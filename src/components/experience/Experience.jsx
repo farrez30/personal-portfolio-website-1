@@ -30,39 +30,51 @@ const Experience = () => {
           <h3>Frontend Development</h3>
           <div class="experience__content">
             <article class="experience__details">
-              <SiHtml5 />
-              <h4>HTML</h4>
-              <small className="text-light">Experienced</small>
+              <SiHtml5 className="experience__details-icon" />
+              <div>
+                <h4>HTML</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <SiCss3 />
-              <h4>CSS</h4>
-              <small className="text-light">intermediate</small>
+              <SiCss3 className="experience__details-icon" />
+              <div>
+                <h4>CSS</h4>
+                <small className="text-light">intermediate</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <DiJsBadge />
-              <h4>Javascript</h4>
-              <small className="text-light">Experienced</small>
+              <DiJsBadge className="experience__details-icon" />
+              <div>
+                <h4>Javascript</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <SiBootstrap />
-              <h4>Bootstrap</h4>
-              <small className="text-light">Experienced</small>
+              <SiBootstrap className="experience__details-icon" />
+              <div>
+                <h4>Bootstrap</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <SiTailwindcss />
-              <h4>Tailwind</h4>
-              <small className="text-light">Experienced</small>
+              <SiTailwindcss className="experience__details-icon" />
+              <div>
+                <h4>Tailwind</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <SiReact />
-              <h4>React</h4>
-              <small className="text-light">Experienced</small>
+              <SiReact className="experience__details-icon" />
+              <div>
+                <h4>React</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
           </div>
         </div>
@@ -72,33 +84,43 @@ const Experience = () => {
           <h3>Backend Development</h3>
           <div class="experience__content">
             <article class="experience__details">
-              <SiNodedotjs />
-              <h4>Node JS</h4>
-              <small className="text-light">Experienced</small>
+              <SiNodedotjs className="experience__details-icon" />
+              <div>
+                <h4>Node JS</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <SiMongodb />
-              <h4>MongoDB</h4>
-              <small className="text-light">intermediate</small>
+              <SiMongodb className="experience__details-icon" />
+              <div>
+                <h4>MongoDB</h4>
+                <small className="text-light">intermediate</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <SiRedux />
-              <h4>Redux</h4>
-              <small className="text-light">Experienced</small>
+              <SiRedux className="experience__details-icon" />
+              <div>
+                <h4>Redux</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <SiMysql />
-              <h4>MySQL</h4>
-              <small className="text-light">Experienced</small>
+              <SiMysql className="experience__details-icon" />
+              <div>
+                <h4>MySQL</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
 
             <article class="experience__details">
-              <SiSequelize />
-              <h4>Sequelize</h4>
-              <small className="text-light">Experienced</small>
+              <SiSequelize className="experience__details-icon" />
+              <div>
+                <h4>Sequelize</h4>
+                <small className="text-light">Experienced</small>
+              </div>
             </article>
           </div>
         </div>
