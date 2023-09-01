@@ -6,7 +6,7 @@
 
 .about__me {
     width: 100%;
-    aspect-ratio: 1/1;
+    aspect-ratio: auto;
     -webkit-border-radius: 2rem;
     -moz-border-radius: 2rem;
     -ms-border-radius: 2rem;
@@ -130,3 +130,5 @@
         margin: 1.5rem 0;
     }
 }
+
+/* 1.38.35 */
