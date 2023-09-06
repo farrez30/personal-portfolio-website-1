@@ -25,11 +25,11 @@ const Experience = () => {
       <h5>What Skills I Have</h5>
       <h2>My Experiences</h2>
 
-      <div class="container experience__container">
-        <div class="experience__frontend">
+      <div className="container experience__container">
+        <div className="experience__frontend">
           <h3>Frontend Development</h3>
-          <div class="experience__content">
-            <article class="experience__details">
+          <div className="experience__content">
+            <article className="experience__details">
               <SiHtml5 className="experience__details-icon" />
               <div>
                 <h4>HTML</h4>
@@ -37,7 +37,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <SiCss3 className="experience__details-icon" />
               <div>
                 <h4>CSS</h4>
@@ -45,7 +45,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <DiJsBadge className="experience__details-icon" />
               <div>
                 <h4>Javascript</h4>
@@ -53,7 +53,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <SiBootstrap className="experience__details-icon" />
               <div>
                 <h4>Bootstrap</h4>
@@ -61,7 +61,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <SiTailwindcss className="experience__details-icon" />
               <div>
                 <h4>Tailwind</h4>
@@ -69,7 +69,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <SiReact className="experience__details-icon" />
               <div>
                 <h4>React</h4>
@@ -80,10 +80,10 @@ const Experience = () => {
         </div>
         {/* END OF FRONTEND */}
 
-        <div class="experience__backend">
+        <div className="experience__backend">
           <h3>Backend Development</h3>
-          <div class="experience__content">
-            <article class="experience__details">
+          <div className="experience__content">
+            <article className="experience__details">
               <SiNodedotjs className="experience__details-icon" />
               <div>
                 <h4>Node JS</h4>
@@ -91,7 +91,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <SiMongodb className="experience__details-icon" />
               <div>
                 <h4>MongoDB</h4>
@@ -99,7 +99,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <SiRedux className="experience__details-icon" />
               <div>
                 <h4>Redux</h4>
@@ -107,7 +107,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <SiMysql className="experience__details-icon" />
               <div>
                 <h4>MySQL</h4>
@@ -115,7 +115,7 @@ const Experience = () => {
               </div>
             </article>
 
-            <article class="experience__details">
+            <article className="experience__details">
               <SiSequelize className="experience__details-icon" />
               <div>
                 <h4>Sequelize</h4>
