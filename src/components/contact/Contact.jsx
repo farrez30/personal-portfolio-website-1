@@ -1,32 +1,44 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./contact.css";
 import { MdOutlineEmail } from "react-icons/md";
-import { RiMessengerLine } from "react-icons/ri";
+// import { RiMessengerLine } from "react-icons/ri";
 import { BsWhatsapp } from "react-icons/bs";
-import { useRef } from "react";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
 
 const Contact = () => {
+  const formRef = useRef();
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    const form = formRef.current;
+
+    // Validate form fields before sending the email
+    if (form.name.value === null || form.email.value === null || form.message.value === null) {
+      // Display an error message or handle the validation as needed
+      Swal.fire({
+        icon: "error",
+        title: "Please fill in all the required fields.",
+      });
+    } else {
+      emailjs.sendForm("service_n9r4x8p", "template_s50v8c4", form, "sHLzgGlimFe2gylV8");
+
+      // Reset the form after successful submission
+      form.reset();
+
+      // Display success message
+      handleClick();
+    }
+  };
+
   const handleClick = () => {
     Swal.fire({
-      // position: 'top-end',
       icon: "success",
       title: "Your message has been sent",
       showConfirmButton: false,
       timer: 1500,
     });
-  };
-
-  const form = { useRef };
-
-  const sendEmail = (e) => {
-    e.preventDefault();
-
-    emailjs.sendForm("service_n9r4x8p", "template_s50v8c4", form.current, "sHLzgGlimFe2gylV8");
-
-    e.target.reset();
   };
   return (
     <section id="contact">
@@ -61,11 +73,11 @@ const Contact = () => {
           </article>
         </div>
         {/* END OF CONTACT OPTIONS */}
-        <form ref={form} onSubmit={sendEmail}>
+        <form ref={formRef} onSubmit={sendEmail}>
           <input type="text" name="name" placeholder="Your Full Name" required />
           <input type="email" name="email" placeholder="Your Email" required />
           <textarea name="message" rows="7" placeholder="Your Message" required></textarea>
-          <button type="submit" className="btn btn-primary" onClick={handleClick}>
+          <button type="submit" className="btn btn-primary">
             Send Message
           </button>
         </form>
