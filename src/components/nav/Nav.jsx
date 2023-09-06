@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./nav.css";
 import { AiOutlineHome } from "react-icons/ai";
 import { AiOutlineUser } from "react-icons/ai";
 import { BiBook } from "react-icons/bi";
 // import { RiServiceLine } from "react-icons/ri";
+import { VscCode } from "react-icons/vsc";
 import { BiMessageSquareDetail } from "react-icons/bi";
 
 const Nav = () => {
@@ -11,7 +12,7 @@ const Nav = () => {
 
   // Fungsi untuk memantau posisi scroll
   const handleScroll = () => {
-    const sections = ["#home", "#about", "#experience", "#contact"];
+    const sections = ["#home", "#about", "#experience", "#portfolio", "#contact"];
 
     // Menentukan bagian mana yang sedang aktif berdasarkan posisi scroll
     for (const section of sections) {
@@ -59,6 +60,13 @@ const Nav = () => {
       >
         <RiServiceLine />
       </a> */}
+      <a
+        href="#portfolio"
+        onClick={() => setActiveNav("#portfolio")}
+        className={activeNav === "#portfolio" ? "active" : ""}
+      >
+        <VscCode />
+      </a>
       <a href="#contact" onClick={() => setActiveNav("#contact")} className={activeNav === "#contact" ? "active" : ""}>
         <BiMessageSquareDetail />
       </a>
