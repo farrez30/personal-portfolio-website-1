@@ -15,7 +15,8 @@ const Header = () => {
         <HeaderSocial />
 
         <div className="me">
-          <img src={ME} alt="me" />
+          {/* <img src={ME} alt="me" /> */}
+          <iframe src="https://giphy.com/embed/qgQUggAC3Pfv687qPC" alt="me" style={{ pointerEvents: "none" }} />
         </div>
 
         <a href="#contact" className="scroll__down">

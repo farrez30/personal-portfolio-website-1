@@ -38,19 +38,26 @@ header {
 
 /* ========== ME ========== */
 .me {
-    background: linear-gradient(var(--color-primary), transparent);
-    width: 22rem;
-    height: 30rem;
+    /* background: linear-gradient(var(--color-primary), transparent); */
+    background: linear-gradient(rgba(255,255,255,1) 38%, rgba(0,49,64,1) 51%, rgba(0,49,64,1) 65%);
+    /* width: 22rem;
+    */
+    /*height: 30rem;
+    */
     position: absolute;
     left: calc(50% - 11rem);
     margin-top: 4rem;
-    -webkit-border-radius: 12rem 12rem 0 0;
-    -moz-border-radius: 12rem 12rem 0 0;
-    -ms-border-radius: 12rem 12rem 0 0;
-    -o-border-radius: 12rem 12rem 0 0;
-    border-radius: 12rem 12rem 0 0;
     overflow: hidden;
-    padding: 5rem 1.5rem 1.5rem 1.5rem;
+    padding: 0;
+    border-radius: 5rem;
+}
+
+.me iframe {
+    /* width: 100%; */
+    height: 30rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5rem;
 }
 
 /* ========== SCROLL DOWN ========== */

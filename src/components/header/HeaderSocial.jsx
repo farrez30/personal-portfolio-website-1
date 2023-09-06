@@ -6,13 +6,13 @@ import { FaCodepen } from "react-icons/fa";
 const HeaderSocial = () => {
   return (
     <div className="header__socials">
-      <a href="https://linkedin.com" target="_blank">
+      <a href="https://www.linkedin.com/in/farrez/" target="_blank">
         <BsLinkedin />
       </a>
-      <a href="https://github.com" target="_blank">
+      <a href="https://github.com/farrez30" target="_blank">
         <FaGithub />
       </a>
-      <a href="https://codepen.com" target="_blank">
+      <a href="https://codepen.io/farrez30" target="_blank">
         <FaCodepen />
       </a>
     </div>
