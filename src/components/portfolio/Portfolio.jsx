@@ -62,15 +62,15 @@ const Portfolio = () => {
       <h5>My Recent Work</h5>
       <h2>Portfolio</h2>
 
-      <div class="container portfolio__container">
+      <div className="container portfolio__container">
         {data.map(({ id, image, title, github, demo }) => {
           return (
-            <article key={id} class="portfolio__item">
-              <div class="portfolio__item-image">
+            <article key={id} className="portfolio__item">
+              <div className="portfolio__item-image">
                 <img src={image} alt={title} />
               </div>
               <h3>{title}</h3>
-              <div class="portfolio__item-cta">
+              <div className="portfolio__item-cta">
                 <a href={github} className="btn portfolio__details">
                   Github
                   <FiGithub className="portfolio__details-icon"/>
