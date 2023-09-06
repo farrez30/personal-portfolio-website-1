@@ -20,6 +20,17 @@ const Header = () => {
         <a href="#contact" className="scroll__down">
           Scroll Down
         </a>
+        <div className="spotify__container">
+          <iframe
+            src="https://open.spotify.com/embed/track/5OGtEYIYqGD9rasNWLGczi?utm_source=generator&theme=0"
+            width="100%"
+            height="100"
+            frameBorder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+          ></iframe>
+        </div>
       </div>
     </header>
   );

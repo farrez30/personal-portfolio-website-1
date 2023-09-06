@@ -74,6 +74,20 @@ header {
     font-size: 0.9rem;
 }
 
+/* ========== Spotify ========== */
+.spotify__container {
+    position: absolute;
+    right: -10rem;
+    bottom: 20rem;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    font-weight: 300;
+    font-size: 0.9rem;
+}
+
 /* ============= MEDIA QUERIES (MEDIUM DEVICES) ============= */
 @media screen and (max-width: 1024px) {
     header {
@@ -90,5 +104,18 @@ header {
     .header__socials,
     .scroll__down {
         display: none;
+    }
+
+    .spotify__container {
+        position: absolute;
+        right: -7rem;
+        bottom: 20rem;
+        -webkit-transform: rotate(90deg);
+        -moz-transform: rotate(90deg);
+        -ms-transform: rotate(90deg);
+        -o-transform: rotate(90deg);
+        transform: rotate(90deg);
+        font-weight: 300;
+        font-size: 0.9rem;
     }
 }
