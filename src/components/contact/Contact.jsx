@@ -49,10 +49,10 @@ const Contact = () => {
         <div className="contact__options">
           <article className="contact__option">
             <MdOutlineEmail className="contact__option-icon" />
-            <h4>Email</h4>
+            <h2>Email</h2>
             <h5>You could directly email me 📨</h5>
             <a href="mailto:farrezalhakim@gmail.com" target="_blank">
-              Send a message
+              📧 SEND NOW 📧
             </a>
           </article>
           {/* <article className="contact__option">
@@ -65,10 +65,10 @@ const Contact = () => {
           </article> */}
           <article className="contact__option">
             <BsWhatsapp className="contact__option-icon" />
-            <h4>WhatsApp</h4>
+            <h2>WhatsApp</h2>
             <h5>or use WA to reach me 😉</h5>
             <a href="https://api.whatsapp.com/send?phone=6285884061543" target="_blank">
-              Send a message
+              💬 CONTACT ME 💬
             </a>
           </article>
         </div>

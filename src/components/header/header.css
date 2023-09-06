@@ -109,7 +109,7 @@ header {
     .spotify__container {
         position: absolute;
         right: -7rem;
-        bottom: 20rem;
+        bottom: 10rem;
         -webkit-transform: rotate(90deg);
         -moz-transform: rotate(90deg);
         -ms-transform: rotate(90deg);

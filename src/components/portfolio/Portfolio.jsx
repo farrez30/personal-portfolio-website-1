@@ -1,6 +1,6 @@
 import React from "react";
 import "./portfolio.css";
-import IMG1 from "../../assets/portfolio1.jpg";
+import IMG1 from "../../assets/portfolio1.png";
 import IMG2 from "../../assets/portfolio2.jpg";
 import IMG3 from "../../assets/portfolio3.jpg";
 import IMG4 from "../../assets/portfolio4.jpg";
@@ -15,45 +15,45 @@ const data = [
   {
     id: 1,
     image: IMG1,
-    title: "Crypto Currency Dashboard & Financial Visualization",
+    title: "Groseria (e-grocery platform)",
     github: "https://github.com",
-    demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
+    demo: "https://groseria-client.vercel.app/",
   },
-  {
-    id: 2,
-    image: IMG2,
-    title: "Crypto Currency Dashboard & Financial Visualization",
-    github: "https://github.com",
-    demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  },
-  {
-    id: 3,
-    image: IMG3,
-    title: "Crypto Currency Dashboard & Financial Visualization",
-    github: "https://github.com",
-    demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  },
-  {
-    id: 4,
-    image: IMG4,
-    title: "Crypto Currency Dashboard & Financial Visualization",
-    github: "https://github.com",
-    demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  },
-  {
-    id: 5,
-    image: IMG5,
-    title: "Crypto Currency Dashboard & Financial Visualization",
-    github: "https://github.com",
-    demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  },
-  {
-    id: 6,
-    image: IMG6,
-    title: "Crypto Currency Dashboard & Financial Visualization",
-    github: "https://github.com",
-    demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  },
+  // {
+  //   id: 2,
+  //   image: IMG2,
+  //   title: "Crypto Currency Dashboard & Financial Visualization",
+  //   github: "https://github.com",
+  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
+  // },
+  // {
+  //   id: 3,
+  //   image: IMG3,
+  //   title: "Crypto Currency Dashboard & Financial Visualization",
+  //   github: "https://github.com",
+  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
+  // },
+  // {
+  //   id: 4,
+  //   image: IMG4,
+  //   title: "Crypto Currency Dashboard & Financial Visualization",
+  //   github: "https://github.com",
+  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
+  // },
+  // {
+  //   id: 5,
+  //   image: IMG5,
+  //   title: "Crypto Currency Dashboard & Financial Visualization",
+  //   github: "https://github.com",
+  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
+  // },
+  // {
+  //   id: 6,
+  //   image: IMG6,
+  //   title: "Crypto Currency Dashboard & Financial Visualization",
+  //   github: "https://github.com",
+  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
+  // },
 ];
 
 const Portfolio = () => {
