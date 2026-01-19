@@ -51,7 +51,7 @@ const Contact = () => {
             <MdOutlineEmail className="contact__option-icon" />
             <h2>Email</h2>
             <h5>You could directly email me 📨</h5>
-            <a href="mailto:farrezalhakim@gmail.com" target="_blank">
+            <a href="mailto:farrezalhakim@gmail.com" target="_blank" rel="noopener noreferrer">
               📧 SEND NOW 📧
             </a>
           </article>
@@ -67,7 +67,7 @@ const Contact = () => {
             <BsWhatsapp className="contact__option-icon" />
             <h2>WhatsApp</h2>
             <h5>or use WA to reach me 😉</h5>
-            <a href="https://api.whatsapp.com/send?phone=6285884061543" target="_blank">
+            <a href="https://api.whatsapp.com/send?phone=6285884061543" target="_blank" rel="noopener noreferrer">
               💬 CONTACT ME 💬
             </a>
           </article>

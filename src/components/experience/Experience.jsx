@@ -8,16 +8,16 @@ import { SiTailwindcss } from "react-icons/si";
 import { SiReact } from "react-icons/si";
 import { SiNodedotjs } from "react-icons/si";
 import { SiMongodb } from "react-icons/si";
-import { SiPhp } from "react-icons/si";
+// import { SiPhp } from "react-icons/si";
 import { SiMysql } from "react-icons/si";
-import { SiJest } from "react-icons/si";
-import { SiAxios } from "react-icons/si";
+// import { SiJest } from "react-icons/si";
+// import { SiAxios } from "react-icons/si";
 import { SiRedux } from "react-icons/si";
-import { SiChakraui } from "react-icons/si";
-import { SiExpress } from "react-icons/si";
+// import { SiChakraui } from "react-icons/si";
+// import { SiExpress } from "react-icons/si";
 import { SiSequelize } from "react-icons/si";
-import { SiNodemon } from "react-icons/si";
-import { BsPatchCheckFill } from "react-icons/bs";
+// import { SiNodemon } from "react-icons/si";
+// import { BsPatchCheckFill } from "react-icons/bs";
 
 const Experience = () => {
   return (

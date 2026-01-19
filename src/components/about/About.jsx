@@ -2,9 +2,9 @@ import React from "react";
 import "./about.css";
 // import ME from "../../assets/me-about.jpg";
 import ME from "../../assets/monkey.gif";
-import { FaAward } from "react-icons/fa";
-import { FiUsers } from "react-icons/fi";
-import { VscFolderLibrary } from "react-icons/vsc";
+// import { FaAward } from "react-icons/fa";
+// import { FiUsers } from "react-icons/fi";
+// import { VscFolderLibrary } from "react-icons/vsc";
 
 const About = () => {
   return (
@@ -15,7 +15,14 @@ const About = () => {
       <div className="container about__container">
         <div className="about__me">
           <div className="about__me-image">
-            <img src={ME} alt="About Image" />
+            {/* <source srcSet={ME_WEBP} type="image/webp" /> */}
+            <img 
+              src={ME} 
+              alt="About Me"
+              title="About Me"
+              loading="lazy"
+              decoding="async"
+            />
           </div>
         </div>
 
