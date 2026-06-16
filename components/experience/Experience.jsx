@@ -1,5 +1,6 @@
 import React from "react";
 import "./experience.css";
+import { getTranslations } from "next-intl/server";
 import { SiHtml5 } from "react-icons/si";
 import { SiCss3 } from "react-icons/si";
 import { DiJsBadge } from "react-icons/di";
@@ -8,32 +9,29 @@ import { SiTailwindcss } from "react-icons/si";
 import { SiReact } from "react-icons/si";
 import { SiNodedotjs } from "react-icons/si";
 import { SiMongodb } from "react-icons/si";
-// import { SiPhp } from "react-icons/si";
 import { SiMysql } from "react-icons/si";
-// import { SiJest } from "react-icons/si";
-// import { SiAxios } from "react-icons/si";
 import { SiRedux } from "react-icons/si";
-// import { SiChakraui } from "react-icons/si";
-// import { SiExpress } from "react-icons/si";
 import { SiSequelize } from "react-icons/si";
-// import { SiNodemon } from "react-icons/si";
-// import { BsPatchCheckFill } from "react-icons/bs";
 
-const Experience = () => {
+const Experience = async () => {
+  const t = await getTranslations("experience");
+  const experienced = t("experienced");
+  const intermediate = t("intermediate");
+
   return (
     <section id="experience">
-      <h5>Here are a few technologies I've been working with:</h5>
-      <h2>My Experiences</h2>
+      <h5>{t("subtitle")}</h5>
+      <h2>{t("title")}</h2>
 
       <div className="container experience__container">
         <div className="experience__frontend">
-          <h3>Frontend Development</h3>
+          <h3>{t("frontend")}</h3>
           <div className="experience__content">
             <article className="experience__details">
               <SiHtml5 className="experience__details-icon" />
               <div>
                 <h4>HTML</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
 
@@ -41,7 +39,7 @@ const Experience = () => {
               <SiCss3 className="experience__details-icon" />
               <div>
                 <h4>CSS</h4>
-                <small className="text-light">intermediate</small>
+                <small className="text-light">{intermediate}</small>
               </div>
             </article>
 
@@ -49,7 +47,7 @@ const Experience = () => {
               <DiJsBadge className="experience__details-icon" />
               <div>
                 <h4>Javascript</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
 
@@ -57,7 +55,7 @@ const Experience = () => {
               <SiBootstrap className="experience__details-icon" />
               <div>
                 <h4>Bootstrap</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
 
@@ -65,7 +63,7 @@ const Experience = () => {
               <SiTailwindcss className="experience__details-icon" />
               <div>
                 <h4>Tailwind</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
 
@@ -73,7 +71,7 @@ const Experience = () => {
               <SiReact className="experience__details-icon" />
               <div>
                 <h4>React</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
           </div>
@@ -81,13 +79,13 @@ const Experience = () => {
         {/* END OF FRONTEND */}
 
         <div className="experience__backend">
-          <h3>Backend Development</h3>
+          <h3>{t("backend")}</h3>
           <div className="experience__content">
             <article className="experience__details">
               <SiNodedotjs className="experience__details-icon" />
               <div>
                 <h4>Node JS</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
 
@@ -95,7 +93,7 @@ const Experience = () => {
               <SiMongodb className="experience__details-icon" />
               <div>
                 <h4>MongoDB</h4>
-                <small className="text-light">intermediate</small>
+                <small className="text-light">{intermediate}</small>
               </div>
             </article>
 
@@ -103,7 +101,7 @@ const Experience = () => {
               <SiRedux className="experience__details-icon" />
               <div>
                 <h4>Redux</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
 
@@ -111,7 +109,7 @@ const Experience = () => {
               <SiMysql className="experience__details-icon" />
               <div>
                 <h4>MySQL</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
 
@@ -119,7 +117,7 @@ const Experience = () => {
               <SiSequelize className="experience__details-icon" />
               <div>
                 <h4>Sequelize</h4>
-                <small className="text-light">Experienced</small>
+                <small className="text-light">{experienced}</small>
               </div>
             </article>
           </div>

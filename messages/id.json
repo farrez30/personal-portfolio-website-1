@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "siteName": "Farrez Al Hakim",
+    "title": "Farrez Al Hakim — Full-Stack Developer, AI Agentic Engineer & Data Engineer",
+    "description": "Portofolio Farrez Al Hakim — seorang Full-Stack Developer, AI Agentic Engineer, dan Data Engineer yang membangun aplikasi web yang andal, skalabel, dan cerdas.",
+    "keywords": "Full-Stack Developer, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, portofolio software engineer"
+  },
+  "nav": {
+    "home": "Beranda",
+    "about": "Tentang",
+    "experience": "Pengalaman",
+    "portfolio": "Portofolio",
+    "contact": "Kontak"
+  },
+  "header": {
+    "greeting": "Halo, saya",
+    "name": "Farrez Al Hakim",
+    "tagline": "Full-Stack Developer · AI Agentic Engineer · Data Engineer",
+    "downloadCV": "Unduh CV",
+    "letsTalk": "Mari Bicara",
+    "scrollDown": "Gulir ke Bawah"
+  },
+  "about": {
+    "subtitle": "Kenali Lebih Dekat",
+    "title": "Tentang Saya",
+    "bio1": "Seorang lulusan Manajemen Bisnis yang memutuskan untuk meniti jalur karier baru di bidang pengembangan web. Saya selalu tertarik dengan teknologi, jadi ketika mulai mendalami pengembangan web, saya langsung jatuh hati.",
+    "bio2": "Saya memulai perjalanan pengembangan web pada tahun 2021 dengan belajar secara mandiri sebelum akhirnya mengikuti program Full Stack Web Development di Purwadhika Digital Technology School, tempat saya memperoleh pengalaman praktis dengan beragam teknologi front-end dan back-end yang menekankan proyek nyata menyerupai skenario industri.",
+    "bio3": "Saya juga memperoleh pengalaman langsung dalam membangun web API yang andal dan skalabel, bekerja dengan basis data, menangani autentikasi dan keamanan, menerapkan arsitektur sisi server yang efisien, merancang antarmuka pengguna yang responsif dan menarik, mengintegrasikan API, menangani interaksi pengguna, serta mengoptimalkan performa web.",
+    "letsTalk": "Mari Bicara"
+  },
+  "experience": {
+    "subtitle": "Berikut beberapa teknologi yang saya gunakan:",
+    "title": "Pengalaman Saya",
+    "frontend": "Pengembangan Frontend",
+    "backend": "Pengembangan Backend",
+    "experienced": "Berpengalaman",
+    "intermediate": "Menengah"
+  },
+  "portfolio": {
+    "subtitle": "Karya Terbaru Saya",
+    "title": "Portofolio",
+    "github": "Github",
+    "liveDemo": "Demo Langsung"
+  },
+  "contact": {
+    "subtitle": "Hubungi Saya",
+    "title": "Kontak Saya",
+    "emailTitle": "Email",
+    "emailDesc": "Anda bisa langsung mengirim email ke saya 📨",
+    "emailCta": "📧 KIRIM SEKARANG 📧",
+    "whatsappTitle": "WhatsApp",
+    "whatsappDesc": "atau gunakan WhatsApp untuk menghubungi saya 😉",
+    "whatsappCta": "💬 HUBUNGI SAYA 💬",
+    "namePlaceholder": "Nama Lengkap Anda",
+    "emailPlaceholder": "Email Anda",
+    "messagePlaceholder": "Pesan Anda",
+    "send": "Kirim Pesan",
+    "alertErrorTitle": "Mohon isi semua kolom yang wajib diisi.",
+    "alertSuccessTitle": "Pesan Anda telah terkirim"
+  },
+  "footer": {
+    "logo": "Farrez",
+    "home": "Beranda",
+    "about": "Tentang",
+    "experience": "Pengalaman",
+    "portfolio": "Portofolio",
+    "contact": "Kontak",
+    "rights": "Hak cipta dilindungi"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "siteName": "Farrez Al Hakim",
+    "title": "Farrez Al Hakim — フルスタック開発者・AIエージェントエンジニア・データエンジニア",
+    "description": "Farrez Al Hakim のポートフォリオ — 堅牢でスケーラブル、かつインテリジェントなWebアプリケーションを構築するフルスタック開発者、AIエージェントエンジニア、データエンジニア。",
+    "keywords": "フルスタック開発者, AIエージェントエンジニア, データエンジニア, React, Next.js, Node.js, Farrez Al Hakim, ソフトウェアエンジニア ポートフォリオ"
+  },
+  "nav": {
+    "home": "ホーム",
+    "about": "概要",
+    "experience": "経験",
+    "portfolio": "ポートフォリオ",
+    "contact": "お問い合わせ"
+  },
+  "header": {
+    "greeting": "こんにちは、私は",
+    "name": "Farrez Al Hakim",
+    "tagline": "フルスタック開発者 · AIエージェントエンジニア · データエンジニア",
+    "downloadCV": "CVをダウンロード",
+    "letsTalk": "話しましょう",
+    "scrollDown": "下にスクロール"
+  },
+  "about": {
+    "subtitle": "私について",
+    "title": "自己紹介",
+    "bio1": "経営学を卒業し、Web開発という新たなキャリアに進むことを決意しました。以前からテクノロジーに魅了されており、Web開発を学び始めるとすぐに夢中になりました。",
+    "bio2": "2021年に独学でWeb開発の旅を始め、その後 Purwadhika Digital Technology School のフルスタックWeb開発プログラムに入学しました。そこでは、業界のシナリオを再現した実践的なプロジェクトを重視し、さまざまなフロントエンドおよびバックエンド技術の実務経験を積みました。",
+    "bio3": "また、堅牢でスケーラブルなWeb APIの構築、データベースの操作、認証とセキュリティの処理、効率的なサーバーサイドアーキテクチャの実装、レスポンシブで魅力的なユーザーインターフェースの作成、APIの統合、ユーザー操作の処理、Webパフォーマンスの最適化など、実践的な経験を得ました。",
+    "letsTalk": "話しましょう"
+  },
+  "experience": {
+    "subtitle": "これまでに扱ってきた技術の一部です：",
+    "title": "私の経験",
+    "frontend": "フロントエンド開発",
+    "backend": "バックエンド開発",
+    "experienced": "熟練",
+    "intermediate": "中級"
+  },
+  "portfolio": {
+    "subtitle": "最近の作品",
+    "title": "ポートフォリオ",
+    "github": "Github",
+    "liveDemo": "ライブデモ"
+  },
+  "contact": {
+    "subtitle": "お問い合わせ",
+    "title": "ご連絡ください",
+    "emailTitle": "メール",
+    "emailDesc": "直接メールを送っていただけます 📨",
+    "emailCta": "📧 今すぐ送信 📧",
+    "whatsappTitle": "WhatsApp",
+    "whatsappDesc": "またはWhatsAppでご連絡ください 😉",
+    "whatsappCta": "💬 連絡する 💬",
+    "namePlaceholder": "お名前",
+    "emailPlaceholder": "メールアドレス",
+    "messagePlaceholder": "メッセージ",
+    "send": "メッセージを送信",
+    "alertErrorTitle": "必須項目をすべてご入力ください。",
+    "alertSuccessTitle": "メッセージが送信されました"
+  },
+  "footer": {
+    "logo": "Farrez",
+    "home": "ホーム",
+    "about": "概要",
+    "experience": "経験",
+    "portfolio": "ポートフォリオ",
+    "contact": "お問い合わせ",
+    "rights": "無断複写・転載を禁じます"
+  }
+}

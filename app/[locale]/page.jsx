@@ -1,3 +1,4 @@
+import { setRequestLocale } from "next-intl/server";
 import Header from "@/components/header/Header";
 import Nav from "@/components/nav/Nav";
 import About from "@/components/about/About";
@@ -7,10 +8,14 @@ import Portfolio from "@/components/portfolio/Portfolio";
 // import Testimonials from "@/components/testimonials/Testimonials";
 import Contact from "@/components/contact/Contact";
 import Footer from "@/components/footer/Footer";
+import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 
-export default function Home() {
+export default function Home({ params: { locale } }) {
+  setRequestLocale(locale);
+
   return (
     <>
+      <LanguageSwitcher />
       <Header />
       <Nav />
       <About />

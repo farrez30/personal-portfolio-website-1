@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "siteName": "Farrez Al Hakim",
+    "title": "Farrez Al Hakim — Full-Stack-Entwickler, AI Agentic Engineer & Data Engineer",
+    "description": "Portfolio von Farrez Al Hakim — ein Full-Stack-Entwickler, AI Agentic Engineer und Data Engineer, der robuste, skalierbare und intelligente Webanwendungen entwickelt.",
+    "keywords": "Full-Stack-Entwickler, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, Softwareentwickler Portfolio"
+  },
+  "nav": {
+    "home": "Start",
+    "about": "Über mich",
+    "experience": "Erfahrung",
+    "portfolio": "Portfolio",
+    "contact": "Kontakt"
+  },
+  "header": {
+    "greeting": "Hallo, ich bin",
+    "name": "Farrez Al Hakim",
+    "tagline": "Full-Stack-Entwickler · AI Agentic Engineer · Data Engineer",
+    "downloadCV": "Lebenslauf herunterladen",
+    "letsTalk": "Lass uns reden",
+    "scrollDown": "Nach unten scrollen"
+  },
+  "about": {
+    "subtitle": "Lerne mich kennen",
+    "title": "Über mich",
+    "bio1": "Ein Absolvent der Betriebswirtschaft, der sich entschied, einen neuen Karriereweg in der Webentwicklung einzuschlagen. Technologie hat mich schon immer fasziniert, und als ich tiefer in die Webentwicklung eintauchte, war ich sofort begeistert.",
+    "bio2": "Ich begann meine Reise in der Webentwicklung 2021 im Selbststudium, bevor ich mich für ein Full-Stack-Web-Development-Programm an der Purwadhika Digital Technology School einschrieb, wo ich praktische Erfahrung mit verschiedenen Frontend- und Backend-Technologien sammelte, die den Schwerpunkt auf reale Projekte legen, welche Branchenszenarien nachbilden.",
+    "bio3": "Außerdem sammelte ich praktische Erfahrung beim Erstellen robuster und skalierbarer Web-APIs, beim Arbeiten mit Datenbanken, beim Umgang mit Authentifizierung und Sicherheit, beim Implementieren effizienter serverseitiger Architektur, beim Gestalten responsiver und ansprechender Benutzeroberflächen, beim Integrieren von APIs, beim Verarbeiten von Benutzerinteraktionen und beim Optimieren der Web-Performance.",
+    "letsTalk": "Lass uns reden"
+  },
+  "experience": {
+    "subtitle": "Hier sind einige Technologien, mit denen ich arbeite:",
+    "title": "Meine Erfahrung",
+    "frontend": "Frontend-Entwicklung",
+    "backend": "Backend-Entwicklung",
+    "experienced": "Erfahren",
+    "intermediate": "Mittelstufe"
+  },
+  "portfolio": {
+    "subtitle": "Meine neuesten Arbeiten",
+    "title": "Portfolio",
+    "github": "Github",
+    "liveDemo": "Live-Demo"
+  },
+  "contact": {
+    "subtitle": "Kontakt aufnehmen",
+    "title": "Kontaktiere mich",
+    "emailTitle": "E-Mail",
+    "emailDesc": "Du kannst mir direkt eine E-Mail schreiben 📨",
+    "emailCta": "📧 JETZT SENDEN 📧",
+    "whatsappTitle": "WhatsApp",
+    "whatsappDesc": "oder erreiche mich über WhatsApp 😉",
+    "whatsappCta": "💬 KONTAKTIERE MICH 💬",
+    "namePlaceholder": "Dein vollständiger Name",
+    "emailPlaceholder": "Deine E-Mail",
+    "messagePlaceholder": "Deine Nachricht",
+    "send": "Nachricht senden",
+    "alertErrorTitle": "Bitte fülle alle erforderlichen Felder aus.",
+    "alertSuccessTitle": "Deine Nachricht wurde gesendet"
+  },
+  "footer": {
+    "logo": "Farrez",
+    "home": "Start",
+    "about": "Über mich",
+    "experience": "Erfahrung",
+    "portfolio": "Portfolio",
+    "contact": "Kontakt",
+    "rights": "Alle Rechte vorbehalten"
+  }
+}

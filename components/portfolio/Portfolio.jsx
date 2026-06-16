@@ -1,5 +1,6 @@
 import React from "react";
 import "./portfolio.css";
+import { getTranslations } from "next-intl/server";
 import { FiGithub } from "react-icons/fi";
 import { MdOpenInNew } from "react-icons/md";
 
@@ -54,11 +55,12 @@ const data = [
   // },
 ];
 
-const Portfolio = () => {
+const Portfolio = async () => {
+  const t = await getTranslations("portfolio");
   return (
     <section id="portfolio">
-      <h5>My Recent Work</h5>
-      <h2>Portfolio</h2>
+      <h5>{t("subtitle")}</h5>
+      <h2>{t("title")}</h2>
 
       <div className="container portfolio__container">
         {data.map(({ id, imageWebp, image, title, github, demo }) => {
@@ -78,11 +80,11 @@ const Portfolio = () => {
               <h3>{title}</h3>
               <div className="portfolio__item-cta">
                 <a href={github} className="btn portfolio__details">
-                  Github
+                  {t("github")}
                   <FiGithub className="portfolio__details-icon" />
                 </a>
                 <a href={demo} className="btn btn-primary portfolio__details" target="_blank" rel="noopener noreferrer">
-                  Live Demo
+                  {t("liveDemo")}
                   <MdOpenInNew className="portfolio__details-icon" />
                 </a>
               </div>

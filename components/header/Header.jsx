@@ -4,10 +4,12 @@ import "./header.css";
 import CTA from "./CTA";
 import HeaderSocial from "./HeaderSocial";
 import { useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 const audio = "/assets/audio/ES_Despite_Such_a_Trustworthy_Appearance-Ludvig_Moulin.mp3";
 
 const Header = () => {
+  const t = useTranslations("header");
   const audioRef = useRef(null);
   const hasUserInteracted = useRef(false);
 
@@ -51,9 +53,9 @@ const Header = () => {
   return (
     <header id="home">
       <div className="container header__container">
-        <h5>Hello I'm</h5>
-        <h1>Farrez Al Hakim</h1>
-        <h5 className="text-light">Full Stack Developer</h5>
+        <h5>{t("greeting")}</h5>
+        <h1>{t("name")}</h1>
+        <h5 className="text-light">{t("tagline")}</h5>
         <CTA />
         <HeaderSocial />
         <div className="me">
@@ -61,7 +63,7 @@ const Header = () => {
           <iframe src="https://giphy.com/embed/qgQUggAC3Pfv687qPC" alt="me" style={{ pointerEvents: "none" }} loading="lazy" title="me" />
         </div>
         <a href="#contact" className="scroll__down">
-          Scroll Down
+          {t("scrollDown")}
         </a>
         <div className="spotify__container">
           {/* <iframe 

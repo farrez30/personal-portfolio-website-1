@@ -1,11 +1,13 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import "./footer.css";
+import { useTranslations } from "next-intl";
 import { FaFacebookF } from "react-icons/fa";
 import { FiInstagram } from "react-icons/fi";
 import { IoLogoTwitter } from "react-icons/io";
 
 const Footer = () => {
+  const t = useTranslations("footer");
   const [year, setYear] = useState(new Date().getFullYear());
 
   useEffect(() => {
@@ -15,30 +17,24 @@ const Footer = () => {
   return (
     <footer>
       <a href="#home" className="footer__logo">
-        Farrez
+        {t("logo")}
       </a>
 
       <ul className="permalinks">
         <li>
-          <a href="#home">Home</a>
+          <a href="#home">{t("home")}</a>
         </li>
         <li>
-          <a href="#about">About</a>
+          <a href="#about">{t("about")}</a>
         </li>
         <li>
-          <a href="#experience">Experience</a>
+          <a href="#experience">{t("experience")}</a>
         </li>
-        {/* <li>
-          <a href="#services">Services</a>
-        </li> */}
         <li>
-          <a href="#portfolio">Portfolio</a>
+          <a href="#portfolio">{t("portfolio")}</a>
         </li>
-        {/* <li>
-          <a href="#testimonials">Testimonials</a>
-        </li> */}
         <li>
-          <a href="#contact">Contact</a>
+          <a href="#contact">{t("contact")}</a>
         </li>
       </ul>
 
@@ -55,7 +51,7 @@ const Footer = () => {
       </div>
 
       <div className="footer__copyright">
-        <small>&copy; Farrez. All rights reserved {year}.</small>
+        <small>&copy; {year} {t("logo")}. {t("rights")}.</small>
       </div>
     </footer>
   );

@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "siteName": "Farrez Al Hakim",
+    "title": "Farrez Al Hakim — Full-Stack Developer, AI Agentic Engineer & Data Engineer",
+    "description": "Portfolio van Farrez Al Hakim — een Full-Stack Developer, AI Agentic Engineer en Data Engineer die robuuste, schaalbare en intelligente webapplicaties bouwt.",
+    "keywords": "Full-Stack Developer, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, software engineer portfolio"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "Over",
+    "experience": "Ervaring",
+    "portfolio": "Portfolio",
+    "contact": "Contact"
+  },
+  "header": {
+    "greeting": "Hallo, ik ben",
+    "name": "Farrez Al Hakim",
+    "tagline": "Full-Stack Developer · AI Agentic Engineer · Data Engineer",
+    "downloadCV": "CV downloaden",
+    "letsTalk": "Laten we praten",
+    "scrollDown": "Scroll omlaag"
+  },
+  "about": {
+    "subtitle": "Maak kennis",
+    "title": "Over mij",
+    "bio1": "Een afgestudeerde in Bedrijfskunde die besloot een nieuw carrièrepad in webontwikkeling in te slaan. Ik ben altijd gefascineerd geweest door technologie, dus toen ik me verder verdiepte in webontwikkeling was ik meteen verkocht.",
+    "bio2": "Ik begon mijn reis in webontwikkeling in 2021 door zelfstandig te leren, voordat ik me inschreef voor een Full Stack Web Development-programma bij Purwadhika Digital Technology School, waar ik praktische ervaring opdeed met uiteenlopende front-end- en back-endtechnologieën met de nadruk op echte projecten die industriescenario's nabootsen.",
+    "bio3": "Daarnaast deed ik praktische ervaring op met het bouwen van robuuste en schaalbare web-API's, het werken met databases, het afhandelen van authenticatie en beveiliging, het implementeren van efficiënte server-side-architectuur, het maken van responsieve en aantrekkelijke gebruikersinterfaces, het integreren van API's, het afhandelen van gebruikersinteracties en het optimaliseren van webprestaties.",
+    "letsTalk": "Laten we praten"
+  },
+  "experience": {
+    "subtitle": "Hier zijn enkele technologieën waarmee ik werk:",
+    "title": "Mijn ervaring",
+    "frontend": "Frontend-ontwikkeling",
+    "backend": "Backend-ontwikkeling",
+    "experienced": "Ervaren",
+    "intermediate": "Gemiddeld"
+  },
+  "portfolio": {
+    "subtitle": "Mijn recente werk",
+    "title": "Portfolio",
+    "github": "Github",
+    "liveDemo": "Live demo"
+  },
+  "contact": {
+    "subtitle": "Neem contact op",
+    "title": "Contacteer mij",
+    "emailTitle": "E-mail",
+    "emailDesc": "Je kunt me direct e-mailen 📨",
+    "emailCta": "📧 STUUR NU 📧",
+    "whatsappTitle": "WhatsApp",
+    "whatsappDesc": "of gebruik WhatsApp om me te bereiken 😉",
+    "whatsappCta": "💬 NEEM CONTACT OP 💬",
+    "namePlaceholder": "Je volledige naam",
+    "emailPlaceholder": "Je e-mail",
+    "messagePlaceholder": "Je bericht",
+    "send": "Bericht verzenden",
+    "alertErrorTitle": "Vul alstublieft alle verplichte velden in.",
+    "alertSuccessTitle": "Je bericht is verzonden"
+  },
+  "footer": {
+    "logo": "Farrez",
+    "home": "Home",
+    "about": "Over",
+    "experience": "Ervaring",
+    "portfolio": "Portfolio",
+    "contact": "Contact",
+    "rights": "Alle rechten voorbehouden"
+  }
+}

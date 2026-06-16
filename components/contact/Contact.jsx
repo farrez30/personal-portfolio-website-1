@@ -1,13 +1,14 @@
 "use client";
 import React, { useRef } from "react";
 import "./contact.css";
+import { useTranslations } from "next-intl";
 import { MdOutlineEmail } from "react-icons/md";
-// import { RiMessengerLine } from "react-icons/ri";
 import { BsWhatsapp } from "react-icons/bs";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
 
 const Contact = () => {
+  const t = useTranslations("contact");
   const formRef = useRef();
 
   const sendEmail = (e) => {
@@ -17,18 +18,14 @@ const Contact = () => {
 
     // Validate form fields before sending the email
     if (form.name.value === null || form.email.value === null || form.message.value === null) {
-      // Display an error message or handle the validation as needed
       Swal.fire({
         icon: "error",
-        title: "Please fill in all the required fields.",
+        title: t("alertErrorTitle"),
       });
     } else {
       emailjs.sendForm("service_n9r4x8p", "template_s50v8c4", form, "sHLzgGlimFe2gylV8");
 
-      // Reset the form after successful submission
       form.reset();
-
-      // Display success message
       handleClick();
     }
   };
@@ -36,50 +33,43 @@ const Contact = () => {
   const handleClick = () => {
     Swal.fire({
       icon: "success",
-      title: "Your message has been sent",
+      title: t("alertSuccessTitle"),
       showConfirmButton: false,
       timer: 1500,
     });
   };
+
   return (
     <section id="contact">
-      <h5>Get In Touch</h5>
-      <h2>Contact Me</h2>
+      <h5>{t("subtitle")}</h5>
+      <h2>{t("title")}</h2>
 
       <div className="container contact__container">
         <div className="contact__options">
           <article className="contact__option">
             <MdOutlineEmail className="contact__option-icon" />
-            <h2>Email</h2>
-            <h5>You could directly email me 📨</h5>
+            <h2>{t("emailTitle")}</h2>
+            <h5>{t("emailDesc")}</h5>
             <a href="mailto:farrezalhakim@gmail.com" target="_blank" rel="noopener noreferrer">
-              📧 SEND NOW 📧
+              {t("emailCta")}
             </a>
           </article>
-          {/* <article className="contact__option">
-            <RiMessengerLine className="contact__option-icon" />
-            <h4>Messenger</h4>
-            <h5>brobro</h5>
-            <a href="https://m.me/brobro" target="_blank">
-              Send a message
-            </a>
-          </article> */}
           <article className="contact__option">
             <BsWhatsapp className="contact__option-icon" />
-            <h2>WhatsApp</h2>
-            <h5>or use WA to reach me 😉</h5>
+            <h2>{t("whatsappTitle")}</h2>
+            <h5>{t("whatsappDesc")}</h5>
             <a href="https://api.whatsapp.com/send?phone=6285884061543" target="_blank" rel="noopener noreferrer">
-              💬 CONTACT ME 💬
+              {t("whatsappCta")}
             </a>
           </article>
         </div>
         {/* END OF CONTACT OPTIONS */}
         <form ref={formRef} onSubmit={sendEmail}>
-          <input type="text" name="name" placeholder="Your Full Name" required />
-          <input type="email" name="email" placeholder="Your Email" required />
-          <textarea name="message" rows="7" placeholder="Your Message" required></textarea>
+          <input type="text" name="name" placeholder={t("namePlaceholder")} required />
+          <input type="email" name="email" placeholder={t("emailPlaceholder")} required />
+          <textarea name="message" rows="7" placeholder={t("messagePlaceholder")} required></textarea>
           <button type="submit" className="btn btn-primary">
-            Send Message
+            {t("send")}
           </button>
         </form>
       </div>

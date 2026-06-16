@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "siteName": "Farrez Al Hakim",
+    "title": "Farrez Al Hakim — Full-Stack Developer, AI Agentic Engineer & Data Engineer",
+    "description": "Portfolio of Farrez Al Hakim — a Full-Stack Developer, AI Agentic Engineer, and Data Engineer building robust, scalable, and intelligent web applications.",
+    "keywords": "Full-Stack Developer, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, software engineer portfolio"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "experience": "Experience",
+    "portfolio": "Portfolio",
+    "contact": "Contact"
+  },
+  "header": {
+    "greeting": "Hello, I'm",
+    "name": "Farrez Al Hakim",
+    "tagline": "Full-Stack Developer · AI Agentic Engineer · Data Engineer",
+    "downloadCV": "Download CV",
+    "letsTalk": "Let's Talk",
+    "scrollDown": "Scroll Down"
+  },
+  "about": {
+    "subtitle": "Get To Know",
+    "title": "About Me",
+    "bio1": "A Business Management graduate who decided to embark on a new career path in web development. I've always been fascinated by technology, so when I started learning more about web development, I was hooked right away.",
+    "bio2": "I began my web development journey in 2021 by learning on my own before enrolling in a Full Stack Web Development program at Purwadhika Digital Technology School, where I gained practical experience with a variety of front-end and back-end technologies that emphasize real-world projects simulating industry scenarios.",
+    "bio3": "I also gained hands-on experience building robust and scalable web APIs, working with databases, handling authentication and security, implementing efficient server-side architecture, crafting responsive and visually appealing user interfaces, integrating APIs, handling user interactions, and optimizing web performance.",
+    "letsTalk": "Let's Talk"
+  },
+  "experience": {
+    "subtitle": "Here are a few technologies I've been working with:",
+    "title": "My Experience",
+    "frontend": "Frontend Development",
+    "backend": "Backend Development",
+    "experienced": "Experienced",
+    "intermediate": "Intermediate"
+  },
+  "portfolio": {
+    "subtitle": "My Recent Work",
+    "title": "Portfolio",
+    "github": "Github",
+    "liveDemo": "Live Demo"
+  },
+  "contact": {
+    "subtitle": "Get In Touch",
+    "title": "Contact Me",
+    "emailTitle": "Email",
+    "emailDesc": "You could directly email me 📨",
+    "emailCta": "📧 SEND NOW 📧",
+    "whatsappTitle": "WhatsApp",
+    "whatsappDesc": "or use WhatsApp to reach me 😉",
+    "whatsappCta": "💬 CONTACT ME 💬",
+    "namePlaceholder": "Your Full Name",
+    "emailPlaceholder": "Your Email",
+    "messagePlaceholder": "Your Message",
+    "send": "Send Message",
+    "alertErrorTitle": "Please fill in all the required fields.",
+    "alertSuccessTitle": "Your message has been sent"
+  },
+  "footer": {
+    "logo": "Farrez",
+    "home": "Home",
+    "about": "About",
+    "experience": "Experience",
+    "portfolio": "Portfolio",
+    "contact": "Contact",
+    "rights": "All rights reserved"
+  }
+}
