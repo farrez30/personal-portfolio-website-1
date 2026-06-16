@@ -66,5 +66,12 @@
     "portfolio": "Portofolio",
     "contact": "Kontak",
     "rights": "Hak cipta dilindungi"
+  },
+  "player": {
+    "play": "Putar",
+    "pause": "Jeda",
+    "hide": "Sembunyikan pemutar",
+    "show": "Tampilkan pemutar",
+    "nowPlaying": "Sedang Diputar"
   }
 }

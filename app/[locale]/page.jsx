@@ -10,6 +10,7 @@ import Contact from "@/components/contact/Contact";
 import Footer from "@/components/footer/Footer";
 import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import VinylPlayer from "@/components/vinyl/VinylPlayer";
 
 export default function Home({ params: { locale } }) {
   setRequestLocale(locale);
@@ -27,6 +28,7 @@ export default function Home({ params: { locale } }) {
       {/* <Testimonials /> */}
       <Contact />
       <Footer />
+      <VinylPlayer />
     </>
   );
 }

@@ -66,5 +66,12 @@
     "portfolio": "ポートフォリオ",
     "contact": "お問い合わせ",
     "rights": "無断複写・転載を禁じます"
+  },
+  "player": {
+    "play": "再生",
+    "pause": "一時停止",
+    "hide": "プレーヤーを隠す",
+    "show": "プレーヤーを表示",
+    "nowPlaying": "再生中"
   }
 }

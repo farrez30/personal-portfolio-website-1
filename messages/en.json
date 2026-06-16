@@ -66,5 +66,12 @@
     "portfolio": "Portfolio",
     "contact": "Contact",
     "rights": "All rights reserved"
+  },
+  "player": {
+    "play": "Play",
+    "pause": "Pause",
+    "hide": "Hide player",
+    "show": "Show player",
+    "nowPlaying": "Now Playing"
   }
 }
