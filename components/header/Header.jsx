@@ -1,9 +1,11 @@
+"use client";
 import React from "react";
 import "./header.css";
 import CTA from "./CTA";
 import HeaderSocial from "./HeaderSocial";
-import audio from "../../assets/audio/ES_Despite_Such_a_Trustworthy_Appearance-Ludvig_Moulin.mp3";
 import { useRef, useEffect } from "react";
+
+const audio = "/assets/audio/ES_Despite_Such_a_Trustworthy_Appearance-Ludvig_Moulin.mp3";
 
 const Header = () => {
   const audioRef = useRef(null);

@@ -1,9 +1,11 @@
+"use client";
 import React from "react";
 import "./testimonials.css";
-import AVTR1 from "../../assets/webp/avatar1.webp";
-import AVTR2 from "../../assets/webp/avatar2.webp";
-import AVTR3 from "../../assets/webp/avatar3.webp";
-import AVTR4 from "../../assets/webp/avatar4.webp";
+
+const AVTR1 = "/assets/webp/avatar1.webp";
+const AVTR2 = "/assets/webp/avatar2.webp";
+const AVTR3 = "/assets/webp/avatar3.webp";
+const AVTR4 = "/assets/webp/avatar4.webp";
 
 // import Swiper core and required modules
 import { Pagination } from "swiper/modules";

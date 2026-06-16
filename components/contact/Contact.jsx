@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef } from "react";
 import "./contact.css";
 import { MdOutlineEmail } from "react-icons/md";

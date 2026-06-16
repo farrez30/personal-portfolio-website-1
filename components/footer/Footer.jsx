@@ -1,3 +1,4 @@
+"use client";
 import React, { useState, useEffect } from "react";
 import "./footer.css";
 import { FaFacebookF } from "react-icons/fa";

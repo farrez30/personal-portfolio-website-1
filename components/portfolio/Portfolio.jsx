@@ -1,20 +1,10 @@
 import React from "react";
 import "./portfolio.css";
-import IMG1 from "../../assets/pngjpg/portfolio1.jpg";
-// import IMG2 from "../../assets/pngjpg/portfolio2.jpg";
-// import IMG3 from "../../assets/pngjpg/portfolio3.jpg";
-// import IMG4 from "../../assets/pngjpg/portfolio4.jpg";
-// import IMG5 from "../../assets/pngjpg/portfolio5.jpg";
-// import IMG6 from "../../assets/pngjpg/portfolio6.jpg";
-
-import IMG1_WEBP from "../../assets/webp/portfolio1.webp";
-// import IMG2_WEBP from "../../assets/webp/portfolio2.webp";
-// import IMG3_WEBP from "../../assets/webp/portfolio3.webp";
-// import IMG4_WEBP from "../../assets/webp/portfolio4.webp";
-// import IMG5_WEBP from "../../assets/webp/portfolio5.webp";
-// import IMG6_WEBP from "../../assets/webp/portfolio6.webp";
 import { FiGithub } from "react-icons/fi";
 import { MdOpenInNew } from "react-icons/md";
+
+const IMG1 = "/assets/pngjpg/portfolio1.jpg";
+const IMG1_WEBP = "/assets/webp/portfolio1.webp";
 
 // DO NOT USE THE IMAGES IN PRODUCTION
 
