@@ -3,6 +3,8 @@ import { Poppins } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
+import ThemeScript from "../ThemeScript";
+import ThemeProvider from "@/components/providers/ThemeProvider";
 
 // Only the locales returned by generateStaticParams are valid; any other
 // first path segment yields Next's built-in 404.
@@ -69,10 +71,11 @@ export default async function LocaleLayout({ children, params: { locale } }) {
   const messages = await getMessages();
 
   return (
-    <html lang={locale} className={poppins.variable}>
+    <html lang={locale} className={poppins.variable} suppressHydrationWarning>
       <body>
+        <ThemeScript />
         <NextIntlClientProvider messages={messages}>
-          {children}
+          <ThemeProvider>{children}</ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

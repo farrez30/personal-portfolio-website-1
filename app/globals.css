@@ -9,6 +9,15 @@
 }
 
 :root {
+    --transition: all 400ms ease;
+
+    --container-width-lg: 75%;
+    --container-width-md: 86%;
+    --container-width-sm: 90%;
+}
+
+:root,
+[data-theme="dark"] {
     --color-bg: #1f1f38;
     --color-bg-variant: #2c2c6c;
     --color-primary: #4db5ff;
@@ -16,11 +25,26 @@
     --color-white: #fff;
     --color-light: rgba(255, 255, 255, 0.6);
 
-    --transition: all 400ms ease;
+    --glass-bg: rgba(31, 31, 56, 0.45);
+    --glass-strong: rgba(31, 31, 56, 0.65);
+    --glass-border: var(--color-primary-variant);
 
-    --container-width-lg: 75%;
-    --container-width-md: 86%;
-    --container-width-sm: 90%;
+    color-scheme: dark;
+}
+
+[data-theme="light"] {
+    --color-bg: #f4f6fb;
+    --color-bg-variant: #e2e8f5;
+    --color-primary: #1d6fe0;
+    --color-primary-variant: rgba(29, 111, 224, 0.25);
+    --color-white: #11131f;
+    --color-light: rgba(17, 19, 31, 0.6);
+
+    --glass-bg: rgba(255, 255, 255, 0.55);
+    --glass-strong: rgba(255, 255, 255, 0.78);
+    --glass-border: rgba(29, 111, 224, 0.25);
+
+    color-scheme: light;
 }
 
 html {
@@ -36,6 +60,7 @@ body {
     background: var(--color-bg);
     color: var(--color-white);
     line-height: 1.7;
+    transition: background 400ms ease, color 400ms ease;
 }
 
 /* ============= GENERAL STYLES ============= */

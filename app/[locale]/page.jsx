@@ -9,6 +9,7 @@ import Portfolio from "@/components/portfolio/Portfolio";
 import Contact from "@/components/contact/Contact";
 import Footer from "@/components/footer/Footer";
 import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 export default function Home({ params: { locale } }) {
   setRequestLocale(locale);
@@ -16,6 +17,7 @@ export default function Home({ params: { locale } }) {
   return (
     <>
       <LanguageSwitcher />
+      <ThemeToggle />
       <Header />
       <Nav />
       <About />
