@@ -5,6 +5,7 @@ import { getMessages, getTranslations, setRequestLocale } from "next-intl/server
 import { routing } from "@/i18n/routing";
 import ThemeScript from "../ThemeScript";
 import ThemeProvider from "@/components/providers/ThemeProvider";
+import LenisProvider from "@/components/providers/LenisProvider";
 
 // Only the locales returned by generateStaticParams are valid; any other
 // first path segment yields Next's built-in 404.
@@ -75,7 +76,9 @@ export default async function LocaleLayout({ children, params: { locale } }) {
       <body>
         <ThemeScript />
         <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <LenisProvider>{children}</LenisProvider>
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

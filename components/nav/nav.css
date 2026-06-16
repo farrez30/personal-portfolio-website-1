@@ -1,45 +1,58 @@
 nav {
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
     width: max-content;
-    display: block;
     padding: 0.7rem 1.7rem;
     position: fixed;
     left: 50%;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
     transform: translateX(-50%);
     bottom: 2rem;
     display: flex;
     gap: 0.8rem;
-    -webkit-border-radius: 3rem;
-    -moz-border-radius: 3rem;
-    -ms-border-radius: 3rem;
-    -o-border-radius: 3rem;
     border-radius: 3rem;
-    -webkit-backdrop-filter: blur(15px);
-    backdrop-filter: blur(15px);
+    z-index: 90;
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+    transition: padding 300ms ease, background 300ms ease, box-shadow 300ms ease;
+}
+
+/* Reacts once the user scrolls past the hero: tighter + more present. */
+nav.scrolled {
+    padding: 0.55rem 1.4rem;
+    background: var(--glass-strong);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.36);
 }
 
 nav a {
+    position: relative;
     background: transparent;
     padding: 0.9rem;
-    -webkit-border-radius: 50%;
-    -moz-border-radius: 50%;
-    -ms-border-radius: 50%;
-    -o-border-radius: 50%;
     border-radius: 50%;
     display: flex;
     color: var(--color-light);
     font-size: 1.1rem;
+    transition: color 250ms ease;
+}
+
+nav a svg {
+    position: relative;
+    z-index: 1;
 }
 
 nav a:hover {
-    background: rgba(0, 0, 0, 0.3);
+    color: var(--color-white);
 }
 
 nav a.active {
-    background: var(--color-primary);
     color: var(--color-bg);
+}
+
+/* Shared-layout highlight that slides between the active items. */
+.nav__pill {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--color-primary);
+    z-index: 0;
 }

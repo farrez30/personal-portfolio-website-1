@@ -47,9 +47,8 @@
     color-scheme: light;
 }
 
-html {
-    scroll-behavior: smooth;
-}
+/* Smooth scrolling is owned by Lenis (see LenisProvider); the CSS rule would
+   conflict with it. */
 
 ::-webkit-scrollbar {
     display: none;

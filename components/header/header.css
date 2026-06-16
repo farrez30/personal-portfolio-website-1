@@ -8,6 +8,7 @@ header {
     text-align: center;
     height: 100%;
     position: relative;
+    perspective: 1000px;
 }
 
 /* ========== CTA ========== */

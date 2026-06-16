@@ -5,6 +5,7 @@ import CTA from "./CTA";
 import HeaderSocial from "./HeaderSocial";
 import { useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 
 const audio = "/assets/audio/ES_Despite_Such_a_Trustworthy_Appearance-Ludvig_Moulin.mp3";
 
@@ -12,6 +13,25 @@ const Header = () => {
   const t = useTranslations("header");
   const audioRef = useRef(null);
   const hasUserInteracted = useRef(false);
+  const headerRef = useRef(null);
+  const reduce = useReducedMotion();
+
+  // Track scroll progress across the hero for the parallax layers.
+  const { scrollYProgress } = useScroll({
+    target: headerRef,
+    offset: ["start start", "end start"],
+  });
+
+  // Each layer moves at a different rate to build depth.
+  const meY = useTransform(scrollYProgress, [0, 1], [0, 140]);
+  const meRotateX = useTransform(scrollYProgress, [0, 1], [0, 9]);
+  const meScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
+  const textY = useTransform(scrollYProgress, [0, 1], [0, -70]);
+
+  const meStyle = reduce
+    ? undefined
+    : { y: meY, rotateX: meRotateX, scale: meScale, transformPerspective: 1000 };
+  const textStyle = reduce ? undefined : { y: textY };
 
   // Set autoplay directly on DOM element and enable audio after first user interaction
   useEffect(() => {
@@ -24,7 +44,7 @@ const Header = () => {
     const enableAudio = async () => {
       if (audioRef.current && !hasUserInteracted.current) {
         hasUserInteracted.current = true;
-        
+
         try {
           // Unmute and play after user interaction
           audioRef.current.muted = false;
@@ -51,32 +71,26 @@ const Header = () => {
   }, []);
 
   return (
-    <header id="home">
+    <header id="home" ref={headerRef}>
       <div className="container header__container">
-        <h5>{t("greeting")}</h5>
-        <h1>{t("name")}</h1>
-        <h5 className="text-light">{t("tagline")}</h5>
-        <CTA />
+        <motion.div className="header__intro" style={textStyle}>
+          <h5>{t("greeting")}</h5>
+          <h1>{t("name")}</h1>
+          <h5 className="text-light">{t("tagline")}</h5>
+          <CTA />
+        </motion.div>
+
         <HeaderSocial />
-        <div className="me">
-          {/* <img src={ME} alt="me" /> */}
+
+        <motion.div className="me" style={meStyle}>
           <iframe src="https://giphy.com/embed/qgQUggAC3Pfv687qPC" alt="me" style={{ pointerEvents: "none" }} loading="lazy" title="me" />
-        </div>
+        </motion.div>
+
         <a href="#contact" className="scroll__down">
           {t("scrollDown")}
         </a>
-        <div className="spotify__container">
-          {/* <iframe 
-          title="spotify"
-          data-testid="embed-iframe" 
-          style={{ borderRadius: "12px" }} 
-          src="https://open.spotify.com/embed/track/0iIcuwia47B5bzjVpyUwyI?utm_source=generator&theme=0"
-           width="100%" 
-          //  height="152" 
-           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
-           loading="lazy"
-           autoplay></iframe> */}
 
+        <div className="spotify__container">
           <audio
             src={audio}
             title="theme song"
