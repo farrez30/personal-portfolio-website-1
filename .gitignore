@@ -19,9 +19,6 @@ next-env.d.ts
 # local tooling
 .claude/
 
-# local session handoff (regenerated on "rangkum session ini")
-SESSION_SUMMARY.md
-
 # misc
 .DS_Store
 .env.local
