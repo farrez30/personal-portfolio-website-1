@@ -86,33 +86,51 @@
 }
 
 /* ===== Tonearm ===== */
+/* Pivots from a hub at the disc's top-right; the headshell tip rests on the
+   record. Paused = lifted out to the armrest, playing = lowered onto grooves. */
 .tonearm {
   position: absolute;
-  top: -0.35rem;
-  right: -0.25rem;
-  width: 0.28rem;
-  height: 2.7rem;
-  background: linear-gradient(180deg, #c9ced8, #8b909c);
-  border-radius: 0.28rem;
-  transform-origin: top right;
-  transform: rotate(-32deg);
+  top: 0.15rem;
+  right: 0.5rem;
+  width: 0.24rem;
+  height: 2.5rem;
+  background: linear-gradient(180deg, #d4d8e0, #8b909c);
+  border-radius: 0.3rem;
+  transform-origin: top center;
+  transform: rotate(4deg); /* paused: arm lifted to the rest position */
   transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
   z-index: 2;
 }
 
+/* Pivot hub */
 .tonearm::after {
   content: "";
   position: absolute;
-  top: -0.18rem;
-  right: -0.18rem;
-  width: 0.6rem;
-  height: 0.6rem;
+  top: -0.28rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0.7rem;
+  height: 0.7rem;
   border-radius: 50%;
-  background: #c9ced8;
+  background: radial-gradient(circle at 35% 30%, #eef0f4, #9095a1 70%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+}
+
+/* Headshell / stylus at the tip */
+.tonearm::before {
+  content: "";
+  position: absolute;
+  bottom: -0.05rem;
+  left: 50%;
+  transform: translateX(-55%) rotate(18deg);
+  width: 0.42rem;
+  height: 0.5rem;
+  border-radius: 0.1rem;
+  background: linear-gradient(180deg, #b9bec9, #6f7480);
 }
 
 .tonearm--on {
-  transform: rotate(-6deg);
+  transform: rotate(22deg); /* playing: arm lowered onto the record */
 }
 
 /* ===== Glass control panel ===== */
