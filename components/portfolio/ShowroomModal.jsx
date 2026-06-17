@@ -70,13 +70,13 @@ const ShowroomModal = ({ project, onClose }) => {
           <FiX />
         </button>
 
-        <header className="showroom__head">
+        <div className="showroom__head">
           <h3 className="showroom__title">{project.title}</h3>
           <div className="showroom__chips">
             {project.year && <span className="showroom__chip">{project.year}</span>}
             {project.role && <span className="showroom__chip">{project.role}</span>}
           </div>
-        </header>
+        </div>
 
         {project.type === "web" && (
           <div className="showroom__viewport">
@@ -220,26 +220,26 @@ const ShowroomModal = ({ project, onClose }) => {
 
         <div className="showroom__content">
           {project.concept && (
-            <section>
+            <div>
               <h4>{t("concept")}</h4>
               <p>{project.concept}</p>
-            </section>
+            </div>
           )}
           {project.impact && (
-            <section>
+            <div>
               <h4>{t("impact")}</h4>
               <p>{project.impact}</p>
-            </section>
+            </div>
           )}
           {project.learnings && (
-            <section>
+            <div>
               <h4>{t("learnings")}</h4>
               <p>{project.learnings}</p>
-            </section>
+            </div>
           )}
         </div>
 
-        <footer className="showroom__links">
+        <div className="showroom__links">
           {project.demoUrl && (
             <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
               {t("visitSite")} <FiExternalLink />
@@ -255,7 +255,7 @@ const ShowroomModal = ({ project, onClose }) => {
               {l.label} <FiExternalLink />
             </a>
           ))}
-        </footer>
+        </div>
       </div>
     </div>
   );

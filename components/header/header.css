@@ -1,4 +1,4 @@
-header {
+#home {
     height: 100vh;
     padding-top: 2rem;
     overflow: hidden;
@@ -77,14 +77,14 @@ header {
 
 /* ============= MEDIA QUERIES (MEDIUM DEVICES) ============= */
 @media screen and (max-width: 1024px) {
-    header {
+    #home {
         height: 68vh;
     }
 }
 
 /* ============= MEDIA QUERIES (SMALL DEVICES) ============= */
 @media screen and (max-width: 600px) {
-    header {
+    #home {
         height: 100vh;
     }
 
