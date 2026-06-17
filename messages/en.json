@@ -52,7 +52,10 @@
     "mobile": "Mobile",
     "close": "Close",
     "soon": "Coming soon",
-    "uiuxCase": "UI/UX case study — see the links below."
+    "uiuxCase": "UI/UX case study — see the links below.",
+    "builtWith": "Built with",
+    "openNewTab": "Open in new tab",
+    "previewNote": "Some sites block embedding — open in a new tab if the preview stays blank."
   },
   "contact": {
     "subtitle": "Get In Touch",

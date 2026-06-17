@@ -8,12 +8,15 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { FiGithub, FiMonitor, FiSmartphone, FiX, FiExternalLink } from "react-icons/fi";
+import { getTech } from "./techStack";
 
 const ShowroomModal = ({ project, onClose }) => {
   const t = useTranslations("portfolio");
   const lenis = useLenis();
   const [view, setView] = useState("desktop");
   const [closing, setClosing] = useState(false);
+  const [frameLoaded, setFrameLoaded] = useState(false);
+  const [frameTimedOut, setFrameTimedOut] = useState(false);
 
   const requestClose = () => setClosing(true);
 
@@ -33,11 +36,23 @@ const ShowroomModal = ({ project, onClose }) => {
     };
   }, [lenis]);
 
+  // Reset the iframe loading state whenever the project or viewport changes,
+  // and reveal a "open in a new tab" hint if it hasn't loaded after a while
+  // (covers sites that block embedding via X-Frame-Options / CSP).
+  useEffect(() => {
+    if (project.type !== "web") return undefined;
+    setFrameLoaded(false);
+    setFrameTimedOut(false);
+    const id = setTimeout(() => setFrameTimedOut(true), 4000);
+    return () => clearTimeout(id);
+  }, [project.id, project.type, view]);
+
   const handleAnimationEnd = (e) => {
     if (closing && e.animationName === "showroom-out") onClose();
   };
 
   const externalLinks = (project.links || []).filter((l) => l.href);
+  const tech = project.tech || [];
 
   return (
     <div
@@ -78,10 +93,39 @@ const ShowroomModal = ({ project, onClose }) => {
               >
                 <FiSmartphone /> {t("mobile")}
               </button>
+              <a
+                href={project.demoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="showroom__toolbar-link"
+              >
+                <FiExternalLink /> {t("openNewTab")}
+              </a>
             </div>
+
             <div className={`showroom__frame showroom__frame--${view}`}>
-              <iframe src={project.demoUrl} title={project.title} loading="lazy" />
+              <iframe
+                key={view}
+                src={project.demoUrl}
+                title={project.title}
+                loading="lazy"
+                onLoad={() => setFrameLoaded(true)}
+              />
+              {!frameLoaded && (
+                <div className="showroom__skeleton" aria-hidden="true">
+                  <span className="showroom__spinner" />
+                </div>
+              )}
+              {!frameLoaded && frameTimedOut && (
+                <div className="showroom__frame-fallback">
+                  <p>{t("previewNote")}</p>
+                  <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
+                    {t("openNewTab")} <FiExternalLink />
+                  </a>
+                </div>
+              )}
             </div>
+            <small className="showroom__hint">{t("previewNote")}</small>
           </div>
         )}
 
@@ -116,6 +160,23 @@ const ShowroomModal = ({ project, onClose }) => {
         {project.type === "soon" && (
           <div className={`showroom__soon accent-${project.accent ?? 0}`}>
             <span className="showroom__badge">{t("soon")}</span>
+          </div>
+        )}
+
+        {tech.length > 0 && (
+          <div className="showroom__tech">
+            <h4>{t("builtWith")}</h4>
+            <ul className="tech-list">
+              {tech.map((key) => {
+                const { Icon, label } = getTech(key);
+                return (
+                  <li key={key} className="tech-chip">
+                    <Icon aria-hidden="true" />
+                    <span>{label}</span>
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         )}
 

@@ -16,6 +16,7 @@ const portfolioData = [
     id: "raja-roti-cemerlang",
     title: "Raja Roti Cemerlang",
     type: "web",
+    tech: ["nextjs", "tailwind", "vercel"], // TODO confirm stack
     year: "2024", // TODO confirm year
     role: "Full-Stack Developer", // TODO confirm role
     accent: 0,
@@ -29,6 +30,7 @@ const portfolioData = [
     id: "uruzin",
     title: "Uruzin",
     type: "web",
+    tech: ["nextjs", "tailwind", "vercel"], // TODO confirm stack
     year: "2024", // TODO
     role: "Full-Stack Developer", // TODO
     accent: 1,
@@ -42,6 +44,7 @@ const portfolioData = [
     id: "coderoach-studio",
     title: "Coderoach Studio",
     type: "web",
+    tech: ["nextjs", "react", "tailwind", "framer", "vercel"], // TODO confirm stack
     year: "2024", // TODO
     role: "Full-Stack Developer", // TODO
     accent: 2,
@@ -55,6 +58,7 @@ const portfolioData = [
     id: "tumtim-cookies",
     title: "Tum Tim Cookies",
     type: "web",
+    tech: ["nextjs", "tailwind", "vercel"], // TODO confirm stack
     year: "2024", // TODO
     role: "Full-Stack Developer", // TODO
     accent: 3,
@@ -68,6 +72,7 @@ const portfolioData = [
     id: "locascore",
     title: "Locascore",
     type: "web",
+    tech: ["react", "nextjs", "tailwind", "node"], // TODO confirm stack
     year: "2025", // TODO
     role: "Full-Stack Developer", // TODO
     accent: 4,
@@ -81,6 +86,7 @@ const portfolioData = [
     id: "viralytics",
     title: "Viralytics",
     type: "web",
+    tech: ["nextjs", "react", "tailwind", "node"], // TODO confirm stack
     year: "2025", // TODO
     role: "Full-Stack Developer", // TODO
     accent: 5,
@@ -94,6 +100,7 @@ const portfolioData = [
     id: "rpn-agro",
     title: "RPN Agro",
     type: "web",
+    tech: ["nextjs", "tailwind", "vercel"], // TODO confirm stack
     year: "2024", // TODO
     role: "Full-Stack Developer", // TODO
     accent: 6,
@@ -107,6 +114,7 @@ const portfolioData = [
     id: "groseria",
     title: "Groseria",
     type: "web",
+    tech: ["react", "redux", "node", "express", "sequelize", "mysql", "tailwind"], // TODO confirm stack
     year: "2023", // TODO
     role: "Full-Stack Developer", // TODO
     accent: 7,
@@ -120,6 +128,7 @@ const portfolioData = [
     id: "payung-hukum",
     title: "Payung Hukum",
     type: "media",
+    tech: ["figma"], // TODO confirm tools
     year: "2024", // TODO
     role: "Business & UI/UX",
     accent: 2,
@@ -137,6 +146,7 @@ const portfolioData = [
     id: "cuanbot",
     title: "Cuanbot",
     type: "media",
+    tech: ["react", "tailwind", "figma"], // TODO confirm stack
     year: "2024", // TODO
     role: "Front-End Developer (UI/UX partner)",
     accent: 5,
@@ -158,6 +168,7 @@ const portfolioData = [
     id: "laporta",
     title: "Laporta",
     type: "soon",
+    tech: ["nextjs", "postgres", "prisma", "tailwind"], // TODO confirm stack
     year: "2025",
     role: "Full-Stack Developer", // TODO confirm
     accent: 1,
@@ -170,6 +181,7 @@ const portfolioData = [
     id: "bpu-utm",
     title: "Platform Digital BPU Universitas Trunojoyo Madura",
     type: "soon",
+    tech: ["nextjs", "tailwind", "postgres"], // TODO confirm stack
     year: "2025",
     role: "Full-Stack Developer", // TODO confirm
     accent: 4,

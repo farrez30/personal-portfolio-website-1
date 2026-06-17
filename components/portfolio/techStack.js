@@ -1,0 +1,75 @@
+// Tech-stack registry: maps a key used in portfolioData `tech: [...]` to an
+// icon + display label. Unknown keys fall back to a generic code icon.
+import {
+  SiReact,
+  SiNextdotjs,
+  SiNodedotjs,
+  SiExpress,
+  SiMongodb,
+  SiMysql,
+  SiPostgresql,
+  SiSequelize,
+  SiRedux,
+  SiTailwindcss,
+  SiBootstrap,
+  SiJavascript,
+  SiTypescript,
+  SiHtml5,
+  SiCss3,
+  SiSass,
+  SiFigma,
+  SiAdobexd,
+  SiAdobephotoshop,
+  SiAdobeillustrator,
+  SiVercel,
+  SiFirebase,
+  SiSupabase,
+  SiPrisma,
+  SiStripe,
+  SiPython,
+  SiOpenai,
+  SiFramer,
+  SiVite,
+  SiGreensock,
+} from "react-icons/si";
+import { FaRobot } from "react-icons/fa";
+import { FiCode } from "react-icons/fi";
+
+const TECH = {
+  react: { Icon: SiReact, label: "React" },
+  nextjs: { Icon: SiNextdotjs, label: "Next.js" },
+  node: { Icon: SiNodedotjs, label: "Node.js" },
+  express: { Icon: SiExpress, label: "Express" },
+  mongodb: { Icon: SiMongodb, label: "MongoDB" },
+  mysql: { Icon: SiMysql, label: "MySQL" },
+  postgres: { Icon: SiPostgresql, label: "PostgreSQL" },
+  sequelize: { Icon: SiSequelize, label: "Sequelize" },
+  redux: { Icon: SiRedux, label: "Redux" },
+  tailwind: { Icon: SiTailwindcss, label: "Tailwind CSS" },
+  bootstrap: { Icon: SiBootstrap, label: "Bootstrap" },
+  javascript: { Icon: SiJavascript, label: "JavaScript" },
+  typescript: { Icon: SiTypescript, label: "TypeScript" },
+  html: { Icon: SiHtml5, label: "HTML5" },
+  css: { Icon: SiCss3, label: "CSS3" },
+  sass: { Icon: SiSass, label: "Sass" },
+  figma: { Icon: SiFigma, label: "Figma" },
+  adobexd: { Icon: SiAdobexd, label: "Adobe XD" },
+  photoshop: { Icon: SiAdobephotoshop, label: "Photoshop" },
+  illustrator: { Icon: SiAdobeillustrator, label: "Illustrator" },
+  vercel: { Icon: SiVercel, label: "Vercel" },
+  firebase: { Icon: SiFirebase, label: "Firebase" },
+  supabase: { Icon: SiSupabase, label: "Supabase" },
+  prisma: { Icon: SiPrisma, label: "Prisma" },
+  stripe: { Icon: SiStripe, label: "Stripe" },
+  python: { Icon: SiPython, label: "Python" },
+  openai: { Icon: SiOpenai, label: "OpenAI" },
+  ai: { Icon: FaRobot, label: "AI" },
+  framer: { Icon: SiFramer, label: "Framer Motion" },
+  vite: { Icon: SiVite, label: "Vite" },
+  gsap: { Icon: SiGreensock, label: "GSAP" },
+};
+
+export const getTech = (key) =>
+  TECH[key] || { Icon: FiCode, label: key };
+
+export default TECH;

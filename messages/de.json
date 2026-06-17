@@ -52,7 +52,10 @@
     "mobile": "Mobil",
     "close": "Schließen",
     "soon": "Demnächst",
-    "uiuxCase": "UI/UX-Fallstudie — siehe die Links unten."
+    "uiuxCase": "UI/UX-Fallstudie — siehe die Links unten.",
+    "builtWith": "Erstellt mit",
+    "openNewTab": "In neuem Tab öffnen",
+    "previewNote": "Einige Websites blockieren das Einbetten — in neuem Tab öffnen, falls die Vorschau leer bleibt."
   },
   "contact": {
     "subtitle": "Kontakt aufnehmen",

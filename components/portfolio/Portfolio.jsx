@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { FiArrowUpRight } from "react-icons/fi";
 import portfolioData from "./portfolioData";
 import ShowroomModal from "./ShowroomModal";
+import { getTech } from "./techStack";
 
 const Portfolio = () => {
   const t = useTranslations("portfolio");
@@ -43,6 +44,14 @@ const Portfolio = () => {
             <div className="showroom-card__meta">
               <h3>{project.title}</h3>
               {project.role && <small className="text-light">{project.role}</small>}
+              {project.tech && project.tech.length > 0 && (
+                <span className="showroom-card__tech" aria-hidden="true">
+                  {project.tech.slice(0, 5).map((key) => {
+                    const { Icon, label } = getTech(key);
+                    return <Icon key={key} title={label} />;
+                  })}
+                </span>
+              )}
             </div>
           </button>
         ))}

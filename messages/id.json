@@ -52,7 +52,10 @@
     "mobile": "Mobile",
     "close": "Tutup",
     "soon": "Segera hadir",
-    "uiuxCase": "Studi kasus UI/UX — lihat tautan di bawah."
+    "uiuxCase": "Studi kasus UI/UX — lihat tautan di bawah.",
+    "builtWith": "Dibangun dengan",
+    "openNewTab": "Buka di tab baru",
+    "previewNote": "Beberapa situs memblokir penyematan — buka di tab baru jika pratinjau tetap kosong."
   },
   "contact": {
     "subtitle": "Hubungi Saya",
