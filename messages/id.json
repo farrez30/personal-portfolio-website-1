@@ -73,7 +73,13 @@
     "messagePlaceholder": "Pesan Anda",
     "send": "Kirim Pesan",
     "alertErrorTitle": "Mohon isi semua kolom yang wajib diisi.",
-    "alertSuccessTitle": "Pesan Anda telah terkirim"
+    "alertSuccessTitle": "Pesan Anda telah terkirim",
+    "alertErrorText": "Terjadi kesalahan. Silakan coba lagi atau hubungi saya via WhatsApp.",
+    "sendEmail": "Kirim via Email",
+    "sendWhatsapp": "Kirim via WhatsApp",
+    "subjectPlaceholder": "Subjek",
+    "subjectTemplate": "Pertanyaan proyek",
+    "messageTemplate": "Halo Farrez,\n\nSaya menemukan portofolio Anda dan ingin mendiskusikan kemungkinan proyek.\n\nSalam,"
   },
   "footer": {
     "logo": "Farrez",

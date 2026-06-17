@@ -73,7 +73,13 @@
     "messagePlaceholder": "Je bericht",
     "send": "Bericht verzenden",
     "alertErrorTitle": "Vul alstublieft alle verplichte velden in.",
-    "alertSuccessTitle": "Je bericht is verzonden"
+    "alertSuccessTitle": "Je bericht is verzonden",
+    "alertErrorText": "Er ging iets mis. Probeer het opnieuw of bereik me via WhatsApp.",
+    "sendEmail": "Verstuur via e-mail",
+    "sendWhatsapp": "Verstuur via WhatsApp",
+    "subjectPlaceholder": "Onderwerp",
+    "subjectTemplate": "Projectaanvraag",
+    "messageTemplate": "Hallo Farrez,\n\nIk kwam je portfolio tegen en wil graag een mogelijk project bespreken.\n\nMet vriendelijke groet,"
   },
   "footer": {
     "logo": "Farrez",

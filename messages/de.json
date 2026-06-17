@@ -73,7 +73,13 @@
     "messagePlaceholder": "Deine Nachricht",
     "send": "Nachricht senden",
     "alertErrorTitle": "Bitte fülle alle erforderlichen Felder aus.",
-    "alertSuccessTitle": "Deine Nachricht wurde gesendet"
+    "alertSuccessTitle": "Deine Nachricht wurde gesendet",
+    "alertErrorText": "Etwas ist schiefgelaufen. Bitte versuche es erneut oder erreiche mich über WhatsApp.",
+    "sendEmail": "Per E-Mail senden",
+    "sendWhatsapp": "Per WhatsApp senden",
+    "subjectPlaceholder": "Betreff",
+    "subjectTemplate": "Projektanfrage",
+    "messageTemplate": "Hallo Farrez,\n\nich bin auf dein Portfolio gestoßen und würde gern über ein mögliches Projekt sprechen.\n\nViele Grüße,"
   },
   "footer": {
     "logo": "Farrez",

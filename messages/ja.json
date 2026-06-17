@@ -73,7 +73,13 @@
     "messagePlaceholder": "メッセージ",
     "send": "メッセージを送信",
     "alertErrorTitle": "必須項目をすべてご入力ください。",
-    "alertSuccessTitle": "メッセージが送信されました"
+    "alertSuccessTitle": "メッセージが送信されました",
+    "alertErrorText": "問題が発生しました。もう一度お試しいただくか、WhatsApp でご連絡ください。",
+    "sendEmail": "メールで送信",
+    "sendWhatsapp": "WhatsApp で送信",
+    "subjectPlaceholder": "件名",
+    "subjectTemplate": "プロジェクトのお問い合わせ",
+    "messageTemplate": "Farrez 様\n\nポートフォリオを拝見し、プロジェクトについてご相談したくご連絡しました。\n\nよろしくお願いいたします。"
   },
   "footer": {
     "logo": "Farrez",
