@@ -55,7 +55,9 @@
     "uiuxCase": "UI/UX-casestudy — zie de links hieronder.",
     "builtWith": "Gebouwd met",
     "openNewTab": "Openen in nieuw tabblad",
-    "previewNote": "Sommige sites blokkeren insluiten — open in een nieuw tabblad als de preview leeg blijft."
+    "previewNote": "Sommige sites blokkeren insluiten — gebruik Live voorbeeld, of open de site in een nieuw tabblad.",
+    "preview": "Voorbeeld",
+    "livePreview": "Live voorbeeld"
   },
   "contact": {
     "subtitle": "Neem contact op",

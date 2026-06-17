@@ -7,7 +7,15 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { FiGithub, FiMonitor, FiSmartphone, FiX, FiExternalLink } from "react-icons/fi";
+import {
+  FiGithub,
+  FiMonitor,
+  FiSmartphone,
+  FiX,
+  FiExternalLink,
+  FiImage,
+  FiPlay,
+} from "react-icons/fi";
 import { getTech } from "./techStack";
 
 const ShowroomModal = ({ project, onClose }) => {
@@ -15,8 +23,8 @@ const ShowroomModal = ({ project, onClose }) => {
   const lenis = useLenis();
   const [view, setView] = useState("desktop");
   const [closing, setClosing] = useState(false);
+  const [liveMode, setLiveMode] = useState(false); // screenshot first; iframe is opt-in
   const [frameLoaded, setFrameLoaded] = useState(false);
-  const [frameTimedOut, setFrameTimedOut] = useState(false);
 
   const requestClose = () => setClosing(true);
 
@@ -36,16 +44,10 @@ const ShowroomModal = ({ project, onClose }) => {
     };
   }, [lenis]);
 
-  // Reset the iframe loading state whenever the project or viewport changes,
-  // and reveal a "open in a new tab" hint if it hasn't loaded after a while
-  // (covers sites that block embedding via X-Frame-Options / CSP).
+  // Reset the iframe loading state whenever the live embed (re)mounts.
   useEffect(() => {
-    if (project.type !== "web") return undefined;
-    setFrameLoaded(false);
-    setFrameTimedOut(false);
-    const id = setTimeout(() => setFrameTimedOut(true), 4000);
-    return () => clearTimeout(id);
-  }, [project.id, project.type, view]);
+    if (liveMode) setFrameLoaded(false);
+  }, [liveMode, view, project.id]);
 
   const handleAnimationEnd = (e) => {
     if (closing && e.animationName === "showroom-out") onClose();
@@ -81,18 +83,36 @@ const ShowroomModal = ({ project, onClose }) => {
             <div className="showroom__toolbar">
               <button
                 type="button"
-                className={view === "desktop" ? "active" : ""}
-                onClick={() => setView("desktop")}
+                className={!liveMode ? "active" : ""}
+                onClick={() => setLiveMode(false)}
               >
-                <FiMonitor /> {t("desktop")}
+                <FiImage /> {t("preview")}
               </button>
               <button
                 type="button"
-                className={view === "mobile" ? "active" : ""}
-                onClick={() => setView("mobile")}
+                className={liveMode ? "active" : ""}
+                onClick={() => setLiveMode(true)}
               >
-                <FiSmartphone /> {t("mobile")}
+                <FiPlay /> {t("livePreview")}
               </button>
+              {liveMode && (
+                <>
+                  <button
+                    type="button"
+                    className={view === "desktop" ? "active" : ""}
+                    onClick={() => setView("desktop")}
+                  >
+                    <FiMonitor /> {t("desktop")}
+                  </button>
+                  <button
+                    type="button"
+                    className={view === "mobile" ? "active" : ""}
+                    onClick={() => setView("mobile")}
+                  >
+                    <FiSmartphone /> {t("mobile")}
+                  </button>
+                </>
+              )}
               <a
                 href={project.demoUrl}
                 target="_blank"
@@ -103,28 +123,46 @@ const ShowroomModal = ({ project, onClose }) => {
               </a>
             </div>
 
-            <div className={`showroom__frame showroom__frame--${view}`}>
-              <iframe
-                key={view}
-                src={project.demoUrl}
-                title={project.title}
-                loading="lazy"
-                onLoad={() => setFrameLoaded(true)}
-              />
-              {!frameLoaded && (
-                <div className="showroom__skeleton" aria-hidden="true">
-                  <span className="showroom__spinner" />
-                </div>
-              )}
-              {!frameLoaded && frameTimedOut && (
-                <div className="showroom__frame-fallback">
-                  <p>{t("previewNote")}</p>
-                  <a href={project.demoUrl} target="_blank" rel="noopener noreferrer" className="btn btn-primary">
-                    {t("openNewTab")} <FiExternalLink />
-                  </a>
-                </div>
-              )}
-            </div>
+            {!liveMode ? (
+              <div className="showroom__frame showroom__frame--shot">
+                <span className={`showroom__shot-poster accent-${project.accent ?? 0}`}>
+                  <span>{project.title}</span>
+                </span>
+                {project.thumbnail && (
+                  <img
+                    className="showroom__shot-img"
+                    src={project.thumbnail}
+                    alt={project.title}
+                    onError={(e) => {
+                      e.currentTarget.style.display = "none";
+                    }}
+                  />
+                )}
+                <a
+                  href={project.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary showroom__shot-cta"
+                >
+                  {t("visitSite")} <FiExternalLink />
+                </a>
+              </div>
+            ) : (
+              <div className={`showroom__frame showroom__frame--${view}`}>
+                <iframe
+                  key={view}
+                  src={project.demoUrl}
+                  title={project.title}
+                  loading="lazy"
+                  onLoad={() => setFrameLoaded(true)}
+                />
+                {!frameLoaded && (
+                  <div className="showroom__skeleton" aria-hidden="true">
+                    <span className="showroom__spinner" />
+                  </div>
+                )}
+              </div>
+            )}
             <small className="showroom__hint">{t("previewNote")}</small>
           </div>
         )}

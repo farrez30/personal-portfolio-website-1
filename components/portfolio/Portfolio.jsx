@@ -26,15 +26,22 @@ const Portfolio = () => {
             aria-label={`${project.title} — ${t("viewCase")}`}
           >
             <div className="showroom-card__media">
-              {project.thumbnail ? (
-                <picture>
-                  {project.thumbnailWebp && <source srcSet={project.thumbnailWebp} type="image/webp" />}
-                  <img src={project.thumbnail} alt={project.title} loading="lazy" decoding="async" />
-                </picture>
-              ) : (
-                <span className={`showroom-card__poster accent-${project.accent ?? 0}`}>
-                  <span className="showroom-card__poster-title">{project.title}</span>
-                </span>
+              {/* Gradient poster is the always-present base layer; a screenshot
+                  (if the file exists) overlays it and hides itself on error. */}
+              <span className={`showroom-card__poster accent-${project.accent ?? 0}`}>
+                <span className="showroom-card__poster-title">{project.title}</span>
+              </span>
+              {project.thumbnail && (
+                <img
+                  className="showroom-card__shot"
+                  src={project.thumbnail}
+                  alt={project.title}
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => {
+                    e.currentTarget.style.display = "none";
+                  }}
+                />
               )}
               {project.type === "soon" && <span className="showroom-card__flag">{t("soon")}</span>}
               <span className="showroom-card__view">

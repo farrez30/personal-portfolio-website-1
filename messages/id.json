@@ -55,7 +55,9 @@
     "uiuxCase": "Studi kasus UI/UX — lihat tautan di bawah.",
     "builtWith": "Dibangun dengan",
     "openNewTab": "Buka di tab baru",
-    "previewNote": "Beberapa situs memblokir penyematan — buka di tab baru jika pratinjau tetap kosong."
+    "previewNote": "Beberapa situs memblokir penyematan — gunakan Pratinjau langsung, atau buka situs di tab baru.",
+    "preview": "Pratinjau",
+    "livePreview": "Pratinjau langsung"
   },
   "contact": {
     "subtitle": "Hubungi Saya",

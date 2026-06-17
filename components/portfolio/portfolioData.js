@@ -21,6 +21,7 @@ const portfolioData = [
     role: "Full-Stack Developer", // TODO confirm role
     accent: 0,
     demoUrl: "https://rajaroticemerlang.com/",
+    thumbnail: "/assets/screenshots/raja-roti-cemerlang.jpg", // drop the screenshot here
     github: "",
     concept: "Company profile and product showcase for a bakery business.", // TODO refine
     impact: "", // TODO
@@ -35,6 +36,7 @@ const portfolioData = [
     role: "Full-Stack Developer", // TODO
     accent: 1,
     demoUrl: "https://uruzin.id/",
+    thumbnail: "/assets/screenshots/uruzin.jpg",
     github: "",
     concept: "", // TODO describe Uruzin
     impact: "",
@@ -49,6 +51,7 @@ const portfolioData = [
     role: "Full-Stack Developer", // TODO
     accent: 2,
     demoUrl: "https://coderoach-web.vercel.app/",
+    thumbnail: "/assets/screenshots/coderoach-studio.jpg",
     github: "",
     concept: "Studio website for Coderoach.", // TODO refine
     impact: "",
@@ -63,6 +66,7 @@ const portfolioData = [
     role: "Full-Stack Developer", // TODO
     accent: 3,
     demoUrl: "https://tumtimcookies.com/",
+    thumbnail: "/assets/screenshots/tumtim-cookies.jpg",
     github: "",
     concept: "Brand and product site for a cookies business.", // TODO refine
     impact: "",
@@ -77,6 +81,7 @@ const portfolioData = [
     role: "Full-Stack Developer", // TODO
     accent: 4,
     demoUrl: "https://locascore-three.vercel.app/",
+    thumbnail: "/assets/screenshots/locascore.jpg",
     github: "",
     concept: "", // TODO describe Locascore
     impact: "",
@@ -91,6 +96,7 @@ const portfolioData = [
     role: "Full-Stack Developer", // TODO
     accent: 5,
     demoUrl: "https://viralytics-web.vercel.app/",
+    thumbnail: "/assets/screenshots/viralytics.jpg",
     github: "",
     concept: "", // TODO describe Viralytics
     impact: "",
@@ -105,6 +111,7 @@ const portfolioData = [
     role: "Full-Stack Developer", // TODO
     accent: 6,
     demoUrl: "https://rpn-agro.com/",
+    thumbnail: "/assets/screenshots/rpn-agro.jpg",
     github: "",
     concept: "", // TODO describe RPN Agro
     impact: "",
@@ -119,6 +126,7 @@ const portfolioData = [
     role: "Full-Stack Developer", // TODO
     accent: 7,
     demoUrl: "https://groseria-client.vercel.app/",
+    thumbnail: "/assets/screenshots/groseria.jpg",
     github: "https://github.com/farrez30",
     concept: "An e-grocery platform for browsing, ordering, and managing grocery products.", // TODO refine
     impact: "",

@@ -55,7 +55,9 @@
     "uiuxCase": "UI/UX-Fallstudie — siehe die Links unten.",
     "builtWith": "Erstellt mit",
     "openNewTab": "In neuem Tab öffnen",
-    "previewNote": "Einige Websites blockieren das Einbetten — in neuem Tab öffnen, falls die Vorschau leer bleibt."
+    "previewNote": "Einige Websites blockieren das Einbetten — nutze die Live-Vorschau oder öffne die Seite in einem neuen Tab.",
+    "preview": "Vorschau",
+    "livePreview": "Live-Vorschau"
   },
   "contact": {
     "subtitle": "Kontakt aufnehmen",

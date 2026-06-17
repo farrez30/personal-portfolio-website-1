@@ -55,7 +55,9 @@
     "uiuxCase": "UI/UX case study — see the links below.",
     "builtWith": "Built with",
     "openNewTab": "Open in new tab",
-    "previewNote": "Some sites block embedding — open in a new tab if the preview stays blank."
+    "previewNote": "Some sites block embedding — use Live preview, or open the site in a new tab.",
+    "preview": "Preview",
+    "livePreview": "Live preview"
   },
   "contact": {
     "subtitle": "Get In Touch",
