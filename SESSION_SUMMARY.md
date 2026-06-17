@@ -7,13 +7,14 @@
 > it and fast-forward porto-v2** like any other change. Keep it self-contained so
 > a fresh AI agent in another session can continue with zero prior context.
 >
-> _Last updated: end of the migration session that delivered Commits 0–5.2._
+> _Last updated: session that finished all planned features (modal-bleed fix,
+> tonearm fix, advanced contact form) and promoted porto-v2 to production._
 
 ---
 
 ## 1. What this project is
 
-A personal portfolio being upgraded from a **Create React App** site into a
+A personal portfolio upgraded from a **Create React App** site into a
 **highly interactive, cinematic, premium** experience (inspired by annapurna.com
 & Netflix) with **international SEO (i18n)**.
 
@@ -23,103 +24,89 @@ A personal portfolio being upgraded from a **Create React App** site into a
   scroll) · `swiper` v10 · `@emailjs/browser` v3 · `sweetalert2` v11 · `react-icons` v4.
 - **Owner:** Farrez Al Hakim. Target roles for SEO: **Full-Stack Developer,
   AI Agentic Engineer, Data Engineer**.
-- Deploy target: **Vercel**.
+- Deploy target: **Vercel** (now serving the new site via `master`, see §10).
 
 ## 2. Git workflow (CRITICAL — read before committing)
 
-- All work must land on branch **`porto-v2`**. NO new branches.
-- This session ran inside a **git worktree** at
-  `D:\Projects\ayam\personal-portfolio-website-1\.claude\worktrees\zealous-almeida-e2ab4a`
-  on throwaway branch `claude/zealous-almeida-e2ab4a`.
+- All work lands on branch **`porto-v2`**. NO new branches.
 - `porto-v2` is checked out in the **main** worktree
-  `D:/Projects/ayam/personal-portfolio-website-1` — git forbids checking out the
+  `D:/Projects/ayam/personal-portfolio-website-1`. Throwaway agent worktrees live under
+  `.claude/worktrees/<name>` on `claude/<name>` branches. Git forbids checking out the
   same branch twice, so per feature:
   1. Commit in the current worktree.
   2. Fast-forward porto-v2 from the main worktree:
      `git -C "D:/Projects/ayam/personal-portfolio-website-1" merge --ff-only <new-sha>`
 - Commit messages end with: `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`.
   PowerShell here-strings break on embedded quotes — write the message to a temp
-  file and use `git commit -F <file>`.
-- **Both branches are currently at `6f72940`** (started from base `6d5c786`).
+  file (or use the Bash tool + heredoc) and `git commit -F <file>`.
+- **`porto-v2` and `master` are both at the latest commit** (this summary), started
+  from CRA base `6d5c786`. `master` was fast-forwarded up to porto-v2 (no force-push).
 
-## 3. Commits done this session (all on porto-v2)
+## 3. Commits done (all on porto-v2)
 
 | Hash | What |
 |------|------|
-| `625890e` | **Commit 0** — CRA→Next.js scaffold. Removed react-scripts/CRA; added next, `next.config.js`, `jsconfig.json`. Moved `src/components`→`components/`, `src/index.css`→`app/globals.css`, `src/assets`→`public/assets/` (referenced by string path). Added `'use client'` to interactive components. |
-| `709a04f` | **Commit 1** — i18n + International SEO. `next-intl` v4, `localePrefix:'always'`, locales **en/id/nl/ja/de**, `defaultLocale:'en'`. `i18n/{routing,navigation,request}.js`, `middleware.js`, `app/[locale]/{layout,page}.jsx`, `messages/*.json` (all 5 authored). `generateMetadata` per-locale (title/desc/keywords/OG/twitter/canonical/hreflang+x-default). `LanguageSwitcher`. |
-| `76b61be` | **Commit 2** — Light/Dark theme. `app/globals.css` split into `[data-theme="dark"]`/`[data-theme="light"]` + glass-surface vars. `app/ThemeScript.jsx` (no-flash inline), `components/providers/ThemeProvider.jsx`, `components/theme/ThemeToggle.jsx`. |
-| `eaf6c2d` | **Commit 3** — Cinematic UI. `LenisProvider` (smooth scroll + anchors), `app/[locale]/template.jsx` (page fade), glass floating Nav with framer `layoutId` active pill + scroll-react, 3D parallax hero in Header. All gated by `useReducedMotion`. |
-| `e36366e` | **Commit 4** — Floating Vinyl Player (`components/vinyl/VinylPlayer.jsx` + `vinyl.css`). Spinning grooved record (CSS keyframes) + tonearm + glass Play/Pause/Hide; collapses to a music button. Audio relocated OUT of Header. `player` i18n namespace. |
-| `e2618c3` | **Commit 5** — Portfolio Showroom. `portfolioData.js` (web/media/soon), `Portfolio.jsx` (client card grid), `ShowroomModal.jsx` (glass modal: iframe desktop/mobile, swiper carousel for media, soon badge; Escape/backdrop close, Lenis scroll-lock, CSS enter/exit). |
-| `4a75d4b` | **Commit 5.1** — Showroom UX fixes. iframe skeleton+spinner, open-in-new-tab, `techStack.js` icon registry + `tech[]` on every project + "Built with" chips + card tech icons. |
-| `6f72940` | **Commit 5.2** — Screenshot-based web previews (fixes blank iframe). Web modal now defaults to a **screenshot** (`/assets/screenshots/<id>.jpg`) with gradient-poster fallback; **Preview/Live-preview toggle** makes the live iframe opt-in. Cards: poster base + screenshot overlay that hides on error. `public/assets/screenshots/README.md`. |
+| `625890e` | **Commit 0** — CRA→Next.js scaffold (next, `next.config.js`, `jsconfig.json`; `src/`→`components/`/`app/`/`public/assets/`; `'use client'` where needed). |
+| `709a04f` | **Commit 1** — i18n + International SEO. `next-intl` v4, `localePrefix:'always'`, locales **en/id/nl/ja/de**, `defaultLocale:'en'`. per-locale `generateMetadata`, `LanguageSwitcher`. |
+| `76b61be` | **Commit 2** — Light/Dark theme. `[data-theme]` vars + glass-surface vars, no-flash `ThemeScript`, `ThemeProvider`, `ThemeToggle`. |
+| `eaf6c2d` | **Commit 3** — Cinematic UI. `LenisProvider`, page-fade `template.jsx`, glass floating Nav (framer `layoutId`), 3D parallax hero. Gated by `useReducedMotion`. |
+| `e36366e` | **Commit 4** — Floating Vinyl Player (`components/vinyl/VinylPlayer.jsx` + `vinyl.css`). |
+| `e2618c3` | **Commit 5** — Portfolio Showroom (`portfolioData.js`, `Portfolio.jsx`, `ShowroomModal.jsx`). |
+| `4a75d4b` | **Commit 5.1** — Showroom UX: iframe skeleton, open-in-new-tab, `techStack.js` registry + chips. |
+| `6f72940` | **Commit 5.2** — Screenshot-based web previews + Preview/Live toggle. |
+| `3a5b49e` | **Fix** — Showroom modal looked empty/broken: bare global `header{height:100vh;overflow:hidden}` / `footer{}` / `section{}` rules (plain CSS imported globally) leaked into the modal's semantic tags. Changed modal `<header>/<footer>/<section>`→`<div>`; scoped the hero rule `header`→`#home`. |
+| `bd74748` | **Fix** — Vinyl tonearm reworked to pivot from a hub at the disc's top-right; headshell tip rests on the record; rest (paused) ≈4°, lowered (playing) ≈22°. |
+| `949ac29` | **Commit 6** — Advanced Contact Form. Dual send: **Email** (`emailjs.sendForm`, awaited w/ success+error handling) and **WhatsApp** (`wa.me/<NUMBER>?text=` deep link, encoded). Editable pre-filled Subject+Message templates via `defaultValue` (translated per locale, no live re-translation). EmailJS IDs + WhatsApp number from `NEXT_PUBLIC_*` env with literal fallbacks; `.env.example` added. Validation via FormData+trim (fixed old `value===null` no-op + `form.name` gotcha). Themed `.swal-glass` SweetAlert2. Scoped bare global `form/input/textarea`→`.contact__form`. `contact` i18n extended across all 5 locales. |
+| `2c23ae1` | chore — Update .gitignore. |
 
-## 4. NEXT UP — Commit 6: Advanced Contact Form (FEATURE 5, the last planned feature)
+## 4. Status: ALL planned features shipped ✅
 
-Build `components/contact/Contact.jsx` (already client) into a premium glass form:
-- Two send paths: **"Send via Email"** and **"Send via WhatsApp"**.
-- Pre-filled **editable** Subject + Message templates; placeholders translated per
-  active locale (use `useTranslations`), **NO live re-translation while typing**.
-- **Email:** reuse existing `emailjs.sendForm("service_n9r4x8p","template_s50v8c4", form, "sHLzgGlimFe2gylV8")`.
-  Move those IDs to `NEXT_PUBLIC_EMAILJS_*` env vars.
-- **WhatsApp:** parse inputs → `https://wa.me/<NUMBER>?text=<encoded>` opened in a
-  new tab. **User must supply the real WhatsApp number** (placeholder until then;
-  repo currently references `6285884061543` in the old contact options).
-- **sweetalert2:** override styles to match the premium dark/glass theme for
-  success/error (themed popup).
-- Add a `contactForm` (or extend `contact`) i18n namespace across all 5 locales.
-- Commit msg: `feat: advanced contact form with email + whatsapp and themed sweetalert2`.
-- Verify in prod (`next start`), then ff porto-v2.
+Commit 6 (contact form) was the last planned feature. The two follow-up fixes
+(modal bleed, tonearm) are also done. The user has configured the env vars.
 
-## 5. Deferred (after Commit 6) — Headless CMS
+## 5. Deferred (by user's choice) — Headless CMS
 
 User wants a CMS eventually but chose **keep `portfolioData.js` hardcoded for now**.
-Decision notes for later: **Payload** requires Next.js **15.2+** (we're on 14.2.x),
-a hosted DB (Mongo/Postgres) + some TypeScript — a big lift. Lighter fits for a solo
-portfolio: **Keystatic** (Git-based, no DB, no Next upgrade) or **Sanity** (hosted).
-Components read from one data source, so swapping `portfolioData.js` for a CMS fetch
-later is localized.
+Later options: **Keystatic** (Git-based, no DB, no Next upgrade) or **Sanity** (hosted);
+**Payload** needs Next **15.2+** + a DB + TS (big lift). Components read one data source,
+so swapping `portfolioData.js` for a CMS fetch later is localized.
 
 ## 6. Key conventions & hard-won lessons (DON'T re-learn these)
 
-- **framer-motion + React StrictMode (dev) is flaky** for: `AnimatePresence mode="wait"`
-  exit (deadlocks, element never unmounts) AND reactive `animate={cond?A:B}` opacity
-  (doesn't reapply). **Use CSS transitions/classes for show/hide** instead (the vinyl
-  player and the showroom modal already do). Plain enter-only `animate` and `useScroll`
-  parallax are fine.
-- **Verify in PRODUCTION**, not dev: `npm run build` then `next start`. Dev StrictMode
-  double-invokes and produces false negatives. There's a preview config `portfolio-prod`
-  (port 3001) for exactly this.
-- **Preview tooling:** `.claude/launch.json` defines `portfolio-dev` (npm run dev, :3000)
-  and `portfolio-prod` (npm run start -- -p 3001). Use the Claude Preview MCP. Caveats in
-  the headless preview: **audio won't play** (can't fully verify vinyl sound) and
-  **screenshots time out** when an iframe/continuous animation keeps the renderer busy —
-  rely on DOM `preview_eval` assertions instead; those are authoritative.
-- **i18n:** message files are `messages/{en,id,nl,ja,de}.json`, namespaced
-  (`meta,nav,header,about,experience,portfolio,contact,footer,player`). Server components
-  use `getTranslations`, client use `useTranslations`. Tech names stay literal.
-- **Assets** are referenced by **string path** from `/public/assets/...` (NOT ES imports,
-  NOT next/image) to preserve the hand-tuned `<picture>` and handle pdf/mp3/gif.
-- `.claude/` is gitignored (local tooling, incl. launch.json). This summary file
-  (`SESSION_SUMMARY.md`) IS tracked and lives on porto-v2.
+- **Global CSS bleed is the recurring trap.** Per-component `.css` files are plain (NOT
+  CSS modules) and imported globally, so **bare element selectors leak app-wide**. This
+  broke the showroom modal (`header/footer/section`). When adding components, prefer class
+  selectors; if you must style an element, scope it (e.g. `#home`, `.contact__form input`).
+- **framer-motion + React StrictMode (dev) is flaky** for `AnimatePresence mode="wait"` exit
+  and reactive `animate={cond?A:B}`. **Use CSS transitions/classes for show/hide** (vinyl
+  player + showroom modal already do). Plain enter-only `animate` and `useScroll` are fine.
+- **Verify in PRODUCTION**: `npm run build` then `next start` (or preview `portfolio-prod`
+  :3001). Dev StrictMode double-invokes → false negatives.
+- **Preview caveats:** audio won't play; **screenshots time out while the vinyl disc spins
+  or an iframe animates** — pause the disc first, and rely on `preview_eval` DOM assertions
+  (authoritative). The headless viewport sometimes reports `innerHeight:0`, inflating
+  absolute px metrics — trust relative/gap measurements.
+- **i18n:** `messages/{en,id,nl,ja,de}.json`, namespaced (`meta,nav,header,about,experience,
+  portfolio,contact,footer,player`). Server comps `getTranslations`, client `useTranslations`.
+- **Assets** referenced by **string path** from `/public/assets/...` (NOT ES imports / next/image).
+- `.claude/` is gitignored (local tooling, incl. `launch.json`). `SESSION_SUMMARY.md` IS tracked.
 
-## 7. Outstanding TODOs the USER must fill (placeholders are wired & graceful)
+## 7. Outstanding TODOs (placeholders are wired & graceful)
 
-1. **Screenshots:** drop 8 files into `public/assets/screenshots/` named by project id
-   (`viralytics.jpg`, `raja-roti-cemerlang.jpg`, `uruzin.jpg`, `coderoach-studio.jpg`,
-   `tumtim-cookies.jpg`, `locascore.jpg`, `rpn-agro.jpg`, `groseria.jpg`). Until then,
-   gradient posters show (no broken images). See that folder's README.
-2. **`components/portfolio/portfolioData.js`** `// TODO` fields: real `year`, `role`,
-   `impact`, `learnings`, confirm `tech[]` (currently guesses), add Figma `links`/`media`
-   exports for Payung Hukum & Cuanbot (Cuanbot has 3 placeholder images to replace).
-3. **Vinyl player** `components/vinyl/VinylPlayer.jsx`: replace `PREVIEW_SRC` (real ~30s
-   MP3), `ALBUM_ART`, `TRACK_TITLE`, `TRACK_ARTIST`.
-4. **WhatsApp number** for Commit 6.
-5. **SEO:** add `public/og/{en,id,nl,ja,de}.png` OG images; set `NEXT_PUBLIC_SITE_URL`
-   env (metadataBase defaults to `https://farrez.vercel.app`).
-6. **Review** machine-authored **ja/de/nl** translations.
-7. Move emailjs IDs to `NEXT_PUBLIC_EMAILJS_*` env (planned in Commit 6).
+1. **Screenshots:** drop files into `public/assets/screenshots/` named by project id
+   (`viralytics.jpg` ✅ added; still need `raja-roti-cemerlang.jpg`, `uruzin.jpg`,
+   `coderoach-studio.jpg`, `tumtim-cookies.jpg`, `locascore.jpg`, `rpn-agro.jpg`,
+   `groseria.jpg`). Until then gradient posters show.
+2. **`portfolioData.js`** `// TODO` fields: real `year`, `role`, `impact`, `learnings`,
+   confirm `tech[]`, add Figma `links`/`media` for Payung Hukum & Cuanbot.
+3. **Vinyl player** constants in `VinylPlayer.jsx:8-11`: `PREVIEW_SRC`, `ALBUM_ART`,
+   `TRACK_TITLE`, `TRACK_ARTIST` (still the placeholder track/cover).
+4. **Review** machine-authored **ja/de/nl** strings (esp. the new `contact.messageTemplate`,
+   `subjectTemplate`, `sendEmail`, `sendWhatsapp`, `alertErrorText`).
+5. **SEO:** add `public/og/{en,id,nl,ja,de}.png` OG images; set `NEXT_PUBLIC_SITE_URL` to the
+   real domain (metadataBase defaults to `https://farrez.vercel.app`).
+6. ~~WhatsApp number~~ ✅ `6285884061543`. ~~Move emailjs IDs to env~~ ✅ done. ~~env setup~~ ✅
+   user configured (locally + Vercel).
 
 ## 8. Project map (key files)
 
@@ -127,22 +114,35 @@ later is localized.
 app/[locale]/{layout.jsx, page.jsx, template.jsx}   app router + providers + metadata
 app/{globals.css, ThemeScript.jsx}
 i18n/{routing.js, navigation.js, request.js}        next-intl core
-middleware.js  next.config.js  jsconfig.json
+middleware.js  next.config.js  jsconfig.json  .env.example
 messages/{en,id,nl,ja,de}.json
 components/providers/{ThemeProvider,LenisProvider}.jsx
 components/theme/ThemeToggle.jsx  components/i18n/LanguageSwitcher.jsx
 components/vinyl/{VinylPlayer.jsx, vinyl.css}
 components/portfolio/{Portfolio.jsx, ShowroomModal.jsx, portfolioData.js, techStack.js, portfolio.css}
-components/{header,nav,about,experience,contact,footer,...}/   (per-component .jsx + .css)
+components/contact/{Contact.jsx, contact.css}       dual email/whatsapp send + .swal-glass
+components/{header,nav,about,experience,footer,...}/  (per-component .jsx + .css)
 public/assets/...  (audio, pngjpg, webp, screenshots/, FarrezCV.pdf, og/ [todo])
 ```
 
-- Full feature-by-feature plan lives at (local, not in repo):
-  `C:\Users\LENOVO\.claude\plans\act-as-a-senior-cuddly-crescent.md`.
-
 ## 9. How to verify quickly
 
-`npm install` → `npm run build` (must be clean, prerenders /en /id /nl /ja /de) →
-`npm run start` (or preview `portfolio-prod` on :3001) → open `/en`, exercise theme
-toggle, language switcher, vinyl, portfolio modal (Preview/Live toggle), nav scroll.
-Use `preview_eval` for DOM assertions; screenshots may time out (not a bug).
+`npm install` → `npm run build` (clean, prerenders /en /id /nl /ja /de) → `npm run start`
+(or preview `portfolio-prod` :3001) → open `/en`, exercise theme toggle, language switcher,
+vinyl (pause disc for screenshots), portfolio modal (Preview/Live toggle), contact form
+(WhatsApp deep link + themed Email send). Use `preview_eval` for DOM assertions.
+
+## 10. Deployment (Vercel)
+
+- **master = production**, fast-forwarded up to porto-v2 (clean ff from CRA base `6d5c786`;
+  no force-push). Default branch = production = newest code. Keep landing work on porto-v2
+  and fast-forward master when promoting.
+- **Vercel project was originally CRA** → ensure **Framework Preset = Next.js** (turn OFF any
+  CRA Build Command `react-scripts build` / Output Directory `build` overrides; Next auto-uses
+  `next build` → `.next`). Node ≥ 18.17.
+- **Production env vars** (Settings → Environment Variables; `NEXT_PUBLIC_*` are inlined at
+  build, so rebuild after changes): `NEXT_PUBLIC_EMAILJS_SERVICE_ID`,
+  `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID`, `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`,
+  `NEXT_PUBLIC_WHATSAPP_NUMBER`, `NEXT_PUBLIC_SITE_URL`. Code has safe fallbacks for all but
+  SITE_URL. `.env.local` is gitignored (never deployed) — see `.env.example`.
+- A failed build never takes prod down: Vercel keeps serving the last good deploy.
