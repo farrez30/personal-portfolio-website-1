@@ -40,7 +40,19 @@
     "subtitle": "最近の作品",
     "title": "ポートフォリオ",
     "github": "Github",
-    "liveDemo": "ライブデモ"
+    "liveDemo": "ライブデモ",
+    "viewCase": "ケースを見る",
+    "year": "年",
+    "role": "役割",
+    "concept": "コンセプト",
+    "impact": "成果",
+    "learnings": "学び",
+    "visitSite": "サイトを見る",
+    "desktop": "デスクトップ",
+    "mobile": "モバイル",
+    "close": "閉じる",
+    "soon": "近日公開",
+    "uiuxCase": "UI/UX のケーススタディ — 下のリンクをご覧ください。"
   },
   "contact": {
     "subtitle": "お問い合わせ",

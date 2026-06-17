@@ -1,97 +1,54 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import "./portfolio.css";
-import { getTranslations } from "next-intl/server";
-import { FiGithub } from "react-icons/fi";
-import { MdOpenInNew } from "react-icons/md";
+import { useTranslations } from "next-intl";
+import { FiArrowUpRight } from "react-icons/fi";
+import portfolioData from "./portfolioData";
+import ShowroomModal from "./ShowroomModal";
 
-const IMG1 = "/assets/pngjpg/portfolio1.jpg";
-const IMG1_WEBP = "/assets/webp/portfolio1.webp";
+const Portfolio = () => {
+  const t = useTranslations("portfolio");
+  const [active, setActive] = useState(null);
 
-// DO NOT USE THE IMAGES IN PRODUCTION
-
-const data = [
-  {
-    id: 1,
-    image: IMG1,
-    imageWebp: IMG1_WEBP,
-    title: "Groseria (e-grocery platform)",
-    github: "https://github.com",
-    demo: "https://groseria-client.vercel.app/",
-  },
-  // {
-  //   id: 2,
-  //   image: IMG2,
-  //   title: "Crypto Currency Dashboard & Financial Visualization",
-  //   github: "https://github.com",
-  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  // },
-  // {
-  //   id: 3,
-  //   image: IMG3,
-  //   title: "Crypto Currency Dashboard & Financial Visualization",
-  //   github: "https://github.com",
-  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  // },
-  // {
-  //   id: 4,
-  //   image: IMG4,
-  //   title: "Crypto Currency Dashboard & Financial Visualization",
-  //   github: "https://github.com",
-  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  // },
-  // {
-  //   id: 5,
-  //   image: IMG5,
-  //   title: "Crypto Currency Dashboard & Financial Visualization",
-  //   github: "https://github.com",
-  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  // },
-  // {
-  //   id: 6,
-  //   image: IMG6,
-  //   title: "Crypto Currency Dashboard & Financial Visualization",
-  //   github: "https://github.com",
-  //   demo: "https://dribbble.com/shots/22396214-Tree-chart-Hyper-charts-UI-Kit",
-  // },
-];
-
-const Portfolio = async () => {
-  const t = await getTranslations("portfolio");
   return (
     <section id="portfolio">
       <h5>{t("subtitle")}</h5>
       <h2>{t("title")}</h2>
 
       <div className="container portfolio__container">
-        {data.map(({ id, imageWebp, image, title, github, demo }) => {
-          return (
-            <article key={id} className="portfolio__item">
-              <div className="portfolio__item-image">
+        {portfolioData.map((project) => (
+          <button
+            key={project.id}
+            type="button"
+            className="showroom-card"
+            onClick={() => setActive(project)}
+            aria-label={`${project.title} — ${t("viewCase")}`}
+          >
+            <div className="showroom-card__media">
+              {project.thumbnail ? (
                 <picture>
-                  <source srcSet={imageWebp} type="image/webp" />
-                  <img
-                    src={image}
-                    alt={title}
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  {project.thumbnailWebp && <source srcSet={project.thumbnailWebp} type="image/webp" />}
+                  <img src={project.thumbnail} alt={project.title} loading="lazy" decoding="async" />
                 </picture>
-              </div>
-              <h3>{title}</h3>
-              <div className="portfolio__item-cta">
-                <a href={github} className="btn portfolio__details">
-                  {t("github")}
-                  <FiGithub className="portfolio__details-icon" />
-                </a>
-                <a href={demo} className="btn btn-primary portfolio__details" target="_blank" rel="noopener noreferrer">
-                  {t("liveDemo")}
-                  <MdOpenInNew className="portfolio__details-icon" />
-                </a>
-              </div>
-            </article>
-          );
-        })}
+              ) : (
+                <span className={`showroom-card__poster accent-${project.accent ?? 0}`}>
+                  <span className="showroom-card__poster-title">{project.title}</span>
+                </span>
+              )}
+              {project.type === "soon" && <span className="showroom-card__flag">{t("soon")}</span>}
+              <span className="showroom-card__view">
+                {t("viewCase")} <FiArrowUpRight />
+              </span>
+            </div>
+            <div className="showroom-card__meta">
+              <h3>{project.title}</h3>
+              {project.role && <small className="text-light">{project.role}</small>}
+            </div>
+          </button>
+        ))}
       </div>
+
+      {active && <ShowroomModal project={active} onClose={() => setActive(null)} />}
     </section>
   );
 };

@@ -40,7 +40,19 @@
     "subtitle": "My Recent Work",
     "title": "Portfolio",
     "github": "Github",
-    "liveDemo": "Live Demo"
+    "liveDemo": "Live Demo",
+    "viewCase": "View case",
+    "year": "Year",
+    "role": "Role",
+    "concept": "Concept",
+    "impact": "Impact",
+    "learnings": "Learnings",
+    "visitSite": "Visit site",
+    "desktop": "Desktop",
+    "mobile": "Mobile",
+    "close": "Close",
+    "soon": "Coming soon",
+    "uiuxCase": "UI/UX case study — see the links below."
   },
   "contact": {
     "subtitle": "Get In Touch",

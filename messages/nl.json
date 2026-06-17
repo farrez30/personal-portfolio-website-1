@@ -40,7 +40,19 @@
     "subtitle": "Mijn recente werk",
     "title": "Portfolio",
     "github": "Github",
-    "liveDemo": "Live demo"
+    "liveDemo": "Live demo",
+    "viewCase": "Bekijk case",
+    "year": "Jaar",
+    "role": "Rol",
+    "concept": "Concept",
+    "impact": "Impact",
+    "learnings": "Inzichten",
+    "visitSite": "Bezoek site",
+    "desktop": "Desktop",
+    "mobile": "Mobiel",
+    "close": "Sluiten",
+    "soon": "Binnenkort",
+    "uiuxCase": "UI/UX-casestudy — zie de links hieronder."
   },
   "contact": {
     "subtitle": "Neem contact op",

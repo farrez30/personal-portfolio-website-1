@@ -40,7 +40,19 @@
     "subtitle": "Karya Terbaru Saya",
     "title": "Portofolio",
     "github": "Github",
-    "liveDemo": "Demo Langsung"
+    "liveDemo": "Demo Langsung",
+    "viewCase": "Lihat studi kasus",
+    "year": "Tahun",
+    "role": "Peran",
+    "concept": "Konsep",
+    "impact": "Dampak",
+    "learnings": "Pembelajaran",
+    "visitSite": "Kunjungi situs",
+    "desktop": "Desktop",
+    "mobile": "Mobile",
+    "close": "Tutup",
+    "soon": "Segera hadir",
+    "uiuxCase": "Studi kasus UI/UX — lihat tautan di bawah."
   },
   "contact": {
     "subtitle": "Hubungi Saya",
