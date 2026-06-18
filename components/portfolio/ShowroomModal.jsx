@@ -65,7 +65,7 @@ const ShowroomModal = ({ project, onClose }) => {
       aria-modal="true"
       aria-label={project.title}
     >
-      <div className="showroom__dialog" onClick={(e) => e.stopPropagation()}>
+      <div className="showroom__dialog" data-lenis-prevent onClick={(e) => e.stopPropagation()}>
         <button type="button" className="showroom__close" onClick={requestClose} aria-label={t("close")}>
           <FiX />
         </button>

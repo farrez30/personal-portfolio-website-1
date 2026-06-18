@@ -221,6 +221,7 @@
 /* ---- Web viewport (iframe + toggle) ---- */
 .showroom__toolbar {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
     margin-bottom: 0.8rem;
 }
@@ -530,5 +531,25 @@
 
     .showroom__frame iframe {
         height: 70vh;
+    }
+
+    .showroom__dialog {
+        padding: 1.15rem;
+    }
+
+    .showroom__title {
+        font-size: 1.35rem;
+    }
+
+    /* Keep the toolbar from overflowing: let it wrap and don't shove the link
+       to the far edge. */
+    .showroom__toolbar-link {
+        margin-left: 0;
+    }
+
+    .showroom__toolbar button,
+    .showroom__toolbar-link {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.75rem;
     }
 }
