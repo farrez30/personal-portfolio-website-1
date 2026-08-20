@@ -18,6 +18,7 @@ next-env.d.ts
 
 # local tooling
 .claude/
+graphify-out/
 
 # misc
 .DS_Store
