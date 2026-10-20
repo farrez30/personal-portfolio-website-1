@@ -1,8 +1,8 @@
 {
   "meta": {
     "siteName": "Farrez Al Hakim",
-    "title": "Farrez Al Hakim — Full-Stack Developer, AI Agentic Engineer & Data Engineer",
-    "description": "Portofolio Farrez Al Hakim — seorang Full-Stack Developer, AI Agentic Engineer, dan Data Engineer yang membangun aplikasi web yang andal, skalabel, dan cerdas.",
+    "title": "Farrez Al Hakim | Full-Stack Developer, AI Agentic Engineer & Data Engineer",
+    "description": "Portofolio Farrez Al Hakim, seorang Full-Stack Developer, AI Agentic Engineer, dan Data Engineer yang membangun aplikasi web yang andal, skalabel, dan cerdas.",
     "keywords": "Full-Stack Developer, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, portofolio software engineer"
   },
   "nav": {
@@ -15,7 +15,7 @@
   "header": {
     "greeting": "Halo, saya",
     "name": "Farrez Al Hakim",
-    "tagline": "Full-Stack Developer · AI Agentic Engineer · Data Engineer",
+    "roles": ["Full-Stack Developer", "AI Agentic Engineer", "Data Engineer"],
     "downloadCV": "Unduh CV",
     "letsTalk": "Mari Bicara",
     "scrollDown": "Gulir ke Bawah"
@@ -52,10 +52,10 @@
     "mobile": "Mobile",
     "close": "Tutup",
     "soon": "Segera hadir",
-    "uiuxCase": "Studi kasus UI/UX — lihat tautan di bawah.",
+    "uiuxCase": "Studi kasus UI/UX. Lihat tautan di bawah.",
     "builtWith": "Dibangun dengan",
     "openNewTab": "Buka di tab baru",
-    "previewNote": "Beberapa situs memblokir penyematan — gunakan Pratinjau langsung, atau buka situs di tab baru.",
+    "previewNote": "Beberapa situs memblokir penyematan. Gunakan Pratinjau langsung, atau buka situs di tab baru.",
     "preview": "Pratinjau",
     "livePreview": "Pratinjau langsung"
   },
@@ -63,11 +63,11 @@
     "subtitle": "Hubungi Saya",
     "title": "Kontak Saya",
     "emailTitle": "Email",
-    "emailDesc": "Anda bisa langsung mengirim email ke saya 📨",
-    "emailCta": "📧 KIRIM SEKARANG 📧",
+    "emailDesc": "Anda bisa langsung mengirim email ke saya",
+    "emailCta": "Kirim email",
     "whatsappTitle": "WhatsApp",
-    "whatsappDesc": "atau gunakan WhatsApp untuk menghubungi saya 😉",
-    "whatsappCta": "💬 HUBUNGI SAYA 💬",
+    "whatsappDesc": "atau gunakan WhatsApp untuk menghubungi saya",
+    "whatsappCta": "Chat di WhatsApp",
     "namePlaceholder": "Nama Lengkap Anda",
     "emailPlaceholder": "Email Anda",
     "messagePlaceholder": "Pesan Anda",

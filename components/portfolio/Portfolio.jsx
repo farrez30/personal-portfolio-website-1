@@ -23,7 +23,7 @@ const Portfolio = () => {
             type="button"
             className="showroom-card"
             onClick={() => setActive(project)}
-            aria-label={`${project.title} — ${t("viewCase")}`}
+            aria-label={`${project.title}, ${t("viewCase")}`}
           >
             <div className="showroom-card__media">
               {/* Gradient poster is the always-present base layer; a screenshot

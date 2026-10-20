@@ -75,7 +75,8 @@ const VinylPlayer = () => {
           <span className={`tonearm ${isPlaying ? "tonearm--on" : ""}`} aria-hidden="true" />
           <div className={`vinyl ${isPlaying ? "playing" : ""}`}>
             <span className="vinyl__label">
-              <img src={ALBUM_ART} alt={`${TRACK_TITLE} — ${TRACK_ARTIST}`} />
+              {/* Decorative: title and artist are printed right next to it. */}
+              <img src={ALBUM_ART} alt="" />
               <span className="vinyl__hole" />
             </span>
           </div>

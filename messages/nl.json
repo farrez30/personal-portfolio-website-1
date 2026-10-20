@@ -1,8 +1,8 @@
 {
   "meta": {
     "siteName": "Farrez Al Hakim",
-    "title": "Farrez Al Hakim — Full-Stack Developer, AI Agentic Engineer & Data Engineer",
-    "description": "Portfolio van Farrez Al Hakim — een Full-Stack Developer, AI Agentic Engineer en Data Engineer die robuuste, schaalbare en intelligente webapplicaties bouwt.",
+    "title": "Farrez Al Hakim | Full-Stack Developer, AI Agentic Engineer & Data Engineer",
+    "description": "Portfolio van Farrez Al Hakim, een Full-Stack Developer, AI Agentic Engineer en Data Engineer die robuuste, schaalbare en intelligente webapplicaties bouwt.",
     "keywords": "Full-Stack Developer, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, software engineer portfolio"
   },
   "nav": {
@@ -15,7 +15,7 @@
   "header": {
     "greeting": "Hallo, ik ben",
     "name": "Farrez Al Hakim",
-    "tagline": "Full-Stack Developer · AI Agentic Engineer · Data Engineer",
+    "roles": ["Full-Stack Developer", "AI Agentic Engineer", "Data Engineer"],
     "downloadCV": "CV downloaden",
     "letsTalk": "Laten we praten",
     "scrollDown": "Scroll omlaag"
@@ -52,10 +52,10 @@
     "mobile": "Mobiel",
     "close": "Sluiten",
     "soon": "Binnenkort",
-    "uiuxCase": "UI/UX-casestudy — zie de links hieronder.",
+    "uiuxCase": "UI/UX-casestudy. Zie de links hieronder.",
     "builtWith": "Gebouwd met",
     "openNewTab": "Openen in nieuw tabblad",
-    "previewNote": "Sommige sites blokkeren insluiten — gebruik Live voorbeeld, of open de site in een nieuw tabblad.",
+    "previewNote": "Sommige sites blokkeren insluiten. Gebruik Live voorbeeld, of open de site in een nieuw tabblad.",
     "preview": "Voorbeeld",
     "livePreview": "Live voorbeeld"
   },
@@ -63,11 +63,11 @@
     "subtitle": "Neem contact op",
     "title": "Contacteer mij",
     "emailTitle": "E-mail",
-    "emailDesc": "Je kunt me direct e-mailen 📨",
-    "emailCta": "📧 STUUR NU 📧",
+    "emailDesc": "Je kunt me direct e-mailen",
+    "emailCta": "Stuur een e-mail",
     "whatsappTitle": "WhatsApp",
-    "whatsappDesc": "of gebruik WhatsApp om me te bereiken 😉",
-    "whatsappCta": "💬 NEEM CONTACT OP 💬",
+    "whatsappDesc": "of gebruik WhatsApp om me te bereiken",
+    "whatsappCta": "Chat via WhatsApp",
     "namePlaceholder": "Je volledige naam",
     "emailPlaceholder": "Je e-mail",
     "messagePlaceholder": "Je bericht",

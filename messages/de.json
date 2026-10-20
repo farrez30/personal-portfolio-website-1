@@ -1,8 +1,8 @@
 {
   "meta": {
     "siteName": "Farrez Al Hakim",
-    "title": "Farrez Al Hakim — Full-Stack-Entwickler, AI Agentic Engineer & Data Engineer",
-    "description": "Portfolio von Farrez Al Hakim — ein Full-Stack-Entwickler, AI Agentic Engineer und Data Engineer, der robuste, skalierbare und intelligente Webanwendungen entwickelt.",
+    "title": "Farrez Al Hakim | Full-Stack-Entwickler, AI Agentic Engineer & Data Engineer",
+    "description": "Portfolio von Farrez Al Hakim, einem Full-Stack-Entwickler, AI Agentic Engineer und Data Engineer, der robuste, skalierbare und intelligente Webanwendungen entwickelt.",
     "keywords": "Full-Stack-Entwickler, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, Softwareentwickler Portfolio"
   },
   "nav": {
@@ -15,7 +15,7 @@
   "header": {
     "greeting": "Hallo, ich bin",
     "name": "Farrez Al Hakim",
-    "tagline": "Full-Stack-Entwickler · AI Agentic Engineer · Data Engineer",
+    "roles": ["Full-Stack-Entwickler", "AI Agentic Engineer", "Data Engineer"],
     "downloadCV": "Lebenslauf herunterladen",
     "letsTalk": "Lass uns reden",
     "scrollDown": "Nach unten scrollen"
@@ -52,10 +52,10 @@
     "mobile": "Mobil",
     "close": "Schließen",
     "soon": "Demnächst",
-    "uiuxCase": "UI/UX-Fallstudie — siehe die Links unten.",
+    "uiuxCase": "UI/UX-Fallstudie. Siehe die Links unten.",
     "builtWith": "Erstellt mit",
     "openNewTab": "In neuem Tab öffnen",
-    "previewNote": "Einige Websites blockieren das Einbetten — nutze die Live-Vorschau oder öffne die Seite in einem neuen Tab.",
+    "previewNote": "Einige Websites blockieren das Einbetten. Nutze die Live-Vorschau oder öffne die Seite in einem neuen Tab.",
     "preview": "Vorschau",
     "livePreview": "Live-Vorschau"
   },
@@ -63,11 +63,11 @@
     "subtitle": "Kontakt aufnehmen",
     "title": "Kontaktiere mich",
     "emailTitle": "E-Mail",
-    "emailDesc": "Du kannst mir direkt eine E-Mail schreiben 📨",
-    "emailCta": "📧 JETZT SENDEN 📧",
+    "emailDesc": "Du kannst mir direkt eine E-Mail schreiben",
+    "emailCta": "E-Mail schreiben",
     "whatsappTitle": "WhatsApp",
-    "whatsappDesc": "oder erreiche mich über WhatsApp 😉",
-    "whatsappCta": "💬 KONTAKTIERE MICH 💬",
+    "whatsappDesc": "oder erreiche mich über WhatsApp",
+    "whatsappCta": "Per WhatsApp schreiben",
     "namePlaceholder": "Dein vollständiger Name",
     "emailPlaceholder": "Deine E-Mail",
     "messagePlaceholder": "Deine Nachricht",

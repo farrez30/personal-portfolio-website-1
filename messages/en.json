@@ -1,8 +1,8 @@
 {
   "meta": {
     "siteName": "Farrez Al Hakim",
-    "title": "Farrez Al Hakim — Full-Stack Developer, AI Agentic Engineer & Data Engineer",
-    "description": "Portfolio of Farrez Al Hakim — a Full-Stack Developer, AI Agentic Engineer, and Data Engineer building robust, scalable, and intelligent web applications.",
+    "title": "Farrez Al Hakim | Full-Stack Developer, AI Agentic Engineer & Data Engineer",
+    "description": "Portfolio of Farrez Al Hakim, a Full-Stack Developer, AI Agentic Engineer, and Data Engineer building robust, scalable, and intelligent web applications.",
     "keywords": "Full-Stack Developer, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, software engineer portfolio"
   },
   "nav": {
@@ -15,7 +15,7 @@
   "header": {
     "greeting": "Hello, I'm",
     "name": "Farrez Al Hakim",
-    "tagline": "Full-Stack Developer · AI Agentic Engineer · Data Engineer",
+    "roles": ["Full-Stack Developer", "AI Agentic Engineer", "Data Engineer"],
     "downloadCV": "Download CV",
     "letsTalk": "Let's Talk",
     "scrollDown": "Scroll Down"
@@ -52,10 +52,10 @@
     "mobile": "Mobile",
     "close": "Close",
     "soon": "Coming soon",
-    "uiuxCase": "UI/UX case study — see the links below.",
+    "uiuxCase": "UI/UX case study. See the links below.",
     "builtWith": "Built with",
     "openNewTab": "Open in new tab",
-    "previewNote": "Some sites block embedding — use Live preview, or open the site in a new tab.",
+    "previewNote": "Some sites block embedding. Use Live preview, or open the site in a new tab.",
     "preview": "Preview",
     "livePreview": "Live preview"
   },
@@ -63,11 +63,11 @@
     "subtitle": "Get In Touch",
     "title": "Contact Me",
     "emailTitle": "Email",
-    "emailDesc": "You could directly email me 📨",
-    "emailCta": "📧 SEND NOW 📧",
+    "emailDesc": "You can email me directly",
+    "emailCta": "Send an email",
     "whatsappTitle": "WhatsApp",
-    "whatsappDesc": "or use WhatsApp to reach me 😉",
-    "whatsappCta": "💬 CONTACT ME 💬",
+    "whatsappDesc": "or reach me on WhatsApp",
+    "whatsappCta": "Chat on WhatsApp",
     "namePlaceholder": "Your Full Name",
     "emailPlaceholder": "Your Email",
     "messagePlaceholder": "Your Message",

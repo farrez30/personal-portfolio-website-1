@@ -11,6 +11,10 @@
     perspective: 1000px;
 }
 
+.header__role {
+    white-space: nowrap;
+}
+
 /* ========== CTA ========== */
 .cta {
     margin-top: 2.5rem;

@@ -35,7 +35,15 @@ const Header = () => {
         <motion.div className="header__intro" style={textStyle}>
           <h5>{t("greeting")}</h5>
           <h1>{t("name")}</h1>
-          <h5 className="text-light">{t("tagline")}</h5>
+          {/* Each role stays on one line; the dots are visual only. */}
+          <h5 className="text-light header__roles">
+            {t.raw("roles").map((role, i) => (
+              <React.Fragment key={role}>
+                {i > 0 && <span aria-hidden="true">{" · "}</span>}
+                <span className="header__role">{role}</span>
+              </React.Fragment>
+            ))}
+          </h5>
           <CTA />
         </motion.div>
 
