@@ -652,3 +652,43 @@
     animation: none;
   }
 }
+
+/* Senter UV: tombol senter antik; saat menyala, kursor menjadi lingkaran cahaya ungu. */
+.senter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0 1rem 0 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--ruang-tinta) 30%, transparent);
+  border-radius: 999px;
+  background: linear-gradient(#2b2a2e, #18171a);
+  color: #e8e2d6;
+  font: inherit;
+  font-size: 0.875rem;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 6px 14px -8px rgb(0 0 0 / 0.6);
+}
+
+.senter__lampu {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #5d4b8a, #2a2140 70%);
+  box-shadow: inset 0 0 0 3px #3b3a40;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+.senter--nyala .senter__lampu {
+  background: radial-gradient(circle at 45% 40%, #f1e7ff, #a07bff 45%, #5b2fd6 75%);
+  box-shadow: inset 0 0 0 3px #3b3a40, 0 0 18px 4px rgb(160 123 255 / 0.65);
+}
+
+.gelembung[data-senter="1"] {
+  --s: 1;
+  mix-blend-mode: normal;
+}
+
+.gelembung[data-senter="1"]::before {
+  background: radial-gradient(circle, rgb(170 130 255 / 0.28) 0%, rgb(140 100 255 / 0.12) 55%, transparent 72%);
+  box-shadow: 0 0 0 1px rgb(170 130 255 / 0.35);
+}

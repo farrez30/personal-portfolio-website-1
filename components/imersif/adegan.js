@@ -10,7 +10,8 @@ import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUnifo
 import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
 import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup } from "./benda";
-import { gambarSampul, gambarHalaman, gambarArsitektur } from "./gambar";
+import { gambarSampul, gambarHalaman } from "./gambar";
+import { buatHalamanUV } from "./halamanUV";
 
 // Satuan studi (1 = 60 mm) ke satuan kita (1 = 100 mm).
 const U = 0.6;
@@ -98,7 +99,7 @@ const LABEL = {
   architecture: "Architecture",
 };
 
-function halamanBuklet(p, locale) {
+function halamanBuklet(p, locale, uv) {
   const hal = [{ src: gambarSampul(p, locale), alt: `${p.katalog} ${p.judul[locale]}` }];
   hal.push({
     src: gambarHalaman({ label: LABEL.overview, judul: p.judul[locale], isi: p.ringkas[locale], catatan: `${p.katalog}  ${p.periode}` }),
@@ -110,11 +111,11 @@ function halamanBuklet(p, locale) {
     if (!b) continue;
     hal.push({ src: gambarHalaman({ label: LABEL[h], judul: b.judul[locale], isi: b.isi[locale] }), alt: LABEL[h], text: `${b.judul[locale]}\n\n${b.isi[locale]}` });
   }
-  if (p.arsitektur) {
-    const c = gambarHalaman({ label: LABEL.architecture });
-    const d = gambarArsitektur(p.arsitektur, { latar: null, garis: "#6f695f", kotak: "#f7f2ea", teks: "#1d1b19", aksen: "#b3322a" }, 864, 640);
-    c.getContext("2d").drawImage(d, 80, 220, 864, 640);
-    hal.push({ src: c, alt: LABEL.architecture, text: p.arsitektur.simpul.map((s) => s.label).join(", ") });
+  if (uv) {
+    // Halaman UV selalu di sisi kanan spread (indeks genap) supaya senter mudah diarahkan.
+    if (hal.length % 2 === 1) hal.push({ src: gambarHalaman({ label: "" }), alt: "" });
+    uv.indeks = hal.length;
+    hal.push({ src: uv.tekstur, alt: LABEL.architecture, text: p.arsitektur.simpul.map((s) => s.label).join(", ") });
   }
   // Halaman belakang sama persis dengan yang terlihat di tutup kotak, supaya tidak
   // ada tekstur yang berganti saat buklet ditarik keluar.
@@ -226,6 +227,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     baca: 0,
     bacaT: tween(),
     buklet: null,
+    uv: null,
+    senter: false,
+    uvTerlihat: false,
     kursor: { x: 0, y: 0, ada: false },
     hover: null,
     tombolHover: null,
@@ -243,6 +247,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       terbalik: kotak[k_.tujuan]?.balikTujuan !== 0,
       duduk,
       jalan: k_.jalan,
+      uvTerlihat: k_.uvTerlihat,
+      senter: k_.senter,
     });
 
   let W = 1;
@@ -333,6 +339,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   const qDatar = new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0));
   const posNampan = new THREE.Vector3(0.06, 0, -KOTAK.d / 2 + 0.066);
   const lensaLayar = new THREE.Vector3();
+  const raySenter = new THREE.Raycaster();
+  const ndcSenter = new THREE.Vector2();
   let lalu = performance.now();
   let seret = null;
 
@@ -386,7 +394,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     const cahayaBaca = p3io((k_.baca - 0.6) / 0.26);
     tepi.intensity = 0.75 * (1 - geser) * (1 - cahayaBaca);
     ambien.intensity = 0.25 + 0.9 * geser + 1.25 * cahayaBaca;
-    matahari.intensity = 2 * cahayaBaca;
+    // Senter UV menyala: ruangan meredup dan bernuansa ungu, seperti memakai lampu UV.
+    k_.redupUV = (k_.redupUV ?? 0) + ((k_.senter ? 1 : 0) - (k_.redupUV ?? 0)) * Math.min(1, dt * 6);
+    matahari.intensity = 2 * cahayaBaca * (1 - 0.6 * k_.redupUV);
+    ambien.color.setRGB(1 - 0.35 * k_.redupUV, 1 - 0.5 * k_.redupUV, 1);
     strip.intensity = 1.9 * (1 - cahayaBaca);
     scene.environmentIntensity = 1 - 0.6 * cahayaBaca;
     rak.updateMatrixWorld(true);
@@ -583,6 +594,33 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       // Paling melengkung tepat saat buklet berputar di punggung, supaya tidak tampak sebagai garis tipis.
       b.userData.deform.uniforms.uLengkung.value = Math.sin(Math.PI * jepit(k_.baca / 0.7)) * 1.5 * (1 - settle * settle);
       b.enabled = k_.baca > 0.999 && k_.keadaan === "buklet";
+      // Senter UV: posisi kursor dipetakan ke halaman kanan buklet yang sudah mendarat.
+      if (k_.uv) {
+        const terlihat = b.enabled && b.visiblePages.includes(k_.uv.indeks);
+        if (terlihat !== k_.uvTerlihat) {
+          k_.uvTerlihat = terlihat;
+          if (!terlihat) k_.senter = false;
+          kirim();
+        }
+        let titik = null;
+        if (terlihat && k_.senter && k_.kursor.ada) {
+          ndcSenter.set(k_.kursor.x, -k_.kursor.y);
+          raySenter.setFromCamera(ndcSenter, camera);
+          b.updateWorldMatrix(true, false);
+          m4.copy(b.matrixWorld).invert();
+          const o = vTmp.copy(raySenter.ray.origin).applyMatrix4(m4);
+          const arah = pos2.copy(raySenter.ray.direction).transformDirection(m4);
+          if (Math.abs(arah.z) > 1e-6) {
+            const t = -o.z / arah.z;
+            const x = o.x + arah.x * t;
+            const y = o.y + arah.y * t;
+            const kiri = k_.sempit ? 0 : 0;
+            if (x >= kiri && x <= kiri + 1 && Math.abs(y) <= 0.5) titik = { u: x - kiri, v: 0.5 - y };
+          }
+        }
+        k_.uv.setTitik(titik);
+        k_.uv.gambar(k_.senter && terlihat, dt);
+      }
       const antre = k_.antreHalaman;
       if (antre && b.enabled && !b.turning) {
         const ok = antre.arah > 0 ? b.next() : b.prev();
@@ -593,6 +631,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         scene.remove(b);
         b.dispose();
         k_.buklet = null;
+        k_.uv?.dispose();
+        k_.uv = null;
+        k_.uvTerlihat = false;
+        k_.senter = false;
       }
     }
 
@@ -877,10 +919,16 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       const p = proyek.find((x) => x.slug === k_.aktif);
       if (!k_.buklet) {
         const deform = { glsl: LENGKUNG_GLSL, uniforms: { uLengkung: { value: 0 } } };
+        let ilustrasi = null;
+        if (p.ilustrasi) {
+          ilustrasi = new Image();
+          ilustrasi.src = p.ilustrasi;
+        }
+        k_.uv = p.arsitektur ? buatHalamanUV(p, locale, ilustrasi) : null;
         const b = new LeafThroughObject(
           { renderer, camera, domElement: kanvas },
           {
-            pages: halamanBuklet(p, locale),
+            pages: halamanBuklet(p, locale, k_.uv),
             pageAspect: 1,
             layout: k_.sempit ? "single" : "spread",
             loop: k_.sempit,
@@ -943,6 +991,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         kt.balikTujuan = 1;
         pasangTween(kt.balikT, kt.balik, kt.balik + Math.PI, 0.9, p3o, now);
       }
+      kirim();
+    },
+    setSenter(nyala) {
+      k_.senter = !!nyala && k_.uvTerlihat;
       kirim();
     },
     get keadaan() {

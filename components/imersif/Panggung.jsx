@@ -29,7 +29,7 @@ export default function Panggung({ gulir }) {
   const adegan = useRef(null);
   const gelembung = useRef(null);
   const [siap, setSiap] = useState(false);
-  const [s, setS] = useState({ fokus: 0, keadaan: "rak", aktif: null, terbalik: false, duduk: false, jalan: false });
+  const [s, setS] = useState({ fokus: 0, keadaan: "rak", aktif: null, terbalik: false, duduk: false, jalan: false, uvTerlihat: false, senter: false });
   const [hover, setHover] = useState(null);
   const [sumur, setSumur] = useState(null);
 
@@ -224,6 +224,9 @@ export default function Panggung({ gulir }) {
   useEffect(() => {
     if (gelembung.current) gelembung.current.dataset.adegan = hover ?? "";
   }, [hover]);
+  useEffect(() => {
+    if (gelembung.current) gelembung.current.dataset.senter = s.senter ? "1" : "0";
+  }, [s.senter]);
 
   const a = adegan.current;
   const aktif = proyek.find((x) => x.slug === s.aktif) ?? p;
@@ -313,6 +316,17 @@ export default function Panggung({ gulir }) {
             <span key={`n-${s.fokus}`} className="panggung__nama panggung__pudar">{aktif.judul[locale]}</span>
           </button>
           {s.keadaan === "rak" && s.terbalik && <p className="panggung__ringkas">{aktif.ringkas[locale]}</p>}
+          {s.keadaan === "buklet" && s.uvTerlihat && (
+            <button
+              type="button"
+              className={`senter ${s.senter ? "senter--nyala" : ""}`}
+              aria-pressed={s.senter}
+              onClick={() => a?.setSenter(!s.senter)}
+            >
+              <span className="senter__lampu" aria-hidden="true" />
+              {t("senter")}
+            </button>
+          )}
         </div>
 
         <div className="panggung__pasangan panggung__pasangan--kanan">

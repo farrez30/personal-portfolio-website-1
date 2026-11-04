@@ -173,7 +173,7 @@ export function gambarHalaman({ label, judul, isi, catatan }, ukuran = 1024) {
 }
 
 // Diagram arsitektur untuk halaman buklet dan layar hologram.
-export function gambarArsitektur(arsitektur, { latar, garis, kotak, teks, aksen }, w = 1024, h = 640) {
+export function gambarArsitektur(arsitektur, { latar, garis, kotak, teks, aksen, huruf = 22 }, w = 1024, h = 640) {
   const [c, g] = kanvas(w, h);
   if (latar) {
     g.fillStyle = latar;
@@ -181,13 +181,13 @@ export function gambarArsitektur(arsitektur, { latar, garis, kotak, teks, aksen 
   }
   const { simpul, garis: sambung } = arsitektur;
   const { posisi, perKolom, jumlahKolom } = tataLetak(simpul, sambung);
-  const kw = Math.min(260, (w - 80) / Math.max(jumlahKolom, 1) - 40);
-  const kh = 64;
+  const kw = Math.min(huruf * 12, (w - 60) / Math.max(jumlahKolom, 1) - 30);
+  const kh = huruf * 2.9;
   const jarakX = jumlahKolom > 1 ? (w - kw - 80) / (jumlahKolom - 1) : 0;
   const titik = (id) => {
     const p = posisi[id];
     const n = perKolom.get(p.kolom);
-    const jarakY = Math.min(130, (h - 80) / n);
+    const jarakY = Math.min(huruf * 6, (h - 80) / n);
     const awal = (h - n * jarakY) / 2 + jarakY / 2;
     return { x: jumlahKolom > 1 ? 40 + kw / 2 + p.kolom * jarakX : w / 2, y: awal + p.baris * jarakY };
   };
@@ -205,7 +205,7 @@ export function gambarArsitektur(arsitektur, { latar, garis, kotak, teks, aksen 
     g.arc((p.x + q.x) / 2, (p.y + q.y) / 2, 6, 0, Math.PI * 2);
     g.fill();
   }
-  g.font = `500 22px ${fontMono()}`;
+  g.font = `600 ${huruf}px ${fontMono()}`;
   g.textAlign = "center";
   g.textBaseline = "middle";
   for (const s of simpul) {
@@ -218,7 +218,7 @@ export function gambarArsitektur(arsitektur, { latar, garis, kotak, teks, aksen 
     g.fill();
     g.stroke();
     g.fillStyle = teks;
-    tulisParagraf(g, s.label, p.x, p.y - (g.measureText(s.label).width > kw - 20 ? 12 : 0), kw - 20, 24);
+    tulisParagraf(g, s.label, p.x, p.y - (g.measureText(s.label).width > kw - 20 ? huruf * 0.55 : 0), kw - 20, huruf * 1.1);
   }
   return c;
 }
