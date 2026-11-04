@@ -50,10 +50,17 @@ export function* petaCetak(ukuran, kasar, normal, { langkah = 64 } = {}) {
   yield* normalDariTinggi(tinggi, ukuran, normal, langkah);
 }
 
-// Bintik halus plastik cetak (seperti nampan kotak), hanya sebagai normal.
-export function* petaBintik(ukuran, normal, { kuat = 0.35, langkah = 128 } = {}) {
+// Bintik halus polistiren satin (nampan kotak, piringan pemutar): normal, dan bila
+// `kasar` diberikan juga kekasaran 0,5 ± 0,15 yang mengikuti bintiknya.
+export function* petaBintik(ukuran, normal, { kasar = null, kuat = 0.35, dasar = 0.5, langkah = 128 } = {}) {
   const tinggi = new Float32Array(ukuran * ukuran);
-  for (let n = 0; n < tinggi.length; n++) tinggi[n] = derau(n % ukuran, Math.floor(n / ukuran)) * kuat;
+  for (let n = 0; n < tinggi.length; n++) {
+    tinggi[n] = derau(n % ukuran, Math.floor(n / ukuran)) * kuat;
+    if (kasar) {
+      kasar[n * 4] = kasar[n * 4 + 1] = kasar[n * 4 + 2] = jepit(dasar + (tinggi[n] / kuat - 0.5) * 0.3, 0.05, 1) * 255;
+      kasar[n * 4 + 3] = 255;
+    }
+  }
   yield;
   yield* normalDariTinggi(tinggi, ukuran, normal, langkah);
 }

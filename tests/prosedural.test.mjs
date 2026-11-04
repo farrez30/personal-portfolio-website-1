@@ -45,6 +45,21 @@ test("normal mengarah keluar (z positif) dan nyaris satuan", () => {
   }
 });
 
+test("bintik nampan: kekasaran 0,5 ± 0,15 mengikuti tinggi bintik", () => {
+  const u = 64;
+  const n = new Uint8Array(u * u * 4);
+  const k = new Uint8Array(u * u * 4);
+  habiskan(petaBintik(u, n, { kasar: k }));
+  let min = 1, maks = 0;
+  for (let i = 0; i < k.length; i += 4) {
+    const v = k[i] / 255;
+    min = Math.min(min, v);
+    maks = Math.max(maks, v);
+  }
+  assert.ok(min >= 0.34 && maks <= 0.66, `${min} ${maks}`);
+  assert.ok(maks - min > 0.25);
+});
+
 test("peta piringan berpusat di sekitar 0,86", () => {
   const u = 64;
   const p = new Uint8Array(u * u * 4);

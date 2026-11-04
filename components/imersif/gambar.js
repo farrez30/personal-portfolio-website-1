@@ -158,25 +158,37 @@ export function gambarAus(ukuran = 512, benih = 11) {
   return c;
 }
 
-// Sisipan belakang kotak: seperti sisi belakang CD, "daftar lagu"-nya adalah
-// komponen sistem, ditambah ringkasan dan nomor katalog.
-export function gambarSisipan(p, locale, w = 1024, h = 900) {
+// Sisipan belakang kotak, digelar datar: punggung 6,5 mm, panel 138 mm, punggung
+// 6,5 mm (tinggi 118 mm). Seperti sisi belakang CD, "daftar lagu"-nya adalah
+// komponen sistem, ditambah ringkasan dan nomor katalog. Kedua punggung memuat
+// nomor katalog dan judul, terbaca dari atas ke bawah.
+export const SISIPAN = { panel: 138, punggung: 6.5, tinggi: 118 };
+
+export function gambarSisipan(p, locale, w = 1024) {
+  const total = SISIPAN.panel + SISIPAN.punggung * 2;
+  const h = Math.round((w * SISIPAN.tinggi) / total);
   const [c, g] = kanvas(w, h);
-  const s = w / 512;
+  const pg = Math.round((w * SISIPAN.punggung) / total);
   g.fillStyle = "#e9e3d8";
   g.fillRect(0, 0, w, h);
   g.fillStyle = p.warna;
-  g.fillRect(0, 0, 22 * s, h);
-  g.fillRect(w - 22 * s, 0, 22 * s, h);
+  g.fillRect(0, 0, pg, h);
+  g.fillRect(w - pg, 0, pg, h);
+  for (const x of [pg / 2, w - pg / 2]) {
+    g.save();
+    g.translate(x, h / 2);
+    g.rotate(Math.PI / 2);
+    g.fillStyle = "#f4efe7";
+    g.font = `500 ${pg * 0.42}px ${fontMono()}`;
+    g.textAlign = "center";
+    g.textBaseline = "middle";
+    g.fillText(`${p.katalog}   ${p.judul[locale]}`.toUpperCase(), 0, 0);
+    g.restore();
+  }
+  // Isi panel di ruang 512 satuan selebar panel, digeser masuk setelah punggung kiri.
+  const s = (w - pg * 2) / 512;
   g.save();
-  g.translate(11 * s, h / 2);
-  g.rotate(-Math.PI / 2);
-  g.fillStyle = "#f4efe7";
-  g.font = `500 ${10 * s}px ${fontMono()}`;
-  g.textAlign = "center";
-  g.textBaseline = "middle";
-  g.fillText(`${p.katalog}  ${p.judul[locale]}`.toUpperCase(), 0, 0);
-  g.restore();
+  g.translate(pg - 22 * s, 0);
   g.textBaseline = "top";
   g.fillStyle = TINTA;
   g.font = `650 ${22 * s}px ${fontKeluarga()}`;
@@ -199,6 +211,7 @@ export function gambarSisipan(p, locale, w = 1024, h = 900) {
   }
   g.font = `400 ${10 * s}px ${fontMono()}`;
   g.fillText(p.katalog, 380 * s, 418 * s);
+  g.restore();
   return c;
 }
 

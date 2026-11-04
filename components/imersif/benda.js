@@ -3,7 +3,6 @@
 // dari catatan desain Discography (pita softbox, plastik yang terlihat lewat
 // pantulan, difraksi sisi data cakram) dan rumus spektrum Zucconi.
 import * as THREE from "three";
-import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { gambarSampul, gambarCakram, gambarSisipan, gambarHalaman, gambarAus } from "./gambar";
 import { petaCetak, petaBintik, petaPiring, geserJudul } from "./prosedural";
@@ -148,19 +147,24 @@ function peta(renderer) {
   const datar = [128, 128, 255, 255];
   const kasarCetak = petaData(1024, [43, 43, 43, 255], an);
   const normalCetak = petaData(1024, datar, an);
+  // Bintik nampan dan piringan berbagi data (satu unggahan), ulangannya beda.
   const bintik = petaData(512, datar, an);
+  const kasarNampan = petaData(512, [128, 128, 128, 255], an);
   const piring = petaData(256, [219, 219, 219, 255], an);
   piring.colorSpace = THREE.SRGBColorSpace;
-  for (const t of [bintik, piring]) t.wrapS = t.wrapT = THREE.RepeatWrapping;
+  const bintikNampan = bintik.clone();
+  for (const t of [bintik, bintikNampan, kasarNampan, piring]) t.wrapS = t.wrapT = THREE.RepeatWrapping;
   bintik.repeat.set(14, 14 / 3);
+  bintikNampan.repeat.set(3, 3);
+  kasarNampan.repeat.set(3, 3);
   piring.repeat.set(4, 1);
   const aus = new THREE.CanvasTexture(gambarAus(512));
   aus.wrapS = aus.wrapT = THREE.RepeatWrapping;
   aus.anisotropy = an;
-  petaBersama = { kasarCetak, normalCetak, bintik, piring, aus };
+  petaBersama = { kasarCetak, normalCetak, bintik, bintikNampan, kasarNampan, piring, aus };
   const tandai = (...ts) => () => ts.forEach((t) => (t.needsUpdate = true));
   jalankanBertahap(petaCetak(1024, kasarCetak.image.data, normalCetak.image.data), tandai(kasarCetak, normalCetak));
-  jalankanBertahap(petaBintik(512, bintik.image.data), tandai(bintik));
+  jalankanBertahap(petaBintik(512, bintik.image.data, { kasar: kasarNampan.image.data }), tandai(bintik, kasarNampan));
   jalankanBertahap(petaPiring(256, piring.image.data), tandai(piring));
   return petaBersama;
 }
@@ -213,34 +217,90 @@ export function setRedup(material, nilai) {
   }
 }
 
-// Tepi potongan plastik: garis tipis yang sedikit lebih buram dari permukaannya.
-function tepiPlastik(geo, opasitas = 0.15) {
-  const garis = new THREE.LineSegments(
-    new THREE.EdgesGeometry(geo, 30),
-    new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: opasitas, depthWrite: false }),
-  );
-  // Garis tidak ikut diklik: ambang raycast garis bawaan three (1 unit) lebih besar dari kotaknya.
-  garis.raycast = () => {};
-  return garis;
+// --- geometri dalam milimeter ------------------------------------------------
+const kotakMm = (w, h, d, x, y, z) => new THREE.BoxGeometry(w, h, d).translate(x, y, z);
+
+// Menandai bagian plastik bening: muka yang memotong lembaran (normalnya melintang
+// sumbu tipisnya, 0/1/2 untuk x/y/z) mendapat tepi 1. Tanpa sumbu, tidak ada yang ditandai.
+function lembaran(geo, sumbuTipis = -1) {
+  const n = geo.attributes.normal;
+  const tepi = new Float32Array(n.count);
+  if (sumbuTipis >= 0) for (let i = 0; i < n.count; i++) tepi[i] = Math.abs(n.getComponent(i, sumbuTipis)) < 0.5 ? 1 : 0;
+  geo.setAttribute("tepiPlastik", new THREE.BufferAttribute(tepi, 1));
+  return geo;
 }
 
-const plastik = () =>
-  pasangSheen(
-    new THREE.MeshPhysicalMaterial({
-      color: 0xb9bcc0,
-      roughness: 0.04,
-      metalness: 0,
-      transparent: true,
-      opacity: 0.04,
-      clearcoat: 1,
-      clearcoatRoughness: 0.04,
-      side: THREE.DoubleSide,
-      depthWrite: false,
-      forceSinglePass: true,
-      envMapIntensity: 1,
-    }),
-    { kuat: 0.12, fresnel: 0.45, kilau: true },
-  );
+function gabungMm(bagian) {
+  const geo = mergeGeometries(bagian);
+  bagian.forEach((b) => b.dispose());
+  return geo.scale(mm(1), mm(1), mm(1));
+}
+
+// Segi empat datar dari empat sudut (berlawanan jarum jam dilihat dari muka cetaknya) dan UV-nya.
+function segiEmpat(sudut, uv) {
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.Float32BufferAttribute(sudut.flat(), 3));
+  geo.setAttribute("uv", new THREE.Float32BufferAttribute(uv.flat(), 2));
+  geo.setIndex([0, 1, 2, 0, 2, 3]);
+  geo.computeVertexNormals();
+  return geo;
+}
+
+// Setengah cakram datar, sisi lurusnya di y = 0, menggembung ke -y (arah -1) atau +y (1).
+// Diputar, bukan dicerminkan: skala negatif membalik mukanya.
+function setengahCakram(r, tebal, arah) {
+  const geo = new THREE.CylinderGeometry(r, r, tebal, 24, 1, false, -Math.PI / 2, Math.PI).rotateX(Math.PI / 2);
+  return arah > 0 ? geo.rotateZ(Math.PI) : geo;
+}
+
+// Polistiren bening kotak, satu bahan per kotak supaya ausnya beda. Tidak mencerminkan
+// lampu langsung, hanya pita softbox; muka potongan sedikit lebih buram (tepiPlastik)
+// supaya terbaca sebagai plastik tebal; aus dari peta bersama yang digeser per kotak:
+// goresan dan pusaran lap (merah) yang muncul terutama di pita, noda (hijau) yang
+// membuat pitanya belang.
+function plastikKotak(petaAus, seed) {
+  const m = new THREE.MeshPhysicalMaterial({
+    color: 0xb9bcc0,
+    roughness: 0.04,
+    metalness: 0,
+    transparent: true,
+    opacity: 0.04,
+    clearcoat: 1,
+    clearcoatRoughness: 0.04,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    forceSinglePass: true,
+    envMapIntensity: 1,
+  });
+  m.onBeforeCompile = (sh) => {
+    sh.uniforms.uPetaAus = { value: petaAus };
+    sh.uniforms.uBenihAus = { value: new THREE.Vector2(seed, (seed * 7.13) % 1) };
+    sh.uniforms.uRedup = { value: 1 };
+    m.userData.shader = sh;
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nattribute float tepiPlastik;\nvarying float vTepi;\nvarying vec2 vUvKotak;")
+      .replace("#include <begin_vertex>", "#include <begin_vertex>\nvTepi = tepiPlastik;\nvUvKotak = uv;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace(
+        "#include <common>",
+        "#include <common>\nuniform sampler2D uPetaAus;\nuniform vec2 uBenihAus;\nvarying float vTepi;\nvarying vec2 vUvKotak;",
+      )
+      .replace(
+        "#include <opaque_fragment>",
+        `${GLSL_PITA}
+        vec2 aus = texture2D(uPetaAus, vUvKotak + uBenihAus).rg;
+        float kilap = pita * 0.12 * (1.0 + (aus.g - 0.5) * 0.8);
+        float gores = aus.r * 0.32 * (0.01 + pita) * (1.0 - vTepi);
+        outgoingLight += vec3(kilap + gores);
+        float fr = pow(1.0 - abs(dot(normal, geometryViewDir)), 3.0);
+        float kilau = dot(reflectedLight.indirectSpecular, vec3(0.3333));
+        diffuseColor.a = clamp(diffuseColor.a + fr * 0.45 + kilau + kilap + gores + vTepi * 0.15, 0.0, 1.0);
+        #include <opaque_fragment>`,
+      );
+  };
+  m.customProgramCacheKey = () => "plastik-kotak";
+  return m;
+}
 
 // --- cakram -----------------------------------------------------------------
 // Benih 0 sampai 1 yang tetap per album (FNV-1a), untuk variasi kecil antar cakram.
@@ -456,83 +516,169 @@ export function buatCakram(p, renderer) {
 // yang perlu disinkronkan lagi. Tetap diekspor untuk pemanggil yang sudah ada.
 export function sinkronCakram() {}
 
+// Kotak dalam milimeter dari pusatnya. Lapisan z (tebal 10,4 mm): pelat dasar -5,2
+// sampai -4,2, sisipan -4,15, nampan sampai 0, panggung rosette 0 sampai 0,8, cakram
+// 0,8 sampai 2,0, tumpukan buklet 2,0 sampai 3,2, sampul 3,3, lembar tutup 3,45
+// sampai 4,95 (garis engsel di z 4,2).
+const KT = {
+  lebar: 142, tinggi: 125, belakang: -5.2, pelatDasar: 1, dinding: 1, sisip: -4.15,
+  nampanLebar: 136, nampanTinggi: 121, nampanDepan: 0, nampanBelakang: -4.1,
+  tutupDalam: 3.45, tutupDepan: 4.95, engselZ: 4.2, sayap: 8,
+  sisipLebar: 138, sisipTinggi: 118, punggung: 6.5,
+  buklet: 120, bukletX: 6, bukletBelakang: 1.95, cakramX: 6,
+  stripLebar: 14, rusuk: 18, tab: 16, jariTab: 5, penahan: [16, 40], klipJarak: 37, klipJari: 4.5,
+};
+KT.engselX = -KT.lebar / 2 + 1;
+
+// Sisipan belakang terlipat seperti di kotak: panel belakang menghadap keluar lewat
+// dasar, kedua ujungnya terlipat ke depan jadi punggung. Teksturnya datar
+// (punggung, panel, punggung), jadi tulisannya terbaca benar dari luar.
+function geoSisipan() {
+  const x = KT.sisipLebar / 2;
+  const y = KT.sisipTinggi / 2;
+  const z = KT.sisip;
+  const lipat = z + KT.punggung;
+  const s = KT.punggung / (KT.sisipLebar + KT.punggung * 2);
+  return gabungMm([
+    segiEmpat([[x, -y, z], [-x, -y, z], [-x, y, z], [x, y, z]], [[s, 0], [1 - s, 0], [1 - s, 1], [s, 1]]),
+    segiEmpat([[x, -y, lipat], [x, -y, z], [x, y, z], [x, y, lipat]], [[0, 0], [s, 0], [s, 1], [0, 1]]),
+    segiEmpat([[-x, -y, z], [-x, -y, lipat], [-x, y, lipat], [-x, y, z]], [[1 - s, 0], [1, 0], [1, 1], [1 - s, 1]]),
+  ]);
+}
+
+// Dasar bening: pelat belakang, dinding samping setinggi nampan di atas punggung,
+// dan di sudut atas-bawah sisi engsel sebuah knuckle dengan pinnya, tempat sayap
+// tutup berputar. Knuckle menutup celah antara ujung nampan dan tutup.
+function geoDasar() {
+  const dalamDinding = KT.nampanDepan + 1.5 - KT.belakang;
+  const xDinding = KT.lebar / 2 - 1;
+  const tinggiKnuckle = KT.tinggi / 2 - KT.nampanTinggi / 2 - KT.dinding;
+  const yKnuckle = KT.nampanTinggi / 2 + tinggiKnuckle / 2;
+  const zDinding = KT.belakang + dalamDinding / 2;
+  const knuckle = [-1, 1].flatMap((arah) => [
+    lembaran(kotakMm(4, tinggiKnuckle, dalamDinding, KT.engselX + 2, arah * yKnuckle, zDinding), 1),
+    lembaran(new THREE.CylinderGeometry(1.6, 1.6, tinggiKnuckle + KT.dinding, 16).translate(KT.engselX, arah * (yKnuckle + KT.dinding / 2), 0)),
+  ]);
+  return gabungMm([
+    lembaran(kotakMm(KT.lebar - 2, KT.tinggi - 2, KT.pelatDasar, 0, 0, KT.belakang + KT.pelatDasar / 2), 2),
+    lembaran(kotakMm(KT.dinding, KT.nampanTinggi, dalamDinding, -xDinding, 0, zDinding), 0),
+    lembaran(kotakMm(KT.dinding, KT.nampanTinggi, dalamDinding, xDinding, 0, zDinding), 0),
+    ...knuckle,
+  ]);
+}
+
+// Tutup bening: pelat depan, sayap atas dan bawah, tab setengah bulat yang menjepit
+// tepi atas-bawah buklet tepat di belakangnya, dan rusuk penahan di tepi bebas.
+// Dibangun di sekitar garis engsel supaya grup tutup berputar di titik asalnya.
+function geoTutup() {
+  const yS = KT.tinggi / 2 - KT.dinding / 2;
+  const dalamSayap = KT.tinggi / 2 - KT.dinding;
+  const tebalPelat = KT.tutupDepan - KT.tutupDalam;
+  const xTab = [-1, 1].map((a) => KT.bukletX + a * (KT.buklet / 2 - KT.tab));
+  // Tab sedikit di belakang buklet (muka yang berimpit saling berebut kedalaman).
+  const tab = xTab.flatMap((x) => [-1, 1].map((a) => lembaran(setengahCakram(KT.jariTab, 0.6, -a).translate(x, a * dalamSayap, KT.bukletBelakang - 0.4), 2)));
+  const [dekat, jauh] = KT.penahan;
+  const xPenahan = (KT.bukletX + KT.buklet / 2 + KT.lebar / 2) / 2;
+  const penahan = [-1, 1].map((a) => lembaran(kotakMm(0.8, jauh - dekat, 1.6, xPenahan, (a * (dekat + jauh)) / 2, KT.tutupDalam - 0.8), 0));
+  return gabungMm(
+    [
+      lembaran(kotakMm(KT.lebar, KT.tinggi, tebalPelat, 0, 0, KT.tutupDepan - tebalPelat / 2), 2),
+      lembaran(kotakMm(KT.lebar, KT.dinding, KT.sayap, 0, yS, KT.tutupDepan - KT.sayap / 2), 1),
+      lembaran(kotakMm(KT.lebar, KT.dinding, KT.sayap, 0, -yS, KT.tutupDepan - KT.sayap / 2), 1),
+      ...tab,
+      ...penahan,
+    ].map((g) => g.translate(0, 0, -KT.engselZ)),
+  );
+}
+
+// Nampan hitam dan rosettenya: panggung tempat cakram bersandar dan cincin gigi yang
+// mencengkeram lubang. Di sisi engsel nampan naik jadi strip berusuk halus setinggi
+// penuh, tepat di bawah tutup. Cincin rendah menandai sumur cakram dan terpotong tepi
+// atas-bawah nampan, seperti nampan asli. Klip setengah cincin berdiri di tepi atas-bawah.
+function geoNampan() {
+  const depan = KT.nampanDepan;
+  const tegak = (g) => g.rotateX(Math.PI / 2);
+  const gigi = Array.from({ length: 12 }, (_, n) =>
+    new THREE.BoxGeometry(4.2, 1.1, 1).translate(5.2, 0, 0).rotateZ((n / 12) * Math.PI * 2).translate(KT.cakramX, 0, depan + 1.3),
+  );
+  const kiriStrip = -KT.lebar / 2 + 1.5;
+  const belakangStrip = KT.sisip + 0.05;
+  const depanStrip = KT.tutupDalam - 0.4;
+  const jarakRusuk = (KT.stripLebar - 2) / KT.rusuk;
+  const rusuk = Array.from({ length: KT.rusuk }, (_, n) =>
+    kotakMm(jarakRusuk * 0.45, KT.nampanTinggi - 2, 0.2, kiriStrip + 1 + jarakRusuk * (n + 0.5), 0, depanStrip + 0.1),
+  );
+  // Dibubut di sekitar y lalu ditegakkan, jadi sudut 0 menunjuk ke bawah nampan; busur dijaga di dalam tingginya.
+  const luarSumur = 62.4;
+  const celah = Math.acos((KT.nampanTinggi / 2 - 1) / luarSumur);
+  const profilSumur = [[60.8, 0], [luarSumur, 0], [luarSumur, 0.5], [60.8, 0.5], [60.8, 0]].map(([x, y]) => new THREE.Vector2(x, y));
+  const sumur = [celah, Math.PI + celah].map((awal) =>
+    tegak(new THREE.LatheGeometry(profilSumur, 48, awal, Math.PI - celah * 2)).translate(KT.cakramX, 0, depan),
+  );
+  const r = KT.klipJari;
+  const profilKlip = [[r - 0.7, 0], [r, 0], [r, 1.2], [r - 0.7, 1.2], [r - 0.7, 0]].map(([x, y]) => new THREE.Vector2(x, y));
+  // Busur tiap klip terbuka ke tepi nampan dan menggembung ke arah cakram.
+  const klip = [-1, 1].flatMap((sx) =>
+    [-1, 1].map((a) =>
+      tegak(new THREE.LatheGeometry(profilKlip, 24, a > 0 ? -Math.PI / 2 : Math.PI / 2, Math.PI)).translate(
+        KT.cakramX + sx * KT.klipJarak,
+        (a * KT.nampanTinggi) / 2,
+        depan,
+      ),
+    ),
+  );
+  const tebal = depan - KT.nampanBelakang;
+  return gabungMm([
+    kotakMm(KT.nampanLebar, KT.nampanTinggi, tebal, 0, 0, depan - tebal / 2),
+    kotakMm(KT.stripLebar, KT.nampanTinggi, depanStrip - belakangStrip, kiriStrip + KT.stripLebar / 2, 0, (depanStrip + belakangStrip) / 2),
+    ...rusuk,
+    ...sumur,
+    ...klip,
+    tegak(new THREE.CylinderGeometry(17, 17, 0.8, 64)).translate(KT.cakramX, 0, depan + 0.4),
+    tegak(new THREE.CylinderGeometry(2.6, 2.6, 1, 24)).translate(KT.cakramX, 0, depan + 1.3),
+    ...gigi,
+  ]);
+}
+
+// Geometri kotak sama untuk semua album, dibuat sekali.
+let geoKotak = null;
+const geometriKotak = () => (geoKotak ??= { sisipan: geoSisipan(), dasar: geoDasar(), tutup: geoTutup(), nampan: geoNampan() });
+
 // --- kotak CD ----------------------------------------------------------------
 export function buatKotak(p, locale, renderer, i) {
   const grup = new THREE.Group();
   const badan = new THREE.Group();
   grup.add(badan);
+  const pt = peta(renderer);
+  const geo = geometriKotak();
+  const plastik = plastikKotak(pt.aus, benih(p.slug ?? i));
 
   const sisipan = new THREE.Mesh(
-    new THREE.PlaneGeometry(mm(138), mm(118)),
-    new THREE.MeshStandardMaterial({ map: tekstur(gambarSisipan(p, locale), renderer), roughness: 0.6 }),
+    geo.sisipan,
+    new THREE.MeshStandardMaterial({ map: tekstur(gambarSisipan(p, locale), renderer), roughness: 0.5 }),
   );
-  sisipan.rotation.y = Math.PI;
-  sisipan.position.z = -KOTAK.d / 2 + mm(0.6);
   badan.add(sisipan);
+  badan.add(new THREE.Mesh(geo.dasar, plastik));
 
-  const dasar = new THREE.Mesh(new RoundedBoxGeometry(KOTAK.w, KOTAK.h, mm(5), 2, mm(1)), plastik());
-  dasar.position.z = -KOTAK.d / 2 + mm(2.5);
-  badan.add(dasar);
-  const tepiDasar = tepiPlastik(dasar.geometry);
-  tepiDasar.position.copy(dasar.position);
-  badan.add(tepiDasar);
-
-  const bahanNampan = pasangSheen(
-    new THREE.MeshPhysicalMaterial({ color: 0x151518, roughness: 0.75, clearcoat: 0.15, clearcoatRoughness: 0.35, envMapIntensity: 1.8 }),
-    { kuat: 0.06 },
+  // Nampan polistiren hitam satin dengan bintik halus.
+  const nampan = new THREE.Mesh(
+    geo.nampan,
+    new THREE.MeshPhysicalMaterial({
+      color: 0x151518,
+      roughness: 1,
+      roughnessMap: pt.kasarNampan,
+      normalMap: pt.bintikNampan,
+      metalness: 0,
+      envMapIntensity: 1.8,
+      clearcoat: 0.15,
+      clearcoatRoughness: 0.35,
+    }),
   );
-  const nampan = new THREE.Mesh(new RoundedBoxGeometry(mm(136), mm(121), mm(5), 2, mm(1.2)), bahanNampan);
-  nampan.position.set(mm(3), 0, -KOTAK.d / 2 + mm(3.5));
   badan.add(nampan);
-
-  // Strip engsel berusuk penuh tinggi, 14 mm, 18 rusuk.
-  const engselStrip = new THREE.Group();
-  const pelat = new THREE.Mesh(new RoundedBoxGeometry(mm(14), mm(121), mm(6), 2, mm(1)), bahanNampan);
-  pelat.position.set(-KOTAK.w / 2 + mm(8), 0, -KOTAK.d / 2 + mm(3.5));
-  engselStrip.add(pelat);
-  const usukGeo = new THREE.BoxGeometry(mm(10), mm(1.2), mm(0.6));
-  const bahanUsuk = new THREE.MeshStandardMaterial({ color: 0x1d1d21, roughness: 0.6 });
-  for (let k = 0; k < 18; k++) {
-    const u = new THREE.Mesh(usukGeo, bahanUsuk);
-    u.position.set(-KOTAK.w / 2 + mm(8), -mm(56) + k * mm(6.6), -KOTAK.d / 2 + mm(6.6));
-    engselStrip.add(u);
-  }
-  // Knuckle di kedua ujung strip engsel.
-  for (const arah of [-1, 1]) {
-    const knuckle = new THREE.Mesh(new THREE.CylinderGeometry(mm(2.4), mm(2.4), mm(6), 16), bahanNampan);
-    knuckle.position.set(-KOTAK.w / 2 + mm(1.5), arah * (KOTAK.h / 2 - mm(4)), KOTAK.d / 2 - mm(3));
-    engselStrip.add(knuckle);
-  }
-  badan.add(engselStrip);
-
-  // Rosette: cincin gigi di tengah nampan yang mencengkeram lubang cakram.
-  const rosette = new THREE.Group();
-  const gigi = new THREE.BoxGeometry(mm(1.6), mm(2.4), mm(2.4));
-  for (let k = 0; k < 12; k++) {
-    const a = (k / 12) * Math.PI * 2;
-    const g = new THREE.Mesh(gigi, bahanNampan);
-    g.position.set(Math.cos(a) * mm(6), Math.sin(a) * mm(6), 0);
-    g.rotation.z = a + Math.PI / 2;
-    rosette.add(g);
-  }
-  const cincinRosette = new THREE.Mesh(new THREE.TorusGeometry(mm(15), mm(0.8), 8, 64), bahanNampan);
-  rosette.add(cincinRosette);
-  // Lapisan z (kotak 10,4 mm): nampan sampai 0,8 mm, cakram 0,8 sampai 2,0, tumpukan buklet
-  // 2,0 sampai 3,2, sampul 3,3, lembar tutup 3,45 sampai 4,95. Gigi rosette berhenti di muka cakram.
-  rosette.position.set(mm(6), 0, -KOTAK.d / 2 + mm(6));
-  badan.add(rosette);
-
-  // Klip setengah cincin di tepi atas dan bawah nampan.
-  for (const arah of [-1, 1]) {
-    const klip = new THREE.Mesh(new THREE.TorusGeometry(mm(4.5), mm(0.9), 8, 24, Math.PI), bahanNampan);
-    klip.position.set(mm(6), arah * mm(57), -KOTAK.d / 2 + mm(6.2));
-    klip.rotation.z = arah > 0 ? Math.PI : 0;
-    badan.add(klip);
-  }
 
   // Cakram duduk 6 mm ke kanan, berputar acak sampai ±25 derajat per album.
   const cakram = buatCakram(p, renderer);
-  cakram.position.set(mm(6), 0, -KOTAK.d / 2 + mm(6.6));
+  cakram.position.set(mm(KT.cakramX), 0, mm(1.4));
   cakram.rotation.z = (((i * 7919) % 100) / 100 - 0.5) * ((50 * Math.PI) / 180);
   badan.add(cakram);
 
@@ -566,33 +712,8 @@ export function buatKotak(p, locale, renderer, i) {
   // Muka depan tumpukan sedikit di belakang sampul supaya tidak berebut kedalaman.
   tumpukan.position.z = -mm(0.7);
   sampul.add(tumpukan);
-  const lembar = new THREE.Mesh(new RoundedBoxGeometry(KOTAK.w, KOTAK.h, mm(1.5), 2, mm(0.6)), plastik());
-  const tepiLembar = tepiPlastik(lembar.geometry, 0.18);
-  // Empat tab setengah lingkaran (radius 5 mm, 16 mm dari tiap sisi) dan dua rusuk
-  // penahan di sisi dalam tutup: yang menjepit buklet di tempatnya.
-  const tabGeo = new THREE.CylinderGeometry(mm(5), mm(5), mm(1), 24);
-  const bahanTab = plastik();
-  const tab = [];
-  for (const [x, y, rot] of [
-    [-BUKLET / 2 + mm(16), BUKLET / 2, 0],
-    [BUKLET / 2 - mm(16), BUKLET / 2, 0],
-    [-BUKLET / 2 + mm(16), -BUKLET / 2, Math.PI],
-    [BUKLET / 2 - mm(16), -BUKLET / 2, Math.PI],
-  ]) {
-    const t = new THREE.Mesh(tabGeo, bahanTab);
-    t.rotation.set(Math.PI / 2, 0, rot);
-    t.position.set(mm(6) + x, y, -mm(2.7));
-    const tepi = tepiPlastik(tabGeo, 0.25);
-    tepi.position.copy(t.position);
-    tepi.rotation.copy(t.rotation);
-    tab.push(t, tepi);
-  }
-  for (const arah of [-1, 1]) {
-    const rusuk = new THREE.Mesh(new THREE.BoxGeometry(mm(1.2), mm(24), mm(2)), bahanTab);
-    rusuk.position.set(mm(6) + BUKLET / 2 + mm(1), arah * mm(28), -mm(1.6));
-    tab.push(rusuk);
-  }
-  tutup.add(sampul, belakangBuklet, lembar, tepiLembar, ...tab);
+  // Cangkang tutup bening: pelat, sayap, tab, dan rusuk penahan dalam satu geometri.
+  tutup.add(sampul, belakangBuklet, new THREE.Mesh(geo.tutup, plastik));
   engsel.add(tutup);
   grup.add(engsel);
 
