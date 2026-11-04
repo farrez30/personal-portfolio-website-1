@@ -5,7 +5,10 @@
 import * as THREE from "three";
 import { gambarArsitektur } from "./gambar";
 
-const UK = 1024;
+// Digambar di 1536 px supaya tajam saat buklet mengisi layar; koordinat ditulis
+// untuk 1024 lalu dikali S.
+const UK = 1536;
+const S = UK / 1024;
 const KERTAS = "#efe9df";
 
 function fontKeluarga() {
@@ -45,14 +48,16 @@ export function buatHalamanUV(p, locale, ilustrasi) {
   const gd = dasar.getContext("2d");
   const tinta = gambarArsitektur(
     p.arsitektur,
-    { latar: null, garis: "#7dffcf", kotak: "rgba(10,30,24,0.6)", teks: "#d8fff4", aksen: "#d9ff6b", huruf: 40 },
-    900,
-    640,
+    { latar: null, garis: "#7dffcf", kotak: "rgba(10,30,24,0.6)", teks: "#d8fff4", aksen: "#d9ff6b", huruf: 30 * S },
+    900 * S,
+    640 * S,
   );
 
   const gambarDasar = () => {
+    gd.setTransform(1, 0, 0, 1, 0, 0);
     gd.fillStyle = KERTAS;
     gd.fillRect(0, 0, UK, UK);
+    gd.setTransform(S, 0, 0, S, 0, 0);
     gd.fillStyle = "#b3322a";
     gd.font = `500 24px ${fontMono()}`;
     gd.textBaseline = "top";
@@ -64,7 +69,7 @@ export function buatHalamanUV(p, locale, ilustrasi) {
       const sk = Math.min(864 / ilustrasi.naturalWidth, 640 / ilustrasi.naturalHeight);
       const w = ilustrasi.naturalWidth * sk;
       const h = ilustrasi.naturalHeight * sk;
-      gd.drawImage(ilustrasi, (UK - w) / 2, 220 + (640 - h) / 2, w, h);
+      gd.drawImage(ilustrasi, (1024 - w) / 2, 220 + (640 - h) / 2, w, h);
     } else {
       const n = Math.max(3, Math.min(5, p.arsitektur.simpul.length));
       for (let i = 0; i < n; i++) siluet(gd, 180 + i * (664 / (n - 1)), 700, 1.15, i % 2 ? "laptop" : "hp");
@@ -72,6 +77,7 @@ export function buatHalamanUV(p, locale, ilustrasi) {
     gd.fillStyle = "#6f695f";
     gd.font = `400 20px ${fontMono()}`;
     gd.fillText(`${p.katalog}  ${p.periode}`, 80, 930);
+    gd.setTransform(1, 0, 0, 1, 0, 0);
   };
   gambarDasar();
   ilustrasi?.addEventListener?.("load", () => {
@@ -106,36 +112,39 @@ export function buatHalamanUV(p, locale, ilustrasi) {
       if (lama < 0.002 && nyala < 0.002) return;
       g.drawImage(dasar, 0, 0);
       if (nyala > 0.002 && titik) {
-        // Kertas di bawah cahaya UV: sedikit gelap keunguan.
-        g.save();
-        g.globalCompositeOperation = "multiply";
-        g.fillStyle = `rgba(120, 90, 200, ${0.35 * nyala})`;
-        g.fillRect(0, 0, UK, UK);
-        g.restore();
         const x = titik.u * UK;
         const y = titik.v * UK;
-        const r = 300;
-        // Tinta hanya menyala di dalam lingkaran senter, tepinya lembut.
+        const r = 0.34 * UK;
+        // Sorot senter: cahaya ungu yang meluruh seperti Gauss dari titik pusat, tanpa
+        // tepi dan tanpa mewarnai halaman di luar sorotnya.
+        const pudar = (grad, warna, kuat, lebar = 2.2) => {
+          for (let i = 0; i <= 10; i++) {
+            const t = i / 10;
+            grad.addColorStop(t, `rgba(${warna}, ${(kuat * Math.exp(-lebar * t * t) * (1 - t * t)).toFixed(4)})`);
+          }
+          return grad;
+        };
+        g.save();
+        g.globalCompositeOperation = "multiply";
+        g.fillStyle = pudar(g.createRadialGradient(x, y, 0, x, y, r * 1.4), "112, 84, 210", 0.55 * nyala);
+        g.fillRect(0, 0, UK, UK);
+        g.restore();
+        // Tinta hanya menyala di dalam sorot, meredup halus ke tepinya.
         gl.globalCompositeOperation = "source-over";
         gl.clearRect(0, 0, UK, UK);
         gl.shadowColor = "rgba(125, 255, 207, 0.9)";
-        gl.shadowBlur = 14;
-        gl.drawImage(tinta, 62, 230);
+        gl.shadowBlur = 14 * S;
+        gl.drawImage(tinta, 62 * S, 230 * S);
         gl.shadowBlur = 0;
         gl.globalCompositeOperation = "destination-in";
-        const topeng = gl.createRadialGradient(x, y, 0, x, y, r);
-        topeng.addColorStop(0, `rgba(0,0,0,${nyala})`);
-        topeng.addColorStop(0.7, `rgba(0,0,0,${0.85 * nyala})`);
-        topeng.addColorStop(1, "rgba(0,0,0,0)");
-        gl.fillStyle = topeng;
+        gl.fillStyle = pudar(gl.createRadialGradient(x, y, 0, x, y, r), "0, 0, 0", Math.min(1, 1.2 * nyala), 1.4);
         gl.fillRect(0, 0, UK, UK);
         g.drawImage(lapis, 0, 0);
-        // Pendar ungu di titik senter.
-        const pendar = g.createRadialGradient(x, y, 0, x, y, r * 1.1);
-        pendar.addColorStop(0, `rgba(150, 110, 255, ${0.22 * nyala})`);
-        pendar.addColorStop(1, "rgba(150, 110, 255, 0)");
-        g.fillStyle = pendar;
+        g.save();
+        g.globalCompositeOperation = "screen";
+        g.fillStyle = pudar(g.createRadialGradient(x, y, 0, x, y, r * 1.2), "150, 110, 255", 0.3 * nyala);
         g.fillRect(0, 0, UK, UK);
+        g.restore();
       }
       tekstur.needsUpdate = true;
     },

@@ -353,7 +353,7 @@ export default function Panggung({ gulir }) {
         </div>
       </footer>
 
-      {s.keadaan === "putar" && s.duduk && !cdMusik && <Hologram p={aktif} sumur={sumur} jalan={s.jalan} />}
+      {s.keadaan === "putar" && s.duduk && !cdMusik && <Hologram p={aktif} sumur={sumur} jalan={s.jalan} onPutar={() => a?.setJalan(true)} />}
 
       <p className="sr-only" aria-live="polite">
         {`${aktif.katalog} ${aktif.judul[locale]}, ${t(`keadaan.${s.keadaan}`)}`}

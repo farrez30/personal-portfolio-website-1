@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpleBold, PiArrowsInSimpleBold } from "react-icons/pi";
+import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpleBold, PiArrowsInSimpleBold, PiPauseFill, PiPlayFill } from "react-icons/pi";
 
 // Layar hologram yang naik dari sumur pemutar. Play menyalakan proyeksi, Pause
 // membekukannya, Keluarkan mematikannya. Layarnya melayang: sedikit miring
 // mengikuti kursor dan naik turun pelan, dengan bingkai monitor sci-fi retro.
 // Situs proyek tampil langsung hanya di farrez.vercel.app (app-nya hanya
 // mengizinkan domain itu membingkai); di tempat lain memakai tangkapan layar.
-export default function Hologram({ p, sumur, jalan }) {
+export default function Hologram({ p, sumur, jalan, onPutar }) {
   const t = useTranslations("panggung.layar");
   const locale = useLocale();
   const [perangkat, setPerangkat] = useState("desktop");
@@ -17,6 +17,18 @@ export default function Hologram({ p, sumur, jalan }) {
   const [muat, setMuat] = useState(true);
   useEffect(() => setMuat(true), [perangkat, p.slug]);
   const panel = useRef(null);
+  // Saat Play ditekan, ikon putar berkedip sebentar di layar sebelum isinya kembali normal.
+  const [kilas, setKilas] = useState(false);
+  const jalanLalu = useRef(jalan);
+  useEffect(() => {
+    if (jalan && !jalanLalu.current) {
+      setKilas(true);
+      const t = setTimeout(() => setKilas(false), 700);
+      jalanLalu.current = jalan;
+      return () => clearTimeout(t);
+    }
+    jalanLalu.current = jalan;
+  }, [jalan]);
 
   useEffect(() => {
     const el = panel.current;
@@ -102,6 +114,17 @@ export default function Hologram({ p, sumur, jalan }) {
               <div className="holo__kosong" style={{ background: p.warna }} ref={(el) => el && setTimeout(() => setMuat(false), 700)}>
                 <span className="mono">{p.katalog}</span>
                 <span>{p.judul[locale]}</span>
+              </div>
+            )}
+            {!jalan && !muat && (
+              <button type="button" className="holo__jeda" onClick={onPutar} aria-label={t("lanjutkan")}>
+                <PiPauseFill aria-hidden="true" />
+                <span className="mono">{t("dijeda")}</span>
+              </button>
+            )}
+            {kilas && (
+              <div className="holo__kilas" aria-hidden="true">
+                <PiPlayFill />
               </div>
             )}
             {muat && (

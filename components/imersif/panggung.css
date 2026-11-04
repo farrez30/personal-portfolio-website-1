@@ -720,6 +720,10 @@
   .panggung__panel {
     animation: none;
   }
+
+  .holo__kilas {
+    display: none;
+  }
 }
 
 /* Senter UV: tombol senter antik; saat menyala, kursor menjadi lingkaran cahaya ungu. */
@@ -842,4 +846,50 @@
 
 @keyframes holo-layar-kedip {
   50% { filter: brightness(1.08); }
+}
+
+/* Layar dijeda: ikon jeda di tengah layar, seluruh layar jadi tombol untuk melanjutkan. */
+.holo__jeda {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.6rem;
+  border: 0;
+  background: rgb(4 10 7 / 0.5);
+  color: rgb(var(--fosfor));
+  font: inherit;
+  font-size: 0.8125rem;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 8px rgb(var(--fosfor) / 0.9);
+  cursor: pointer;
+}
+
+.holo__jeda svg,
+.holo__kilas svg {
+  width: 64px;
+  height: 64px;
+  filter: drop-shadow(0 0 10px rgb(var(--fosfor) / 0.8));
+}
+
+.holo__jeda:focus-visible {
+  outline: 2px solid rgb(var(--fosfor));
+  outline-offset: -6px;
+}
+
+.holo__kilas {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgb(var(--fosfor));
+  pointer-events: none;
+  animation: holo-kilas 700ms ease-out forwards;
+}
+
+@keyframes holo-kilas {
+  0% { opacity: 0; transform: scale(0.8); }
+  20% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.25); }
 }
