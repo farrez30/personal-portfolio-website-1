@@ -9,11 +9,15 @@ import {
   PiArrowUpRightBold,
   PiXBold,
 } from "react-icons/pi";
-import { proyek } from "@/content/proyek";
+import { proyek as daftarProyek } from "@/content/proyek";
+import { albumMusik } from "@/content/musik";
 import { situs } from "@/content/situs";
 import Acak from "@/components/gerbang/Acak";
 import Contact from "@/components/contact/Contact";
-import Layar from "./Layar";
+import Hologram from "./Hologram";
+
+// Rak imersif: semua proyek, lalu satu CD musik di ujung.
+const proyek = [...daftarProyek, albumMusik];
 import { buatAdegan } from "./adegan";
 import "./panggung.css";
 
@@ -30,7 +34,7 @@ export default function Panggung() {
   const [siap, setSiap] = useState(false);
   const [s, setS] = useState({ fokus: 0, keadaan: "rak", aktif: null, terbalik: false, duduk: false, jalan: false });
   const [hover, setHover] = useState(null);
-  const [lensa, setLensa] = useState(null);
+  const [sumur, setSumur] = useState(null);
   const [panel, setPanel] = useState(null); // "tentang" | "kontak" | null
 
   const p = proyek[s.fokus];
@@ -62,11 +66,11 @@ export default function Panggung() {
       a.on("tombol", (nama) => tekanTombol.current(nama));
       a.on("hover", setHover);
       let terakhir = 0;
-      a.on("lensa", (x, y, nyala) => {
+      a.on("sumur", (x, y, w, nyala) => {
         const now = performance.now();
         if (now - terakhir < 50) return;
         terakhir = now;
-        setLensa(nyala ? { x, y } : null);
+        setSumur(nyala ? { x, y, w } : null);
       });
       adegan.current = a;
       bacaHash(a);
@@ -79,10 +83,11 @@ export default function Panggung() {
     };
   }, [locale]);
 
-  // Musik ikut tombol Play di pemutar; pemutar piringan hitam mendengar event ini.
+  // Play di pemutar: CD proyek menyalakan hologram, CD musik memutar lagu.
+  const cdMusik = s.aktif === albumMusik.slug;
   useEffect(() => {
-    window.dispatchEvent(new CustomEvent("musik", { detail: { jalan: s.jalan } }));
-  }, [s.jalan]);
+    window.dispatchEvent(new CustomEvent("musik", { detail: { jalan: cdMusik && s.jalan } }));
+  }, [s.jalan, cdMusik]);
 
   // Rute di hash: #/slug, #/slug/buka, #/slug/putar, #/slug/buklet.
   useEffect(() => {
@@ -230,7 +235,7 @@ export default function Panggung() {
               ←
             </button>
           )}
-          {s.keadaan === "putar" && aktif.tautan.repo && (
+          {s.keadaan === "putar" && aktif.tautan?.repo && (
             <a className="panggung__sudut" href={aktif.tautan.repo} target="_blank" rel="noopener noreferrer">
               GitHub
             </a>
@@ -262,7 +267,7 @@ export default function Panggung() {
             aria-label={s.keadaan === "rak" ? `${tr("buka")}: ${aktif.judul[locale]}` : undefined}
           >
             <span key={`i-${s.fokus}`} className="panggung__info mono panggung__pudar">
-              {tr(`jenis.${aktif.jenis}`)}, {aktif.periode}, {tr(`status.${aktif.status}`)}
+              {aktif.musik ? aktif.ringkas[locale] : `${tr(`jenis.${aktif.jenis}`)}, ${aktif.periode}, ${tr(`status.${aktif.status}`)}`}
             </span>
             <span key={`n-${s.fokus}`} className="panggung__nama panggung__pudar">{aktif.judul[locale]}</span>
           </button>
@@ -285,7 +290,7 @@ export default function Panggung() {
               →
             </button>
           )}
-          {s.keadaan === "putar" && aktif.tautan.situs && (
+          {s.keadaan === "putar" && aktif.tautan?.situs && (
             <a className="panggung__sudut" href={aktif.tautan.situs} target="_blank" rel="noopener noreferrer">
               {t("bukaTab")} <PiArrowUpRightBold aria-hidden="true" />
             </a>
@@ -293,7 +298,7 @@ export default function Panggung() {
         </div>
       </footer>
 
-      {s.keadaan === "putar" && s.duduk && <Layar p={aktif} lensa={lensa} />}
+      {s.keadaan === "putar" && s.duduk && !cdMusik && <Hologram p={aktif} sumur={sumur} jalan={s.jalan} />}
 
       <p className="sr-only" aria-live="polite">
         {`${aktif.katalog} ${aktif.judul[locale]}, ${t(`keadaan.${s.keadaan}`)}`}

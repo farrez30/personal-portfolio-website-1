@@ -354,110 +354,141 @@ html.panggung-aktif body {
   }
 }
 
-/* Layar proyektor PiP. */
-.layar {
+/* Hologram: layar melayang yang naik dari sumur pemutar, bingkai monitor sci-fi retro. */
+.holo {
+  --fosfor: 150 255 190;
   position: absolute;
   inset: 0;
   z-index: 3;
   pointer-events: none;
+  perspective: 1400px;
 }
 
-.layar__sinar {
+.holo__sinar {
   position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
+  left: var(--sx);
+  top: 0;
+  width: min(62vw, 820px);
+  height: var(--sy);
+  transform: translateX(-50%);
+  background: linear-gradient(to top, rgb(var(--fosfor) / 0.32), rgb(var(--fosfor) / 0.04) 70%, transparent);
+  clip-path: polygon(calc(50% - var(--sw) * 0.55) 100%, calc(50% + var(--sw) * 0.55) 100%, 100% 12%, 0 12%);
   mix-blend-mode: screen;
-  animation: layar-nyala 900ms var(--ease) both;
+  opacity: 0;
+  transition: opacity 500ms ease;
 }
 
-@keyframes layar-nyala {
-  0% {
-    opacity: 0;
-  }
-  30% {
-    opacity: 0.9;
-  }
-  40% {
-    opacity: 0.4;
-  }
-  100% {
-    opacity: 1;
-  }
+.holo--nyala .holo__sinar {
+  opacity: 1;
+  animation: holo-kedip 4s steps(60) infinite;
 }
 
-.layar__bingkai {
+@keyframes holo-kedip {
+  0%, 100% { filter: brightness(1); }
+  47% { filter: brightness(1); }
+  48% { filter: brightness(0.7); }
+  49% { filter: brightness(1.05); }
+}
+
+.holo__panel {
+  --rx: 0deg;
+  --ry: 0deg;
+  --bob: 0px;
   position: absolute;
-  right: clamp(1rem, 3vw, 2.5rem);
-  top: 54%;
-  transform: translateY(-50%);
-  width: min(42vw, 720px);
+  left: var(--sx);
+  top: calc(var(--sy) * 0.82);
+  width: min(56vw, 720px);
+  transform-origin: 50% 100%;
+  transform: translate(-50%, -100%) translateY(var(--bob)) rotateX(var(--rx)) rotateY(var(--ry));
+  pointer-events: auto;
+  animation: holo-naik 800ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.holo[data-perangkat="hp"] .holo__panel {
+  width: min(30vw, 300px);
+}
+
+@keyframes holo-naik {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%) scaleY(0.02);
+    filter: brightness(3);
+  }
+}
+
+.holo__bingkai {
+  position: relative;
   display: grid;
   gap: 0.5rem;
-  pointer-events: auto;
-}
-
-.layar[data-perangkat="hp"] .layar__bingkai {
-  width: min(24vw, 360px);
-}
-
-.layar__alat {
-  display: flex;
-  gap: 0.25rem;
-  flex-wrap: wrap;
-}
-
-.layar__alat button {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  min-height: 36px;
-  padding: 0 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--ruang-tinta) 25%, transparent);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--ruang) 70%, transparent);
-  color: var(--ruang-tinta);
-  font-size: 0.8125rem;
-  cursor: pointer;
-}
-
-.layar__alat button[aria-pressed="true"] {
-  background: var(--ruang-tinta);
-  color: var(--ruang);
-}
-
-.layar__alat button:disabled {
-  opacity: 0.35;
-  cursor: default;
-}
-
-.layar__isi {
-  position: relative;
-  aspect-ratio: 16 / 10;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #11100f;
+  padding: 0.6rem;
+  border-radius: 14px;
+  background: rgb(10 18 14 / 0.82);
+  border: 1px solid rgb(var(--fosfor) / 0.55);
   box-shadow:
-    0 0 0 1px rgb(255 243 217 / 0.45),
-    0 0 40px rgb(255 238 205 / 0.35),
-    0 30px 60px -30px rgb(0 0 0 / 0.5);
+    0 0 0 1px rgb(0 0 0 / 0.4),
+    0 0 24px rgb(var(--fosfor) / 0.35),
+    inset 0 0 30px rgb(var(--fosfor) / 0.12);
+  color: rgb(var(--fosfor));
 }
 
-/* Garis pindai halus: kesan layar hasil proyeksi. */
-.layar__isi::after {
+/* Siku-siku sudut ala HUD. */
+.holo__bingkai::before,
+.holo__bingkai::after {
   content: "";
   position: absolute;
-  inset: 0;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgb(var(--fosfor) / 0.9);
   pointer-events: none;
-  background: repeating-linear-gradient(0deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 3px);
 }
 
-.layar[data-perangkat="hp"] .layar__isi {
-  aspect-ratio: 9 / 18;
+.holo__bingkai::before {
+  top: -6px;
+  left: -6px;
+  border-right: 0;
+  border-bottom: 0;
 }
 
-.layar__frame,
-.layar__gambar {
+.holo__bingkai::after {
+  bottom: -6px;
+  right: -6px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.holo__kepala {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 6px rgb(var(--fosfor) / 0.8);
+}
+
+.holo__status {
+  padding: 0 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+}
+
+.holo--beku .holo__status {
+  color: #ffc46b;
+}
+
+.holo__layar {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #070b09;
+}
+
+.holo[data-perangkat="hp"] .holo__layar {
+  aspect-ratio: 9 / 17;
+}
+
+.holo__layar iframe,
+.holo__layar img {
   width: 100%;
   height: 100%;
   border: 0;
@@ -466,24 +497,111 @@ html.panggung-aktif body {
   background: #fff;
 }
 
-.layar__kosong {
+/* Garis pindai dan vinyet tabung. */
+.holo__layar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.12) 0 1px, transparent 1px 3px),
+    radial-gradient(120% 100% at 50% 50%, transparent 60%, rgb(0 20 10 / 0.45) 100%);
+  box-shadow: inset 0 0 40px rgb(var(--fosfor) / 0.15);
+}
+
+.holo--beku .holo__layar {
+  filter: saturate(0.4) brightness(0.8);
+}
+
+.holo--beku .holo__layar iframe {
+  pointer-events: none;
+}
+
+.holo__kosong {
   display: grid;
-  place-items: center;
+  place-content: center;
+  gap: 0.5rem;
   width: 100%;
   height: 100%;
+  text-align: center;
   color: #f4efe7;
+  font-size: 1.5rem;
+  font-weight: 650;
 }
 
-.layar__isi .sinarx,
-.layar__isi .sinarx__panggung {
-  height: 100%;
+.holo__alat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
 }
 
-.layar__isi .sinarx figcaption {
+.holo__alat button,
+.holo__alat a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 34px;
+  padding: 0 0.7rem;
+  border: 1px solid rgb(var(--fosfor) / 0.45);
+  border-radius: 999px;
+  background: transparent;
+  color: rgb(var(--fosfor));
+  font: inherit;
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.holo__alat a {
+  margin-left: auto;
+}
+
+.holo__alat button[aria-pressed="true"] {
+  background: rgb(var(--fosfor) / 0.18);
+}
+
+/* Keping-keping kecil yang mengorbit layar, sebagai hiasan. */
+.holo__orbit {
   position: absolute;
-  bottom: 0.5rem;
-  left: 0.75rem;
-  color: rgb(244 239 231 / 0.7);
+  left: var(--sx);
+  top: calc(var(--sy) * 0.5);
+  width: 0;
+  height: 0;
+  animation: holo-orbit 40s linear infinite;
+}
+
+.holo__keping {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgb(var(--fosfor) / 0.4);
+  border-radius: 4px;
+  background: rgb(10 18 14 / 0.6);
+  color: rgb(var(--fosfor) / 0.85);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  transform: rotate(calc(var(--i) / var(--n) * 1turn)) translateX(min(36vw, 470px)) rotate(calc(var(--i) / var(--n) * -1turn));
+  animation: holo-lawan 40s linear infinite;
+}
+
+@keyframes holo-orbit {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes holo-lawan {
+  from {
+    rotate: 0turn;
+  }
+  to {
+    rotate: -1turn;
+  }
+}
+
+.holo--beku .holo__orbit,
+.holo--beku .holo__keping {
+  animation-play-state: paused;
 }
 
 @media (max-width: 650px) {
@@ -512,30 +630,22 @@ html.panggung-aktif body {
     grid-area: kanan;
   }
 
-  .layar__sinar {
+  .holo__panel,
+  .holo[data-perangkat="hp"] .holo__panel {
+    width: calc(100vw - 2rem);
+  }
+
+  .holo__orbit {
     display: none;
-  }
-
-  .layar__bingkai,
-  .layar[data-perangkat="hp"] .layar__bingkai {
-    top: auto;
-    bottom: 9.5rem;
-    left: 1rem;
-    right: 1rem;
-    width: auto;
-    transform: none;
-  }
-
-  .layar__isi,
-  .layar[data-perangkat="hp"] .layar__isi {
-    aspect-ratio: 16 / 11;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .panggung__cincin,
-  .layar__sinar,
-  .layar__bingkai,
+  .holo__sinar,
+  .holo__panel,
+  .holo__orbit,
+  .holo__keping,
   .panggung__panel {
     animation: none;
   }

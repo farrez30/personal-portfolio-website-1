@@ -125,7 +125,8 @@
       "hp": "HP",
       "sinarx": "Sinar-x",
       "tampilan": "Tampilan layar",
-      "sedangDisiapkan": "Tampilan langsung sedang disiapkan."
+      "sedangDisiapkan": "Tampilan langsung sedang disiapkan.",
+      "bukaTab": "Buka di tab baru"
     }
   }
 }

@@ -321,6 +321,8 @@ export function buatKotak(p, locale, renderer, i) {
     if (o.isMesh) o.userData.slug = p.slug;
   });
   cakram.traverse((o) => (o.userData.bagian = "cakram"));
+  // Bagian dalam tutup: buklet yang bisa diklik untuk dibaca.
+  for (const m of [sampul, belakangBuklet]) m.userData.bagian = "buklet";
   return { grup, badan, engsel, cakram, sampul, sasaran };
 }
 
@@ -540,31 +542,6 @@ export function buatPemutar(renderer) {
   grup.add(bayangan);
 
   return { grup, layar, tombol, lampu, puncakY: puncak + mm(3) };
-}
-
-// --- proyektor -----------------------------------------------------------------
-// Sci-fi retro: badan krem membulat, sirip pendingin, laras logam, lensa menyala.
-export function buatProyektor() {
-  const grup = new THREE.Group();
-  const krem = pasangSheen(new THREE.MeshPhysicalMaterial({ color: 0xe6dccb, roughness: 0.42, clearcoat: 0.5 }), { kuat: 0.1 });
-  const badan = new THREE.Mesh(new RoundedBoxGeometry(mm(90), mm(42), mm(60), 5, mm(14)), krem);
-  grup.add(badan);
-  const gelap = new THREE.MeshStandardMaterial({ color: 0x2a2826, roughness: 0.5, metalness: 0.4 });
-  for (let k = 0; k < 5; k++) {
-    const sirip = new THREE.Mesh(new RoundedBoxGeometry(mm(4), mm(30), mm(50), 2, mm(1.5)), gelap);
-    sirip.position.set(-mm(30) + k * mm(7), mm(23), 0);
-    grup.add(sirip);
-  }
-  const laras = new THREE.Mesh(new THREE.CylinderGeometry(mm(15), mm(17), mm(22), 48), gelap);
-  laras.rotation.z = Math.PI / 2;
-  laras.position.set(mm(52), mm(2), 0);
-  const lensa = new THREE.Mesh(new THREE.CircleGeometry(mm(12), 48), new THREE.MeshBasicMaterial({ color: 0xfff1d6, toneMapped: false }));
-  lensa.rotation.y = Math.PI / 2;
-  lensa.position.set(mm(63.5), mm(2), 0);
-  const kaki = new THREE.Mesh(new THREE.CylinderGeometry(mm(5), mm(8), mm(20), 24), gelap);
-  kaki.position.y = -mm(30);
-  grup.add(laras, lensa, kaki);
-  return { grup, lensa };
 }
 
 export { gambarHalaman };

@@ -125,7 +125,8 @@
       "hp": "Phone",
       "sinarx": "X-ray",
       "tampilan": "Screen view",
-      "sedangDisiapkan": "The live view is being set up."
+      "sedangDisiapkan": "The live view is being set up.",
+      "bukaTab": "Open in new tab"
     }
   }
 }

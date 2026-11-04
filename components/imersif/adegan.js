@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
 import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
-import { KOTAK, BUKLET, buatKotak, buatPemutar, buatProyektor, buatLingkungan, sinkronCakram, setRedup } from "./benda";
+import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup } from "./benda";
 import { gambarSampul, gambarHalaman, gambarArsitektur } from "./gambar";
 
 // Satuan studi (1 = 60 mm) ke satuan kita (1 = 100 mm).
@@ -194,13 +194,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
   });
 
   let pemutar = null;
-  let proyektor = null;
   const siapkanPemutar = () => {
     if (pemutar) return;
     pemutar = buatPemutar(renderer);
-    proyektor = buatProyektor();
-    pemutar.grup.visible = proyektor.grup.visible = false;
-    scene.add(pemutar.grup, proyektor.grup);
+    pemutar.grup.visible = false;
+    scene.add(pemutar.grup);
   };
   // Di perangkat sentuh shader dikompilasi di utas utama; buat lebih awal.
   if (sentuhKasar) siapkanPemutar();
@@ -458,6 +456,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
         sk3.lerp(vTmp.setScalar(skBuka), face);
       }
       kt.engsel.rotation.y = -sudutTutup * swing;
+      // Kotak klik menutupi isi; saat terbuka, cakram dan buklet harus bisa diklik langsung.
+      kt.sasaran.visible = !terbuka;
       const redup = 0.1 + 0.9 * p3io(swing / 0.5);
       if (kt.cakram.parent === kt.badan) {
         setRedup(kt.cakram.userData.bahan.cetak, redup);
@@ -473,22 +473,17 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
       kt.sampul.visible = !(kt === aktifK && k_.buklet);
     }
 
-    // --- pemutar dan proyektor ---------------------------------------------
+    // --- pemutar -----------------------------------------------------------
     if (pemutar) {
       const tampil = k_.dengar > 0.001;
       pemutar.grup.visible = tampil;
-      proyektor.grup.visible = tampil && !k_.sempit;
       const pY = -C.geserNaik * (1 - geser);
       const mx = k_.kursor.ada ? k_.kursor.y * C.miringKursor * 0.4 * 0.35 : 0;
       const my = k_.kursor.ada ? k_.kursor.x * C.miringKursor * 0.4 * 0.35 : 0;
-      pemutar.grup.position.set(k_.sempit ? 0 : -0.3, pY + 0.12, 0);
+      pemutar.grup.position.set(0, pY - 0.32, 0);
       pemutar.grup.rotation.set(mx, Math.PI / 4 + my, 0);
       pemutar.grup.scale.setScalar(0.62);
-      proyektor.grup.position.set(0.22, pY - 0.5, -0.1);
-      proyektor.grup.scale.setScalar(0.32);
-      proyektor.grup.rotation.set(0, -0.65, 0);
       pemutar.lampu.material.color.set(k_.jalan ? 0x8fd694 : 0xe0574b);
-      proyektor.lensa.material.color.set(duduk ? 0xfff1d6 : 0x2a2622);
       for (const b of pemutar.tombol) {
         const sorot = k_.tombolHover === b.userData.tombol;
         const lab = b.userData.label.material;
@@ -496,9 +491,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
         b.position.z += (b.userData.dasarZ - (b.userData.tekan ? 0.004 : 0) - b.position.z) * Math.min(1, dt * 30);
       }
       pemutar.layar.gambar(now, duduk);
-      if (tampil && !k_.sempit) {
-        proyektor.lensa.getWorldPosition(lensaLayar).project(camera);
-        panggil("lensa", (lensaLayar.x + 1) / 2, (1 - lensaLayar.y) / 2, duduk);
+      if (tampil) {
+        // Titik sumur di layar: dari sini hologram naik.
+        lensaLayar.set(0, pemutar.puncakY, 0).applyMatrix4(pemutar.grup.matrixWorld).project(camera);
+        const lebarSumur = vTmp.set(0.62, pemutar.puncakY, 0).applyMatrix4(pemutar.grup.matrixWorld).project(camera);
+        panggil("sumur", (lensaLayar.x + 1) / 2, (1 - lensaLayar.y) / 2, Math.abs(lebarSumur.x - lensaLayar.x) / 2, duduk);
       }
     }
 
@@ -621,7 +618,12 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
     if (pemutar?.grup.visible) sasaran.push(pemutar.grup);
     const ak = kotak.find((x) => x.p.slug === k_.aktif);
     if (ak && ak.cakram.parent === scene) sasaran.push(ak.cakram);
-    return ray.intersectObjects(sasaran, true)[0] ?? null;
+    // Lewati benda yang disembunyikan (raycaster tetap mengenainya).
+    const tampak = (o) => {
+      for (let x = o; x; x = x.parent) if (!x.visible) return false;
+      return true;
+    };
+    return ray.intersectObjects(sasaran, true).find((h) => tampak(h.object)) ?? null;
   };
 
   let tahan = 0;
@@ -688,6 +690,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
       if (obj && k_.keadaan !== "buklet") {
         if (obj.userData.tombol) jenis = duduk ? "tombol" : null;
         else if (obj.userData.bagian === "cakram" && (k_.keadaan === "buka" || duduk)) jenis = "cakram";
+        else if (obj.userData.bagian === "buklet" && k_.keadaan === "buka") jenis = "cakram";
         else if (obj.userData.slug && k_.keadaan === "rak") jenis = "kotak";
       }
       k_.tombolHover = jenis === "tombol" ? obj.userData.tombol : null;
@@ -758,6 +761,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
       else keIndeks(s.kotak.i, "klik");
     } else if (k_.keadaan === "buka" && s.obj?.userData.bagian === "cakram") {
       panggil("klikCakram");
+    } else if (k_.keadaan === "buka" && s.obj?.userData.bagian === "buklet") {
+      api.bukaBuklet();
     } else if (k_.keadaan === "putar" && s.obj && duduk) {
       if (s.obj.userData.tombol) panggil("tombol", s.obj.userData.tombol);
       else if (s.obj.userData.bagian === "cakram") panggil("klikCakram");
@@ -891,7 +896,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
       if (k_.keadaan !== "buka" || k_.baca > 0.001) return;
       siapkanPemutar();
       const p = proyek.find((x) => x.slug === k_.aktif);
-      pemutar.layar.setel(`${p.judul[locale]}  ${p.katalog}`, performance.now());
+      pemutar.layar.setel(p.musik ? p.ringkas[locale].replace(/\.$/, "") : `${p.judul[locale]}  ${p.katalog}`, performance.now());
       pasangTween(k_.dengarT, k_.dengar, 1, C.dengarMasuk * (1 - k_.dengar), linear, performance.now());
       k_.keadaan = "putar";
       k_.rem = C.remDetik;
