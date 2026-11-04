@@ -1,100 +1,98 @@
 {
   "meta": {
     "siteName": "Farrez Al Hakim",
-    "title": "Farrez Al Hakim — Full-Stack Developer, AI Agentic Engineer & Data Engineer",
-    "description": "Portfolio of Farrez Al Hakim — a Full-Stack Developer, AI Agentic Engineer, and Data Engineer building robust, scalable, and intelligent web applications.",
-    "keywords": "Full-Stack Developer, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, software engineer portfolio"
+    "title": "Farrez Al Hakim: from business needs to systems people use",
+    "description": "Farrez Al Hakim, Jakarta. Implementation, business analysis, and delivery for ERP and digital products, from the requirements meeting to a system people use every day.",
+    "keywords": "Farrez Al Hakim, implementation consultant, business analyst, project delivery, ERP, Jakarta"
   },
-  "nav": {
-    "home": "Home",
-    "about": "About",
-    "experience": "Experience",
-    "portfolio": "Portfolio",
-    "contact": "Contact"
+  "gerbang": {
+    "nama": "Farrez Al Hakim",
+    "peran": "Implementation, business analysis, and delivery. Jakarta.",
+    "headline": "Not just a system that ships. A system people use every day.",
+    "lihatProyek": "See the work",
+    "hubungi": "Get in touch",
+    "unduhCV": "Download CV"
   },
-  "header": {
-    "greeting": "Hello, I'm",
-    "name": "Farrez Al Hakim",
-    "tagline": "Full-Stack Developer · AI Agentic Engineer · Data Engineer",
-    "downloadCV": "Download CV",
-    "letsTalk": "Let's Talk",
-    "scrollDown": "Scroll Down"
+  "mode": {
+    "label": "View",
+    "imersif": "Immersive",
+    "ringan": "Light",
+    "imersifInfo": "Full 3D. Needs a decent graphics card.",
+    "ringanInfo": "Fast and easy on the battery."
   },
-  "about": {
-    "subtitle": "Get To Know",
-    "title": "About Me",
-    "bio1": "A Business Management graduate who decided to embark on a new career path in web development. I've always been fascinated by technology, so when I started learning more about web development, I was hooked right away.",
-    "bio2": "I began my web development journey in 2021 by learning on my own before enrolling in a Full Stack Web Development program at Purwadhika Digital Technology School, where I gained practical experience with a variety of front-end and back-end technologies that emphasize real-world projects simulating industry scenarios.",
-    "bio3": "I also gained hands-on experience building robust and scalable web APIs, working with databases, handling authentication and security, implementing efficient server-side architecture, crafting responsive and visually appealing user interfaces, integrating APIs, handling user interactions, and optimizing web performance.",
-    "letsTalk": "Let's Talk"
+  "rak": {
+    "judul": "The shelf",
+    "petunjuk": "Pick an album to open.",
+    "sebelumnya": "Previous album",
+    "berikutnya": "Next album",
+    "buka": "Open album",
+    "jenis": {
+      "kerja": "Day job",
+      "studio": "Studio",
+      "pribadi": "Personal"
+    },
+    "status": {
+      "dipakai": "In use",
+      "berjalan": "Running",
+      "pilot": "Pilot"
+    }
   },
-  "experience": {
-    "subtitle": "Here are a few technologies I've been working with:",
-    "title": "My Experience",
-    "frontend": "Frontend Development",
-    "backend": "Backend Development",
-    "experienced": "Experienced",
-    "intermediate": "Intermediate"
+  "album": {
+    "tutup": "Close album",
+    "buklet": "Read the booklet",
+    "putar": "Play the disc",
+    "kembali": "Back to the shelf",
+    "bukaSitus": "Open site",
+    "lihatRepo": "View repo",
+    "halaman": {
+      "overview": "Overview",
+      "challenge": "Challenge",
+      "decisions": "Key decisions",
+      "solution": "Solution",
+      "delivery": "Delivery & role",
+      "outcome": "Outcome",
+      "architecture": "Architecture"
+    },
+    "periode": "Period",
+    "jenis": "Type",
+    "status": "Status",
+    "sinarx": "Move your cursor or finger over the image to see what's underneath.",
+    "sinarxDaftar": "System parts",
+    "ke": "to",
+    "tutupBuklet": "Close booklet"
   },
-  "portfolio": {
-    "subtitle": "My Recent Work",
-    "title": "Portfolio",
-    "github": "Github",
-    "liveDemo": "Live Demo",
-    "viewCase": "View case",
-    "year": "Year",
-    "role": "Role",
-    "concept": "Concept",
-    "impact": "Impact",
-    "learnings": "Learnings",
-    "visitSite": "Visit site",
-    "desktop": "Desktop",
-    "mobile": "Mobile",
-    "close": "Close",
-    "soon": "Coming soon",
-    "uiuxCase": "UI/UX case study — see the links below.",
-    "builtWith": "Built with",
-    "openNewTab": "Open in new tab",
-    "previewNote": "Some sites block embedding — use Live preview, or open the site in a new tab.",
-    "preview": "Preview",
-    "livePreview": "Live preview"
+  "kontak": {
+    "judul": "Talking about a project or a role?",
+    "teks": "Email or WhatsApp is fastest. I reply on working days.",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "formJudul": "Or write here",
+    "nama": "Name",
+    "emailAnda": "Your email",
+    "subjek": "Subject",
+    "subjekIsi": "About a project or a role",
+    "pesan": "Message",
+    "pesanIsi": "Hi Farrez,\n\nI saw your portfolio and would like to talk about",
+    "kirimEmail": "Send by email",
+    "kirimWa": "Send on WhatsApp",
+    "galatJudul": "Name, email, and message are required.",
+    "galatKirim": "That didn't send. Try again, or reach me on WhatsApp.",
+    "terkirim": "Sent. Thank you.",
+    "helix": "Click once, then sweep your cursor across the helix."
   },
-  "contact": {
-    "subtitle": "Get In Touch",
-    "title": "Contact Me",
-    "emailTitle": "Email",
-    "emailDesc": "You could directly email me 📨",
-    "emailCta": "📧 SEND NOW 📧",
-    "whatsappTitle": "WhatsApp",
-    "whatsappDesc": "or use WhatsApp to reach me 😉",
-    "whatsappCta": "💬 CONTACT ME 💬",
-    "namePlaceholder": "Your Full Name",
-    "emailPlaceholder": "Your Email",
-    "messagePlaceholder": "Your Message",
-    "send": "Send Message",
-    "alertErrorTitle": "Please fill in all the required fields.",
-    "alertSuccessTitle": "Your message has been sent",
-    "alertErrorText": "Something went wrong. Please try again or reach me on WhatsApp.",
-    "sendEmail": "Send via Email",
-    "sendWhatsapp": "Send via WhatsApp",
-    "subjectPlaceholder": "Subject",
-    "subjectTemplate": "Project inquiry",
-    "messageTemplate": "Hi Farrez,\n\nI came across your portfolio and I'd love to talk about a potential project.\n\nBest regards,"
+  "pemutar": {
+    "putar": "Play music",
+    "jeda": "Pause music",
+    "sembunyi": "Hide player",
+    "tampil": "Show player",
+    "sedangDiputar": "Now playing"
   },
-  "footer": {
-    "logo": "Farrez",
-    "home": "Home",
-    "about": "About",
-    "experience": "Experience",
-    "portfolio": "Portfolio",
-    "contact": "Contact",
-    "rights": "All rights reserved"
-  },
-  "player": {
-    "play": "Play",
-    "pause": "Pause",
-    "hide": "Hide player",
-    "show": "Show player",
-    "nowPlaying": "Now Playing"
+  "umum": {
+    "bahasa": "Language",
+    "temaTerang": "Switch to light theme",
+    "temaGelap": "Switch to dark theme",
+    "lewati": "Skip to content"
   }
 }

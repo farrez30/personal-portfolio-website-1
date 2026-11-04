@@ -1,100 +1,98 @@
 {
   "meta": {
     "siteName": "Farrez Al Hakim",
-    "title": "Farrez Al Hakim — Full-Stack Developer, AI Agentic Engineer & Data Engineer",
-    "description": "Portofolio Farrez Al Hakim — seorang Full-Stack Developer, AI Agentic Engineer, dan Data Engineer yang membangun aplikasi web yang andal, skalabel, dan cerdas.",
-    "keywords": "Full-Stack Developer, AI Agentic Engineer, Data Engineer, React, Next.js, Node.js, Farrez Al Hakim, portofolio software engineer"
+    "title": "Farrez Al Hakim: dari kebutuhan bisnis ke sistem yang dipakai",
+    "description": "Farrez Al Hakim, Jakarta. Implementation, business analysis, dan delivery untuk ERP dan produk digital, dari rapat kebutuhan sampai sistem dipakai tiap hari.",
+    "keywords": "Farrez Al Hakim, implementation consultant, business analyst, project delivery, ERP, Jakarta"
   },
-  "nav": {
-    "home": "Beranda",
-    "about": "Tentang",
-    "experience": "Pengalaman",
-    "portfolio": "Portofolio",
-    "contact": "Kontak"
+  "gerbang": {
+    "nama": "Farrez Al Hakim",
+    "peran": "Implementation, business analysis, dan delivery. Jakarta.",
+    "headline": "Bukan sekadar sistem yang selesai dibuat, tapi sistem yang dipakai tiap hari.",
+    "lihatProyek": "Lihat proyek",
+    "hubungi": "Hubungi saya",
+    "unduhCV": "Unduh CV"
   },
-  "header": {
-    "greeting": "Halo, saya",
-    "name": "Farrez Al Hakim",
-    "tagline": "Full-Stack Developer · AI Agentic Engineer · Data Engineer",
-    "downloadCV": "Unduh CV",
-    "letsTalk": "Mari Bicara",
-    "scrollDown": "Gulir ke Bawah"
+  "mode": {
+    "label": "Tampilan",
+    "imersif": "Imersif",
+    "ringan": "Ringan",
+    "imersifInfo": "3D penuh, butuh kartu grafis yang lumayan.",
+    "ringanInfo": "Cepat dan hemat baterai."
   },
-  "about": {
-    "subtitle": "Kenali Lebih Dekat",
-    "title": "Tentang Saya",
-    "bio1": "Seorang lulusan Manajemen Bisnis yang memutuskan untuk meniti jalur karier baru di bidang pengembangan web. Saya selalu tertarik dengan teknologi, jadi ketika mulai mendalami pengembangan web, saya langsung jatuh hati.",
-    "bio2": "Saya memulai perjalanan pengembangan web pada tahun 2021 dengan belajar secara mandiri sebelum akhirnya mengikuti program Full Stack Web Development di Purwadhika Digital Technology School, tempat saya memperoleh pengalaman praktis dengan beragam teknologi front-end dan back-end yang menekankan proyek nyata menyerupai skenario industri.",
-    "bio3": "Saya juga memperoleh pengalaman langsung dalam membangun web API yang andal dan skalabel, bekerja dengan basis data, menangani autentikasi dan keamanan, menerapkan arsitektur sisi server yang efisien, merancang antarmuka pengguna yang responsif dan menarik, mengintegrasikan API, menangani interaksi pengguna, serta mengoptimalkan performa web.",
-    "letsTalk": "Mari Bicara"
+  "rak": {
+    "judul": "Rak proyek",
+    "petunjuk": "Pilih satu album untuk dibuka.",
+    "sebelumnya": "Album sebelumnya",
+    "berikutnya": "Album berikutnya",
+    "buka": "Buka album",
+    "jenis": {
+      "kerja": "Kerja kantor",
+      "studio": "Studio",
+      "pribadi": "Pribadi"
+    },
+    "status": {
+      "dipakai": "Dipakai",
+      "berjalan": "Sedang berjalan",
+      "pilot": "Pilot"
+    }
   },
-  "experience": {
-    "subtitle": "Berikut beberapa teknologi yang saya gunakan:",
-    "title": "Pengalaman Saya",
-    "frontend": "Pengembangan Frontend",
-    "backend": "Pengembangan Backend",
-    "experienced": "Berpengalaman",
-    "intermediate": "Menengah"
+  "album": {
+    "tutup": "Tutup album",
+    "buklet": "Baca buklet",
+    "putar": "Putar cakram",
+    "kembali": "Kembali ke rak",
+    "bukaSitus": "Buka situs",
+    "lihatRepo": "Lihat repo",
+    "halaman": {
+      "overview": "Overview",
+      "challenge": "Challenge",
+      "decisions": "Key decisions",
+      "solution": "Solution",
+      "delivery": "Delivery & role",
+      "outcome": "Outcome",
+      "architecture": "Architecture"
+    },
+    "periode": "Periode",
+    "jenis": "Jenis",
+    "status": "Status",
+    "sinarx": "Geser kursor atau jari di atas gambar untuk melihat isi di baliknya.",
+    "sinarxDaftar": "Komponen sistem",
+    "ke": "ke",
+    "tutupBuklet": "Tutup buklet"
   },
-  "portfolio": {
-    "subtitle": "Karya Terbaru Saya",
-    "title": "Portofolio",
-    "github": "Github",
-    "liveDemo": "Demo Langsung",
-    "viewCase": "Lihat studi kasus",
-    "year": "Tahun",
-    "role": "Peran",
-    "concept": "Konsep",
-    "impact": "Dampak",
-    "learnings": "Pembelajaran",
-    "visitSite": "Kunjungi situs",
-    "desktop": "Desktop",
-    "mobile": "Mobile",
-    "close": "Tutup",
-    "soon": "Segera hadir",
-    "uiuxCase": "Studi kasus UI/UX — lihat tautan di bawah.",
-    "builtWith": "Dibangun dengan",
-    "openNewTab": "Buka di tab baru",
-    "previewNote": "Beberapa situs memblokir penyematan — gunakan Pratinjau langsung, atau buka situs di tab baru.",
-    "preview": "Pratinjau",
-    "livePreview": "Pratinjau langsung"
+  "kontak": {
+    "judul": "Ngobrol soal proyek atau posisi?",
+    "teks": "Paling cepat lewat email atau WhatsApp. Saya balas di hari kerja.",
+    "email": "Email",
+    "whatsapp": "WhatsApp",
+    "linkedin": "LinkedIn",
+    "github": "GitHub",
+    "formJudul": "Atau tulis di sini",
+    "nama": "Nama",
+    "emailAnda": "Email Anda",
+    "subjek": "Subjek",
+    "subjekIsi": "Tentang proyek atau posisi",
+    "pesan": "Pesan",
+    "pesanIsi": "Halo Farrez,\n\nSaya melihat portofolio Anda dan ingin ngobrol soal",
+    "kirimEmail": "Kirim lewat email",
+    "kirimWa": "Kirim lewat WhatsApp",
+    "galatJudul": "Nama, email, dan pesan wajib diisi.",
+    "galatKirim": "Pesan belum terkirim. Coba lagi, atau hubungi saya lewat WhatsApp.",
+    "terkirim": "Pesan terkirim. Terima kasih.",
+    "helix": "Klik sekali, lalu sapukan kursor di helix ini."
   },
-  "contact": {
-    "subtitle": "Hubungi Saya",
-    "title": "Kontak Saya",
-    "emailTitle": "Email",
-    "emailDesc": "Anda bisa langsung mengirim email ke saya 📨",
-    "emailCta": "📧 KIRIM SEKARANG 📧",
-    "whatsappTitle": "WhatsApp",
-    "whatsappDesc": "atau gunakan WhatsApp untuk menghubungi saya 😉",
-    "whatsappCta": "💬 HUBUNGI SAYA 💬",
-    "namePlaceholder": "Nama Lengkap Anda",
-    "emailPlaceholder": "Email Anda",
-    "messagePlaceholder": "Pesan Anda",
-    "send": "Kirim Pesan",
-    "alertErrorTitle": "Mohon isi semua kolom yang wajib diisi.",
-    "alertSuccessTitle": "Pesan Anda telah terkirim",
-    "alertErrorText": "Terjadi kesalahan. Silakan coba lagi atau hubungi saya via WhatsApp.",
-    "sendEmail": "Kirim via Email",
-    "sendWhatsapp": "Kirim via WhatsApp",
-    "subjectPlaceholder": "Subjek",
-    "subjectTemplate": "Pertanyaan proyek",
-    "messageTemplate": "Halo Farrez,\n\nSaya menemukan portofolio Anda dan ingin mendiskusikan kemungkinan proyek.\n\nSalam,"
+  "pemutar": {
+    "putar": "Putar musik",
+    "jeda": "Jeda musik",
+    "sembunyi": "Sembunyikan pemutar",
+    "tampil": "Tampilkan pemutar",
+    "sedangDiputar": "Sedang diputar"
   },
-  "footer": {
-    "logo": "Farrez",
-    "home": "Beranda",
-    "about": "Tentang",
-    "experience": "Pengalaman",
-    "portfolio": "Portofolio",
-    "contact": "Kontak",
-    "rights": "Hak cipta dilindungi"
-  },
-  "player": {
-    "play": "Putar",
-    "pause": "Jeda",
-    "hide": "Sembunyikan pemutar",
-    "show": "Tampilkan pemutar",
-    "nowPlaying": "Sedang Diputar"
+  "umum": {
+    "bahasa": "Bahasa",
+    "temaTerang": "Ganti ke tema terang",
+    "temaGelap": "Ganti ke tema gelap",
+    "lewati": "Lewati ke isi"
   }
 }

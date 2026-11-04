@@ -1,0 +1,38 @@
+.saklar {
+  display: inline-flex;
+  margin: 0;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+}
+
+.saklar__opsi {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: background var(--t-cepat) var(--ease), color var(--t-cepat) var(--ease);
+}
+
+.saklar__opsi input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.saklar__opsi:has(input:checked) {
+  background: var(--ink);
+  color: var(--bg);
+}
+
+.saklar__opsi:has(input:focus-visible) {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
+}

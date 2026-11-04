@@ -1,0 +1,64 @@
+.album {
+  display: grid;
+  gap: 2rem;
+}
+
+.album__katalog {
+  color: var(--ink-3);
+}
+
+.album__judul {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  margin-top: 0.25rem;
+}
+
+.album__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin: 1rem 0 0;
+}
+
+.album__meta div {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.album__meta dt {
+  color: var(--ink-3);
+}
+
+.album__meta dd {
+  margin: 0;
+}
+
+.album__bagian {
+  display: grid;
+  gap: 0.75rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--line);
+}
+
+.album__label {
+  color: var(--aksen);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+}
+
+.album__ringkas {
+  font-size: 1.125rem;
+  max-width: 60ch;
+}
+
+.album__judul-halaman {
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.album__tautan {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}

@@ -1,0 +1,51 @@
+.bilah {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+
+.bilah__isi {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 60px;
+  flex-wrap: wrap;
+  padding-block: 0.5rem;
+}
+
+.bilah__nama {
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.bilah__alat {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.bilah__bahasa {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.bilah__bahasa a {
+  display: inline-grid;
+  place-items: center;
+  min-width: 44px;
+  min-height: 44px;
+  text-decoration: none;
+  color: var(--ink-3);
+}
+
+.bilah__bahasa a[aria-current="true"] {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: var(--aksen);
+  text-underline-offset: 4px;
+}

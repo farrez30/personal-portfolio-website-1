@@ -1,25 +1,18 @@
 "use client";
-import React from "react";
-import { FiSun, FiMoon } from "react-icons/fi";
+import { useTranslations } from "next-intl";
+import { PiSunBold, PiMoonBold } from "react-icons/pi";
 import { useTheme } from "@/components/providers/ThemeProvider";
 import "./themeToggle.css";
 
-const ThemeToggle = () => {
+export default function ThemeToggle() {
+  const t = useTranslations("umum");
   const { theme, toggle } = useTheme();
-  const isLight = theme === "light";
+  const terang = theme === "light";
+  const label = terang ? t("temaGelap") : t("temaTerang");
 
   return (
-    <button
-      type="button"
-      className="theme-toggle"
-      onClick={toggle}
-      aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
-      title={isLight ? "Switch to dark mode" : "Switch to light mode"}
-    >
-      {/* theme can be null before mount; default to the moon (dark) glyph */}
-      {isLight ? <FiMoon /> : <FiSun />}
+    <button type="button" className="tema" onClick={toggle} aria-label={label} title={label}>
+      {terang ? <PiMoonBold aria-hidden="true" /> : <PiSunBold aria-hidden="true" />}
     </button>
   );
-};
-
-export default ThemeToggle;
+}
