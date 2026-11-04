@@ -30,7 +30,10 @@ export default function Layar({ p, lensa }) {
     return () => ro.disconnect();
   }, []);
 
-  const langsung = p.tanam && p.tautan.situs && !sinar;
+  // App proyek hanya mengizinkan farrez.vercel.app membingkainya; di tempat lain
+  // (pratinjau lokal, domain lain) layar memakai tangkapan layar.
+  const bolehTanam = typeof window !== "undefined" && window.location.hostname === "farrez.vercel.app";
+  const langsung = bolehTanam && p.tanam && p.tautan.situs && !sinar;
   const gambar = p.layar?.[perangkat] ?? null;
 
   return (

@@ -29,7 +29,7 @@ export default function Panggung() {
   const gelembung = useRef(null);
   const [siap, setSiap] = useState(false);
   const [s, setS] = useState({ fokus: 0, keadaan: "rak", aktif: null, terbalik: false, duduk: false, jalan: false });
-  const [hover, setHover] = useState(false);
+  const [hover, setHover] = useState(null);
   const [lensa, setLensa] = useState(null);
   const [panel, setPanel] = useState(null); // "tentang" | "kontak" | null
 
@@ -147,28 +147,39 @@ export default function Panggung() {
     return () => window.removeEventListener("keydown", tekan);
   }, [s, p, panel]);
 
-  // Kursor gelembung: titik yang membesar di atas apa pun yang bisa diklik.
+  // Kursor gelembung: lingkaran 76 px yang hanya diskalakan. Titik kecil saat diam,
+  // membesar di atas benda yang bisa diklik, lebih besar di atas teks (warna dibalik),
+  // dan jadi cincin tipis di atas tombol kecil pemutar.
   useEffect(() => {
     const el = gelembung.current;
     if (!el) return;
+    let x = -100;
+    let y = -100;
+    let raf = 0;
+    const gambar = () => {
+      el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      raf = 0;
+    };
     const gerak = (e) => {
       if (e.pointerType !== "mouse") {
         el.dataset.ada = "0";
         return;
       }
       el.dataset.ada = "1";
-      el.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-      const atasTombol = !!e.target.closest?.("[data-gelembung], button, a");
-      el.dataset.besar = atasTombol ? "1" : el.dataset.besar3d;
+      x = e.clientX;
+      y = e.clientY;
+      const teks = e.target.closest?.("button, a, [data-gelembung]");
+      el.dataset.teks = teks && !teks.disabled ? "1" : "0";
+      if (!raf) raf = requestAnimationFrame(gambar);
     };
     window.addEventListener("pointermove", gerak);
-    return () => window.removeEventListener("pointermove", gerak);
+    return () => {
+      window.removeEventListener("pointermove", gerak);
+      cancelAnimationFrame(raf);
+    };
   }, []);
   useEffect(() => {
-    if (gelembung.current) {
-      gelembung.current.dataset.besar3d = hover ? "1" : "0";
-      gelembung.current.dataset.besar = hover ? "1" : "0";
-    }
+    if (gelembung.current) gelembung.current.dataset.adegan = hover ?? "";
   }, [hover]);
 
   const a = adegan.current;
@@ -250,10 +261,10 @@ export default function Panggung() {
             tabIndex={s.keadaan === "rak" ? 0 : -1}
             aria-label={s.keadaan === "rak" ? `${tr("buka")}: ${aktif.judul[locale]}` : undefined}
           >
-            <span className="panggung__info mono">
+            <span key={`i-${s.fokus}`} className="panggung__info mono panggung__pudar">
               {tr(`jenis.${aktif.jenis}`)}, {aktif.periode}, {tr(`status.${aktif.status}`)}
             </span>
-            <span className="panggung__nama">{aktif.judul[locale]}</span>
+            <span key={`n-${s.fokus}`} className="panggung__nama panggung__pudar">{aktif.judul[locale]}</span>
           </button>
           {s.keadaan === "rak" && s.terbalik && <p className="panggung__ringkas">{aktif.ringkas[locale]}</p>}
         </div>
@@ -312,7 +323,7 @@ export default function Panggung() {
         </div>
       )}
 
-      <div ref={gelembung} className="gelembung" data-ada="0" data-besar="0" aria-hidden="true" />
+      <div ref={gelembung} className="gelembung" data-ada="0" aria-hidden="true" />
     </div>
   );
 }
@@ -322,7 +333,8 @@ function bacaHash(a, dariLuar = false) {
   const i = proyek.findIndex((p) => p.slug === slug);
   if (i < 0) return;
   if (dariLuar && a.keadaan !== "rak") a.tutup();
-  a.fokus(i);
+  if (dariLuar) a.fokus(i);
+  else a.lompat(i);
   if (aksi === "buka" || aksi === "putar" || aksi === "buklet") {
     a.buka(slug);
     if (aksi === "putar") setTimeout(() => a.dengarkan(), 1200);

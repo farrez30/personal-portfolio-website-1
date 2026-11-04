@@ -13,8 +13,7 @@ html.panggung-aktif body {
   inset: 60px 0 0;
   z-index: 30;
   color: var(--ruang-tinta);
-  background:
-    radial-gradient(120% 90% at 50% 40%, #f1ebdf 0%, var(--ruang) 55%, #d9cfbd 100%);
+  background: radial-gradient(circle at 48% 38%, #f6f0e5 0%, #ebe3d4 68%, #e1d7c5 100%);
   overflow: hidden;
 }
 
@@ -24,8 +23,8 @@ html.panggung-aktif body {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  opacity: 0.14;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.83' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   mix-blend-mode: multiply;
 }
 
@@ -268,39 +267,90 @@ html.panggung-aktif body {
   flex-wrap: wrap;
 }
 
-/* Kursor gelembung. */
+/* Kursor gelembung: satu lingkaran 76 px yang hanya diskalakan, tanpa jeda. */
 .gelembung {
+  --s: 0.14;
   position: fixed;
-  left: 0;
-  top: 0;
+  left: -38px;
+  top: -38px;
   z-index: 50;
-  width: 14px;
-  height: 14px;
-  margin: -7px 0 0 -7px;
+  width: 76px;
+  height: 76px;
+  pointer-events: none;
+}
+
+.gelembung::before {
+  content: "";
+  position: absolute;
+  inset: 0;
   border-radius: 50%;
   background: var(--ruang-tinta);
-  pointer-events: none;
+  transform: scale(var(--s));
   transition:
-    width 180ms var(--ease),
-    height 180ms var(--ease),
-    margin 180ms var(--ease),
-    opacity 180ms var(--ease);
+    transform 350ms cubic-bezier(0.32, 0.72, 0, 1),
+    background-color 350ms cubic-bezier(0.32, 0.72, 0, 1),
+    box-shadow 350ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.gelembung[data-adegan="kotak"],
+.gelembung[data-adegan="cakram"] {
+  --s: 0.3;
+}
+
+/* Di atas teks: lingkaran membesar dan membalik warna teks di dalamnya. */
+.gelembung[data-teks="1"] {
+  --s: 0.526;
+  mix-blend-mode: difference;
+}
+
+.gelembung[data-teks="1"]::before {
+  background: #e8e2d6;
+}
+
+/* Di atas tombol kecil pemutar: cincin tipis. */
+.gelembung[data-adegan="tombol"] {
+  --s: 0.34;
+}
+
+.gelembung[data-adegan="tombol"]::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 13px transparent, inset 0 0 0 4.5px var(--ruang-tinta);
 }
 
 .gelembung[data-ada="0"] {
   opacity: 0;
 }
 
-.gelembung[data-besar="1"] {
-  width: 44px;
-  height: 44px;
-  margin: -22px 0 0 -22px;
-  opacity: 0.85;
+.panggung,
+.panggung button,
+.panggung a {
+  cursor: none;
+}
+
+.panggung__panel,
+.panggung__panel * {
+  cursor: auto;
 }
 
 @media (hover: none) {
   .gelembung {
     display: none;
+  }
+
+  .panggung,
+  .panggung button,
+  .panggung a {
+    cursor: auto;
+  }
+}
+
+.panggung__pudar {
+  animation: panggung-pudar 220ms ease both;
+}
+
+@keyframes panggung-pudar {
+  from {
+    opacity: 0;
   }
 }
 
@@ -338,14 +388,13 @@ html.panggung-aktif body {
 
 .layar__bingkai {
   position: absolute;
-  right: clamp(1rem, 4vw, 3rem);
-  top: 50%;
-  transform: translateY(-55%);
-  width: min(46vw, 760px);
+  right: clamp(1rem, 3vw, 2.5rem);
+  top: 54%;
+  transform: translateY(-50%);
+  width: min(42vw, 720px);
   display: grid;
   gap: 0.5rem;
   pointer-events: auto;
-  animation: layar-nyala 900ms 150ms var(--ease) both;
 }
 
 .layar[data-perangkat="hp"] .layar__bingkai {
