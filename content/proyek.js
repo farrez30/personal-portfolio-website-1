@@ -99,6 +99,7 @@ export const proyek = [
     periode: "2026",
     warna: "#24423b",
     tautan: { situs: "https://fifofun.vercel.app", repo: "https://github.com/farrez30/fifofun" },
+    tanam: true,
     gambar: null,
     ringkas: {
       id: "Perencana keuangan rumah tangga. Mutasi bank diimpor dari e-Statement, lalu tiap baris dicocokkan dengan saldo dari bank, jadi anggarannya bisa dipercaya.",
@@ -160,9 +161,9 @@ export const proyek = [
     warna: "#5c4a2a",
     tautan: { situs: "https://akarkita.vercel.app/warisan" },
     gambar: null,
-    // Tampilan langsung di layar proyektor menyala setelah AkarKita mengizinkan
-    // farrez.vercel.app di frame-ancestors (sesi terpisah, 5 Nov 2026).
-    tanam: false,
+    // AkarKita mengizinkan farrez.vercel.app di frame-ancestors (5 Nov 2026), jadi
+    // layar proyektor menampilkannya langsung. Di localhost tetap ditolak.
+    tanam: true,
     layar: { desktop: "/assets/layar/akarkita-desktop.jpg", hp: "/assets/layar/akarkita-hp.jpg" },
     ringkas: {
       id: "Pohon keluarga privat, hanya lewat undangan. Sebutan kerabat Sunda dan garis suku Minang ikut dihitung, jadi yang muda tahu harus memanggil siapa dengan sebutan apa.",
@@ -219,6 +220,7 @@ export const proyek = [
     periode: "2026",
     warna: "#2c3f52",
     tautan: { situs: "https://jedaweb.vercel.app" },
+    tanam: true,
     gambar: null,
     ringkas: {
       id: "Catatan pikiran di antara sesi terapi. Tetap jalan tanpa sinyal, dan psikolog hanya bisa membaca lewat tautan yang dibagikan klien.",
