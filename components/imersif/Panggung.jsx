@@ -127,7 +127,7 @@ export default function Panggung() {
   useEffect(() => {
     const tekan = (e) => {
       const a = adegan.current;
-      if (!a || panel || e.target.closest("input, textarea, select, [contenteditable]")) return;
+      if (!a || panel || e.target?.closest?.("input, textarea, select, [contenteditable]")) return;
       if (e.key === "Escape") {
         if (s.keadaan !== "rak") a.tutup();
       } else if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
@@ -136,7 +136,7 @@ export default function Panggung() {
         else if (s.keadaan === "buklet") a.halaman(arah);
         else return;
         e.preventDefault();
-      } else if ((e.key === "Enter" || e.key === " ") && e.target === document.body) {
+      } else if ((e.key === "Enter" || e.key === " ") && (e.target === document.body || e.target === window)) {
         if (s.keadaan === "rak") a.buka(p.slug);
         else if (s.keadaan === "putar" && s.duduk) a.setJalan(!s.jalan);
         else return;

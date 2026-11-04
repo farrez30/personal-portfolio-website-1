@@ -164,7 +164,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
   const strip = new THREE.RectAreaLight(0xffffff, 1.9, 6, 0.4);
   strip.position.set(0, 3.2, 3);
   strip.lookAt(0, 0, 0);
-  scene.add(kunci, isiCahaya, tepi, strip);
+  // Cahaya baca: masuk saat buklet mendarat, menggantikan cahaya galeri.
+  const matahari = new THREE.DirectionalLight(0xffffff, 0);
+  matahari.position.set(0.6, 1.2, 3);
+  scene.add(kunci, isiCahaya, tepi, strip, matahari);
 
   // Rak dimiringkan; kotak bukan anak rak, posenya dihitung lewat matriks ini.
   const rak = new THREE.Object3D();
@@ -378,8 +381,12 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
     const naikRak = Math.max(geser, keluarBaca) * C.geserNaik;
     pasangLensa(geser);
     // Cahaya tepi biru memudar bersama lensa; cahaya ambien naik untuk pemutar.
-    tepi.intensity = 0.75 * (1 - geser);
-    ambien.intensity = 0.25 + 0.9 * geser;
+    const cahayaBaca = p3io((k_.baca - 0.6) / 0.26);
+    tepi.intensity = 0.75 * (1 - geser) * (1 - cahayaBaca);
+    ambien.intensity = 0.25 + 0.9 * geser + 1.25 * cahayaBaca;
+    matahari.intensity = 2 * cahayaBaca;
+    strip.intensity = 1.9 * (1 - cahayaBaca);
+    scene.environmentIntensity = 1 - 0.6 * cahayaBaca;
     rak.updateMatrixWorld(true);
 
     const { w: vw, h: vh } = tampak();
@@ -545,14 +552,23 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
       const b = k_.buklet;
       const u = kuintik(k_.baca);
       const hal = b.bounds.pages;
-      const skBaca = k_.sempit
-        ? (0.82 * vw) / Math.max(hal.width, 1)
-        : Math.min((0.84 * vw) / Math.max(hal.width, 1), (0.64 * vh) / Math.max(hal.height, 1));
+      // Buklet dibaca sedikit di depan bidang rak; perkecil sesuai jaraknya ke kamera.
+      const dekatKamera = (C.jarak - 0.3 * U) / C.jarak;
+      const skBaca =
+        dekatKamera *
+        (k_.sempit
+          ? (0.82 * vw) / Math.max(hal.width, 1)
+          : Math.min((0.84 * vw) / Math.max(hal.width, 1), (0.64 * vh) / Math.max(hal.height, 1)));
       aktifK.sampul.updateWorldMatrix(true, false);
       aktifK.sampul.matrixWorld.decompose(pos, q, sk3);
       const skAsal = BUKLET * sk3.x;
       const sk = skAsal + (skBaca - skAsal) * u;
-      pos2.set(-(hal.x + hal.width / 2) * skBaca, 0.03 * vh, 0.3 * U);
+      // Sampul tertutup ada di x 0..1 (depan) atau -1..0 (belakang); geser ke tengah.
+      const tutupDepan = b.page === 0 && !b.turning;
+      const tutupBelakang = b.page >= b.pageCount - 1 && !b.turning && !k_.sempit;
+      const geserTutup = k_.sempit ? 0 : tutupDepan ? -0.5 : tutupBelakang ? 0.5 : 0;
+      b.userData.geser = (b.userData.geser ?? geserTutup) + (geserTutup - (b.userData.geser ?? geserTutup)) * Math.min(1, dt * 5);
+      pos2.set((b.userData.geser - (hal.x + hal.width / 2)) * skBaca, 0.03 * vh, 0.3 * U);
       b.position.lerpVectors(pos, pos2, u);
       b.position.z += Math.sin(Math.PI * u) * 1.2 * U;
       b.quaternion.slerpQuaternions(q, qTmp.identity(), u);
@@ -560,6 +576,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
       const settle = jepit((k_.baca - 0.55) / 0.45);
       b.userData.deform.uniforms.uLengkung.value = Math.sin(Math.PI * jepit(k_.baca / 0.7)) * 1.1 * (1 - settle * settle);
       b.enabled = k_.baca > 0.999 && k_.keadaan === "buklet";
+      const antre = k_.antreHalaman;
+      if (antre && b.enabled && !b.turning) {
+        const ok = antre.arah > 0 ? b.next() : b.prev();
+        if (ok || now > antre.sampai) k_.antreHalaman = null;
+      }
       b.tick(now);
       if (k_.keadaan !== "buklet" && k_.baca < 0.001) {
         scene.remove(b);
@@ -861,9 +882,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
       kirim();
     },
     halaman(arah) {
-      if (!k_.buklet || k_.baca < 0.999) return;
-      if (arah > 0) k_.buklet.next();
-      else k_.buklet.previous();
+      if (!k_.buklet) return;
+      // Selama halaman masih dimuat, LeafThrough menolak membalik; antrekan dan
+      // coba tiap bingkai sampai berhasil (paling lama 4 detik).
+      k_.antreHalaman = { arah, sampai: performance.now() + 4000 };
     },
     dengarkan() {
       if (k_.keadaan !== "buka" || k_.baca > 0.001) return;
