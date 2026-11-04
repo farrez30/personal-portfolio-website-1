@@ -15,6 +15,7 @@ export const HALAMAN = ["challenge", "decisions", "solution", "delivery", "outco
 export const proyek = [
   {
     slug: "erp-software-house",
+    ilustrasi: "/assets/ilustrasi/erp-software-house.webp",
     katalog: "FRZ-01",
     judul: { id: "ERP untuk banyak klien", en: "ERP for many clients" },
     jenis: "kerja",
@@ -44,6 +45,7 @@ export const proyek = [
   },
   {
     slug: "viralytics",
+    ilustrasi: "/assets/ilustrasi/viralytics.webp",
     katalog: "FRZ-02",
     judul: { id: "Viralytics", en: "Viralytics" },
     jenis: "studio",
@@ -61,6 +63,7 @@ export const proyek = [
   },
   {
     slug: "coderoach-os",
+    ilustrasi: "/assets/ilustrasi/coderoach-os.webp",
     katalog: "FRZ-03",
     judul: { id: "Coderoach OS", en: "Coderoach OS" },
     jenis: "studio",
@@ -92,6 +95,7 @@ export const proyek = [
   },
   {
     slug: "fifofun",
+    ilustrasi: "/assets/ilustrasi/fifofun.webp",
     katalog: "FRZ-04",
     judul: { id: "FiFoFun", en: "FiFoFun" },
     jenis: "pribadi",
@@ -122,6 +126,7 @@ export const proyek = [
   },
   {
     slug: "nds-etl",
+    ilustrasi: "/assets/ilustrasi/nds-etl.webp",
     katalog: "FRZ-05",
     judul: { id: "Dashboard jaringan distributor", en: "Distributor network dashboard" },
     jenis: "pribadi",
@@ -153,6 +158,7 @@ export const proyek = [
   },
   {
     slug: "akarkita",
+    ilustrasi: "/assets/ilustrasi/akarkita.webp",
     katalog: "FRZ-06",
     judul: { id: "AkarKita", en: "AkarKita" },
     jenis: "pribadi",
@@ -186,6 +192,7 @@ export const proyek = [
   },
   {
     slug: "pilot-iklan",
+    ilustrasi: "/assets/ilustrasi/pilot-iklan.webp",
     katalog: "FRZ-07",
     judul: { id: "Pilot iklan usaha keluarga", en: "Family shop ad pilot" },
     jenis: "pribadi",
@@ -213,6 +220,7 @@ export const proyek = [
   },
   {
     slug: "jeda",
+    ilustrasi: "/assets/ilustrasi/jeda.webp",
     katalog: "FRZ-08",
     judul: { id: "Jeda", en: "Jeda" },
     jenis: "pribadi",
@@ -243,6 +251,7 @@ export const proyek = [
   },
   {
     slug: "yiheecam",
+    ilustrasi: "/assets/ilustrasi/yiheecam.webp",
     katalog: "FRZ-09",
     judul: { id: "YiheeCam", en: "YiheeCam" },
     jenis: "pribadi",
@@ -270,6 +279,7 @@ export const proyek = [
   },
   {
     slug: "d-day",
+    ilustrasi: "/assets/ilustrasi/d-day.webp",
     katalog: "FRZ-10",
     judul: { id: "d-day", en: "d-day" },
     jenis: "pribadi",

@@ -126,7 +126,10 @@
       "sinarx": "Sinar-x",
       "tampilan": "Tampilan layar",
       "sedangDisiapkan": "Tampilan langsung sedang disiapkan.",
-      "bukaTab": "Buka di tab baru"
+      "bukaTab": "Buka di tab baru",
+      "perbesar": "Perbesar layar",
+      "perkecil": "Kembalikan ukuran",
+      "memuat": "MENYELARASKAN SINYAL"
     },
     "senter": "Senter UV"
   }

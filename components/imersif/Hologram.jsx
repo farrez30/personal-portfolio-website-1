@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold } from "react-icons/pi";
+import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpleBold, PiArrowsInSimpleBold } from "react-icons/pi";
 
 // Layar hologram yang naik dari sumur pemutar. Play menyalakan proyeksi, Pause
 // membekukannya, Keluarkan mematikannya. Layarnya melayang: sedikit miring
@@ -12,6 +12,10 @@ export default function Hologram({ p, sumur, jalan }) {
   const t = useTranslations("panggung.layar");
   const locale = useLocale();
   const [perangkat, setPerangkat] = useState("desktop");
+  const [besar, setBesar] = useState(false);
+  // Layar memuat ala terminal retro sampai isi (situs atau gambar) selesai dimuat.
+  const [muat, setMuat] = useState(true);
+  useEffect(() => setMuat(true), [perangkat, p.slug]);
   const panel = useRef(null);
 
   useEffect(() => {
@@ -46,12 +50,13 @@ export default function Hologram({ p, sumur, jalan }) {
   if (!sumur) return null;
   const bolehTanam = typeof window !== "undefined" && window.location.hostname === "farrez.vercel.app";
   const langsung = bolehTanam && p.tanam && p.tautan.situs;
-  const gambar = p.layar?.[perangkat] ?? null;
+  // Tanpa situs atau tangkapan layar, layar memutar ilustrasi orang yang memakainya.
+  const gambar = p.layar?.[perangkat] ?? p.ilustrasi ?? null;
   const potongan = (p.arsitektur?.simpul ?? []).slice(0, 6);
 
   return (
     <div
-      className={`holo ${jalan ? "holo--nyala" : "holo--beku"}`}
+      className={`holo ${jalan ? "holo--nyala" : "holo--beku"} ${besar ? "holo--besar" : ""}`}
       data-perangkat={perangkat}
       style={{ "--sx": `${sumur.x * 100}%`, "--sy": `${sumur.y * 100}%`, "--sw": `${sumur.w * 100}%` }}
     >
@@ -70,6 +75,16 @@ export default function Hologram({ p, sumur, jalan }) {
             <span>{p.judul[locale].toUpperCase()}</span>
             <span className="holo__status">{jalan ? "LIVE" : "PAUSE"}</span>
           </div>
+          <button
+            type="button"
+            className="holo__ukuran"
+            onClick={() => setBesar(!besar)}
+            aria-pressed={besar}
+            aria-label={besar ? t("perkecil") : t("perbesar")}
+            title={besar ? t("perkecil") : t("perbesar")}
+          >
+            {besar ? <PiArrowsInSimpleBold aria-hidden="true" /> : <PiArrowsOutSimpleBold aria-hidden="true" />}
+          </button>
           <div className="holo__layar">
             {langsung ? (
               <iframe
@@ -79,13 +94,24 @@ export default function Hologram({ p, sumur, jalan }) {
                 loading="lazy"
                 referrerPolicy="strict-origin-when-cross-origin"
                 sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
+                onLoad={() => setMuat(false)}
               />
             ) : gambar ? (
-              <img src={gambar} alt="" />
+              <img key={gambar} src={gambar} alt="" onLoad={() => setTimeout(() => setMuat(false), 700)} />
             ) : (
-              <div className="holo__kosong" style={{ background: p.warna }}>
+              <div className="holo__kosong" style={{ background: p.warna }} ref={(el) => el && setTimeout(() => setMuat(false), 700)}>
                 <span className="mono">{p.katalog}</span>
                 <span>{p.judul[locale]}</span>
+              </div>
+            )}
+            {muat && (
+              <div className="holo__muat mono" role="status">
+                <span>{p.katalog} // {t("memuat")}</span>
+                <span className="holo__bilah" aria-hidden="true">
+                  {Array.from({ length: 16 }, (_, i) => (
+                    <i key={i} style={{ "--i": i }} />
+                  ))}
+                </span>
               </div>
             )}
           </div>

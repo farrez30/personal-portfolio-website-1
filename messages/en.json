@@ -126,7 +126,10 @@
       "sinarx": "X-ray",
       "tampilan": "Screen view",
       "sedangDisiapkan": "The live view is being set up.",
-      "bukaTab": "Open in new tab"
+      "bukaTab": "Open in new tab",
+      "perbesar": "Enlarge screen",
+      "perkecil": "Restore size",
+      "memuat": "TUNING SIGNAL"
     },
     "senter": "UV torch"
   }
