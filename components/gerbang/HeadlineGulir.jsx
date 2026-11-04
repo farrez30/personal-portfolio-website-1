@@ -29,6 +29,8 @@ export default function HeadlineGulir({ a, b, sorot, idJudul }) {
   const kataB = b.split(" ");
   const awalSorot = sorot ? b.indexOf(sorot) : -1;
   let pos = 0;
+  let urutSorot = 0;
+  const jumlahSorot = sorot ? sorot.trim().split(" ").length : 0;
 
   return (
     <h1 id={idJudul} ref={ref} className="hg" style={{ "--n": kataB.length }}>
@@ -44,8 +46,13 @@ export default function HeadlineGulir({ a, b, sorot, idJudul }) {
           pos += k.length + 1;
           const disorot = awalSorot >= 0 && mulai >= awalSorot && mulai < awalSorot + sorot.length;
           return (
-            <span key={i} className={`hg__kata ${disorot ? "hg__kata--sorot" : ""}`} style={{ "--i": i }}>
-              {k}{" "}
+            <span
+              key={i}
+              className={`hg__kata ${disorot ? "hg__kata--sorot" : ""}`}
+              style={disorot ? { "--i": i, "--j": urutSorot++, "--m": jumlahSorot } : { "--i": i }}
+            >
+              {k}
+              {i < kataB.length - 1 ? " " : ""}
             </span>
           );
         })}

@@ -68,8 +68,33 @@
 }
 
 .hg__kata--sorot {
-  --s: clamp(0, calc((var(--p) - 0.75) / 0.15), 1);
-  color: color-mix(in srgb, var(--aksen) calc(var(--s) * 100%), var(--ink));
+  /* Stabilo kuning ala Vox: menyapu kata demi kata (--j dari --m) sesudah bagian kedua
+     naik, teks berubah hitam begitu stabilonya lewat. Tepinya kasar seperti spidol. */
+  --s: clamp(0, calc((var(--p) - 0.72) / 0.2), 1);
+  --w: clamp(0, calc(var(--s) * var(--m) - var(--j)), 1);
+  padding-inline: 0.08em;
+  margin-inline: -0.08em;
+  color: color-mix(in srgb, #161514 calc(var(--w) * 100%), var(--ink));
+  --stabilo: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40' preserveAspectRatio='none'><filter id='k'><feTurbulence type='fractalNoise' baseFrequency='.9 .06' numOctaves='2' seed='4'/><feDisplacementMap in='SourceGraphic' scale='5'/></filter><g filter='url(%23k)'><path d='M2 9C50 4 140 7 198 5L199 34C140 37 60 35 1 33Z' fill='%23ffd84a'/><path d='M4 13C70 10 130 12 196 11' stroke='%23ffe782' stroke-width='3' opacity='.7' fill='none'/><path d='M3 29C70 31 140 30 197 28' stroke='%23f5c400' stroke-width='3' opacity='.5' fill='none'/></g></svg>");
+  background-image: var(--stabilo);
+  background-repeat: no-repeat;
+  background-position: 0 58%;
+  background-size: calc(var(--w) * 100%) 92%;
+}
+
+/* Warna huruf mengikuti tepi stabilo: hitam di bagian yang sudah tertutup, terang di
+   sisanya. Lapisan atas (dipotong ke huruf) mewarnai teks, lapisan bawah stabilonya. */
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .hg__kata--sorot {
+    color: transparent;
+    background-image:
+      linear-gradient(to right, #161514 calc(var(--w) * 100%), var(--ink) calc(var(--w) * 100%)),
+      var(--stabilo);
+    background-position: 0 0, 0 58%;
+    background-size: 100% 100%, calc(var(--w) * 100%) 92%;
+    -webkit-background-clip: text, border-box;
+    background-clip: text, border-box;
+  }
 }
 
 .gerbang__aksi {
