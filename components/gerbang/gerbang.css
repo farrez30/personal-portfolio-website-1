@@ -29,7 +29,8 @@
 /* Bagian pertama: tercoret dari kiri ke kanan antara p 0,1 dan 0,4. */
 .hg__a {
   --c: clamp(0, calc((var(--p) - 0.1) / 0.3), 1);
-  color: color-mix(in srgb, var(--ink) calc(100% - var(--c) * 45%), var(--ink-3));
+  --warna-a: color-mix(in srgb, var(--ink) calc(100% - var(--c) * 45%), var(--ink-3));
+  color: var(--warna-a);
 }
 
 .hg__coret {
@@ -39,6 +40,21 @@
   background-size: calc(var(--c) * 100%) 0.07em;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+}
+
+/* Garis coret harus di atas huruf, bukan di belakangnya. Latar selalu dilukis di
+   bawah teks, jadi warna hurufnya sendiri dipindah ke lapisan latar kedua yang
+   dipotong mengikuti huruf (background-clip: text); garis merah lapisan pertama
+   (paling atas) tetap utuh dan jatuh di atas huruf. */
+@supports ((background-clip: text) or (-webkit-background-clip: text)) {
+  .hg__coret {
+    color: transparent;
+    background-image: linear-gradient(var(--aksen), var(--aksen)), linear-gradient(var(--warna-a), var(--warna-a));
+    background-position: 0 58%, 0 0;
+    background-size: calc(var(--c) * 100%) 0.07em, 100% 100%;
+    -webkit-background-clip: border-box, text;
+    background-clip: border-box, text;
+  }
 }
 
 /* Bagian kedua: tiap kata naik bergiliran antara p 0,35 dan 0,8. */

@@ -115,8 +115,8 @@ export function buatHalamanUV(p, locale, ilustrasi) {
         const x = titik.u * UK;
         const y = titik.v * UK;
         const r = 0.34 * UK;
-        // Sorot senter: cahaya ungu yang meluruh seperti Gauss dari titik pusat, tanpa
-        // tepi dan tanpa mewarnai halaman di luar sorotnya.
+        // Cahaya ungunya datang dari lampu sorot di adegan; di sini hanya tinta yang
+        // berpendar, meluruh seperti Gauss dari titik senter.
         const pudar = (grad, warna, kuat, lebar = 2.2) => {
           for (let i = 0; i <= 10; i++) {
             const t = i / 10;
@@ -124,11 +124,6 @@ export function buatHalamanUV(p, locale, ilustrasi) {
           }
           return grad;
         };
-        g.save();
-        g.globalCompositeOperation = "multiply";
-        g.fillStyle = pudar(g.createRadialGradient(x, y, 0, x, y, r * 1.4), "112, 84, 210", 0.55 * nyala);
-        g.fillRect(0, 0, UK, UK);
-        g.restore();
         // Tinta hanya menyala di dalam sorot, meredup halus ke tepinya.
         gl.globalCompositeOperation = "source-over";
         gl.clearRect(0, 0, UK, UK);
@@ -140,11 +135,6 @@ export function buatHalamanUV(p, locale, ilustrasi) {
         gl.fillStyle = pudar(gl.createRadialGradient(x, y, 0, x, y, r), "0, 0, 0", Math.min(1, 1.2 * nyala), 1.4);
         gl.fillRect(0, 0, UK, UK);
         g.drawImage(lapis, 0, 0);
-        g.save();
-        g.globalCompositeOperation = "screen";
-        g.fillStyle = pudar(g.createRadialGradient(x, y, 0, x, y, r * 1.2), "150, 110, 255", 0.3 * nyala);
-        g.fillRect(0, 0, UK, UK);
-        g.restore();
       }
       tekstur.needsUpdate = true;
     },
