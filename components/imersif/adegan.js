@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
 import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
-import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup } from "./benda";
+import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
 import { gambarSampul, gambarHalaman } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
 
@@ -148,9 +148,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 0.95;
+  renderer.toneMappingExposure = 0.86;
   renderer.setClearColor(0x000000, 0);
-  renderer.shadowMap.enabled = true;
+  const iOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  renderer.shadowMap.enabled = !iOS;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.shadowMap.autoUpdate = false;
   wadah.appendChild(renderer.domElement);
@@ -415,7 +416,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     matahari.intensity = sinarBaca * (1 - 0.45 * k_.redupUV);
     langit.color.setRGB(1 - 0.2 * k_.redupUV, 1 - 0.3 * k_.redupUV, 1);
     strip.intensity = 1.9 * (1 - cahayaBaca);
-    scene.environmentIntensity = 1 - 0.6 * cahayaBaca;
+    kunci.intensity = 0.75 * (1 - cahayaBaca);
+    isiCahaya.intensity = 0.3 * (1 - cahayaBaca);
+    scene.environmentIntensity = 1 - cahayaBaca;
     rak.updateMatrixWorld(true);
 
     const { w: vw, h: vh } = tampak();
@@ -541,8 +544,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         m4.decompose(pos, q, sk3);
         pos.addScaledVector(vTmp.copy(sumbuZ).applyQuaternion(q), p3o(k_.dengar / 0.3) * 0.6 * U);
         pemutar.grup.updateWorldMatrix(true, false);
-        const atas = pos2.set(0, pemutar.puncakY + 0.3 * U, 0).applyMatrix4(pemutar.grup.matrixWorld).clone();
-        const poros = pos2.set(0, pemutar.puncakY, 0).applyMatrix4(pemutar.grup.matrixWorld).clone();
+        const atas = pos2.set(0, pemutar.kursiY + 0.3 * U, 0).applyMatrix4(pemutar.grup.matrixWorld).clone();
+        const poros = pos2.set(0, pemutar.kursiY, 0).applyMatrix4(pemutar.grup.matrixWorld).clone();
         q2.copy(pemutar.grup.getWorldQuaternion(qTmp)).multiply(qDatar);
         const bawa = p3io((k_.dengar - 0.35) / 0.45);
         const jatuh = p3io((k_.dengar - 0.78) / 0.22);
@@ -555,6 +558,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         if (sasaranLaju > k_.laju) k_.laju += (sasaranLaju - k_.laju) * (1 - Math.exp(-dt / 0.4));
         else k_.laju = Math.max(sasaranLaju, k_.laju - (C.rpm / 60 / k_.rem) * dt);
         if (!kurangiGerak) k_.sudut += k_.laju * Math.PI * 2 * dt;
+        setBlurPutar(c.userData.bahan.cetak, kurangiGerak ? 0 : k_.laju * Math.PI * 2 * Math.max(0.025, dt));
         q.multiply(qTmp.setFromAxisAngle(sumbuZ, -k_.sudut));
         c.position.copy(pos);
         c.quaternion.copy(q);
@@ -740,7 +744,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     // Kotak merunduk di titik yang ditekan.
     if (kt && k_.keadaan === "rak") {
       const uv = h.uv ?? { x: 0.5, y: 0.5 };
-      kt.dorong.vz -= 0.55 * U * 4;
+      kt.dorong.vz -= 0.55 * U;
       kt.dorong.vrx += (uv.y - 0.5) * 1.5;
       kt.dorong.vry -= (uv.x - 0.5) * 1.5;
     }
