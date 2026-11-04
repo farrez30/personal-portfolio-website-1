@@ -1,0 +1,845 @@
+/* Mode Imersif: seluruh layar di bawah bilah atas adalah ruang krem tempat rak berdiri.
+   Krem dipakai di kedua tema; di latar hitam tepi kotak bening terbaca sebagai garis putih. */
+
+
+.rak-gulir {
+  position: relative;
+}
+
+.panggung {
+  --ruang: #e9e1d3;
+  --ruang-tinta: #22201d;
+  --ruang-tinta-2: #6b645a;
+  position: sticky;
+  top: 60px;
+  height: calc(100vh - 60px);
+  z-index: 1;
+  color: var(--ruang-tinta);
+  background: radial-gradient(circle at 48% 38%, #f6f0e5 0%, #ebe3d4 68%, #e1d7c5 100%);
+  overflow: hidden;
+}
+
+/* Butiran halus di atas segalanya, seperti kertas. */
+.panggung::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.15;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.83' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.panggung__kanvas {
+  position: absolute;
+  inset: 0;
+  touch-action: pan-y;
+}
+
+.panggung__kanvas canvas {
+  width: 100%;
+  height: 100%;
+  cursor: none;
+}
+
+.panggung__muat {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 5;
+}
+
+.panggung__cincin {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--ruang-tinta) 25%, transparent);
+  border-top-color: var(--ruang-tinta);
+  animation: panggung-putar 1s linear infinite;
+}
+
+@keyframes panggung-putar {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.panggung__kepala,
+.panggung__kaki {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  pointer-events: none;
+}
+
+.panggung__kepala {
+  top: 0;
+  align-items: start;
+}
+
+.panggung__kaki {
+  bottom: 0;
+  align-items: end;
+}
+
+.panggung__kepala > *,
+.panggung__kaki > * {
+  pointer-events: auto;
+}
+
+.panggung__kepala > :last-child {
+  justify-self: end;
+}
+
+.panggung__sudut {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--ruang-tinta);
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--t-sedang) var(--ease);
+}
+
+.panggung__sudut:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--aksen);
+}
+
+.panggung__sudut:disabled {
+  opacity: 0.3;
+  cursor: default;
+  text-decoration: none;
+}
+
+.panggung__masthead {
+  max-width: 34ch;
+  text-align: center;
+  font-size: clamp(1.05rem, 1.8vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.panggung__pasangan {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.panggung__pasangan--kanan {
+  justify-content: end;
+}
+
+.panggung__keterangan {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.panggung__judul {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.panggung--buka .panggung__judul,
+.panggung--putar .panggung__judul,
+.panggung--buklet .panggung__judul {
+  cursor: default;
+}
+
+.panggung__info {
+  color: var(--ruang-tinta-2);
+  font-size: 0.75rem;
+}
+
+.panggung__nama {
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.panggung__ringkas {
+  max-width: 46ch;
+  color: var(--ruang-tinta-2);
+  font-size: 0.9375rem;
+}
+
+.panggung__transport {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ruang) 60%, transparent);
+}
+
+.panggung__transport button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ruang-tinta);
+  cursor: pointer;
+}
+
+.panggung__transport button[aria-pressed="true"] {
+  background: var(--ruang-tinta);
+  color: var(--ruang);
+}
+
+.panggung__transport button:disabled {
+  opacity: 0.3;
+}
+
+/* Panel Tentang dan Kontak: lembar kertas yang menutupi ruang. */
+.panggung__panel {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--ink);
+  padding: clamp(1rem, 4vw, 3rem);
+  animation: panggung-masuk var(--t-sedang) var(--ease);
+}
+
+@keyframes panggung-masuk {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.panggung__panel .panggung__sudut {
+  color: var(--ink);
+}
+
+.panggung__tutup-panel {
+  position: sticky;
+  top: 0;
+}
+
+.panggung__panel .kontak {
+  border-top: 0;
+  padding-block: 1rem;
+}
+
+.panggung__tentang {
+  max-width: 48rem;
+  margin: 10vh auto 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.panggung__tentang .mono {
+  color: var(--ink-3);
+}
+
+.panggung__tentang h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.panggung__tentang-aksi {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Kursor gelembung: satu lingkaran 76 px yang hanya diskalakan, tanpa jeda. */
+.gelembung {
+  --s: 0.14;
+  position: fixed;
+  left: -38px;
+  top: -38px;
+  z-index: 50;
+  width: 76px;
+  height: 76px;
+  pointer-events: none;
+}
+
+.gelembung::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--ruang-tinta);
+  transform: scale(var(--s));
+  transition:
+    transform 350ms cubic-bezier(0.32, 0.72, 0, 1),
+    background-color 350ms cubic-bezier(0.32, 0.72, 0, 1),
+    box-shadow 350ms cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.gelembung[data-adegan="kotak"],
+.gelembung[data-adegan="cakram"] {
+  --s: 0.3;
+}
+
+/* Di atas teks: lingkaran membesar dan membalik warna teks di dalamnya. */
+.gelembung[data-teks="1"] {
+  --s: 0.526;
+  mix-blend-mode: difference;
+}
+
+.gelembung[data-teks="1"]::before {
+  background: #e8e2d6;
+}
+
+/* Di atas tombol kecil pemutar: cincin tipis. */
+.gelembung[data-adegan="tombol"] {
+  --s: 0.34;
+}
+
+.gelembung[data-adegan="tombol"]::before {
+  background: transparent;
+  box-shadow: inset 0 0 0 13px transparent, inset 0 0 0 4.5px var(--ruang-tinta);
+}
+
+.gelembung[data-ada="0"] {
+  opacity: 0;
+}
+
+.panggung,
+.panggung button,
+.panggung a {
+  cursor: none;
+}
+
+.panggung__panel,
+.panggung__panel * {
+  cursor: auto;
+}
+
+@media (hover: none) {
+  .gelembung {
+    display: none;
+  }
+
+  .panggung,
+  .panggung button,
+  .panggung a {
+    cursor: auto;
+  }
+}
+
+.panggung__pudar {
+  animation: panggung-pudar 220ms ease both;
+}
+
+@keyframes panggung-pudar {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Hologram: layar melayang yang naik dari sumur pemutar, bingkai monitor sci-fi retro. */
+.holo {
+  --fosfor: 150 255 190;
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  perspective: 1400px;
+}
+
+/* Sorot cahaya: tiga lapis lembut (kerucut kabur, inti terang, pendar di sumur)
+   ditambah debu yang naik pelan. Tepi kiri dan kanan memudar, tidak bersudut tajam. */
+.holo__sinar {
+  position: absolute;
+  left: var(--sx);
+  top: 0;
+  width: min(66vw, 860px);
+  height: var(--sy);
+  transform: translateX(-50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  mix-blend-mode: screen;
+}
+
+.holo__sinar::before,
+.holo__sinar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(calc(50% - var(--sw) * 0.5) 100%, calc(50% + var(--sw) * 0.5) 100%, 98% 14%, 2% 14%);
+}
+
+/* Kerucut luar: kabur, memudar ke samping dan ke atas, dengan debu melayang. */
+.holo__sinar::before {
+  background:
+    linear-gradient(to top, rgb(var(--fosfor) / 0.4), rgb(var(--fosfor) / 0.08) 75%, transparent),
+    radial-gradient(1.2px 1.2px at 20% 30%, rgb(255 255 255 / 0.7), transparent),
+    radial-gradient(1px 1px at 70% 55%, rgb(255 255 255 / 0.6), transparent),
+    radial-gradient(1.4px 1.4px at 40% 75%, rgb(255 255 255 / 0.5), transparent),
+    radial-gradient(1px 1px at 85% 40%, rgb(255 255 255 / 0.6), transparent);
+  background-size: 100% 100%, 180px 220px, 140px 260px, 220px 200px, 160px 240px;
+  filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+  animation: holo-debu 9s linear infinite;
+}
+
+/* Inti terang yang lebih sempit. */
+.holo__sinar::after {
+  background: linear-gradient(to top, rgb(220 255 235 / 0.45), rgb(var(--fosfor) / 0.05) 60%, transparent 90%);
+  filter: blur(14px);
+  transform: scaleX(0.45);
+  transform-origin: 50% 100%;
+}
+
+@keyframes holo-debu {
+  to {
+    background-position: 0 0, 0 -220px, 0 -260px, 0 -200px, 0 -240px;
+  }
+}
+
+.holo--nyala .holo__sinar {
+  opacity: 1;
+  animation: holo-kedip 4s steps(60) infinite;
+}
+
+@keyframes holo-kedip {
+  0%, 100% { filter: brightness(1); }
+  47% { filter: brightness(1); }
+  48% { filter: brightness(0.7); }
+  49% { filter: brightness(1.05); }
+}
+
+/* Pendar bulat di mulut sumur. */
+.holo::before {
+  content: "";
+  position: absolute;
+  left: var(--sx);
+  top: var(--sy);
+  width: calc(var(--sw) * 1.4);
+  height: calc(var(--sw) * 0.35);
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(200 255 225 / 0.55), rgb(var(--fosfor) / 0.15) 60%, transparent);
+  filter: blur(8px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 600ms ease;
+  pointer-events: none;
+}
+
+.holo--nyala::before {
+  opacity: 1;
+}
+
+.holo__panel {
+  --rx: 0deg;
+  --ry: 0deg;
+  --bob: 0px;
+  position: absolute;
+  left: var(--sx);
+  top: calc(var(--sy) * 0.82);
+  width: min(56vw, 720px);
+  transform-origin: 50% 100%;
+  transform: translate(-50%, -100%) translateY(var(--bob)) rotateX(var(--rx)) rotateY(var(--ry));
+  pointer-events: auto;
+  transition:
+    width 600ms cubic-bezier(0.32, 0.72, 0, 1),
+    top 600ms cubic-bezier(0.32, 0.72, 0, 1);
+  animation: holo-naik 800ms cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+.holo[data-perangkat="hp"] .holo__panel {
+  width: min(30vw, 300px);
+}
+
+@keyframes holo-naik {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -100%) scaleY(0.02);
+    filter: brightness(3);
+  }
+}
+
+.holo__bingkai {
+  position: relative;
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.6rem;
+  border-radius: 14px;
+  background: rgb(10 18 14 / 0.82);
+  border: 1px solid rgb(var(--fosfor) / 0.55);
+  box-shadow:
+    0 0 0 1px rgb(0 0 0 / 0.4),
+    0 0 24px rgb(var(--fosfor) / 0.35),
+    inset 0 0 30px rgb(var(--fosfor) / 0.12);
+  color: rgb(var(--fosfor));
+}
+
+/* Siku-siku sudut ala HUD. */
+.holo__bingkai::before,
+.holo__bingkai::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 2px solid rgb(var(--fosfor) / 0.9);
+  pointer-events: none;
+}
+
+.holo__bingkai::before {
+  top: -6px;
+  left: -6px;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.holo__bingkai::after {
+  bottom: -6px;
+  right: -6px;
+  border-left: 0;
+  border-top: 0;
+}
+
+.holo__kepala {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 6px rgb(var(--fosfor) / 0.8);
+}
+
+.holo__status {
+  padding: 0 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: 3px;
+}
+
+.holo--beku .holo__status {
+  color: #ffc46b;
+}
+
+.holo__layar {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #070b09;
+}
+
+.holo[data-perangkat="hp"] .holo__layar {
+  aspect-ratio: 9 / 17;
+}
+
+.holo__layar iframe,
+.holo__layar img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  object-position: top;
+  background: #fff;
+}
+
+/* Garis pindai dan vinyet tabung. */
+.holo__layar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.12) 0 1px, transparent 1px 3px),
+    radial-gradient(120% 100% at 50% 50%, transparent 60%, rgb(0 20 10 / 0.45) 100%);
+  box-shadow: inset 0 0 40px rgb(var(--fosfor) / 0.15);
+}
+
+.holo--beku .holo__layar {
+  filter: saturate(0.4) brightness(0.8);
+}
+
+.holo--beku .holo__layar iframe {
+  pointer-events: none;
+}
+
+.holo__kosong {
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  color: #f4efe7;
+  font-size: 1.5rem;
+  font-weight: 650;
+}
+
+.holo__alat {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.holo__alat button,
+.holo__alat a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 34px;
+  padding: 0 0.7rem;
+  border: 1px solid rgb(var(--fosfor) / 0.45);
+  border-radius: 999px;
+  background: transparent;
+  color: rgb(var(--fosfor));
+  font: inherit;
+  font-size: 0.8125rem;
+  text-decoration: none;
+}
+
+.holo__alat a {
+  margin-left: auto;
+}
+
+.holo__alat button[aria-pressed="true"] {
+  background: rgb(var(--fosfor) / 0.18);
+}
+
+/* Keping-keping kecil yang mengorbit layar, sebagai hiasan. */
+.holo__orbit {
+  position: absolute;
+  left: var(--sx);
+  top: calc(var(--sy) * 0.5);
+  width: 0;
+  height: 0;
+  animation: holo-orbit 40s linear infinite;
+}
+
+.holo__keping {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding: 0.2rem 0.5rem;
+  border: 1px solid rgb(var(--fosfor) / 0.4);
+  border-radius: 4px;
+  background: rgb(10 18 14 / 0.6);
+  color: rgb(var(--fosfor) / 0.85);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  transform: rotate(calc(var(--i) / var(--n) * 1turn)) translateX(min(36vw, 470px)) rotate(calc(var(--i) / var(--n) * -1turn));
+  animation: holo-lawan 40s linear infinite;
+}
+
+@keyframes holo-orbit {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes holo-lawan {
+  from {
+    rotate: 0turn;
+  }
+  to {
+    rotate: -1turn;
+  }
+}
+
+.holo--beku .holo__orbit,
+.holo--beku .holo__keping {
+  animation-play-state: paused;
+}
+
+@media (max-width: 650px) {
+  .panggung__kepala {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .panggung__masthead {
+    font-size: 0.95rem;
+  }
+
+  .panggung__kaki {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "kiri kanan" "teks teks";
+  }
+
+  .panggung__kaki > :nth-child(1) {
+    grid-area: kiri;
+  }
+
+  .panggung__kaki > :nth-child(2) {
+    grid-area: teks;
+  }
+
+  .panggung__kaki > :nth-child(3) {
+    grid-area: kanan;
+  }
+
+  .holo__panel,
+  .holo[data-perangkat="hp"] .holo__panel,
+  .holo--besar .holo__panel {
+    width: calc(100vw - 2rem);
+  }
+
+  .holo__orbit {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panggung__cincin,
+  .holo__sinar,
+  .holo__sinar::before,
+  .holo__muat,
+  .holo__bilah i,
+  .holo__panel,
+  .holo__orbit,
+  .holo__keping,
+  .panggung__panel {
+    animation: none;
+  }
+}
+
+/* Senter UV: tombol senter antik; saat menyala, kursor menjadi lingkaran cahaya ungu. */
+.senter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  padding: 0 1rem 0 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--ruang-tinta) 30%, transparent);
+  border-radius: 999px;
+  background: linear-gradient(#2b2a2e, #18171a);
+  color: #e8e2d6;
+  font: inherit;
+  font-size: 0.875rem;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.12), 0 6px 14px -8px rgb(0 0 0 / 0.6);
+}
+
+.senter__lampu {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #5d4b8a, #2a2140 70%);
+  box-shadow: inset 0 0 0 3px #3b3a40;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+
+.senter--nyala .senter__lampu {
+  background: radial-gradient(circle at 45% 40%, #f1e7ff, #a07bff 45%, #5b2fd6 75%);
+  box-shadow: inset 0 0 0 3px #3b3a40, 0 0 18px 4px rgb(160 123 255 / 0.65);
+}
+
+.gelembung[data-senter="1"] {
+  --s: 1;
+  mix-blend-mode: normal;
+}
+
+.gelembung[data-senter="1"]::before {
+  background: radial-gradient(circle, rgb(170 130 255 / 0.28) 0%, rgb(140 100 255 / 0.12) 55%, transparent 72%);
+  box-shadow: 0 0 0 1px rgb(170 130 255 / 0.35);
+}
+
+/* Layar diperbesar: lebih dominan, tetap melayang di atas pemutar. */
+.holo--besar .holo__panel {
+  top: 50%;
+  width: min(88vw, 1240px, calc((100vh - 290px) * 1.45));
+  transform: translate(-50%, -50%) translateY(var(--bob)) rotateX(var(--rx)) rotateY(var(--ry));
+}
+
+.holo--besar[data-perangkat="hp"] .holo__panel {
+  width: min(40vw, 420px, calc((100vh - 290px) * 0.52));
+}
+
+.holo--besar .holo__orbit {
+  opacity: 0.35;
+}
+
+.holo__ukuran {
+  position: absolute;
+  top: 0.45rem;
+  right: 4.6rem;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 22px;
+  border: 1px solid rgb(var(--fosfor) / 0.45);
+  border-radius: 4px;
+  background: transparent;
+  color: rgb(var(--fosfor));
+}
+
+/* Layar memuat ala terminal retro: teks hijau berpendar dan bilah blok yang terisi. */
+.holo__muat {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.9rem;
+  background:
+    repeating-linear-gradient(0deg, rgb(0 0 0 / 0.25) 0 1px, transparent 1px 3px),
+    radial-gradient(circle at 50% 50%, #0c1f15, #040a07 75%);
+  color: rgb(var(--fosfor));
+  font-size: 0.8125rem;
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 8px rgb(var(--fosfor) / 0.9);
+  animation: holo-layar-kedip 120ms steps(2) infinite;
+}
+
+.holo__muat > span:first-child::after {
+  content: "_";
+  animation: holo-kursor 1s steps(1) infinite;
+}
+
+.holo__bilah {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgb(var(--fosfor) / 0.6);
+}
+
+.holo__bilah i {
+  width: 10px;
+  height: 14px;
+  background: rgb(var(--fosfor));
+  box-shadow: 0 0 6px rgb(var(--fosfor) / 0.8);
+  opacity: 0.12;
+  animation: holo-blok 1.6s steps(1) infinite;
+  animation-delay: calc(var(--i) * 0.08s);
+}
+
+@keyframes holo-blok {
+  0%, 100% { opacity: 0.12; }
+  10%, 70% { opacity: 1; }
+}
+
+@keyframes holo-kursor {
+  50% { opacity: 0; }
+}
+
+@keyframes holo-layar-kedip {
+  50% { filter: brightness(1.08); }
+}

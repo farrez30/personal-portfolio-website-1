@@ -1,0 +1,73 @@
+.sinarx {
+  margin: 0;
+}
+
+.sinarx__panggung {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--r-kotak);
+  overflow: hidden;
+  background: var(--bg-2);
+}
+
+.sinarx__diagram {
+  width: 100%;
+  height: auto;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.sinarx__garis {
+  stroke: var(--ink-3);
+  stroke-width: 1.5;
+}
+
+.sinarx__paket {
+  stroke: var(--aksen);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 2 46;
+  animation: sinarx-paket 1.6s linear infinite;
+}
+
+@keyframes sinarx-paket {
+  to {
+    stroke-dashoffset: -48;
+  }
+}
+
+.sinarx__kotak {
+  fill: var(--bg);
+  stroke: var(--ink-2);
+  stroke-width: 1;
+}
+
+.sinarx__teks {
+  fill: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.sinarx__sampul {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+
+.sinarx figcaption {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--ink-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sinarx__paket {
+    animation: none;
+    opacity: 0;
+  }
+}

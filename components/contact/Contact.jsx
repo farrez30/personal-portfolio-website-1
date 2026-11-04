@@ -1,137 +1,119 @@
 "use client";
-import React, { useRef } from "react";
-import "./contact.css";
+import { useRef } from "react";
+import dynamic from "next/dynamic";
 import { useTranslations } from "next-intl";
-import { MdOutlineEmail } from "react-icons/md";
-import { BsWhatsapp } from "react-icons/bs";
+import {
+  PiEnvelopeSimpleBold,
+  PiWhatsappLogoBold,
+  PiLinkedinLogoBold,
+  PiGithubLogoBold,
+} from "react-icons/pi";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
+import { situs } from "@/content/situs";
+import { useMode } from "@/components/mode/ModeProvider";
+import "./contact.css";
 
-// IDs are overridable via env; literal fallbacks keep the form working out of the box.
+const Helix = dynamic(() => import("@/components/imersif/Helix"), { ssr: false });
+
+// ID EmailJS memang publik (dipakai dari browser); boleh ditimpa lewat env.
 const EMAILJS_SERVICE = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "service_n9r4x8p";
 const EMAILJS_TEMPLATE = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "template_s50v8c4";
 const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "sHLzgGlimFe2gylV8";
-const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "6285884061543";
 
-const Contact = () => {
-  const t = useTranslations("contact");
-  const formRef = useRef();
+export default function Contact() {
+  const t = useTranslations("kontak");
+  const { mode } = useMode();
+  const formRef = useRef(null);
 
-  // SweetAlert2 themed to match the dark/glass UI.
-  const themedSwal = (opts) =>
-    Swal.fire({
-      customClass: { popup: "swal-glass" },
-      buttonsStyling: false,
-      ...opts,
-    });
+  const kabar = (opts) =>
+    Swal.fire({ customClass: { popup: "kabar" }, buttonsStyling: false, ...opts });
 
-  // FormData avoids the HTMLFormElement.name gotcha (form.name reflects the
-  // element's name attribute, not the control named "name").
-  const getFields = () => {
+  const ambil = () => {
     const fd = new FormData(formRef.current);
     const g = (k) => (fd.get(k) || "").toString().trim();
     return { name: g("name"), email: g("email"), subject: g("subject"), message: g("message") };
   };
+  const kurang = ({ name, email, message }) => !name || !email || !message;
 
-  const missingRequired = ({ name, email, message }) => !name || !email || !message;
-
-  const sendEmail = async (e) => {
+  const kirimEmail = async (e) => {
     e.preventDefault();
-    if (missingRequired(getFields())) {
-      themedSwal({ icon: "error", title: t("alertErrorTitle") });
-      return;
-    }
+    if (kurang(ambil())) return kabar({ icon: "error", title: t("galatJudul") });
     try {
       await emailjs.sendForm(EMAILJS_SERVICE, EMAILJS_TEMPLATE, formRef.current, EMAILJS_PUBLIC_KEY);
       formRef.current.reset();
-      themedSwal({
-        icon: "success",
-        title: t("alertSuccessTitle"),
-        showConfirmButton: false,
-        timer: 1600,
-      });
-    } catch (err) {
-      themedSwal({ icon: "error", title: t("alertErrorTitle"), text: t("alertErrorText") });
+      kabar({ icon: "success", title: t("terkirim"), showConfirmButton: false, timer: 1600 });
+    } catch {
+      kabar({ icon: "error", title: t("galatJudul"), text: t("galatKirim") });
     }
   };
 
-  const sendWhatsapp = () => {
-    const { name, email, subject, message } = getFields();
-    if (missingRequired({ name, email, message })) {
-      themedSwal({ icon: "error", title: t("alertErrorTitle") });
-      return;
-    }
-    const body = [
-      subject ? `*${subject}*` : null,
-      message,
-      `— ${name}${email ? ` (${email})` : ""}`,
-    ]
+  const kirimWa = () => {
+    const { name, email, subject, message } = ambil();
+    if (kurang({ name, email, message })) return kabar({ icon: "error", title: t("galatJudul") });
+    const isi = [subject ? `*${subject}*` : null, message, `${name}${email ? ` (${email})` : ""}`]
       .filter(Boolean)
       .join("\n\n");
-    const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(body)}`;
-    window.open(url, "_blank", "noopener,noreferrer");
+    window.open(`https://wa.me/${situs.whatsapp}?text=${encodeURIComponent(isi)}`, "_blank", "noopener,noreferrer");
   };
 
+  const jalur = [
+    { href: `mailto:${situs.email}`, label: t("email"), nilai: situs.email, Ikon: PiEnvelopeSimpleBold },
+    { href: `https://wa.me/${situs.whatsapp}`, label: t("whatsapp"), nilai: `+${situs.whatsapp}`, Ikon: PiWhatsappLogoBold },
+    { href: situs.linkedin, label: t("linkedin"), nilai: "linkedin.com/in/farrez", Ikon: PiLinkedinLogoBold },
+    { href: situs.github, label: t("github"), nilai: "github.com/farrez30", Ikon: PiGithubLogoBold },
+  ];
+
   return (
-    <section id="contact">
-      <h5>{t("subtitle")}</h5>
-      <h2>{t("title")}</h2>
-
-      <div className="container contact__container">
-        <div className="contact__options">
-          <article className="contact__option">
-            <MdOutlineEmail className="contact__option-icon" />
-            <h2>{t("emailTitle")}</h2>
-            <h5>{t("emailDesc")}</h5>
-            <a href="mailto:farrezalhakim@gmail.com" target="_blank" rel="noopener noreferrer">
-              {t("emailCta")}
-            </a>
-          </article>
-          <article className="contact__option">
-            <BsWhatsapp className="contact__option-icon" />
-            <h2>{t("whatsappTitle")}</h2>
-            <h5>{t("whatsappDesc")}</h5>
-            <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer">
-              {t("whatsappCta")}
-            </a>
-          </article>
+    <section id="kontak" className="kontak" aria-labelledby="kontak-judul">
+      <div className="wadah kontak__isi">
+        <div className="kontak__kiri">
+          <h2 id="kontak-judul" className="kontak__judul">
+            {t("judul")}
+          </h2>
+          <p className="kontak__teks">{t("teks")}</p>
+          <ul className="kontak__jalur">
+            {jalur.map(({ href, label, nilai, Ikon }) => (
+              <li key={label}>
+                <a href={href} target={href.startsWith("http") ? "_blank" : undefined} rel="noopener noreferrer">
+                  <Ikon aria-hidden="true" />
+                  <span className="mono kontak__label">{label}</span>
+                  <span>{nilai}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          {mode === "imersif" && <Helix label={t("helix")} />}
         </div>
-        {/* END OF CONTACT OPTIONS */}
 
-        <form ref={formRef} className="contact__form" onSubmit={sendEmail}>
-          <div className="contact__row">
-            <input type="text" name="name" placeholder={t("namePlaceholder")} required />
-            <input type="email" name="email" placeholder={t("emailPlaceholder")} required />
-          </div>
-          <input
-            type="text"
-            name="subject"
-            placeholder={t("subjectPlaceholder")}
-            defaultValue={t("subjectTemplate")}
-          />
-          <textarea
-            name="message"
-            rows="7"
-            placeholder={t("messagePlaceholder")}
-            defaultValue={t("messageTemplate")}
-            required
-          ></textarea>
-          <div className="contact__actions">
-            <button type="submit" className="btn btn-primary contact__send">
-              <MdOutlineEmail /> {t("sendEmail")}
+        <form ref={formRef} className="kontak__form" onSubmit={kirimEmail}>
+          <h3 className="mono kontak__label">{t("formJudul")}</h3>
+          <label>
+            <span>{t("nama")}</span>
+            <input type="text" name="name" autoComplete="name" required />
+          </label>
+          <label>
+            <span>{t("emailAnda")}</span>
+            <input type="email" name="email" autoComplete="email" required />
+          </label>
+          <label>
+            <span>{t("subjek")}</span>
+            <input type="text" name="subject" defaultValue={t("subjekIsi")} />
+          </label>
+          <label>
+            <span>{t("pesan")}</span>
+            <textarea name="message" rows="6" defaultValue={t("pesanIsi")} required />
+          </label>
+          <div className="kontak__tombol">
+            <button type="submit" className="tombol tombol--utama">
+              <PiEnvelopeSimpleBold aria-hidden="true" /> {t("kirimEmail")}
             </button>
-            <button
-              type="button"
-              className="btn contact__send contact__send--wa"
-              onClick={sendWhatsapp}
-            >
-              <BsWhatsapp /> {t("sendWhatsapp")}
+            <button type="button" className="tombol" onClick={kirimWa}>
+              <PiWhatsappLogoBold aria-hidden="true" /> {t("kirimWa")}
             </button>
           </div>
         </form>
       </div>
     </section>
   );
-};
-
-export default Contact;
+}

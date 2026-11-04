@@ -1,34 +1,17 @@
 import { setRequestLocale } from "next-intl/server";
-import Header from "@/components/header/Header";
-import Nav from "@/components/nav/Nav";
-import About from "@/components/about/About";
-import Experience from "@/components/experience/Experience";
-// import Services from "@/components/services/Services";
-import Portfolio from "@/components/portfolio/Portfolio";
-// import Testimonials from "@/components/testimonials/Testimonials";
+import Gerbang from "@/components/gerbang/Gerbang";
+import RakSesuaiMode from "@/components/rak/RakSesuaiMode";
 import Contact from "@/components/contact/Contact";
-import Footer from "@/components/footer/Footer";
-import LanguageSwitcher from "@/components/i18n/LanguageSwitcher";
-import ThemeToggle from "@/components/theme/ThemeToggle";
-import VinylPlayer from "@/components/vinyl/VinylPlayer";
 
-export default function Home({ params: { locale } }) {
+export default async function Beranda({ params }) {
+  const { locale } = await params;
   setRequestLocale(locale);
 
   return (
     <>
-      <LanguageSwitcher />
-      <ThemeToggle />
-      <Header />
-      <Nav />
-      <About />
-      <Experience />
-      {/* <Services /> */}
-      <Portfolio />
-      {/* <Testimonials /> */}
+      <Gerbang />
+      <RakSesuaiMode />
       <Contact />
-      <Footer />
-      <VinylPlayer />
     </>
   );
 }

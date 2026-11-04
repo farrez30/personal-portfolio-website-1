@@ -1,154 +1,132 @@
-.container.contact__container {
-    width: 58%;
-    display: grid;
-    grid-template-columns: 30% 58%;
-    gap: 12%;
+.kontak {
+  padding-block: clamp(4rem, 10vh, 7rem);
+  border-top: 1px solid var(--line);
 }
 
-.contact__options {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
+.kontak__isi {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
 }
 
-.contact__option {
-    background: var(--glass-bg);
-    padding: 1.2rem;
-    border-radius: 1.2rem;
-    text-align: center;
-    border: 1px solid var(--glass-border);
-    transition: var(--transition);
+.kontak__judul {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
 }
 
-.contact__option:hover {
-    background: transparent;
-    border-color: var(--color-primary-variant);
-    transform: translateY(-4px);
+.kontak__teks {
+  color: var(--ink-2);
+  margin-top: 0.75rem;
 }
 
-.contact__option-icon {
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--color-primary);
+.kontak__jalur {
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0 0;
+  display: grid;
 }
 
-.contact__option a {
-    margin-top: 0.7rem;
-    display: inline-block;
-    font-size: 0.8rem;
+.kontak__jalur a {
+  display: grid;
+  grid-template-columns: 1.25rem 6.5rem 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 52px;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  overflow-wrap: anywhere;
 }
 
-/* ========== FORM (scoped so these element rules don't leak app-wide) ========== */
-.contact__form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.2rem;
+.kontak__jalur a:hover span:last-child {
+  color: var(--aksen);
 }
 
-.contact__row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.2rem;
+.kontak__label {
+  color: var(--ink-3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.75rem;
+  font-weight: 500;
 }
 
-.contact__form input,
-.contact__form textarea {
-    width: 100%;
-    padding: 1.1rem 1.2rem;
-    border-radius: 0.8rem;
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    resize: none;
-    color: var(--color-white);
-    font: inherit;
-    transition: var(--transition);
+.kontak__form {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
 }
 
-.contact__form input::placeholder,
-.contact__form textarea::placeholder {
-    color: var(--color-light);
-    opacity: 0.8;
+.kontak__form label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  color: var(--ink-2);
 }
 
-.contact__form input:focus,
-.contact__form textarea:focus {
-    outline: none;
-    border-color: var(--color-primary);
-    background: var(--glass-strong);
+.kontak__form input,
+.kontak__form textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 0.8rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-kecil);
+  background: var(--bg-2);
+  color: var(--ink);
+  font-size: 1rem;
 }
 
-.contact__actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
+.kontak__form textarea {
+  resize: vertical;
 }
 
-.contact__send {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
+.kontak__tombol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
-.contact__send--wa {
-    color: var(--color-white);
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
+.kabar {
+  background: var(--bg-2) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--line);
+  border-radius: var(--r-kotak) !important;
 }
 
-.contact__send--wa:hover {
-    background: #25d366;
-    color: #fff;
-    border-color: transparent;
+.kabar .swal2-confirm {
+  min-height: 44px;
+  padding: 0.6rem 1.2rem;
+  border: 0;
+  border-radius: var(--r-kecil);
+  background: var(--aksen);
+  color: var(--aksen-ink);
+  font-weight: 600;
+  cursor: pointer;
 }
 
-/* ========== Themed SweetAlert2 popup (rendered at <body>, needs global CSS) ========== */
-.swal-glass {
-    background: var(--glass-strong) !important;
-    border: 1px solid var(--glass-border);
-    border-radius: 1.2rem !important;
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
-    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
-    color: var(--color-white);
+@media (max-width: 760px) {
+  .kontak__isi {
+    grid-template-columns: 1fr;
+  }
+
+  .kontak__jalur a {
+    grid-template-columns: 1.25rem 5.5rem 1fr;
+  }
 }
 
-.swal-glass .swal2-title {
-    color: var(--color-white);
+.helix {
+  margin: 2rem 0 0;
 }
 
-.swal-glass .swal2-html-container {
-    color: var(--color-light);
+.helix__panggung {
+  height: 260px;
+  touch-action: pan-y;
+  cursor: pointer;
 }
 
-.swal-glass .swal2-confirm {
-    background: var(--color-primary);
-    color: var(--color-bg);
-    border-radius: 0.6rem;
-    padding: 0.6rem 1.5rem;
-    font-weight: 500;
-    cursor: pointer;
+.helix__panggung canvas {
+  width: 100%;
+  height: 100%;
 }
 
-.swal-glass .swal2-confirm:hover {
-    filter: brightness(1.08);
-}
-
-/* ============= MEDIA QUERIES (MEDIUM DEVICES) ============= */
-@media screen and (max-width: 1024px) {
-    .container.contact__container {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-}
-
-/* ============= MEDIA QUERIES (SMALL DEVICES) ============= */
-@media screen and (max-width: 600px) {
-    .container.contact__container {
-        width: var(--container-width-sm);
-    }
-
-    .contact__row {
-        grid-template-columns: 1fr;
-    }
+.helix figcaption {
+  color: var(--ink-3);
+  font-size: 0.75rem;
 }
