@@ -182,7 +182,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   matahari.shadow.normalBias = 0.002;
   matahari.shadow.radius = 3;
   const langit = new THREE.HemisphereLight(0xffffff, 0xa1aeaf, 0);
-  scene.add(kunci, isiCahaya, tepi, strip, matahari, matahari.target, langit);
+  // Senter UV sebagai lampu sorot sungguhan: cahayanya jatuh merata ke dua halaman
+  // dan melewati punggung buklet, bukan dilukis di tekstur satu halaman.
+  const senterLampu = new THREE.SpotLight(0x7d5cff, 0, 0, 0.3, 1, 0);
+  scene.add(kunci, isiCahaya, tepi, strip, matahari, matahari.target, langit, senterLampu, senterLampu.target);
 
   // Rak dimiringkan; kotak bukan anak rak, posenya dihitung lewat matriks ini.
   const rak = new THREE.Object3D();
@@ -573,6 +576,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       kirim();
     }
 
+    if (!k_.buklet) senterLampu.intensity = 0;
     // --- buklet: keluar dari tutup sambil melengkung, mendarat datar --------
     if (k_.buklet && aktifK) {
       const b = k_.buklet;
@@ -623,6 +627,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
           kirim();
         }
         let titik = null;
+        let kenaBuklet = false;
         if (terlihat && k_.senter && k_.kursor.ada) {
           ndcSenter.set(k_.kursor.x, -k_.kursor.y);
           raySenter.setFromCamera(ndcSenter, camera);
@@ -634,10 +639,18 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
             const t = -o.z / arah.z;
             const x = o.x + arah.x * t;
             const y = o.y + arah.y * t;
-            const kiri = k_.sempit ? 0 : 0;
-            if (x >= kiri && x <= kiri + 1 && Math.abs(y) <= 0.5) titik = { u: x - kiri, v: 0.5 - y };
+            if (x >= 0 && x <= 1 && Math.abs(y) <= 0.5) titik = { u: x, v: 0.5 - y };
+            // Lampu sorot diarahkan ke titik kursor di bidang buklet, dari arah kamera.
+            const kena = pos.set(x, y, 0).applyMatrix4(b.matrixWorld);
+            senterLampu.target.position.copy(kena);
+            const jarakSorot = 1.5 * sk;
+            senterLampu.position.copy(kena).addScaledVector(vTmp.subVectors(camera.position, kena).normalize(), jarakSorot);
+            senterLampu.angle = Math.atan((0.42 * sk) / jarakSorot);
+            kenaBuklet = Math.abs(x) <= 1.3 && Math.abs(y) <= 0.8;
           }
         }
+        k_.sorot = (k_.sorot ?? 0) + ((kenaBuklet ? 1 : 0) - (k_.sorot ?? 0)) * Math.min(1, dt * 8);
+        senterLampu.intensity = 3 * k_.sorot;
         k_.uv.setTitik(titik);
         k_.uv.gambar(k_.senter && terlihat, dt);
       }
