@@ -9,6 +9,7 @@ import * as THREE from "three";
 import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
 import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
+import { GULUNG_GLSL, aturGulung, letakTengah, gulungDari, mulaiBelok } from "./gulung";
 import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
 import { gambarSampul, gambarHalaman } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
@@ -125,16 +126,10 @@ function halamanBuklet(p, locale, uv) {
   return hal;
 }
 
-// Kertas melengkung mengitari silinder di sepanjang punggung buklet.
-const LENGKUNG_GLSL = `
-uniform float uLengkung;
-vec3 deformSheet(vec3 p, vec2 uv) {
-  float a = uLengkung;
-  if (a < 0.0005) return p;
-  float sudut = a * uv.x;
-  float s = p.x < 0.0 ? -1.0 : 1.0;
-  return vec3(s * sin(sudut) / a, p.y, p.z + (1.0 - cos(sudut)) / a);
-}`;
+// Kapan pose buklet mulai berubah (tengahnya mulai mengitari silinder), untuk tutup 180 derajat.
+const MULAI_BELOK = mulaiBelok();
+// Kotak naik keluar layar mulai saat itu, dengan kurva yang sama seperti Dengarkan.
+const MULAI_GESER_BACA = Math.max(0.4, MULAI_BELOK);
 
 const tween = () => ({ aktif: false, dari: 0, ke: 0, mulai: 0, durasi: 1, kurva: luncur });
 
@@ -152,8 +147,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   renderer.setClearColor(0x000000, 0);
   const iOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   renderer.shadowMap.enabled = !iOS;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.shadowMap.autoUpdate = false;
+  // Peta bayangan digambar sekali sejak awal: bahan yang menerima bayangan butuh teksturnya ada.
+  renderer.shadowMap.needsUpdate = true;
   wadah.appendChild(renderer.domElement);
   const kanvas = renderer.domElement;
 
@@ -284,11 +281,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   // Lensa: satu kamera untuk semua tampilan. FOV 40 ke 18 sambil mundur supaya
   // bidang z = 0 tetap terbingkai sama; naik untuk melihat pemutar dari atas
   // sambil tetap memandang lurus, lalu frustum digeser (tilt-shift).
-  const pasangLensa = (a) => {
+  const pasangLensa = (a, aNaik = a) => {
     const fov = C.fovRak + (C.fovDekat - C.fovRak) * a;
     const tanS = Math.tan((fov * Math.PI) / 360);
     const jarak = (C.jarak * Math.tan((20 * Math.PI) / 180)) / tanS;
-    const naik = jarak * Math.tan(C.pandangAtas) * a;
+    const naik = jarak * Math.tan(C.pandangAtas) * aNaik;
     camera.fov = fov;
     camera.position.set(0, naik, jarak);
     camera.rotation.set(0, 0, 0);
@@ -348,6 +345,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   const eu = new THREE.Euler();
   const sk3 = new THREE.Vector3();
   const vTmp = new THREE.Vector3();
+  const vTengahBaca = new THREE.Vector3();
+  const vAkhir = new THREE.Vector3();
+  const vGeser = new THREE.Vector3();
+  const vTengah = new THREE.Vector3();
+  const qBalik = new THREE.Quaternion();
+  const qTenang = new THREE.Quaternion();
+  const sumbuY = new THREE.Vector3(0, 1, 0);
+  const gAkhir = {};
   const sumbuZ = new THREE.Vector3(0, 0, 1);
   const qBuka = new THREE.Quaternion().setFromEuler(new THREE.Euler(C.bukaTunduk, 0, 0));
   const qDatar = new THREE.Quaternion().setFromEuler(new THREE.Euler(-Math.PI / 2, 0, 0));
@@ -401,9 +406,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     if (bv != null) k_.baca = bv;
 
     const geser = p3io((k_.dengar - 0.2) / 0.5);
-    const keluarBaca = p3io((k_.baca - 0.4) / 0.5);
+    const keluarBaca = p3io((k_.baca - MULAI_GESER_BACA) / 0.5);
     const naikRak = Math.max(geser, keluarBaca) * C.geserNaik;
-    pasangLensa(geser);
+    pasangLensa(Math.max(geser, keluarBaca), geser);
     // Cahaya tepi biru memudar bersama lensa; cahaya ambien naik untuk pemutar.
     const cahayaBaca = p3io((k_.baca - 0.6) / 0.26);
     tepi.intensity = 0.75 * (1 - geser) * (1 - cahayaBaca);
@@ -584,37 +589,93 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     // --- buklet: keluar dari tutup sambil melengkung, mendarat datar --------
     if (k_.buklet && aktifK) {
       const b = k_.buklet;
-      const u = kuintik(k_.baca);
       const hal = b.bounds.pages;
       // Buklet dibaca sedikit di depan bidang rak; perkecil sesuai jaraknya ke kamera.
-      const dekatKamera = (C.jarak - 0.3 * U) / C.jarak;
+      const dekatKamera = (camera.position.z - 0.3 * U) / camera.position.z;
       const skBaca =
         dekatKamera *
         (k_.sempit
           ? (0.82 * vw) / Math.max(hal.width, 1)
           : Math.min((0.84 * vw) / Math.max(hal.width, 1), (0.64 * vh) / Math.max(hal.height, 1)));
+      // Kerangka diam: buklet di tutup, tengahnya di tengah sampul. Satuannya satuan kotak,
+      // dikali skala kotak di dunia.
       aktifK.sampul.updateWorldMatrix(true, false);
       aktifK.sampul.matrixWorld.decompose(pos, q, sk3);
-      const skAsal = BUKLET * sk3.x;
-      // Sampul LeafThrough terbentang x 0..1 dari punggung, sampul di tutup terpusat:
-      // geser titik asal setengah halaman ke arah punggung supaya bingkai pertama tidak melompat.
-      pos.addScaledVector(vTmp.set(1, 0, 0).applyQuaternion(q), -0.5 * skAsal);
-      const sk = skAsal + (skBaca - skAsal) * u;
+      // Kotak naik keluar layar, kertas yang sudah keluar tidak ikut terbawa.
+      pos.y -= naikRak;
+      const skKotak = sk3.x;
+      const skAsal = BUKLET * skKotak;
       // Sampul tertutup ada di x 0..1 (depan) atau -1..0 (belakang); geser ke tengah.
       const tutupDepan = b.page === 0 && !b.turning;
       const tutupBelakang = b.page >= b.pageCount - 1 && !b.turning && !k_.sempit;
       const geserTutup = k_.sempit ? 0 : tutupDepan ? -0.5 : tutupBelakang ? 0.5 : 0;
       b.userData.geser = (b.userData.geser ?? geserTutup) + (geserTutup - (b.userData.geser ?? geserTutup)) * Math.min(1, dt * 5);
+      // Titik asal LeafThrough (punggung) saat dibaca, lalu tengah sampulnya.
       pos2.set((b.userData.geser - (hal.x + hal.width / 2)) * skBaca, 0.03 * vh, 0.3 * U);
-      b.position.lerpVectors(pos, pos2, u);
-      // Busur kecil keluar dari tutup; terlalu dekat ke kamera membuatnya membesar keluar layar.
-      b.position.z += Math.sin(Math.PI * u) * 0.12 * U;
-      b.quaternion.slerpQuaternions(q, qTmp.identity(), u);
+      const tengahBaca = vTengahBaca.copy(pos2).add(vTmp.set(0.5 * skBaca, 0, 0));
+
+      // Kertas meluncur sepanjang jalur gulung; tengahnya ikut jalur itu, jadi buklet
+      // berputar mengitari sumbu silinder di sisi punggung.
+      const g = (k_.gul ??= {});
+      aturGulung(gulungDari(k_.baca), g);
+      const [cx, cz, ca] = letakTengah(g);
+      aturGulung(gulungDari(1), gAkhir);
+      const [ax, az] = letakTengah(gAkhir);
+      // Satu perubahan pose sejak tengahnya mulai mengitari silinder: miring, ukuran, dan
+      // geseran yang membawa ujung putaran ke tengah layar baca. Lengkung kertas ikut lemas.
+      const settle = kuintik(jepit((k_.baca - MULAI_BELOK) / (1 - MULAI_BELOK)));
+      const akhir = vAkhir.set(ax, 0, az).applyQuaternion(q).multiplyScalar(skKotak).add(pos);
+      const geserBaca = vGeser.subVectors(tengahBaca, akhir);
+      const tengah = vTengah.set(cx, 0, cz).applyQuaternion(q).multiplyScalar(skKotak).add(pos).addScaledVector(geserBaca, settle);
+      // Arah: diputar di punggung sebesar sudut jalur, lalu pose kotak berubah ke pose baca.
+      // Sudut akhir -pi dibatalkan oleh putaran setengah lingkaran, sampul depan menghadap kita.
+      qBalik.setFromAxisAngle(sumbuY, Math.PI).multiply(q2.copy(q).invert());
+      qTenang.identity().slerp(qBalik, settle);
+      const qBuklet = qTmp.copy(q).multiply(q2.setFromAxisAngle(sumbuY, ca)).premultiply(qTenang);
+      let sk = skAsal + (skBaca - skAsal) * settle;
+      // Bingkai terbang: begitu buklet mulai mengitari silinder, ukurannya di layar dibatasi
+      // supaya tidak membesar keluar layar saat mendekat ke kamera, dan tingginya digeser masuk
+      // ke batas atas dan bawah. Hanya kertasnya yang dikoreksi, kotaknya tidak.
+      const bingkai = p3io((k_.baca - MULAI_BELOK * 0.8) / 0.25) * (1 - jepit((k_.baca - 0.97) / 0.03));
+      if (bingkai > 0) {
+        camera.updateMatrixWorld();
+        const tepiNdc = (2 * 64) / H;
+        const ukur = () => {
+          let atas = -Infinity;
+          let bawah = Infinity;
+          for (const sx of [-0.5, 0.5]) {
+            for (const sy of [-0.5, 0.5]) {
+              vTmp.set(sx * sk, sy * sk, 0).applyQuaternion(qBuklet).add(tengah).project(camera);
+              atas = Math.max(atas, vTmp.y);
+              bawah = Math.min(bawah, vTmp.y);
+            }
+          }
+          return [atas, bawah];
+        };
+        let [atas, bawah] = ukur();
+        const batas = 2 - 2 * tepiNdc;
+        if (atas - bawah > batas) {
+          sk *= 1 - bingkai * (1 - batas / (atas - bawah));
+          [atas, bawah] = ukur();
+        }
+        const lebih = Math.max(0, atas - (1 - tepiNdc)) - Math.max(0, -1 + tepiNdc - bawah);
+        if (lebih !== 0) {
+          const jarakKamera = camera.position.z - tengah.z;
+          tengah.y -= bingkai * lebih * jarakKamera * Math.tan((camera.fov * Math.PI) / 360);
+        }
+      }
+      b.quaternion.copy(qBuklet);
+      b.position.copy(tengah).add(vTmp.set(-0.5 * sk, 0, 0).applyQuaternion(qBuklet));
       b.scale.setScalar(sk);
-      const settle = jepit((k_.baca - 0.55) / 0.45);
-      // Paling melengkung tepat saat buklet berputar di punggung, supaya tidak tampak sebagai garis tipis.
-      b.userData.deform.uniforms.uLengkung.value = Math.sin(Math.PI * jepit(k_.baca / 0.7)) * 1.5 * (1 - settle * settle);
+      const un = b.userData.deform.uniforms;
+      un.uGulung.value.set(g.x, g.y, k_.baca < 0.9999 ? 1 : 0, g.w);
+      un.uDatar.value = settle * settle;
       b.enabled = k_.baca > 0.999 && k_.keadaan === "buklet";
+      // Kembali: tunggu halaman tertutup di sampul dan sudah ke tengah, baru terbang.
+      if (k_.tutupMenunggu && b.page === 0 && !b.turning && Math.abs(b.userData.geser + 0.5) < 0.01) {
+        k_.tutupMenunggu = false;
+        pasangTween(k_.bacaT, k_.baca, 0, C.bacaKeluar * k_.baca, linear, performance.now());
+      }
       matahari.target.position.copy(b.position);
       matahari.position.copy(b.position).add(vTmp.set(-3.5, 1.3, 4.1).multiplyScalar(sk));
       const kb = matahari.shadow.camera;
@@ -966,8 +1027,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     bukaBuklet() {
       if (k_.keadaan !== "buka" || k_.dengar > 0.001) return;
       const p = proyek.find((x) => x.slug === k_.aktif);
+      k_.tutupMenunggu = false;
       if (!k_.buklet) {
-        const deform = { glsl: LENGKUNG_GLSL, uniforms: { uLengkung: { value: 0 } } };
+        const deform = { glsl: GULUNG_GLSL, uniforms: { uGulung: { value: new THREE.Vector4() }, uDatar: { value: 0 } } };
         let ilustrasi = null;
         if (p.ilustrasi) {
           ilustrasi = new Image();
@@ -1005,7 +1067,16 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     },
     tutupBuklet() {
       if (k_.keadaan !== "buklet") return;
-      pasangTween(k_.bacaT, k_.baca, 0, C.bacaKeluar * k_.baca, linear, performance.now());
+      const b = k_.buklet;
+      // Halaman dikembalikan ke sampul dulu, baru buklet terbang masuk ke tutup.
+      if (b && b.page > 0 && !kurangiGerak) {
+        b.enabled = false;
+        b.goTo(0, { animate: true });
+        k_.tutupMenunggu = true;
+      } else {
+        b?.goTo(0);
+        pasangTween(k_.bacaT, k_.baca, 0, C.bacaKeluar * k_.baca, linear, performance.now());
+      }
       k_.keadaan = "buka";
       kirim();
     },
