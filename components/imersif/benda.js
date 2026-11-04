@@ -34,13 +34,13 @@ export function buatLingkungan(renderer) {
   latar.addColorStop(1, "#020203");
   g.fillStyle = latar;
   g.fillRect(0, 0, 1024, 512);
-  for (const y of [0.14, 0.26, 0.4, 0.62]) {
-    const pita = g.createLinearGradient(0, (y - 0.03) * 512, 0, (y + 0.03) * 512);
+  for (const [y, t, kuat] of [[0.14, 0.07, 1], [0.4, 0.049, 0.6], [0.26, 0.077, 0.85], [0.62, 0.035, 0.35]]) {
+    const pita = g.createLinearGradient(0, (y - t) * 512, 0, (y + t) * 512);
     pita.addColorStop(0, "rgba(255,255,255,0)");
-    pita.addColorStop(0.5, "rgba(255,255,255,0.85)");
+    pita.addColorStop(0.5, `rgba(255,255,255,${kuat})`);
     pita.addColorStop(1, "rgba(255,255,255,0)");
     g.fillStyle = pita;
-    g.fillRect(0, (y - 0.03) * 512, 1024, 0.06 * 512);
+    g.fillRect(0, (y - t) * 512, 1024, 2 * t * 512);
   }
   const t = new THREE.CanvasTexture(c);
   t.mapping = THREE.EquirectangularReflectionMapping;
@@ -57,7 +57,7 @@ export function buatLingkungan(renderer) {
 // Bidang pita memuat sumbu X dunia dan arah (0, 0.75, 0.66); pita = exp(-(asin(r·n)/0.1)^2).
 const NORMAL_PITA = new THREE.Vector3(1, 0, 0).cross(new THREE.Vector3(0, 0.75, 0.66)).normalize();
 
-function pasangSheen(material, { kuat = 0.12, alfa = 0, fresnel = 0, tepi = 0 } = {}) {
+function pasangSheen(material, { kuat = 0.12, alfa = 0, fresnel = 0, kilau = false } = {}) {
   material.onBeforeCompile = (sh) => {
     sh.uniforms.uNormalPita = { value: NORMAL_PITA };
     sh.uniforms.uRedup = { value: 1 };
@@ -68,21 +68,63 @@ function pasangSheen(material, { kuat = 0.12, alfa = 0, fresnel = 0, tepi = 0 } 
         "#include <common>\nuniform vec3 uNormalPita;\nuniform float uRedup;",
       )
       .replace(
-        "#include <dithering_fragment>",
+        "#include <opaque_fragment>",
         `
-        vec3 vArah = normalize(vViewPosition);
-        vec3 rDunia = inverseTransformDirection(reflect(-vArah, normal), viewMatrix);
-        float sp = asin(clamp(dot(rDunia, uNormalPita), -1.0, 1.0)) / 0.1;
+        #ifdef USE_CLEARCOAT
+        outgoingLight -= reflectedLight.directSpecular * (1.0 - material.clearcoat * Fcc) + clearcoatSpecularDirect * material.clearcoat;
+        #else
+        outgoingLight -= reflectedLight.directSpecular;
+        #endif
+        // Membuang sorotan langsung bisa di bawah nol di sudut miring (bintik hitam).
+        outgoingLight = max(outgoingLight, vec3(0.0));
+        vec3 bidangPita = normalize((viewMatrix * vec4(uNormalPita, 0.0)).xyz);
+        float sp = asin(clamp(dot(reflect(-geometryViewDir, normal), bidangPita), -1.0, 1.0)) / 0.1;
         float pita = exp(-sp * sp);
-        float fr = pow(1.0 - abs(dot(normal, vArah)), 3.0);
-        gl_FragColor.rgb += ${kuat.toFixed(3)} * pita;
-        gl_FragColor.a = clamp(gl_FragColor.a + ${alfa.toFixed(3)} * pita + ${fresnel.toFixed(3)} * fr, 0.0, 1.0);
-        gl_FragColor.rgb *= uRedup;
-        #include <dithering_fragment>`,
+        float fr = pow(1.0 - abs(dot(normal, geometryViewDir)), 3.0);
+        // Logam memantulkan dengan warnanya sendiri.
+        float sheen = pita * ${kuat.toFixed(3)};
+        outgoingLight += mix(vec3(1.0), diffuseColor.rgb, metalnessFactor) * sheen;
+        float kilauLingkungan = ${kilau ? "dot(reflectedLight.indirectSpecular, vec3(0.3333)) + sheen" : "0.0"};
+        diffuseColor.a = clamp(diffuseColor.a + ${alfa.toFixed(3)} * pita + ${fresnel.toFixed(3)} * fr + kilauLingkungan, 0.0, 1.0);
+        outgoingLight *= uRedup;
+        #include <opaque_fragment>`,
       );
   };
-  material.customProgramCacheKey = () => `sheen-${kuat}-${alfa}-${fresnel}-${tepi}`;
+  material.customProgramCacheKey = () => `sheen-${kuat}-${alfa}-${fresnel}-${kilau}`;
   return material;
+}
+
+// Blur putar untuk cetakan cakram: tanpa ini cetakan berkedip (strobo) di 120 rpm.
+// uBlur = sudut yang ditempuh selama eksposur (radian), diisi tiap bingkai oleh adegan.
+function blurPutar(material) {
+  const asal = material.onBeforeCompile;
+  material.onBeforeCompile = (sh, r) => {
+    asal(sh, r);
+    sh.uniforms.uBlur = { value: 0 };
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nuniform float uBlur;")
+      .replace(
+        "#include <map_fragment>",
+        `#ifdef USE_MAP
+        vec4 tekstil = vec4(0.0);
+        vec2 d = vMapUv - 0.5;
+        for (int i = 0; i < 24; i++) {
+          float a = (float(i) / 23.0 - 0.5) * uBlur;
+          float c = cos(a), s = sin(a);
+          tekstil += texture2D(map, vec2(c * d.x - s * d.y, s * d.x + c * d.y) + 0.5);
+        }
+        diffuseColor *= tekstil / 24.0;
+        #endif`,
+      );
+  };
+  const kunci = material.customProgramCacheKey;
+  material.customProgramCacheKey = () => `${kunci()}-blur-putar`;
+  return material;
+}
+
+export function setBlurPutar(material, sudut) {
+  const sh = material.userData.shader;
+  if (sh?.uniforms.uBlur) sh.uniforms.uBlur.value = sudut;
 }
 
 // Peredup untuk cakram di kotak tertutup (tanpa bayangan, jadi diredupkan manual).
@@ -106,7 +148,7 @@ function tepiPlastik(geo, opasitas = 0.15) {
 const plastik = () =>
   pasangSheen(
     new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
+      color: 0xb9bcc0,
       roughness: 0.04,
       metalness: 0,
       transparent: true,
@@ -115,9 +157,10 @@ const plastik = () =>
       clearcoatRoughness: 0.04,
       side: THREE.DoubleSide,
       depthWrite: false,
-      envMapIntensity: 1.2,
+      forceSinglePass: true,
+      envMapIntensity: 1,
     }),
-    { kuat: 0.1, alfa: 0.12, fresnel: 0.3 },
+    { kuat: 0.12, fresnel: 0.45, kilau: true },
   );
 
 // --- cakram -----------------------------------------------------------------
@@ -169,8 +212,10 @@ function bahanSisiData() {
         }`,
       )
       .replace(
-        "#include <dithering_fragment>",
+        "#include <opaque_fragment>",
         `
+        outgoingLight -= reflectedLight.directSpecular;
+        outgoingLight = max(outgoingLight, vec3(0.0));
         vec3 V = normalize(cameraPosition - vDunia);
         vec3 rad = vDunia - uPusat;
         rad -= uSumbu * dot(rad, uSumbu);
@@ -183,9 +228,9 @@ function bahanSisiData() {
         float abu = dot(pelangi, vec3(0.299, 0.587, 0.114));
         pelangi = mix(vec3(abu), pelangi, 0.8);
         float riak = 1.0 + 0.025 * sin(jari * 520.0 / ${CAKRAM.r.toFixed(3)}) * (1.0 - clamp(fwidth(jari * 520.0) , 0.0, 1.0));
-        gl_FragColor.rgb = (gl_FragColor.rgb * 0.75 + 0.3) * riak + 0.45 * (g1 + 0.6 * g2) + 1.1 * pelangi;
-        gl_FragColor.rgb *= uRedup;
-        #include <dithering_fragment>`,
+        outgoingLight = (outgoingLight * 0.75 + 0.09) * riak + 0.2 * (g1 + 0.6 * g2) + 0.5 * pelangi;
+        outgoingLight *= uRedup;
+        #include <opaque_fragment>`,
       );
   };
   m.customProgramCacheKey = () => "sisi-data";
@@ -205,9 +250,8 @@ export function buatCakram(p, renderer) {
     }
     return geo;
   };
-  const cetak = pasangSheen(
-    new THREE.MeshPhysicalMaterial({ map: muka, roughness: 0.42, metalness: 0.48, clearcoat: 0.8 }),
-    { kuat: 0.18 },
+  const cetak = blurPutar(
+    pasangSheen(new THREE.MeshPhysicalMaterial({ map: muka, roughness: 0.42, metalness: 0.48, clearcoat: 0.8 }), { kuat: 0.18 }),
   );
   const depan = new THREE.Mesh(cincin(CAKRAM.cermin, CAKRAM.cetak), cetak);
   depan.position.z = mm(0.6);
@@ -274,7 +318,7 @@ export function buatKotak(p, locale, renderer, i) {
   badan.add(tepiDasar);
 
   const bahanNampan = pasangSheen(
-    new THREE.MeshPhysicalMaterial({ color: 0x151518, roughness: 0.5, clearcoat: 0.15, envMapIntensity: 1.8 }),
+    new THREE.MeshPhysicalMaterial({ color: 0x151518, roughness: 0.75, clearcoat: 0.15, clearcoatRoughness: 0.35, envMapIntensity: 1.8 }),
     { kuat: 0.06 },
   );
   const nampan = new THREE.Mesh(new RoundedBoxGeometry(mm(136), mm(121), mm(5), 2, mm(1.2)), bahanNampan);
@@ -303,7 +347,7 @@ export function buatKotak(p, locale, renderer, i) {
 
   // Rosette: cincin gigi di tengah nampan yang mencengkeram lubang cakram.
   const rosette = new THREE.Group();
-  const gigi = new THREE.BoxGeometry(mm(1.6), mm(2.4), mm(2.6));
+  const gigi = new THREE.BoxGeometry(mm(1.6), mm(2.4), mm(2.4));
   for (let k = 0; k < 12; k++) {
     const a = (k / 12) * Math.PI * 2;
     const g = new THREE.Mesh(gigi, bahanNampan);
@@ -313,7 +357,9 @@ export function buatKotak(p, locale, renderer, i) {
   }
   const cincinRosette = new THREE.Mesh(new THREE.TorusGeometry(mm(15), mm(0.8), 8, 64), bahanNampan);
   rosette.add(cincinRosette);
-  rosette.position.set(mm(6), 0, -KOTAK.d / 2 + mm(6.8));
+  // Lapisan z (kotak 10,4 mm): nampan sampai 0,8 mm, cakram 0,8 sampai 2,0, tumpukan buklet
+  // 2,0 sampai 3,2, sampul 3,3, lembar tutup 3,45 sampai 4,95. Gigi rosette berhenti di muka cakram.
+  rosette.position.set(mm(6), 0, -KOTAK.d / 2 + mm(6));
   badan.add(rosette);
 
   // Klip setengah cincin di tepi atas dan bawah nampan.
@@ -338,11 +384,11 @@ export function buatKotak(p, locale, renderer, i) {
   const sampul = new THREE.Mesh(
     new THREE.PlaneGeometry(BUKLET, BUKLET),
     pasangSheen(
-      new THREE.MeshPhysicalMaterial({ map: (petaSampul = tekstur(gambarSampul(p, locale), renderer)), emissiveMap: petaSampul, emissive: 0xffffff, emissiveIntensity: 0.35, roughness: 0.5 }),
+      new THREE.MeshPhysicalMaterial({ map: (petaSampul = tekstur(gambarSampul(p, locale), renderer)), roughness: 0.5 }),
       { kuat: 0.05 },
     ),
   );
-  sampul.position.set(mm(6), 0, -mm(1.6));
+  sampul.position.set(mm(6), 0, -mm(0.9));
   const belakangBuklet = new THREE.Mesh(
     new THREE.PlaneGeometry(BUKLET, BUKLET),
     new THREE.MeshStandardMaterial({
@@ -351,13 +397,14 @@ export function buatKotak(p, locale, renderer, i) {
     }),
   );
   belakangBuklet.rotation.y = Math.PI;
-  belakangBuklet.position.set(mm(6), 0, -mm(2.8));
+  belakangBuklet.position.set(mm(6), 0, -mm(2.25));
   // Tumpukan kertas buklet 1,2 mm di antara sampul depan dan belakang.
   const tumpukan = new THREE.Mesh(
     new THREE.BoxGeometry(BUKLET, BUKLET, mm(1.2)),
     new THREE.MeshStandardMaterial({ color: 0xebe4d6, roughness: 0.9 }),
   );
-  tumpukan.position.z = -mm(0.6);
+  // Muka depan tumpukan sedikit di belakang sampul supaya tidak berebut kedalaman.
+  tumpukan.position.z = -mm(0.7);
   sampul.add(tumpukan);
   const lembar = new THREE.Mesh(new RoundedBoxGeometry(KOTAK.w, KOTAK.h, mm(1.5), 2, mm(0.6)), plastik());
   const tepiLembar = tepiPlastik(lembar.geometry, 0.18);
@@ -374,7 +421,7 @@ export function buatKotak(p, locale, renderer, i) {
   ]) {
     const t = new THREE.Mesh(tabGeo, bahanTab);
     t.rotation.set(Math.PI / 2, 0, rot);
-    t.position.set(mm(6) + x, y, -mm(3.4));
+    t.position.set(mm(6) + x, y, -mm(2.7));
     const tepi = tepiPlastik(tabGeo, 0.25);
     tepi.position.copy(t.position);
     tepi.rotation.copy(t.rotation);
@@ -382,7 +429,7 @@ export function buatKotak(p, locale, renderer, i) {
   }
   for (const arah of [-1, 1]) {
     const rusuk = new THREE.Mesh(new THREE.BoxGeometry(mm(1.2), mm(24), mm(2)), bahanTab);
-    rusuk.position.set(mm(6) + BUKLET / 2 + mm(1), arah * mm(28), -mm(2.2));
+    rusuk.position.set(mm(6) + BUKLET / 2 + mm(1), arah * mm(28), -mm(1.6));
     tab.push(rusuk);
   }
   tutup.add(sampul, belakangBuklet, lembar, tepiLembar, ...tab);
@@ -396,6 +443,8 @@ export function buatKotak(p, locale, renderer, i) {
     if (o.isMesh) o.userData.slug = p.slug;
   });
   cakram.traverse((o) => (o.userData.bagian = "cakram"));
+  for (const m of [nampan, sisipan]) m.receiveShadow = true;
+  cakram.traverse((o) => o.isMesh && (o.receiveShadow = true));
   // Bagian dalam tutup: buklet yang bisa diklik untuk dibaca.
   for (const m of [sampul, belakangBuklet]) m.userData.bagian = "buklet";
   return { grup, badan, engsel, cakram, sampul, belakangBuklet, sasaran };
@@ -518,14 +567,15 @@ export function buatPemutar(renderer) {
     new THREE.CylinderGeometry(mm(17), mm(17), mm(2), 48),
     new THREE.MeshStandardMaterial({ color: 0x1b1b1d, roughness: 0.7 }),
   );
-  piring.position.y = mm(6);
+  // Puncak piringan 4,6 mm di bawah bibir; cakram (tebal 1,2 mm) duduk di atasnya.
+  piring.position.y = puncak - mm(5.6);
   for (let k = 0; k < 3; k++) {
     const bola = new THREE.Mesh(
       new THREE.SphereGeometry(mm(1.4), 12, 12),
       new THREE.MeshStandardMaterial({ color: 0xdedede, metalness: 1, roughness: 0.1 }),
     );
     const a = (k / 3) * Math.PI * 2;
-    bola.position.set(Math.cos(a) * mm(11), mm(7.5), Math.sin(a) * mm(11));
+    bola.position.set(Math.cos(a) * mm(6.2), puncak - mm(4), Math.sin(a) * mm(6.2));
     grup.add(bola);
   }
   const lensa = new THREE.Mesh(
@@ -616,7 +666,7 @@ export function buatPemutar(renderer) {
   bayangan.position.y = -mm(1.5);
   grup.add(bayangan);
 
-  return { grup, layar, tombol, lampu, puncakY: puncak + mm(3) };
+  return { grup, layar, tombol, lampu, puncakY: puncak + mm(3), kursiY: puncak - mm(4) };
 }
 
 export { gambarHalaman };
