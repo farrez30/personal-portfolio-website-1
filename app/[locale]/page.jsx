@@ -1,8 +1,7 @@
 import { setRequestLocale } from "next-intl/server";
 import Gerbang from "@/components/gerbang/Gerbang";
-import Rak from "@/components/rak/Rak";
+import RakSesuaiMode from "@/components/rak/RakSesuaiMode";
 import Contact from "@/components/contact/Contact";
-import PanggungMode from "@/components/imersif/PanggungMode";
 
 export default async function Beranda({ params }) {
   const { locale } = await params;
@@ -11,9 +10,8 @@ export default async function Beranda({ params }) {
   return (
     <>
       <Gerbang />
-      <Rak />
+      <RakSesuaiMode />
       <Contact />
-      <PanggungMode />
     </>
   );
 }

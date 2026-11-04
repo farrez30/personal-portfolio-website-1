@@ -133,7 +133,7 @@ vec3 deformSheet(vec3 p, vec2 uv) {
 
 const tween = () => ({ aktif: false, dari: 0, ke: 0, mulai: 0, durasi: 1, kurva: luncur });
 
-export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
+export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirHalaman = false }) {
   RectAreaLightUniformsLib.init();
   const sentuhKasar = matchMedia("(pointer: coarse)").matches;
   const renderer = new THREE.WebGLRenderer({
@@ -591,8 +591,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
 
   let tampil = true;
   const jalan = () => renderer.setAnimationLoop(tampil && !document.hidden ? bingkai : null);
+  let pernahTampil = false;
   const io = new IntersectionObserver(([en]) => {
     tampil = en.isIntersecting;
+    // Intro rak diputar saat bagian rak pertama kali masuk layar, bukan saat dimuat.
+    if (tampil && !pernahTampil) {
+      pernahTampil = true;
+      k_.introMulai = performance.now();
+    }
     jalan();
   });
   io.observe(wadah);
@@ -813,7 +819,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah }) {
   window.addEventListener("pointermove", gerak);
   window.addEventListener("pointerup", naik);
   kanvas.addEventListener("pointerleave", keluar);
-  kanvas.addEventListener("wheel", putarRoda, { passive: false });
+  // Di halaman utuh, roda menggulir halaman; gulir itulah yang memindah rak.
+  if (!gulirHalaman) kanvas.addEventListener("wheel", putarRoda, { passive: false });
 
   const api = {
     on(nama, fn) {

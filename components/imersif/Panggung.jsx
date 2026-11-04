@@ -11,9 +11,6 @@ import {
 } from "react-icons/pi";
 import { proyek as daftarProyek } from "@/content/proyek";
 import { albumMusik } from "@/content/musik";
-import { situs } from "@/content/situs";
-import Acak from "@/components/gerbang/Acak";
-import Contact from "@/components/contact/Contact";
 import Hologram from "./Hologram";
 
 // Rak imersif: semua proyek, lalu satu CD musik di ujung.
@@ -23,7 +20,7 @@ import "./panggung.css";
 
 // Mode Imersif: seluruh layar adalah rak CD. Semua yang bisa diklik di 3D punya
 // padanan tombol HTML di sini, jadi tetap bisa dipakai lewat keyboard.
-export default function Panggung() {
+export default function Panggung({ gulir }) {
   const t = useTranslations("panggung");
   const tr = useTranslations("rak");
   const tg = useTranslations("gerbang");
@@ -35,20 +32,49 @@ export default function Panggung() {
   const [s, setS] = useState({ fokus: 0, keadaan: "rak", aktif: null, terbalik: false, duduk: false, jalan: false });
   const [hover, setHover] = useState(null);
   const [sumur, setSumur] = useState(null);
-  const [panel, setPanel] = useState(null); // "tentang" | "kontak" | null
 
   const p = proyek[s.fokus];
 
-  // Halaman di belakang panggung tidak boleh tersentuh fokus.
+  // Selama album terbuka, halaman tidak ikut tergulir.
   useEffect(() => {
-    const isi = document.getElementById("isi");
-    isi?.setAttribute("inert", "");
-    document.documentElement.classList.add("panggung-aktif");
-    return () => {
-      isi?.removeAttribute("inert");
-      document.documentElement.classList.remove("panggung-aktif");
+    const kunci = s.keadaan !== "rak";
+    document.documentElement.classList.toggle("panggung-aktif", kunci);
+    return () => document.documentElement.classList.remove("panggung-aktif");
+  }, [s.keadaan]);
+
+  // Gulir halaman memindah rak: posisi gulir di dalam bagian rak dipetakan ke indeks album.
+  const posisiGulir = useCallback(() => {
+    const el = gulir?.current;
+    if (!el) return null;
+    const atas = el.getBoundingClientRect().top + window.scrollY;
+    const jarak = Math.max(1, el.offsetHeight - window.innerHeight);
+    return { atas, jarak };
+  }, [gulir]);
+
+  const keIndeksGulir = useCallback(
+    (i, halus = true) => {
+      const g = posisiGulir();
+      if (!g) return;
+      const k = Math.max(0, Math.min(proyek.length - 1, i));
+      window.scrollTo({ top: g.atas + (k / (proyek.length - 1)) * g.jarak, behavior: halus ? "smooth" : "instant" });
+    },
+    [posisiGulir],
+  );
+
+  useEffect(() => {
+    if (!siap) return;
+    const saatGulir = () => {
+      const a = adegan.current;
+      const g = posisiGulir();
+      if (!a || !g || a.keadaan !== "rak") return;
+      const p = (window.scrollY - g.atas) / g.jarak;
+      if (p < -0.02 || p > 1.02) return;
+      const i = Math.round(Math.max(0, Math.min(1, p)) * (proyek.length - 1));
+      a.fokus(i);
     };
-  }, []);
+    window.addEventListener("scroll", saatGulir, { passive: true });
+    return () => window.removeEventListener("scroll", saatGulir);
+  }, [siap, posisiGulir]);
 
   useEffect(() => {
     let batal = false;
@@ -60,6 +86,7 @@ export default function Panggung() {
         locale,
         kurangiGerak: matchMedia("(prefers-reduced-motion: reduce)").matches,
         onUbah: setS,
+        gulirHalaman: true,
       });
       a.on("klikKotak", (slug) => a.buka(slug));
       a.on("klikCakram", () => (a.keadaan === "putar" ? a.keluarkan() : a.dengarkan()));
@@ -73,7 +100,7 @@ export default function Panggung() {
         setSumur(nyala ? { x, y, w } : null);
       });
       adegan.current = a;
-      bacaHash(a);
+      bacaHash(a, false, keIndeksGulir);
       setSiap(true);
     });
     return () => {
@@ -99,7 +126,7 @@ export default function Panggung() {
 
   // Hash yang berubah dari luar (tombol Back, tautan) ikut diterapkan.
   useEffect(() => {
-    const ubah = () => adegan.current && bacaHash(adegan.current, true);
+    const ubah = () => adegan.current && bacaHash(adegan.current, true, keIndeksGulir);
     window.addEventListener("hashchange", ubah);
     return () => window.removeEventListener("hashchange", ubah);
   }, []);
@@ -132,12 +159,12 @@ export default function Panggung() {
   useEffect(() => {
     const tekan = (e) => {
       const a = adegan.current;
-      if (!a || panel || e.target?.closest?.("input, textarea, select, [contenteditable]")) return;
+      if (!a || e.target?.closest?.("input, textarea, select, [contenteditable]")) return;
       if (e.key === "Escape") {
         if (s.keadaan !== "rak") a.tutup();
       } else if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
         const arah = e.key === "ArrowRight" ? 1 : -1;
-        if (s.keadaan === "rak") a.geser(arah);
+        if (s.keadaan === "rak") keIndeksGulir(s.fokus + arah);
         else if (s.keadaan === "buklet") a.halaman(arah);
         else return;
         e.preventDefault();
@@ -150,7 +177,7 @@ export default function Panggung() {
     };
     window.addEventListener("keydown", tekan);
     return () => window.removeEventListener("keydown", tekan);
-  }, [s, p, panel]);
+  }, [s, p, keIndeksGulir]);
 
   // Kursor gelembung: lingkaran 76 px yang hanya diskalakan. Titik kecil saat diam,
   // membesar di atas benda yang bisa diklik, lebih besar di atas teks (warna dibalik),
@@ -190,7 +217,7 @@ export default function Panggung() {
   const a = adegan.current;
   const aktif = proyek.find((x) => x.slug === s.aktif) ?? p;
   const sudut = {
-    rak: { kiri: [t("tentang"), () => setPanel("tentang")] },
+    rak: { kiri: [t("tentang"), () => window.scrollTo({ top: 0, behavior: "smooth" })] },
     buka: { kiri: [t("tutup"), () => a?.tutup()] },
     buklet: { kiri: [t("tutup"), () => a?.tutup()] },
     putar: { kiri: [t("keluarkan"), () => a?.keluarkan()] },
@@ -210,10 +237,13 @@ export default function Panggung() {
         <button type="button" className="panggung__sudut" onClick={sudut.kiri[1]}>
           {sudut.kiri[0]}
         </button>
-        <p className="panggung__masthead">
-          {s.keadaan === "rak" && <Acak teks={tg("headline")} durasi={1800} tunda={300} />}
-        </p>
-        <button type="button" className="panggung__sudut" onClick={() => setPanel("kontak")}>
+        <span />
+        <button
+          type="button"
+          className="panggung__sudut"
+          onClick={() => document.getElementById("kontak")?.scrollIntoView({ behavior: "smooth" })}
+          disabled={s.keadaan !== "rak"}
+        >
           {t("kontak")}
         </button>
       </header>
@@ -221,7 +251,7 @@ export default function Panggung() {
       <footer className="panggung__kaki">
         <div className="panggung__pasangan">
           {s.keadaan === "rak" && (
-            <button type="button" className="panggung__sudut" onClick={() => a?.geser(-1)} disabled={s.fokus === 0} aria-label={tr("sebelumnya")}>
+            <button type="button" className="panggung__sudut" onClick={() => keIndeksGulir(s.fokus - 1)} disabled={s.fokus === 0} aria-label={tr("sebelumnya")}>
               ←
             </button>
           )}
@@ -276,7 +306,7 @@ export default function Panggung() {
 
         <div className="panggung__pasangan panggung__pasangan--kanan">
           {s.keadaan === "rak" && (
-            <button type="button" className="panggung__sudut" onClick={() => a?.geser(1)} disabled={s.fokus === proyek.length - 1} aria-label={tr("berikutnya")}>
+            <button type="button" className="panggung__sudut" onClick={() => keIndeksGulir(s.fokus + 1)} disabled={s.fokus === proyek.length - 1} aria-label={tr("berikutnya")}>
               →
             </button>
           )}
@@ -304,42 +334,20 @@ export default function Panggung() {
         {`${aktif.katalog} ${aktif.judul[locale]}, ${t(`keadaan.${s.keadaan}`)}`}
       </p>
 
-      {panel && (
-        <div className="panggung__panel" role="dialog" aria-modal="true" aria-label={t(panel)}>
-          <button type="button" className="panggung__sudut panggung__tutup-panel" onClick={() => setPanel(null)} autoFocus>
-            <PiXBold aria-hidden="true" /> {t("tutup")}
-          </button>
-          {panel === "tentang" ? (
-            <div className="panggung__tentang">
-              <p className="mono">{tg("peran")}</p>
-              <h2>{tg("headline")}</h2>
-              <p className="panggung__tentang-aksi">
-                <a className="tombol tombol--utama" href={situs.cv} download>
-                  {tg("unduhCV")}
-                </a>
-                <button type="button" className="tombol" onClick={() => setPanel("kontak")}>
-                  {tg("hubungi")}
-                </button>
-              </p>
-            </div>
-          ) : (
-            <Contact />
-          )}
-        </div>
-      )}
-
       <div ref={gelembung} className="gelembung" data-ada="0" aria-hidden="true" />
     </div>
   );
 }
 
-function bacaHash(a, dariLuar = false) {
+function bacaHash(a, dariLuar, keIndeksGulir) {
   const [, slug, aksi] = location.hash.split("/");
   const i = proyek.findIndex((p) => p.slug === slug);
   if (i < 0) return;
   if (dariLuar && a.keadaan !== "rak") a.tutup();
   if (dariLuar) a.fokus(i);
   else a.lompat(i);
+  // Tautan langsung ke album: gulir halaman ke posisi rak album itu.
+  if (!dariLuar && aksi) keIndeksGulir?.(i, false);
   if (aksi === "buka" || aksi === "putar" || aksi === "buklet") {
     a.buka(slug);
     if (aksi === "putar") setTimeout(() => a.dengarkan(), 1200);
