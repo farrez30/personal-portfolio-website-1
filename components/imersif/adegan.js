@@ -11,7 +11,7 @@ import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
 import { GULUNG_GLSL, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok } from "./gulung";
 import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
-import { gambarSampul, gambarHalaman, muatGambar } from "./gambar";
+import { gambarSampul, gambarHalaman, gambarBelakang, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
 
 // Satuan studi (1 = 60 mm) ke satuan kita (1 = 100 mm).
@@ -120,7 +120,7 @@ function halamanBuklet(p, locale, uv) {
   }
   // Halaman belakang sama persis dengan yang terlihat di tutup kotak, supaya tidak
   // ada tekstur yang berganti saat buklet ditarik keluar.
-  const belakang = { src: gambarHalaman({ label: p.katalog, catatan: `${p.judul[locale]}  ${p.periode}` }, 1024), alt: p.katalog };
+  const belakang = { src: gambarBelakang(p, locale, 1024), alt: p.katalog };
   while (hal.length < 3 || hal.length % 2 === 0) hal.push({ src: gambarHalaman({ label: "" }), alt: "" });
   hal.push(belakang);
   return hal;
@@ -489,7 +489,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (terbuka) {
         const face = p3io(kt.buka / 0.6);
         const lebarSpread = k_.sempit ? KOTAK.w * 1.35 : KOTAK.w * 2;
-        const skBuka = Math.min((0.8 * vw) / lebarSpread, (0.62 * vh) / KOTAK.h, 1.6);
+        // Kotak terbuka dengan ruang di sekelilingnya, seperti benda di atas meja.
+        const skBuka = Math.min(((k_.sempit ? 0.86 : 0.7) * vw) / lebarSpread, (0.46 * vh) / KOTAK.h, 1.6);
         const geserTengah = k_.sempit ? 0 : (KOTAK.w / 2) * swing * skBuka;
         pos2.set(geserTengah, 0.05, 0.3 * U);
         q2.copy(qBuka);

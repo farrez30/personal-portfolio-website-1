@@ -155,32 +155,110 @@ export function gambarSampul(p, locale, ukuran = 1024) {
 // sampai tepi. Tanpa alur: cakram cetak asli tidak punya alur di labelnya.
 export const CETAK_CAKRAM = { hub: 0.31, label: 0.345, tepi: 0.978, sisa: "#0c0c0e" };
 
+// Cakram bergambar (picture disc): ilustrasi proyek dicetak penuh di bidang cetak, dengan
+// nomor katalog kecil. Tanpa ilustrasi, warna proyek polos.
 export function gambarCakram(p, ukuran = 1024) {
   const [c, g] = kanvas(ukuran, ukuran);
   const m = ukuran / 2;
   const { hub, label, tepi, sisa } = CETAK_CAKRAM;
-  g.beginPath();
-  g.arc(m, m, m, 0, Math.PI * 2);
-  g.arc(m, m, m * hub, 0, Math.PI * 2, true);
-  g.clip("evenodd");
-  g.fillStyle = p.warna;
-  g.fillRect(0, 0, ukuran, ukuran);
-  g.fillStyle = "#f4efe7";
-  g.font = `500 ${ukuran * 0.035}px ${fontMono()}`;
-  g.textAlign = "center";
-  g.fillText(p.katalog, m, m * 1.45);
-  g.beginPath();
-  g.arc(m, m, m * label, 0, Math.PI * 2);
-  g.arc(m, m, m * hub, 0, Math.PI * 2, true);
-  g.fillStyle = "rgba(6, 6, 10, 0.2)";
-  g.fill("evenodd");
-  // Cetak berhenti sebelum tepi supaya cakram yang berputar tidak membawa garis terang.
-  g.beginPath();
-  g.arc(m, m, m, 0, Math.PI * 2);
-  g.arc(m, m, m * tepi, 0, Math.PI * 2, true);
-  g.fillStyle = sisa;
-  g.fill("evenodd");
+  const gambar = (im) => {
+    g.save();
+    g.clearRect(0, 0, ukuran, ukuran);
+    g.beginPath();
+    g.arc(m, m, m, 0, Math.PI * 2);
+    g.arc(m, m, m * hub, 0, Math.PI * 2, true);
+    g.clip("evenodd");
+    g.fillStyle = p.warna;
+    g.fillRect(0, 0, ukuran, ukuran);
+    if (im) {
+      const sk = Math.max(ukuran / im.naturalWidth, ukuran / im.naturalHeight);
+      const w = im.naturalWidth * sk;
+      const h = im.naturalHeight * sk;
+      g.drawImage(im, (ukuran - w) / 2, (ukuran - h) / 2, w, h);
+      // Sablon pada polikarbonat sedikit lebih gelap dan kurang jenuh dari kertas.
+      g.fillStyle = "rgba(20, 18, 16, 0.18)";
+      g.fillRect(0, 0, ukuran, ukuran);
+    }
+    g.fillStyle = "#f4efe7";
+    g.font = `600 ${ukuran * 0.03}px ${fontMono()}`;
+    g.textAlign = "center";
+    g.lineWidth = ukuran * 0.006;
+    g.strokeStyle = "rgba(20, 18, 16, 0.55)";
+    g.strokeText(p.katalog, m, m * 1.5);
+    g.fillText(p.katalog, m, m * 1.5);
+    g.beginPath();
+    g.arc(m, m, m * label, 0, Math.PI * 2);
+    g.arc(m, m, m * hub, 0, Math.PI * 2, true);
+    g.fillStyle = "rgba(6, 6, 10, 0.2)";
+    g.fill("evenodd");
+    // Cetak berhenti sebelum tepi supaya cakram yang berputar tidak membawa garis terang.
+    g.beginPath();
+    g.arc(m, m, m, 0, Math.PI * 2);
+    g.arc(m, m, m * tepi, 0, Math.PI * 2, true);
+    g.fillStyle = sisa;
+    g.fill("evenodd");
+    g.restore();
+  };
+  siapkanGambar(c, p.ilustrasi, gambar);
   return c;
+}
+
+// Halaman belakang buklet (yang terlihat di tutup kotak terbuka): ilustrasi proyek dicetak
+// satu warna, warna proyek, di atas kertas, dengan judul dan katalog kecil di bawah.
+export function gambarBelakang(p, locale, ukuran = 1024) {
+  const [c, g] = kanvas(ukuran, ukuran);
+  const s = ukuran / 512;
+  const gambar = (im) => {
+    g.fillStyle = "#efe9df";
+    g.fillRect(0, 0, ukuran, ukuran);
+    if (im) {
+      const sk = Math.max(ukuran / im.naturalWidth, ukuran / im.naturalHeight);
+      const w = im.naturalWidth * sk;
+      const h = im.naturalHeight * sk;
+      g.save();
+      g.filter = "grayscale(1) contrast(1.15) brightness(1.05)";
+      g.drawImage(im, (ukuran - w) / 2, (ukuran - h) / 2, w, h);
+      g.filter = "none";
+      // Satu warna: warna proyek menggantikan hitam, kertas tetap krem.
+      g.globalCompositeOperation = "screen";
+      g.fillStyle = p.warna;
+      g.fillRect(0, 0, ukuran, ukuran);
+      g.globalCompositeOperation = "multiply";
+      g.fillStyle = "#efe9df";
+      g.fillRect(0, 0, ukuran, ukuran);
+      g.restore();
+    }
+    g.fillStyle = "#efe9df";
+    g.fillRect(0, ukuran - 56 * s, ukuran, 56 * s);
+    g.fillStyle = "#1d1b19";
+    g.font = `500 ${11 * s}px ${fontMono()}`;
+    g.textBaseline = "middle";
+    g.fillText(`${p.katalog}  ${p.judul[locale]}  ${p.periode}`, 28 * s, ukuran - 28 * s);
+    butir(g, ukuran, ukuran, 0.08);
+  };
+  siapkanGambar(c, p.ilustrasi, gambar);
+  return c;
+}
+
+// Gambar sekarang bila ilustrasinya sudah termuat; bila belum, gambar versi tanpa ilustrasi
+// dan beri kanvas janji `siap` yang selesai setelah digambar ulang dengan ilustrasinya.
+function siapkanGambar(c, src, gambar) {
+  const im = src ? muatGambar(src) : null;
+  if (!im || (im.complete && im.naturalWidth)) {
+    gambar(im);
+    return;
+  }
+  gambar(null);
+  c.siap = new Promise((selesai) => {
+    im.addEventListener(
+      "load",
+      () => {
+        gambar(im);
+        selesai();
+      },
+      { once: true },
+    );
+  });
 }
 
 // Aus pada plastik mengilap: merah = goresan halus pendek, beberapa goresan panjang
