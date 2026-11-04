@@ -74,28 +74,87 @@ export function gambarSampul(p, locale, ukuran = 1024) {
   return c;
 }
 
+// Cetakan cakram sebagai cincin di sekitar hub bening (proporsi cakram asli, pecahan
+// jari-jari): cetak dari 0,345 sampai 0,978, pita cermin 0,31 sampai 0,345 yang sedikit
+// lebih gelap karena lapisan pantul terlihat lewat plastik polos, lalu hampir hitam
+// sampai tepi. Tanpa alur: cakram cetak asli tidak punya alur di labelnya.
+export const CETAK_CAKRAM = { hub: 0.31, label: 0.345, tepi: 0.978, sisa: "#0c0c0e" };
+
 export function gambarCakram(p, ukuran = 1024) {
   const [c, g] = kanvas(ukuran, ukuran);
   const m = ukuran / 2;
-  g.fillStyle = "#d9d6d0";
-  g.fillRect(0, 0, ukuran, ukuran);
-  g.fillStyle = p.warna;
+  const { hub, label, tepi, sisa } = CETAK_CAKRAM;
   g.beginPath();
-  g.arc(m, m, m * 0.98, 0, Math.PI * 2);
-  g.fill();
-  alur(g, m, m, m * 0.98, "#ffffff");
+  g.arc(m, m, m, 0, Math.PI * 2);
+  g.arc(m, m, m * hub, 0, Math.PI * 2, true);
+  g.clip("evenodd");
+  g.fillStyle = p.warna;
+  g.fillRect(0, 0, ukuran, ukuran);
   g.fillStyle = "#f4efe7";
   g.font = `500 ${ukuran * 0.035}px ${fontMono()}`;
   g.textAlign = "center";
   g.fillText(p.katalog, m, m * 1.45);
-  g.fillStyle = "#cfcac2";
   g.beginPath();
-  g.arc(m, m, m * 0.3, 0, Math.PI * 2);
-  g.fill();
-  g.fillStyle = "#111";
+  g.arc(m, m, m * label, 0, Math.PI * 2);
+  g.arc(m, m, m * hub, 0, Math.PI * 2, true);
+  g.fillStyle = "rgba(6, 6, 10, 0.2)";
+  g.fill("evenodd");
+  // Cetak berhenti sebelum tepi supaya cakram yang berputar tidak membawa garis terang.
   g.beginPath();
-  g.arc(m, m, m * 0.08, 0, Math.PI * 2);
-  g.fill();
+  g.arc(m, m, m, 0, Math.PI * 2);
+  g.arc(m, m, m * tepi, 0, Math.PI * 2, true);
+  g.fillStyle = sisa;
+  g.fill("evenodd");
+  return c;
+}
+
+// Aus pada plastik mengilap: merah = goresan halus pendek, beberapa goresan panjang
+// samar, dan pusaran busur bekas lap; hijau = noda lembut di sekitar abu-abu tengah.
+// Berulang (tile). Acaknya berbenih supaya tiap muat terlihat sama.
+export function gambarAus(ukuran = 512, benih = 11) {
+  const [c, g] = kanvas(ukuran, ukuran);
+  let s = benih >>> 0;
+  const acak = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+  g.fillStyle = "rgb(0, 110, 0)";
+  g.fillRect(0, 0, ukuran, ukuran);
+  g.globalCompositeOperation = "lighter";
+  g.lineCap = "round";
+  const gores = (panjang, alfa, tebal) => {
+    const x = acak() * ukuran;
+    const y = acak() * ukuran;
+    const a = acak() * Math.PI;
+    g.strokeStyle = `rgba(255, 0, 0, ${alfa})`;
+    g.lineWidth = tebal;
+    g.beginPath();
+    g.moveTo(x, y);
+    g.lineTo(x + Math.cos(a) * panjang, y + Math.sin(a) * panjang);
+    g.stroke();
+  };
+  for (let n = 0; n < 70; n++) gores(ukuran * (0.008 + acak() * 0.035), 0.2 + acak() * 0.4, 0.5 + acak() * 0.4);
+  for (let n = 0; n < 4; n++) gores(ukuran * (0.15 + acak() * 0.25), 0.15 + acak() * 0.2, 0.7);
+  for (let n = 0; n < 4; n++) {
+    const cx = acak() * ukuran;
+    const cy = acak() * ukuran;
+    for (let k = 0; k < 14; k++) {
+      const r = ukuran * (0.05 + acak() * 0.12);
+      const awal = acak() * Math.PI * 2;
+      g.strokeStyle = `rgba(255, 0, 0, ${0.1 + acak() * 0.15})`;
+      g.lineWidth = 0.6;
+      g.beginPath();
+      g.arc(cx, cy, r, awal, awal + 0.3 + acak() * 0.6);
+      g.stroke();
+    }
+  }
+  for (let n = 0; n < 26; n++) {
+    const x = acak() * ukuran;
+    const y = acak() * ukuran;
+    const r = ukuran * (0.03 + acak() * 0.08);
+    const noda = g.createRadialGradient(x, y, 0, x, y, r);
+    noda.addColorStop(0, `rgba(0, 255, 0, ${0.15 + acak() * 0.2})`);
+    noda.addColorStop(1, "rgba(0, 255, 0, 0)");
+    g.fillStyle = noda;
+    g.fillRect(x - r, y - r, r * 2, r * 2);
+  }
   return c;
 }
 
