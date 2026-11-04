@@ -21,6 +21,10 @@ should look like a real object photographed on a beige studio table, not a styli
 | `--aksen` | `#e0574b` | `#b3322a` | Primary button, highlights |
 | `--fokus` | `#f0b35a` | `#8a4b00` | Focus ring |
 
+The hero headline's last words get a yellow highlighter stroke (`#ffd84a`, ragged SVG edge,
+black text), swept word by word with scroll like a Vox explainer. Yellow appears only there; the
+struck-through first half keeps the red accent line, drawn above the letters.
+
 The rack stage has its own warm palette (`components/imersif/panggung.css`): `--ruang #e9e1d3`
 with a radial light and fine grain. The hologram uses one phosphor green, `--fosfor: 150 255 190`,
 nothing else.
