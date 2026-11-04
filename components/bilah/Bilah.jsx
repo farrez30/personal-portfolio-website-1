@@ -14,8 +14,8 @@ export default function Bilah() {
   return (
     <header className="bilah">
       <div className="wadah bilah__isi">
-        <Link href="/" className="bilah__nama mono">
-          FARREZ AL HAKIM
+        <Link href="/" className="bilah__nama mono" aria-label="Farrez Al Hakim">
+          FARREZ<span className="bilah__nama-ekor"> AL HAKIM</span>
         </Link>
         <div className="bilah__alat">
           <ModeSwitch />

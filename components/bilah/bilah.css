@@ -49,3 +49,26 @@
   text-decoration-color: var(--aksen);
   text-underline-offset: 4px;
 }
+
+/* Layar HP: bilah tetap satu baris supaya tidak menutupi navigasi pojok rak.
+   Nama dipendekkan dan hanya bahasa lain yang ditampilkan. */
+@media (max-width: 480px) {
+  .bilah__isi {
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+  }
+
+  .bilah__alat {
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+  }
+
+  .bilah__nama-ekor,
+  .bilah__bahasa a[aria-current="true"] {
+    display: none;
+  }
+
+  .bilah .saklar__opsi {
+    padding: 0 0.6rem;
+  }
+}
