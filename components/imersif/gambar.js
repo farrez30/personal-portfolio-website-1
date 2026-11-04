@@ -57,20 +57,95 @@ function alur(g, cx, cy, r, warna) {
   g.restore();
 }
 
+// Gambar yang dimuat sekali dan dipakai bersama (ilustrasi sampul dan halaman).
+const simpanan = new Map();
+export function muatGambar(src) {
+  if (!simpanan.has(src)) {
+    const im = new Image();
+    im.decoding = "async";
+    im.src = src;
+    simpanan.set(src, im);
+  }
+  return simpanan.get(src);
+}
+
+// Butir cetak: titik acak halus yang membuat gambar terasa dicetak di kertas, bukan layar.
+function butir(g, w, h, kuat = 0.06) {
+  const [c, gb] = kanvas(256, 256);
+  const data = gb.createImageData(256, 256);
+  for (let i = 0; i < data.data.length; i += 4) {
+    const v = Math.random() * 255;
+    data.data[i] = data.data[i + 1] = data.data[i + 2] = v;
+    data.data[i + 3] = 255;
+  }
+  gb.putImageData(data, 0, 0);
+  g.save();
+  g.globalAlpha = kuat;
+  g.globalCompositeOperation = "overlay";
+  g.fillStyle = g.createPattern(c, "repeat");
+  g.fillRect(0, 0, w, h);
+  g.restore();
+}
+
+// Sampul: ilustrasi orang yang memakai produknya, dicetak penuh di atas kertas krem,
+// dengan pita bawah berisi judul seperti sampul rilisan indie. Sebelum ilustrasinya
+// termuat (atau bila tidak ada), sampul warna polos dengan judul besar.
 export function gambarSampul(p, locale, ukuran = 1024) {
   const [c, g] = kanvas(ukuran, ukuran);
   const s = ukuran / 512;
-  g.fillStyle = p.warna;
-  g.fillRect(0, 0, ukuran, ukuran);
-  alur(g, ukuran * 0.86, ukuran * 0.9, ukuran * 0.62, "#ffffff");
-  g.fillStyle = "#f4efe7";
-  g.font = `650 ${44 * s}px ${fontKeluarga()}`;
-  g.textBaseline = "top";
-  tulisParagraf(g, p.judul[locale], 36 * s, 36 * s, 400 * s, 48 * s);
-  g.font = `500 ${15 * s}px ${fontMono()}`;
-  g.globalAlpha = 0.8;
-  g.fillText(`${p.katalog}  ${p.periode}`, 36 * s, 460 * s);
-  g.globalAlpha = 1;
+  const polos = () => {
+    g.fillStyle = p.warna;
+    g.fillRect(0, 0, ukuran, ukuran);
+    alur(g, ukuran * 0.86, ukuran * 0.9, ukuran * 0.62, "#ffffff");
+    g.fillStyle = "#f4efe7";
+    g.font = `650 ${44 * s}px ${fontKeluarga()}`;
+    g.textBaseline = "top";
+    tulisParagraf(g, p.judul[locale], 36 * s, 36 * s, 400 * s, 48 * s);
+    g.font = `500 ${15 * s}px ${fontMono()}`;
+    g.globalAlpha = 0.8;
+    g.fillText(`${p.katalog}  ${p.periode}`, 36 * s, 460 * s);
+    g.globalAlpha = 1;
+  };
+  const bergambar = (im) => {
+    const pita = 104 * s;
+    const tinggi = ukuran - pita;
+    g.fillStyle = "#efe9df";
+    g.fillRect(0, 0, ukuran, ukuran);
+    // Potong tengah supaya ilustrasi mengisi bidang atas tanpa gepeng.
+    const sk = Math.max(ukuran / im.naturalWidth, tinggi / im.naturalHeight);
+    const w = im.naturalWidth * sk;
+    const h = im.naturalHeight * sk;
+    g.drawImage(im, (ukuran - w) / 2, (tinggi - h) / 2, w, h);
+    // Pita bawah berwarna proyek, supaya tiap sampul di rak mudah dibedakan.
+    g.fillStyle = p.warna;
+    g.fillRect(0, tinggi, ukuran, pita);
+    g.fillStyle = "#f4efe7";
+    g.font = `650 ${26 * s}px ${fontKeluarga()}`;
+    g.textBaseline = "top";
+    tulisParagraf(g, p.judul[locale], 28 * s, tinggi + 18 * s, 360 * s, 28 * s);
+    g.font = `500 ${11 * s}px ${fontMono()}`;
+    g.fillStyle = "rgba(244, 239, 231, 0.75)";
+    g.textAlign = "right";
+    g.fillText(p.katalog, ukuran - 28 * s, tinggi + 22 * s);
+    g.fillText(p.periode, ukuran - 28 * s, tinggi + 40 * s);
+    g.textAlign = "left";
+    butir(g, ukuran, ukuran);
+  };
+  const im = p.ilustrasi ? muatGambar(p.ilustrasi) : null;
+  if (im?.complete && im.naturalWidth) {
+    bergambar(im);
+  } else {
+    polos();
+    if (im) {
+      // Pemakai kanvas (tekstur) menunggu ini lalu menandai teksturnya perlu diunggah ulang.
+      c.siap = new Promise((selesai) => {
+        im.addEventListener("load", () => {
+          bergambar(im);
+          selesai();
+        }, { once: true });
+      });
+    }
+  }
   return c;
 }
 

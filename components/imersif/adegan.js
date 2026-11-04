@@ -11,7 +11,7 @@ import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
 import { GULUNG_GLSL, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok } from "./gulung";
 import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
-import { gambarSampul, gambarHalaman } from "./gambar";
+import { gambarSampul, gambarHalaman, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
 
 // Satuan studi (1 = 60 mm) ke satuan kita (1 = 100 mm).
@@ -191,6 +191,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   rak.rotation.set(C.miringRak.x, C.miringRak.y, 0);
   scene.add(rak);
 
+  for (const p of proyek) if (p.ilustrasi) muatGambar(p.ilustrasi);
   const kotak = proyek.map((p, i) => {
     const k = buatKotak(p, locale, renderer, i);
     Object.assign(k, {
