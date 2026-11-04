@@ -1,22 +1,16 @@
 "use client";
-import dynamic from "next/dynamic";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { PiXBold } from "react-icons/pi";
 import { proyek } from "@/content/proyek";
-import { useMode } from "@/components/mode/ModeProvider";
 import AlbumIsi from "@/components/album/AlbumIsi";
 import Sampul from "./Sampul";
 import "./rak.css";
-
-// three.js hanya dimuat di mode Imersif, sesudah teks halaman tampil.
-const RakImersif = dynamic(() => import("@/components/imersif/RakImersif"), { ssr: false });
 
 export default function Rak() {
   const t = useTranslations("rak");
   const ta = useTranslations("album");
   const locale = useLocale();
-  const { mode } = useMode();
   const [aktif, setAktif] = useState(null);
   const dialog = useRef(null);
   const p = proyek.find((x) => x.slug === aktif) ?? null;
@@ -26,10 +20,10 @@ export default function Rak() {
   // Mode Ringan: album dibuka sebagai <dialog> bawaan (fokus terkunci, Esc menutup).
   useEffect(() => {
     const d = dialog.current;
-    if (!d || mode === "imersif") return;
+    if (!d) return;
     if (p && !d.open) d.showModal();
     if (!p && d.open) d.close();
-  }, [p, mode]);
+  }, [p]);
 
   return (
     <section id="rak" className="rak" aria-labelledby="rak-judul">
@@ -40,11 +34,7 @@ export default function Rak() {
         <p className="rak__petunjuk">{t("petunjuk")}</p>
       </div>
 
-      {mode === "imersif" && (
-        <RakImersif proyek={proyek} locale={locale} aktif={aktif} onBuka={setAktif} onTutup={tutup} />
-      )}
-
-      <ul className={`wadah rak__kisi ${mode === "imersif" ? "sr-only" : ""}`}>
+      <ul className="wadah rak__kisi">
         {proyek.map((x) => (
           <li key={x.slug}>
             <button type="button" className="rak__album" onClick={() => setAktif(x.slug)}>
@@ -60,7 +50,7 @@ export default function Rak() {
         ))}
       </ul>
 
-      {mode !== "imersif" && (
+      {(
         <dialog
           ref={dialog}
           className="rak__dialog"

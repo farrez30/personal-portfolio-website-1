@@ -11,7 +11,10 @@
     "headline": "Bukan sekadar sistem yang selesai dibuat, tapi sistem yang dipakai tiap hari.",
     "lihatProyek": "Lihat proyek",
     "hubungi": "Hubungi saya",
-    "unduhCV": "Unduh CV"
+    "unduhCV": "Unduh CV",
+    "headlineA": "Bukan sekadar sistem yang selesai dibuat,",
+    "headlineB": "tapi sistem yang dipakai tiap hari.",
+    "sorot": "dipakai tiap hari."
   },
   "mode": {
     "label": "Tampilan",
@@ -94,5 +97,35 @@
     "temaTerang": "Ganti ke tema terang",
     "temaGelap": "Ganti ke tema gelap",
     "lewati": "Lewati ke isi"
+  },
+  "panggung": {
+    "tentang": "Tentang",
+    "kontak": "Kontak",
+    "tutup": "Tutup",
+    "keluarkan": "Keluarkan",
+    "buklet": "Buklet",
+    "putarCakram": "Putar",
+    "bukaTab": "Buka di tab baru",
+    "memuat": "Memuat rak",
+    "pemutar": "Pemutar",
+    "putar": "Putar",
+    "jeda": "Jeda",
+    "sebelumnya": "Proyek sebelumnya",
+    "berikutnya": "Proyek berikutnya",
+    "halamanSebelumnya": "Halaman sebelumnya",
+    "halamanBerikutnya": "Halaman berikutnya",
+    "keadaan": {
+      "rak": "di rak",
+      "buka": "kotak terbuka",
+      "buklet": "buklet terbuka",
+      "putar": "di pemutar"
+    },
+    "layar": {
+      "desktop": "Desktop",
+      "hp": "HP",
+      "sinarx": "Sinar-x",
+      "tampilan": "Tampilan layar",
+      "sedangDisiapkan": "Tampilan langsung sedang disiapkan."
+    }
   }
 }

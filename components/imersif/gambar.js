@@ -99,6 +99,50 @@ export function gambarCakram(p, ukuran = 1024) {
   return c;
 }
 
+// Sisipan belakang kotak: seperti sisi belakang CD, "daftar lagu"-nya adalah
+// komponen sistem, ditambah ringkasan dan nomor katalog.
+export function gambarSisipan(p, locale, w = 1024, h = 900) {
+  const [c, g] = kanvas(w, h);
+  const s = w / 512;
+  g.fillStyle = "#e9e3d8";
+  g.fillRect(0, 0, w, h);
+  g.fillStyle = p.warna;
+  g.fillRect(0, 0, 22 * s, h);
+  g.fillRect(w - 22 * s, 0, 22 * s, h);
+  g.save();
+  g.translate(11 * s, h / 2);
+  g.rotate(-Math.PI / 2);
+  g.fillStyle = "#f4efe7";
+  g.font = `500 ${10 * s}px ${fontMono()}`;
+  g.textAlign = "center";
+  g.textBaseline = "middle";
+  g.fillText(`${p.katalog}  ${p.judul[locale]}`.toUpperCase(), 0, 0);
+  g.restore();
+  g.textBaseline = "top";
+  g.fillStyle = TINTA;
+  g.font = `650 ${22 * s}px ${fontKeluarga()}`;
+  let y = tulisParagraf(g, p.judul[locale], 44 * s, 32 * s, 420 * s, 26 * s) + 10 * s;
+  if (p.arsitektur) {
+    g.font = `400 ${12 * s}px ${fontMono()}`;
+    p.arsitektur.simpul.forEach((n, i) => {
+      g.fillText(`${String(i + 1).padStart(2, "0")}  ${n.label}`, 44 * s, y);
+      y += 19 * s;
+    });
+    y += 10 * s;
+  }
+  g.fillStyle = "#4f4a43";
+  g.font = `400 ${12 * s}px ${fontKeluarga()}`;
+  tulisParagraf(g, p.ringkas[locale], 44 * s, y, 420 * s, 17 * s);
+  g.fillStyle = TINTA;
+  for (let i = 0; i < 34; i++) {
+    const lebarBatang = (i * 7) % 3 === 0 ? 3 : 1.5;
+    g.fillRect(380 * s + i * 2.6 * s, 380 * s, lebarBatang * s * 0.6, 34 * s);
+  }
+  g.font = `400 ${10 * s}px ${fontMono()}`;
+  g.fillText(p.katalog, 380 * s, 418 * s);
+  return c;
+}
+
 // Halaman buklet persegi (kotak CD), dengan label bagian berbahasa Inggris
 // dan isi dalam bahasa halaman.
 export function gambarHalaman({ label, judul, isi, catatan }, ukuran = 1024) {

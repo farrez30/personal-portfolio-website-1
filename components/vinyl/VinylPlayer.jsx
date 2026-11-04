@@ -1,5 +1,6 @@
 "use client";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useMode } from "@/components/mode/ModeProvider";
 import "./vinyl.css";
 import { useTranslations } from "next-intl";
 import { PiPlayFill, PiPauseFill, PiXBold, PiMusicNotesBold } from "react-icons/pi";
@@ -16,6 +17,22 @@ const VinylPlayer = () => {
   // Suara selalu mati di awal; musik baru jalan saat pengunjung menekan putar.
   const [isPlaying, setIsPlaying] = useState(false);
   const [hidden, setHidden] = useState(false);
+  const { mode } = useMode();
+
+  // Di mode Imersif musik dikendalikan tombol Play pada pemutar CD.
+  useEffect(() => {
+    const dengar = (e) => {
+      const el = audioRef.current;
+      if (!el) return;
+      if (e.detail.jalan) el.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+      else {
+        el.pause();
+        setIsPlaying(false);
+      }
+    };
+    window.addEventListener("musik", dengar);
+    return () => window.removeEventListener("musik", dengar);
+  }, []);
 
   const togglePlay = () => {
     const el = audioRef.current;
@@ -30,6 +47,8 @@ const VinylPlayer = () => {
       setIsPlaying(false);
     }
   };
+
+  if (mode === "imersif") return <audio ref={audioRef} src={PREVIEW_SRC} loop preload="none" />;
 
   return (
     <>

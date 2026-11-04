@@ -13,7 +13,7 @@ const JARAK_Y = 80;
 // Lapisan bawah: diagram arsitektur (SVG, selalu ada dan terbaca).
 // Lapisan atas, hanya di mode Imersif: kanvas sampul yang tersibak di bawah
 // kursor lalu pelan-pelan menutup lagi, seperti cairan.
-export default function SinarX({ arsitektur, warna }) {
+export default function SinarX({ arsitektur, warna, gambar = null }) {
   const t = useTranslations("album");
   const { mode } = useMode();
   const kanvas = useRef(null);
@@ -40,11 +40,19 @@ export default function SinarX({ arsitektur, warna }) {
     let lebar = 0;
     let tinggi = 0;
 
+    const img = gambar ? Object.assign(new Image(), { src: gambar }) : null;
     const isi = (alpha) => {
       g.globalCompositeOperation = "source-over";
       g.globalAlpha = alpha;
       g.fillStyle = warna;
       g.fillRect(0, 0, lebar, tinggi);
+      // Permukaan berupa layar produk bila ada; sinar-x menyibaknya.
+      if (img?.complete && img.naturalWidth) {
+        const sk = Math.max(lebar / img.naturalWidth, tinggi / img.naturalHeight);
+        g.drawImage(img, 0, 0, img.naturalWidth * sk, img.naturalHeight * sk);
+        g.globalAlpha = 1;
+        return;
+      }
       g.globalAlpha = alpha * 0.16;
       g.strokeStyle = "#ffffff";
       g.beginPath();
@@ -111,7 +119,7 @@ export default function SinarX({ arsitektur, warna }) {
       c.removeEventListener("pointerleave", lepas);
       window.removeEventListener("resize", ukur);
     };
-  }, [tutupi, warna]);
+  }, [tutupi, warna, gambar]);
 
   return (
     <figure className="sinarx">

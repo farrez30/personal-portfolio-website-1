@@ -11,7 +11,10 @@
     "headline": "Not just a system that ships. A system people use every day.",
     "lihatProyek": "See the work",
     "hubungi": "Get in touch",
-    "unduhCV": "Download CV"
+    "unduhCV": "Download CV",
+    "headlineA": "Not just a system that ships.",
+    "headlineB": "A system people use every day.",
+    "sorot": "use every day."
   },
   "mode": {
     "label": "View",
@@ -94,5 +97,35 @@
     "temaTerang": "Switch to light theme",
     "temaGelap": "Switch to dark theme",
     "lewati": "Skip to content"
+  },
+  "panggung": {
+    "tentang": "About",
+    "kontak": "Contact",
+    "tutup": "Close",
+    "keluarkan": "Eject",
+    "buklet": "Booklet",
+    "putarCakram": "Play",
+    "bukaTab": "Open in new tab",
+    "memuat": "Loading the shelf",
+    "pemutar": "Player",
+    "putar": "Play",
+    "jeda": "Pause",
+    "sebelumnya": "Previous project",
+    "berikutnya": "Next project",
+    "halamanSebelumnya": "Previous page",
+    "halamanBerikutnya": "Next page",
+    "keadaan": {
+      "rak": "on the shelf",
+      "buka": "case open",
+      "buklet": "booklet open",
+      "putar": "in the player"
+    },
+    "layar": {
+      "desktop": "Desktop",
+      "hp": "Phone",
+      "sinarx": "X-ray",
+      "tampilan": "Screen view",
+      "sedangDisiapkan": "The live view is being set up."
+    }
   }
 }

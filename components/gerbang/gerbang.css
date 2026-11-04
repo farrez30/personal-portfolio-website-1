@@ -1,5 +1,15 @@
+/* Hero setinggi beberapa layar; isinya menempel selama gulir menggerakkan headline. */
 .gerbang {
-  padding-block: clamp(4rem, 14vh, 9rem) clamp(3rem, 8vh, 5rem);
+  height: 230vh;
+}
+
+.gerbang__tempel {
+  position: sticky;
+  top: 60px;
+  min-height: calc(100vh - 60px);
+  display: grid;
+  align-content: center;
+  padding-block: 3rem;
 }
 
 .gerbang__peran {
@@ -7,17 +17,43 @@
   margin-bottom: 1.25rem;
 }
 
-.gerbang__judul {
-  max-width: 18ch;
+.hg {
+  --p: 1;
+  max-width: 20ch;
   font-size: clamp(2.25rem, 6.2vw, 4.75rem);
   font-weight: 650;
   letter-spacing: -0.025em;
-  line-height: 1.04;
+  line-height: 1.06;
 }
 
-.kata {
+/* Bagian pertama: tercoret dari kiri ke kanan antara p 0,1 dan 0,4. */
+.hg__a {
+  --c: clamp(0, calc((var(--p) - 0.1) / 0.3), 1);
+  color: color-mix(in srgb, var(--ink) calc(100% - var(--c) * 45%), var(--ink-3));
+}
+
+.hg__coret {
+  background-image: linear-gradient(var(--aksen), var(--aksen));
+  background-repeat: no-repeat;
+  background-position: 0 58%;
+  background-size: calc(var(--c) * 100%) 0.07em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Bagian kedua: tiap kata naik bergiliran antara p 0,35 dan 0,8. */
+.hg__kata {
+  --k: clamp(0, calc((var(--p) - 0.35 - var(--i) / var(--n) * 0.3) / 0.15), 1);
   display: inline-block;
   white-space: pre;
+  opacity: calc(0.12 + var(--k) * 0.88);
+  transform: translateY(calc((1 - var(--k)) * 0.45em));
+  filter: blur(calc((1 - var(--k)) * 4px));
+}
+
+.hg__kata--sorot {
+  --s: clamp(0, calc((var(--p) - 0.75) / 0.15), 1);
+  color: color-mix(in srgb, var(--aksen) calc(var(--s) * 100%), var(--ink));
 }
 
 .gerbang__aksi {
@@ -25,4 +61,15 @@
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 2.25rem;
+}
+
+/* Tanpa JS (atau gerak dikurangi) hero tidak perlu panjang. */
+.gerbang:not(:has([data-gerak])) {
+  height: auto;
+}
+
+.gerbang:not(:has([data-gerak])) .gerbang__tempel {
+  position: static;
+  min-height: 0;
+  padding-block: clamp(4rem, 14vh, 9rem) clamp(3rem, 8vh, 5rem);
 }

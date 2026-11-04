@@ -1,0 +1,493 @@
+/* Mode Imersif: seluruh layar di bawah bilah atas adalah ruang krem tempat rak berdiri.
+   Krem dipakai di kedua tema; di latar hitam tepi kotak bening terbaca sebagai garis putih. */
+html.panggung-aktif,
+html.panggung-aktif body {
+  overflow: hidden;
+}
+
+.panggung {
+  --ruang: #e9e1d3;
+  --ruang-tinta: #22201d;
+  --ruang-tinta-2: #6b645a;
+  position: fixed;
+  inset: 60px 0 0;
+  z-index: 30;
+  color: var(--ruang-tinta);
+  background:
+    radial-gradient(120% 90% at 50% 40%, #f1ebdf 0%, var(--ruang) 55%, #d9cfbd 100%);
+  overflow: hidden;
+}
+
+/* Butiran halus di atas segalanya, seperti kertas. */
+.panggung::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.14;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+
+.panggung__kanvas {
+  position: absolute;
+  inset: 0;
+  touch-action: pan-y;
+}
+
+.panggung__kanvas canvas {
+  width: 100%;
+  height: 100%;
+  cursor: none;
+}
+
+.panggung__muat {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 5;
+}
+
+.panggung__cincin {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid color-mix(in srgb, var(--ruang-tinta) 25%, transparent);
+  border-top-color: var(--ruang-tinta);
+  animation: panggung-putar 1s linear infinite;
+}
+
+@keyframes panggung-putar {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+.panggung__kepala,
+.panggung__kaki {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem clamp(1rem, 3vw, 2rem);
+  pointer-events: none;
+}
+
+.panggung__kepala {
+  top: 0;
+  align-items: start;
+}
+
+.panggung__kaki {
+  bottom: 0;
+  align-items: end;
+}
+
+.panggung__kepala > *,
+.panggung__kaki > * {
+  pointer-events: auto;
+}
+
+.panggung__kepala > :last-child {
+  justify-self: end;
+}
+
+.panggung__sudut {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--ruang-tinta);
+  font-size: 1rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--t-sedang) var(--ease);
+}
+
+.panggung__sudut:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: var(--aksen);
+}
+
+.panggung__sudut:disabled {
+  opacity: 0.3;
+  cursor: default;
+  text-decoration: none;
+}
+
+.panggung__masthead {
+  max-width: 34ch;
+  text-align: center;
+  font-size: clamp(1.05rem, 1.8vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+.panggung__pasangan {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.panggung__pasangan--kanan {
+  justify-content: end;
+}
+
+.panggung__keterangan {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.panggung__judul {
+  display: grid;
+  gap: 0.2rem;
+  justify-items: center;
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+
+.panggung--buka .panggung__judul,
+.panggung--putar .panggung__judul,
+.panggung--buklet .panggung__judul {
+  cursor: default;
+}
+
+.panggung__info {
+  color: var(--ruang-tinta-2);
+  font-size: 0.75rem;
+}
+
+.panggung__nama {
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 650;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.panggung__ringkas {
+  max-width: 46ch;
+  color: var(--ruang-tinta-2);
+  font-size: 0.9375rem;
+}
+
+.panggung__transport {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ruang) 60%, transparent);
+}
+
+.panggung__transport button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--ruang-tinta);
+  cursor: pointer;
+}
+
+.panggung__transport button[aria-pressed="true"] {
+  background: var(--ruang-tinta);
+  color: var(--ruang);
+}
+
+.panggung__transport button:disabled {
+  opacity: 0.3;
+}
+
+/* Panel Tentang dan Kontak: lembar kertas yang menutupi ruang. */
+.panggung__panel {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--ink);
+  padding: clamp(1rem, 4vw, 3rem);
+  animation: panggung-masuk var(--t-sedang) var(--ease);
+}
+
+@keyframes panggung-masuk {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+.panggung__panel .panggung__sudut {
+  color: var(--ink);
+}
+
+.panggung__tutup-panel {
+  position: sticky;
+  top: 0;
+}
+
+.panggung__panel .kontak {
+  border-top: 0;
+  padding-block: 1rem;
+}
+
+.panggung__tentang {
+  max-width: 48rem;
+  margin: 10vh auto 0;
+  display: grid;
+  gap: 1.25rem;
+}
+
+.panggung__tentang .mono {
+  color: var(--ink-3);
+}
+
+.panggung__tentang h2 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.panggung__tentang-aksi {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+/* Kursor gelembung. */
+.gelembung {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 50;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  border-radius: 50%;
+  background: var(--ruang-tinta);
+  pointer-events: none;
+  transition:
+    width 180ms var(--ease),
+    height 180ms var(--ease),
+    margin 180ms var(--ease),
+    opacity 180ms var(--ease);
+}
+
+.gelembung[data-ada="0"] {
+  opacity: 0;
+}
+
+.gelembung[data-besar="1"] {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  opacity: 0.85;
+}
+
+@media (hover: none) {
+  .gelembung {
+    display: none;
+  }
+}
+
+/* Layar proyektor PiP. */
+.layar {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.layar__sinar {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: screen;
+  animation: layar-nyala 900ms var(--ease) both;
+}
+
+@keyframes layar-nyala {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.9;
+  }
+  40% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.layar__bingkai {
+  position: absolute;
+  right: clamp(1rem, 4vw, 3rem);
+  top: 50%;
+  transform: translateY(-55%);
+  width: min(46vw, 760px);
+  display: grid;
+  gap: 0.5rem;
+  pointer-events: auto;
+  animation: layar-nyala 900ms 150ms var(--ease) both;
+}
+
+.layar[data-perangkat="hp"] .layar__bingkai {
+  width: min(24vw, 360px);
+}
+
+.layar__alat {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+
+.layar__alat button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 36px;
+  padding: 0 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--ruang-tinta) 25%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ruang) 70%, transparent);
+  color: var(--ruang-tinta);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.layar__alat button[aria-pressed="true"] {
+  background: var(--ruang-tinta);
+  color: var(--ruang);
+}
+
+.layar__alat button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.layar__isi {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #11100f;
+  box-shadow:
+    0 0 0 1px rgb(255 243 217 / 0.45),
+    0 0 40px rgb(255 238 205 / 0.35),
+    0 30px 60px -30px rgb(0 0 0 / 0.5);
+}
+
+/* Garis pindai halus: kesan layar hasil proyeksi. */
+.layar__isi::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgb(255 255 255 / 0.04) 0 1px, transparent 1px 3px);
+}
+
+.layar[data-perangkat="hp"] .layar__isi {
+  aspect-ratio: 9 / 18;
+}
+
+.layar__frame,
+.layar__gambar {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+  object-position: top;
+  background: #fff;
+}
+
+.layar__kosong {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  color: #f4efe7;
+}
+
+.layar__isi .sinarx,
+.layar__isi .sinarx__panggung {
+  height: 100%;
+}
+
+.layar__isi .sinarx figcaption {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.75rem;
+  color: rgb(244 239 231 / 0.7);
+}
+
+@media (max-width: 650px) {
+  .panggung__kepala {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .panggung__masthead {
+    font-size: 0.95rem;
+  }
+
+  .panggung__kaki {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "kiri kanan" "teks teks";
+  }
+
+  .panggung__kaki > :nth-child(1) {
+    grid-area: kiri;
+  }
+
+  .panggung__kaki > :nth-child(2) {
+    grid-area: teks;
+  }
+
+  .panggung__kaki > :nth-child(3) {
+    grid-area: kanan;
+  }
+
+  .layar__sinar {
+    display: none;
+  }
+
+  .layar__bingkai,
+  .layar[data-perangkat="hp"] .layar__bingkai {
+    top: auto;
+    bottom: 9.5rem;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    transform: none;
+  }
+
+  .layar__isi,
+  .layar[data-perangkat="hp"] .layar__isi {
+    aspect-ratio: 16 / 11;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panggung__cincin,
+  .layar__sinar,
+  .layar__bingkai,
+  .panggung__panel {
+    animation: none;
+  }
+}

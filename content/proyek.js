@@ -160,6 +160,10 @@ export const proyek = [
     warna: "#5c4a2a",
     tautan: { situs: "https://akarkita.vercel.app/warisan" },
     gambar: null,
+    // Tampilan langsung di layar proyektor menyala setelah AkarKita mengizinkan
+    // farrez.vercel.app di frame-ancestors (sesi terpisah, 5 Nov 2026).
+    tanam: false,
+    layar: { desktop: "/assets/layar/akarkita-desktop.jpg", hp: "/assets/layar/akarkita-hp.jpg" },
     ringkas: {
       id: "Pohon keluarga privat, hanya lewat undangan. Sebutan kerabat Sunda dan garis suku Minang ikut dihitung, jadi yang muda tahu harus memanggil siapa dengan sebutan apa.",
       en: "A private, invite-only family tree. It works out Sundanese kinship terms and Minang clan lines, so the younger ones know what to call whom.",
