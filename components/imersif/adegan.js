@@ -681,7 +681,16 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       for (let x = o; x; x = x.parent) if (!x.visible) return false;
       return true;
     };
-    return ray.intersectObjects(sasaran, true).find((h) => tampak(h.object)) ?? null;
+    const h = ray.intersectObjects(sasaran, true).find((x) => tampak(x.object)) ?? null;
+    // Kotak terbuka: yang menentukan adalah sisi yang diklik, bukan mesh mana yang kena
+    // (plastik bening tutup dan dasar menutupi cakram dan buklet). Separuh kiri = tutup
+    // berisi buklet, separuh kanan = nampan berisi cakram.
+    if (h && ak && k_.keadaan === "buka" && h.object.userData.slug === ak.p.slug) {
+      const lokal = ak.grup.worldToLocal(h.point.clone());
+      const bagian = lokal.x < -KOTAK.w / 2 + 0.02 ? "buklet" : "cakram";
+      return { ...h, object: { userData: { slug: ak.p.slug, bagian } } };
+    }
+    return h;
   };
 
   let tahan = 0;
