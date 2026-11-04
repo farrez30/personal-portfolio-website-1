@@ -64,7 +64,8 @@
   white-space: pre;
   opacity: calc(0.12 + var(--k) * 0.88);
   transform: translateY(calc((1 - var(--k)) * 0.45em));
-  filter: blur(calc((1 - var(--k)) * 4px));
+  /* Blur ikut ukuran huruf: di judul 76 px sekitar 12 px, cukup kabur sebelum kata naik. */
+  filter: blur(calc((1 - var(--k)) * 0.16em));
 }
 
 .hg__kata--sorot {
