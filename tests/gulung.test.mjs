@@ -77,3 +77,19 @@ test("GLSL memuat fungsi deformSheet dan tidak berisi NaN", () => {
   assert.match(GULUNG_GLSL, /vec3 deformSheet\(vec3 p, vec2 uv\)/);
   assert.doesNotMatch(GULUNG_GLSL, /NaN|undefined|Infinity/);
 });
+
+test("jalur HP (sisi -1, tutup 110 derajat) adalah cermin: tengah bergerak ke arah sebaliknya", () => {
+  const kanan = aturGulung(gulungDari(0.5, 1, 180), {}, 1, 180);
+  const kiri = aturGulung(gulungDari(0.5, -1, 110), {}, -1, 110);
+  assert.ok(letakTengah(kanan)[0] < 0, "layar lebar: punggung keluar ke -x");
+  assert.ok(letakTengah(kiri)[0] > 0, "HP: tepi depan keluar ke +x");
+  assert.ok(dekat(letakTengah(aturGulung(gulungDari(1, -1, 110), {}, -1, 110))[2], Math.PI, 1e-6));
+});
+
+test("jalur HP juga menjaga panjang kertas dan mendarat datar", () => {
+  for (const k of [0.2, 0.5, 0.8]) {
+    const g = aturGulung(gulungDari(k, -1, 110), {}, -1, 110);
+    assert.ok(dekat(panjang(titik(g, 0, 400)), UKURAN, 2e-4));
+    for (const [, z, a] of titik(g, 1)) assert.ok(dekat(z, 0, 1e-9) && dekat(a, 0, 1e-9));
+  }
+});
