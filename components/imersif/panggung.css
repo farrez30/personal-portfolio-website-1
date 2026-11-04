@@ -1,11 +1,6 @@
 /* Mode Imersif: seluruh layar di bawah bilah atas adalah ruang krem tempat rak berdiri.
    Krem dipakai di kedua tema; di latar hitam tepi kotak bening terbaca sebagai garis putih. */
-/* Selama album terbuka, halaman tidak ikut tergulir. */
-html.panggung-aktif,
-html.panggung-aktif body {
-  overflow: hidden;
-  overscroll-behavior: none;
-}
+
 
 .rak-gulir {
   position: relative;

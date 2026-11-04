@@ -35,11 +35,22 @@ export default function Panggung({ gulir }) {
 
   const p = proyek[s.fokus];
 
-  // Selama album terbuka, halaman tidak ikut tergulir.
+  // Selama album terbuka, halaman tidak ikut tergulir. Roda, sentuhan, dan tombol
+  // gulir ditahan; overflow tidak diubah karena itu merusak elemen sticky.
   useEffect(() => {
-    const kunci = s.keadaan !== "rak";
-    document.documentElement.classList.toggle("panggung-aktif", kunci);
-    return () => document.documentElement.classList.remove("panggung-aktif");
+    if (s.keadaan === "rak") return;
+    const tahan = (e) => e.preventDefault();
+    const tombol = (e) => {
+      if (["PageDown", "PageUp", "Home", "End", " ", "ArrowDown", "ArrowUp"].includes(e.key) && !e.target?.closest?.("input, textarea")) e.preventDefault();
+    };
+    window.addEventListener("wheel", tahan, { passive: false });
+    window.addEventListener("touchmove", tahan, { passive: false });
+    window.addEventListener("keydown", tombol);
+    return () => {
+      window.removeEventListener("wheel", tahan);
+      window.removeEventListener("touchmove", tahan);
+      window.removeEventListener("keydown", tombol);
+    };
   }, [s.keadaan]);
 
   // Gulir halaman memindah rak: posisi gulir di dalam bagian rak dipetakan ke indeks album.

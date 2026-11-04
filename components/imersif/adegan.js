@@ -116,7 +116,11 @@ function halamanBuklet(p, locale) {
     c.getContext("2d").drawImage(d, 80, 220, 864, 640);
     hal.push({ src: c, alt: LABEL.architecture, text: p.arsitektur.simpul.map((s) => s.label).join(", ") });
   }
-  while (hal.length < 4 || hal.length % 2 === 1) hal.push({ src: gambarHalaman({ label: p.katalog }), alt: p.katalog });
+  // Halaman belakang sama persis dengan yang terlihat di tutup kotak, supaya tidak
+  // ada tekstur yang berganti saat buklet ditarik keluar.
+  const belakang = { src: gambarHalaman({ label: p.katalog, catatan: `${p.judul[locale]}  ${p.periode}` }, 512), alt: p.katalog };
+  while (hal.length < 3 || hal.length % 2 === 0) hal.push({ src: gambarHalaman({ label: "" }), alt: "" });
+  hal.push(belakang);
   return hal;
 }
 
@@ -470,7 +474,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       kt.grup.position.lerp(pos, laju);
       kt.grup.quaternion.slerp(q, laju);
       kt.grup.scale.lerp(sk3, laju);
-      kt.sampul.visible = !(kt === aktifK && k_.buklet);
+      // Buklet di tutup disembunyikan selama salinannya (LeafThrough) sedang keluar.
+      kt.sampul.visible = kt.belakangBuklet.visible = !(kt === aktifK && k_.buklet);
     }
 
     // --- pemutar -----------------------------------------------------------
@@ -559,6 +564,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       aktifK.sampul.updateWorldMatrix(true, false);
       aktifK.sampul.matrixWorld.decompose(pos, q, sk3);
       const skAsal = BUKLET * sk3.x;
+      // Sampul LeafThrough terbentang x 0..1 dari punggung, sampul di tutup terpusat:
+      // geser titik asal setengah halaman ke arah punggung supaya bingkai pertama tidak melompat.
+      pos.addScaledVector(vTmp.set(1, 0, 0).applyQuaternion(q), -0.5 * skAsal);
       const sk = skAsal + (skBaca - skAsal) * u;
       // Sampul tertutup ada di x 0..1 (depan) atau -1..0 (belakang); geser ke tengah.
       const tutupDepan = b.page === 0 && !b.turning;
@@ -567,11 +575,13 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       b.userData.geser = (b.userData.geser ?? geserTutup) + (geserTutup - (b.userData.geser ?? geserTutup)) * Math.min(1, dt * 5);
       pos2.set((b.userData.geser - (hal.x + hal.width / 2)) * skBaca, 0.03 * vh, 0.3 * U);
       b.position.lerpVectors(pos, pos2, u);
-      b.position.z += Math.sin(Math.PI * u) * 1.2 * U;
+      // Busur kecil keluar dari tutup; terlalu dekat ke kamera membuatnya membesar keluar layar.
+      b.position.z += Math.sin(Math.PI * u) * 0.12 * U;
       b.quaternion.slerpQuaternions(q, qTmp.identity(), u);
       b.scale.setScalar(sk);
       const settle = jepit((k_.baca - 0.55) / 0.45);
-      b.userData.deform.uniforms.uLengkung.value = Math.sin(Math.PI * jepit(k_.baca / 0.7)) * 1.1 * (1 - settle * settle);
+      // Paling melengkung tepat saat buklet berputar di punggung, supaya tidak tampak sebagai garis tipis.
+      b.userData.deform.uniforms.uLengkung.value = Math.sin(Math.PI * jepit(k_.baca / 0.7)) * 1.5 * (1 - settle * settle);
       b.enabled = k_.baca > 0.999 && k_.keadaan === "buklet";
       const antre = k_.antreHalaman;
       if (antre && b.enabled && !b.turning) {

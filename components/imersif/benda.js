@@ -323,7 +323,7 @@ export function buatKotak(p, locale, renderer, i) {
   cakram.traverse((o) => (o.userData.bagian = "cakram"));
   // Bagian dalam tutup: buklet yang bisa diklik untuk dibaca.
   for (const m of [sampul, belakangBuklet]) m.userData.bagian = "buklet";
-  return { grup, badan, engsel, cakram, sampul, sasaran };
+  return { grup, badan, engsel, cakram, sampul, belakangBuklet, sasaran };
 }
 
 // --- pemutar -----------------------------------------------------------------
