@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# farrez.vercel.app
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Portfolio of Farrez Al Hakim: implementation, business analysis and delivery. Each project is a
+CD in a rack. Open the case to read the booklet (Overview, Challenge, Key decisions, Solution,
+Delivery & role, Outcome), or put the disc in the player to see the product on a hologram screen.
 
-## Available Scripts
+## Run
 
-In the project directory, you can run:
+Node 20.9 or newer.
 
-### `npm start`
+```bash
+npm ci
+npm run dev      # http://localhost:3000
+npm test         # node:test, no browser needed
+npm run build && npm start
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Layout
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+| Path | What it holds |
+|---|---|
+| `content/proyek.js` | The ten albums: titles, summaries, architecture, booklet pages. Privacy rules at the top of the file. |
+| `content/musik.js`, `content/situs.js` | The music CD and personal links (CV, email, socials). |
+| `messages/id.json`, `messages/en.json` | All UI text. Same keys in both; `npm test` checks it. |
+| `components/imersif/` | Immersive mode: the three.js scene (`adegan.js`), the case, disc and player models (`benda.js`), canvas textures (`gambar.js`, `halamanUV.js`), and the hologram. |
+| `components/rak/` | Light mode: grid of covers and a dialog per project. |
+| `components/mode/` | Picks Immersive or Light per device; the visitor's choice wins. |
+| `docs/decisions/` | Architecture decision records. |
+| `docs/naskah-adegan.md` | Scene script and language rules. |
+| `DESIGN.md` | Tokens, type, motion and the CD case measurements. |
 
-### `npm test`
+## Content rules
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Booklet pages other than Overview are claims about Farrez. They stay `null`, and hidden, until the
+  claim is rated defensible in `karier-frz/claims-audit.md`.
+- Client names from office work are never written. The family business pilot carries no names,
+  ad IDs, prices or margins.
+- Indonesian copy is written for Indonesian readers, not translated. Work terms stay English.
 
-### `npm run build`
+## Credits
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Inspired by [Discography](https://github.com/dmtrbrl/discography) by Dmytro Barylo, rebuilt from
+scratch (see `docs/decisions/0006`). Booklet page turns use
+[LeafThrough](https://www.npmjs.com/package/leafthrough) (MIT). Full list in `public/credits.txt`.

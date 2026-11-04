@@ -1,5 +1,10 @@
 # Naskah adegan: Rak CD proyek
 
+> Status 5 Nov 2026: naskah ini draf sebelum kode. Yang sudah berubah sesudahnya (rak jadi bagian
+> halaman yang digeser lewat gulir, Play menampilkan hologram produk, CD musik terpisah, sinar-X
+> diganti senter UV di halaman Architecture buklet) tercatat di `docs/decisions/` dan `DESIGN.md`.
+> Aturan bahasa di bawah tetap berlaku.
+
 Draf 1, 4 Nov 2026. Bahan tinjauan Farrez sebelum ada kode. Setiap adegan menulis apa yang
 dilihat pengunjung, apa yang bisa ia lakukan, teks yang tampil, dan apa yang terjadi di mode
 Ringan. Teks bertanda `[slot]` menunggu penilaian klaim di `karier-frz/claims-audit.md`.

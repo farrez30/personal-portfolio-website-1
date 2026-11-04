@@ -1,0 +1,23 @@
+farrez.vercel.app - credits
+
+Inspiration
+  Discography by Dmytro Barylo (github.com/dmtrbrl/discography): the idea of a rack of
+  jewel cases with a booklet and a player. Rebuilt from scratch; no code, texture or
+  font from that project is used.
+  Codrops Glass Xylophone: the idea behind the contact helix.
+
+Libraries
+  LeafThrough 0.1.8, MIT License, Copyright (c) 2026 Dmytro Barylo (booklet page turns)
+  three.js 0.187.0, MIT License, Copyright (c) 2010-2026 three.js authors
+  Motion 14.9.1, MIT License
+  Next.js 16, MIT License, Vercel
+  next-intl 4, MIT License
+  Phosphor Icons via react-icons, MIT License
+  Schibsted Grotesk and IBM Plex Mono, SIL Open Font License 1.1, via Google Fonts
+
+Images
+  Project illustrations: generated with Google Flow (Nano Banana 2.1), November 2026.
+  People in them are fictional.
+
+Music
+  "Despite Such a Trustworthy Appearance" by Ludvig Moulin, Epidemic Sound.
