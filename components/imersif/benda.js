@@ -92,6 +92,17 @@ export function setRedup(material, nilai) {
   }
 }
 
+// Tepi potongan plastik: garis tipis yang sedikit lebih buram dari permukaannya.
+function tepiPlastik(geo, opasitas = 0.15) {
+  const garis = new THREE.LineSegments(
+    new THREE.EdgesGeometry(geo, 30),
+    new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: opasitas, depthWrite: false }),
+  );
+  // Garis tidak ikut diklik: ambang raycast garis bawaan three (1 unit) lebih besar dari kotaknya.
+  garis.raycast = () => {};
+  return garis;
+}
+
 const plastik = () =>
   pasangSheen(
     new THREE.MeshPhysicalMaterial({
@@ -258,6 +269,9 @@ export function buatKotak(p, locale, renderer, i) {
   const dasar = new THREE.Mesh(new RoundedBoxGeometry(KOTAK.w, KOTAK.h, mm(5), 2, mm(1)), plastik());
   dasar.position.z = -KOTAK.d / 2 + mm(2.5);
   badan.add(dasar);
+  const tepiDasar = tepiPlastik(dasar.geometry);
+  tepiDasar.position.copy(dasar.position);
+  badan.add(tepiDasar);
 
   const bahanNampan = pasangSheen(
     new THREE.MeshPhysicalMaterial({ color: 0x151518, roughness: 0.5, clearcoat: 0.15, envMapIntensity: 1.8 }),
@@ -279,7 +293,36 @@ export function buatKotak(p, locale, renderer, i) {
     u.position.set(-KOTAK.w / 2 + mm(8), -mm(56) + k * mm(6.6), -KOTAK.d / 2 + mm(6.6));
     engselStrip.add(u);
   }
+  // Knuckle di kedua ujung strip engsel.
+  for (const arah of [-1, 1]) {
+    const knuckle = new THREE.Mesh(new THREE.CylinderGeometry(mm(2.4), mm(2.4), mm(6), 16), bahanNampan);
+    knuckle.position.set(-KOTAK.w / 2 + mm(1.5), arah * (KOTAK.h / 2 - mm(4)), KOTAK.d / 2 - mm(3));
+    engselStrip.add(knuckle);
+  }
   badan.add(engselStrip);
+
+  // Rosette: cincin gigi di tengah nampan yang mencengkeram lubang cakram.
+  const rosette = new THREE.Group();
+  const gigi = new THREE.BoxGeometry(mm(1.6), mm(2.4), mm(2.6));
+  for (let k = 0; k < 12; k++) {
+    const a = (k / 12) * Math.PI * 2;
+    const g = new THREE.Mesh(gigi, bahanNampan);
+    g.position.set(Math.cos(a) * mm(6), Math.sin(a) * mm(6), 0);
+    g.rotation.z = a + Math.PI / 2;
+    rosette.add(g);
+  }
+  const cincinRosette = new THREE.Mesh(new THREE.TorusGeometry(mm(15), mm(0.8), 8, 64), bahanNampan);
+  rosette.add(cincinRosette);
+  rosette.position.set(mm(6), 0, -KOTAK.d / 2 + mm(6.8));
+  badan.add(rosette);
+
+  // Klip setengah cincin di tepi atas dan bawah nampan.
+  for (const arah of [-1, 1]) {
+    const klip = new THREE.Mesh(new THREE.TorusGeometry(mm(4.5), mm(0.9), 8, 24, Math.PI), bahanNampan);
+    klip.position.set(mm(6), arah * mm(57), -KOTAK.d / 2 + mm(6.2));
+    klip.rotation.z = arah > 0 ? Math.PI : 0;
+    badan.add(klip);
+  }
 
   // Cakram duduk 6 mm ke kanan, berputar acak sampai ±25 derajat per album.
   const cakram = buatCakram(p, renderer);
@@ -309,8 +352,40 @@ export function buatKotak(p, locale, renderer, i) {
   );
   belakangBuklet.rotation.y = Math.PI;
   belakangBuklet.position.set(mm(6), 0, -mm(2.8));
+  // Tumpukan kertas buklet 1,2 mm di antara sampul depan dan belakang.
+  const tumpukan = new THREE.Mesh(
+    new THREE.BoxGeometry(BUKLET, BUKLET, mm(1.2)),
+    new THREE.MeshStandardMaterial({ color: 0xebe4d6, roughness: 0.9 }),
+  );
+  tumpukan.position.z = -mm(0.6);
+  sampul.add(tumpukan);
   const lembar = new THREE.Mesh(new RoundedBoxGeometry(KOTAK.w, KOTAK.h, mm(1.5), 2, mm(0.6)), plastik());
-  tutup.add(sampul, belakangBuklet, lembar);
+  const tepiLembar = tepiPlastik(lembar.geometry, 0.18);
+  // Empat tab setengah lingkaran (radius 5 mm, 16 mm dari tiap sisi) dan dua rusuk
+  // penahan di sisi dalam tutup: yang menjepit buklet di tempatnya.
+  const tabGeo = new THREE.CylinderGeometry(mm(5), mm(5), mm(1), 24);
+  const bahanTab = plastik();
+  const tab = [];
+  for (const [x, y, rot] of [
+    [-BUKLET / 2 + mm(16), BUKLET / 2, 0],
+    [BUKLET / 2 - mm(16), BUKLET / 2, 0],
+    [-BUKLET / 2 + mm(16), -BUKLET / 2, Math.PI],
+    [BUKLET / 2 - mm(16), -BUKLET / 2, Math.PI],
+  ]) {
+    const t = new THREE.Mesh(tabGeo, bahanTab);
+    t.rotation.set(Math.PI / 2, 0, rot);
+    t.position.set(mm(6) + x, y, -mm(3.4));
+    const tepi = tepiPlastik(tabGeo, 0.25);
+    tepi.position.copy(t.position);
+    tepi.rotation.copy(t.rotation);
+    tab.push(t, tepi);
+  }
+  for (const arah of [-1, 1]) {
+    const rusuk = new THREE.Mesh(new THREE.BoxGeometry(mm(1.2), mm(24), mm(2)), bahanTab);
+    rusuk.position.set(mm(6) + BUKLET / 2 + mm(1), arah * mm(28), -mm(2.2));
+    tab.push(rusuk);
+  }
+  tutup.add(sampul, belakangBuklet, lembar, tepiLembar, ...tab);
   engsel.add(tutup);
   grup.add(engsel);
 
