@@ -129,7 +129,9 @@
       "bukaTab": "Open in new tab",
       "perbesar": "Enlarge screen",
       "perkecil": "Restore size",
-      "memuat": "TUNING SIGNAL"
+      "memuat": "TUNING SIGNAL",
+      "dijeda": "PAUSED",
+      "lanjutkan": "Resume playback"
     },
     "senter": "UV torch"
   }

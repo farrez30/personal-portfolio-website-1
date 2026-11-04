@@ -346,7 +346,7 @@ export function buatKotak(p, locale, renderer, i) {
   const belakangBuklet = new THREE.Mesh(
     new THREE.PlaneGeometry(BUKLET, BUKLET),
     new THREE.MeshStandardMaterial({
-      map: tekstur(gambarHalaman({ label: p.katalog, catatan: `${p.judul[locale]}  ${p.periode}` }, 512), renderer),
+      map: tekstur(gambarHalaman({ label: p.katalog, catatan: `${p.judul[locale]}  ${p.periode}` }, 1024), renderer),
       roughness: 0.75,
     }),
   );

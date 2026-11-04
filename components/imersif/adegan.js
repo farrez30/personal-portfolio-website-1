@@ -100,16 +100,16 @@ const LABEL = {
 };
 
 function halamanBuklet(p, locale, uv) {
-  const hal = [{ src: gambarSampul(p, locale), alt: `${p.katalog} ${p.judul[locale]}` }];
+  const hal = [{ src: gambarSampul(p, locale, 2048), alt: `${p.katalog} ${p.judul[locale]}` }];
   hal.push({
-    src: gambarHalaman({ label: LABEL.overview, judul: p.judul[locale], isi: p.ringkas[locale], catatan: `${p.katalog}  ${p.periode}` }),
+    src: gambarHalaman({ label: LABEL.overview, judul: p.judul[locale], isi: p.ringkas[locale], catatan: `${p.katalog}  ${p.periode}` }, 2048),
     alt: LABEL.overview,
     text: p.ringkas[locale],
   });
   for (const h of HALAMAN) {
     const b = p.buklet[h];
     if (!b) continue;
-    hal.push({ src: gambarHalaman({ label: LABEL[h], judul: b.judul[locale], isi: b.isi[locale] }), alt: LABEL[h], text: `${b.judul[locale]}\n\n${b.isi[locale]}` });
+    hal.push({ src: gambarHalaman({ label: LABEL[h], judul: b.judul[locale], isi: b.isi[locale] }, 2048), alt: LABEL[h], text: `${b.judul[locale]}\n\n${b.isi[locale]}` });
   }
   if (uv) {
     // Halaman UV selalu di sisi kanan spread (indeks genap) supaya senter mudah diarahkan.
@@ -119,7 +119,7 @@ function halamanBuklet(p, locale, uv) {
   }
   // Halaman belakang sama persis dengan yang terlihat di tutup kotak, supaya tidak
   // ada tekstur yang berganti saat buklet ditarik keluar.
-  const belakang = { src: gambarHalaman({ label: p.katalog, catatan: `${p.judul[locale]}  ${p.periode}` }, 512), alt: p.katalog };
+  const belakang = { src: gambarHalaman({ label: p.katalog, catatan: `${p.judul[locale]}  ${p.periode}` }, 1024), alt: p.katalog };
   while (hal.length < 3 || hal.length % 2 === 0) hal.push({ src: gambarHalaman({ label: "" }), alt: "" });
   hal.push(belakang);
   return hal;
@@ -150,6 +150,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 0.95;
   renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.autoUpdate = false;
   wadah.appendChild(renderer.domElement);
   const kanvas = renderer.domElement;
 
@@ -170,9 +173,16 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   strip.position.set(0, 3.2, 3);
   strip.lookAt(0, 0, 0);
   // Cahaya baca: masuk saat buklet mendarat, menggantikan cahaya galeri.
+  // Posisinya dalam lebar halaman relatif ke buklet: dari kiri atas depan, cukup rendah
+  // supaya lengkung kertas dan bayangan lembar yang dibalik terlihat di dekat punggung.
   const matahari = new THREE.DirectionalLight(0xffffff, 0);
-  matahari.position.set(0.6, 1.2, 3);
-  scene.add(kunci, isiCahaya, tepi, strip, matahari);
+  matahari.castShadow = true;
+  matahari.shadow.mapSize.set(2048, 2048);
+  matahari.shadow.bias = -0.0007;
+  matahari.shadow.normalBias = 0.002;
+  matahari.shadow.radius = 3;
+  const langit = new THREE.HemisphereLight(0xffffff, 0xa1aeaf, 0);
+  scene.add(kunci, isiCahaya, tepi, strip, matahari, matahari.target, langit);
 
   // Rak dimiringkan; kotak bukan anak rak, posenya dihitung lewat matriks ini.
   const rak = new THREE.Object3D();
@@ -393,11 +403,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     // Cahaya tepi biru memudar bersama lensa; cahaya ambien naik untuk pemutar.
     const cahayaBaca = p3io((k_.baca - 0.6) / 0.26);
     tepi.intensity = 0.75 * (1 - geser) * (1 - cahayaBaca);
-    ambien.intensity = 0.25 + 0.9 * geser + 1.25 * cahayaBaca;
+    ambien.intensity = (0.25 + 0.9 * geser) * (1 - cahayaBaca);
+    langit.intensity = 1.5 * cahayaBaca;
     // Senter UV menyala: ruangan meredup dan bernuansa ungu, seperti memakai lampu UV.
     k_.redupUV = (k_.redupUV ?? 0) + ((k_.senter ? 1 : 0) - (k_.redupUV ?? 0)) * Math.min(1, dt * 6);
-    matahari.intensity = 2 * cahayaBaca * (1 - 0.6 * k_.redupUV);
-    ambien.color.setRGB(1 - 0.35 * k_.redupUV, 1 - 0.5 * k_.redupUV, 1);
+    // Matahari baca sudah menyala selama buklet terbang (1,6), penuh saat mendarat (2).
+    const sinarBaca = (1.6 + 0.4 * cahayaBaca) * p3io(k_.baca / 0.35);
+    matahari.intensity = sinarBaca * (1 - 0.45 * k_.redupUV);
+    langit.color.setRGB(1 - 0.2 * k_.redupUV, 1 - 0.3 * k_.redupUV, 1);
     strip.intensity = 1.9 * (1 - cahayaBaca);
     scene.environmentIntensity = 1 - 0.6 * cahayaBaca;
     rak.updateMatrixWorld(true);
@@ -594,6 +607,13 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       // Paling melengkung tepat saat buklet berputar di punggung, supaya tidak tampak sebagai garis tipis.
       b.userData.deform.uniforms.uLengkung.value = Math.sin(Math.PI * jepit(k_.baca / 0.7)) * 1.5 * (1 - settle * settle);
       b.enabled = k_.baca > 0.999 && k_.keadaan === "buklet";
+      matahari.target.position.copy(b.position);
+      matahari.position.copy(b.position).add(vTmp.set(-3.5, 1.3, 4.1).multiplyScalar(sk));
+      const kb = matahari.shadow.camera;
+      Object.assign(kb, { left: -1.3 * sk, right: 1.3 * sk, top: 0.9 * sk, bottom: -0.9 * sk, near: 0.5 * sk, far: 12 * sk });
+      kb.updateProjectionMatrix();
+      b.userData.lantai.material.opacity = 0.15 * p3io((k_.baca - 0.6) / 0.4);
+      b.userData.lantai.visible = b.userData.lantai.material.opacity > 0.002;
       // Senter UV: posisi kursor dipetakan ke halaman kanan buklet yang sudah mendarat.
       if (k_.uv) {
         const terlihat = b.enabled && b.visiblePages.includes(k_.uv.indeks);
@@ -627,8 +647,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         if (ok || now > antre.sampai) k_.antreHalaman = null;
       }
       b.tick(now);
+      renderer.shadowMap.needsUpdate = true;
       if (k_.keadaan !== "buklet" && k_.baca < 0.001) {
         scene.remove(b);
+        b.userData.lantai.geometry.dispose();
+        b.userData.lantai.material.dispose();
         b.dispose();
         k_.buklet = null;
         k_.uv?.dispose();
@@ -942,11 +965,20 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
             layout: k_.sempit ? "single" : "spread",
             loop: k_.sempit,
             deform,
-            paper: { wrinkles: 0.055, bulge: 0.22 },
+            paper: { wrinkles: 0.055, bulge: 0.22, sheetGap: 0.007 / 120 },
+            lighting: { sun: { position: [-3.5, 1.3, 4.1] }, shadows: true },
             motion: { reducedMotion: kurangiGerak ? true : "auto" },
           },
         );
         b.userData.deform = deform;
+        // Lantai tak terlihat tepat di belakang halaman, hanya menangkap bayangan buklet.
+        const lantai = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.ShadowMaterial({ opacity: 0, transparent: true, depthWrite: false }));
+        lantai.position.z = -0.24 / 120;
+        lantai.receiveShadow = true;
+        lantai.visible = false;
+        lantai.raycast = () => {};
+        b.add(lantai);
+        b.userData.lantai = lantai;
         scene.add(b);
         k_.buklet = b;
       }
