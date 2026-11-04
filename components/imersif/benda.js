@@ -4,7 +4,7 @@
 // pantulan, difraksi sisi data cakram) dan rumus spektrum Zucconi.
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
-import { gambarSampul, gambarCakram, gambarSisipan, gambarHalaman, gambarAus } from "./gambar";
+import { gambarSampul, gambarCakram, gambarSisipan, gambarHalaman, gambarBelakang, gambarAus } from "./gambar";
 import { petaCetak, petaBintik, petaPiring, geserJudul } from "./prosedural";
 
 const mm = (x) => x / 100;
@@ -437,6 +437,7 @@ export function buatCakram(p, renderer) {
   // Satu peredup untuk semua bahan cakram: di kotak tertutup seluruhnya gelap.
   const redup = { value: 1 };
   const muka = tekstur(gambarCakram(p), renderer);
+  muka.image.siap?.then(() => (muka.needsUpdate = true));
   const cincin = (dalam, luar, seg = 220) => {
     const geo = new THREE.RingGeometry(dalam, luar, seg, 1);
     // UV dari xy supaya cetakan persegi menempel benar pada cincin.
@@ -687,6 +688,7 @@ export function buatKotak(p, locale, renderer, i) {
   const tutup = new THREE.Group();
   tutup.position.x = KOTAK.w / 2;
   let petaSampul;
+  let petaBelakang;
   const sampul = new THREE.Mesh(
     new THREE.PlaneGeometry(BUKLET, BUKLET),
     pasangSheen(
@@ -700,10 +702,11 @@ export function buatKotak(p, locale, renderer, i) {
   const belakangBuklet = new THREE.Mesh(
     new THREE.PlaneGeometry(BUKLET, BUKLET),
     new THREE.MeshStandardMaterial({
-      map: tekstur(gambarHalaman({ label: p.katalog, catatan: `${p.judul[locale]}  ${p.periode}` }, 1024), renderer),
+      map: (petaBelakang = tekstur(gambarBelakang(p, locale, 1024), renderer)),
       roughness: 0.75,
     }),
   );
+  petaBelakang.image.siap?.then(() => (petaBelakang.needsUpdate = true));
   belakangBuklet.rotation.y = Math.PI;
   belakangBuklet.position.set(mm(6), 0, -mm(2.25));
   // Tumpukan kertas buklet 1,2 mm di antara sampul depan dan belakang.
