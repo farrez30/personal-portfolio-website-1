@@ -694,6 +694,8 @@ export function buatKotak(p, locale, renderer, i) {
       { kuat: 0.05 },
     ),
   );
+  // Ilustrasi sampul dimuat terpisah; begitu siap, kanvasnya digambar ulang dan diunggah lagi.
+  petaSampul.image.siap?.then(() => (petaSampul.needsUpdate = true));
   sampul.position.set(mm(6), 0, -mm(0.9));
   const belakangBuklet = new THREE.Mesh(
     new THREE.PlaneGeometry(BUKLET, BUKLET),

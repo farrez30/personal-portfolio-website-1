@@ -135,3 +135,30 @@
   z-index: 2;
   background: var(--bg);
 }
+
+/* Sampul bergambar: ilustrasi mengisi bidang atas, pita bawah berwarna proyek. */
+.sampul__muka--gambar {
+  padding: 0;
+  justify-content: flex-start;
+  background: #efe9df;
+}
+
+.sampul__gambar {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  object-fit: cover;
+}
+
+.sampul__pita {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  background: var(--album);
+}
+
+.sampul__muka--gambar .sampul__judul {
+  font-size: 0.95rem;
+}
