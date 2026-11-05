@@ -3,6 +3,7 @@
 // gambar, jadi ringan dan ikut berganti bahasa.
 import { tataLetak } from "@/components/sinarx/tataLetak";
 import { albumUntuk } from "@/content/album";
+import { formatDurasi } from "@/components/musik/daftarLagu";
 import { hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
 
 const KERTAS = "#efe9df";
@@ -689,3 +690,52 @@ export function warnaRata(c, gelap = 0.72) {
   k.width = 0;
   return `#${hex(r)}${hex(gg)}${hex(b)}`;
 }
+
+// Halaman daftar lagu CD musik: nomor, judul, artis, dan durasi, sepuluh lagu per
+// halaman, dicetak seperti sisipan CD. `lagu` dari /api/musik/daftar.
+export function gambarDaftarLagu(lagu, { awal = 0, label = "Tracklist", catatan = "" } = {}, ukuran = 2048) {
+  const [c, g] = kanvas(ukuran, ukuran);
+  const s = ukuran / 512;
+  const kiri = 40 * s;
+  const kanan = ukuran - 40 * s;
+  const potong = (teks, lebar) => {
+    if (g.measureText(teks).width <= lebar) return teks;
+    let t = teks;
+    while (t && g.measureText(`${t}…`).width > lebar) t = t.slice(0, -1);
+    return `${t.trimEnd()}…`;
+  };
+  g.fillStyle = KERTAS;
+  g.fillRect(0, 0, ukuran, ukuran);
+  g.textBaseline = "top";
+  g.fillStyle = "#b3322a";
+  g.font = `500 ${12 * s}px ${fontMono()}`;
+  g.fillText(label.toUpperCase(), kiri, 40 * s);
+  let y = 72 * s;
+  lagu.forEach((l, i) => {
+    const durasi = formatDurasi(l.durasi);
+    g.font = `500 ${11 * s}px ${fontMono()}`;
+    g.fillStyle = "#6f695f";
+    g.fillText(String(awal + i + 1).padStart(2, "0"), kiri, y + 3 * s);
+    g.textAlign = "right";
+    g.fillText(durasi, kanan, y + 3 * s);
+    g.textAlign = "left";
+    const lebar = kanan - (kiri + 30 * s) - 44 * s;
+    g.fillStyle = TINTA;
+    g.font = `650 ${15 * s}px ${fontKeluarga()}`;
+    g.fillText(potong(l.judul, lebar), kiri + 30 * s, y);
+    if (l.artis) {
+      g.fillStyle = "#6f695f";
+      g.font = `400 ${11 * s}px ${fontKeluarga()}`;
+      g.fillText(potong(l.artis, lebar), kiri + 30 * s, y + 18 * s);
+    }
+    y += 37 * s;
+  });
+  if (catatan) {
+    g.fillStyle = "#6f695f";
+    g.font = `400 ${11 * s}px ${fontMono()}`;
+    g.fillText(catatan, kiri, 462 * s);
+  }
+  butir(g, ukuran, ukuran, 0.05);
+  return c;
+}
+
