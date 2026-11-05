@@ -1,12 +1,15 @@
 // Isi rak CD. Satu objek = satu album proyek.
 //
 // Aturan isi (lihat docs/naskah-adegan.md):
-// - `ringkas` dan `arsitektur` hanya fakta tentang produknya, dicek dari repo.
+// - `ringkas` dan `arsitektur` (content/arsitektur.js) hanya fakta tentang produknya,
+//   dicek dari repo.
 // - Halaman buklet selain Overview adalah klaim tentang Farrez. Nilainya null
 //   sampai klaim di karier-frz/claims-audit.md dinilai "Bisa dibela"; halaman
 //   null tidak ditampilkan. Isi halaman wajib menyebut ID klaimnya di `klaim`.
 // - Nama klien mitraPlus tidak pernah ditulis. Pilot iklan tanpa nama orang,
 //   merek, ID iklan, harga, atau margin.
+
+import { ARSITEKTUR } from "./arsitektur.js";
 
 /** @typedef {{ id: string, en: string }} Teks */
 
@@ -28,19 +31,7 @@ export const proyek = [
       id: "Software house tempat saya bekerja membangun ERP dan back-office untuk beberapa klien: distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan. Nama kliennya disamarkan.",
       en: "The software house I work at builds ERP and back-office systems for several clients: distribution and service, health insurance, plantation payroll. Client names are withheld.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "web", label: "Web app (React)" },
-        { id: "api", label: "API (Express, Bun)" },
-        { id: "db", label: "SQL Server + stored procedure" },
-        { id: "ops", label: "Docker + GitOps" },
-      ],
-      garis: [
-        ["web", "api"],
-        ["api", "db"],
-        ["ops", "api"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["erp-software-house"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
   {
@@ -76,21 +67,7 @@ export const proyek = [
       id: "Aplikasi internal studio: proyek, jam kerja, invoice, kas, dan pembukuan. Status pekerjaan ikut bergerak sendiri dari pull request dan deploy.",
       en: "The studio's internal app: projects, timesheets, invoices, cash, and bookkeeping. Work status moves on its own from pull requests and deploys.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "web", label: "Next.js" },
-        { id: "db", label: "PostgreSQL" },
-        { id: "gh", label: "GitHub webhook" },
-        { id: "ci", label: "CI (OIDC)" },
-        { id: "mcp", label: "MCP server" },
-      ],
-      garis: [
-        ["web", "db"],
-        ["gh", "web"],
-        ["ci", "web"],
-        ["mcp", "web"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["coderoach-os"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
   {
@@ -109,19 +86,7 @@ export const proyek = [
       id: "Perencana keuangan rumah tangga. Mutasi bank diimpor dari e-Statement, lalu tiap baris dicocokkan dengan saldo dari bank, jadi anggarannya bisa dipercaya.",
       en: "A household budget planner. Bank e-Statements are imported and every line is matched against the bank's own balance, so the budget can be trusted.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "xlsx", label: "e-Statement .xlsx" },
-        { id: "web", label: "Next.js" },
-        { id: "db", label: "PostgreSQL" },
-        { id: "pdf", label: "Ringkasan PDF" },
-      ],
-      garis: [
-        ["xlsx", "web"],
-        ["web", "db"],
-        ["web", "pdf"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["fifofun"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
   {
@@ -139,21 +104,7 @@ export const proyek = [
       id: "Dashboard untuk distributor sebuah perusahaan network marketing, banyak di antaranya orang tua yang membuka lewat HP. Isinya rencana repeat order mingguan: berapa, di posisi mana, kapan.",
       en: "A dashboard for distributors of a network marketing company, many of them older people on their phones. It plans the weekly repeat order: how much, where in the network, and when.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "portal", label: "Portal distributor" },
-        { id: "cron", label: "Cloudflare Workers" },
-        { id: "web", label: "Next.js" },
-        { id: "db", label: "PostgreSQL" },
-        { id: "notif", label: "Email + web push" },
-      ],
-      garis: [
-        ["portal", "cron"],
-        ["cron", "db"],
-        ["web", "db"],
-        ["web", "notif"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["nds-etl"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
   {
@@ -175,19 +126,7 @@ export const proyek = [
       id: "Pohon keluarga privat, hanya lewat undangan. Sebutan kerabat Sunda dan garis suku Minang ikut dihitung, jadi yang muda tahu harus memanggil siapa dengan sebutan apa.",
       en: "A private, invite-only family tree. It works out Sundanese kinship terms and Minang clan lines, so the younger ones know what to call whom.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "web", label: "Next.js" },
-        { id: "db", label: "PostgreSQL (Neon)" },
-        { id: "blob", label: "Penyimpanan foto" },
-        { id: "mail", label: "Email undangan" },
-      ],
-      garis: [
-        ["web", "db"],
-        ["web", "blob"],
-        ["web", "mail"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["akarkita"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
   {
@@ -205,17 +144,7 @@ export const proyek = [
       id: "Iklan Meta untuk toko keluarga, dari iklan ke obrolan WhatsApp, dengan aturan iklan produk kesehatan dicek sebelum tayang.",
       en: "Meta ads for a family-run shop, from the ad into a WhatsApp chat, with health-product ad rules checked before anything goes live.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "iklan", label: "Iklan Meta" },
-        { id: "wa", label: "WhatsApp" },
-        { id: "cek", label: "Cek aturan iklan" },
-      ],
-      garis: [
-        ["cek", "iklan"],
-        ["iklan", "wa"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["pilot-iklan"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
   {
@@ -234,19 +163,7 @@ export const proyek = [
       id: "Catatan pikiran di antara sesi terapi. Tetap jalan tanpa sinyal, dan psikolog hanya bisa membaca lewat tautan yang dibagikan klien.",
       en: "A thought journal for the days between therapy sessions. It works offline, and the psychologist only reads what the client chooses to share.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "hp", label: "Penyimpanan di HP" },
-        { id: "web", label: "Next.js (PWA)" },
-        { id: "db", label: "PostgreSQL" },
-        { id: "link", label: "Tautan untuk psikolog" },
-      ],
-      garis: [
-        ["hp", "web"],
-        ["web", "db"],
-        ["web", "link"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["jeda"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
   {
@@ -264,17 +181,7 @@ export const proyek = [
       id: "Aplikasi Android pengganti app kamera aksi yang sudah ditinggalkan vendornya: live view, rekam, setting, baterai, dan kartu SD.",
       en: "An Android app replacing an action camera app its vendor abandoned: live view, recording, settings, battery, and SD card.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "app", label: "Android (Kotlin)" },
-        { id: "wifi", label: "WiFi kamera" },
-        { id: "cam", label: "Kamera aksi" },
-      ],
-      garis: [
-        ["app", "wifi"],
-        ["wifi", "cam"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["yiheecam"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
   {
@@ -292,19 +199,7 @@ export const proyek = [
       id: "Mesin trading kripto semi-otomatis untuk seorang teman. Sudah lulus uji di testnet dan belum pernah memakai uang sungguhan.",
       en: "A semi-automatic crypto trading engine built for a friend. It has passed its testnet gate and has never touched real money.",
     },
-    arsitektur: {
-      simpul: [
-        { id: "dash", label: "Dashboard Next.js" },
-        { id: "engine", label: "Engine" },
-        { id: "db", label: "PostgreSQL" },
-        { id: "ex", label: "Exchange (testnet)" },
-      ],
-      garis: [
-        ["dash", "db"],
-        ["engine", "db"],
-        ["engine", "ex"],
-      ],
-    },
+    arsitektur: ARSITEKTUR["d-day"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
 ];

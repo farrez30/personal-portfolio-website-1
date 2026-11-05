@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { teknologiDari } from "@/components/arsitektur/teknologi";
 import { useLocale, useTranslations } from "next-intl";
 import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpleBold, PiArrowsInSimpleBold, PiPauseFill, PiPlayFill } from "react-icons/pi";
 
@@ -91,7 +92,8 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
   const langsung = bolehTanam && p.tanam && p.tautan.situs;
   // Tanpa situs atau tangkapan layar, layar memutar ilustrasi orang yang memakainya.
   const gambar = p.layar?.[perangkat] ?? p.ilustrasi ?? null;
-  const potongan = (p.arsitektur?.simpul ?? []).slice(0, 6);
+  // Keping yang mengorbit: teknologi proyeknya, ikon dan nama.
+  const potongan = p.arsitektur ? teknologiDari([...p.arsitektur.teknologi.stack, ...p.arsitektur.teknologi.infrastruktur]).slice(0, 6) : [];
 
   return (
     <div
@@ -100,9 +102,9 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
       style={{ "--sx": `${sumur.x * 100}%`, "--sy": `${sumur.y * 100}%`, "--syf": sumur.y, "--sw": `${sumur.w * 100}%`, "--semut": teksturSemut() ?? "none" }}
     >
       <div className="holo__orbit" aria-hidden="true">
-        {potongan.map((s, i) => (
-          <span key={s.id} className="holo__keping mono" style={{ "--i": i, "--n": potongan.length }}>
-            {s.label}
+        {potongan.map(({ kunci, nama, Ikon }, i) => (
+          <span key={kunci} className="holo__keping mono" style={{ "--i": i, "--n": potongan.length }}>
+            <Ikon aria-hidden="true" /> {nama[locale]}
           </span>
         ))}
       </div>
