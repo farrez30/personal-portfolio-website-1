@@ -1,0 +1,772 @@
+[
+  {
+    "slug": "erp-software-house",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene: a warehouse shelf, a service van and a payroll ledger reduced to geometric blocks on a grid, one large red circle. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Motif: concentric grid rings and radial bars like a precise dial, one red segment. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene: a tidy grid of twelve small square photomontage tiles of warehouse boxes, invoices, scanners and plantation rows. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene, journey: a lone desk with one computer in an empty grid, the start of the work. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene, journey: the grid fills with more desks and lines connecting several separate buildings. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene, problem: piles of paper forms and mismatched folders breaking out of the grid. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene, feature: a hand-held barcode scanner and stacked boxes on a precise shelf grid. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene, feature: a service technician's toolbox and a clipboard aligned to the grid. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene, feature: rows of plantation trees counted like a table, payroll envelopes beside them. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene, decision: two paths on the grid, one chosen and highlighted in red. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "erp-software-house",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture. Scene, outcome: the whole grid in perfect order, one red circle completing the composition. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene: cut-out photos of a phone on a tripod, a ring light, a microphone and a calendar page exploding out of a sunburst. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Motif: a spiral of cut-out photo strips of cameras and phones swirling around the centre. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene: a scrapbook wall of torn photos: briefs, contracts, filming setups and a planning board pinned together. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene, journey: a messy desk with a laptop, sticky notes and many chat bubbles shaped as torn paper. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene, journey: torn spreadsheet pieces and phone screenshots scattered across a table. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene, problem: a tangle of chat bubbles and paper scraps knotted together. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene, feature: a campaign planning board with cut-out creators' silhouettes arranged in rows. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene, feature: a brief and a contract as paper cut-outs passing between two hands. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene, feature: a stack of paper invoices collaged with coins and a calculator. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene, decision: two collage paths, scattered scraps on one side and one neat stack on the other. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "viralytics",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows. Scene, outcome: a single bright collage board with everything in one place under a sunburst. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene: a small two-person workshop built from geometric blocks, gears and a clock made of circles. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Motif: a target of red, yellow and blue rings with a black triangle and square orbiting. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene: a diagonal arrangement of geometric tools: a clock, a ledger, a coin, a code bracket shape made of bars. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene, journey: two geometric figures at one table with a single lamp. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene, journey: the table grows into a workshop with shelves of geometric boxes. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene, problem: scattered paper sheets, coins and clocks tumbling diagonally. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene, feature: a large circle clock with a timesheet made of coloured bars. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene, feature: an invoice sheet and a stack of coins balanced on a triangle. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene, feature: a chain of squares moving along a conveyor by themselves. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene, decision: a crossroads of red and blue bars, one bar continuing. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "coderoach-os",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture. Scene, outcome: all shapes locked into one balanced composition, a yellow sun circle above. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene: a young couple at a kitchen table with a piggy bank, a ledger book and a pendant lamp. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Motif: a starburst of coins and boomerang shapes around the centre. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene: a mid-century living room shelf with unlabelled jars, a ledger, a radio and a potted plant. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene, journey: a couple unpacking boxes into a small new home. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene, journey: a monthly calendar on the wall and receipts on the fridge. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene, problem: a tall stack of receipts and bank papers that does not add up, a puzzled couple. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene, feature: a bank statement sheet sliding into a neat file cabinet. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene, feature: two columns of coins matched side by side like a balance. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene, feature: envelopes for groceries, school and savings lined up on a shelf. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene, decision: a scale weighing a big coin against many small ones. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "fifofun",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache. Scene, outcome: the couple relaxed on a sofa, a full jar of coins on the table. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene: an older couple looking at a phone, with radiating lines connecting small circles behind them. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Motif: a network of circles linked by straight lines radiating from the centre. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene: a diagonal map of connected nodes, delivery boxes and a weekly calendar strip. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene, journey: one person handing a product box to another, a single line between them. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene, journey: the line branches into a growing network of circles. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene, problem: a tangled web of lines and an older person squinting at a small screen. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene, feature: a big clear phone screen held in two hands, large simple bars on it. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene, feature: a weekly calendar strip with boxes placed on certain days. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene, feature: a branching tree of nodes with one branch highlighted in red. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene, decision: a large diagonal arrow choosing one direction. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "nds-etl",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture. Scene, outcome: an older couple smiling together, a calm ordered network behind them. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene: a great banyan-like tree whose roots and branches hold small family figures of three generations. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Motif: roots spiralling around the centre like tree rings. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene: a carved border of leaves framing a row of traditional curved Minangkabau roofs and Sundanese bamboo houses. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene, journey: a grandmother telling a story to grandchildren on a porch. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene, journey: an old photo album and a carved family tree on a wall. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene, problem: a young person confused among many relatives at a family gathering. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene, feature: a branching tree with figures linked by carved lines. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene, feature: a traditional curved roof house sheltering a line of women across generations. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene, feature: an envelope invitation passed from hand to hand, a small padlock beside it. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene, decision: a gate with a lock, only family figures walking through. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "akarkita",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns. Scene, outcome: a large family meal under the tree, everyone in their place. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene: a mother running a home shop packing parcels while a phone rings with an empty speech bubble. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Motif: a burst of Ben-Day dots radiating from the centre with an empty speech bubble. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene: comic panels: a phone feed, a chat window shape, a parcel, a delivery scooter, all bubbles empty. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene, journey: a small home shop counter with parcels and a phone. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene, journey: a phone screen showing an ad shape, a thumb about to tap. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene, problem: a pile of unanswered empty chat bubbles around a tired shop owner. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene, feature: a phone with an empty chat bubble and a parcel ready to send. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene, feature: a checklist clipboard with tick marks next to a small bottle silhouette. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene, feature: a delivery scooter speeding with a parcel. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene, decision: two comic panels, a crossed-out loud megaphone and a calm phone chat. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "pilot-iklan",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty. Scene, outcome: the shop owner smiling, parcels stacked neatly, empty heart bubbles. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene: a single small figure sitting on a bench at the edge of a misty lake. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Motif: soft concentric ripples on still grey water seen from above. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene: a foggy shoreline with a small empty wooden pier. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene, journey: a window at dawn with rain drops and a notebook on the sill. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene, journey: a quiet road in fog with one streetlight. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene, problem: a crowded dark sky of tangled bird flocks over a small figure. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene, feature: a phone lying face up on a bedside table in soft light, no signal, calm room. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene, feature: a single sealed envelope on a wooden table by a window. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene, feature: footprints in sand leading toward the sea, regular spacing. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene, decision: a lone key on a white surface. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "jeda",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet. Scene, outcome: open misty horizon with light breaking through, a small figure standing. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene: a motorcycle rider with a small action camera on the helmet riding along a coastal highway at sunset. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Motif: a sunset sun striped with horizontal bands and palm silhouettes. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene: a parked motorcycle by a seaside wall, a helmet with an action camera resting on the seat. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, journey: an action camera in its box on a shelf, forgotten. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, journey: a rider picking up the camera, a phone beside it. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, problem: a phone showing an empty broken app icon, a camera blinking. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, feature: a phone in a handlebar mount showing a live road view. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, feature: a small memory card and battery floating against the sky gradient. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, feature: a rider pressing record, a small red dot light on the camera. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, decision: two roads diverging under palm trees, the rider taking the coastal one. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "yiheecam",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, outcome: the rider at a lookout at dusk, city lights below. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene: two friends at a desk at night lit by monitors, cropped tightly, a bold blue rectangle. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Motif: a close-up of a candlestick-like bar chart in duotone around the centre. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene: a desk at night with a coffee cup, keyboard and a glowing monitor, tight crop. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "buklet-1",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene, journey: two friends talking at a late night cafe table. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "buklet-2",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene, journey: a laptop opened on a kitchen table at midnight. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "buklet-3",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene, problem: a wall of flickering monitors with chaotic lines. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "buklet-4",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene, feature: a single monitor with clean upward and downward bars. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "buklet-5",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene, feature: a hand resting near a big red stop button on a desk. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "buklet-6",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene, feature: a sandbox tray with toy coins, a test environment metaphor. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "buklet-7",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene, decision: a chess board mid-game under a desk lamp. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "d-day",
+    "jenis": "buklet-8",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering. Scene, outcome: dawn light through blinds onto a calm desk, monitors off. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  }
+]
