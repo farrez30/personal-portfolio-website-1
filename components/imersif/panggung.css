@@ -19,17 +19,6 @@
   overflow: hidden;
 }
 
-/* Butiran halus di atas segalanya, seperti kertas. */
-.panggung::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.15;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.83' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
-  mix-blend-mode: multiply;
-}
-
 .panggung__kanvas {
   position: absolute;
   inset: 0;
@@ -368,71 +357,7 @@
   perspective: 1400px;
 }
 
-/* Sorot cahaya: tiga lapis lembut (kerucut kabur, inti terang, pendar di sumur)
-   ditambah debu yang naik pelan. Tepi kiri dan kanan memudar, tidak bersudut tajam. */
-.holo__sinar {
-  position: absolute;
-  left: var(--sx);
-  top: 0;
-  width: min(66vw, 860px);
-  height: var(--sy);
-  transform: translateX(-50%);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 600ms ease;
-  mix-blend-mode: screen;
-}
-
-.holo__sinar::before,
-.holo__sinar::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  clip-path: polygon(calc(50% - var(--sw) * 0.5) 100%, calc(50% + var(--sw) * 0.5) 100%, 98% 14%, 2% 14%);
-}
-
-/* Kerucut luar: kabur, memudar ke samping dan ke atas, dengan debu melayang. */
-.holo__sinar::before {
-  background:
-    linear-gradient(to top, rgb(var(--fosfor) / 0.4), rgb(var(--fosfor) / 0.08) 75%, transparent),
-    radial-gradient(1.2px 1.2px at 20% 30%, rgb(255 255 255 / 0.7), transparent),
-    radial-gradient(1px 1px at 70% 55%, rgb(255 255 255 / 0.6), transparent),
-    radial-gradient(1.4px 1.4px at 40% 75%, rgb(255 255 255 / 0.5), transparent),
-    radial-gradient(1px 1px at 85% 40%, rgb(255 255 255 / 0.6), transparent);
-  background-size: 100% 100%, 180px 220px, 140px 260px, 220px 200px, 160px 240px;
-  filter: blur(6px);
-  -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
-  mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
-  animation: holo-debu 9s linear infinite;
-}
-
-/* Inti terang yang lebih sempit. */
-.holo__sinar::after {
-  background: linear-gradient(to top, rgb(220 255 235 / 0.45), rgb(var(--fosfor) / 0.05) 60%, transparent 90%);
-  filter: blur(14px);
-  transform: scaleX(0.45);
-  transform-origin: 50% 100%;
-}
-
-@keyframes holo-debu {
-  to {
-    background-position: 0 0, 0 -220px, 0 -260px, 0 -200px, 0 -240px;
-  }
-}
-
-.holo--nyala .holo__sinar {
-  opacity: 1;
-  animation: holo-kedip 4s steps(60) infinite;
-}
-
-@keyframes holo-kedip {
-  0%, 100% { filter: brightness(1); }
-  47% { filter: brightness(1); }
-  48% { filter: brightness(0.7); }
-  49% { filter: brightness(1.05); }
-}
-
-/* Pendar bulat di mulut sumur. */
+/* Sorot cahaya digambar adegan 3D (sorot.js); di sini tinggal pendar di mulut sumur. */
 .holo::before {
   content: "";
   position: absolute;
@@ -461,7 +386,9 @@
   position: absolute;
   left: var(--sx);
   top: calc(var(--sy) * 0.82);
-  width: min(56vw, 720px);
+  /* Lebar dibatasi juga oleh ruang di atas sumur, supaya bagian atas panel tidak terpotong
+     tepi panggung: tinggi panel kira-kira 0,625 x lebar ditambah kepala dan bilah alat. */
+  width: min(56vw, 720px, calc((var(--syf, 1) * (100vh - 60px) * 0.82 - 28px - 96px) / 0.625));
   transform-origin: 50% 100%;
   transform: translate(-50%, -100%) translateY(var(--bob)) rotateX(var(--rx)) rotateY(var(--ry));
   pointer-events: auto;
@@ -472,7 +399,26 @@
 }
 
 .holo[data-perangkat="hp"] .holo__panel {
-  width: min(30vw, 300px);
+  width: min(30vw, 300px, calc((var(--syf, 1) * (100vh - 60px) * 0.82 - 28px - 96px) / 2));
+}
+
+/* Cakram dikeluarkan: panel turun kembali ke sumur dan padam. */
+.holo--keluar .holo__panel {
+  animation: holo-turun 400ms cubic-bezier(0.32, 0.72, 0, 1) both;
+  pointer-events: none;
+}
+
+.holo--keluar .holo__orbit {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+@keyframes holo-turun {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -100%) scaleY(0.02);
+    filter: brightness(3);
+  }
 }
 
 @keyframes holo-naik {
@@ -548,6 +494,10 @@
   border-radius: 8px;
   overflow: hidden;
   background: #070b09;
+  /* Pendar tabung yang meluber sedikit ke bingkai. */
+  box-shadow:
+    0 0 14px rgb(var(--fosfor) / 0.3),
+    0 0 42px rgb(var(--fosfor) / 0.14);
 }
 
 .holo[data-perangkat="hp"] .holo__layar {
@@ -569,11 +519,46 @@
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 2;
   pointer-events: none;
   background:
     repeating-linear-gradient(0deg, rgb(0 0 0 / 0.12) 0 1px, transparent 1px 3px),
     radial-gradient(120% 100% at 50% 50%, transparent 60%, rgb(0 20 10 / 0.45) 100%);
   box-shadow: inset 0 0 40px rgb(var(--fosfor) / 0.15);
+}
+
+/* Semut layar tabung: tekstur derau yang melompat posisi sekitar 15 kali sedetik. */
+.holo__semut {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: var(--semut);
+  background-size: 256px 256px;
+  opacity: 0.08;
+  mix-blend-mode: screen;
+  animation: holo-semut 0.54s steps(1, end) infinite;
+}
+
+@keyframes holo-semut {
+  0% { background-position: 0 0; }
+  12.5% { background-position: -97px -173px; }
+  25% { background-position: -211px -38px; }
+  37.5% { background-position: -54px -122px; }
+  50% { background-position: -180px -201px; }
+  62.5% { background-position: -13px -66px; }
+  75% { background-position: -143px -19px; }
+  87.5% { background-position: -229px -147px; }
+}
+
+.holo--beku .holo__semut {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .holo__semut {
+    animation: none;
+  }
 }
 
 .holo--beku .holo__layar {
@@ -710,8 +695,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .panggung__cincin,
-  .holo__sinar,
-  .holo__sinar::before,
   .holo__muat,
   .holo__bilah i,
   .holo__panel,

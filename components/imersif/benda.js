@@ -23,6 +23,21 @@ export function tekstur(canvas, renderer) {
   return t;
 }
 
+// CD musik berganti isi saat pengunjung memilih lagu Spotify (peristiwa "musik:album").
+// Teksturnya digambar ulang dari data album yang sudah diperbarui; pendengar dilepas
+// bersama teksturnya.
+function ikutiMusik(p, peta, gambar) {
+  if (!p.musik || typeof window === "undefined") return;
+  const ulang = () => {
+    const c = gambar();
+    peta.image = c;
+    peta.needsUpdate = true;
+    c.siap?.then(() => (peta.needsUpdate = true));
+  };
+  window.addEventListener("musik:album", ulang);
+  peta.addEventListener("dispose", () => window.removeEventListener("musik:album", ulang));
+}
+
 // --- lingkungan ------------------------------------------------------------
 // Studio gelap dengan empat pita putih lembut: plastik dan logam baru terlihat
 // "nyata" karena memantulkan pita-pita ini, bukan karena warnanya sendiri.
@@ -438,6 +453,7 @@ export function buatCakram(p, renderer) {
   const redup = { value: 1 };
   const muka = tekstur(gambarCakram(p), renderer);
   muka.image.siap?.then(() => (muka.needsUpdate = true));
+  ikutiMusik(p, muka, () => gambarCakram(p));
   const cincin = (dalam, luar, seg = 220) => {
     const geo = new THREE.RingGeometry(dalam, luar, seg, 1);
     // UV dari xy supaya cetakan persegi menempel benar pada cincin.
@@ -656,6 +672,7 @@ export function buatKotak(p, locale, renderer, i) {
 
   const petaSisipan = tekstur(gambarSisipan(p, locale), renderer);
   petaSisipan.image.siap?.then(() => (petaSisipan.needsUpdate = true));
+  ikutiMusik(p, petaSisipan, () => gambarSisipan(p, locale));
   const sisipan = new THREE.Mesh(geo.sisipan, new THREE.MeshStandardMaterial({ map: petaSisipan, roughness: 0.5 }));
   badan.add(sisipan);
   badan.add(new THREE.Mesh(geo.dasar, plastik));
@@ -697,6 +714,7 @@ export function buatKotak(p, locale, renderer, i) {
   );
   // Ilustrasi sampul dimuat terpisah; begitu siap, kanvasnya digambar ulang dan diunggah lagi.
   petaSampul.image.siap?.then(() => (petaSampul.needsUpdate = true));
+  ikutiMusik(p, petaSampul, () => gambarSampul(p, locale));
   sampul.position.set(mm(6), 0, -mm(0.9));
   const belakangBuklet = new THREE.Mesh(
     new THREE.PlaneGeometry(BUKLET, BUKLET),
@@ -706,6 +724,7 @@ export function buatKotak(p, locale, renderer, i) {
     }),
   );
   petaBelakang.image.siap?.then(() => (petaBelakang.needsUpdate = true));
+  ikutiMusik(p, petaBelakang, () => gambarBelakang(p, locale, 1024));
   belakangBuklet.rotation.y = Math.PI;
   belakangBuklet.position.set(mm(6), 0, -mm(2.25));
   // Tumpukan kertas buklet 1,2 mm di antara sampul depan dan belakang.
@@ -1096,14 +1115,17 @@ export function buatPemutar(renderer) {
       normalScale: new THREE.Vector2(1.5, 1.5),
     }),
   );
-  isi.add(piring);
+  // Piringan dan bola ikut berputar bersama cakram; terlihat lewat hub bening.
+  const poros = new THREE.Group();
+  poros.add(piring);
+  isi.add(poros);
   const krom = new THREE.MeshPhysicalMaterial({ color: WARNA.krom, roughness: 0.12, metalness: 1 });
   const geoBola = new THREE.SphereGeometry(0.8, 16, 8);
   for (let k = 0; k < 3; k++) {
     const a = (k / 3) * Math.PI * 2;
     const bola = new THREE.Mesh(geoBola, krom);
-    bola.position.set(Math.cos(a) * (pin - 0.3), kursi + 1.4, Math.sin(a) * (pin - 0.3));
-    isi.add(bola);
+    bola.position.set(Math.cos(a) * (pin - 0.3), kursi + 1.1, Math.sin(a) * (pin - 0.3));
+    poros.add(bola);
   }
 
   const bayangan = new THREE.Mesh(
@@ -1239,7 +1261,7 @@ export function buatPemutar(renderer) {
   kiri.add(kerah, soket);
 
   // puncakY: sedikit di atas bibir sumur, pangkal sinar hologram. kursiY: pusat cakram di piringan.
-  return { grup, layar, tombol, lampu, puncakY: mm(PM.tinggi + 2), kursiY: mm(atas + kursi) };
+  return { grup, layar, tombol, lampu, poros, puncakY: mm(PM.tinggi + 2), kursiY: mm(atas + kursi) };
 }
 
 export { gambarHalaman };

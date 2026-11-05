@@ -90,13 +90,27 @@
     "jeda": "Pause music",
     "sembunyi": "Hide player",
     "tampil": "Show player",
-    "sedangDiputar": "Now playing"
+    "sedangDiputar": "Now playing",
+    "siap": "Ready to play",
+    "playlistFarrez": "Farrez's work playlist",
+    "pilihanmu": "Your pick",
+    "viaSpotify": "via Spotify",
+    "ganti": "Change song",
+    "tempel": "Spotify link",
+    "contoh": "open.spotify.com/track/…",
+    "pasang": "Play",
+    "batal": "Cancel",
+    "salah": "That isn't a Spotify track, album, or playlist link.",
+    "kembali": "Back to Farrez's playlist",
+    "kosong": "Paste a Spotify link to start.",
+    "disimpan": "Your link is only saved in this browser."
   },
   "umum": {
     "bahasa": "Language",
     "temaTerang": "Switch to light theme",
     "temaGelap": "Switch to dark theme",
-    "lewati": "Skip to content"
+    "lewati": "Skip to content",
+    "suara": "Sound effects"
   },
   "panggung": {
     "tentang": "About",

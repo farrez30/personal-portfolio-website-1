@@ -7,7 +7,7 @@ import ThemeScript from "../ThemeScript";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import ModeProvider from "@/components/mode/ModeProvider";
 import Bilah from "@/components/bilah/Bilah";
-import VinylPlayer from "@/components/vinyl/VinylPlayer";
+import PemutarMusik from "@/components/musik/PemutarMusik";
 
 export const dynamicParams = false;
 
@@ -84,7 +84,7 @@ export default async function LocaleLayout({ children, params }) {
               </a>
               <Bilah />
               <main id="isi">{children}</main>
-              <VinylPlayer />
+              <PemutarMusik />
             </ModeProvider>
           </ThemeProvider>
         </NextIntlClientProvider>
