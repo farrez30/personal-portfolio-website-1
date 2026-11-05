@@ -70,7 +70,7 @@ because the lettering sits inside the art. Everything else is set by code in the
 (OFL fonts in `public/assets/album/huruf/`), with a slight misregistered second pass and paper
 grain, never a separate title band; the same code version is the fallback front cover. Spines take the album's ink colour with
 the title in the genre face and the site logo. Every back insert has its own layout (`tata` in
-`content/album.js`), like real CD backs: track list (system components), a decorative barcode with
+`content/album.js`), like real CD backs: track list (the architecture story steps), a decorative barcode with
 the catalogue number, the site logo as record label, the project's own logo when it has one, and
 a small credit line. The plain band Flow left at the bottom of the art is detected and cropped. Projects without album art fall back to the old cream cover with a colour band.
 
