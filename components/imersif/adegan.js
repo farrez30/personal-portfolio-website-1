@@ -62,7 +62,7 @@ const C = {
   mundurSkala: 0.3,
   // Ganti album dari pemutar: semua gerak diputar lebih cepat dan saling menyambung,
   // supaya satu pergantian (keluarkan sampai cakram baru duduk) selesai sekitar 2 detik.
-  gantiSkala: 0.3,
+  gantiSkala: 0.25,
 };
 
 // --- kurva ---------------------------------------------------------------

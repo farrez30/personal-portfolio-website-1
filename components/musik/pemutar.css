@@ -151,11 +151,14 @@
   display: flex;
   align-items: center;
   gap: 0.85rem;
+  min-width: 0;
 }
 
 .vinyl-meta {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
   max-width: 9.5rem;
   line-height: 1.25;
 }
@@ -186,6 +189,7 @@
 
 .vinyl-controls {
   display: flex;
+  flex-shrink: 0;
   gap: 0.4rem;
 }
 
