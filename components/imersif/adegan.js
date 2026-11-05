@@ -273,6 +273,13 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   let urut = false;
   const terkunci = () => k_.sibuk && !urut;
   const panggil = (n, ...a) => dengar[n]?.(...a);
+  // Laju motor dikirim hanya saat berubah berarti, bukan tiap bingkai.
+  let motorLalu = 0;
+  const kirimMotor = (r) => {
+    if (Math.abs(r - motorLalu) < 0.01 && !(r === 0 && motorLalu !== 0)) return;
+    motorLalu = r;
+    panggil("motor", r);
+  };
   let duduk = false;
 
   const kirim = () =>
@@ -438,7 +445,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (menunggu[n].cek()) menunggu.splice(n, 1)[0].selesai();
     }
     const dv = nilaiTween(k_.dengarT, now);
+    const dengarLalu = k_.dengar;
     if (dv != null) k_.dengar = dv;
+    if (k_.dengar > 0.03 && dengarLalu <= 0.03 && k_.keadaan === "putar") panggil("suara", "angkat");
     const bv = nilaiTween(k_.bacaT, now);
     if (bv != null) k_.baca = bv;
     const mv = nilaiTween(k_.mundurT, now);
@@ -519,6 +528,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       // Pose terbuka: menghadap kamera, tunduk 24 derajat, spread di tengah.
       const bk = nilaiTween(kt.bukaT, now);
       if (bk != null) kt.buka = bk;
+      // Bunyi mengikuti gerak tutupnya: kait lepas di awal buka, klak saat rapat.
+      const bukaLalu = kt.bukaLalu ?? 0;
+      if (kt.buka > 0.04 && bukaLalu <= 0.04) panggil("suara", "bukaKotak");
+      else if (kt.buka < 0.02 && bukaLalu >= 0.02) panggil("suara", "rapat");
+      kt.bukaLalu = kt.buka;
       const swing = p3io((kt.buka - 0.3) / 0.7);
       const sudutTutup = k_.sempit ? (110 * Math.PI) / 180 : Math.PI;
       if (terbuka) {
@@ -601,6 +615,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         sorot.mesh.visible = true;
       }
     }
+    if (Math.abs(terangSorot - (k_.dengungLalu ?? 0)) > 0.005 || (terangSorot < 0.002 && k_.dengungLalu)) {
+      k_.dengungLalu = terangSorot < 0.002 ? 0 : terangSorot;
+      panggil("proyektor", k_.dengungLalu, kurangiGerak ? 1 : kedip(now / 1000));
+    }
 
     // --- cakram: angkat, geser, bawa, jatuhkan ------------------------------
     if (aktifK) {
@@ -628,6 +646,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         if (sasaranLaju > k_.laju) k_.laju += (sasaranLaju - k_.laju) * (1 - Math.exp(-dt / 0.4));
         else k_.laju = Math.max(sasaranLaju, k_.laju - (C.rpm / 60 / k_.rem) * dt);
         if (!kurangiGerak) k_.sudut += k_.laju * Math.PI * 2 * dt;
+        kirimMotor(k_.laju / (C.rpm / 60));
         setBlurPutar(c.userData.bahan.cetak, kurangiGerak ? 0 : k_.laju * Math.PI * 2 * Math.max(0.025, dt));
         // Sudut putar kembali ke nol selama dibawa pulang, supaya tidak meloncat saat masuk nampan.
         const sudutTampak = (k_.sudut % (Math.PI * 2)) * bawa;
@@ -645,11 +664,13 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         c.scale.setScalar(1);
         k_.laju = 0;
         k_.sudut = 0;
+        kirimMotor(0);
       }
       sinkronCakram(c);
     }
     const sudahDuduk = k_.keadaan === "putar" && k_.dengar > 0.999;
     if (sudahDuduk !== duduk) {
+      if (sudahDuduk) panggil("suara", "duduk");
       duduk = sudahDuduk;
       kirim();
     }
@@ -776,6 +797,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (k_.tutupMenunggu && b.page === 0 && !b.turning && Math.abs(b.userData.geser + 0.5) < 0.01) {
         k_.tutupMenunggu = false;
         pasangTween(k_.bacaT, k_.baca, 0, C.bacaKeluar * k_.baca, linear, performance.now());
+        panggil("suara", "kertas");
       }
       matahari.target.position.copy(tengahBaca);
       matahari.position.copy(tengahBaca).add(vTmp.set(-3.5, 1.3, 4.1).multiplyScalar(skBaca));
@@ -825,6 +847,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         const ok = antre.arah > 0 ? b.next() : b.prev();
         if (ok || now > antre.sampai) k_.antreHalaman = null;
       }
+      if (b.turning && !k_.membalik) panggil("suara", "halaman");
+      k_.membalik = b.turning;
       b.tick(now);
       if (k_.baca > 0.0005 || k_.bayanganLama) renderer.shadowMap.needsUpdate = true;
       k_.bayanganLama = k_.baca > 0.0005;
@@ -1217,6 +1241,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       k_.tutupMenunggu = false;
       if (!k_.buklet) k_.buklet = buatBuklet(p);
       pasangTween(k_.bacaT, k_.baca, 1, C.bacaMasuk * (1 - k_.baca), linear, performance.now());
+      panggil("suara", "kertas");
       k_.keadaan = "buklet";
       kirim();
     },
@@ -1231,6 +1256,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       } else {
         b?.goTo(0);
         pasangTween(k_.bacaT, k_.baca, 0, C.bacaKeluar * k_.baca, linear, performance.now());
+        panggil("suara", "kertas");
       }
       k_.keadaan = "buka";
       kirim();
@@ -1254,6 +1280,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     },
     keluarkan() {
       if (k_.keadaan !== "putar" || terkunci()) return;
+      panggil("suara", "keluarkan");
       k_.jalan = false;
       k_.rem = C.remKeluarkan;
       const now = performance.now();
@@ -1266,6 +1293,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     },
     setJalan(nyala) {
       if (!duduk) return;
+      panggil("suara", "tombol");
       k_.jalan = nyala;
       k_.rem = C.remDetik;
       // Play pertama: pemutar mundur supaya proyeksi di atasnya terlihat. Pause tidak membalik.
@@ -1289,6 +1317,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       const awal = kotak.findIndex((x) => x.p.slug === k_.aktif);
       k_.tujuanGanti = jepit(awal + arah, 0, kotak.length - 1);
       if (k_.tujuanGanti === awal) return;
+      if (dariPutar) panggil("suara", "tombol");
       k_.sibuk = true;
       kirim();
       const langkah = (fn) => {

@@ -12,6 +12,7 @@ import {
 import { proyek as daftarProyek } from "@/content/proyek";
 import { albumMusik } from "@/content/musik";
 import Hologram from "./Hologram";
+import { suara } from "./suara";
 
 // Rak imersif: semua proyek, lalu satu CD musik di ujung.
 const proyek = [...daftarProyek, albumMusik];
@@ -103,6 +104,10 @@ export default function Panggung({ gulir }) {
       a.on("klikCakram", () => (a.keadaan === "putar" ? a.keluarkan() : a.dengarkan()));
       a.on("tombol", (nama) => tekanTombol.current(nama));
       a.on("hover", setHover);
+      const sfx = suara();
+      a.on("suara", (nama) => sfx?.mainkan(nama));
+      a.on("motor", (r) => sfx?.motor(r));
+      a.on("proyektor", (k, kedip) => sfx?.proyektor(k, kedip));
       // Tiap bingkai, supaya panel dan sorotnya menempel pada pemutar tanpa tersendat.
       a.on("sumur", (x, y, w, nyala) => setSumur(nyala ? { x, y, w } : null));
       // Selama ganti album, posisi gulir halaman ikut indeks baru tanpa menggeser rak lagi.
@@ -113,6 +118,9 @@ export default function Panggung({ gulir }) {
     });
     return () => {
       batal = true;
+      // Lup motor dan dengung berhenti saat rak dilepas (misalnya pindah ke mode Ringan).
+      suara()?.motor(0);
+      suara()?.proyektor(0);
       a?.dispose();
       adegan.current = null;
     };
