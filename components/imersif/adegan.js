@@ -556,7 +556,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       const mundur = p3io(k_.mundur);
       pemutar.grup.position.set(0, pY + 0.2 - mundur * C.mundurTurun, 0);
       pemutar.grup.rotation.set(mx, Math.PI / 4 + my, 0);
-      pemutar.grup.scale.setScalar(0.62 * (1 - C.mundurSkala * mundur));
+      // Di layar sempit pemutar mengecil mengikuti lebar layar, seperti Discography.
+      const muat = jepit(vw / 2 / (1.4 * U), 0.4, 1);
+      pemutar.grup.scale.setScalar(0.62 * muat * (1 - C.mundurSkala * mundur));
       pemutar.lampu.material.color.set(k_.jalan ? 0x8fd694 : 0xe0574b);
       for (const b of pemutar.tombol) {
         const sorot = k_.tombolHover === b.userData.tombol;
