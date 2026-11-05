@@ -91,3 +91,9 @@ export function isiAlbum(tautan, info) {
     ringkas: { id: `${label.id} pilihanmu, diputar lewat Spotify.`, en: `Your ${label.en.toLowerCase()}, played through Spotify.` },
   };
 }
+
+// Tanpa login Spotify, embed memutar cuplikan 15 sampai 30 detik (teramati 15 dan 19 detik,
+// 5 Nov 2026); lagu penuh hampir selalu lebih panjang. Durasi dari peristiwa playback_update.
+export function cuplikan(durasi) {
+  return Number.isFinite(durasi) && durasi > 0 && durasi <= 31000;
+}

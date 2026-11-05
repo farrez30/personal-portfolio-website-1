@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { uraiTautan, ambilInfo, sampulAman, sampulBesar, isiAlbum } from "../components/musik/spotify.js";
+import { uraiTautan, ambilInfo, sampulAman, sampulBesar, isiAlbum, cuplikan } from "../components/musik/spotify.js";
 import { albumMusik, PLAYLIST } from "../content/musik.js";
 
 const ID = "4cOdK2wGLETKBW3PvgPWqT";
@@ -130,4 +130,9 @@ test("judul CD dari oEmbed, atau label jenisnya bila oEmbed gagal", () => {
 test("playlist Farrez, bila diisi, adalah tautan yang sah", () => {
   if (PLAYLIST) assert.equal(uraiTautan(PLAYLIST)?.jenis, "playlist");
   assert.equal(albumMusik.musik, true);
+});
+
+test("cuplikan dikenali dari durasi, lagu penuh dan data kosong tidak", () => {
+  for (const d of [15123, 18689, 30000, 31000]) assert.equal(cuplikan(d), true, String(d));
+  for (const d of [31001, 206000, 0, -1, NaN, undefined, null, "18689"]) assert.equal(cuplikan(d), false, String(d));
 });

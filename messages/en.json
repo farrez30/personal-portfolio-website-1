@@ -103,7 +103,8 @@
     "salah": "That isn't a Spotify track, album, or playlist link.",
     "kembali": "Back to Farrez's playlist",
     "kosong": "Paste a Spotify link to start.",
-    "disimpan": "Your link is only saved in this browser."
+    "disimpan": "Your link is only saved in this browser.",
+    "cuplikan": "This is a preview. <login>Log in to Spotify</login> in this browser to hear full tracks."
   },
   "umum": {
     "bahasa": "Language",

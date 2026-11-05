@@ -308,6 +308,20 @@
   border: 0;
 }
 
+.vinyl-cuplikan {
+  margin: 0;
+  max-width: 19rem;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--ink-2);
+}
+
+.vinyl-cuplikan a {
+  color: var(--aksen);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* Imersif: pojok kanan atas, di bawah kepala panggung, supaya tidak menutup rak dan
    tombol pemutar CD di bawah. */
 .vinyl-player--imersif,
