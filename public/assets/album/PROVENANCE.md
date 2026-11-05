@@ -10,6 +10,8 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 Sampul berjudul (`sampul-judul.webp`): sampul terpilih diedit di layar edit Flow (Nano Banana 2.1, 0 kredit, 5 Nov 2026), dengan judul berbahasa Indonesia digambar oleh model. Prompt per sampul ada di [docs/seni-cd/prompt-judul.json](../../../docs/seni-cd/prompt-judul.json). Ejaan 10 dari 10 dicek manual dari gambar aslinya. Farrez memilih versi ini untuk semua sampul depan. Asli JPEG ada di `D:\downloads\claude\2026-11-05-flow-album-cd\_judul-ai\`, diubah ke WebP 1024 px q82.
 
+Logo proyek (`logo.svg`) bukan buatan AI: disalin apa adanya dari repo proyek milik Farrez sendiri (FiFoFun `public/icon.svg`, Jeda `src/app/icon.svg`, AkarKita `app/icon.svg`, d-day `dashboard/src/app/icon.svg` ditambah width/height 64, NDS-ETL `web/app/icon.svg`, Coderoach `public/brand/coderoach_logo.svg`) pada 5 Nov 2026. Semuanya SVG tanpa skrip dan tanpa rujukan luar.
+
 ## erp-software-house: Swiss International Style
 
 | Berkas | Varian | Isi |

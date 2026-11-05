@@ -2,8 +2,8 @@
 // sampul, label cakram, halaman buklet, dan layar hologram. Tanpa berkas
 // gambar, jadi ringan dan ikut berganti bahasa.
 import { jalurIkon, teknologiDari } from "@/components/arsitektur/teknologi";
-import { albumUntuk } from "@/content/album";
-import { hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
+import { albumUntuk, LOGO_LABEL } from "@/content/album";
+import { batasPita, hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
 
 const KERTAS = "#efe9df";
 const TINTA = "#1d1b19";
@@ -99,23 +99,36 @@ function gambarPenuh(g, im, x, y, w, h, skala = 1) {
 
 // Seperti siapkanGambar, tapi menunggu huruf genre album juga, supaya judul
 // tidak sempat tergambar dengan huruf cadangan lalu tertinggal di tekstur.
-function siapkanAlbum(c, src, a, gambar) {
+// `tambahan`: gambar kecil (logo) yang ikut ditunggu sebelum gambar akhir.
+function siapkanAlbum(c, src, a, gambar, tambahan = []) {
   const im = muatGambar(src);
+  const lain = tambahan.filter(Boolean).map(muatGambar);
   const hurufSiap = muatHuruf(a.huruf);
   // Sudah termuat semua (mis. buklet dibuka setelah rak tampil): gambar langsung,
   // karena pemakai seperti buklet membaca kanvasnya saat itu juga.
-  if (im.complete && im.naturalWidth && hurufTermuat(a.huruf)) {
+  if (im.complete && im.naturalWidth && hurufTermuat(a.huruf) && lain.every((x) => x.complete)) {
     gambar(im);
     return;
   }
-  const imSiap = im.complete && im.naturalWidth
-    ? Promise.resolve()
-    : new Promise((selesai) => {
-        im.addEventListener("load", selesai, { once: true });
-        im.addEventListener("error", selesai, { once: true });
-      });
+  const tunggu = (x) =>
+    x.complete
+      ? Promise.resolve()
+      : new Promise((selesai) => {
+          x.addEventListener("load", selesai, { once: true });
+          x.addEventListener("error", selesai, { once: true });
+        });
   gambar(null);
-  c.siap = Promise.all([imSiap, hurufSiap]).then(() => gambar(im.naturalWidth ? im : null));
+  c.siap = Promise.all([tunggu(im), ...lain.map(tunggu), hurufSiap]).then(() => gambar(im.naturalWidth ? im : null));
+}
+
+// Logo kecil (SVG) dipas ke kotak persegi; dilewati bila belum termuat atau rusak.
+function gambarLogo(g, src, x, y, sisi) {
+  const im = src ? muatGambar(src) : null;
+  if (!im?.complete || !im.naturalWidth) return;
+  const sk = sisi / Math.max(im.naturalWidth, im.naturalHeight);
+  const w = im.naturalWidth * sk;
+  const h = im.naturalHeight * sk;
+  g.drawImage(im, x + (sisi - w) / 2, y + (sisi - h) / 2, w, h);
 }
 
 // Sampul album bergenre: sampul yang judulnya sudah digambar Nano Banana. Bila
@@ -260,6 +273,8 @@ export function gambarCakram(p, ukuran = 1024) {
     g.strokeStyle = "rgba(20, 18, 16, 0.55)";
     g.strokeText(p.katalog, m, m * 1.5);
     g.fillText(p.katalog, m, m * 1.5);
+    // Logo situs sebagai label rekaman, tepat di atas nomor katalog.
+    if (a) gambarLogo(g, LOGO_LABEL, m - ukuran * 0.028, m * 1.5 - ukuran * 0.1, ukuran * 0.056);
     g.beginPath();
     g.arc(m, m, m * label, 0, Math.PI * 2);
     g.arc(m, m, m * hub, 0, Math.PI * 2, true);
@@ -273,7 +288,8 @@ export function gambarCakram(p, ukuran = 1024) {
     g.fill("evenodd");
     g.restore();
   };
-  siapkanGambar(c, a?.label ?? p.ilustrasi, gambar);
+  if (a) siapkanAlbum(c, a.label, a, gambar, [LOGO_LABEL]);
+  else siapkanGambar(c, p.ilustrasi, gambar);
   return c;
 }
 
@@ -414,17 +430,39 @@ export function gambarAus(ukuran = 512, benih = 11) {
 // nomor katalog dan judul, terbaca dari atas ke bawah.
 export const SISIPAN = { panel: 138, punggung: 6.5, tinggi: 118 };
 
-// Terang rata-rata (0..1) satu kotak kanvas, untuk memilih tinta gelap atau terang.
-function terang(g, x, y, w, h) {
-  const d = g.getImageData(x, y, Math.max(1, w), Math.max(1, h)).data;
-  let t = 0;
-  for (let i = 0; i < d.length; i += 4) t += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
-  return t / (d.length / 4) / 255;
+// Terang rata-rata dan simpangan tiap baris, diukur di 80% kolom tengah supaya
+// bingkai gelap di tepi gambar tidak ikut. Baris terbawah (sering garis bingkai)
+// dilewati.
+function simpanganBaris(im) {
+  const lebar = 96;
+  const tinggi = Math.max(2, Math.round((lebar * im.naturalHeight) / im.naturalWidth));
+  const [, gk] = kanvas(lebar, tinggi);
+  gk.drawImage(im, 0, 0, lebar, tinggi);
+  const d = gk.getImageData(0, 0, lebar, tinggi).data;
+  const x0 = Math.round(lebar * 0.1);
+  const x1 = Math.round(lebar * 0.9);
+  const hasil = [];
+  for (let y = 0; y < tinggi - 1; y++) {
+    let jumlah = 0;
+    let kuadrat = 0;
+    for (let x = x0; x < x1; x++) {
+      const i = (y * lebar + x) * 4;
+      const l = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+      jumlah += l;
+      kuadrat += l * l;
+    }
+    const n = x1 - x0;
+    const rata = jumlah / n;
+    hasil.push({ rata, sd: Math.sqrt(Math.max(0, kuadrat / n - rata * rata)) });
+  }
+  return hasil;
 }
 
-// Sisipan album: gambar belakang dicetak di panel, punggung berwarna tinta album
-// dengan judul berhuruf genre. "Daftar lagu" (komponen sistem) dicetak langsung di
-// pita bawah gambar yang sengaja dibiarkan polos, tanpa kotak tambahan.
+// Sisipan album, meniru sisi belakang CD asli: gambar belakang memenuhi panel
+// (pita polosnya dibuang), "daftar lagu" (komponen sistem) satu kolom rata kiri
+// di pojok kiri atas, dan stiker putih kanan bawah berisi barcode hiasan, nomor
+// katalog, logo situs sebagai label rekaman, dan logo proyek bila ada. Punggung
+// berwarna tinta album dengan judul berhuruf genre dan logo situs.
 function gambarSisipanAlbum(p, a, locale, w) {
   const total = SISIPAN.panel + SISIPAN.punggung * 2;
   const h = Math.round((w * SISIPAN.tinggi) / total);
@@ -435,12 +473,14 @@ function gambarSisipanAlbum(p, a, locale, w) {
     g.fillStyle = KERTAS;
     g.fillRect(0, 0, w, h);
     if (im) {
-      g.save();
-      g.beginPath();
-      g.rect(pg, 0, lebarPanel, h);
-      g.clip();
-      gambarPenuh(g, im, pg, 0, lebarPanel, h);
-      g.restore();
+      const atas = batasPita(simpanganBaris(im));
+      const sw = im.naturalWidth;
+      const sh = im.naturalHeight * atas;
+      // Potong tengah bagian di atas pita supaya mengisi panel tanpa gepeng.
+      const sk = Math.max(lebarPanel / sw, h / sh);
+      const cw = lebarPanel / sk;
+      const ch = h / sk;
+      g.drawImage(im, (sw - cw) / 2, (sh - ch) / 2, cw, ch, pg, 0, lebarPanel, h);
     }
     g.fillStyle = a.tinta;
     g.fillRect(0, 0, pg, h);
@@ -457,34 +497,114 @@ function gambarSisipanAlbum(p, a, locale, w) {
       g.font = `500 ${pg * 0.36}px ${fontMono()}`;
       g.fillText(p.katalog, -h * 0.4, 0);
       g.restore();
+      // Logo situs tegak di kaki punggung, seperti logo label rekaman.
+      gambarLogo(g, LOGO_LABEL, x - pg * 0.32, h - pg * 1.1, pg * 0.64);
     }
     if (!im) return;
-    // Pita bawah gambar: 22% tinggi terbawah panel.
-    const s = lebarPanel / 512;
-    const atas = h * 0.78;
-    const gelap = terang(g, pg, Math.round(atas), lebarPanel, Math.round(h * 0.2)) < 0.45;
-    const tinta = gelap ? "#f4efe7" : a.tinta;
-    g.fillStyle = tinta;
-    g.textBaseline = "top";
-    // Daftar lagu di sisipan belakang: langkah-langkah cerita arsitekturnya.
-    const lagu = (p.arsitektur?.alur ?? []).map((l) => ({ label: l.judul[locale] }));
-    g.font = `400 ${10 * s}px ${fontMono()}`;
-    const kolom = Math.ceil(lagu.length / 2) || 1;
-    lagu.forEach((n, i) => {
-      const x = pg + 22 * s + Math.floor(i / kolom) * 150 * s;
-      const y = atas + 10 * s + (i % kolom) * 15 * s;
-      g.fillText(`${String(i + 1).padStart(2, "0")}  ${n.label}`, x, y, 142 * s);
-    });
-    // Barcode hiasan dengan nomor katalog, bukan kode produk sungguhan.
-    for (let i = 0; i < 30; i++) {
-      const lebarBatang = (i * 7) % 3 === 0 ? 3 : 1.5;
-      g.fillRect(pg + 400 * s + i * 2.6 * s, atas + 8 * s, lebarBatang * s * 0.6, 26 * s);
-    }
-    g.font = `400 ${8 * s}px ${fontMono()}`;
-    g.fillText(p.katalog, pg + 400 * s, atas + 38 * s);
+    // Tata letak belakang khas tiap album (content/album.js `tata`): bahannya sama,
+    // letak, huruf, dan bentuknya ikut genre, seperti sisi belakang CD sungguhan.
+    tataBelakang(g, p, a, { x: pg, y: 0, w: lebarPanel, h }, locale);
     butir(g, w, h, 0.05);
-  });
+  }, [LOGO_LABEL, a.logo]);
   return c;
+}
+
+const TATA_BAWAAN = {
+  lagu: { x: 0.05, y: 0.05, rata: "left", huruf: "mono", ukuran: 10, warna: null, kotak: "rgba(244, 239, 231, 0.9)" },
+  barcode: { x: 0.72, y: 0.84, gaya: "stiker" },
+  kredit: { x: 0.05, y: 0.94, rata: "left", warna: null },
+};
+
+function hurufTata(a, jenis, px) {
+  if (jenis === "genre") return `${a.huruf.berat ?? 400} ${px}px ${namaHuruf(a.huruf)}`;
+  if (jenis === "sans") return `500 ${px}px ${fontKeluarga()}`;
+  return `500 ${px}px ${fontMono()}`;
+}
+
+// Bahan sisi belakang: daftar lagu (langkah cerita arsitektur), barcode hiasan (bukan kode
+// produk sungguhan) dengan nomor katalog dan logo, dan baris kredit kecil.
+// Semua letak dalam pecahan panel; ukuran huruf dalam satuan 1/512 lebar panel.
+function tataBelakang(g, p, a, panel, locale) {
+  const t = { ...TATA_BAWAAN, ...a.tata };
+  const s = panel.w / 512;
+  const px = (fx) => panel.x + fx * panel.w;
+  const py = (fy) => panel.y + fy * panel.h;
+  g.save();
+  g.textBaseline = "top";
+
+  // Daftar lagu: langkah-langkah cerita arsitekturnya (satu permintaan pengguna).
+  const lagu = (p.arsitektur?.alur ?? []).map((l) => l.judul[locale]);
+  if (lagu.length) {
+    const L = { ...TATA_BAWAAN.lagu, ...t.lagu };
+    const ukuran = L.ukuran * s;
+    const tinggiBaris = ukuran * 1.45;
+    g.font = hurufTata(a, L.huruf, ukuran);
+    if (L.renggang && "letterSpacing" in g) g.letterSpacing = `${L.renggang * ukuran}px`;
+    const teks = lagu.map((l, i) => {
+      const isi = L.kapital ? l.toUpperCase() : l;
+      return L.nomor === false ? isi : `${String(i + 1).padStart(2, "0")}  ${isi}`;
+    });
+    const kolom = L.kolom === 2 ? Math.ceil(teks.length / 2) : teks.length;
+    const lebarKolom = Math.max(...teks.map((x) => g.measureText(x).width));
+    const jarakKolom = lebarKolom + 18 * s;
+    const lebarBlok = L.kolom === 2 && teks.length > 1 ? jarakKolom + lebarKolom : lebarKolom;
+    const tinggiBlok = kolom * tinggiBaris;
+    const ax = px(L.x);
+    const ay = py(L.y);
+    g.translate(ax, ay);
+    if (L.putar) g.rotate((L.putar * Math.PI) / 180);
+    const kiriBlok = L.rata === "center" ? -lebarBlok / 2 : L.rata === "right" ? -lebarBlok : 0;
+    if (L.kotak) {
+      const pad = 9 * s;
+      g.fillStyle = L.kotak;
+      g.fillRect(kiriBlok - pad, -pad * 0.8, lebarBlok + pad * 2, tinggiBlok + pad * 1.3);
+      if (L.garis) {
+        g.strokeStyle = L.garis;
+        g.lineWidth = L.tebalGaris ?? 1.2 * s;
+        g.strokeRect(kiriBlok - pad, -pad * 0.8, lebarBlok + pad * 2, tinggiBlok + pad * 1.3);
+      }
+    }
+    g.fillStyle = L.warna ?? a.tinta;
+    g.textAlign = L.kolom === 2 ? "left" : L.rata;
+    teks.forEach((x, i) => {
+      const k = Math.floor(i / kolom);
+      const bx = L.kolom === 2 ? kiriBlok + k * jarakKolom : 0;
+      g.fillText(x, bx, (i % kolom) * tinggiBaris);
+    });
+    g.setTransform(1, 0, 0, 1, 0, 0);
+    if ("letterSpacing" in g) g.letterSpacing = "0px";
+  }
+
+  // Barcode dengan nomor katalog; logo situs dan logo proyek di sampingnya.
+  const B = { ...TATA_BAWAAN.barcode, ...t.barcode };
+  const bw = 96 * s;
+  const bh = 30 * s;
+  const ikon = 14 * s;
+  const bx = px(B.x);
+  const by = py(B.y);
+  if (B.gaya === "stiker" || B.gaya === "warna") {
+    g.fillStyle = B.gaya === "warna" ? B.latar : "#fbfaf6";
+    g.fillRect(bx - 6 * s, by - 6 * s, bw + ikon + 18 * s, bh + 18 * s);
+  }
+  g.fillStyle = B.warna ?? "#151515";
+  for (let i = 0; i < 30; i++) {
+    const lebarBatang = (i * 7) % 3 === 0 ? 3 : 1.5;
+    g.fillRect(bx + i * 2.6 * s, by, lebarBatang * s * 0.6, bh - 8 * s);
+  }
+  g.font = `500 ${6.5 * s}px ${fontMono()}`;
+  g.textAlign = "left";
+  g.fillText(p.katalog, bx, by + bh - 6 * s);
+  gambarLogo(g, LOGO_LABEL, bx + bw, by, ikon);
+  gambarLogo(g, a.logo, bx + bw, by + ikon + 2 * s, ikon);
+
+  // Baris kredit kecil, seperti tulisan hak cipta di CD.
+  const K = { ...TATA_BAWAAN.kredit, ...t.kredit };
+  const tahun = (String(p.periode).match(/\d{4}(?!.*\d{4})/) ?? [""])[0];
+  g.font = `400 ${6 * s}px ${fontMono()}`;
+  g.fillStyle = K.warna ?? a.tinta;
+  g.textAlign = K.rata;
+  g.fillText(`© ${tahun} Farrez Al Hakim. farrez.vercel.app`, px(K.x), py(K.y));
+  g.restore();
 }
 
 export function gambarSisipan(p, locale, w = 1024) {
