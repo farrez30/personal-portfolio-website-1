@@ -4,6 +4,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import ModeSwitch from "@/components/mode/ModeSwitch";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import TombolSuara from "./TombolSuara";
 import "./bilah.css";
 
 export default function Bilah() {
@@ -32,6 +33,7 @@ export default function Bilah() {
               </Link>
             ))}
           </nav>
+          <TombolSuara />
           <ThemeToggle />
         </div>
       </div>
