@@ -12,7 +12,7 @@ import { HALAMAN } from "@/content/proyek";
 import { albumUntuk } from "@/content/album";
 import { GULUNG_GLSL, UKURAN, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok, tekuk } from "./gulung";
 import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
-import { gambarSampul, gambarHalaman, gambarBelakang, muatGambar } from "./gambar";
+import { gambarSampul, gambarHalaman, gambarBelakang, gambarDaftarLagu, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
 import { buatSorot, ujungSorot, kedip } from "./sorot";
 
@@ -117,6 +117,12 @@ function halamanBuklet(p, locale, uv) {
   // saat buklet dibuka. Sepertiga kanannya sengaja kosong untuk teks yang menunggu
   // persetujuan naskah (content/proyek.js), jadi untuk sekarang dekoratif.
   for (const src of albumUntuk(p.slug)?.buklet ?? []) hal.push({ src, alt: "" });
+  // CD musik: daftar lagu playlist Farrez (content/musik.js, diisi dari /api/musik/daftar).
+  const lagu = p.daftarLagu ?? [];
+  for (let i = 0; i < lagu.length; i += 10) {
+    const isi = lagu.slice(i, i + 10);
+    hal.push({ src: gambarDaftarLagu(isi, { awal: i }), alt: "Tracklist", text: isi.map((l) => `${l.judul}, ${l.artis}`).join("\n") });
+  }
   for (const h of HALAMAN) {
     const b = p.buklet[h];
     if (!b) continue;
