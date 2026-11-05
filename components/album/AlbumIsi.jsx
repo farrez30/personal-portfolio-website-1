@@ -41,7 +41,7 @@ export default function AlbumIsi({ p, judulSebagai: Judul = "h2", idJudul }) {
           {t("halaman.overview")}
         </h3>
         <p className="album__ringkas">{p.ringkas[locale]}</p>
-        {(p.tautan.situs || p.tautan.repo) && (
+        {(p.tautan.situs || p.tautan.repo || p.tautan.kasus) && (
           <p className="album__tautan">
             {p.tautan.situs && (
               <a href={p.tautan.situs} className="tombol" target="_blank" rel="noopener noreferrer">
@@ -51,6 +51,11 @@ export default function AlbumIsi({ p, judulSebagai: Judul = "h2", idJudul }) {
             {p.tautan.repo && (
               <a href={p.tautan.repo} className="tombol" target="_blank" rel="noopener noreferrer">
                 <PiGithubLogoBold aria-hidden="true" /> {t("lihatRepo")}
+              </a>
+            )}
+            {p.tautan.kasus && (
+              <a href={p.tautan.kasus} className="tombol" target="_blank" rel="noopener noreferrer">
+                {t("caseStudy")} <PiArrowUpRightBold aria-hidden="true" />
               </a>
             )}
           </p>

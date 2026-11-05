@@ -33,9 +33,23 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
   const locale = useLocale();
   const [perangkat, setPerangkat] = useState("desktop");
   const [besar, setBesar] = useState(false);
-  // Layar memuat ala terminal retro sampai isi (situs atau gambar) selesai dimuat.
-  const [muat, setMuat] = useState(true);
-  useEffect(() => setMuat(true), [perangkat, p.slug]);
+  const bolehTanam = typeof window !== "undefined" && window.location.hostname === "farrez.vercel.app";
+  const langsung = bolehTanam && p.tanam && p.tautan.situs;
+  // Tanpa situs atau tangkapan layar, layar memutar ilustrasi orang yang memakainya.
+  const gambar = p.layar?.[perangkat] ?? p.ilustrasi ?? null;
+  // Layar memuat ala terminal retro sampai isi yang sedang tampil selesai dimuat.
+  // Yang dicatat adalah isi mana yang sudah siap, bukan saklar ya/tidak: kalau HP dan
+  // Desktop memakai gambar yang sama, elemennya tidak dimuat ulang dan layar tetap siap.
+  const isi = langsung ? `situs:${perangkat}:${p.tautan.situs}` : gambar ? `gambar:${gambar}` : `kosong:${p.slug}`;
+  const [siapIsi, setSiapIsi] = useState(null);
+  const muat = siapIsi !== isi;
+  const selesai = useCallback((kunci, jeda = 700) => setTimeout(() => setSiapIsi(kunci), jeda), []);
+  // Jaring pengaman: gambar gagal, situs menolak dibingkai tanpa memicu load, atau
+  // event load yang terlewat tidak boleh membuat layar memuat selamanya.
+  useEffect(() => {
+    const t = selesai(isi, isi.startsWith("kosong:") ? 700 : 8000);
+    return () => clearTimeout(t);
+  }, [isi, selesai]);
   const panel = useRef(null);
   // Panel diserahkan ke adegan 3D supaya sorot proyektor berakhir tepat di tepinya.
   // Ref callback harus stabil; kalau tidak, React memanggilnya null lalu el tiap render.
@@ -88,10 +102,8 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
   }, []);
 
   if (!sumur) return null;
-  const bolehTanam = typeof window !== "undefined" && window.location.hostname === "farrez.vercel.app";
-  const langsung = bolehTanam && p.tanam && p.tautan.situs;
-  // Tanpa situs atau tangkapan layar, layar memutar ilustrasi orang yang memakainya.
-  const gambar = p.layar?.[perangkat] ?? p.ilustrasi ?? null;
+  // Situs sendiri lebih dulu; tanpa itu, halaman case study-nya di coderoach.id.
+  const tautanKeluar = p.tautan.situs ?? p.tautan.kasus;
   // Keping yang mengorbit: teknologi proyeknya, ikon dan nama.
   const potongan = p.arsitektur ? teknologiDari([...p.arsitektur.teknologi.stack, ...p.arsitektur.teknologi.infrastruktur]).slice(0, 6) : [];
 
@@ -134,12 +146,18 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
                 loading="lazy"
                 referrerPolicy="strict-origin-when-cross-origin"
                 sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
-                onLoad={() => setMuat(false)}
+                onLoad={() => selesai(isi, 0)}
               />
             ) : gambar ? (
-              <img key={gambar} src={gambar} alt="" onLoad={() => setTimeout(() => setMuat(false), 700)} />
+              <img
+                key={gambar}
+                src={gambar}
+                alt=""
+                onLoad={() => selesai(isi)}
+                onError={() => selesai(isi, 0)}
+              />
             ) : (
-              <div className="holo__kosong" style={{ background: p.warna }} ref={(el) => el && setTimeout(() => setMuat(false), 700)}>
+              <div className="holo__kosong" style={{ background: p.warna }}>
                 <span className="mono">{p.katalog}</span>
                 <span>{p.judul[locale]}</span>
               </div>
@@ -174,9 +192,9 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
             <button type="button" aria-pressed={perangkat === "hp"} onClick={() => setPerangkat("hp")}>
               <PiDeviceMobileBold aria-hidden="true" /> {t("hp")}
             </button>
-            {p.tautan.situs && (
-              <a href={p.tautan.situs} target="_blank" rel="noopener noreferrer">
-                {t("bukaTab")} <PiArrowUpRightBold aria-hidden="true" />
+            {tautanKeluar && (
+              <a href={tautanKeluar} target="_blank" rel="noopener noreferrer">
+                {t(p.tautan.situs ? "bukaTab" : "caseStudy")} <PiArrowUpRightBold aria-hidden="true" />
               </a>
             )}
           </div>

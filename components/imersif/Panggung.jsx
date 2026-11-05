@@ -351,9 +351,9 @@ export default function Panggung({ gulir }) {
               →
             </button>
           )}
-          {s.keadaan === "putar" && aktif.tautan?.situs && (
-            <a className="panggung__sudut" href={aktif.tautan.situs} target="_blank" rel="noopener noreferrer">
-              {t("bukaTab")} <PiArrowUpRightBold aria-hidden="true" />
+          {s.keadaan === "putar" && (aktif.tautan?.situs || aktif.tautan?.kasus) && (
+            <a className="panggung__sudut" href={aktif.tautan.situs ?? aktif.tautan.kasus} target="_blank" rel="noopener noreferrer">
+              {t(aktif.tautan.situs ? "bukaTab" : "caseStudy")} <PiArrowUpRightBold aria-hidden="true" />
             </a>
           )}
         </div>

@@ -25,13 +25,17 @@ test("messages/id.json dan en.json punya kunci yang sama persis", () => {
 test("setiap kunci t(...) di komponen ada di messages", () => {
   const id = new Set(kunci(baca("messages/id.json")));
   // Pasangan namespace dan berkas dibaca dari pemanggilan useTranslations di tiap komponen.
-  const berkas = ["components/imersif/Hologram.jsx", "components/imersif/Panggung.jsx"];
+  const berkas = ["components/imersif/Hologram.jsx", "components/imersif/Panggung.jsx", "components/album/AlbumIsi.jsx"];
   for (const b of berkas) {
     const src = readFileSync(new URL(b, akar), "utf8");
     const ns = /useTranslations\("([^"]+)"\)/.exec(src)?.[1];
     assert.ok(ns, `${b} tanpa useTranslations`);
     for (const [, k] of src.matchAll(/\bt\("([a-zA-Z.]+)"/g)) {
       assert.ok(id.has(`${ns}.${k}`), `${b}: ${ns}.${k} tidak ada di messages`);
+    }
+    // Kunci yang dipilih lewat ternary: t(x ? "a" : "b").
+    for (const [, k1, k2] of src.matchAll(/\bt\([^()"]*\?\s*"([a-zA-Z.]+)"\s*:\s*"([a-zA-Z.]+)"\)/g)) {
+      for (const k of [k1, k2]) assert.ok(id.has(`${ns}.${k}`), `${b}: ${ns}.${k} tidak ada di messages`);
     }
   }
 });
@@ -72,4 +76,22 @@ test("cariProyek mengembalikan null untuk slug yang tidak dikenal", () => {
 
 test("iframe hanya untuk proyek yang punya situs", () => {
   for (const p of proyek.filter((x) => x.tanam)) assert.ok(p.tautan.situs, `${p.slug}: tanam tanpa situs`);
+});
+
+test("tautan case study hanya ke halaman coderoach.id/work milik album itu", () => {
+  for (const p of proyek.filter((x) => x.tautan.kasus)) {
+    assert.equal(p.tautan.kasus, `https://coderoach.id/work/${p.slug}`, `${p.slug}: tautan kasus`);
+  }
+});
+
+test("ERP klien dan Viralytics tidak bertautan keluar sebelum ada izin", () => {
+  // ERP: nama klien disamarkan. Viralytics: menunggu izin mitra.
+  for (const slug of ["erp-software-house", "viralytics"]) {
+    assert.deepEqual(cariProyek(slug).tautan, {}, `${slug} punya tautan`);
+    assert.equal(cariProyek(slug).layar, undefined, `${slug} punya tangkapan layar`);
+  }
+});
+
+test("tiap tangkapan layar punya pasangan desktop dan HP", () => {
+  for (const p of proyek.filter((x) => x.layar)) assert.deepEqual(Object.keys(p.layar).sort(), ["desktop", "hp"], p.slug);
 });

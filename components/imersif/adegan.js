@@ -11,10 +11,11 @@ import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
 import { albumUntuk } from "@/content/album";
 import { GULUNG_GLSL, UKURAN, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok, tekuk } from "./gulung";
-import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
+import { KOTAK, BUKLET, CAKRAM, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
 import { gambarSampul, gambarHalaman, gambarBelakang, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
 import { buatSorot, ujungSorot, kedip } from "./sorot";
+import { FASE, ANGKAT, angkatBebas } from "./lintasan";
 
 // Satuan studi (1 = 60 mm) ke satuan kita (1 = 100 mm).
 const U = 0.6;
@@ -59,6 +60,9 @@ const C = {
   mundurDetik: 1.2,
   mundurTurun: 1.1 * U,
   mundurSkala: 0.3,
+  // Ganti album dari pemutar: semua gerak diputar lebih cepat dan saling menyambung,
+  // supaya satu pergantian (keluarkan sampai cakram baru duduk) selesai sekitar 2 detik.
+  gantiSkala: 0.3,
 };
 
 // --- kurva ---------------------------------------------------------------
@@ -276,6 +280,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   const tunggu = (cek) => new Promise((selesai) => menunggu.push({ cek, selesai }));
   // Selama urutan ganti album berjalan, klik dan tombol lain diabaikan.
   let urut = false;
+  let skalaDurasi = 1;
   const terkunci = () => k_.sibuk && !urut;
   const panggil = (n, ...a) => dengar[n]?.(...a);
   // Laju motor dikirim hanya saat berubah berarti, bukan tiap bingkai.
@@ -343,7 +348,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   };
 
   const pasangTween = (tw, dari, ke, durasi, kurva, now) =>
-    Object.assign(tw, { aktif: true, dari, ke, durasi: kurangiGerak ? 1e-4 : Math.max(1e-4, durasi), kurva, mulai: now });
+    Object.assign(tw, { aktif: true, dari, ke, durasi: kurangiGerak ? 1e-4 : Math.max(1e-4, durasi * skalaDurasi), kurva, mulai: now });
   const nilaiTween = (tw, now) => {
     if (!tw.aktif) return null;
     const t = (now - tw.mulai) / 1000 / tw.durasi;
@@ -635,16 +640,24 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         m4.decompose(pos, q, sk3);
         // Asal cakram tetap di tempat kotak semula: kotak naik keluar layar, cakram tidak ikut.
         pos.y -= geser * C.geserNaik;
-        pos.addScaledVector(vTmp.copy(sumbuZ).applyQuaternion(q), p3o(k_.dengar / 0.3) * 0.6 * U);
+        pos.addScaledVector(vTmp.copy(sumbuZ).applyQuaternion(q), p3o(k_.dengar / FASE.dorong) * 0.6 * U);
         pemutar.grup.updateWorldMatrix(true, false);
-        const atas = pos2.set(0, pemutar.kursiY + 0.3 * U, 0).applyMatrix4(pemutar.grup.matrixWorld).clone();
+        const atas = pos2.set(0, pemutar.kursiY + ANGKAT, 0).applyMatrix4(pemutar.grup.matrixWorld).clone();
         const poros = pos2.set(0, pemutar.kursiY, 0).applyMatrix4(pemutar.grup.matrixWorld).clone();
         q2.copy(pemutar.grup.getWorldQuaternion(qTmp)).multiply(qDatar);
-        const bawa = p3io((k_.dengar - 0.35) / 0.45);
-        const jatuh = p3io((k_.dengar - 0.78) / 0.22);
+        const bawa = p3io((k_.dengar - FASE.bawaDari) / (FASE.bawaSampai - FASE.bawaDari));
+        const jatuh = p3io((k_.dengar - FASE.bawaSampai) / (FASE.jatuhSampai - FASE.bawaSampai));
         pos.lerp(atas, bawa).lerp(poros, jatuh);
         q.slerp(q2, bawa);
         sk3.lerp(vTmp.setScalar(pemutar.grup.scale.x), bawa);
+        // Selama dibawa, cakram yang miring tidak boleh menyapu badan pemutar: pemutar
+        // baru turun setelah cakram mulai pindah, jadi tanpa ini separuh cakram masuk
+        // ke badannya. Cakram diangkat secukupnya di atas puncak badan. Saat jatuh ke
+        // sumur cakram sudah datar dan pas di dalam sumurnya, jadi batas ini dilepas.
+        if (jatuh <= 0) {
+          const lantai = pos2.set(0, pemutar.puncakY, 0).applyMatrix4(pemutar.grup.matrixWorld).y + 0.01;
+          pos.y += angkatBebas(pos.y, vTmp.copy(sumbuZ).applyQuaternion(q).y, CAKRAM.r * sk3.x, lantai);
+        }
         if (c.parent !== scene) scene.attach(c);
         // 120 rpm, naik eksponensial (tau 0,4 dt), rem dengan perlambatan tetap.
         const sasaranLaju = k_.jalan ? C.rpm / 60 : 0;
@@ -1330,24 +1343,32 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         fn();
         urut = false;
       };
+      // Tiap langkah mulai sedikit sebelum langkah sebelumnya selesai. Semua tween
+      // berangkat dari nilai saat itu, jadi tumpang tindihnya tetap tanpa lompatan.
+      skalaDurasi = C.gantiSkala;
       if (dariPutar) {
         langkah(api.keluarkan);
-        await tunggu(() => !k_.dengarT.aktif);
+        // Cakram nyaris masuk nampan; tutup mulai turun di atasnya.
+        await tunggu(() => k_.dengar < 0.04);
       }
       const lama = kotak[awal];
       langkah(api.tutup);
-      await tunggu(() => !lama.bukaT.aktif && !k_.menutup);
+      await tunggu(() => lama.buka < 0.12);
       keIndeks(k_.tujuanGanti, "klik");
       panggil("indeks", k_.tujuanGanti);
-      await tunggu(() => !k_.posT.aktif);
+      await tunggu(() => Math.abs(k_.pos - k_.tujuan) < 0.08);
       const kt = kotak[k_.tujuanGanti];
       langkah(() => api.buka(kt.p.slug));
-      await tunggu(() => !kt.bukaT.aktif);
       if (dariPutar) {
+        // Cakram baru keluar saat tutupnya sudah cukup terbuka untuk dilewati.
+        await tunggu(() => kt.buka > 0.75);
         langkah(api.dengarkan);
         await tunggu(() => duduk);
+        // Pemutar mundur untuk proyeksi dengan kecepatan biasa, bukan kecepatan ganti.
+        skalaDurasi = 1;
         if (mainLagi) api.setJalan(true);
-      }
+      } else await tunggu(() => !kt.bukaT.aktif);
+      skalaDurasi = 1;
       k_.sibuk = false;
       kirim();
     },

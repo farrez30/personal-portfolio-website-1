@@ -61,7 +61,8 @@ export const proyek = [
     status: "dipakai",
     periode: "2026",
     warna: "#3d4a2c",
-    tautan: {},
+    tautan: { kasus: "https://coderoach.id/work/coderoach-os" },
+    layar: { desktop: "/assets/layar/coderoach-os-desktop.webp", hp: "/assets/layar/coderoach-os-hp.webp" },
     gambar: null,
     ringkas: {
       id: "Aplikasi internal studio: proyek, jam kerja, invoice, kas, dan pembukuan. Status pekerjaan ikut bergerak sendiri dari pull request dan deploy.",
@@ -79,7 +80,8 @@ export const proyek = [
     status: "dipakai",
     periode: "2026",
     warna: "#24423b",
-    tautan: { situs: "https://fifofun.vercel.app", repo: "https://github.com/farrez30/fifofun" },
+    tautan: { situs: "https://fifofun.vercel.app", repo: "https://github.com/farrez30/fifofun", kasus: "https://coderoach.id/work/fifofun" },
+    layar: { desktop: "/assets/layar/fifofun-desktop.webp", hp: "/assets/layar/fifofun-hp.webp" },
     tanam: true,
     gambar: null,
     ringkas: {
@@ -116,7 +118,7 @@ export const proyek = [
     status: "dipakai",
     periode: "2026",
     warna: "#5c4a2a",
-    tautan: { situs: "https://akarkita.vercel.app/warisan" },
+    tautan: { situs: "https://akarkita.vercel.app/warisan", kasus: "https://coderoach.id/work/akarkita" },
     gambar: null,
     // AkarKita mengizinkan farrez.vercel.app di frame-ancestors (5 Nov 2026), jadi
     // layar proyektor menampilkannya langsung. Di localhost tetap ditolak.
@@ -156,7 +158,8 @@ export const proyek = [
     status: "pilot",
     periode: "2026",
     warna: "#2c3f52",
-    tautan: { situs: "https://jedaweb.vercel.app" },
+    tautan: { situs: "https://jedaweb.vercel.app", kasus: "https://coderoach.id/work/jeda" },
+    layar: { desktop: "/assets/layar/jeda-desktop.webp", hp: "/assets/layar/jeda-hp.webp" },
     tanam: true,
     gambar: null,
     ringkas: {
@@ -175,7 +178,8 @@ export const proyek = [
     status: "pilot",
     periode: "2026",
     warna: "#33333d",
-    tautan: {},
+    tautan: { kasus: "https://coderoach.id/work/yiheecam" },
+    layar: { desktop: "/assets/layar/yiheecam-desktop.webp", hp: "/assets/layar/yiheecam-hp.webp" },
     gambar: null,
     ringkas: {
       id: "Aplikasi Android pengganti app kamera aksi yang sudah ditinggalkan vendornya: live view, rekam, setting, baterai, dan kartu SD.",
@@ -193,7 +197,8 @@ export const proyek = [
     status: "pilot",
     periode: "2026",
     warna: "#3a3f2a",
-    tautan: {},
+    tautan: { kasus: "https://coderoach.id/work/d-day" },
+    layar: { desktop: "/assets/layar/d-day-desktop.webp", hp: "/assets/layar/d-day-hp.webp" },
     gambar: null,
     ringkas: {
       id: "Mesin trading kripto semi-otomatis untuk seorang teman. Sudah lulus uji di testnet dan belum pernah memakai uang sungguhan.",
