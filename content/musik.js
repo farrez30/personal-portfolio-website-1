@@ -3,7 +3,7 @@
 // tidak tampil di daftar proyek mode Ringan.
 
 // Tautan playlist Farrez (open.spotify.com/playlist/...). Kosong: pengunjung yang memilih.
-export const PLAYLIST = null;
+export const PLAYLIST = "https://open.spotify.com/playlist/1qmBZS2MPCIpgs9tqzYslN";
 
 // Objek ini sengaja bisa diubah: pemutar musik mengisi judul, ringkasan, dan sampulnya
 // dari oEmbed, lalu rak 3D menggambar ulang kotak dan cakramnya.
