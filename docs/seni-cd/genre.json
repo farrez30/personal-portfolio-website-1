@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "erp-software-house",
+    "genre": "Swiss International Style",
+    "alasan": "Sistem back-office untuk banyak klien adalah soal grid, aturan, dan data yang rapi. Gaya Swiss (Zurich dan Basel 1950-an) lahir dari kebutuhan yang sama: informasi objektif di grid modular. Fotomontase hitam putih menyamarkan klien tanpa wajah.",
+    "gaya": "1960s Swiss International Style poster: strict modular grid, flat geometric circles and bars, black, white and signal red with one cool grey, objective black-and-white halftone photomontage, asymmetric balance, generous white space, offset print texture."
+  },
+  {
+    "slug": "viralytics",
+    "genre": "70s photo collage",
+    "alasan": "Viralytics hidup di dunia kreator dan kampanye: banyak potongan konten yang ditempel jadi satu rencana. Kolase foto psikedelik 1970-an persis begitu, potongan foto dengan tepi sobek yang disusun jadi satu sampul.",
+    "gaya": "1970s psychedelic photo collage album art: cut-out vintage photographs with torn and scissor-cut paper edges, layered and overlapping, saturated orange, magenta and teal, sunburst rays, halftone and film grain, glue shadows."
+  },
+  {
+    "slug": "coderoach-os",
+    "genre": "Bauhaus",
+    "alasan": "Aplikasi internal studio: alat kerja yang dibuat oleh bengkelnya sendiri. Bauhaus adalah sekolah bengkel yang memadukan fungsi dan bentuk dasar; lingkaran, persegi, dan segitiga cocok untuk status yang bergerak sendiri.",
+    "gaya": "1920s Bauhaus poster: primary red, yellow and blue with black on off-white paper, circles, squares and triangles, strong diagonals, figures constructed from simple geometry, lithograph texture."
+  },
+  {
+    "slug": "fifofun",
+    "genre": "Mid-century modern",
+    "alasan": "Perencana keuangan rumah tangga. Ilustrasi domestik 1950-an (gaya UPA, era atom) penuh dapur, ruang keluarga, dan optimisme rumah tangga, jadi cocok untuk anggaran yang terasa hangat dan bisa dipercaya.",
+    "gaya": "1950s mid-century modern illustration: flat shapes with slight offset misregistration, mustard, teal, coral and cream, boomerang and starburst motifs, stylized people with simple dot faces, textured gouache."
+  },
+  {
+    "slug": "nds-etl",
+    "genre": "Constructivist poster",
+    "alasan": "Jaringan distributor dan rencana repeat order adalah garis, simpul, dan arah. Poster konstruktivis 1920-an memakai diagonal tegas dan garis memancar untuk menggambarkan jaringan, dalam versi non-politis.",
+    "gaya": "1920s constructivist-inspired poster, non-political: bold diagonals, red, black and cream, black-and-white photomontage, radiating lines and connected circles, strong geometric blocks, letterpress texture."
+  },
+  {
+    "slug": "akarkita",
+    "genre": "Linocut folk print",
+    "alasan": "Pohon keluarga dengan sebutan kerabat Sunda dan garis suku Minang. Cetak cukil kayu dan linoleum adalah tradisi cetak rakyat yang kasar dan hangat; akar, cabang, dan atap rumah gadang terpahat dengan wajar.",
+    "gaya": "hand-carved linocut folk print: bold black carved lines and gouge marks on warm cream paper, two spot colours deep indigo and ochre, slight ink unevenness, decorative leaves and root patterns."
+  },
+  {
+    "slug": "pilot-iklan",
+    "genre": "Pop art",
+    "alasan": "Pilot iklan untuk toko keluarga. Pop art 1960-an lahir dari iklan dan komik cetak murah: titik Ben-Day, garis hitam tebal, warna primer. Pas untuk iklan yang diubah jadi obrolan.",
+    "gaya": "1960s pop art: Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy, speech bubbles left completely empty."
+  },
+  {
+    "slug": "jeda",
+    "genre": "ECM minimalism",
+    "alasan": "Catatan pikiran di antara sesi terapi. Sampul ECM Records terkenal dengan foto berkabut, ruang kosong yang luas, dan satu subjek kecil. Rasanya tenang dan memberi jeda, sama seperti aplikasinya.",
+    "gaya": "ECM Records minimalism: muted fine-art photograph, mist and fog, vast negative space, pale grey, slate blue and soft white, one small subject far away, soft film grain, calm and quiet."
+  },
+  {
+    "slug": "yiheecam",
+    "genre": "Japanese city-pop",
+    "alasan": "Aplikasi untuk kamera aksi di helm pengendara motor. Ilustrasi city-pop Jepang 1980-an penuh jalan raya, langit gradasi, dan perjalanan kota, cocok untuk merekam perjalanan.",
+    "gaya": "1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes."
+  },
+  {
+    "slug": "d-day",
+    "genre": "Blue Note jazz",
+    "alasan": "Mesin trading untuk teman, diuji di testnet pada malam-malam panjang. Sampul jazz Blue Note memakai foto duotone kontras tinggi, crop ketat, dan blok warna tegas; rasanya tegang, malam, dan fokus.",
+    "gaya": "1950s-60s Blue Note style jazz record cover: high-contrast duotone photograph in black and one bold colour, tight dramatic cropping, night lighting, heavy grain, large flat coloured rectangles, no lettering."
+  }
+]

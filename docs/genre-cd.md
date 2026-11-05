@@ -1,0 +1,27 @@
+# Genre album per proyek
+
+Keputusan Farrez 5 Nov 2026: tiap CD proyek tampil seperti album yang berbeda, satu genre desain rekaman per proyek. Tidak ada genre yang dipakai dua kali, dan tidak ada yang memakai gaya ilustrasi risograf seragam yang lama. Semua gambar dibuat di Google Flow (Nano Banana 2.1, akun Google AI Pro Farrez, 0 kredit). Prompt lengkap ada di [seni-cd/prompt.json](seni-cd/prompt.json), blok gayanya di [seni-cd/genre.json](seni-cd/genre.json), dan asal tiap berkas di [public/assets/album/PROVENANCE.md](../public/assets/album/PROVENANCE.md). Datanya di `content/album.js`.
+
+## Aturan
+
+- **Gambar tanpa teks.** Prompt melarang huruf, angka, dan logo, jadi tidak ada klaim yang tercetak. Orang di gambar fiktif dan anonim, tidak ada wajah klien.
+- **Judul dicetak kode, bukan oleh model gambar.** Judul ditulis langsung di atas gambar dengan huruf genre itu, tanpa pita judul, lalu diberi geser cetak dan butir kertas supaya terasa tercetak (`components/imersif/tipografi.js`). Alasannya: ejaan pasti benar, ikut bahasa halaman, dan letaknya bisa digeser tanpa generate ulang. Dua sampul (Viralytics, AkarKita) sengaja murni gambar, seperti sebagian sampul di Discography; judulnya ada di punggung dan cakram.
+- **Halaman buklet** menyisakan sepertiga kanan sebagai kertas kosong untuk teks cerita proyek. Teks itu diisi di fase berikutnya setelah Farrez menyetujui naskahnya. **Sisipan belakang** menyisakan pita bawah polos; "daftar lagu" (komponen sistem) dan barcode hiasan dicetak di sana. Punggung kiri dan kanan berwarna tinta album dengan judul berhuruf genre.
+- **Ukuran:** sampul, label, dan halaman buklet persegi (buklet CD asli 120 x 120 mm). Label cakram berkomposisi lingkaran. Sisipan belakang 4:3 (inlay asli 151 x 118 mm).
+
+## Tabel
+
+| Proyek | Genre | Kenapa genre ini | Huruf judul | Berkas |
+|---|---|---|---|---|
+| erp-software-house | Swiss International Style | Sistem back-office untuk banyak klien adalah soal grid, aturan, dan data yang rapi. Gaya Swiss (Zurich dan Basel 1950-an) lahir dari kebutuhan yang sama: informasi objektif di grid modular. Fotomontase hitam putih menyamarkan klien tanpa wajah. | Schibsted Grotesk (huruf situs) | `public/assets/album/erp-software-house/`: sampul, label, belakang, buklet-01 sampai 08 |
+| viralytics | 70s photo collage | Viralytics hidup di dunia kreator dan kampanye: banyak potongan konten yang ditempel jadi satu rencana. Kolase foto psikedelik 1970-an persis begitu, potongan foto dengan tepi sobek yang disusun jadi satu sampul. | Shrikhand (sampul tanpa judul) | `public/assets/album/viralytics/`: sampul, label, belakang, buklet-01 sampai 08 |
+| coderoach-os | Bauhaus | Aplikasi internal studio: alat kerja yang dibuat oleh bengkelnya sendiri. Bauhaus adalah sekolah bengkel yang memadukan fungsi dan bentuk dasar; lingkaran, persegi, dan segitiga cocok untuk status yang bergerak sendiri. | Josefin Sans | `public/assets/album/coderoach-os/`: sampul, label, belakang, buklet-01 sampai 08 |
+| fifofun | Mid-century modern | Perencana keuangan rumah tangga. Ilustrasi domestik 1950-an (gaya UPA, era atom) penuh dapur, ruang keluarga, dan optimisme rumah tangga, jadi cocok untuk anggaran yang terasa hangat dan bisa dipercaya. | Pacifico | `public/assets/album/fifofun/`: sampul, label, belakang, buklet-01 sampai 08 |
+| nds-etl | Constructivist poster | Jaringan distributor dan rencana repeat order adalah garis, simpul, dan arah. Poster konstruktivis 1920-an memakai diagonal tegas dan garis memancar untuk menggambarkan jaringan, dalam versi non-politis. | Oswald | `public/assets/album/nds-etl/`: sampul, label, belakang, buklet-01 sampai 08 |
+| akarkita | Linocut folk print | Pohon keluarga dengan sebutan kerabat Sunda dan garis suku Minang. Cetak cukil kayu dan linoleum adalah tradisi cetak rakyat yang kasar dan hangat; akar, cabang, dan atap rumah gadang terpahat dengan wajar. | Alfa Slab One (sampul tanpa judul) | `public/assets/album/akarkita/`: sampul, label, belakang, buklet-01 sampai 08 |
+| pilot-iklan | Pop art | Pilot iklan untuk toko keluarga. Pop art 1960-an lahir dari iklan dan komik cetak murah: titik Ben-Day, garis hitam tebal, warna primer. Pas untuk iklan yang diubah jadi obrolan. | Bangers | `public/assets/album/pilot-iklan/`: sampul, label, belakang, buklet-01 sampai 08 |
+| jeda | ECM minimalism | Catatan pikiran di antara sesi terapi. Sampul ECM Records terkenal dengan foto berkabut, ruang kosong yang luas, dan satu subjek kecil. Rasanya tenang dan memberi jeda, sama seperti aplikasinya. | Cormorant Garamond | `public/assets/album/jeda/`: sampul, label, belakang, buklet-01 sampai 08 |
+| yiheecam | Japanese city-pop | Aplikasi untuk kamera aksi di helm pengendara motor. Ilustrasi city-pop Jepang 1980-an penuh jalan raya, langit gradasi, dan perjalanan kota, cocok untuk merekam perjalanan. | Kaushan Script | `public/assets/album/yiheecam/`: sampul, label, belakang, buklet-01 sampai 08 |
+| d-day | Blue Note jazz | Mesin trading untuk teman, diuji di testnet pada malam-malam panjang. Sampul jazz Blue Note memakai foto duotone kontras tinggi, crop ketat, dan blok warna tegas; rasanya tegang, malam, dan fokus. | Bebas Neue | `public/assets/album/d-day/`: sampul, label, belakang, buklet-01 sampai 08 |
+
+Huruf genre (OFL, dari Google Fonts, subset latin) ada di `public/assets/album/huruf/`. Total sekitar 190 KB, dan baru dimuat saat adegan imersif menggambar sampul.

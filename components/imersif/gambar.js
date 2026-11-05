@@ -2,6 +2,8 @@
 // sampul, label cakram, halaman buklet, dan layar hologram. Tanpa berkas
 // gambar, jadi ringan dan ikut berganti bahasa.
 import { tataLetak } from "@/components/sinarx/tataLetak";
+import { albumUntuk } from "@/content/album";
+import { hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
 
 const KERTAS = "#efe9df";
 const TINTA = "#1d1b19";
@@ -87,10 +89,56 @@ function butir(g, w, h, kuat = 0.06) {
   g.restore();
 }
 
-// Sampul: ilustrasi orang yang memakai produknya, dicetak penuh di atas kertas krem,
-// dengan pita bawah berisi judul seperti sampul rilisan indie. Sebelum ilustrasinya
-// termuat (atau bila tidak ada), sampul warna polos dengan judul besar.
+// Gambar dipotong tengah supaya mengisi kotak tanpa gepeng.
+function gambarPenuh(g, im, x, y, w, h, skala = 1) {
+  const sk = Math.max(w / im.naturalWidth, h / im.naturalHeight) * skala;
+  const iw = im.naturalWidth * sk;
+  const ih = im.naturalHeight * sk;
+  g.drawImage(im, x + (w - iw) / 2, y + (h - ih) / 2, iw, ih);
+}
+
+// Seperti siapkanGambar, tapi menunggu huruf genre album juga, supaya judul
+// tidak sempat tergambar dengan huruf cadangan lalu tertinggal di tekstur.
+function siapkanAlbum(c, src, a, gambar) {
+  const im = muatGambar(src);
+  const hurufSiap = muatHuruf(a.huruf);
+  // Sudah termuat semua (mis. buklet dibuka setelah rak tampil): gambar langsung,
+  // karena pemakai seperti buklet membaca kanvasnya saat itu juga.
+  if (im.complete && im.naturalWidth && hurufTermuat(a.huruf)) {
+    gambar(im);
+    return;
+  }
+  const imSiap = im.complete && im.naturalWidth
+    ? Promise.resolve()
+    : new Promise((selesai) => {
+        im.addEventListener("load", selesai, { once: true });
+        im.addEventListener("error", selesai, { once: true });
+      });
+  gambar(null);
+  c.siap = Promise.all([imSiap, hurufSiap]).then(() => gambar(im.naturalWidth ? im : null));
+}
+
+// Sampul album bergenre: gambar penuh dan judul dicetak langsung di atasnya
+// dengan huruf genre itu (letak di content/album.js). Tanpa pita judul.
+function gambarSampulAlbum(p, a, locale, ukuran) {
+  const [c, g] = kanvas(ukuran, ukuran);
+  siapkanAlbum(c, a.sampul, a, (im) => {
+    g.fillStyle = im ? KERTAS : p.warna;
+    g.fillRect(0, 0, ukuran, ukuran);
+    if (!im) return;
+    gambarPenuh(g, im, 0, 0, ukuran, ukuran);
+    tulisJudul(g, ukuran, p.judul[locale], a.judul, a.huruf);
+    butir(g, ukuran, ukuran, 0.05);
+  });
+  return c;
+}
+
+// Sampul: tanpa seni album, ilustrasi orang yang memakai produknya di atas kertas
+// krem dengan pita bawah berisi judul. Sebelum ilustrasinya termuat (atau bila
+// tidak ada), sampul warna polos dengan judul besar.
 export function gambarSampul(p, locale, ukuran = 1024) {
+  const a = albumUntuk(p.slug);
+  if (a) return gambarSampulAlbum(p, a, locale, ukuran);
   const [c, g] = kanvas(ukuran, ukuran);
   const s = ukuran / 512;
   const polos = () => {
@@ -161,6 +209,10 @@ export function gambarCakram(p, ukuran = 1024) {
   const [c, g] = kanvas(ukuran, ukuran);
   const m = ukuran / 2;
   const { hub, label, tepi, sisa } = CETAK_CAKRAM;
+  const a = albumUntuk(p.slug);
+  // Seni label album sudah berkomposisi lingkaran dengan sedikit latar di sudut;
+  // diperbesar sedikit supaya lingkarannya sampai ke tepi cetak.
+  const perbesar = a ? 1.12 : 1;
   const gambar = (im) => {
     g.save();
     g.clearRect(0, 0, ukuran, ukuran);
@@ -171,10 +223,7 @@ export function gambarCakram(p, ukuran = 1024) {
     g.fillStyle = p.warna;
     g.fillRect(0, 0, ukuran, ukuran);
     if (im) {
-      const sk = Math.max(ukuran / im.naturalWidth, ukuran / im.naturalHeight);
-      const w = im.naturalWidth * sk;
-      const h = im.naturalHeight * sk;
-      g.drawImage(im, (ukuran - w) / 2, (ukuran - h) / 2, w, h);
+      gambarPenuh(g, im, 0, 0, ukuran, ukuran, perbesar);
       // Sablon pada polikarbonat sedikit lebih gelap dan kurang jenuh dari kertas.
       g.fillStyle = "rgba(20, 18, 16, 0.18)";
       g.fillRect(0, 0, ukuran, ukuran);
@@ -199,13 +248,15 @@ export function gambarCakram(p, ukuran = 1024) {
     g.fill("evenodd");
     g.restore();
   };
-  siapkanGambar(c, p.ilustrasi, gambar);
+  siapkanGambar(c, a?.label ?? p.ilustrasi, gambar);
   return c;
 }
 
 // Halaman belakang buklet (yang terlihat di tutup kotak terbuka): ilustrasi proyek dicetak
 // satu warna, warna proyek, di atas kertas, dengan judul dan katalog kecil di bawah.
 export function gambarBelakang(p, locale, ukuran = 1024) {
+  const a = albumUntuk(p.slug);
+  if (a) return gambarBelakangAlbum(p, a, locale, ukuran);
   const [c, g] = kanvas(ukuran, ukuran);
   const s = ukuran / 512;
   const gambar = (im) => {
@@ -237,6 +288,27 @@ export function gambarBelakang(p, locale, ukuran = 1024) {
     butir(g, ukuran, ukuran, 0.08);
   };
   siapkanGambar(c, p.ilustrasi, gambar);
+  return c;
+}
+
+// Halaman belakang buklet album: gambar penutup buklet (hasil akhir) penuh warna,
+// dengan katalog dan judul kecil di sepertiga kanan yang memang dibiarkan kosong.
+function gambarBelakangAlbum(p, a, locale, ukuran) {
+  const [c, g] = kanvas(ukuran, ukuran);
+  siapkanAlbum(c, a.buklet[a.buklet.length - 1], a, (im) => {
+    g.fillStyle = KERTAS;
+    g.fillRect(0, 0, ukuran, ukuran);
+    if (!im) return;
+    gambarPenuh(g, im, 0, 0, ukuran, ukuran);
+    g.fillStyle = a.tinta;
+    g.textBaseline = "bottom";
+    g.textAlign = "right";
+    g.font = `${a.huruf.berat ?? 400} ${ukuran * 0.032}px ${namaHuruf(a.huruf)}`;
+    g.fillText(p.judul[locale], ukuran * 0.95, ukuran * 0.9);
+    g.font = `500 ${ukuran * 0.02}px ${fontMono()}`;
+    g.fillText(`${p.katalog}  ${p.periode}`, ukuran * 0.95, ukuran * 0.94);
+    butir(g, ukuran, ukuran, 0.06);
+  });
   return c;
 }
 
@@ -317,7 +389,81 @@ export function gambarAus(ukuran = 512, benih = 11) {
 // nomor katalog dan judul, terbaca dari atas ke bawah.
 export const SISIPAN = { panel: 138, punggung: 6.5, tinggi: 118 };
 
+// Terang rata-rata (0..1) satu kotak kanvas, untuk memilih tinta gelap atau terang.
+function terang(g, x, y, w, h) {
+  const d = g.getImageData(x, y, Math.max(1, w), Math.max(1, h)).data;
+  let t = 0;
+  for (let i = 0; i < d.length; i += 4) t += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+  return t / (d.length / 4) / 255;
+}
+
+// Sisipan album: gambar belakang dicetak di panel, punggung berwarna tinta album
+// dengan judul berhuruf genre. "Daftar lagu" (komponen sistem) dicetak langsung di
+// pita bawah gambar yang sengaja dibiarkan polos, tanpa kotak tambahan.
+function gambarSisipanAlbum(p, a, locale, w) {
+  const total = SISIPAN.panel + SISIPAN.punggung * 2;
+  const h = Math.round((w * SISIPAN.tinggi) / total);
+  const [c, g] = kanvas(w, h);
+  const pg = Math.round((w * SISIPAN.punggung) / total);
+  const lebarPanel = w - pg * 2;
+  siapkanAlbum(c, a.belakang, a, (im) => {
+    g.fillStyle = KERTAS;
+    g.fillRect(0, 0, w, h);
+    if (im) {
+      g.save();
+      g.beginPath();
+      g.rect(pg, 0, lebarPanel, h);
+      g.clip();
+      gambarPenuh(g, im, pg, 0, lebarPanel, h);
+      g.restore();
+    }
+    g.fillStyle = a.tinta;
+    g.fillRect(0, 0, pg, h);
+    g.fillRect(w - pg, 0, pg, h);
+    for (const x of [pg / 2, w - pg / 2]) {
+      g.save();
+      g.translate(x, h / 2);
+      g.rotate(Math.PI / 2);
+      g.fillStyle = "#f4efe7";
+      g.textAlign = "center";
+      g.textBaseline = "middle";
+      g.font = `${a.huruf.berat ?? 400} ${pg * 0.5}px ${namaHuruf(a.huruf)}`;
+      g.fillText(p.judul[locale], 0, 0);
+      g.font = `500 ${pg * 0.36}px ${fontMono()}`;
+      g.fillText(p.katalog, -h * 0.4, 0);
+      g.restore();
+    }
+    if (!im) return;
+    // Pita bawah gambar: 22% tinggi terbawah panel.
+    const s = lebarPanel / 512;
+    const atas = h * 0.78;
+    const gelap = terang(g, pg, Math.round(atas), lebarPanel, Math.round(h * 0.2)) < 0.45;
+    const tinta = gelap ? "#f4efe7" : a.tinta;
+    g.fillStyle = tinta;
+    g.textBaseline = "top";
+    const lagu = p.arsitektur?.simpul ?? [];
+    g.font = `400 ${10 * s}px ${fontMono()}`;
+    const kolom = Math.ceil(lagu.length / 2) || 1;
+    lagu.forEach((n, i) => {
+      const x = pg + 22 * s + Math.floor(i / kolom) * 150 * s;
+      const y = atas + 10 * s + (i % kolom) * 15 * s;
+      g.fillText(`${String(i + 1).padStart(2, "0")}  ${n.label}`, x, y);
+    });
+    // Barcode hiasan dengan nomor katalog, bukan kode produk sungguhan.
+    for (let i = 0; i < 30; i++) {
+      const lebarBatang = (i * 7) % 3 === 0 ? 3 : 1.5;
+      g.fillRect(pg + 400 * s + i * 2.6 * s, atas + 8 * s, lebarBatang * s * 0.6, 26 * s);
+    }
+    g.font = `400 ${8 * s}px ${fontMono()}`;
+    g.fillText(p.katalog, pg + 400 * s, atas + 38 * s);
+    butir(g, w, h, 0.05);
+  });
+  return c;
+}
+
 export function gambarSisipan(p, locale, w = 1024) {
+  const a = albumUntuk(p.slug);
+  if (a) return gambarSisipanAlbum(p, a, locale, w);
   const total = SISIPAN.panel + SISIPAN.punggung * 2;
   const h = Math.round((w * SISIPAN.tinggi) / total);
   const [c, g] = kanvas(w, h);

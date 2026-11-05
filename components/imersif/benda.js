@@ -671,6 +671,7 @@ export function buatKotak(p, locale, renderer, i) {
   const plastik = plastikKotak(pt.aus, benih(p.slug ?? i));
 
   const petaSisipan = tekstur(gambarSisipan(p, locale), renderer);
+  petaSisipan.image.siap?.then(() => (petaSisipan.needsUpdate = true));
   ikutiMusik(p, petaSisipan, () => gambarSisipan(p, locale));
   const sisipan = new THREE.Mesh(geo.sisipan, new THREE.MeshStandardMaterial({ map: petaSisipan, roughness: 0.5 }));
   badan.add(sisipan);

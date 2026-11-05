@@ -60,6 +60,17 @@ by four round tabs 16 mm in from each corner and two stop ribs; clear sheet 1.5 
 shows faint cut edges (lines at 15 to 25% white). Plastic sheen is a soft studio strip reflection,
 the disc's data side a diffraction shader.
 
+## Album art (`content/album.js`, `components/imersif/tipografi.js`)
+
+Every project CD is its own album: one classic record-design genre each (Swiss, 70s collage,
+Bauhaus, mid-century, constructivist, linocut, pop art, ECM, city-pop, Blue Note), table and
+reasons in `docs/genre-cd.md`. The art is generated without any lettering. Titles are set by code
+straight onto the art in that genre's typeface (OFL fonts in `public/assets/album/huruf/`), with a
+slight misregistered second pass and paper grain so they read as printed, never as a separate
+title band. Two covers carry no title on the front at all. Spines take the album's ink colour with
+the title in the genre face; the back insert prints the "track list" on the plain band the art
+leaves at the bottom. Projects without album art fall back to the old cream cover with a colour band.
+
 ## Icons and text
 
 Phosphor icons through `react-icons/pi`. UI text follows the `bahasa-lisan` rules: plain
