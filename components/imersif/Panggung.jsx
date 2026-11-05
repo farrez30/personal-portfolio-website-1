@@ -103,13 +103,10 @@ export default function Panggung({ gulir }) {
       a.on("klikCakram", () => (a.keadaan === "putar" ? a.keluarkan() : a.dengarkan()));
       a.on("tombol", (nama) => tekanTombol.current(nama));
       a.on("hover", setHover);
-      let terakhir = 0;
-      a.on("sumur", (x, y, w, nyala) => {
-        const now = performance.now();
-        if (now - terakhir < 50) return;
-        terakhir = now;
-        setSumur(nyala ? { x, y, w } : null);
-      });
+      // Tiap bingkai, supaya panel dan sorotnya menempel pada pemutar tanpa tersendat.
+      a.on("sumur", (x, y, w, nyala) => setSumur(nyala ? { x, y, w } : null));
+      // Selama ganti album, posisi gulir halaman ikut indeks baru tanpa menggeser rak lagi.
+      a.on("indeks", (i) => keIndeksGulir(i, false));
       adegan.current = a;
       bacaHash(a, false, keIndeksGulir);
       setSiap(true);
@@ -151,20 +148,8 @@ export default function Panggung({ gulir }) {
     else if (nama === "prev" || nama === "next") gantiAlbum(nama === "next" ? 1 : -1);
   };
 
-  // Ganti album dari pemutar: keluarkan cakram, tutup, geser, buka, putar.
-  const gantiAlbum = useCallback((arah) => {
-    const a = adegan.current;
-    const i = s.fokus + arah;
-    if (!a || i < 0 || i >= proyek.length) return;
-    a.keluarkan();
-    setTimeout(() => {
-      a.tutup();
-      setTimeout(() => {
-        a.buka(proyek[i].slug);
-        setTimeout(() => a.dengarkan(), 900);
-      }, 700);
-    }, 900);
-  }, [s.fokus]);
+  // Ganti album dari pemutar: urutannya dijalankan adegan sampai tiap gerak selesai.
+  const gantiAlbum = useCallback((arah) => adegan.current?.gantiAlbum(arah), []);
 
   // Keyboard ala pemutar: panah, Enter, Spasi, Escape.
   useEffect(() => {
@@ -230,6 +215,19 @@ export default function Panggung({ gulir }) {
 
   const a = adegan.current;
   const aktif = proyek.find((x) => x.slug === s.aktif) ?? p;
+  // Proyeksi baru muncul setelah Play pertama, dan padam pelan saat cakram dikeluarkan.
+  const holoNyala = s.keadaan === "putar" && s.duduk && s.pernahMain && !cdMusik;
+  const [holo, setHolo] = useState(null);
+  const [panelHolo, setPanelHolo] = useState(null);
+  // Sorot 3D hanya menyala selama proyeksi berjalan; dijeda atau keluar, ia padam.
+  useEffect(() => {
+    adegan.current?.setSorot(panelHolo, holoNyala && s.jalan);
+  }, [panelHolo, holoNyala, s.jalan]);
+  useEffect(() => {
+    if (holoNyala) return setHolo(aktif);
+    const t = setTimeout(() => setHolo(null), 420);
+    return () => clearTimeout(t);
+  }, [holoNyala, aktif]);
   const sudut = {
     rak: { kiri: [t("tentang"), () => window.scrollTo({ top: 0, behavior: "smooth" })] },
     buka: { kiri: [t("tutup"), () => a?.tutup()] },
@@ -353,7 +351,7 @@ export default function Panggung({ gulir }) {
         </div>
       </footer>
 
-      {s.keadaan === "putar" && s.duduk && !cdMusik && <Hologram p={aktif} sumur={sumur} jalan={s.jalan} onPutar={() => a?.setJalan(true)} />}
+      {holo && <Hologram p={holo} sumur={sumur} jalan={s.jalan} keluar={!holoNyala} onPutar={() => a?.setJalan(true)} onPanel={setPanelHolo} />}
 
       <p className="sr-only" aria-live="polite">
         {`${aktif.katalog} ${aktif.judul[locale]}, ${t(`keadaan.${s.keadaan}`)}`}

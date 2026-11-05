@@ -1114,14 +1114,17 @@ export function buatPemutar(renderer) {
       normalScale: new THREE.Vector2(1.5, 1.5),
     }),
   );
-  isi.add(piring);
+  // Piringan dan bola ikut berputar bersama cakram; terlihat lewat hub bening.
+  const poros = new THREE.Group();
+  poros.add(piring);
+  isi.add(poros);
   const krom = new THREE.MeshPhysicalMaterial({ color: WARNA.krom, roughness: 0.12, metalness: 1 });
   const geoBola = new THREE.SphereGeometry(0.8, 16, 8);
   for (let k = 0; k < 3; k++) {
     const a = (k / 3) * Math.PI * 2;
     const bola = new THREE.Mesh(geoBola, krom);
-    bola.position.set(Math.cos(a) * (pin - 0.3), kursi + 1.4, Math.sin(a) * (pin - 0.3));
-    isi.add(bola);
+    bola.position.set(Math.cos(a) * (pin - 0.3), kursi + 1.1, Math.sin(a) * (pin - 0.3));
+    poros.add(bola);
   }
 
   const bayangan = new THREE.Mesh(
@@ -1257,7 +1260,7 @@ export function buatPemutar(renderer) {
   kiri.add(kerah, soket);
 
   // puncakY: sedikit di atas bibir sumur, pangkal sinar hologram. kursiY: pusat cakram di piringan.
-  return { grup, layar, tombol, lampu, puncakY: mm(PM.tinggi + 2), kursiY: mm(atas + kursi) };
+  return { grup, layar, tombol, lampu, poros, puncakY: mm(PM.tinggi + 2), kursiY: mm(atas + kursi) };
 }
 
 export { gambarHalaman };

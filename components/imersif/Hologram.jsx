@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpleBold, PiArrowsInSimpleBold, PiPauseFill, PiPlayFill } from "react-icons/pi";
 
@@ -8,7 +8,26 @@ import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpl
 // mengikuti kursor dan naik turun pelan, dengan bingkai monitor sci-fi retro.
 // Situs proyek tampil langsung hanya di farrez.vercel.app (app-nya hanya
 // mengizinkan domain itu membingkai); di tempat lain memakai tangkapan layar.
-export default function Hologram({ p, sumur, jalan, onPutar }) {
+// Derau "semut" layar tabung: satu tekstur 256 px dibuat sekali, lalu digeser
+// lompat-lompat oleh CSS supaya terlihat hidup tanpa menggambar ulang tiap bingkai.
+let semut = null;
+function teksturSemut() {
+  if (semut || typeof document === "undefined") return semut;
+  const c = document.createElement("canvas");
+  c.width = c.height = 256;
+  const g = c.getContext("2d");
+  const d = g.createImageData(256, 256);
+  for (let i = 0; i < d.data.length; i += 4) {
+    const v = (Math.random() * 256) | 0;
+    d.data[i] = d.data[i + 1] = d.data[i + 2] = v;
+    d.data[i + 3] = 255;
+  }
+  g.putImageData(d, 0, 0);
+  semut = `url(${c.toDataURL("image/png")})`;
+  return semut;
+}
+
+export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onPanel }) {
   const t = useTranslations("panggung.layar");
   const locale = useLocale();
   const [perangkat, setPerangkat] = useState("desktop");
@@ -17,6 +36,14 @@ export default function Hologram({ p, sumur, jalan, onPutar }) {
   const [muat, setMuat] = useState(true);
   useEffect(() => setMuat(true), [perangkat, p.slug]);
   const panel = useRef(null);
+  // Panel diserahkan ke adegan 3D supaya sorot proyektor berakhir tepat di tepinya.
+  // Ref callback harus stabil; kalau tidak, React memanggilnya null lalu el tiap render.
+  const lapor = useRef(onPanel);
+  lapor.current = onPanel;
+  const pasangPanel = useCallback((el) => {
+    panel.current = el;
+    lapor.current?.(el);
+  }, []);
   // Saat Play ditekan, ikon putar berkedip sebentar di layar sebelum isinya kembali normal.
   const [kilas, setKilas] = useState(false);
   const jalanLalu = useRef(jalan);
@@ -68,11 +95,10 @@ export default function Hologram({ p, sumur, jalan, onPutar }) {
 
   return (
     <div
-      className={`holo ${jalan ? "holo--nyala" : "holo--beku"} ${besar ? "holo--besar" : ""}`}
+      className={`holo ${jalan && !keluar ? "holo--nyala" : "holo--beku"} ${besar ? "holo--besar" : ""} ${keluar ? "holo--keluar" : ""}`}
       data-perangkat={perangkat}
-      style={{ "--sx": `${sumur.x * 100}%`, "--sy": `${sumur.y * 100}%`, "--sw": `${sumur.w * 100}%` }}
+      style={{ "--sx": `${sumur.x * 100}%`, "--sy": `${sumur.y * 100}%`, "--syf": sumur.y, "--sw": `${sumur.w * 100}%`, "--semut": teksturSemut() ?? "none" }}
     >
-      <div className="holo__sinar" aria-hidden="true" />
       <div className="holo__orbit" aria-hidden="true">
         {potongan.map((s, i) => (
           <span key={s.id} className="holo__keping mono" style={{ "--i": i, "--n": potongan.length }}>
@@ -80,7 +106,7 @@ export default function Hologram({ p, sumur, jalan, onPutar }) {
           </span>
         ))}
       </div>
-      <div className="holo__panel" ref={panel}>
+      <div className="holo__panel" ref={pasangPanel}>
         <div className="holo__bingkai">
           <div className="holo__kepala mono" aria-hidden="true">
             <span>{p.katalog}</span>
@@ -116,6 +142,7 @@ export default function Hologram({ p, sumur, jalan, onPutar }) {
                 <span>{p.judul[locale]}</span>
               </div>
             )}
+            <span className="holo__semut" aria-hidden="true" />
             {!jalan && !muat && (
               <button type="button" className="holo__jeda" onClick={onPutar} aria-label={t("lanjutkan")}>
                 <PiPauseFill aria-hidden="true" />
