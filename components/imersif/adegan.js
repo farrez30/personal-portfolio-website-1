@@ -9,6 +9,7 @@ import * as THREE from "three";
 import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
 import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
+import { albumUntuk } from "@/content/album";
 import { GULUNG_GLSL, UKURAN, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok, tekuk } from "./gulung";
 import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
 import { gambarSampul, gambarHalaman, gambarBelakang, muatGambar } from "./gambar";
@@ -112,6 +113,10 @@ function halamanBuklet(p, locale, uv) {
     alt: LABEL.overview,
     text: p.ringkas[locale],
   });
+  // Ilustrasi album bergenre: diberikan sebagai URL supaya LeafThrough baru memuatnya
+  // saat buklet dibuka. Sepertiga kanannya sengaja kosong untuk teks yang menunggu
+  // persetujuan naskah (content/proyek.js), jadi untuk sekarang dekoratif.
+  for (const src of albumUntuk(p.slug)?.buklet ?? []) hal.push({ src, alt: "" });
   for (const h of HALAMAN) {
     const b = p.buklet[h];
     if (!b) continue;
