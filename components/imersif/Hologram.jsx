@@ -8,7 +8,7 @@ import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpl
 // mengikuti kursor dan naik turun pelan, dengan bingkai monitor sci-fi retro.
 // Situs proyek tampil langsung hanya di farrez.vercel.app (app-nya hanya
 // mengizinkan domain itu membingkai); di tempat lain memakai tangkapan layar.
-export default function Hologram({ p, sumur, jalan, onPutar }) {
+export default function Hologram({ p, sumur, jalan, keluar = false, onPutar }) {
   const t = useTranslations("panggung.layar");
   const locale = useLocale();
   const [perangkat, setPerangkat] = useState("desktop");
@@ -68,9 +68,9 @@ export default function Hologram({ p, sumur, jalan, onPutar }) {
 
   return (
     <div
-      className={`holo ${jalan ? "holo--nyala" : "holo--beku"} ${besar ? "holo--besar" : ""}`}
+      className={`holo ${jalan && !keluar ? "holo--nyala" : "holo--beku"} ${besar ? "holo--besar" : ""} ${keluar ? "holo--keluar" : ""}`}
       data-perangkat={perangkat}
-      style={{ "--sx": `${sumur.x * 100}%`, "--sy": `${sumur.y * 100}%`, "--sw": `${sumur.w * 100}%` }}
+      style={{ "--sx": `${sumur.x * 100}%`, "--sy": `${sumur.y * 100}%`, "--syf": sumur.y, "--sw": `${sumur.w * 100}%` }}
     >
       <div className="holo__sinar" aria-hidden="true" />
       <div className="holo__orbit" aria-hidden="true">
