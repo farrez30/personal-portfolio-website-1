@@ -1,7 +1,7 @@
 // Semua "cetakan" di adegan 3D digambar di kanvas 2D dari data proyek:
 // sampul, label cakram, halaman buklet, dan layar hologram. Tanpa berkas
 // gambar, jadi ringan dan ikut berganti bahasa.
-import { tataLetak } from "@/components/sinarx/tataLetak";
+import { jalurIkon, teknologiDari } from "@/components/arsitektur/teknologi";
 import { albumUntuk } from "@/content/album";
 import { hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
 
@@ -466,13 +466,14 @@ function gambarSisipanAlbum(p, a, locale, w) {
     const tinta = gelap ? "#f4efe7" : a.tinta;
     g.fillStyle = tinta;
     g.textBaseline = "top";
-    const lagu = p.arsitektur?.simpul ?? [];
+    // Daftar lagu di sisipan belakang: langkah-langkah cerita arsitekturnya.
+    const lagu = (p.arsitektur?.alur ?? []).map((l) => ({ label: l.judul[locale] }));
     g.font = `400 ${10 * s}px ${fontMono()}`;
     const kolom = Math.ceil(lagu.length / 2) || 1;
     lagu.forEach((n, i) => {
       const x = pg + 22 * s + Math.floor(i / kolom) * 150 * s;
       const y = atas + 10 * s + (i % kolom) * 15 * s;
-      g.fillText(`${String(i + 1).padStart(2, "0")}  ${n.label}`, x, y);
+      g.fillText(`${String(i + 1).padStart(2, "0")}  ${n.label}`, x, y, 142 * s);
     });
     // Barcode hiasan dengan nomor katalog, bukan kode produk sungguhan.
     for (let i = 0; i < 30; i++) {
@@ -519,8 +520,8 @@ export function gambarSisipan(p, locale, w = 1024) {
   let y = tulisParagraf(g, p.judul[locale], 44 * s, 32 * s, 420 * s, 26 * s) + 10 * s;
   if (p.arsitektur) {
     g.font = `400 ${12 * s}px ${fontMono()}`;
-    p.arsitektur.simpul.forEach((n, i) => {
-      g.fillText(`${String(i + 1).padStart(2, "0")}  ${n.label}`, 44 * s, y);
+    teknologiDari(p.arsitektur.teknologi.stack).slice(0, 6).forEach((n, i) => {
+      g.fillText(`${String(i + 1).padStart(2, "0")}  ${n.nama[locale]}`, 44 * s, y);
       y += 19 * s;
     });
     y += 10 * s;
@@ -568,54 +569,62 @@ export function gambarHalaman({ label, judul, isi, catatan }, ukuran = 1024) {
   return c;
 }
 
-// Diagram arsitektur untuk halaman buklet dan layar hologram.
-export function gambarArsitektur(arsitektur, { latar, garis, kotak, teks, aksen, huruf = 22 }, w = 1024, h = 640) {
+// Ikon teknologi digambar dari jalur SVG-nya, jadi tajam di ukuran berapa pun.
+export function gambarIkon(g, Ikon, x, y, ukuran, warna) {
+  const { ukuran: asli, jalur } = jalurIkon(Ikon);
+  g.save();
+  g.translate(x, y);
+  g.scale(ukuran / asli, ukuran / asli);
+  g.fillStyle = warna;
+  for (const d of jalur) g.fill(new Path2D(d));
+  g.restore();
+}
+
+// Cerita satu permintaan untuk tinta UV di buklet: langkah bernomor, ikon teknologi
+// utamanya, judul, dan nama teknologinya. Dibaca sekilas, rinciannya ada di halaman web.
+export function gambarAlur(arsitektur, locale, { latar, garis, kotak, teks, redup, aksen, huruf = 22 }, w = 1024, h = 640) {
   const [c, g] = kanvas(w, h);
+  const alur = arsitektur.alur;
+  // Pelat tinta: di atas ilustrasi yang ramai, teks butuh dasar gelap supaya terbaca.
   if (latar) {
     g.fillStyle = latar;
-    g.fillRect(0, 0, w, h);
-  }
-  const { simpul, garis: sambung } = arsitektur;
-  const { posisi, perKolom, jumlahKolom } = tataLetak(simpul, sambung);
-  const kw = Math.min(huruf * 12, (w - 60) / Math.max(jumlahKolom, 1) - 30);
-  const kh = huruf * 2.9;
-  const jarakX = jumlahKolom > 1 ? (w - kw - 80) / (jumlahKolom - 1) : 0;
-  const titik = (id) => {
-    const p = posisi[id];
-    const n = perKolom.get(p.kolom);
-    const jarakY = Math.min(huruf * 6, (h - 80) / n);
-    const awal = (h - n * jarakY) / 2 + jarakY / 2;
-    return { x: jumlahKolom > 1 ? 40 + kw / 2 + p.kolom * jarakX : w / 2, y: awal + p.baris * jarakY };
-  };
-  g.lineWidth = 3;
-  for (const [a, b] of sambung) {
-    const p = titik(a);
-    const q = titik(b);
-    g.strokeStyle = garis;
     g.beginPath();
-    g.moveTo(p.x, p.y);
-    g.lineTo(q.x, q.y);
-    g.stroke();
-    g.fillStyle = aksen;
-    g.beginPath();
-    g.arc((p.x + q.x) / 2, (p.y + q.y) / 2, 6, 0, Math.PI * 2);
+    g.roundRect(0, 0, w, h, huruf);
     g.fill();
   }
-  g.font = `600 ${huruf}px ${fontMono()}`;
-  g.textAlign = "center";
+  const tinggi = h / alur.length;
+  const r = Math.min(tinggi * 0.36, huruf * 1.5);
+  const x0 = r + (latar ? huruf : 6);
+  g.lineWidth = Math.max(2, huruf / 10);
+  g.strokeStyle = garis;
+  g.setLineDash([huruf / 4, huruf / 3]);
+  g.beginPath();
+  g.moveTo(x0, tinggi / 2);
+  g.lineTo(x0, h - tinggi / 2);
+  g.stroke();
+  g.setLineDash([]);
   g.textBaseline = "middle";
-  for (const s of simpul) {
-    const p = titik(s.id);
+  alur.forEach((l, i) => {
+    const y = tinggi * (i + 0.5);
     g.fillStyle = kotak;
     g.strokeStyle = garis;
-    g.lineWidth = 2;
     g.beginPath();
-    g.roundRect(p.x - kw / 2, p.y - kh / 2, kw, kh, 10);
+    g.arc(x0, y, r, 0, Math.PI * 2);
     g.fill();
     g.stroke();
+    const tek = teknologiDari(l.teknologi);
+    if (tek[0]) gambarIkon(g, tek[0].Ikon, x0 - r * 0.55, y - r * 0.55, r * 1.1, teks);
+    const xt = x0 + r + huruf * 0.8;
+    g.fillStyle = aksen;
+    g.font = `600 ${huruf * 0.7}px ${fontMono()}`;
+    g.fillText(String(i + 1).padStart(2, "0"), xt, y - huruf * 0.62);
     g.fillStyle = teks;
-    tulisParagraf(g, s.label, p.x, p.y - (g.measureText(s.label).width > kw - 20 ? huruf * 0.55 : 0), kw - 20, huruf * 1.1);
-  }
+    g.font = `650 ${huruf}px ${fontKeluarga()}`;
+    g.fillText(l.judul[locale], xt + huruf * 1.6, y - huruf * 0.62, w - xt - huruf * 2);
+    g.fillStyle = redup;
+    g.font = `400 ${huruf * 0.72}px ${fontMono()}`;
+    g.fillText(tek.map((t) => t.nama[locale]).join("  /  "), xt + huruf * 1.6, y + huruf * 0.55, w - xt - huruf * 2);
+  });
   return c;
 }
 

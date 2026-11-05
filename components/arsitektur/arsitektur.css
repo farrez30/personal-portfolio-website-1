@@ -1,0 +1,328 @@
+.cerita {
+  display: grid;
+  gap: 1.75rem;
+}
+
+.cerita__alur {
+  display: grid;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cerita__langkah {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 0.75rem;
+}
+
+.cerita__nomor {
+  display: inline-grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--aksen);
+  font-size: 0.8125rem;
+}
+
+.cerita__judul {
+  font-weight: 600;
+}
+
+.cerita__rincian {
+  color: var(--ink-2);
+  max-width: 60ch;
+}
+
+.cerita__tek {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cerita__tek li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.cerita__tek svg {
+  flex: none;
+  font-size: 1rem;
+}
+
+.cerita__kelompok {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+}
+
+.cerita__kelompok dt {
+  color: var(--ink-3);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.cerita__kelompok dd {
+  margin: 0;
+}
+
+@media (min-width: 720px) {
+  .cerita__kelompok {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Halaman arsitektur: diagram menempel di atas, teks langkah digulir di bawahnya. */
+.jelajah {
+  display: grid;
+  gap: 2rem;
+}
+
+.jelajah__panggung {
+  position: sticky;
+  top: 72px;
+  z-index: 2;
+}
+
+.diagram {
+  --papan: #141311;
+  --papan-garis: #3a3733;
+  --papan-tinta: #ece8e1;
+  --papan-redup: #847e75;
+  --papan-aksen: #e0574b;
+  position: relative;
+  margin: 0;
+  padding: clamp(1rem, 3vw, 1.75rem) clamp(0.75rem, 3vw, 1.75rem);
+  border: 1px solid var(--papan-garis);
+  border-radius: var(--r-kotak);
+  color: var(--papan-tinta);
+  background:
+    radial-gradient(circle, rgb(255 255 255 / 0.07) 1px, transparent 1.2px) 0 0 / 18px 18px,
+    var(--papan);
+}
+
+.diagram__garis {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.diagram__jejak {
+  fill: none;
+  stroke: var(--papan-garis);
+  stroke-width: 2;
+}
+
+.diagram__arus {
+  fill: none;
+  stroke: var(--papan-redup);
+  stroke-width: 2;
+  stroke-dasharray: 2 8;
+  stroke-linecap: round;
+  animation: diagram-arus 1.2s linear infinite;
+}
+
+.diagram__ruas--lewat .diagram__jejak {
+  stroke: color-mix(in srgb, var(--papan-aksen) 55%, var(--papan-garis));
+}
+
+.diagram__paket {
+  fill: var(--papan-tinta);
+  opacity: 0.55;
+}
+
+.diagram__paket--aktif {
+  fill: var(--papan-aksen);
+  opacity: 1;
+}
+
+@keyframes diagram-arus {
+  to {
+    stroke-dashoffset: -10;
+  }
+}
+
+.diagram--diam .diagram__arus {
+  animation: none;
+}
+
+.diagram__simpul {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.diagram__simpul li {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.diagram__simpul button {
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.25rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
+.diagram__bulat {
+  display: grid;
+  place-items: center;
+  /* Menyusut bersama kolomnya di layar sempit, tidak pernah meluber. */
+  width: min(3.25rem, 100%);
+  aspect-ratio: 1;
+  border: 1px solid var(--papan-garis);
+  border-radius: 999px;
+  background: var(--papan);
+  font-size: 1.4rem;
+  color: var(--papan-redup);
+  transition:
+    color var(--t-sedang) var(--ease),
+    border-color var(--t-sedang) var(--ease),
+    outline-color var(--t-sedang) var(--ease),
+    transform var(--t-sedang) var(--ease);
+}
+
+.diagram__nomor {
+  font-size: 0.6875rem;
+  color: var(--papan-redup);
+}
+
+.diagram__label {
+  font-size: 0.8125rem;
+  line-height: 1.3;
+  color: var(--papan-redup);
+  transition: color var(--t-sedang) var(--ease);
+}
+
+.diagram__simpul .lewat .diagram__bulat {
+  color: var(--papan-tinta);
+}
+
+.diagram__simpul .aktif .diagram__bulat {
+  color: var(--papan-tinta);
+  border-color: var(--papan-aksen);
+  outline: 3px solid color-mix(in srgb, var(--papan-aksen) 30%, transparent);
+  outline-offset: 2px;
+  transform: scale(1.08);
+}
+
+.diagram__simpul .aktif .diagram__label,
+.diagram__simpul .aktif .diagram__nomor {
+  color: var(--papan-tinta);
+}
+
+.diagram__simpul button:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
+  border-radius: var(--r-kecil);
+}
+
+.jelajah__langkah {
+  display: grid;
+  margin: 0;
+  padding: 0 0 30vh;
+  list-style: none;
+}
+
+.jelajah__langkah > li {
+  display: grid;
+  align-content: center;
+  gap: 0.6rem;
+  min-height: 46vh;
+  max-width: 60ch;
+}
+
+.jelajah__langkah .jelajah__judul {
+  color: var(--ink-2);
+  transition: color var(--t-sedang) var(--ease);
+}
+
+.jelajah__langkah > li.aktif .jelajah__judul {
+  color: var(--ink);
+}
+
+.jelajah__langkah .cerita__nomor {
+  transition:
+    background var(--t-sedang) var(--ease),
+    color var(--t-sedang) var(--ease);
+}
+
+.jelajah__langkah > li.aktif .cerita__nomor {
+  border-color: var(--aksen);
+  background: var(--aksen);
+  color: var(--aksen-ink);
+}
+
+.jelajah__judul {
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+}
+
+/* HP: simpul tinggal lingkaran ikon; nama langkah ada di teks di bawahnya. */
+@media (max-width: 640px) {
+  .diagram__label {
+    display: none;
+  }
+
+  .diagram__bulat {
+    width: min(2.75rem, 100%);
+    font-size: 1.15rem;
+  }
+
+  .diagram__simpul {
+    gap: 0.25rem;
+  }
+
+  .diagram__simpul button {
+    padding: 0.25rem 0;
+  }
+
+  .jelajah__langkah > li {
+    min-height: 40vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .diagram__bulat,
+  .diagram__label,
+  .jelajah__langkah .jelajah__judul,
+  .jelajah__langkah .cerita__nomor {
+    transition: none;
+  }
+}
+
+@media print {
+  .jelajah__panggung {
+    position: static;
+  }
+
+  .jelajah__langkah > li {
+    min-height: 0;
+    padding-block: 0.5rem;
+  }
+}

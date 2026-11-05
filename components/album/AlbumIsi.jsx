@@ -2,7 +2,7 @@
 import { useLocale, useTranslations } from "next-intl";
 import { PiArrowUpRightBold, PiGithubLogoBold } from "react-icons/pi";
 import { halamanTampil } from "@/content/proyek";
-import SinarX from "@/components/sinarx/SinarX";
+import CeritaArsitektur from "@/components/arsitektur/CeritaArsitektur";
 import "./album.css";
 
 // Isi satu album sebagai HTML: dipakai di mode Ringan, di halaman /proyek/[slug],
@@ -72,7 +72,7 @@ export default function AlbumIsi({ p, judulSebagai: Judul = "h2", idJudul }) {
           <h3 id={`${p.slug}-architecture`} className="album__label mono">
             {t("halaman.architecture")}
           </h3>
-          <SinarX arsitektur={p.arsitektur} warna={p.warna} />
+          <CeritaArsitektur p={p} />
         </section>
       )}
     </article>

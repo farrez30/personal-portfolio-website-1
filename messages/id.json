@@ -59,9 +59,6 @@
     "periode": "Periode",
     "jenis": "Jenis",
     "status": "Status",
-    "sinarx": "Geser kursor atau jari di atas gambar untuk melihat isi di baliknya.",
-    "sinarxDaftar": "Komponen sistem",
-    "ke": "ke",
     "tutupBuklet": "Tutup buklet"
   },
   "kontak": {
@@ -149,5 +146,18 @@
       "lanjutkan": "Lanjutkan pemutaran"
     },
     "senter": "Senter UV"
+  },
+  "arsitektur": {
+    "dipakai": "Teknologi di langkah ini",
+    "kelompok": {
+      "fitur": "Fitur",
+      "stack": "Stack",
+      "infrastruktur": "Infrastruktur"
+    },
+    "lihatDiagram": "Lihat alur lengkapnya",
+    "judulHalaman": "Arsitektur {judul}",
+    "kembali": "Kembali ke {judul}",
+    "diagram": "Diagram alur satu permintaan",
+    "teknologi": "Teknologi"
   }
 }

@@ -126,7 +126,7 @@ function halamanBuklet(p, locale, uv) {
     // Halaman UV selalu di sisi kanan spread (indeks genap) supaya senter mudah diarahkan.
     if (hal.length % 2 === 1) hal.push({ src: gambarHalaman({ label: "" }), alt: "" });
     uv.indeks = hal.length;
-    hal.push({ src: uv.tekstur, alt: LABEL.architecture, text: p.arsitektur.simpul.map((s) => s.label).join(", ") });
+    hal.push({ src: uv.tekstur, alt: LABEL.architecture, text: p.arsitektur.alur.map((l, i) => `${i + 1}. ${l.judul[locale]}`).join("\n") });
   }
   // Halaman belakang sama persis dengan yang terlihat di tutup kotak, supaya tidak
   // ada tekstur yang berganti saat buklet ditarik keluar.
@@ -838,7 +838,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
             senterLampu.target.position.copy(kena);
             const jarakSorot = 1.5 * sk;
             senterLampu.position.copy(kena).addScaledVector(vTmp.subVectors(camera.position, kena).normalize(), jarakSorot);
-            senterLampu.angle = Math.atan((0.42 * sk) / jarakSorot);
+            senterLampu.angle = Math.atan((0.75 * sk) / jarakSorot);
             kenaBuklet = Math.abs(x) <= 1.3 && Math.abs(y) <= 0.8;
           }
         }

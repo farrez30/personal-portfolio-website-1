@@ -3,7 +3,7 @@
 // hanya menyala di bawah senter UV yang mengikuti kursor, seperti tanda rahasia
 // di uang kertas. Kanvasnya digambar ulang tiap bingkai selama senter menyala.
 import * as THREE from "three";
-import { gambarArsitektur } from "./gambar";
+import { gambarAlur } from "./gambar";
 
 // Digambar di 1536 px supaya tajam saat buklet mengisi layar; koordinat ditulis
 // untuk 1024 lalu dikali S.
@@ -46,9 +46,11 @@ export function buatHalamanUV(p, locale, ilustrasi) {
   const dasar = document.createElement("canvas");
   dasar.width = dasar.height = UK;
   const gd = dasar.getContext("2d");
-  const tinta = gambarArsitektur(
+  // Tinta UV: cerita satu permintaan, langkah bernomor dengan ikon teknologinya.
+  const tinta = gambarAlur(
     p.arsitektur,
-    { latar: null, garis: "#7dffcf", kotak: "rgba(10,30,24,0.6)", teks: "#d8fff4", aksen: "#d9ff6b", huruf: 30 * S },
+    locale,
+    { latar: "rgba(6,20,15,0.82)", garis: "#7dffcf", kotak: "rgba(10,30,24,0.7)", teks: "#eafff8", redup: "#b8f5df", aksen: "#d9ff6b", huruf: 30 * S },
     900 * S,
     640 * S,
   );
@@ -71,7 +73,7 @@ export function buatHalamanUV(p, locale, ilustrasi) {
       const h = ilustrasi.naturalHeight * sk;
       gd.drawImage(ilustrasi, (1024 - w) / 2, 220 + (640 - h) / 2, w, h);
     } else {
-      const n = Math.max(3, Math.min(5, p.arsitektur.simpul.length));
+      const n = Math.max(3, Math.min(5, p.arsitektur.alur.length));
       for (let i = 0; i < n; i++) siluet(gd, 180 + i * (664 / (n - 1)), 700, 1.15, i % 2 ? "laptop" : "hp");
     }
     gd.fillStyle = "#6f695f";
@@ -114,13 +116,15 @@ export function buatHalamanUV(p, locale, ilustrasi) {
       if (nyala > 0.002 && titik) {
         const x = titik.u * UK;
         const y = titik.v * UK;
-        const r = 0.34 * UK;
-        // Cahaya ungunya datang dari lampu sorot di adegan; di sini hanya tinta yang
-        // berpendar, meluruh seperti Gauss dari titik senter.
-        const pudar = (grad, warna, kuat, lebar = 2.2) => {
+        // Begitu senter menyala, seluruh cerita sudah terbaca (DASAR); titik senter
+        // hanya menambah terang di sekitarnya. Jari-jarinya menutup seluruh halaman.
+        const r = 1.25 * UK;
+        const DASAR = 0.72;
+        const pudar = (grad, kuat) => {
           for (let i = 0; i <= 10; i++) {
             const t = i / 10;
-            grad.addColorStop(t, `rgba(${warna}, ${(kuat * Math.exp(-lebar * t * t) * (1 - t * t)).toFixed(4)})`);
+            const a = (DASAR + (1 - DASAR) * Math.exp(-6 * t * t)) * (1 - t ** 6);
+            grad.addColorStop(t, `rgba(0, 0, 0, ${(kuat * a).toFixed(4)})`);
           }
           return grad;
         };
@@ -132,7 +136,7 @@ export function buatHalamanUV(p, locale, ilustrasi) {
         gl.drawImage(tinta, 62 * S, 230 * S);
         gl.shadowBlur = 0;
         gl.globalCompositeOperation = "destination-in";
-        gl.fillStyle = pudar(gl.createRadialGradient(x, y, 0, x, y, r), "0, 0, 0", Math.min(1, 1.2 * nyala), 1.4);
+        gl.fillStyle = pudar(gl.createRadialGradient(x, y, 0, x, y, r), Math.min(1, nyala));
         gl.fillRect(0, 0, UK, UK);
         g.drawImage(lapis, 0, 0);
       }

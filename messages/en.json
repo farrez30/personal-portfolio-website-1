@@ -59,9 +59,6 @@
     "periode": "Period",
     "jenis": "Type",
     "status": "Status",
-    "sinarx": "Move your cursor or finger over the image to see what's underneath.",
-    "sinarxDaftar": "System parts",
-    "ke": "to",
     "tutupBuklet": "Close booklet"
   },
   "kontak": {
@@ -149,5 +146,18 @@
       "lanjutkan": "Resume playback"
     },
     "senter": "UV torch"
+  },
+  "arsitektur": {
+    "dipakai": "Technology in this step",
+    "kelompok": {
+      "fitur": "Features",
+      "stack": "Stack",
+      "infrastruktur": "Infrastructure"
+    },
+    "lihatDiagram": "See the full flow",
+    "judulHalaman": "{judul} architecture",
+    "kembali": "Back to {judul}",
+    "diagram": "Diagram of one request",
+    "teknologi": "Technology"
   }
 }
