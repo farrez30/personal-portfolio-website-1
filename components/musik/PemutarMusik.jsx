@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { PiPlayFill, PiPauseFill, PiXBold, PiMusicNotesBold, PiLinkBold, PiArrowCounterClockwiseBold } from "react-icons/pi";
 import { useMode } from "@/components/mode/ModeProvider";
 import { PLAYLIST, AWAL_MUSIK } from "@/content/musik";
-import { uraiTautan, ambilInfo } from "./spotify";
+import { uraiTautan, ambilInfo, cuplikan } from "./spotify";
 import { cetakSampul, terapkanKeAlbum } from "./album";
 import "./pemutar.css";
 
@@ -60,6 +60,7 @@ export default function PemutarMusik() {
   const [pilihan, setPilihan] = useState(playlistFarrez ? { tautan: playlistFarrez, judul: null, milikFarrez: true } : null);
   const [tersambung, setTersambung] = useState(false);
   const [jalan, setJalan] = useState(false);
+  const [pratinjau, setPratinjau] = useState(false);
   const [meta, setMeta] = useState({ url: null, judul: null, sampul: null });
   const [tersembunyi, setTersembunyi] = useState(false);
   const [form, setForm] = useState(false);
@@ -136,7 +137,10 @@ export default function PemutarMusik() {
         api.createController(tempat, { uri, width: "100%", height: 152 }, (k) => {
           kontrol.current = k;
           k.addListener("ready", () => mauPutar.current && k.play());
-          k.addListener("playback_update", (e) => setJalan(!e?.data?.isPaused));
+          k.addListener("playback_update", (e) => {
+            setJalan(!e?.data?.isPaused);
+            setPratinjau(cuplikan(e?.data?.duration));
+          });
         });
       })
       .catch(() => setTersambung(false));
@@ -302,6 +306,17 @@ export default function PemutarMusik() {
         )}
 
         <div ref={wadahEmbed} className="vinyl-embed" hidden={!tersambung} />
+        {tersambung && pratinjau && (
+          <p className="vinyl-cuplikan">
+            {t.rich("cuplikan", {
+              login: (isi) => (
+                <a href="https://accounts.spotify.com/login" target="_blank" rel="noopener noreferrer">
+                  {isi}
+                </a>
+              ),
+            })}
+          </p>
+        )}
       </section>
 
       <button
