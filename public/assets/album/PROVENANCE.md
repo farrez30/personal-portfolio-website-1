@@ -8,10 +8,13 @@ Pengolahan: JPEG asli Flow (1024x1024, sisipan belakang 1200x896) disimpan denga
 
 Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez mengoreksi bahwa kamera aksinya dipasang di chin mount helm, bukan di atas helm. Gambar versi lama tidak dipakai.
 
+Sampul berjudul (`sampul-judul.webp`): sampul terpilih diedit di layar edit Flow (Nano Banana 2.1, 0 kredit, 5 Nov 2026), dengan judul berbahasa Indonesia digambar oleh model. Prompt per sampul ada di [docs/seni-cd/prompt-judul.json](../../../docs/seni-cd/prompt-judul.json). Ejaan 10 dari 10 dicek manual dari gambar aslinya. Farrez memilih versi ini untuk semua sampul depan. Asli JPEG ada di `D:\downloads\claude\2026-11-05-flow-album-cd\_judul-ai\`, diubah ke WebP 1024 px q82.
+
 ## erp-software-house: Swiss International Style
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v1 | a warehouse shelf, a service van and a payroll ledger reduced to geometric blocks on a grid, one large red circle |
 | label.webp | v1 | concentric grid rings and radial bars like a precise dial, one red segment |
 | belakang.webp | v1 | a tidy grid of twelve small square photomontage tiles of warehouse boxes, invoices, scanners and plantation rows |
@@ -28,6 +31,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v1 | cut-out photos of a phone on a tripod, a ring light, a microphone and a calendar page exploding out of a sunburst |
 | label.webp | v1 | a spiral of cut-out photo strips of cameras and phones swirling around the centre |
 | belakang.webp | v1 | a scrapbook wall of torn photos: briefs, contracts, filming setups and a planning board pinned together |
@@ -44,6 +48,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v1 | a small two-person workshop built from geometric blocks, gears and a clock made of circles |
 | label.webp | v1 | a target of red, yellow and blue rings with a black triangle and square orbiting |
 | belakang.webp | v1 | a diagonal arrangement of geometric tools: a clock, a ledger, a coin, a code bracket shape made of bars |
@@ -60,6 +65,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v1 | a young couple at a kitchen table with a piggy bank, a ledger book and a pendant lamp |
 | label.webp | v1 | a starburst of coins and boomerang shapes around the centre |
 | belakang.webp | v1 | a mid-century living room shelf with unlabelled jars, a ledger, a radio and a potted plant |
@@ -76,6 +82,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v2 | an older couple looking at a phone, with radiating lines connecting small circles behind them |
 | label.webp | v1 | a network of circles linked by straight lines radiating from the centre |
 | belakang.webp | v1 | a diagonal map of connected nodes, delivery boxes and a weekly calendar strip |
@@ -92,6 +99,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v1 | a great banyan-like tree whose roots and branches hold small family figures of three generations |
 | label.webp | v1 | roots spiralling around the centre like tree rings |
 | belakang.webp | v1 | a carved border of leaves framing a row of traditional curved Minangkabau roofs and Sundanese bamboo houses |
@@ -108,6 +116,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v1 | a mother running a home shop packing parcels while a phone rings with an empty speech bubble |
 | label.webp | v1 | a burst of Ben-Day dots radiating from the centre with an empty speech bubble |
 | belakang.webp | v1 | comic panels: a phone feed, a chat window shape, a parcel, a delivery scooter, all bubbles empty |
@@ -124,6 +133,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v2 | a single small figure sitting on a bench at the edge of a misty lake |
 | label.webp | v1 | soft concentric ripples on still grey water seen from above |
 | belakang.webp | v1 | a foggy shoreline with a small empty wooden pier |
@@ -140,6 +150,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v2 | a motorcycle rider in a full-face helmet riding along a coastal highway at sunset, a small action camera mounted on the chin bar of the helmet facing forward (nothing on top of the helmet) |
 | label.webp | v1 | a sunset sun striped with horizontal bands and palm silhouettes |
 | belakang.webp | v1 | a parked motorcycle by a seaside wall, a full-face helmet resting on the seat with a small action camera mounted on its chin bar facing forward |
@@ -156,6 +167,7 @@ Revisi: prompt YiheeCam (sampul, belakang, buklet 2 dan 6) diubah setelah Farrez
 
 | Berkas | Varian | Isi |
 |---|---|---|
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v1 | two friends at a desk at night lit by monitors, cropped tightly, a bold blue rectangle |
 | label.webp | v2 | a close-up of a candlestick-like bar chart in duotone around the centre |
 | belakang.webp | v1 | a desk at night with a coffee cup, keyboard and a glowing monitor, tight crop |

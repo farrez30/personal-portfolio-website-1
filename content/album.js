@@ -1,12 +1,14 @@
 // Seni album per proyek: satu genre desain rekaman per CD (docs/genre-cd.md).
-// Gambar dari Google Flow, tanpa teks; judul ditulis kode di atasnya dengan huruf
-// genre itu, jadi ejaannya pasti dan ikut bahasa halaman. Asal tiap berkas di
-// public/assets/album/PROVENANCE.md.
+// Gambar dari Google Flow. Sampul depan memakai `sampulJudul`: sampul yang sama
+// dengan judul berbahasa Indonesia yang digambar Nano Banana sendiri (pilihan
+// Farrez 5 Nov 2026, ejaannya dicek satu per satu). Punggung, cakram, dan sisipan
+// tetap ditulis kode dengan huruf genre, jadi ikut bahasa halaman. Asal tiap
+// berkas di public/assets/album/PROVENANCE.md.
 //
-// `judul` mengatur letak teks di sampul dalam pecahan sisi sampul (0..1):
-// x, y = titik jangkar, rata = left | center | right, ukuran = tinggi huruf,
-// lebar = lebar maksimum baris, putar = derajat. `judul: null` berarti sampul
-// murni gambar; judulnya cukup di punggung dan cakram.
+// `judul` mengatur letak teks bila sampul ditulis kode (cadangan saat
+// `sampulJudul` gagal dimuat), dalam pecahan sisi sampul (0..1): x, y = titik
+// jangkar, rata = left | center | right, ukuran = tinggi huruf, lebar = lebar
+// maksimum baris, putar = derajat. `judul: null` berarti tanpa judul.
 // Halaman `buklet` sengaja menyisakan sepertiga kanan kosong untuk teks yang
 // diisi setelah Farrez menyetujui naskahnya.
 
@@ -14,6 +16,7 @@ const dasar = (slug) => {
   const akar = `/assets/album/${slug}`;
   return {
     sampul: `${akar}/sampul.webp`,
+    sampulJudul: `${akar}/sampul-judul.webp`,
     label: `${akar}/label.webp`,
     belakang: `${akar}/belakang.webp`,
     buklet: Array.from({ length: 8 }, (_, i) => `${akar}/buklet-${String(i + 1).padStart(2, "0")}.webp`),
