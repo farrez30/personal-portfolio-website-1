@@ -15,6 +15,19 @@ npm test         # node:test, no browser needed
 npm run build && npm start
 ```
 
+### Spotify track list (optional)
+
+The music CD booklet lists the tracks of the playlist in `content/musik.js` through
+`/api/musik/daftar` (ADR 0010). One-time setup:
+
+1. Create an app at developer.spotify.com/dashboard (Web API, Redirect URI
+   `http://127.0.0.1:8888/callback`). The playlist owner must be the app owner, with Premium.
+2. Put `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` in `.env.local`.
+3. `node scripts/spotify-token.mjs`, log in, and the refresh token is written to `.env.local`.
+4. Copy the three values to Vercel (Production) and redeploy.
+
+If the list goes empty, the server log says why (`daftar lagu: token-400` means log in again).
+
 ## Layout
 
 | Path | What it holds |

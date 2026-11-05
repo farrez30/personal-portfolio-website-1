@@ -12,7 +12,7 @@ import { HALAMAN } from "@/content/proyek";
 import { albumUntuk } from "@/content/album";
 import { GULUNG_GLSL, UKURAN, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok, tekuk } from "./gulung";
 import { KOTAK, BUKLET, CAKRAM, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
-import { gambarSampul, gambarHalaman, gambarBelakang, muatGambar } from "./gambar";
+import { gambarSampul, gambarHalaman, gambarBelakang, gambarDaftarLagu, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
 import { buatSorot, ujungSorot, kedip } from "./sorot";
 import { FASE, ANGKAT, angkatBebas } from "./lintasan";
@@ -121,6 +121,12 @@ function halamanBuklet(p, locale, uv) {
   // saat buklet dibuka. Sepertiga kanannya sengaja kosong untuk teks yang menunggu
   // persetujuan naskah (content/proyek.js), jadi untuk sekarang dekoratif.
   for (const src of albumUntuk(p.slug)?.buklet ?? []) hal.push({ src, alt: "" });
+  // CD musik: daftar lagu playlist Farrez (content/musik.js, diisi dari /api/musik/daftar).
+  const lagu = p.daftarLagu ?? [];
+  for (let i = 0; i < lagu.length; i += 10) {
+    const isi = lagu.slice(i, i + 10);
+    hal.push({ src: gambarDaftarLagu(isi, { awal: i }), alt: "Tracklist", text: isi.map((l) => `${l.judul}, ${l.artis}`).join("\n") });
+  }
   for (const h of HALAMAN) {
     const b = p.buklet[h];
     if (!b) continue;
@@ -845,7 +851,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
             const t = -o.z / arah.z;
             const x = o.x + arah.x * t;
             const y = o.y + arah.y * t;
-            if (x >= 0 && x <= 1 && Math.abs(y) <= 0.5) titik = { u: x, v: 0.5 - y };
+            // Titik senter tetap dikirim walau di luar halaman UV (misalnya di halaman kiri),
+            // supaya tinta ikut memudar masuk dari tepi cahaya, bukan muncul tiba-tiba.
+            titik = { u: x, v: 0.5 - y };
             // Lampu sorot diarahkan ke titik kursor di bidang buklet, dari arah kamera.
             const kena = pos.set(x, y, 0).applyMatrix4(b.matrixWorld);
             senterLampu.target.position.copy(kena);

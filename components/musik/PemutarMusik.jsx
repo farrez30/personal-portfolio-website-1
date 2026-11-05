@@ -3,7 +3,7 @@ import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { PiPlayFill, PiPauseFill, PiXBold, PiMusicNotesBold, PiLinkBold, PiArrowCounterClockwiseBold } from "react-icons/pi";
 import { useMode } from "@/components/mode/ModeProvider";
-import { PLAYLIST, AWAL_MUSIK } from "@/content/musik";
+import { PLAYLIST, AWAL_MUSIK, albumMusik } from "@/content/musik";
 import { uraiTautan, ambilInfo, cuplikan } from "./spotify";
 import { cetakSampul, terapkanKeAlbum } from "./album";
 import "./pemutar.css";
@@ -72,6 +72,24 @@ export default function PemutarMusik() {
   const mauPutar = useRef(false);
   const uriDimuat = useRef(null);
   const dariCd = useRef(false);
+
+  // Daftar lagu playlist Farrez untuk buklet, dari server situs sendiri (bukan Spotify
+  // langsung), jadi boleh dimuat sebelum klik. Pilihan pengunjung tidak punya daftar lagu.
+  const [daftar, setDaftar] = useState(null);
+  useEffect(() => {
+    if (!playlistFarrez) return;
+    let batal = false;
+    fetch("/api/musik/daftar")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => !batal && Array.isArray(d?.lagu) && setDaftar(d.lagu))
+      .catch(() => {});
+    return () => {
+      batal = true;
+    };
+  }, []);
+  useEffect(() => {
+    albumMusik.daftarLagu = pilihan?.milikFarrez && daftar?.length ? daftar : null;
+  }, [pilihan, daftar]);
 
   // Pilihan pengunjung dari kunjungan sebelumnya (hanya tautan dan judul, tanpa sampul).
   useEffect(() => {
