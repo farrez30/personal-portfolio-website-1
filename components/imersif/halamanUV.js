@@ -116,15 +116,16 @@ export function buatHalamanUV(p, locale, ilustrasi) {
       if (nyala > 0.002 && titik) {
         const x = titik.u * UK;
         const y = titik.v * UK;
-        // Begitu senter menyala, seluruh cerita sudah terbaca (DASAR); titik senter
-        // hanya menambah terang di sekitarnya. Jari-jarinya menutup seluruh halaman.
-        const r = 1.25 * UK;
-        const DASAR = 0.72;
+        // Tinta mengikuti sebaran cahaya senter: penuh di dalam lingkar tengah, lalu
+        // memudar halus sampai jari-jari R. Titik di luar halaman tetap dipakai, jadi
+        // cahaya yang masuk dari halaman sebelah menyalakan tinta sedikit demi sedikit.
+        const r = 1.0 * UK;
+        const INTI = 0.35;
         const pudar = (grad, kuat) => {
-          for (let i = 0; i <= 10; i++) {
-            const t = i / 10;
-            const a = (DASAR + (1 - DASAR) * Math.exp(-6 * t * t)) * (1 - t ** 6);
-            grad.addColorStop(t, `rgba(0, 0, 0, ${(kuat * a).toFixed(4)})`);
+          for (let i = 0; i <= 16; i++) {
+            const t = i / 16;
+            const u = Math.min(1, Math.max(0, (1 - t) / (1 - INTI)));
+            grad.addColorStop(t, `rgba(0, 0, 0, ${(kuat * u * u * (3 - 2 * u)).toFixed(4)})`);
           }
           return grad;
         };
