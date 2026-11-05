@@ -47,8 +47,8 @@ const C = {
   bukaTunduk: (-24 * Math.PI) / 180,
   tetanggaPergi: 5 * U,
   tetanggaMundur: 1.6 * U,
-  dengarMasuk: 2.4,
-  dengarKeluar: 1.9,
+  dengarMasuk: 1.7,
+  dengarKeluar: 1.4,
   geserNaik: 4.4 * U,
   rpm: 120,
   remDetik: 1,
@@ -61,8 +61,8 @@ const C = {
   mundurTurun: 1.1 * U,
   mundurSkala: 0.3,
   // Ganti album dari pemutar: semua gerak diputar lebih cepat dan saling menyambung,
-  // supaya satu pergantian (keluarkan sampai cakram baru duduk) selesai sekitar 2 detik.
-  gantiSkala: 0.25,
+  // supaya satu pergantian (keluarkan sampai cakram baru duduk) selesai sekitar 2 detik tanpa terasa terburu-buru.
+  gantiSkala: 0.35,
 };
 
 // --- kurva ---------------------------------------------------------------
