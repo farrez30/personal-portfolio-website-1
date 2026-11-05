@@ -218,6 +218,11 @@ export default function Panggung({ gulir }) {
   // Proyeksi baru muncul setelah Play pertama, dan padam pelan saat cakram dikeluarkan.
   const holoNyala = s.keadaan === "putar" && s.duduk && s.pernahMain && !cdMusik;
   const [holo, setHolo] = useState(null);
+  const [panelHolo, setPanelHolo] = useState(null);
+  // Sorot 3D hanya menyala selama proyeksi berjalan; dijeda atau keluar, ia padam.
+  useEffect(() => {
+    adegan.current?.setSorot(panelHolo, holoNyala && s.jalan);
+  }, [panelHolo, holoNyala, s.jalan]);
   useEffect(() => {
     if (holoNyala) return setHolo(aktif);
     const t = setTimeout(() => setHolo(null), 420);
@@ -346,7 +351,7 @@ export default function Panggung({ gulir }) {
         </div>
       </footer>
 
-      {holo && <Hologram p={holo} sumur={sumur} jalan={s.jalan} keluar={!holoNyala} onPutar={() => a?.setJalan(true)} />}
+      {holo && <Hologram p={holo} sumur={sumur} jalan={s.jalan} keluar={!holoNyala} onPutar={() => a?.setJalan(true)} onPanel={setPanelHolo} />}
 
       <p className="sr-only" aria-live="polite">
         {`${aktif.katalog} ${aktif.judul[locale]}, ${t(`keadaan.${s.keadaan}`)}`}

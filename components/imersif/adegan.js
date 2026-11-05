@@ -13,6 +13,7 @@ import { GULUNG_GLSL, UKURAN, aturGulung, letakTengah, gulungDari, mulaiBelok, t
 import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
 import { gambarSampul, gambarHalaman, gambarBelakang, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
+import { buatSorot, ujungSorot, kedip } from "./sorot";
 
 // Satuan studi (1 = 60 mm) ke satuan kita (1 = 100 mm).
 const U = 0.6;
@@ -224,6 +225,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   };
   // Di perangkat sentuh shader dikompilasi di utas utama; buat lebih awal.
   if (sentuhKasar) siapkanPemutar();
+  // Sorot proyektor ke panel hologram (panelnya HTML, diukur tiap bingkai).
+  const sorot = buatSorot();
+  scene.add(sorot.mesh);
+  let panelHolo = null;
+  let sorotNyala = false;
+  let terangSorot = 0;
+  const asalSorot = new THREE.Vector3();
+  const tepiSumur = new THREE.Vector3();
 
   const k_ = {
     pos: 0,
@@ -572,6 +581,24 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         lensaLayar.set(0, pemutar.puncakY, 0).applyMatrix4(pemutar.grup.matrixWorld).project(camera);
         const lebarSumur = vTmp.set(0.62, pemutar.puncakY, 0).applyMatrix4(pemutar.grup.matrixWorld).project(camera);
         panggil("sumur", (lensaLayar.x + 1) / 2, (1 - lensaLayar.y) / 2, Math.abs(lebarSumur.x - lensaLayar.x) / 2, duduk);
+      }
+    }
+
+    // --- sorot proyektor ------------------------------------------------------
+    // Menyala pelan saat Play, padam lebih cepat saat jeda atau cakram dikeluarkan.
+    const sasaranSorot = sorotNyala && panelHolo && pemutar && k_.dengar > 0.001 ? 1 : 0;
+    terangSorot += (sasaranSorot - terangSorot) * Math.min(1, dt * (sasaranSorot ? 2.4 : 6));
+    sorot.mesh.visible = false;
+    if (terangSorot > 0.002 && panelHolo && pemutar?.grup.visible) {
+      const ujung = ujungSorot(panelHolo.getBoundingClientRect(), kanvas.getBoundingClientRect());
+      asalSorot.set(0, pemutar.puncakY, 0).applyMatrix4(pemutar.grup.matrixWorld);
+      const jari = tepiSumur.set(0.62 * 0.55, pemutar.puncakY, 0).applyMatrix4(pemutar.grup.matrixWorld).distanceTo(asalSorot);
+      if (ujung && sorot.pasang(asalSorot, ujung, jari, camera, U)) {
+        const detik = kurangiGerak ? 0 : now / 1000;
+        sorot.uniforms.uWaktu.value = detik;
+        sorot.uniforms.uKedip.value = kurangiGerak ? 1 : kedip(detik);
+        sorot.uniforms.uKuat.value = terangSorot;
+        sorot.mesh.visible = true;
       }
     }
 
@@ -1301,6 +1328,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       }
       kirim();
     },
+    // Panel hologram (elemen HTML) yang jadi ujung sorot, dan apakah sorotnya menyala.
+    setSorot(el, nyala) {
+      panelHolo = el ?? null;
+      sorotNyala = !!nyala && !!el;
+    },
     setSenter(nyala) {
       k_.senter = !!nyala && k_.uvTerlihat;
       kirim();
@@ -1320,6 +1352,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       kanvas.removeEventListener("pointerleave", keluar);
       kanvas.removeEventListener("wheel", putarRoda);
       k_.buklet?.dispose();
+      panelHolo = null;
       scene.traverse((o) => {
         if (!o.isMesh) return;
         o.geometry.dispose();
