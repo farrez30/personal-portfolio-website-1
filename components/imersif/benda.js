@@ -23,6 +23,21 @@ export function tekstur(canvas, renderer) {
   return t;
 }
 
+// CD musik berganti isi saat pengunjung memilih lagu Spotify (peristiwa "musik:album").
+// Teksturnya digambar ulang dari data album yang sudah diperbarui; pendengar dilepas
+// bersama teksturnya.
+function ikutiMusik(p, peta, gambar) {
+  if (!p.musik || typeof window === "undefined") return;
+  const ulang = () => {
+    const c = gambar();
+    peta.image = c;
+    peta.needsUpdate = true;
+    c.siap?.then(() => (peta.needsUpdate = true));
+  };
+  window.addEventListener("musik:album", ulang);
+  peta.addEventListener("dispose", () => window.removeEventListener("musik:album", ulang));
+}
+
 // --- lingkungan ------------------------------------------------------------
 // Studio gelap dengan empat pita putih lembut: plastik dan logam baru terlihat
 // "nyata" karena memantulkan pita-pita ini, bukan karena warnanya sendiri.
@@ -438,6 +453,7 @@ export function buatCakram(p, renderer) {
   const redup = { value: 1 };
   const muka = tekstur(gambarCakram(p), renderer);
   muka.image.siap?.then(() => (muka.needsUpdate = true));
+  ikutiMusik(p, muka, () => gambarCakram(p));
   const cincin = (dalam, luar, seg = 220) => {
     const geo = new THREE.RingGeometry(dalam, luar, seg, 1);
     // UV dari xy supaya cetakan persegi menempel benar pada cincin.
@@ -654,10 +670,9 @@ export function buatKotak(p, locale, renderer, i) {
   const geo = geometriKotak();
   const plastik = plastikKotak(pt.aus, benih(p.slug ?? i));
 
-  const sisipan = new THREE.Mesh(
-    geo.sisipan,
-    new THREE.MeshStandardMaterial({ map: tekstur(gambarSisipan(p, locale), renderer), roughness: 0.5 }),
-  );
+  const petaSisipan = tekstur(gambarSisipan(p, locale), renderer);
+  ikutiMusik(p, petaSisipan, () => gambarSisipan(p, locale));
+  const sisipan = new THREE.Mesh(geo.sisipan, new THREE.MeshStandardMaterial({ map: petaSisipan, roughness: 0.5 }));
   badan.add(sisipan);
   badan.add(new THREE.Mesh(geo.dasar, plastik));
 
@@ -698,6 +713,7 @@ export function buatKotak(p, locale, renderer, i) {
   );
   // Ilustrasi sampul dimuat terpisah; begitu siap, kanvasnya digambar ulang dan diunggah lagi.
   petaSampul.image.siap?.then(() => (petaSampul.needsUpdate = true));
+  ikutiMusik(p, petaSampul, () => gambarSampul(p, locale));
   sampul.position.set(mm(6), 0, -mm(0.9));
   const belakangBuklet = new THREE.Mesh(
     new THREE.PlaneGeometry(BUKLET, BUKLET),
@@ -707,6 +723,7 @@ export function buatKotak(p, locale, renderer, i) {
     }),
   );
   petaBelakang.image.siap?.then(() => (petaBelakang.needsUpdate = true));
+  ikutiMusik(p, petaBelakang, () => gambarBelakang(p, locale, 1024));
   belakangBuklet.rotation.y = Math.PI;
   belakangBuklet.position.set(mm(6), 0, -mm(2.25));
   // Tumpukan kertas buklet 1,2 mm di antara sampul depan dan belakang.

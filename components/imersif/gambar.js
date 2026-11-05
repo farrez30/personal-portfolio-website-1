@@ -447,3 +447,74 @@ export function gambarArsitektur(arsitektur, { latar, garis, kotak, teks, aksen,
   }
   return c;
 }
+
+// Gambar dari luar (sampul Spotify) dicetak ulang supaya senada dengan CD lain dan tidak
+// mengilap seperti layar: warna sedikit pudar dan hitam terangkat ke warna kertas, raster
+// titik 45 derajat yang samar, lalu butir. Acaknya berbenih, jadi hasilnya tetap.
+// `im` boleh gambar atau kanvas yang sudah termuat (dan lolos CORS).
+export function cetakKertas(im, { ukuran = 1024, benih = 7, butir: kuatButir = 0.07, raster = 0.22, pudar = 0.16 } = {}) {
+  const [c, g] = kanvas(ukuran, ukuran);
+  const lw = im.naturalWidth || im.width;
+  const lh = im.naturalHeight || im.height;
+  const sk = Math.max(ukuran / lw, ukuran / lh);
+  g.imageSmoothingQuality = "high";
+  g.drawImage(im, (ukuran - lw * sk) / 2, (ukuran - lh * sk) / 2, lw * sk, lh * sk);
+
+  const d = g.getImageData(0, 0, ukuran, ukuran);
+  const px = d.data;
+  let s = benih >>> 0;
+  const acak = () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296;
+  // Warna kertas (#efe9df) yang terlihat di sela tinta.
+  const kr = 239;
+  const kg = 233;
+  const kb = 223;
+  const sel = ukuran / 150;
+  const k = Math.SQRT1_2 / sel;
+  for (let y = 0; y < ukuran; y++) {
+    for (let x = 0; x < ukuran; x++) {
+      const i = (y * ukuran + x) * 4;
+      let r = px[i];
+      let gg = px[i + 1];
+      let b = px[i + 2];
+      const l = 0.299 * r + 0.587 * gg + 0.114 * b;
+      // Pudar: saturasi turun, lalu dicampur sedikit ke kertas (hitam jadi abu-abu hangat).
+      r += (l - r) * pudar;
+      gg += (l - gg) * pudar;
+      b += (l - b) * pudar;
+      r = r * (1 - pudar * 0.55) + kr * pudar * 0.55;
+      gg = gg * (1 - pudar * 0.55) + kg * pudar * 0.55;
+      b = b * (1 - pudar * 0.55) + kb * pudar * 0.55;
+      // Raster: titik tinta tumbuh di bidang gelap; di luar titik kertasnya sedikit tampak.
+      const u = (x + y) * k;
+      const v = (x - y) * k;
+      const pola = (Math.cos(u * 2 * Math.PI) + Math.cos(v * 2 * Math.PI)) * 0.25 + 0.5;
+      const tinta = 1 - l / 255;
+      const f = tinta > pola ? 1 - raster * 0.45 : 1 + raster * 0.3;
+      const n = (acak() - 0.5) * 2 * kuatButir * 255;
+      px[i] = r * f + n;
+      px[i + 1] = gg * f + n;
+      px[i + 2] = b * f + n;
+    }
+  }
+  g.putImageData(d, 0, 0);
+  return c;
+}
+
+// Warna rata-rata gambar, digelapkan sedikit, untuk pita sampul dan cakram.
+export function warnaRata(c, gelap = 0.72) {
+  const [k, g] = kanvas(8, 8);
+  g.drawImage(c, 0, 0, 8, 8);
+  const px = g.getImageData(0, 0, 8, 8).data;
+  let r = 0;
+  let gg = 0;
+  let b = 0;
+  for (let i = 0; i < px.length; i += 4) {
+    r += px[i];
+    gg += px[i + 1];
+    b += px[i + 2];
+  }
+  const n = px.length / 4;
+  const hex = (v) => Math.round((v / n) * gelap).toString(16).padStart(2, "0");
+  k.width = 0;
+  return `#${hex(r)}${hex(gg)}${hex(b)}`;
+}
