@@ -9,7 +9,7 @@ import * as THREE from "three";
 import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUniformsLib.js";
 import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
-import { GULUNG_GLSL, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok } from "./gulung";
+import { GULUNG_GLSL, UKURAN, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok, tekuk } from "./gulung";
 import { KOTAK, BUKLET, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
 import { gambarSampul, gambarHalaman, gambarBelakang, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
@@ -53,6 +53,10 @@ const C = {
   bacaMasuk: 2.4,
   bacaKeluar: 1.9,
   pandangAtas: (26 * Math.PI) / 180,
+  // Setelah Play: pemutar turun dan mengecil supaya ruang proyeksi di atasnya terlihat.
+  mundurDetik: 1.2,
+  mundurTurun: 1.1 * U,
+  mundurSkala: 0.3,
 };
 
 // --- kurva ---------------------------------------------------------------
@@ -237,6 +241,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     laju: 0,
     rem: C.remDetik,
     sudut: 0,
+    mundur: 0,
+    mundurT: tween(),
+    pernahMain: false,
+    sibuk: false,
     baca: 0,
     bacaT: tween(),
     buklet: null,
@@ -249,6 +257,12 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     introMulai: performance.now(),
   };
   const dengar = {};
+  // Penunggu: selesai di bingkai pertama kondisinya terpenuhi.
+  const menunggu = [];
+  const tunggu = (cek) => new Promise((selesai) => menunggu.push({ cek, selesai }));
+  // Selama urutan ganti album berjalan, klik dan tombol lain diabaikan.
+  let urut = false;
+  const terkunci = () => k_.sibuk && !urut;
   const panggil = (n, ...a) => dengar[n]?.(...a);
   let duduk = false;
 
@@ -260,6 +274,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       terbalik: kotak[k_.tujuan]?.balikTujuan !== 0,
       duduk,
       jalan: k_.jalan,
+      pernahMain: k_.pernahMain,
+      sibuk: k_.sibuk,
       uvTerlihat: k_.uvTerlihat,
       senter: k_.senter,
     });
@@ -403,11 +419,21 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     const condong = Math.sign(k_.alir) * Math.min(C.condongMaks, Math.sqrt(Math.abs(k_.alir)) * C.condong);
     const runduk = Math.min(C.rundukMaks, C.rundukPerAlir * Math.abs(k_.alir));
 
+    if (k_.menutup && !k_.menutup.bukaT.aktif) {
+      if (k_.aktif === k_.menutup.p.slug && k_.keadaan === "rak") k_.aktif = null;
+      k_.menutup = null;
+      kirim();
+    }
     const aktifK = kotak.find((x) => x.p.slug === k_.aktif) ?? null;
+    for (let n = menunggu.length - 1; n >= 0; n--) {
+      if (menunggu[n].cek()) menunggu.splice(n, 1)[0].selesai();
+    }
     const dv = nilaiTween(k_.dengarT, now);
     if (dv != null) k_.dengar = dv;
     const bv = nilaiTween(k_.bacaT, now);
     if (bv != null) k_.baca = bv;
+    const mv = nilaiTween(k_.mundurT, now);
+    if (mv != null) k_.mundur = mv;
 
     const geser = p3io((k_.dengar - 0.2) / 0.5);
     const sisiBuklet = k_.sempit ? -1 : 1;
@@ -508,7 +534,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         setRedup(kt.cakram.userData.bahan.cetak, redup);
         setRedup(kt.cakram.userData.bahan.data, redup);
       }
-      if (kt === aktifK || terbuka) pos.y += naikRak;
+      // Seluruh rak naik bersama, termasuk tetangga, seperti satu galeri.
+      pos.y += naikRak;
 
       // Ikuti sasaran: kotak jauh mengejar lebih lambat, memberi rasa inersia.
       const laju = kurangiGerak || terbuka ? 1 : Math.min(1, dt * jepit((seret?.gerak ? C.ikutSeret : C.ikutDasar) - C.ikutJarak * jarak, 6.5, 15));
@@ -526,9 +553,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       const pY = -C.geserNaik * (1 - geser);
       const mx = k_.kursor.ada ? k_.kursor.y * C.miringKursor * 0.4 * 0.35 : 0;
       const my = k_.kursor.ada ? k_.kursor.x * C.miringKursor * 0.4 * 0.35 : 0;
-      pemutar.grup.position.set(0, pY - 0.32, 0);
+      const mundur = p3io(k_.mundur);
+      pemutar.grup.position.set(0, pY + 0.2 - mundur * C.mundurTurun, 0);
       pemutar.grup.rotation.set(mx, Math.PI / 4 + my, 0);
-      pemutar.grup.scale.setScalar(0.62);
+      pemutar.grup.scale.setScalar(0.62 * (1 - C.mundurSkala * mundur));
       pemutar.lampu.material.color.set(k_.jalan ? 0x8fd694 : 0xe0574b);
       for (const b of pemutar.tombol) {
         const sorot = k_.tombolHover === b.userData.tombol;
@@ -553,6 +581,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         qTmp.setFromAxisAngle(sumbuZ, c.userData.putarAsal);
         m4.compose(posNampan, qTmp, vTmp.set(1, 1, 1)).premultiply(aktifK.badan.matrixWorld);
         m4.decompose(pos, q, sk3);
+        // Asal cakram tetap di tempat kotak semula: kotak naik keluar layar, cakram tidak ikut.
+        pos.y -= geser * C.geserNaik;
         pos.addScaledVector(vTmp.copy(sumbuZ).applyQuaternion(q), p3o(k_.dengar / 0.3) * 0.6 * U);
         pemutar.grup.updateWorldMatrix(true, false);
         const atas = pos2.set(0, pemutar.kursiY + 0.3 * U, 0).applyMatrix4(pemutar.grup.matrixWorld).clone();
@@ -570,7 +600,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         else k_.laju = Math.max(sasaranLaju, k_.laju - (C.rpm / 60 / k_.rem) * dt);
         if (!kurangiGerak) k_.sudut += k_.laju * Math.PI * 2 * dt;
         setBlurPutar(c.userData.bahan.cetak, kurangiGerak ? 0 : k_.laju * Math.PI * 2 * Math.max(0.025, dt));
-        q.multiply(qTmp.setFromAxisAngle(sumbuZ, -k_.sudut));
+        // Sudut putar kembali ke nol selama dibawa pulang, supaya tidak meloncat saat masuk nampan.
+        const sudutTampak = (k_.sudut % (Math.PI * 2)) * bawa;
+        q.multiply(qTmp.setFromAxisAngle(sumbuZ, -sudutTampak));
+        pemutar.poros.rotation.y = -sudutTampak;
         c.position.copy(pos);
         c.quaternion.copy(q);
         c.scale.copy(sk3);
@@ -582,6 +615,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         c.quaternion.setFromAxisAngle(sumbuZ, c.userData.putarAsal);
         c.scale.setScalar(1);
         k_.laju = 0;
+        k_.sudut = 0;
       }
       sinkronCakram(c);
     }
@@ -652,12 +686,19 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (bingkai > 0) {
         camera.updateMatrixWorld();
         const tepiNdc = (2 * 64) / H;
+        // Titik kertas yang sudah ditekuk (sama dengan shader), bukan hanya sudut datarnya:
+        // saat melengkung kertas menonjol melewati sudut-sudut itu.
+        const datar = settle * settle;
+        const titik = (px, sy) => {
+          const [tx, tz] = k_.baca < 0.9999 ? tekuk((px - 0.5) * UKURAN, g, datar) : [(px - 0.5) * UKURAN, 0];
+          return vTmp.set((tx / UKURAN) * sk, sy * sk, (tz / UKURAN) * sk).applyQuaternion(qBuklet).add(tengah).project(camera);
+        };
         const ukur = () => {
           let atas = -Infinity;
           let bawah = Infinity;
-          for (const sx of [-0.5, 0.5]) {
+          for (let n = 0; n <= 8; n++) {
             for (const sy of [-0.5, 0.5]) {
-              vTmp.set(sx * sk, sy * sk, 0).applyQuaternion(qBuklet).add(tengah).project(camera);
+              titik(n / 8, sy);
               atas = Math.max(atas, vTmp.y);
               bawah = Math.min(bawah, vTmp.y);
             }
@@ -677,9 +718,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         if (!k_.sempit) {
           let kiri = Infinity;
           let kanan = -Infinity;
-          for (const sx of [-0.5, 0.5]) {
+          for (let n = 0; n <= 8; n++) {
             for (const sy of [-0.5, 0.5]) {
-              vTmp.set(sx * sk, sy * sk, 0).applyQuaternion(qBuklet).add(tengah).project(camera);
+              titik(n / 8, sy);
               kiri = Math.min(kiri, vTmp.x);
               kanan = Math.max(kanan, vTmp.x);
             }
@@ -1106,7 +1147,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       dengar[nama] = fn;
     },
     fokus(i) {
-      if (k_.keadaan === "rak") keIndeks(i, "kunci");
+      if (k_.keadaan === "rak" && !k_.sibuk) keIndeks(i, "kunci");
     },
     lompat(i) {
       // Untuk tautan langsung: tanpa animasi geser.
@@ -1118,13 +1159,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     },
     buka(slug) {
       const i = proyek.findIndex((p) => p.slug === slug);
-      if (i < 0 || k_.keadaan !== "rak") return;
+      if (i < 0 || k_.keadaan !== "rak" || terkunci()) return;
       const now = performance.now();
-      if (i !== k_.tujuan) {
-        k_.tujuan = i;
-        k_.pos = i;
-      }
+      if (i !== k_.tujuan) keIndeks(i, "klik");
       const kt = kotak[i];
+      if (k_.menutup === kt) k_.menutup = null;
       if (kt.balikTujuan) tegakkan(kt, now, 0.6);
       pasangTween(kt.bukaT, kt.buka, 1, C.bukaDetik * (1 - kt.buka), linear, now);
       k_.aktif = slug;
@@ -1132,12 +1171,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       kirim();
     },
     tutup() {
+      if (terkunci()) return;
       if (k_.keadaan === "buklet") return api.tutupBuklet();
       if (k_.keadaan === "putar") return api.keluarkan();
       if (k_.keadaan !== "buka") return;
       const kt = kotak.find((x) => x.p.slug === k_.aktif);
       pasangTween(kt.bukaT, kt.buka, 0, Math.max(0.2, C.bukaDetik * 0.85 * kt.buka), linear, performance.now());
-      k_.aktif = null;
+      // Kotak tetap aktif sampai tutupnya rapat, supaya tetangga dan buklet kembali halus.
+      k_.menutup = kt;
       k_.keadaan = "rak";
       kirim();
     },
@@ -1172,20 +1213,24 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       k_.antreHalaman = { arah, sampai: performance.now() + 4000 };
     },
     dengarkan() {
-      if (k_.keadaan !== "buka" || k_.baca > 0.001) return;
+      if (k_.keadaan !== "buka" || k_.baca > 0.001 || terkunci()) return;
       siapkanPemutar();
       const p = proyek.find((x) => x.slug === k_.aktif);
       pemutar.layar.setel(p.musik ? p.ringkas[locale].replace(/\.$/, "") : `${p.judul[locale]}  ${p.katalog}`, performance.now());
       pasangTween(k_.dengarT, k_.dengar, 1, C.dengarMasuk * (1 - k_.dengar), linear, performance.now());
+      k_.pernahMain = false;
       k_.keadaan = "putar";
       k_.rem = C.remDetik;
       kirim();
     },
     keluarkan() {
-      if (k_.keadaan !== "putar") return;
+      if (k_.keadaan !== "putar" || terkunci()) return;
       k_.jalan = false;
       k_.rem = C.remKeluarkan;
-      pasangTween(k_.dengarT, k_.dengar, 0, C.dengarKeluar * k_.dengar, linear, performance.now());
+      const now = performance.now();
+      pasangTween(k_.dengarT, k_.dengar, 0, C.dengarKeluar * k_.dengar, linear, now);
+      pasangTween(k_.mundurT, k_.mundur, 0, C.mundurDetik * 0.6 * k_.mundur, linear, now);
+      k_.pernahMain = false;
       k_.keadaan = "buka";
       duduk = false;
       kirim();
@@ -1194,6 +1239,53 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (!duduk) return;
       k_.jalan = nyala;
       k_.rem = C.remDetik;
+      // Play pertama: pemutar mundur supaya proyeksi di atasnya terlihat. Pause tidak membalik.
+      if (nyala && !k_.pernahMain) {
+        k_.pernahMain = true;
+        pasangTween(k_.mundurT, k_.mundur, 1, C.mundurDetik * (1 - k_.mundur), linear, performance.now());
+      }
+      kirim();
+    },
+    // Ganti album dari pemutar atau kotak terbuka, berurutan seperti tangan sungguhan:
+    // keluarkan cakram, tutup kotak, geser rak, buka kotak berikut, masukkan cakramnya,
+    // lalu putar lagi bila tadi sedang diputar. Klik lagi selama berjalan hanya mengubah tujuan.
+    async gantiAlbum(arah) {
+      if (k_.sibuk) {
+        k_.tujuanGanti = jepit(k_.tujuanGanti + arah, 0, kotak.length - 1);
+        return;
+      }
+      const dariPutar = k_.keadaan === "putar";
+      const mainLagi = dariPutar && k_.jalan;
+      if (!dariPutar && k_.keadaan !== "buka") return;
+      const awal = kotak.findIndex((x) => x.p.slug === k_.aktif);
+      k_.tujuanGanti = jepit(awal + arah, 0, kotak.length - 1);
+      if (k_.tujuanGanti === awal) return;
+      k_.sibuk = true;
+      kirim();
+      const langkah = (fn) => {
+        urut = true;
+        fn();
+        urut = false;
+      };
+      if (dariPutar) {
+        langkah(api.keluarkan);
+        await tunggu(() => !k_.dengarT.aktif);
+      }
+      const lama = kotak[awal];
+      langkah(api.tutup);
+      await tunggu(() => !lama.bukaT.aktif && !k_.menutup);
+      keIndeks(k_.tujuanGanti, "klik");
+      panggil("indeks", k_.tujuanGanti);
+      await tunggu(() => !k_.posT.aktif);
+      const kt = kotak[k_.tujuanGanti];
+      langkah(() => api.buka(kt.p.slug));
+      await tunggu(() => !kt.bukaT.aktif);
+      if (dariPutar) {
+        langkah(api.dengarkan);
+        await tunggu(() => duduk);
+        if (mainLagi) api.setJalan(true);
+      }
+      k_.sibuk = false;
       kirim();
     },
     balik() {

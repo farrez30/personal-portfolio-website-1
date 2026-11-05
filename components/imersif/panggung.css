@@ -461,7 +461,9 @@
   position: absolute;
   left: var(--sx);
   top: calc(var(--sy) * 0.82);
-  width: min(56vw, 720px);
+  /* Lebar dibatasi juga oleh ruang di atas sumur, supaya bagian atas panel tidak terpotong
+     tepi panggung: tinggi panel kira-kira 0,625 x lebar ditambah kepala dan bilah alat. */
+  width: min(56vw, 720px, calc((var(--syf, 1) * (100vh - 60px) * 0.82 - 28px - 96px) / 0.625));
   transform-origin: 50% 100%;
   transform: translate(-50%, -100%) translateY(var(--bob)) rotateX(var(--rx)) rotateY(var(--ry));
   pointer-events: auto;
@@ -472,7 +474,26 @@
 }
 
 .holo[data-perangkat="hp"] .holo__panel {
-  width: min(30vw, 300px);
+  width: min(30vw, 300px, calc((var(--syf, 1) * (100vh - 60px) * 0.82 - 28px - 96px) / 2));
+}
+
+/* Cakram dikeluarkan: panel turun kembali ke sumur dan padam. */
+.holo--keluar .holo__panel {
+  animation: holo-turun 400ms cubic-bezier(0.32, 0.72, 0, 1) both;
+  pointer-events: none;
+}
+
+.holo--keluar .holo__orbit {
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+@keyframes holo-turun {
+  to {
+    opacity: 0;
+    transform: translate(-50%, -100%) scaleY(0.02);
+    filter: brightness(3);
+  }
 }
 
 @keyframes holo-naik {
