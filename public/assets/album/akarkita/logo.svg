@@ -1,0 +1,28 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- Badge nila pekat + pohon-berakar piksel benang emas. Vektor rect saja
+       (tanpa font). Regenerasi: node scripts/gen-icons.mjs -->
+  <rect width="64" height="64" rx="8" fill="#101a2f"/>
+  <g fill="#e8be62" shape-rendering="crispEdges">
+    <rect x="21.5" y="7.5" width="7" height="7"/>
+    <rect x="28.5" y="7.5" width="7" height="7"/>
+    <rect x="35.5" y="7.5" width="7" height="7"/>
+    <rect x="14.5" y="14.5" width="7" height="7"/>
+    <rect x="21.5" y="14.5" width="7" height="7"/>
+    <rect x="28.5" y="14.5" width="7" height="7"/>
+    <rect x="35.5" y="14.5" width="7" height="7"/>
+    <rect x="42.5" y="14.5" width="7" height="7"/>
+    <rect x="7.5" y="21.5" width="7" height="7"/>
+    <rect x="14.5" y="21.5" width="7" height="7"/>
+    <rect x="21.5" y="21.5" width="7" height="7"/>
+    <rect x="28.5" y="21.5" width="7" height="7"/>
+    <rect x="35.5" y="21.5" width="7" height="7"/>
+    <rect x="42.5" y="21.5" width="7" height="7"/>
+    <rect x="49.5" y="21.5" width="7" height="7"/>
+    <rect x="28.5" y="28.5" width="7" height="7"/>
+    <rect x="28.5" y="35.5" width="7" height="7"/>
+    <rect x="21.5" y="42.5" width="7" height="7"/>
+    <rect x="35.5" y="42.5" width="7" height="7"/>
+    <rect x="14.5" y="49.5" width="7" height="7"/>
+    <rect x="42.5" y="49.5" width="7" height="7"/>
+  </g>
+</svg>

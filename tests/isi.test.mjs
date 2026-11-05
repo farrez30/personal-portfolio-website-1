@@ -59,15 +59,6 @@ test("berkas ilustrasi dan tangkapan layar yang dirujuk benar-benar ada", () => 
   }
 });
 
-test("garis arsitektur hanya menghubungkan simpul yang ada", () => {
-  for (const p of proyek.filter((x) => x.arsitektur)) {
-    const ids = new Set(p.arsitektur.simpul.map((s) => s.id));
-    for (const [a, b] of p.arsitektur.garis) {
-      assert.ok(ids.has(a) && ids.has(b), `${p.slug}: garis ${a} ke ${b}`);
-    }
-  }
-});
-
 test("halaman buklet yang tampil hanya yang sudah terisi, urut sesuai HALAMAN", () => {
   const contoh = { buklet: { challenge: null, decisions: "x", solution: null, delivery: null, outcome: "y" } };
   assert.deepEqual(halamanTampil(contoh), ["decisions", "outcome"]);

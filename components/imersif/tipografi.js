@@ -94,3 +94,21 @@ export function tulisJudul(g, ukuran, teks, spec, h) {
   tulis(spec.warna, 0, 0, 0.94);
   g.restore();
 }
+
+// Gambar belakang dari Flow punya pita polos di bawah (dulu diminta untuk daftar
+// lagu), tingginya beda-beda. Cari batasnya: baris dari bawah yang hampir tanpa
+// variasi warna dianggap pita. Mengembalikan pecahan tinggi gambar di atas pita.
+// `baris`: per baris { rata, sd } terang (0..255). Baris pita = warnanya dekat
+// dengan baris paling bawah dan cukup rata (tekstur kertas masih lolos). Garis
+// tepi tipis di dalam pita (1–2 baris) tidak dianggap isi; isi baru dimulai
+// setelah 3 baris bukan-pita berturut-turut.
+export function batasPita(baris, { selisih = 14, sdMaks = 24 } = {}) {
+  const dasar = baris[baris.length - 1]?.rata ?? 0;
+  let isi = 0;
+  for (let y = baris.length - 1; y >= 0; y--) {
+    const pita = Math.abs(baris[y].rata - dasar) < selisih && baris[y].sd < sdMaks;
+    isi = pita ? 0 : isi + 1;
+    if (isi === 3) return Math.min(1, Math.max(0.6, (y + 3) / baris.length));
+  }
+  return 0.6;
+}

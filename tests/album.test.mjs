@@ -4,8 +4,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { proyek } from "../content/proyek.js";
-import { ALBUM, albumUntuk } from "../content/album.js";
-import { pecahBaris, hurufTermuat } from "../components/imersif/tipografi.js";
+import { ALBUM, albumUntuk, LOGO_LABEL } from "../content/album.js";
+import { pecahBaris, hurufTermuat, batasPita } from "../components/imersif/tipografi.js";
 
 const akar = new URL("../", import.meta.url);
 const ada = (url) => existsSync(new URL(`public${url}`, akar));
@@ -99,4 +99,33 @@ test("pecahBaris memecah di batas lebar tanpa memotong kata", () => {
 test("huruf halaman sendiri dianggap sudah termuat", () => {
   assert.equal(hurufTermuat({ keluarga: "var(--font-sans)" }), true);
   assert.equal(hurufTermuat(undefined), true);
+});
+
+test("logo situs dan logo proyek ada, tanpa skrip atau rujukan luar", () => {
+  assert.ok(ada(LOGO_LABEL), "logo situs tidak ada");
+  const berlogo = Object.entries(ALBUM).filter(([, a]) => a.logo);
+  assert.equal(berlogo.length, 6);
+  // Klien anonim, partner yang belum memberi izin, dan pilot tanpa merek tidak berlogo.
+  for (const slug of ["erp-software-house", "viralytics", "pilot-iklan"]) assert.equal(ALBUM[slug].logo, undefined, slug);
+  for (const [slug, a] of berlogo) {
+    assert.ok(ada(a.logo), `${slug}: ${a.logo} tidak ada`);
+    const svg = readFileSync(new URL(`public${a.logo}`, akar), "utf8");
+    assert.doesNotMatch(svg, /<script|href=|url\(|<image|@import|\son[a-z]+=/i, `${slug}: logo memuat isi aktif`);
+    assert.match(svg, /<svg[^>]*\swidth="/, `${slug}: logo tanpa width, kanvas tidak bisa mengukurnya`);
+  }
+});
+
+test("batasPita membuang pita polos di bawah, tidak lebih", () => {
+  const isi = (n) => Array.from({ length: n }, (_, i) => ({ rata: 60 + (i % 5) * 30, sd: 40 }));
+  const pita = (n, rata = 230, sd = 12) => Array.from({ length: n }, () => ({ rata, sd }));
+  assert.equal(batasPita([...isi(80), ...pita(20)]), 0.8);
+  assert.equal(batasPita(isi(100)), 1, "tanpa pita, gambar utuh");
+  // Pita kertas bertekstur (sd sedang) tetap dikenali.
+  assert.equal(batasPita([...isi(80), ...pita(20, 225, 20)]), 0.8);
+  // Garis tepi tipis di dalam pita tetap ikut terbuang.
+  assert.equal(batasPita([...isi(80), ...pita(8), { rata: 20, sd: 50 }, { rata: 20, sd: 50 }, ...pita(10)]), 0.8);
+  // Pita sangat tinggi (gambar hampir polos) dibatasi supaya gambar tidak hilang.
+  assert.equal(batasPita([...isi(30), ...pita(70)]), 0.6);
+  // Baris yang warnanya sama dengan pita tapi ada di tengah gambar tidak dihitung.
+  assert.equal(batasPita([...isi(40), ...pita(10), ...isi(50)]), 1);
 });

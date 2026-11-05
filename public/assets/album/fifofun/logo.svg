@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="FiFoFun">
+  <title>FiFoFun</title>
+  <!--
+    One flow entering, two leaving.
+
+    The mark is the thesis of the app rather than a wallet or a coin: money is
+    not a pile, it is something that arrives and divides. It is also the shape of
+    the Sankey diagram on the dashboard, so the icon and the product agree.
+
+    The background is filled edge to edge and the mark sits inside the 80% safe
+    circle, so the same file works as a maskable icon without a second version.
+  -->
+  <rect width="512" height="512" fill="#1f1d1b"/>
+  <path d="M 144 152 C 256 152, 256 112, 368 112 L 368 216 C 256 216, 256 256, 144 256 Z" fill="#4fbfd4"/>
+  <path d="M 144 256 C 256 256, 256 296, 368 296 L 368 400 C 256 400, 256 360, 144 360 Z" fill="#3f9e88"/>
+  <rect x="96" y="152" width="48" height="208" rx="6" fill="#e8e5e0"/>
+  <rect x="368" y="112" width="48" height="104" rx="6" fill="#4fbfd4"/>
+  <rect x="368" y="296" width="48" height="104" rx="6" fill="#3f9e88"/>
+</svg>

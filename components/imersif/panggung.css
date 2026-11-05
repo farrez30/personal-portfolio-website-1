@@ -632,6 +632,9 @@
   color: rgb(var(--fosfor) / 0.85);
   font-size: 0.6875rem;
   white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   transform: rotate(calc(var(--i) / var(--n) * 1turn)) translateX(min(36vw, 470px)) rotate(calc(var(--i) / var(--n) * -1turn));
   animation: holo-lawan 40s linear infinite;
 }
