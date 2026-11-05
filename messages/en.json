@@ -47,6 +47,7 @@
     "kembali": "Back to the shelf",
     "bukaSitus": "Open site",
     "lihatRepo": "View repo",
+    "caseStudy": "View case study",
     "halaman": {
       "overview": "Overview",
       "challenge": "Challenge",
@@ -118,6 +119,7 @@
     "buklet": "Booklet",
     "putarCakram": "Play",
     "bukaTab": "Open in new tab",
+    "caseStudy": "Case study",
     "memuat": "Loading the shelf",
     "pemutar": "Player",
     "putar": "Play",
@@ -139,6 +141,7 @@
       "tampilan": "Screen view",
       "sedangDisiapkan": "The live view is being set up.",
       "bukaTab": "Open in new tab",
+      "caseStudy": "Case study",
       "perbesar": "Enlarge screen",
       "perkecil": "Restore size",
       "memuat": "TUNING SIGNAL",

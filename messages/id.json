@@ -47,6 +47,7 @@
     "kembali": "Kembali ke rak",
     "bukaSitus": "Buka situs",
     "lihatRepo": "Lihat repo",
+    "caseStudy": "Lihat case study",
     "halaman": {
       "overview": "Overview",
       "challenge": "Challenge",
@@ -118,6 +119,7 @@
     "buklet": "Buklet",
     "putarCakram": "Putar",
     "bukaTab": "Buka di tab baru",
+    "caseStudy": "Case study",
     "memuat": "Memuat rak",
     "pemutar": "Pemutar",
     "putar": "Putar",
@@ -139,6 +141,7 @@
       "tampilan": "Tampilan layar",
       "sedangDisiapkan": "Tampilan langsung sedang disiapkan.",
       "bukaTab": "Buka di tab baru",
+      "caseStudy": "Case study",
       "perbesar": "Perbesar layar",
       "perkecil": "Kembalikan ukuran",
       "memuat": "MENYELARASKAN SINYAL",
