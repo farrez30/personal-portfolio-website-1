@@ -118,17 +118,42 @@ function siapkanAlbum(c, src, a, gambar) {
   c.siap = Promise.all([imSiap, hurufSiap]).then(() => gambar(im.naturalWidth ? im : null));
 }
 
-// Sampul album bergenre: gambar penuh dan judul dicetak langsung di atasnya
-// dengan huruf genre itu (letak di content/album.js). Tanpa pita judul.
+// Sampul album bergenre: sampul yang judulnya sudah digambar Nano Banana. Bila
+// berkas itu gagal dimuat, sampul tanpa judul dengan judul dicetak kode memakai
+// huruf genre (letak di content/album.js). Tanpa pita judul.
 function gambarSampulAlbum(p, a, locale, ukuran) {
   const [c, g] = kanvas(ukuran, ukuran);
-  siapkanAlbum(c, a.sampul, a, (im) => {
-    g.fillStyle = im ? KERTAS : p.warna;
+  const kosong = () => {
+    g.fillStyle = p.warna;
     g.fillRect(0, 0, ukuran, ukuran);
-    if (!im) return;
-    gambarPenuh(g, im, 0, 0, ukuran, ukuran);
-    tulisJudul(g, ukuran, p.judul[locale], a.judul, a.huruf);
-    butir(g, ukuran, ukuran, 0.05);
+  };
+  const cetakKode = () =>
+    siapkanAlbum(c, a.sampul, a, (im) => {
+      if (!im) return kosong();
+      gambarPenuh(g, im, 0, 0, ukuran, ukuran);
+      tulisJudul(g, ukuran, p.judul[locale], a.judul, a.huruf);
+      butir(g, ukuran, ukuran, 0.05);
+    });
+  if (!a.sampulJudul) {
+    cetakKode();
+    return c;
+  }
+  let gagal = false;
+  siapkanAlbum(c, a.sampulJudul, a, (im) => {
+    if (im) {
+      gambarPenuh(g, im, 0, 0, ukuran, ukuran);
+      butir(g, ukuran, ukuran, 0.04);
+    } else {
+      kosong();
+      gagal = muatGambar(a.sampulJudul).complete;
+    }
+  });
+  // Berkas berjudul rusak atau hilang: jatuh ke versi kode, lalu janji `siap`
+  // baru selesai setelah versi itu tergambar.
+  c.siap = c.siap?.then(() => {
+    if (!gagal) return;
+    cetakKode();
+    return c.siap;
   });
   return c;
 }

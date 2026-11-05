@@ -27,7 +27,7 @@ test("genre tidak ada yang sama, dan bukan gaya risograf seragam yang lama", () 
 test("semua gambar dan huruf yang dirujuk ada di public/", () => {
   for (const [slug, a] of Object.entries(ALBUM)) {
     assert.equal(a.buklet.length, 8, `${slug}: halaman buklet`);
-    for (const f of [a.sampul, a.label, a.belakang, ...a.buklet]) assert.ok(ada(f), `${slug}: ${f} tidak ada`);
+    for (const f of [a.sampul, a.sampulJudul, a.label, a.belakang, ...a.buklet]) assert.ok(ada(f), `${slug}: ${f} tidak ada`);
     if (a.huruf.berkas) assert.ok(ada(a.huruf.berkas), `${slug}: ${a.huruf.berkas} tidak ada`);
   }
 });
@@ -69,6 +69,18 @@ test("buklet memuat halaman ilustrasi album sebagai URL, sesudah Overview", () =
   const iAlbum = fungsi.indexOf("albumUntuk(p.slug)?.buklet");
   assert.ok(iAlbum > 0, "halamanBuklet tidak memakai ilustrasi album");
   assert.ok(iAlbum > iOverview, "ilustrasi harus sesudah halaman Overview");
+});
+
+test("sampul berjudul tercatat asalnya dan prompt-nya mengunci ejaan", () => {
+  const prov = baca("public/assets/album/PROVENANCE.md");
+  const prompt = JSON.parse(baca("docs/seni-cd/prompt-judul.json"));
+  for (const slug of Object.keys(ALBUM)) {
+    const bagian = prov.split(`## ${slug}:`)[1]?.split("\n## ")[0] ?? "";
+    assert.match(bagian, /\| sampul-judul\.webp \| edit \|/, `${slug}: sampul berjudul tanpa baris asal`);
+    const p = prompt.find((x) => x.slug === slug);
+    assert.ok(p, `${slug}: prompt sampul berjudul tidak ada`);
+    assert.match(p.prompt, /Spell it exactly "[^"]+" and write nothing else/, `${slug}: prompt tanpa kunci ejaan`);
+  }
 });
 
 // Kanvas palsu: lebar teks = 10 px per karakter, seperti huruf monospace.
