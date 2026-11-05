@@ -4,8 +4,9 @@
   bottom: 1.5rem;
   z-index: 95;
   display: flex;
-  align-items: center;
-  gap: 0.85rem;
+  flex-direction: column;
+  gap: 0.7rem;
+  max-width: min(22rem, calc(100vw - 2.5rem));
   padding: 0.7rem 0.9rem 0.7rem 0.7rem;
   border-radius: 1.1rem;
   background: color-mix(in srgb, var(--bg-2) 85%, transparent);
@@ -21,6 +22,12 @@
   opacity: 0;
   transform: translateY(80px) scale(0.9);
   pointer-events: none;
+}
+
+.vinyl-baris {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
 }
 
 /* ===== Record stage (disc + tonearm) ===== */
@@ -133,6 +140,12 @@
   transform: rotate(22deg); /* playing: arm lowered onto the record */
 }
 
+.vinyl__polos {
+  width: 100%;
+  height: 100%;
+  background: #6b5a3a;
+}
+
 /* ===== Glass control panel ===== */
 .vinyl-panel {
   display: flex;
@@ -194,6 +207,120 @@
   background: var(--aksen);
   color: var(--bg);
   border-color: transparent;
+}
+
+@media (pointer: coarse) {
+  .vinyl-btn {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+
+/* ===== Spotify link form and embed ===== */
+.vinyl-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+  color: var(--ink-2);
+}
+
+.vinyl-form label {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.vinyl-form__baris {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.vinyl-form input {
+  flex: 1;
+  min-width: 0;
+  min-height: 2.5rem;
+  padding: 0 0.7rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.85rem;
+}
+
+.vinyl-form input:focus-visible {
+  outline: 2px solid var(--aksen);
+  outline-offset: 1px;
+}
+
+.vinyl-form input[aria-invalid] {
+  border-color: #c2412d;
+}
+
+.vinyl-form__pasang {
+  min-height: 2.5rem;
+  padding: 0 0.9rem;
+  border-radius: 0.6rem;
+  border: 0;
+  cursor: pointer;
+  background: var(--aksen);
+  color: var(--bg);
+  font: inherit;
+  font-weight: 600;
+}
+
+.vinyl-form__catatan,
+.vinyl-form__galat {
+  margin: 0;
+}
+
+.vinyl-form__galat {
+  color: #c2412d;
+}
+
+.vinyl-form__kembali {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: var(--aksen);
+  font: inherit;
+}
+
+.vinyl-embed {
+  width: 100%;
+  min-height: 152px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.vinyl-embed[hidden] {
+  display: none;
+}
+
+.vinyl-embed iframe {
+  display: block;
+  border: 0;
+}
+
+/* Imersif: pojok kanan atas, di bawah kepala panggung, supaya tidak menutup rak dan
+   tombol pemutar CD di bawah. */
+.vinyl-player--imersif,
+.vinyl-reopen--imersif {
+  left: auto;
+  right: 1.25rem;
+  bottom: auto;
+  top: 7.5rem;
+  transform-origin: top right;
+}
+
+.vinyl-player--imersif.is-hidden {
+  transform: translateY(-40px) scale(0.9);
 }
 
 /* ===== Collapsed reopen button ===== */
@@ -258,6 +385,14 @@
   .vinyl-reopen {
     left: 0.75rem;
     bottom: 6rem;
+  }
+
+  .vinyl-player--imersif,
+  .vinyl-reopen--imersif {
+    left: auto;
+    right: 0.75rem;
+    bottom: auto;
+    top: 6.5rem;
   }
 
   .vinyl-stage {

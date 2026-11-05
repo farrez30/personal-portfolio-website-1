@@ -90,7 +90,20 @@
     "jeda": "Jeda musik",
     "sembunyi": "Sembunyikan pemutar",
     "tampil": "Tampilkan pemutar",
-    "sedangDiputar": "Sedang diputar"
+    "sedangDiputar": "Sedang diputar",
+    "siap": "Siap diputar",
+    "playlistFarrez": "Playlist kerja Farrez",
+    "pilihanmu": "Pilihanmu",
+    "viaSpotify": "lewat Spotify",
+    "ganti": "Ganti lagu",
+    "tempel": "Tautan Spotify",
+    "contoh": "open.spotify.com/track/…",
+    "pasang": "Putar",
+    "batal": "Batal",
+    "salah": "Itu bukan tautan lagu, album, atau playlist Spotify.",
+    "kembali": "Kembali ke playlist Farrez",
+    "kosong": "Tempel tautan Spotify untuk mulai.",
+    "disimpan": "Tautanmu hanya disimpan di browser ini."
   },
   "umum": {
     "bahasa": "Bahasa",

@@ -1,12 +1,12 @@
-// CD musik di ujung rak: memutar lagu yang sudah dipakai pemutar piringan hitam.
-// Bukan proyek, jadi tidak tampil di mode Ringan.
-// Catatan lisensi: berkas ES_ berasal dari Epidemic Sound; lisensinya belum tercatat.
-export const LAGU = {
-  src: "/assets/audio/ES_Despite_Such_a_Trustworthy_Appearance-Ludvig_Moulin.mp3",
-  judul: "Despite Such a Trustworthy Appearance",
-  artis: "Ludvig Moulin",
-};
+// CD musik di ujung rak. Isinya dari Spotify lewat embed resmi (ADR 0009): playlist
+// Farrez, atau lagu, album, dan playlist yang ditempel pengunjung. Bukan proyek, jadi
+// tidak tampil di daftar proyek mode Ringan.
 
+// Tautan playlist Farrez (open.spotify.com/playlist/...). Kosong: pengunjung yang memilih.
+export const PLAYLIST = null;
+
+// Objek ini sengaja bisa diubah: pemutar musik mengisi judul, ringkasan, dan sampulnya
+// dari oEmbed, lalu rak 3D menggambar ulang kotak dan cakramnya.
 export const albumMusik = {
   slug: "musik",
   katalog: "FRZ-00",
@@ -17,8 +17,12 @@ export const albumMusik = {
   warna: "#6b5a3a",
   tautan: {},
   gambar: null,
-  ringkas: { id: `${LAGU.judul}, ${LAGU.artis}.`, en: `${LAGU.judul}, ${LAGU.artis}.` },
+  ilustrasi: null,
+  ringkas: { id: "Playlist kerja Farrez, diputar lewat Spotify.", en: "Farrez's work playlist, played through Spotify." },
   arsitektur: null,
   buklet: {},
   musik: true,
 };
+
+// Keadaan awal, untuk kembali ke playlist Farrez setelah pengunjung memilih lagu sendiri.
+export const AWAL_MUSIK = structuredClone(albumMusik);

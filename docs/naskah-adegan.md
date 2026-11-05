@@ -136,10 +136,8 @@ pembaca layar sebagai daftar.
 
 ## Suara
 
-- Pemutar piringan hitam tetap ada sebagai kontrol suara global. Suara selalu mati di awal.
-- Trek: perlu musik berlisensi. Lagu `ES_...mp3` di repo berasal dari Epidemic Sound dan
-  lisensinya tidak tercatat. Opsi: langganan pustaka musik, musik bebas royalti dengan
-  lisensi tertulis, atau buatan sendiri. `[keputusan Farrez]`
+- Pemutar mini yang sama di kedua mode, lewat embed resmi Spotify. Suara selalu mati di awal,
+  dan Spotify baru dimuat setelah klik. Lagu Epidemic Sound sudah dihapus. Lihat ADR 0009.
 
 ## Aset yang dibuat (alur alur-desain: Gemini membuat, Claude mengatur)
 
@@ -171,5 +169,5 @@ pembaca layar sebagai daftar.
 
 1. Urutan dan daftar proyek di rak.
 2. Struktur enam halaman buklet di adegan 3 (sudah diriset, tinggal disetujui).
-3. Sumber musik.
+3. Tautan playlist Spotify (1 sampai 10 lagu).
 4. Persetujuan konsep sinar-x tiga lapis.

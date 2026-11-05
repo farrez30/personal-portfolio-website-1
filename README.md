@@ -20,7 +20,8 @@ npm run build && npm start
 | Path | What it holds |
 |---|---|
 | `content/proyek.js` | The ten albums: titles, summaries, architecture, booklet pages. Privacy rules at the top of the file. |
-| `content/musik.js`, `content/situs.js` | The music CD and personal links (CV, email, socials). |
+| `content/musik.js`, `content/situs.js` | The music CD (Spotify playlist link) and personal links (CV, email, socials). |
+| `components/musik/` | Spotify mini player for both modes: link parsing, oEmbed, print filter hookup (ADR 0009). |
 | `messages/id.json`, `messages/en.json` | All UI text. Same keys in both; `npm test` checks it. |
 | `components/imersif/` | Immersive mode: the three.js scene (`adegan.js`), the case, disc and player models (`benda.js`), canvas textures (`gambar.js`, `halamanUV.js`), and the hologram. |
 | `components/rak/` | Light mode: grid of covers and a dialog per project. |
