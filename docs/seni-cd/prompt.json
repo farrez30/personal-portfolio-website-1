@@ -620,7 +620,7 @@
     "jenis": "sampul",
     "rasio": "1:1",
     "berkas": "sampul.webp",
-    "prompt": "Square album cover. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene: a motorcycle rider with a small action camera on the helmet riding along a coastal highway at sunset. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+    "prompt": "Square album cover. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene: a motorcycle rider in a full-face helmet riding along a coastal highway at sunset, a small action camera mounted on the chin bar of the helmet facing forward (nothing on top of the helmet). Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
   },
   {
     "slug": "yiheecam",
@@ -634,7 +634,7 @@
     "jenis": "belakang",
     "rasio": "4:3",
     "berkas": "belakang.webp",
-    "prompt": "Back insert artwork for a CD case, landscape. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene: a parked motorcycle by a seaside wall, a helmet with an action camera resting on the seat. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+    "prompt": "Back insert artwork for a CD case, landscape. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene: a parked motorcycle by a seaside wall, a full-face helmet resting on the seat with a small action camera mounted on its chin bar facing forward. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
   },
   {
     "slug": "yiheecam",
@@ -648,7 +648,7 @@
     "jenis": "buklet-2",
     "rasio": "1:1",
     "berkas": "buklet-02.webp",
-    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, journey: a rider picking up the camera, a phone beside it. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, journey: a rider clipping the action camera onto the chin bar mount of a full-face helmet, a phone beside it. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
   },
   {
     "slug": "yiheecam",
@@ -676,7 +676,7 @@
     "jenis": "buklet-6",
     "rasio": "1:1",
     "berkas": "buklet-06.webp",
-    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, feature: a rider pressing record, a small red dot light on the camera. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+    "prompt": "Square CD booklet page illustration. 1980s Japanese city-pop illustration: airbrushed clean sky gradients from pink to cyan, crisp flat shadows, palm trees, coastal highways, glossy chrome, pastel sunset, smooth vector-like shapes. Scene, feature: a rider in a full-face helmet reaching to the action camera mounted on the chin bar, a small red recording light on it. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
   },
   {
     "slug": "yiheecam",
