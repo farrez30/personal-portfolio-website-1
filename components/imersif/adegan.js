@@ -832,7 +832,9 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
             const t = -o.z / arah.z;
             const x = o.x + arah.x * t;
             const y = o.y + arah.y * t;
-            if (x >= 0 && x <= 1 && Math.abs(y) <= 0.5) titik = { u: x, v: 0.5 - y };
+            // Titik senter tetap dikirim walau di luar halaman UV (misalnya di halaman kiri),
+            // supaya tinta ikut memudar masuk dari tepi cahaya, bukan muncul tiba-tiba.
+            titik = { u: x, v: 0.5 - y };
             // Lampu sorot diarahkan ke titik kursor di bidang buklet, dari arah kamera.
             const kena = pos.set(x, y, 0).applyMatrix4(b.matrixWorld);
             senterLampu.target.position.copy(kena);
