@@ -62,6 +62,15 @@ test("asal setiap berkas tercatat di PROVENANCE.md dan prompt.json", () => {
   }
 });
 
+test("buklet memuat halaman ilustrasi album sebagai URL, sesudah Overview", () => {
+  const src = baca("components/imersif/adegan.js");
+  const fungsi = src.slice(src.indexOf("function halamanBuklet"), src.indexOf("\n}\n", src.indexOf("function halamanBuklet")));
+  const iOverview = fungsi.indexOf("LABEL.overview");
+  const iAlbum = fungsi.indexOf("albumUntuk(p.slug)?.buklet");
+  assert.ok(iAlbum > 0, "halamanBuklet tidak memakai ilustrasi album");
+  assert.ok(iAlbum > iOverview, "ilustrasi harus sesudah halaman Overview");
+});
+
 // Kanvas palsu: lebar teks = 10 px per karakter, seperti huruf monospace.
 const kanvasPalsu = { measureText: (t) => ({ width: t.length * 10 }) };
 
