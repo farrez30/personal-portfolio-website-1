@@ -109,7 +109,15 @@ export default function Panggung({ gulir }) {
       a.on("motor", (r) => sfx?.motor(r));
       a.on("proyektor", (k, kedip) => sfx?.proyektor(k, kedip));
       // Tiap bingkai, supaya panel dan sorotnya menempel pada pemutar tanpa tersendat.
-      a.on("sumur", (x, y, w, nyala) => setSumur(nyala ? { x, y, w } : null));
+      // Hanya render ulang bila posisinya bergeser lebih dari 0,1% layar; render React
+      // tiap bingkai membuat gerak pemutar tersendat saat ganti album.
+      a.on("sumur", (x, y, w, nyala) =>
+        setSumur((lalu) => {
+          if (!nyala) return null;
+          if (lalu && Math.abs(lalu.x - x) < 1e-3 && Math.abs(lalu.y - y) < 1e-3 && Math.abs(lalu.w - w) < 1e-3) return lalu;
+          return { x, y, w };
+        }),
+      );
       // Selama ganti album, posisi gulir halaman ikut indeks baru tanpa menggeser rak lagi.
       a.on("indeks", (i) => keIndeksGulir(i, false));
       adegan.current = a;
