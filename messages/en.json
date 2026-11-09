@@ -102,7 +102,8 @@
     "kembali": "Back to Farrez's playlist",
     "kosong": "Paste a Spotify link to start.",
     "disimpan": "Your link is only saved in this browser.",
-    "cuplikan": "Still a preview? <login>Log in to Spotify</login>, then allow cookies from spotify.com in your browser settings."
+    "cuplikan": "Still a preview? <login>Log in to Spotify</login>, then allow cookies from spotify.com in your browser settings, or open it in Spotify.",
+    "bukaSpotify": "Open in Spotify"
   },
   "umum": {
     "bahasa": "Language",
