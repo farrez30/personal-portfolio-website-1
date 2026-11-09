@@ -33,6 +33,7 @@ const C = {
   ikutDasar: 11,
   ikutSeret: 15,
   ikutJarak: 1.15,
+  kejarTau: 0.06,
   condong: 0.055,
   condongMaks: 0.3,
   tikung: 0.32,
@@ -269,6 +270,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   const k_ = {
     pos: 0,
     tujuan: 0,
+    // Posisi pecahan dari gulir halaman; selama ada, rak mengejarnya tanpa tween.
+    kejar: null,
     posT: tween(),
     alir: 0,
     settle: 0,
@@ -395,6 +398,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     const durasi =
       jenis === "roda" ? 0.51 : jenis === "kunci" ? Math.min(0.6, 0.42 + 0.05 * jauh) : jenis === "klik" ? jepit(0.45 + 0.11 * jauh, 0.46, 1.05) : jenis === "sentuh" ? 0.56 : 0.46;
     pasangTween(k_.posT, k_.pos, baru, durasi, jenis === "snap" ? p3o : luncur, now);
+    k_.kejar = null;
     if (jenis === "klik") k_.alir += Math.sign(baru - k_.pos) * Math.min(5, jauh * 2);
     k_.tujuan = baru;
     k_.settle = 0;
@@ -440,7 +444,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     const sebelum = k_.pos;
     const tw = nilaiTween(k_.posT, now);
     if (tw != null) k_.pos = tw;
-    else if (seret?.gerak && !seret.balik) {
+    else if (k_.kejar != null) {
+      // Ikut gulir halaman: redaman eksponensial pendek, jadi roda terasa langsung.
+      const sisa = k_.kejar - k_.pos;
+      k_.pos = kurangiGerak || Math.abs(sisa) < 1e-3 ? k_.kejar : k_.pos + sisa * (1 - Math.exp(-dt / C.kejarTau));
+    } else if (seret?.gerak && !seret.balik) {
       // diatur seretan
     } else if (Math.abs(k_.inersia) > 0.002) {
       k_.pos = jepit(k_.pos + k_.inersia * dt * 60, -0.3, kotak.length - 0.7);
@@ -594,7 +602,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       pos.y += naikRak;
 
       // Ikuti sasaran: kotak jauh mengejar lebih lambat, memberi rasa inersia.
-      const laju = kurangiGerak || terbuka ? 1 : Math.min(1, dt * jepit((seret?.gerak ? C.ikutSeret : C.ikutDasar) - C.ikutJarak * jarak, 6.5, 15));
+      const laju = kurangiGerak || terbuka ? 1 : Math.min(1, dt * jepit((seret?.gerak || k_.kejar != null ? C.ikutSeret : C.ikutDasar) - C.ikutJarak * jarak, 6.5, 15));
       kt.grup.position.lerp(pos, laju);
       kt.grup.quaternion.slerp(q, laju);
       kt.grup.scale.lerp(sk3, laju);
@@ -1134,6 +1142,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       seret.gerak = true;
       clearTimeout(tahan);
       k_.posT.aktif = false;
+      k_.kejar = null;
       k_.inersia = 0;
     }
     if (k_.keadaan !== "rak" || !seret.gerak) return;
@@ -1252,8 +1261,26 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     fokus(i) {
       if (k_.keadaan === "rak" && !k_.sibuk) keIndeks(i, "kunci");
     },
+    // Gulir halaman: p 0..1 sepanjang bagian rak. Rak mengikuti pecahannya terus,
+    // bukan menunggu dibulatkan ke album berikut lalu menyusul dengan tween.
+    ikuti(p) {
+      if (k_.keadaan !== "rak" || k_.sibuk || seret?.gerak) return;
+      const n = kotak.length - 1;
+      k_.kejar = jepit(p, 0, 1) * n;
+      k_.posT.aktif = false;
+      k_.inersia = 0;
+      k_.settle = 0;
+      const i = Math.round(k_.kejar);
+      if (i !== k_.tujuan) {
+        const now = performance.now();
+        kotak.forEach((x) => x.balikTujuan && tegakkan(x, now));
+        k_.tujuan = i;
+        kirim();
+      }
+    },
     lompat(i) {
       // Untuk tautan langsung: tanpa animasi geser.
+      k_.kejar = null;
       k_.tujuan = k_.pos = jepit(i, 0, kotak.length - 1);
       kirim();
     },

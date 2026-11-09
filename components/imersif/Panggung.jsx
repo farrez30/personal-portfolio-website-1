@@ -17,6 +17,7 @@ import { suara } from "./suara";
 // Rak imersif: semua proyek, lalu satu CD musik di ujung.
 const proyek = [...daftarProyek, albumMusik];
 import { buatAdegan } from "./adegan";
+import { indeksMendarat } from "./mendarat";
 import "./panggung.css";
 
 // Mode Imersif: seluruh layar adalah rak CD. Semua yang bisa diklik di 3D punya
@@ -75,18 +76,43 @@ export default function Panggung({ gulir }) {
 
   useEffect(() => {
     if (!siap) return;
+    let diam = 0;
+    let lalu = window.scrollY;
+    let arah = 0;
+    // Arah gulir pendaratan yang sedang berjalan (1/-1), 0 bila tidak ada.
+    let mendarat = 0;
     const saatGulir = () => {
       const a = adegan.current;
       const g = posisiGulir();
+      const y = window.scrollY;
+      // Arah hanya dari gulir pengguna, bukan dari gulir pendaratan kita sendiri.
+      // Gerak berlawanan dengan pendaratan berarti pengguna memutar roda lagi.
+      if (mendarat && y !== lalu && Math.sign(y - lalu) !== mendarat) mendarat = 0;
+      if (!mendarat && y !== lalu) arah = Math.sign(y - lalu);
+      lalu = y;
       if (!a || !g || a.keadaan !== "rak") return;
-      const p = (window.scrollY - g.atas) / g.jarak;
+      const p = (y - g.atas) / g.jarak;
       if (p < -0.02 || p > 1.02) return;
-      const i = Math.round(Math.max(0, Math.min(1, p)) * (proyek.length - 1));
-      a.fokus(i);
+      a.ikuti(p);
+      // Setelah roda berhenti, halaman mendarat di album searah gulir supaya rak tidak
+      // berhenti di antara dua CD.
+      clearTimeout(diam);
+      diam = setTimeout(() => {
+        const x = Math.max(0, Math.min(1, (window.scrollY - g.atas) / g.jarak)) * (proyek.length - 1);
+        const sisa = x - Math.floor(x);
+        mendarat = 0;
+        if (a.keadaan !== "rak" || p <= 0 || p >= 1 || sisa < 0.01 || sisa > 0.99) return;
+        const ke = indeksMendarat(x, arah);
+        mendarat = Math.sign(ke - x) || 0;
+        keIndeksGulir(ke);
+      }, 140);
     };
     window.addEventListener("scroll", saatGulir, { passive: true });
-    return () => window.removeEventListener("scroll", saatGulir);
-  }, [siap, posisiGulir]);
+    return () => {
+      clearTimeout(diam);
+      window.removeEventListener("scroll", saatGulir);
+    };
+  }, [siap, posisiGulir, keIndeksGulir]);
 
   useEffect(() => {
     let batal = false;
