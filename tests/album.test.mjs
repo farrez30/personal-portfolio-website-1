@@ -168,6 +168,23 @@ test("kiriKolomTeks memulai teks sesudah tepi gambar, dalam batas", async () => 
   assert.equal(kiriKolomTeks(kolom(0)), 0.66);
 });
 
+test("gambarMasukKolom: kertas di belakang teks hanya bila gambar melewati batas kolom teks", async () => {
+  const { gambarMasukKolom, kiriKolomTeks } = await import("../components/imersif/tipografi.js");
+  const kolom = (tepi, n = 100) => Array.from({ length: n }, (_, x) => (x < tepi ? 40 : 3));
+  // Gambar berhenti di 65% atau 70%: teks muat sesudahnya, tanpa kertas.
+  assert.equal(gambarMasukKolom(kolom(65)), false);
+  assert.equal(gambarMasukKolom(kolom(70)), false);
+  // Tepi di 73% (biasanya sudah memudar ke kertas): teks mulai di 74%, tidak menimpa.
+  assert.equal(kiriKolomTeks(kolom(73)), 0.74);
+  assert.equal(gambarMasukKolom(kolom(73)), false);
+  // YiheeCam 03: gambar sampai 75%, teks mulai 74%, jadi judul menimpa tepi helm.
+  assert.equal(gambarMasukKolom(kolom(75)), true);
+  // Ilustrasi selebar halaman, kabut, atau gradasi.
+  assert.equal(gambarMasukKolom(kolom(100)), true);
+  // Blok warna rata (Blue Note d-day) bukan gambar: teks terang di atasnya, tanpa kertas.
+  assert.equal(gambarMasukKolom(Array(100).fill(4)), false);
+});
+
 test("semua halaman buklet dimuat, supaya halaman belakang di tutup kotak tidak kosong", () => {
   const src = baca("components/imersif/adegan.js");
   assert.match(src, /pages: halaman,\s*(\/\/[^\n]*\s*)*preload: halaman\.length/, "LeafThrough harus memuat semua halaman (preload)");

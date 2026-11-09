@@ -142,10 +142,10 @@ Logo proyek (`logo.svg`) bukan buatan AI: disalin apa adanya dari repo proyek mi
 | buklet-01.webp | v1 | journey: a window at dawn with rain drops and a notebook on the sill |
 | buklet-02.webp | v1 | journey: a quiet road in fog with one streetlight |
 | buklet-03.webp | v1 | problem: a crowded dark sky of tangled bird flocks over a small figure |
-| buklet-04.webp | v1 | feature: a phone lying face up on a bedside table in soft light, no signal, calm room |
-| buklet-05.webp | v1 | feature: a single sealed envelope on a wooden table by a window |
-| buklet-06.webp | v1 | feature: footprints in sand leading toward the sea, regular spacing |
-| buklet-07.webp | v1 | decision: a lone key on a white surface |
+| buklet-04.webp | v2 | feature, without signal: a phone lying on the deep windowsill of a remote stone cottage, its screen softly lit and blank, a small closed notebook and pencil beside it; outside the window only thick fog and an empty field, no power lines, no towers (dibuat ulang 9 Nov 2026, opsi b dari 2, karena versi lama tidak mewakili isi halaman) |
+| buklet-05.webp | v2 | feature, the client decides: a small quiet table by a foggy window, an anonymous hand holding a phone with a blank softly lit screen, on the table a small open padlock and a single key resting beside a folded note (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
+| buklet-06.webp | v2 | feature, a glance for the psychologist: a calm consulting desk in pale morning fog light, an open paper notebook showing a plain grid of small squares, some squares softly shaded slate blue and grey like a mood calendar with no numbers, a cup of tea and a pair of reading glasses beside it, an empty armchair in soft focus (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
+| buklet-07.webp | v2 | how it works, write sync share: three small objects in a quiet row on a pale wooden table in fog light, left an open notebook with a pencil, middle a phone with a blank softly lit screen, right an open envelope, with faint soft light connecting them (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
 | buklet-08.webp | v1 | outcome: open misty horizon with light breaking through, a small figure standing |
 
 ## yiheecam: Japanese city-pop
@@ -157,12 +157,12 @@ Logo proyek (`logo.svg`) bukan buatan AI: disalin apa adanya dari repo proyek mi
 | label.webp | v1 | a sunset sun striped with horizontal bands and palm silhouettes |
 | belakang.webp | v1 | a parked motorcycle by a seaside wall, a full-face helmet resting on the seat with a small action camera mounted on its chin bar facing forward |
 | buklet-01.webp | v1 | journey: an action camera in its box on a shelf, forgotten |
-| buklet-02.webp | v1 | journey: a rider clipping the action camera onto the chin bar mount of a full-face helmet, a phone beside it |
-| buklet-03.webp | v1 | problem: a phone showing an empty broken app icon, a camera blinking |
+| buklet-02.webp | v2 | journey, departing: early morning in a small home garage, a laptop open on a workbench showing abstract wave shapes, a small action camera connected to it by a cable, a phone beside it, and a full-face motorcycle helmet on the bench with an action camera fixed on its chin bar, the lower front part of the helmet below the visor, not on top of the helmet (dibuat ulang 9 Nov 2026, opsi b dari 2, karena versi lama tidak mewakili isi halaman) |
+| buklet-03.webp | v2 | problem, a glance in the sun: a gloved hand on a motorcycle handlebar under harsh bright midday sun, a phone in a handlebar mount with strong glare across the screen, the rider's helmet visor reflecting the sun, coastal highway ahead (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
 | buklet-04.webp | v1 | feature: a phone in a handlebar mount showing a live road view |
-| buklet-05.webp | v1 | feature: a small memory card and battery floating against the sky gradient |
+| buklet-05.webp | v2 | feature, a board you read at a glance: close-up of a phone in a handlebar mount showing a large split-flap style board of four big blank flap tiles, each with one simple bold pictogram only: a battery, a thermometer, a signal wave, a recording dot, no digits; coastal road and palm trees blurred behind (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
 | buklet-06.webp | v1 | feature: a rider in a full-face helmet reaching to the action camera mounted on the chin bar, a small red recording light on it |
-| buklet-07.webp | v1 | decision: two roads diverging under palm trees, the rider taking the coastal one |
+| buklet-07.webp | v2 | how it works, ride home: dusk, a motorcycle parked in front of a small house with a palm tree, the rider standing beside it holding a full-face helmet with an action camera fixed on its chin bar below the visor, looking at a phone showing a row of small video thumbnails (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
 | buklet-08.webp | v1 | outcome: the rider at a lookout at dusk, city lights below |
 
 ## d-day: Blue Note jazz
@@ -176,9 +176,9 @@ Logo proyek (`logo.svg`) bukan buatan AI: disalin apa adanya dari repo proyek mi
 | buklet-01.webp | v1 | journey: two friends talking at a late night cafe table |
 | buklet-02.webp | v1 | journey: a laptop opened on a kitchen table at midnight |
 | buklet-03.webp | v1 | problem: a wall of flickering monitors with chaotic lines |
-| buklet-04.webp | v1 | feature: a single monitor with clean upward and downward bars |
-| buklet-05.webp | v1 | feature: a hand resting near a big red stop button on a desk |
-| buklet-06.webp | v1 | feature: a sandbox tray with toy coins, a test environment metaphor |
+| buklet-04.webp | v2 | feature, real stop loss: a hand sliding a paper order slip through the brass bars of an old exchange counter window, a clerk's hand on the other side stamping it, a price chart line on a monitor glowing behind (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
+| buklet-05.webp | v2 | feature, honest numbers: a desk at night with a mechanical adding machine, its paper tape torn into four separate strips laid neatly side by side, beside each strip a small separate pile of coins of different heights, a desk lamp lighting it (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
+| buklet-06.webp | v2 | feature, build then test: two hands stacking small wooden blocks into a little structure on a desk at night, next to a vintage monitor replaying an old price chart line, a stopwatch beside it (dibuat ulang 9 Nov 2026, opsi a dari 2, karena versi lama tidak mewakili isi halaman) |
 | buklet-07.webp | v1 | decision: a chess board mid-game under a desk lamp |
 | buklet-08.webp | v1 | outcome: dawn light through blinds onto a calm desk, monitors off |
 

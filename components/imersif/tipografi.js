@@ -116,14 +116,24 @@ export function batasPita(baris, { selisih = 14, sdMaks = 24 } = {}) {
 // Ilustrasi buklet mengosongkan kira-kira sepertiga kanan, tapi tepinya beda-beda per
 // gambar. `sdKolom`: simpangan terang tiap kolom (kiri ke kanan). Tepi gambar = kolom
 // paling kanan yang masih ramai; teks mulai sedikit sesudahnya, dalam batas [min, maks].
-export function kiriKolomTeks(sdKolom, { ambang = 18, min = 0.66, maks = 0.74, jarak = 0.025 } = {}) {
+const KOLOM = { ambang: 18, min: 0.66, maks: 0.74, jarak: 0.025 };
+
+function tepiGambar(sdKolom, ambang) {
   const n = sdKolom.length;
-  let tepi = 0;
-  for (let x = n - 1; x >= 0; x--) {
-    if (sdKolom[x] >= ambang) {
-      tepi = (x + 1) / n;
-      break;
-    }
-  }
-  return Math.min(maks, Math.max(min, tepi + jarak));
+  for (let x = n - 1; x >= 0; x--) if (sdKolom[x] >= ambang) return (x + 1) / n;
+  return 0;
+}
+
+export function kiriKolomTeks(sdKolom, opsi = {}) {
+  const { ambang, min, maks, jarak } = { ...KOLOM, ...opsi };
+  return Math.min(maks, Math.max(min, tepiGambar(sdKolom, ambang) + jarak));
+}
+
+// Benar bila gambar masih berjalan di bawah kolom teks: kolomnya sudah mentok di `maks`
+// dan tepi gambar lewat dari situ (ilustrasi selebar halaman, kabut, gradasi). Teks lalu
+// butuh kertas di belakangnya. Tepi yang berhenti tepat sebelum `maks` biasanya sudah
+// memudar ke kertas, jadi tidak dihitung. Blok warna rata (Blue Note) bukan gambar.
+export function gambarMasukKolom(sdKolom, opsi = {}) {
+  const { ambang, maks, toleransi = 0.005 } = { ...KOLOM, ...opsi };
+  return tepiGambar(sdKolom, ambang) > maks + toleransi;
 }
