@@ -112,3 +112,18 @@ export function batasPita(baris, { selisih = 14, sdMaks = 24 } = {}) {
   }
   return 0.6;
 }
+
+// Ilustrasi buklet mengosongkan kira-kira sepertiga kanan, tapi tepinya beda-beda per
+// gambar. `sdKolom`: simpangan terang tiap kolom (kiri ke kanan). Tepi gambar = kolom
+// paling kanan yang masih ramai; teks mulai sedikit sesudahnya, dalam batas [min, maks].
+export function kiriKolomTeks(sdKolom, { ambang = 18, min = 0.66, maks = 0.74, jarak = 0.025 } = {}) {
+  const n = sdKolom.length;
+  let tepi = 0;
+  for (let x = n - 1; x >= 0; x--) {
+    if (sdKolom[x] >= ambang) {
+      tepi = (x + 1) / n;
+      break;
+    }
+  }
+  return Math.min(maks, Math.max(min, tepi + jarak));
+}

@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
 import { proyek } from "../content/proyek.js";
 import { ALBUM, albumUntuk, LOGO_LABEL } from "../content/album.js";
+import { BUKLET } from "../content/buklet.js";
 import { pecahBaris, hurufTermuat, batasPita } from "../components/imersif/tipografi.js";
 
 const akar = new URL("../", import.meta.url);
@@ -62,13 +63,36 @@ test("asal setiap berkas tercatat di PROVENANCE.md dan prompt.json", () => {
   }
 });
 
-test("buklet memuat halaman ilustrasi album sebagai URL, sesudah Overview", () => {
+test("buklet memuat halaman ilustrasi album sesudah Overview, teksnya hanya bila naskah disetujui", () => {
   const src = baca("components/imersif/adegan.js");
-  const fungsi = src.slice(src.indexOf("function halamanBuklet"), src.indexOf("\n}\n", src.indexOf("function halamanBuklet")));
+  const awal = src.indexOf("function halamanBuklet");
+  const fungsi = src.slice(awal, src.indexOf("\n}\n", awal));
   const iOverview = fungsi.indexOf("LABEL.overview");
-  const iAlbum = fungsi.indexOf("albumUntuk(p.slug)?.buklet");
+  const iAlbum = fungsi.indexOf("album?.buklet");
   assert.ok(iAlbum > 0, "halamanBuklet tidak memakai ilustrasi album");
   assert.ok(iAlbum > iOverview, "ilustrasi harus sesudah halaman Overview");
+  assert.ok(fungsi.includes("naskah?.disetujui ? naskah.halaman[i] : null"), "teks harus digerbang persetujuan naskah");
+  assert.match(src, /teksturNaskah[\s\S]*t\.dispose\(\)/, "tekstur naskah harus dibuang bersama buklet");
+});
+
+test("naskah buklet: 8 halaman per album, dua bahasa, label kerja, tanpa simbol penyambung", () => {
+  const label = new Set(["Context", "Challenge", "Solution", "How it works", "Outcome"]);
+  for (const slug of Object.keys(ALBUM)) {
+    const n = BUKLET[slug];
+    assert.ok(n, `${slug}: naskah tidak ada`);
+    assert.equal(typeof n.disetujui, "boolean", `${slug}: gerbang disetujui hilang`);
+    assert.equal(n.halaman.length, ALBUM[slug].buklet.length, `${slug}: jumlah halaman tidak sama dengan ilustrasi`);
+    for (const [i, h] of n.halaman.entries()) {
+      assert.ok(label.has(h.label), `${slug} #${i + 1}: label ${h.label}`);
+      for (const bahasa of ["id", "en"]) {
+        for (const teks of [h.judul[bahasa], h.isi[bahasa]]) {
+          assert.ok(teks && teks.trim(), `${slug} #${i + 1}: teks ${bahasa} kosong`);
+          assert.doesNotMatch(teks, /→| · | — | \| /, `${slug} #${i + 1}: simbol penyambung`);
+        }
+      }
+      assert.ok(h.isi.id.split(/\s+/).length <= 45, `${slug} #${i + 1}: isi terlalu panjang untuk sepertiga halaman`);
+    }
+  }
 });
 
 test("sampul berjudul tercatat asalnya dan prompt-nya mengunci ejaan", () => {
@@ -128,4 +152,18 @@ test("batasPita membuang pita polos di bawah, tidak lebih", () => {
   assert.equal(batasPita([...isi(30), ...pita(70)]), 0.6);
   // Baris yang warnanya sama dengan pita tapi ada di tengah gambar tidak dihitung.
   assert.equal(batasPita([...isi(40), ...pita(10), ...isi(50)]), 1);
+});
+
+test("kiriKolomTeks memulai teks sesudah tepi gambar, dalam batas", async () => {
+  const { kiriKolomTeks } = await import("../components/imersif/tipografi.js");
+  const kolom = (tepi, n = 100) => Array.from({ length: n }, (_, x) => (x < tepi ? 40 : 3));
+  // Gambar berakhir di 65%: teks di 67,5%.
+  assert.equal(kiriKolomTeks(kolom(65)), 0.675);
+  // Gambar masuk sampai 70% (blok d-day): teks bergeser ke 72,5%.
+  assert.equal(kiriKolomTeks(kolom(70)), 0.725);
+  // Gambar nyaris penuh: dibatasi 74% supaya kolom tetap muat.
+  assert.equal(kiriKolomTeks(kolom(95)), 0.74);
+  // Gambar sempit atau polos: tidak lebih kiri dari 66%.
+  assert.equal(kiriKolomTeks(kolom(30)), 0.66);
+  assert.equal(kiriKolomTeks(kolom(0)), 0.66);
 });

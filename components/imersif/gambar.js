@@ -4,7 +4,7 @@
 import { jalurIkon, teknologiDari } from "@/components/arsitektur/teknologi";
 import { albumUntuk, LOGO_LABEL } from "@/content/album";
 import { formatDurasi } from "@/components/musik/daftarLagu";
-import { batasPita, hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
+import { batasPita, kiriKolomTeks, hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
 
 const KERTAS = "#efe9df";
 const TINTA = "#1d1b19";
@@ -352,6 +352,76 @@ function gambarBelakangAlbum(p, a, locale, ukuran) {
     butir(g, ukuran, ukuran, 0.06);
   });
   return c;
+}
+
+// Halaman buklet album bertulisan: ilustrasi penuh, lalu label, judul (huruf genre)
+// dan isi (huruf situs) di sepertiga kanan yang memang dibiarkan kosong di ilustrasinya.
+// Tinta mengikuti terang area itu supaya tetap terbaca di ilustrasi yang gelap.
+export function gambarHalamanAlbum(p, a, halaman, nomor, locale, ukuran = 2048) {
+  const [c, g] = kanvas(ukuran, ukuran);
+  siapkanAlbum(c, a.buklet[nomor - 1], a, (im) => {
+    g.fillStyle = KERTAS;
+    g.fillRect(0, 0, ukuran, ukuran);
+    if (im) gambarPenuh(g, im, 0, 0, ukuran, ukuran);
+    // Kolom teks mulai sesudah tepi gambar di halaman ini, bukan angka tetap.
+    const kiri = ukuran * (im ? kiriKolomTeks(simpanganKolom(im)) : 0.675);
+    const lebar = ukuran * 0.955 - kiri;
+    const gelap = im && terangArea(g, Math.round(kiri), Math.round(ukuran * 0.06), Math.round(lebar), Math.round(ukuran * 0.6)) < 0.45;
+    const tinta = gelap ? "#f4efe7" : a.tinta;
+    g.textBaseline = "top";
+    g.textAlign = "left";
+    g.fillStyle = tinta;
+    g.globalAlpha = 0.7;
+    g.font = `500 ${ukuran * 0.0135}px ${fontMono()}`;
+    g.fillText(halaman.label.toUpperCase(), kiri, ukuran * 0.08);
+    g.globalAlpha = 1;
+    g.font = `${a.huruf.berat ?? 400} ${ukuran * 0.034}px ${namaHuruf(a.huruf)}`;
+    let y = tulisParagraf(g, halaman.judul[locale], kiri, ukuran * 0.11, lebar, ukuran * 0.04) + ukuran * 0.02;
+    g.font = `400 ${ukuran * 0.021}px ${fontKeluarga()}`;
+    tulisParagraf(g, halaman.isi[locale], kiri, y, lebar, ukuran * 0.03);
+    g.globalAlpha = 0.6;
+    g.font = `500 ${ukuran * 0.012}px ${fontMono()}`;
+    g.textAlign = "right";
+    g.textBaseline = "bottom";
+    g.fillText(`${p.katalog}  ${String(nomor).padStart(2, "0")} / ${String(a.buklet.length).padStart(2, "0")}`, ukuran * 0.955, ukuran * 0.955);
+    g.globalAlpha = 1;
+    butir(g, ukuran, ukuran, 0.04);
+  });
+  return c;
+}
+
+// Simpangan terang tiap kolom gambar (diperkecil ke 96 px, baris 5% sampai 95%).
+function simpanganKolom(im) {
+  const w = 96;
+  const h = 96;
+  const [, gk] = kanvas(w, h);
+  gk.drawImage(im, 0, 0, w, h);
+  const d = gk.getImageData(0, 0, w, h).data;
+  const y0 = Math.round(h * 0.05);
+  const y1 = Math.round(h * 0.95);
+  const hasil = [];
+  for (let x = 0; x < w; x++) {
+    let jumlah = 0;
+    let kuadrat = 0;
+    for (let y = y0; y < y1; y++) {
+      const i = (y * w + x) * 4;
+      const l = 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+      jumlah += l;
+      kuadrat += l * l;
+    }
+    const n = y1 - y0;
+    const rata = jumlah / n;
+    hasil.push(Math.sqrt(Math.max(0, kuadrat / n - rata * rata)));
+  }
+  return hasil;
+}
+
+// Terang rata-rata (0..1) satu kotak kanvas.
+function terangArea(g, x, y, w, h) {
+  const d = g.getImageData(x, y, Math.max(1, w), Math.max(1, h)).data;
+  let t = 0;
+  for (let i = 0; i < d.length; i += 16) t += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
+  return t / (d.length / 16) / 255;
 }
 
 // Gambar sekarang bila ilustrasinya sudah termuat; bila belum, gambar versi tanpa ilustrasi
