@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { teknologiDari } from "@/components/arsitektur/teknologi";
+import { demoUntuk } from "@/content/demo";
 import { useLocale, useTranslations } from "next-intl";
 import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpleBold, PiArrowsInSimpleBold, PiPauseFill, PiPlayFill } from "react-icons/pi";
 
@@ -37,10 +38,20 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
   const langsung = bolehTanam && p.tanam && p.tautan.situs;
   // Tanpa situs atau tangkapan layar, layar memutar ilustrasi orang yang memakainya.
   const gambar = p.layar?.[perangkat] ?? p.ilustrasi ?? null;
+  // Klip demo dipakai bila situsnya tidak bisa dibingkai di sini; gambar jadi posternya.
+  const demo = langsung ? null : (demoUntuk(p.slug)?.[perangkat] ?? null);
+  const video = useRef(null);
+  // Klip ikut Play dan Pause pemutar; gerak dikurangi berarti klip tidak diputar sendiri.
+  useEffect(() => {
+    const v = video.current;
+    if (!v) return;
+    if (jalan && !keluar && !matchMedia("(prefers-reduced-motion: reduce)").matches) v.play().catch(() => {});
+    else v.pause();
+  }, [jalan, keluar, demo]);
   // Layar memuat ala terminal retro sampai isi yang sedang tampil selesai dimuat.
   // Yang dicatat adalah isi mana yang sudah siap, bukan saklar ya/tidak: kalau HP dan
   // Desktop memakai gambar yang sama, elemennya tidak dimuat ulang dan layar tetap siap.
-  const isi = langsung ? `situs:${perangkat}:${p.tautan.situs}` : gambar ? `gambar:${gambar}` : `kosong:${p.slug}`;
+  const isi = langsung ? `situs:${perangkat}:${p.tautan.situs}` : demo ? `demo:${demo}` : gambar ? `gambar:${gambar}` : `kosong:${p.slug}`;
   const [siapIsi, setSiapIsi] = useState(null);
   const muat = siapIsi !== isi;
   const selesai = useCallback((kunci, jeda = 700) => setTimeout(() => setSiapIsi(kunci), jeda), []);
@@ -147,6 +158,20 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
                 referrerPolicy="strict-origin-when-cross-origin"
                 sandbox="allow-scripts allow-same-origin allow-forms allow-popups"
                 onLoad={() => selesai(isi, 0)}
+              />
+            ) : demo ? (
+              <video
+                key={demo}
+                ref={video}
+                src={demo}
+                poster={gambar ?? undefined}
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                aria-label={p.judul[locale]}
+                onLoadedData={() => selesai(isi)}
+                onError={() => selesai(isi, 0)}
               />
             ) : gambar ? (
               <img
