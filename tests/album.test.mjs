@@ -167,3 +167,8 @@ test("kiriKolomTeks memulai teks sesudah tepi gambar, dalam batas", async () => 
   assert.equal(kiriKolomTeks(kolom(30)), 0.66);
   assert.equal(kiriKolomTeks(kolom(0)), 0.66);
 });
+
+test("semua halaman buklet dimuat, supaya halaman belakang di tutup kotak tidak kosong", () => {
+  const src = baca("components/imersif/adegan.js");
+  assert.match(src, /pages: halaman,\s*(\/\/[^\n]*\s*)*preload: halaman\.length/, "LeafThrough harus memuat semua halaman (preload)");
+});
