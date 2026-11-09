@@ -63,6 +63,10 @@ export default function PemutarMusik() {
   const [pratinjau, setPratinjau] = useState(false);
   const [meta, setMeta] = useState({ url: null, judul: null, sampul: null });
   const [tersembunyi, setTersembunyi] = useState(false);
+  // Dilipat sendiri selama buklet dibaca supaya panel tidak menutupi kolom teksnya;
+  // musik tetap jalan. Terpisah dari pilihan pengguna, jadi kembali sendiri saat ditutup.
+  const [dilipat, setDilipat] = useState(false);
+  const sembunyi = tersembunyi || dilipat;
   const [form, setForm] = useState(false);
   const [teks, setTeks] = useState("");
   const [galat, setGalat] = useState("");
@@ -210,6 +214,12 @@ export default function PemutarMusik() {
     return () => window.removeEventListener("musik", dengar);
   }, [putar, jeda]);
 
+  useEffect(() => {
+    const dengar = (e) => setDilipat(e.detail?.keadaan === "buklet");
+    window.addEventListener("panggung", dengar);
+    return () => window.removeEventListener("panggung", dengar);
+  }, []);
+
   const pasang = (e) => {
     e.preventDefault();
     const tautan = uraiTautan(teks);
@@ -246,10 +256,10 @@ export default function PemutarMusik() {
   return (
     <>
       <section
-        className={`vinyl-player ${mode === "imersif" ? "vinyl-player--imersif" : ""} ${tersembunyi ? "is-hidden" : ""} ${tersambung ? "is-tersambung" : ""}`}
+        className={`vinyl-player ${mode === "imersif" ? "vinyl-player--imersif" : ""} ${sembunyi ? "is-hidden" : ""} ${tersambung ? "is-tersambung" : ""}`}
         aria-label={t("sedangDiputar")}
-        aria-hidden={tersembunyi}
-        inert={tersembunyi ? true : undefined}
+        aria-hidden={sembunyi}
+        inert={sembunyi ? true : undefined}
       >
         <div className="vinyl-baris">
           <div className="vinyl-stage">
@@ -346,12 +356,15 @@ export default function PemutarMusik() {
 
       <button
         type="button"
-        className={`vinyl-reopen ${mode === "imersif" ? "vinyl-reopen--imersif" : ""} ${tersembunyi ? "is-shown" : ""}`}
-        onClick={() => setTersembunyi(false)}
+        className={`vinyl-reopen ${mode === "imersif" ? "vinyl-reopen--imersif" : ""} ${sembunyi ? "is-shown" : ""}`}
+        onClick={() => {
+          setTersembunyi(false);
+          setDilipat(false);
+        }}
         aria-label={t("tampil")}
         title={t("tampil")}
-        aria-hidden={!tersembunyi}
-        tabIndex={tersembunyi ? 0 : -1}
+        aria-hidden={!sembunyi}
+        tabIndex={sembunyi ? 0 : -1}
       >
         <PiMusicNotesBold aria-hidden="true" />
       </button>

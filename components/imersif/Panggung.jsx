@@ -37,6 +37,12 @@ export default function Panggung({ gulir }) {
 
   const p = proyek[s.fokus];
 
+  // Keadaan panggung diumumkan ke pemutar musik, yang melipat panelnya selama buklet dibaca.
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("panggung", { detail: { keadaan: s.keadaan } }));
+  }, [s.keadaan]);
+  useEffect(() => () => window.dispatchEvent(new CustomEvent("panggung", { detail: { keadaan: "rak" } })), []);
+
   // Selama album terbuka, halaman tidak ikut tergulir. Roda, sentuhan, dan tombol
   // gulir ditahan; overflow tidak diubah karena itu merusak elemen sticky.
   useEffect(() => {
