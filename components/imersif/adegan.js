@@ -128,7 +128,8 @@ function halamanBuklet(p, locale, uv) {
   (album?.buklet ?? []).forEach((src, i) => {
     const h = naskah?.disetujui ? naskah.halaman[i] : null;
     if (!h) return hal.push({ src, alt: "" });
-    const kanvas = gambarHalamanAlbum(p, album, h, i + 1, locale);
+    // 1536 px: cukup tajam untuk dibaca, dan semua halaman dimuat sekaligus (lihat preload).
+    const kanvas = gambarHalamanAlbum(p, album, h, i + 1, locale, 1536);
     const tekstur = new THREE.CanvasTexture(kanvas);
     tekstur.colorSpace = THREE.SRGBColorSpace;
     kanvas.siap?.then(() => (tekstur.needsUpdate = true));
@@ -942,6 +943,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       { renderer, camera, domElement: kanvas },
       {
         pages: halaman,
+        // Halaman belakang terlihat di tutup kotak sejak buklet tertutup, padahal letaknya
+        // paling akhir. Radius bawaan LeafThrough (6) tidak menjangkaunya begitu buklet berisi
+        // ilustrasi album, jadi semua halaman dimuat sekaligus.
+        preload: halaman.length,
         pageAspect: 1,
         layout: k_.sempit ? "single" : "spread",
         loop: k_.sempit,
