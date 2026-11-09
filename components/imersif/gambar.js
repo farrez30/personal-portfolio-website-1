@@ -5,6 +5,7 @@ import { jalurIkon, teknologiDari } from "@/components/arsitektur/teknologi";
 import { albumUntuk, LOGO_LABEL } from "@/content/album";
 import { formatDurasi } from "@/components/musik/daftarLagu";
 import { batasPita, kiriKolomTeks, hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
+import { buatPemuat } from "./muat";
 
 const KERTAS = "#efe9df";
 const TINTA = "#1d1b19";
@@ -61,16 +62,10 @@ function alur(g, cx, cy, r, warna) {
 }
 
 // Gambar yang dimuat sekali dan dipakai bersama (ilustrasi sampul dan halaman).
-const simpanan = new Map();
-export function muatGambar(src) {
-  if (!simpanan.has(src)) {
-    const im = new Image();
-    im.decoding = "async";
-    im.src = src;
-    simpanan.set(src, im);
-  }
-  return simpanan.get(src);
-}
+// Yang gagal dicoba ulang lewat tungguGambar (lihat muat.js).
+const pemuat = buatPemuat();
+export const muatGambar = (src) => pemuat.muat(src);
+const tungguGambar = (src) => pemuat.tunggu(src);
 
 // Butir cetak: titik acak halus yang membuat gambar terasa dicetak di kertas, bukan layar.
 function butir(g, w, h, kuat = 0.06) {
@@ -111,15 +106,10 @@ function siapkanAlbum(c, src, a, gambar, tambahan = []) {
     gambar(im);
     return;
   }
-  const tunggu = (x) =>
-    x.complete
-      ? Promise.resolve()
-      : new Promise((selesai) => {
-          x.addEventListener("load", selesai, { once: true });
-          x.addEventListener("error", selesai, { once: true });
-        });
   gambar(null);
-  c.siap = Promise.all([tunggu(im), ...lain.map(tunggu), hurufSiap]).then(() => gambar(im.naturalWidth ? im : null));
+  c.siap = Promise.all([tungguGambar(src), ...tambahan.filter(Boolean).map(tungguGambar), hurufSiap]).then(([akhir]) =>
+    gambar(akhir.naturalWidth ? akhir : null),
+  );
 }
 
 // Logo kecil (SVG) dipas ke kotak persegi; dilewati bila belum termuat atau rusak.
@@ -433,15 +423,8 @@ function siapkanGambar(c, src, gambar) {
     return;
   }
   gambar(null);
-  c.siap = new Promise((selesai) => {
-    im.addEventListener(
-      "load",
-      () => {
-        gambar(im);
-        selesai();
-      },
-      { once: true },
-    );
+  c.siap = tungguGambar(src).then((akhir) => {
+    if (akhir.naturalWidth) gambar(akhir);
   });
 }
 

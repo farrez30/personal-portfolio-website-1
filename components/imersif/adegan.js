@@ -113,7 +113,20 @@ const LABEL = {
 };
 
 function halamanBuklet(p, locale, uv) {
-  const hal = [{ src: gambarSampul(p, locale, 2048), alt: `${p.katalog} ${p.judul[locale]}` }];
+  const hal = [];
+  // Kanvas yang gambarnya menyusul (kanvas.siap) diberikan sebagai tekstur kita sendiri.
+  // Kanvas mentah dibungkus LeafThrough sekali saja, jadi gambar ulangnya tidak pernah
+  // terunggah dan halaman tetap versi kosong. Teksturnya dibuang bersama buklet.
+  hal.milik = [];
+  const tekstur = (kanvas) => {
+    if (!kanvas.siap) return kanvas;
+    const t = new THREE.CanvasTexture(kanvas);
+    t.colorSpace = THREE.SRGBColorSpace;
+    kanvas.siap.then(() => (t.needsUpdate = true));
+    hal.milik.push(t);
+    return t;
+  };
+  hal.push({ src: tekstur(gambarSampul(p, locale, 2048)), alt: `${p.katalog} ${p.judul[locale]}` });
   hal.push({
     src: gambarHalaman({ label: LABEL.overview, judul: p.judul[locale], isi: p.ringkas[locale], catatan: `${p.katalog}  ${p.periode}` }, 2048),
     alt: LABEL.overview,
@@ -125,17 +138,11 @@ function halamanBuklet(p, locale, uv) {
   // tekturnya diperbarui begitu ilustrasinya termuat; teksturnya dibuang bersama buklet.
   const album = albumUntuk(p.slug);
   const naskah = bukletUntuk(p.slug);
-  hal.milik = [];
   (album?.buklet ?? []).forEach((src, i) => {
     const h = naskah?.disetujui ? naskah.halaman[i] : null;
     if (!h) return hal.push({ src, alt: "" });
     // 1536 px: cukup tajam untuk dibaca, dan semua halaman dimuat sekaligus (lihat preload).
-    const kanvas = gambarHalamanAlbum(p, album, h, i + 1, locale, 1536);
-    const tekstur = new THREE.CanvasTexture(kanvas);
-    tekstur.colorSpace = THREE.SRGBColorSpace;
-    kanvas.siap?.then(() => (tekstur.needsUpdate = true));
-    hal.milik.push(tekstur);
-    hal.push({ src: tekstur, alt: h.judul[locale], text: `${h.judul[locale]}
+    hal.push({ src: tekstur(gambarHalamanAlbum(p, album, h, i + 1, locale, 1536)), alt: h.judul[locale], text: `${h.judul[locale]}
 
 ${h.isi[locale]}` });
   });
@@ -158,7 +165,7 @@ ${h.isi[locale]}` });
   }
   // Halaman belakang sama persis dengan yang terlihat di tutup kotak, supaya tidak
   // ada tekstur yang berganti saat buklet ditarik keluar.
-  const belakang = { src: gambarBelakang(p, locale, 1024), alt: p.katalog };
+  const belakang = { src: tekstur(gambarBelakang(p, locale, 1024)), alt: p.katalog };
   while (hal.length < 3 || hal.length % 2 === 0) hal.push({ src: gambarHalaman({ label: "" }), alt: "" });
   hal.push(belakang);
   return hal;
