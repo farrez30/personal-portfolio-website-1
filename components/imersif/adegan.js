@@ -10,9 +10,10 @@ import { RectAreaLightUniformsLib } from "three/addons/lights/RectAreaLightUnifo
 import { LeafThroughObject } from "leafthrough";
 import { HALAMAN } from "@/content/proyek";
 import { albumUntuk } from "@/content/album";
+import { bukletUntuk } from "@/content/buklet";
 import { GULUNG_GLSL, UKURAN, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok, tekuk } from "./gulung";
 import { KOTAK, BUKLET, CAKRAM, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
-import { gambarSampul, gambarHalaman, gambarBelakang, gambarDaftarLagu, muatGambar } from "./gambar";
+import { gambarSampul, gambarHalaman, gambarHalamanAlbum, gambarBelakang, gambarDaftarLagu, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
 import { buatSorot, ujungSorot, kedip } from "./sorot";
 import { FASE, ANGKAT, angkatBebas } from "./lintasan";
@@ -117,10 +118,25 @@ function halamanBuklet(p, locale, uv) {
     alt: LABEL.overview,
     text: p.ringkas[locale],
   });
-  // Ilustrasi album bergenre: diberikan sebagai URL supaya LeafThrough baru memuatnya
-  // saat buklet dibuka. Sepertiga kanannya sengaja kosong untuk teks yang menunggu
-  // persetujuan naskah (content/proyek.js), jadi untuk sekarang dekoratif.
-  for (const src of albumUntuk(p.slug)?.buklet ?? []) hal.push({ src, alt: "" });
+  // Ilustrasi album bergenre. Tanpa naskah yang disetujui (content/buklet.js) halamannya
+  // diberikan sebagai URL supaya LeafThrough baru memuatnya saat buklet dibuka, dan sepertiga
+  // kanannya tetap kosong. Dengan naskah, teksnya dicetak di sepertiga kanan lewat kanvas yang
+  // tekturnya diperbarui begitu ilustrasinya termuat; teksturnya dibuang bersama buklet.
+  const album = albumUntuk(p.slug);
+  const naskah = bukletUntuk(p.slug);
+  hal.milik = [];
+  (album?.buklet ?? []).forEach((src, i) => {
+    const h = naskah?.disetujui ? naskah.halaman[i] : null;
+    if (!h) return hal.push({ src, alt: "" });
+    const kanvas = gambarHalamanAlbum(p, album, h, i + 1, locale);
+    const tekstur = new THREE.CanvasTexture(kanvas);
+    tekstur.colorSpace = THREE.SRGBColorSpace;
+    kanvas.siap?.then(() => (tekstur.needsUpdate = true));
+    hal.milik.push(tekstur);
+    hal.push({ src: tekstur, alt: h.judul[locale], text: `${h.judul[locale]}
+
+${h.isi[locale]}` });
+  });
   // CD musik: daftar lagu playlist Farrez (content/musik.js, diisi dari /api/musik/daftar).
   const lagu = p.daftarLagu ?? [];
   for (let i = 0; i < lagu.length; i += 10) {
@@ -921,10 +937,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       ilustrasi.src = p.ilustrasi;
     }
     k_.uv = p.arsitektur ? buatHalamanUV(p, locale, ilustrasi) : null;
+    const halaman = halamanBuklet(p, locale, k_.uv);
     const b = new LeafThroughObject(
       { renderer, camera, domElement: kanvas },
       {
-        pages: halamanBuklet(p, locale, k_.uv),
+        pages: halaman,
         pageAspect: 1,
         layout: k_.sempit ? "single" : "spread",
         loop: k_.sempit,
@@ -937,6 +954,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     b.enabled = false;
     b.userData.deform = deform;
     b.userData.slug = p.slug;
+    b.userData.teksturNaskah = halaman.milik;
     // Lantai tak terlihat tepat di belakang halaman, hanya menangkap bayangan buklet.
     const lantai = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.ShadowMaterial({ opacity: 0, transparent: true, depthWrite: false }));
     lantai.position.z = -0.24 / 120;
@@ -955,6 +973,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     b.userData.lantai.geometry.dispose();
     b.userData.lantai.material.dispose();
     b.dispose();
+    for (const t of b.userData.teksturNaskah ?? []) t.dispose();
     k_.buklet = null;
     k_.uv?.dispose();
     k_.uv = null;
