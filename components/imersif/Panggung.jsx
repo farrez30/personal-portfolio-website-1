@@ -119,19 +119,20 @@ export default function Panggung({ gulir }) {
     let a = null;
     document.fonts.ready.then(() => {
       if (batal) return;
+      const sfx = suara();
       a = buatAdegan(wadah.current, {
         proyek,
         locale,
         kurangiGerak: matchMedia("(prefers-reduced-motion: reduce)").matches,
         onUbah: setS,
         gulirHalaman: true,
+        latensiSuara: () => sfx?.latensi ?? 0,
       });
       a.on("klikKotak", (slug) => a.buka(slug));
       a.on("klikCakram", () => (a.keadaan === "putar" ? a.keluarkan() : a.dengarkan()));
       a.on("tombol", (nama) => tekanTombol.current(nama));
       a.on("hover", setHover);
-      const sfx = suara();
-      a.on("suara", (nama) => sfx?.mainkan(nama));
+      a.on("suara", (nama, lama) => sfx?.mainkan(nama, lama));
       a.on("motor", (r) => sfx?.motor(r));
       a.on("proyektor", (k, kedip) => sfx?.proyektor(k, kedip));
       // Tiap bingkai, supaya panel dan sorotnya menempel pada pemutar tanpa tersendat.

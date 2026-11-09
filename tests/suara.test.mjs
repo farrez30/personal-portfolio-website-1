@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { bacaBisu, simpanBisu, buatSuara, RESEP, PERISTIWA, TINGKAT, KUNCI_BISU, variasi } from "../components/imersif/suara.js";
+import { readFileSync, existsSync } from "node:fs";
+import { bacaBisu, simpanBisu, buatSuara, RESEP, PERISTIWA, TINGKAT, KUNCI_BISU, variasi, REKAMAN, semuaBerkas } from "../components/imersif/suara.js";
 
 // Penyimpanan palsu; "rusak" meniru Safari privat yang melempar saat diakses.
 const simpanan = (awal = {}, rusak = false) => {
@@ -81,13 +82,18 @@ class KonteksPalsu {
   }
   createBufferSource() {
     const n = new Node(this);
+    n.playbackRate = new Param(1);
     n.start = () => (n.mulai = true);
-    n.stop = () => {};
+    n.stop = (t) => (n.berhenti = t);
     return this.catat(n);
   }
   createBuffer(_, n) {
     const d = new Float32Array(n);
     return { getChannelData: () => d };
+  }
+  // Seperti aslinya: callback sukses atau gagal. Isi "rusak" gagal didekode.
+  decodeAudioData(ab, ok, gagal) {
+    queueMicrotask(() => (ab === "rusak" ? gagal(new Error("EncodingError")) : ok({ nama: ab, duration: 2 })));
   }
   resume() {
     this.state = "running";
@@ -170,6 +176,91 @@ test("lup motor dan proyektor hanya dibuat saat menyala, dijepit 0..1", () => {
   s.proyektor(-1);
   assert.deepEqual(s.lup, { motor: 1, proyektor: 0 });
   assert.ok(KonteksPalsu.terakhir.dibuat.length > awal);
+});
+
+// Pemuat palsu: "berkas" yang dikembalikan adalah namanya, supaya buffer bisa dikenali.
+const muatSemua = (src) => Promise.resolve(src.split("/").pop());
+const tunggu = () => new Promise((r) => setTimeout(r, 0));
+const sumberRekaman = (ctx) => ctx.dibuat.filter((n) => n.buffer?.nama);
+
+test("setiap peristiwa punya rekaman, dan semua berkasnya ada serta tercatat CC0", () => {
+  const prov = readFileSync(new URL("../public/assets/suara/PROVENANCE.md", import.meta.url), "utf8");
+  for (const nama of PERISTIWA) assert.ok(REKAMAN[nama]?.berkas.length, `tanpa rekaman: ${nama}`);
+  for (const src of semuaBerkas()) {
+    assert.ok(existsSync(new URL(`../public${src}`, import.meta.url)), `${src} tidak ada`);
+    const berkas = src.split("/").pop();
+    assert.match(prov, new RegExp(`\\| ${berkas.replace(".", "\\.")} \\|[^\\n]*CC0`), `${berkas} tanpa asal CC0`);
+  }
+});
+
+test("setelah rekaman siap, peristiwa memutar rekaman dan tidak mengulang take yang sama", async () => {
+  // acak selalu 0: tanpa penyaring take terakhir, take pertama terpilih terus.
+  const s = buatSuara({ Konteks: KonteksPalsu, simpanan: simpanan(), muat: muatSemua, acak: () => 0 });
+  s.buka();
+  await tunggu();
+  const ctx = KonteksPalsu.terakhir;
+  assert.equal(s.rekaman.length, semuaBerkas().length);
+  const take = [];
+  for (let i = 0; i < 6; i++) {
+    s.mainkan("tombol");
+    take.push(sumberRekaman(ctx).at(-1).buffer.nama);
+  }
+  for (const t of take) assert.match(t, /^tombol-\d\.mp3$/);
+  for (let i = 1; i < take.length; i++) assert.notEqual(take[i], take[i - 1], "take sama berturut-turut");
+});
+
+test("lama memotong rekaman tepat di akhir gerak", async () => {
+  const s = buatSuara({ Konteks: KonteksPalsu, simpanan: simpanan(), muat: muatSemua, acak: () => 0.5 });
+  s.buka();
+  await tunggu();
+  s.mainkan("kertas", 1.2);
+  const src = sumberRekaman(KonteksPalsu.terakhir).at(-1);
+  assert.equal(src.buffer.nama, "kertas-1.mp3");
+  assert.ok(Math.abs(src.berhenti - (0.005 + 1.2 + 0.02)) < 1e-9);
+});
+
+test("rekaman yang gagal dimuat jatuh ke sintesis, tidak sunyi", async () => {
+  const s = buatSuara({ Konteks: KonteksPalsu, simpanan: simpanan(), muat: () => Promise.resolve("rusak") });
+  s.buka();
+  await tunggu();
+  assert.equal(s.rekaman.length, 0);
+  const ctx = KonteksPalsu.terakhir;
+  const sebelum = ctx.dibuat.length;
+  assert.equal(s.mainkan("rapat"), true);
+  assert.ok(ctx.dibuat.length > sebelum, "resep sintesis tidak membuat node");
+});
+
+test("motor sintesis yang sedang jalan diganti lup rekaman begitu rekamannya siap", async () => {
+  let lepas;
+  const tahan = new Promise((r) => (lepas = r));
+  const s = buatSuara({ Konteks: KonteksPalsu, simpanan: simpanan(), muat: (src) => tahan.then(() => muatSemua(src)) });
+  s.buka();
+  s.motor(1);
+  const ctx = KonteksPalsu.terakhir;
+  assert.equal(sumberRekaman(ctx).length, 0);
+  lepas();
+  await tunggu();
+  const lup = sumberRekaman(ctx).find((n) => n.buffer.nama === "motor.wav");
+  assert.ok(lup?.loop && lup.mulai, "lup motor rekaman tidak dimulai");
+  assert.equal(lup.playbackRate.value, 1);
+});
+
+test("latensi = base + output + jadwal 5 ms; 0 sebelum ada konteks", () => {
+  const s = buatSuara({ Konteks: KonteksPalsu, simpanan: simpanan(), muat: muatSemua });
+  assert.equal(s.latensi, 0);
+  s.buka();
+  Object.assign(KonteksPalsu.terakhir, { baseLatency: 0.01, outputLatency: 0.04 });
+  assert.ok(Math.abs(s.latensi - 0.055) < 1e-9);
+});
+
+test("bunyi kontak (tutup rapat, cakram duduk) dipicu lebih awal sebesar latensi, sekali per gerak", () => {
+  const src = readFileSync(new URL("../components/imersif/adegan.js", import.meta.url), "utf8");
+  assert.match(src, /!kt\.rapatBerbunyi && kt\.buka < ambangKontak\(/);
+  assert.match(src, /!k_\.dudukBerbunyi && lajuDengar >= 0 && k_\.dengar > 1 - ambangKontak\(/);
+  // Latensi yang tak masuk akal dibatasi 150 ms supaya bunyi tidak mendahului gerak terlalu jauh.
+  assert.match(src, /Math\.min\(0\.15, latensiSuara\?\.\(\) \?\? 0\)/);
+  const panggung = readFileSync(new URL("../components/imersif/Panggung.jsx", import.meta.url), "utf8");
+  assert.match(panggung, /latensiSuara: \(\) => sfx\?\.latensi/);
 });
 
 test("tanpa AudioContext (peramban lama, SSR) semuanya diam tanpa galat", () => {
