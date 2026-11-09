@@ -1,5 +1,6 @@
-// Efek suara rak CD, seluruhnya disintesis Web Audio: tidak ada berkas audio yang
-// diunduh, jadi tidak ada lisensi yang perlu dicatat dan tidak ada beban jaringan.
+// Efek suara rak CD dari rekaman asli (Freesound, CC0; asal di public/assets/suara/
+// PROVENANCE.md), dimuat setelah gestur pertama. Selama rekaman belum siap atau gagal
+// dimuat, resep sintesis di bawah dipakai sebagai cadangan, jadi tidak pernah sunyi.
 // Satu AudioContext, dibuat pada gestur pertama (aturan autoplay peramban), dengan
 // satu GainNode utama. Bisu disimpan di localStorage dan dibagikan ke tombol di bilah.
 
@@ -68,11 +69,44 @@ export const RESEP = {
   ],
   // Buklet ditarik keluar atau masuk ke tutup: gesekan kertas panjang dan halus.
   kertas: [{ jenis: "derau", filter: "highpass", f: 2200, f2: 1400, q: 0.6, kuat: 0.3, lama: 0.45 }],
+  // Rak bergeser satu album: ketuk plastik kecil.
+  rak: [{ jenis: "derau", filter: "bandpass", f: 2800, q: 5, kuat: 0.3, lama: 0.02 }],
 };
 
 export const PERISTIWA = Object.keys(RESEP);
 
-export function buatSuara({ Konteks = globalThis.AudioContext ?? globalThis.webkitAudioContext, simpanan = globalThis.localStorage, kurangiGerak = false, acak = Math.random } = {}) {
+// Rekaman per peristiwa: beberapa take dipilih bergantian supaya tidak terdengar diulang.
+// Satu-tembakan (MP3) dinormalkan puncaknya ke -3 dBFS, kecuali klik kotak 265634 yang
+// berbagi satu gain supaya kait lepas tetap lebih pelan dari tutup menghentak.
+// `kuat` mengatur keras relatifnya di atas TINGKAT utama.
+const AKAR = "/assets/suara/";
+export const REKAMAN = {
+  bukaKotak: { berkas: ["buka-1", "buka-2"], kuat: 2 },
+  rapat: { berkas: ["rapat-1", "rapat-2"], kuat: 1.6 },
+  angkat: { berkas: ["angkat-1"], kuat: 1.2 },
+  duduk: { berkas: ["duduk-1"], kuat: 1.4 },
+  keluarkan: { berkas: ["keluarkan-1"], kuat: 1.4 },
+  tombol: { berkas: ["tombol-1", "tombol-2", "tombol-3"], kuat: 1 },
+  halaman: { berkas: ["halaman-1", "halaman-2", "halaman-3"], kuat: 1.4 },
+  kertas: { berkas: ["kertas-1"], kuat: 1 },
+  rak: { berkas: ["rak-1", "rak-2", "rak-3"], kuat: 1.8 },
+};
+// Lup (WAV, karena MP3 menambah jeda di ujung berkas dan sambungan lupnya berbunyi klik).
+export const LUP = { motor: "motor", proyektor: "proyektor" };
+export const semuaBerkas = () => [
+  ...Object.values(REKAMAN).flatMap((r) => r.berkas.map((n) => `${AKAR}${n}.mp3`)),
+  ...Object.values(LUP).map((n) => `${AKAR}${n}.wav`),
+];
+
+const ambil = (src) => fetch(src).then((r) => (r.ok ? r.arrayBuffer() : Promise.reject(new Error(`${r.status} ${src}`))));
+
+export function buatSuara({
+  Konteks = globalThis.AudioContext ?? globalThis.webkitAudioContext,
+  simpanan = globalThis.localStorage,
+  kurangiGerak = false,
+  acak = Math.random,
+  muat = ambil,
+} = {}) {
   let ctx = null;
   let utama = null;
   let derauBuf = null;
@@ -82,8 +116,39 @@ export function buatSuara({ Konteks = globalThis.AudioContext ?? globalThis.webk
   let dengung = null;
   let lajuMotor = 0;
   let kuatDengung = 0;
+  // Rekaman yang sudah terdekode, per nama berkas; dan take terakhir per peristiwa.
+  const rekaman = new Map();
+  const takeLalu = {};
 
   const kabari = () => pendengar.forEach((fn) => fn(bisu));
+
+  // Lup sintesis yang sedang jalan diganti rekamannya begitu rekaman itu siap.
+  const gantiLup = (nama) => {
+    if (nama === LUP.motor && motor?.sintesis) {
+      motor.g.disconnect?.();
+      motor = null;
+      if (lajuMotor > 0) api.motor(lajuMotor);
+    }
+    if (nama === LUP.proyektor && dengung?.sintesis) {
+      dengung.g.disconnect?.();
+      dengung = null;
+      if (kuatDengung > 0) api.proyektor(kuatDengung);
+    }
+  };
+
+  const muatRekaman = () => {
+    for (const src of semuaBerkas()) {
+      const nama = src.slice(AKAR.length, -4);
+      Promise.resolve()
+        .then(() => muat(src))
+        .then((ab) => new Promise((ok, gagal) => ctx.decodeAudioData(ab, ok, gagal)))
+        .then((buf) => {
+          rekaman.set(nama, buf);
+          gantiLup(nama);
+        })
+        .catch(() => {});
+    }
+  };
 
   const siapkan = () => {
     if (ctx || !Konteks) return ctx;
@@ -100,7 +165,49 @@ export function buatSuara({ Konteks = globalThis.AudioContext ?? globalThis.webk
     derauBuf = ctx.createBuffer(1, n, ctx.sampleRate);
     const d = derauBuf.getChannelData(0);
     for (let i = 0; i < n; i++) d[i] = acak() * 2 - 1;
+    muatRekaman();
     return ctx;
+  };
+
+  // Mainkan satu take rekaman. `lama` (detik) memotongnya dengan pudar supaya bunyi
+  // berhenti bersama geraknya; tanpa `lama` rekaman diputar utuh.
+  const putarRekaman = (nama, t, lama) => {
+    const r = REKAMAN[nama];
+    const siap = r?.berkas.filter((b) => rekaman.has(b)) ?? [];
+    if (!siap.length) return false;
+    const pilihan = siap.length > 1 ? siap.filter((b) => b !== takeLalu[nama]) : siap;
+    const take = pilihan[Math.floor(acak() * pilihan.length) % pilihan.length];
+    takeLalu[nama] = take;
+    const s = ctx.createBufferSource();
+    s.buffer = rekaman.get(take);
+    s.playbackRate.value = variasi(acak);
+    const g = ctx.createGain();
+    const kuat = r.kuat * (0.9 + acak() * 0.2);
+    g.gain.setValueAtTime(kuat, t);
+    s.connect(g);
+    g.connect(utama);
+    s.start(t);
+    if (lama) {
+      const pudar = Math.min(0.15, lama / 3);
+      g.gain.setValueAtTime(kuat, t + lama - pudar);
+      g.gain.linearRampToValueAtTime(0.0001, t + lama);
+      s.stop(t + lama + 0.02);
+    }
+    return true;
+  };
+
+  const lupRekaman = (nama) => {
+    const buf = rekaman.get(nama);
+    if (!buf) return null;
+    const s = ctx.createBufferSource();
+    s.buffer = buf;
+    s.loop = true;
+    const g = ctx.createGain();
+    g.gain.value = 0;
+    s.connect(g);
+    g.connect(utama);
+    s.start(0, acak() * buf.duration);
+    return { s, g };
   };
 
   const sumberDerau = (loop = false) => {
@@ -174,7 +281,7 @@ export function buatSuara({ Konteks = globalThis.AudioContext ?? globalThis.webk
     g.connect(utama);
     s.start();
     o.start();
-    return { s, f, o, g };
+    return { s, f, o, g, sintesis: true };
   };
 
   const buatDengung = () => {
@@ -215,7 +322,7 @@ export function buatSuara({ Konteks = globalThis.AudioContext ?? globalThis.webk
     o.start();
     o2.start();
     lfo.start();
-    return { g, f };
+    return { g, f, sintesis: true };
   };
 
   const buka = () => {
@@ -223,36 +330,48 @@ export function buatSuara({ Konteks = globalThis.AudioContext ?? globalThis.webk
     if (ctx?.state === "suspended") ctx.resume?.().catch?.(() => {});
   };
 
-  return {
+  const api = {
     // Dipanggil dari gestur pengguna (pointerdown/keydown).
     buka,
-    mainkan(nama) {
+    // `lama` (detik, opsional): panjang gerak yang ditemani, supaya bunyinya ikut berhenti.
+    mainkan(nama, lama) {
       const resep = RESEP[nama];
       if (!resep || bisu || !ctx || ctx.state !== "running") return false;
       const t = ctx.currentTime + 0.005;
+      if (putarRekaman(nama, t, lama)) return true;
       for (const l of resep) lapisan(l, t);
       return true;
     },
-    // r: 0..1 kecepatan putar relatif terhadap 120 rpm.
+    // r: 0..1 kecepatan putar relatif terhadap 120 rpm. Rekaman motor diputar lebih
+    // lambat saat cakram baru mulai berputar, jadi nadanya ikut naik seperti aslinya.
     motor(r) {
       lajuMotor = Math.max(0, Math.min(1, r));
       if (!ctx) return;
-      if (!motor && lajuMotor > 0) motor = buatMotor();
+      if (!motor && lajuMotor > 0) motor = lupRekaman(LUP.motor) ?? buatMotor();
       if (!motor) return;
       const t = ctx.currentTime;
-      motor.g.gain.setTargetAtTime(lajuMotor * 0.35, t, 0.08);
-      motor.f.frequency.setTargetAtTime(140 + 160 * lajuMotor, t, 0.08);
-      motor.o.frequency.setTargetAtTime(20 + 30 * lajuMotor, t, 0.08);
+      if (motor.sintesis) {
+        motor.g.gain.setTargetAtTime(lajuMotor * 0.35, t, 0.08);
+        motor.f.frequency.setTargetAtTime(140 + 160 * lajuMotor, t, 0.08);
+        motor.o.frequency.setTargetAtTime(20 + 30 * lajuMotor, t, 0.08);
+        return;
+      }
+      motor.g.gain.setTargetAtTime(Math.min(1, lajuMotor * 1.4) * 1.5, t, 0.06);
+      motor.s.playbackRate.setTargetAtTime(0.5 + 0.5 * lajuMotor, t, 0.06);
     },
     // k: 0..1 terang sorot proyektor; kedip opsional mengguncang dengungnya.
     proyektor(k, kedip = 1) {
       kuatDengung = Math.max(0, Math.min(1, k));
       if (!ctx) return;
-      if (!dengung && kuatDengung > 0) dengung = buatDengung();
+      if (!dengung && kuatDengung > 0) dengung = lupRekaman(LUP.proyektor) ?? buatDengung();
       if (!dengung) return;
       const t = ctx.currentTime;
-      dengung.g.gain.setTargetAtTime(kuatDengung * 0.3 * kedip, t, 0.03);
-      dengung.f.frequency.setTargetAtTime(500 + 400 * kedip, t, 0.05);
+      if (dengung.sintesis) {
+        dengung.g.gain.setTargetAtTime(kuatDengung * 0.3 * kedip, t, 0.03);
+        dengung.f.frequency.setTargetAtTime(500 + 400 * kedip, t, 0.05);
+        return;
+      }
+      dengung.g.gain.setTargetAtTime(kuatDengung * 1.2 * kedip, t, 0.03);
     },
     get bisu() {
       return bisu;
@@ -273,7 +392,17 @@ export function buatSuara({ Konteks = globalThis.AudioContext ?? globalThis.webk
     get lup() {
       return { motor: lajuMotor, proyektor: kuatDengung };
     },
+    // Jeda dari menjadwalkan bunyi sampai terdengar (detik). Bunyi kontak (tutup rapat,
+    // cakram duduk) dipicu lebih awal sebesar ini supaya jatuh tepat di bingkai kontaknya.
+    get latensi() {
+      return ctx ? (ctx.baseLatency || 0) + (ctx.outputLatency || 0) + 0.005 : 0;
+    },
+    // Nama berkas rekaman yang sudah siap dipakai.
+    get rekaman() {
+      return [...rekaman.keys()];
+    },
   };
+  return api;
 }
 
 // Satu mesin suara untuk seluruh halaman, dibuat saat pertama dibutuhkan di peramban.

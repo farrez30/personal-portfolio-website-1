@@ -79,6 +79,9 @@ const kuintik = (t) => {
   return t * t * t * (t * (t * 6 - 15) + 10);
 };
 const linear = (t) => t;
+// Gesekan kertas hanya terdengar selama buklet meluncur di jepitan tutup, kira-kira
+// 60% awal geraknya; sisanya buklet melayang tanpa bunyi.
+const lamaKertas = (durasi) => Math.min(1.6, Math.max(0.4, durasi * 0.6));
 // cubic-bezier(0.32, 0.72, 0, 1): kurva "luncur" untuk semua perpindahan rak.
 function bezier(x1, y1, x2, y2) {
   const cx = 3 * x1;
@@ -179,7 +182,10 @@ const mulaiGeserBaca = (sisi) => Math.max(0.4, MULAI[sisi]);
 
 const tween = () => ({ aktif: false, dari: 0, ke: 0, mulai: 0, durasi: 1, kurva: luncur });
 
-export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirHalaman = false }) {
+export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirHalaman = false, latensiSuara }) {
+  // Ambang pemicu bunyi kontak, dimajukan sejauh gerak yang terjadi selama latensi audio
+  // (`laju` per detik). Tween geraknya linear dalam waktu, jadi majunya juga tepat dalam waktu.
+  const ambangKontak = (dasar, laju) => dasar + Math.max(0, laju) * Math.min(0.15, latensiSuara?.() ?? 0);
   RectAreaLightUniformsLib.init();
   const sentuhKasar = matchMedia("(pointer: coarse)").matches;
   const renderer = new THREE.WebGLRenderer({
@@ -396,11 +402,24 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     pasangTween(kt.balikT, kt.balik, Math.round(kt.balik / (2 * Math.PI)) * 2 * Math.PI, durasi, p3o, now);
   };
 
+  // Ketuk plastik tiap kali rak melewati satu album; dibatasi supaya gulir cepat tidak
+  // menjadi derau berderet.
+  let ketukLalu = 0;
+  const ketukRak = () => {
+    const now = performance.now();
+    if (now - ketukLalu < 45) return;
+    ketukLalu = now;
+    panggil("suara", "rak");
+  };
+
   // Pindah rak dengan tween plus "tendangan" ke aliran, supaya lompatan tetap condong.
   const keIndeks = (i, jenis) => {
     const now = performance.now();
     const baru = jepit(Math.round(i), 0, kotak.length - 1);
-    if (baru !== k_.tujuan) kotak.forEach((x) => x.balikTujuan && tegakkan(x, now));
+    if (baru !== k_.tujuan) {
+      kotak.forEach((x) => x.balikTujuan && tegakkan(x, now));
+      ketukRak();
+    }
     const jauh = Math.abs(baru - k_.pos);
     const durasi =
       jenis === "roda" ? 0.51 : jenis === "kunci" ? Math.min(0.6, 0.42 + 0.05 * jauh) : jenis === "klik" ? jepit(0.45 + 0.11 * jauh, 0.46, 1.05) : jenis === "sentuh" ? 0.56 : 0.46;
@@ -465,6 +484,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       const dekat = jepit(Math.round(k_.pos), 0, kotak.length - 1);
       if (dekat !== k_.tujuan && !seret && k_.keadaan === "rak") {
         kotak.forEach((x) => x.balikTujuan && tegakkan(x, now));
+        ketukRak();
         k_.tujuan = dekat;
         kirim();
       }
@@ -578,8 +598,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (bk != null) kt.buka = bk;
       // Bunyi mengikuti gerak tutupnya: kait lepas di awal buka, klak saat rapat.
       const bukaLalu = kt.bukaLalu ?? 0;
-      if (kt.buka > 0.04 && bukaLalu <= 0.04) panggil("suara", "bukaKotak");
-      else if (kt.buka < 0.02 && bukaLalu >= 0.02) panggil("suara", "rapat");
+      if (kt.buka > 0.04 && bukaLalu <= 0.04) {
+        panggil("suara", "bukaKotak");
+        kt.rapatBerbunyi = false;
+      } else if (kt.buka < bukaLalu && !kt.rapatBerbunyi && kt.buka < ambangKontak(0.02, (bukaLalu - kt.buka) / dt)) {
+        // Klak dipicu lebih awal sebesar latensi audio, jadi terdengar tepat saat tutup rapat.
+        panggil("suara", "rapat");
+        kt.rapatBerbunyi = true;
+      }
       kt.bukaLalu = kt.buka;
       const swing = p3io((kt.buka - 0.3) / 0.7);
       const sudutTutup = k_.sempit ? (110 * Math.PI) / 180 : Math.PI;
@@ -724,9 +750,16 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       }
       sinkronCakram(c);
     }
+    // Bunyi cakram masuk poros dipicu sedikit sebelum duduk, sebesar latensi audio.
+    const lajuDengar = (k_.dengar - (k_.dengarLalu ?? k_.dengar)) / dt;
+    k_.dengarLalu = k_.dengar;
+    if (k_.keadaan !== "putar") k_.dudukBerbunyi = false;
+    else if (!k_.dudukBerbunyi && lajuDengar >= 0 && k_.dengar > 1 - ambangKontak(0.001, lajuDengar)) {
+      panggil("suara", "duduk");
+      k_.dudukBerbunyi = true;
+    }
     const sudahDuduk = k_.keadaan === "putar" && k_.dengar > 0.999;
     if (sudahDuduk !== duduk) {
-      if (sudahDuduk) panggil("suara", "duduk");
       duduk = sudahDuduk;
       kirim();
     }
@@ -853,7 +886,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (k_.tutupMenunggu && b.page === 0 && !b.turning && Math.abs(b.userData.geser + 0.5) < 0.01) {
         k_.tutupMenunggu = false;
         pasangTween(k_.bacaT, k_.baca, 0, C.bacaKeluar * k_.baca, linear, performance.now());
-        panggil("suara", "kertas");
+        panggil("suara", "kertas", lamaKertas(C.bacaKeluar * k_.baca));
       }
       matahari.target.position.copy(tengahBaca);
       matahari.position.copy(tengahBaca).add(vTmp.set(-3.5, 1.3, 4.1).multiplyScalar(skBaca));
@@ -1281,6 +1314,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (i !== k_.tujuan) {
         const now = performance.now();
         kotak.forEach((x) => x.balikTujuan && tegakkan(x, now));
+        ketukRak();
         k_.tujuan = i;
         kirim();
       }
@@ -1325,7 +1359,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       k_.tutupMenunggu = false;
       if (!k_.buklet) k_.buklet = buatBuklet(p);
       pasangTween(k_.bacaT, k_.baca, 1, C.bacaMasuk * (1 - k_.baca), linear, performance.now());
-      panggil("suara", "kertas");
+      panggil("suara", "kertas", lamaKertas(C.bacaMasuk * (1 - k_.baca)));
       k_.keadaan = "buklet";
       kirim();
     },
@@ -1340,7 +1374,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       } else {
         b?.goTo(0);
         pasangTween(k_.bacaT, k_.baca, 0, C.bacaKeluar * k_.baca, linear, performance.now());
-        panggil("suara", "kertas");
+        panggil("suara", "kertas", lamaKertas(C.bacaKeluar * k_.baca));
       }
       k_.keadaan = "buka";
       kirim();
