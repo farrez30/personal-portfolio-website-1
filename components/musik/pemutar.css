@@ -418,3 +418,28 @@
     height: 3.6rem;
   }
 }
+
+/* Jalan keluar saat embed hanya memutar cuplikan: buka playlist di Spotify sendiri,
+   tempat login pengunjung terbaca. Target sentuh 44px. */
+.vinyl-buka {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  padding: 0 0.25rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--aksen);
+  text-decoration: none;
+}
+
+.vinyl-buka:hover {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.vinyl-buka:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}

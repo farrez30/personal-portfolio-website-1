@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { PiPlayFill, PiPauseFill, PiXBold, PiMusicNotesBold, PiLinkBold, PiArrowCounterClockwiseBold } from "react-icons/pi";
+import { PiPlayFill, PiPauseFill, PiXBold, PiMusicNotesBold, PiLinkBold, PiArrowCounterClockwiseBold, PiArrowSquareOutBold } from "react-icons/pi";
 import { useMode } from "@/components/mode/ModeProvider";
 import { PLAYLIST, AWAL_MUSIK, albumMusik } from "@/content/musik";
 import { uraiTautan, ambilInfo, cuplikan } from "./spotify";
@@ -324,6 +324,13 @@ export default function PemutarMusik() {
         )}
 
         <div ref={wadahEmbed} className="vinyl-embed" hidden={!tersambung} />
+        {/* Embed tertanam tidak bisa membaca login Spotify bila browser memblokir cookie
+            pihak ketiga, jadi lagu penuh selalu tersedia lewat Spotify sendiri. */}
+        {tersambung && url && (
+          <a className="vinyl-buka" href={url} target="_blank" rel="noopener noreferrer">
+            <PiArrowSquareOutBold aria-hidden="true" /> {t("bukaSpotify")}
+          </a>
+        )}
         {tersambung && pratinjau && (
           <p className="vinyl-cuplikan">
             {t.rich("cuplikan", {
