@@ -4,7 +4,7 @@
 import { jalurIkon, teknologiDari } from "@/components/arsitektur/teknologi";
 import { albumUntuk, LOGO_LABEL } from "@/content/album";
 import { formatDurasi } from "@/components/musik/daftarLagu";
-import { batasPita, kiriKolomTeks, hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
+import { batasPita, kiriKolomTeks, gambarMasukKolom, hurufTermuat, muatHuruf, namaHuruf, tulisJudul } from "./tipografi";
 import { buatPemuat } from "./muat";
 
 const KERTAS = "#efe9df";
@@ -354,9 +354,20 @@ export function gambarHalamanAlbum(p, a, halaman, nomor, locale, ukuran = 2048) 
     g.fillRect(0, 0, ukuran, ukuran);
     if (im) gambarPenuh(g, im, 0, 0, ukuran, ukuran);
     // Kolom teks mulai sesudah tepi gambar di halaman ini, bukan angka tetap.
-    const kiri = ukuran * (im ? kiriKolomTeks(simpanganKolom(im)) : 0.675);
+    const sd = im ? simpanganKolom(im) : null;
+    const kiri = ukuran * (sd ? kiriKolomTeks(sd) : 0.675);
     const lebar = ukuran * 0.955 - kiri;
-    const gelap = im && terangArea(g, Math.round(kiri), Math.round(ukuran * 0.06), Math.round(lebar), Math.round(ukuran * 0.6)) < 0.45;
+    // Gambar yang melebar sampai tepi kanan: kertas memudar di belakang teks.
+    const berkertas = sd && gambarMasukKolom(sd);
+    if (berkertas) {
+      const x0 = kiri - ukuran * 0.05;
+      const pudar = g.createLinearGradient(x0, 0, kiri - ukuran * 0.01, 0);
+      pudar.addColorStop(0, "rgba(239, 233, 223, 0)");
+      pudar.addColorStop(1, "rgba(239, 233, 223, 0.94)");
+      g.fillStyle = pudar;
+      g.fillRect(x0, 0, ukuran - x0, ukuran);
+    }
+    const gelap = im && !berkertas && terangArea(g, Math.round(kiri), Math.round(ukuran * 0.06), Math.round(lebar), Math.round(ukuran * 0.6)) < 0.45;
     const tinta = gelap ? "#f4efe7" : a.tinta;
     g.textBaseline = "top";
     g.textAlign = "left";
