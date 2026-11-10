@@ -1,5 +1,5 @@
 {
-  "version": "2.21",
+  "version": "2.22",
   "children": [
     {
       "type": "frame",
@@ -98,7 +98,7 @@
                   "fill": "#e9e1d3cc",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "Lalu dibangun dan dicoba di perangkat yang memang dipakai.",
+                  "content": "Saya bangun, lalu saya coba di alat yang benar-benar dipakai.",
                   "lineHeight": 1.35,
                   "fontFamily": "Schibsted Grotesk",
                   "fontSize": 20,
@@ -129,7 +129,7 @@
                       "fill": "#b3ada4",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Handheld mengikuti kamera aksi dan HP.",
+                      "content": "Handheld, ikut gerak kamera aksi dan HP.",
                       "fontFamily": "IBM Plex Mono",
                       "fontSize": 15,
                       "fontWeight": "normal"
@@ -313,7 +313,7 @@
                   "fill": "#e9e1d3cc",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "Anda selalu tahu posisinya.",
+                  "content": "Anda selalu tahu sudah sampai mana.",
                   "lineHeight": 1.35,
                   "fontFamily": "Schibsted Grotesk",
                   "fontSize": 20,
@@ -344,7 +344,7 @@
                       "fill": "#b3ada4",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Dorong ke dua monitor timeline.",
+                      "content": "Push in ke dua monitor timeline.",
                       "fontFamily": "IBM Plex Mono",
                       "fontSize": 15,
                       "fontWeight": "normal"
@@ -528,7 +528,7 @@
                   "fill": "#e9e1d3cc",
                   "textGrowth": "fixed-width",
                   "width": "fill_container",
-                  "content": "Yang kasar dirapikan sampai enak dipakai.",
+                  "content": "Yang sudah jalan, saya haluskan sampai enak dipakai.",
                   "lineHeight": 1.35,
                   "fontFamily": "Schibsted Grotesk",
                   "fontSize": 20,
@@ -559,7 +559,7 @@
                       "fill": "#b3ada4",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Layar terbelah, garis sibak bergeser.",
+                      "content": "Split screen, garis pembatasnya bergeser.",
                       "fontFamily": "IBM Plex Mono",
                       "fontSize": 15,
                       "fontWeight": "normal"
@@ -591,7 +591,7 @@
                       "fill": "#b3ada4",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Mundur keluar ke ruang tonton.",
+                      "content": "Pull back keluar dari ruang grading, ke ruang tonton.",
                       "fontFamily": "IBM Plex Mono",
                       "fontSize": 15,
                       "fontWeight": "normal"
