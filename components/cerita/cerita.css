@@ -620,7 +620,8 @@
   position: absolute;
   inset: 0;
   background: #0b0b0a;
-  clip-path: circle(calc(var(--iris) * 120%) at var(--bx) 50%);
+  /* Berpusat di lubang cakram (diproyeksikan tiap bingkai). */
+  clip-path: circle(calc(var(--iris) * 120%) at var(--ix, 50%) var(--iy, 50%));
 }
 
 /* Sinyal hilang: butir, garis pindai, dan geser warna di atas kanvas. */
@@ -800,10 +801,6 @@
 @media (max-width: 47.99rem) {
   .panggung-cerita {
     --bx: 50%;
-  }
-
-  .panggung-cerita__iris {
-    clip-path: circle(calc(var(--iris) * 120%) at 50% 33%);
   }
 
   .panggung-cerita__catatan,

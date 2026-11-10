@@ -27,7 +27,7 @@ const DASAR = {
   kotak: [0, -2.6, 0], putar: [0.35, -0.9, 0.12], skala: 0.8,
   tutup: 0, cakramNaik: 0, putaran: 0, buklet: 0, segel: 0, uv: 0,
   perangkat: 0, laptop: 0, layarPenuh: 0, tumpuk: 0, urai: 0, sinyal: 0, ruang: 0, coret: 0,
-  hilang: 0, iris: 0,
+  hilang: 0, iris: 0, selam: 0, meja: 0,
 };
 
 const pose = (ubah) => ({ ...DASAR, ...ubah });
@@ -81,18 +81,18 @@ const SISIPAN = {
     s.coret = jendela(u, 0.25, 0.85);
   },
   aransemen: (s, u) => {
-    // Menyelam ke lubang cakram (0 sampai 0,22), meja perangkat (0,22 sampai 0,85), keluar.
-    const masuk = jendela(u, 0.04, 0.22);
-    const keluar = jendela(u, 0.85, 0.98);
-    s.perangkat = masuk * (1 - keluar);
-    s.laptop = jendela(u, 0.28, 0.45) * (1 - keluar);
-    s.layarPenuh = bukit((u - 0.55) / 0.27, 0.35, 0.35) * (u > 0.55 && u < 0.82 ? 1 : 0);
-    // Kamera mendekat ke pusat cakram lalu "tembus".
-    const selam = bukit(u / 0.24, 0.85, 0.15);
-    // Tirai bulat menutup layar tepat saat kamera tembus, lalu membuka di meja perangkat.
-    s.iris = bukit((u - 0.12) / 0.18, 0.45, 0.45);
-    s.cam = [s.cam[0] * (1 - selam), s.cam[1] * (1 - selam), s.cam[2] - selam * 5.4];
-    s.arah = [s.arah[0] * (1 - selam), s.arah[1] * (1 - selam), s.arah[2]];
+    // 0 sampai 0,2: kamera mendekat lurus ke lubang cakram. 0,14 sampai 0,3: tirai bulat
+    // menutup dari lubang itu dan membuka lagi; tepat saat tertutup penuh (0,22) kotak diganti
+    // meja perangkat, jadi keduanya tidak pernah terlihat bersamaan. 0,82 sampai 0,98: tirai
+    // kedua, meja diganti kotak lagi di 0,9.
+    s.selam = u < 0.22 ? halus(u / 0.2) : 0;
+    s.iris = bukit((u - 0.14) / 0.16, 0.5, 0.5) + bukit((u - 0.82) / 0.16, 0.5, 0.5);
+    s.meja = u >= 0.22 && u < 0.9 ? 1 : 0;
+    s.perangkat = s.meja * jendela(u, 0.22, 0.34) * (1 - jendela(u, 0.84, 0.9));
+    s.laptop = s.meja * jendela(u, 0.3, 0.45) * (1 - jendela(u, 0.84, 0.9));
+    s.layarPenuh = bukit((u - 0.55) / 0.27, 0.35, 0.35);
+    s.cam = [s.cam[0] * (1 - s.selam), s.cam[1] * (1 - s.selam), s.cam[2] - s.selam * 4.9];
+    s.arah = [s.arah[0] * (1 - s.selam), s.arah[1] * (1 - s.selam), s.arah[2]];
     // Di meja perangkat kamera bergeser pelan dari kiri ke kanan dan sedikit naik.
     s.cam = [s.cam[0] + s.perangkat * (u - 0.5) * 1.8, s.cam[1] + s.perangkat * 0.7, s.cam[2]];
   },

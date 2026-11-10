@@ -23,12 +23,16 @@ function video(src) {
   return { v, t };
 }
 
-// Coretan spidol "demo" di atas cakram: kanvas yang dibuka dari kiri ke kanan.
-function buatCoret(locale) {
+// Tulisan spidol "demo" di bidang label cakram, di bawah lubang, seperti CD-R yang ditulisi
+// tangan. Hurufnya memakai huruf situs (Schibsted Grotesk) yang sudah dimuat halaman, digambar
+// dua kali sedikit bergeser supaya terbaca seperti tinta spidol; garis merah di bawah kata.
+function buatCoret() {
   const c = document.createElement("canvas");
   c.width = c.height = 512;
   const t = new THREE.CanvasTexture(c);
   t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  const huruf = getComputedStyle(document.body).fontFamily || "sans-serif";
   let terakhir = -1;
   const gambar = (k) => {
     const q = Math.round(k * 40) / 40;
@@ -38,27 +42,40 @@ function buatCoret(locale) {
     g.clearRect(0, 0, 512, 512);
     if (q <= 0) return (t.needsUpdate = true);
     g.save();
+    g.translate(256, 392);
+    g.rotate(-0.05);
+    // Tinta muncul dari kiri ke kanan seperti spidol yang sedang menulis.
     g.beginPath();
-    g.rect(0, 0, 512 * q, 512);
+    g.rect(-200, -90, 400 * Math.min(1, q / 0.75), 180);
     g.clip();
-    g.translate(256, 300);
-    g.rotate(-0.14);
-    g.fillStyle = "#1b1a19";
-    g.font = "italic 700 112px 'Segoe Print', 'Bradley Hand', 'Comic Sans MS', cursive";
+    g.font = `italic 700 74px ${huruf}`;
     g.textAlign = "center";
-    g.fillText(locale === "id" ? "demo" : "demo", 0, 0);
-    g.lineWidth = 9;
-    g.lineCap = "round";
-    g.strokeStyle = "#e0574b";
-    g.beginPath();
-    g.moveTo(-150, 34);
-    g.bezierCurveTo(-60, 52, 70, 22, 160, 40);
-    g.stroke();
+    g.textBaseline = "alphabetic";
+    g.fillStyle = "rgba(24, 22, 21, 0.55)";
+    g.fillText("demo", 1.5, 1);
+    g.fillStyle = "rgba(24, 22, 21, 0.9)";
+    g.fillText("demo", 0, 0);
     g.restore();
+    // Garis bawah ditarik sesudah katanya selesai.
+    const garis = Math.max(0, (q - 0.7) / 0.3);
+    if (garis > 0) {
+      g.save();
+      g.translate(256, 392);
+      g.rotate(-0.05);
+      g.lineWidth = 7;
+      g.lineCap = "round";
+      g.strokeStyle = "#e0574b";
+      g.beginPath();
+      g.moveTo(-92, 20);
+      const ujung = -92 + 188 * garis;
+      g.quadraticCurveTo((-92 + ujung) / 2, 27, ujung, 18);
+      g.stroke();
+      g.restore();
+    }
     t.needsUpdate = true;
   };
   const mesh = new THREE.Mesh(
-    new THREE.PlaneGeometry(CAKRAM.r * 1.7, CAKRAM.r * 1.7),
+    new THREE.PlaneGeometry(CAKRAM.r * 2, CAKRAM.r * 2),
     new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, toneMapped: false }),
   );
   mesh.position.z = mm(0.9);
@@ -220,7 +237,7 @@ export function buatDunia(wadah, { proyek, locale }) {
     sampulRot: k.sampul.rotation.clone(),
     cakram: k.cakram.position.clone(),
   };
-  const coret = buatCoret(locale);
+  const coret = buatCoret();
   k.cakram.add(coret.mesh);
 
   // Segel plastik: kulit bening sedikit lebih besar dari kotak, disapu dari kiri.
@@ -290,6 +307,8 @@ export function buatDunia(wadah, { proyek, locale }) {
     const tinggiPandang = 2 * d * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     if (lebar) geser.set(-s.sisi * tinggiPandang * camera.aspect * 0.21, 0, 0);
     else geser.set(0, -tinggiPandang * 0.17, 0);
+    // Saat menyelam, kamera lurus ke lubang cakram: geser komposisi dilepas.
+    geser.multiplyScalar(1 - s.selam);
     camera.position.set(s.cam[0], s.cam[1], s.cam[2] * mundur).add(geser);
     sasaran.set(s.arah[0], s.arah[1], s.arah[2]).add(geser);
 
@@ -308,7 +327,8 @@ export function buatDunia(wadah, { proyek, locale }) {
     k.grup.position.set(s.kotak[0], s.kotak[1], s.kotak[2]);
     k.grup.rotation.set(s.putar[0], s.putar[1] + (penunjuk ? penunjuk.x * 0.08 : 0), s.putar[2]);
     k.grup.scale.setScalar(s.skala);
-    k.grup.visible = s.perangkat < 0.5 && s.hilang < 0.999;
+    // Kotak dan meja perangkat bergantian tepat di balik tirai, tidak pernah tampil bersama.
+    k.grup.visible = s.meja < 0.5 && s.hilang < 0.999;
     k.engsel.rotation.y = -s.tutup * 1.9;
     k.engsel.position.z = dasar.engselZ + s.urai * 1.25;
     k.sampul.position.set(dasar.sampul.x, dasar.sampul.y, dasar.sampul.z + s.urai * 0.55 + s.buklet * 0.3);
@@ -329,7 +349,7 @@ export function buatDunia(wadah, { proyek, locale }) {
     uv.target.position.set(s.kotak[0] + sapu * 0.9, s.kotak[1] + (penunjuk ? -penunjuk.y * 0.5 : 0), 0);
 
     // Perangkat.
-    perangkat.grup.visible = s.perangkat > 0.01;
+    perangkat.grup.visible = s.meja > 0.5;
     perangkat.grup.scale.setScalar(0.72 + 0.08 * s.perangkat);
     perangkat.laptopEngsel.rotation.x = -(1 - s.laptop) * 1.5 + 0.14;
     perangkat.ponsel.rotation.y = -0.38 - (1 - s.perangkat) * 0.9;
@@ -351,7 +371,7 @@ export function buatDunia(wadah, { proyek, locale }) {
 
     renderer.render(scene, camera);
 
-    const label = {};
+    const label = { pusat: proyeksi(k.cakram.getWorldPosition(tmp).clone()) };
     if (s.urai > 0.05) for (const [nama, f] of Object.entries(jangkar)) label[nama] = proyeksi(f());
     return label;
   }
