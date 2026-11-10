@@ -24,8 +24,11 @@ together with the Coderoach pattern bank, and asked for everything in one PR.
 
 ## Reasoning
 
-Farrez picked GSAP plus Lenis over the recommendation (GSAP alone). His one-sentence reason has
-not been written yet; add it here in his words.
+Farrez picked GSAP plus Lenis over the recommendation (GSAP alone). At his request ("kamu yg
+tulis", 10 Nov 2026) the reason was written by Claude from what he had said in the same session:
+he wants the page to feel as cinematic and smooth as miftahul.com, and the gentle inertia from
+Lenis is part of that feel, alongside the pinned and scrubbed scenes from GSAP.
+Edit it if the wording does not match his intent.
 
 ## Consequences
 
