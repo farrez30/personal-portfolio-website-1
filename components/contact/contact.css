@@ -61,7 +61,7 @@
   color: var(--ink-2);
 }
 
-.kontak__form input,
+.kontak__form input:not([type="radio"]),
 .kontak__form textarea {
   width: 100%;
   min-height: 44px;
@@ -75,6 +75,78 @@
 
 .kontak__form textarea {
   resize: vertical;
+}
+
+/* Wizard brief: pilihan berbentuk chip, tiap pertanyaan satu fieldset radio. */
+.kontak__sapa {
+  min-height: 1.6em;
+  margin: 0 0 0.5rem;
+  color: var(--ink-3);
+}
+
+.kontak__catatan {
+  margin: -0.6rem 0 0;
+  color: var(--ink-3);
+  font-size: 0.875rem;
+}
+
+.kontak__brief {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.kontak__brief legend {
+  margin-bottom: 0.5rem;
+  padding: 0;
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+.kontak__chip-baris {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.kontak__form .kontak__chip {
+  position: relative;
+  display: block;
+}
+
+.kontak__chip input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.kontak__chip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-2);
+  font-size: 0.875rem;
+  transition: border-color var(--t-cepat) var(--ease), background var(--t-cepat) var(--ease);
+}
+
+.kontak__chip:hover span {
+  border-color: var(--ink-2);
+}
+
+.kontak__chip input:checked + span {
+  border-color: var(--aksen);
+  background: color-mix(in srgb, var(--aksen) 14%, transparent);
+  color: var(--ink);
+}
+
+.kontak__chip input:focus-visible + span {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
 }
 
 .kontak__tombol {

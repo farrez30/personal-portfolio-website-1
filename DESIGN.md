@@ -50,6 +50,27 @@ nothing else.
 - `prefers-reduced-motion`: Light mode by default, headline in its final state, hologram tilt and
   dust off.
 
+## The scroll story (`components/cerita/`, ADR 0011)
+
+Eight chapters between the hero and the rack, named like a track list after the steps of making
+an album: Demo, Arrangement, Liner notes, Sealed, On repeat, Press run, The plant, In the rack.
+Text and object alternate sides; on screens under 48rem the object drops below the text.
+
+- Each chapter has its own `--p`, reaching 1 when the chapter is centred, so the finished state
+  is what a reader stops on. Text rises over the first 45%, the object plays over the rest.
+- Objects are CSS and inline SVG only, aria-hidden, drawn in the page tokens: a scribble and voice
+  memo, CSS 3D laptop, phone and action camera playing the Coderoach OS screen recordings, a
+  cream liner-notes card listing real ADRs, a sealed case with the accent lock, a disc that keeps
+  spinning while the signal bars drop, a pressing stack, a request path, and album spines landing
+  on a shelf in each project's `warna`.
+- The chapter label is the accent colour in the mono face, the only accent in the section apart
+  from the lock and the camera link line.
+- Every sentence is backed by a project on the rack and links to it under "Proof".
+
+The contact form opens with a greeting from the visitor's local clock and a brief of optional
+chips (need, users, timing, budget band in rupiah via `Intl`). The chosen chips are written at
+the top of the email or WhatsApp message.
+
 ## The jewel case (`components/imersif/benda.js`)
 
 Built in millimetres, 1 scene unit = 100 mm. Case 142 × 125 × 10.4 mm. Clear base with a printed

@@ -81,7 +81,44 @@
     "galatJudul": "Name, email, and message are required.",
     "galatKirim": "That didn't send. Try again, or reach me on WhatsApp.",
     "terkirim": "Sent. Thank you.",
-    "helix": "Click once, then sweep your cursor across the helix."
+    "helix": "Click once, then sweep your cursor across the helix.",
+    "sapa": {
+      "pagi": "Good morning.",
+      "siang": "Good afternoon.",
+      "sore": "Good afternoon.",
+      "malam": "Good evening."
+    },
+    "bantu": "What can I help with?",
+    "briefJudul": "So we can get straight to the point",
+    "briefLewati": "Every choice is optional.",
+    "kebutuhan": {
+      "judul": "What do you want sorted?",
+      "android": "An Android app",
+      "kantor": "An office system or ERP",
+      "iklan": "Ads through to orders",
+      "konten": "A content workflow",
+      "belum": "Not sure yet, I'll explain"
+    },
+    "pemakai": {
+      "judul": "Who will use it?",
+      "sendiri": "Just me",
+      "tim": "A small team",
+      "perusahaan": "A company with several divisions"
+    },
+    "waktu": {
+      "judul": "When does it need to run?",
+      "bulanIni": "This month",
+      "tigaBulan": "Within 3 months",
+      "menjajaki": "Still exploring"
+    },
+    "anggaran": {
+      "judul": "Rough budget?",
+      "belum": "Not sure yet",
+      "bawah": "Under {a}",
+      "antara": "{a} to {b}",
+      "atas": "Over {a}"
+    },
+    "briefPesan": "Brief"
   },
   "pemutar": {
     "putar": "Play music",
@@ -166,5 +203,12 @@
     "kembali": "Back to {judul}",
     "diagram": "Diagram of one request",
     "teknologi": "Technology"
+  },
+  "cerita": {
+    "judul": "From idea to everyday use",
+    "lewati": "Skip to the project shelf",
+    "bukti": "Proof",
+    "keRak": "Open the project shelf",
+    "bab": "Chapter {n} of {total}"
   }
 }

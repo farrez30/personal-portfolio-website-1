@@ -81,7 +81,44 @@
     "galatJudul": "Nama, email, dan pesan wajib diisi.",
     "galatKirim": "Pesan belum terkirim. Coba lagi, atau hubungi saya lewat WhatsApp.",
     "terkirim": "Pesan terkirim. Terima kasih.",
-    "helix": "Klik sekali, lalu sapukan kursor di helix ini."
+    "helix": "Klik sekali, lalu sapukan kursor di helix ini.",
+    "sapa": {
+      "pagi": "Selamat pagi.",
+      "siang": "Selamat siang.",
+      "sore": "Selamat sore.",
+      "malam": "Selamat malam."
+    },
+    "bantu": "Ada yang bisa saya bantu?",
+    "briefJudul": "Biar obrolannya langsung ke inti",
+    "briefLewati": "Semua pilihan boleh dilewati.",
+    "kebutuhan": {
+      "judul": "Apa yang mau Anda bereskan?",
+      "android": "Aplikasi Android",
+      "kantor": "Sistem kantor atau ERP",
+      "iklan": "Iklan sampai pesanan masuk",
+      "konten": "Alur kerja konten",
+      "belum": "Belum tahu, saya ceritakan saja"
+    },
+    "pemakai": {
+      "judul": "Siapa yang akan memakainya?",
+      "sendiri": "Saya sendiri",
+      "tim": "Tim kecil",
+      "perusahaan": "Perusahaan dengan beberapa divisi"
+    },
+    "waktu": {
+      "judul": "Kapan perlu jalan?",
+      "bulanIni": "Bulan ini",
+      "tigaBulan": "Dalam 3 bulan",
+      "menjajaki": "Masih menjajaki"
+    },
+    "anggaran": {
+      "judul": "Kira-kira anggarannya?",
+      "belum": "Belum tahu",
+      "bawah": "Di bawah {a}",
+      "antara": "{a} sampai {b}",
+      "atas": "Di atas {a}"
+    },
+    "briefPesan": "Kebutuhan"
   },
   "pemutar": {
     "putar": "Putar musik",
@@ -166,5 +203,12 @@
     "kembali": "Kembali ke {judul}",
     "diagram": "Diagram alur satu permintaan",
     "teknologi": "Teknologi"
+  },
+  "cerita": {
+    "judul": "Dari ide sampai dipakai",
+    "lewati": "Langsung ke rak proyek",
+    "bukti": "Buktinya",
+    "keRak": "Buka rak proyek",
+    "bab": "Bab {n} dari {total}"
   }
 }
