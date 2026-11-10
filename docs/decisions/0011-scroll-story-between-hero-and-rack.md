@@ -27,8 +27,14 @@ question on 10 Nov 2026.
 
 ## Reasoning
 
-Farrez picked the recommended option for each question. His one-sentence reason has not been
-written yet; add it here in his words.
+In Farrez's words (10 Nov 2026): "Saya ingin desain dan narasinya menyambung mulus dari hero
+sampai rak, dan tetap mengikuti pola serta genre yang sudah ada." (I want the design and the
+story to run seamlessly from the hero into the rack, while keeping the existing patterns and
+genre.)
+
+This is why the other options lost: the blueprint leaves the CD-rack world, Apple style and the
+cinematic route both replace the look in DESIGN.md, and a separate page breaks the flow into
+the rack.
 
 ## Consequences
 

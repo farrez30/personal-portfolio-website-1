@@ -4,7 +4,8 @@ Draf 10 Nov 2026, bahan keputusan Farrez sebelum ada kode. Belum ada yang diimpl
 
 **Pilihan Farrez (10 Nov 2026):** arah "Dari demo ke rak", diletakkan antara hero dan rak,
 kontak dengan wizard kebutuhan, sapaan jam lokal, dan pita anggaran. Alasan dalam kata
-Farrez untuk ADR: `[menunggu satu kalimat]`. Slot klaim di bagian 3 masih terbuka.
+Farrez untuk ADR: desain dan narasinya menyambung mulus dari hero sampai rak, dan tetap
+mengikuti pola serta genre yang sudah ada. Slot klaim di bagian 3 masih terbuka.
 
 **Dibangun 10 Nov 2026** (ADR 0011). Bedanya dengan usulan:
 - Kalimat ber-`[slot]` tidak ikut tayang. Bab 6 memakai daftar klien ERP yang sudah ada di
