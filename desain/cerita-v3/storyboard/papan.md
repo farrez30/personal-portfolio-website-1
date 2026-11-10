@@ -18,14 +18,14 @@ muncul di sisi kiri (desktop) atau bawah (HP).
 | # | Beat | Durasi desktop | Pola bank | Benang merah | Teks bab (Anda), lihat naskah-teks.md | Status teks |
 |---|---|---|---|---|---|---|
 | 1 | Ide | 120vh | 89 coretan jadi benda | pensil merah | Ceritakan dulu masalahnya. | ada (bab demo) |
-| 2 | Naskah | 100vh | 88 catatan jadi rencana | pita pembatas | Saya pelajari alurnya, lalu saya tulis jadi requirement. | draf, perlu bukti |
-| 3 | Storyboard | 140vh | 86 gambar kerja jadi barang | benang di dinding | Tidak selalu jadi aplikasi. | ada (bab aransemen) |
-| 4 | Set dan lighting | 120vh | 53 camera path (crane) | kabel merah | Server dan database juga saya urus. | ada (bab infrastruktur) |
-| 5 | Syuting | 120vh | 55 objek persisten, 33 FLIP ke monitor | lampu tally | Lalu saya bangun, bertahap. | draf, perlu bukti |
+| 2 | Naskah | 100vh | 88 catatan jadi rencana | pita pembatas | Saya pelajari dulu cara kerja tim Anda. | draf, perlu bukti |
+| 3 | Storyboard | 140vh | 86 gambar kerja jadi barang | benang di dinding | Tim lapangan pakai HP, tim kantor pakai laptop. | ada (bab aransemen) |
+| 4 | Set dan lighting | 120vh | 53 camera path (crane) | kabel merah | Dapurnya juga boleh Anda intip. | ada (bab infrastruktur) |
+| 5 | Syuting | 120vh | 55 objek persisten, 33 FLIP ke monitor | lampu tally | Lalu saya bangun, sedikit demi sedikit. | draf, perlu bukti |
 | 6 | Editing | 120vh | 18 timeline panggung sticky | playhead | Progresnya selalu bisa Anda cek. | ada (bab transparansi) |
 | 7 | Grading | 100vh | 01 sibak, 57 butir dan distorsi | cincin grading | Lalu dirapikan sampai enak dipakai. | draf, perlu bukti |
-| 8 | Test screening | 120vh | 36 portal zoom-through | lampu merah | Sinyal hilang, catatan tetap tersimpan. | ada (bab keandalan) |
-| 9 | Segel dan duplikasi | 120vh | 56 instanced field | segel lilin | Siapa boleh lihat apa, saya atur dari awal. Klien bertambah, sistemnya tetap satu. | ada (bab keamanan, skala) |
+| 8 | Test screening | 120vh | 36 portal zoom-through | lampu merah | Sistem yang dipakai tiap hari tidak boleh rewel. | ada (bab keandalan) |
+| 9 | Segel dan duplikasi | 120vh | 56 instanced field | segel lilin | Tidak semua orang perlu lihat semua data. Usaha tumbuh, sistemnya ikut tumbuh. | ada (bab keamanan, skala) |
 | 10 | Rilis | 180vh | 40 traveling hero object, 36 portal | tirai rak | Sampai akhirnya dipakai tiap hari. Sepuluh di antaranya ada di rak ini. | ada (bab rak) |
 
 Anti-resep yang dihindari: A5 (diorama, fly-through, dan rack focus sekaligus). DOF hanya dipakai

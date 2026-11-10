@@ -136,7 +136,8 @@ function gambar() {
 
   // Teks bab tampil di tengah beat, tidak saat sambungan.
   const tampil = halus((u - 0.06) / 0.1) * (1 - halus((u - (0.92 - SAMBUNG)) / 0.1));
-  noEl.textContent = String(b.no).padStart(2, "0") + "  " + b.judul;
+  // Nama tahap film hanya untuk papan storyboard; halaman cukup nomor beat.
+  noEl.textContent = String(b.no).padStart(2, "0");
   judulEl.textContent = b.teks;
   babEl.style.opacity = tampil;
   babEl.style.transform = `translateY(${(1 - tampil) * 16}px)`;

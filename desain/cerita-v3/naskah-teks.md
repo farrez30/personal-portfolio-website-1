@@ -1,57 +1,73 @@
 # Teks cerita v3 (versi Indonesia)
 
-Putaran 3, 11 Nov 2026. Putaran 1 kaku. Putaran 2 sudah tidak kaku, tapi Farrez menilainya aneh
-("mana ada orang copywriting seperti itu"), karena kalimatnya dirakit dari aturan, bukan dari
-contoh nyata. Putaran ini ditulis dari riset (`riset-teks.md` di folder ini): cara software house
-dan agensi Indonesia menulis tahap kerjanya, dan kajian kenapa teks terasa terjemahan.
+Putaran 4, 11 Nov 2026.
 
-Pola yang dipakai, semuanya terlihat di situs Indonesia sungguhan (11 Nov 2026):
-- Ajakan langsung di awal: "Ceritakan kebutuhan Anda" (Javan, GITS, KerjainWeb).
-- Pelaku jelas dan kata kerja tanpa me-: "Kami pelajari ...", "Kami susun ..." (Olakses, KerjainWeb).
-  Di situs pribadi pelakunya "saya".
-- Klien jadi pelaku di tahap persetujuan: "Anda tinjau dan setujui sebelum masuk development"
-  (KerjainWeb).
-- Benda konkret, bukan sifat abstrak: "domain, hosting, CMS" (Olakses), "garansi bug" (Venturo).
-- Istilah kerja dibiarkan Inggris: requirement, development, UAT, go-live, bug (Venturo, Niagadev).
-- Satu kalimat per tahap, 7 sampai 14 kata.
+| Putaran | Penilaian Farrez | Penyebab |
+|---|---|---|
+| 1 | Kaku, terasa terjemahan paksa | Disalin dari teks lama yang ditulis dari bahasa Inggris |
+| 2 | Tidak kaku, tapi aneh | Dirakit dari aturan, bukan dari contoh nyata |
+| 3 | Beberapa terdengar gagal, ketus, atau teknis | Ditulis dari sudut "apa yang saya kerjakan", bukan dari kekhawatiran pembaca |
 
-Yang dihindari, juga dari riset: kalimat yang terbaca balik sebagai tagline Inggris, kata kerja
-transitif tanpa objek ("menyesuaikan"), sifat abstrak tanpa contoh, "lebih dari sekadar",
-"solusi digital", "era digital" (Narabahasa; alvinindra/bahasa-skills; Machali 2023).
+## Tujuan halaman (patokan setiap kalimat)
 
-Fakta dan cakupan klaim sama dengan `content/cerita.js`. Baris **[konfirmasi]** memuat klaim yang
-hanya Farrez tahu benar tidaknya; baris itu belum dipasang di papan dan animatic.
+Pemilik usaha, stakeholder, dan perusahaan membaca lalu merasa "ini masalah saya juga, dan orang
+ini bisa menuntaskannya". Jadi setiap beat dimulai dari hal yang ada di kepala mereka, dijawab
+dengan bahasa sehari-hari, lalu ditutup bukti dari proyek di rak.
+
+Soundstage film hanya kerangka visual. Nama tahap film (ide, naskah, syuting, editing, dan
+seterusnya) dipakai di papan storyboard untuk tim, tidak tampil di halaman. Teks yang tampil tidak
+menyebut film sama sekali.
+
+Sapaan "Anda" (keputusan Farrez 4 Nov 2026). Pola kalimat dari riset `riset-teks.md`. Istilah
+teknis (requirement, server, database, testnet) dibuang, karena pembaca utamanya bukan developer.
+Baris **[konfirmasi]** memuat klaim yang hanya Farrez tahu benar tidaknya, dan belum dipasang.
 
 ## Judul dan isi per beat
 
-| # | Putaran 2 (aneh) | Putaran 3 | Polanya dari mana |
+| # | Yang dipikirkan pemilik usaha | Judul | Isi (bukti) |
 |---|---|---|---|
-| 1 judul | Banyak proyek saya berawal dari satu keluhan. | Ceritakan dulu masalahnya. | Ajakan "Ceritakan kebutuhan Anda" (Javan, GITS). |
-| 1 isi | Ceritakan saja masalahnya pakai bahasa Anda sendiri. Soal teknis, biar saya yang pikirkan. | Tidak perlu pakai istilah teknis. Cukup cerita apa yang bikin repot, sisanya saya yang urus. | Bahasa pemilik usaha ("bikin repot"); janji pendek di akhir. |
-| 2 judul | Keluhan itu saya ubah jadi daftar yang bisa dicentang. | Saya pelajari alurnya, lalu saya tulis jadi requirement. | "Kami pelajari bisnis Anda" (Olakses); requirement dibiarkan Inggris (Venturo). |
-| 2 isi | Tiap poin jelas: siapa yang pakai, apa yang harus terjadi, kapan dianggap beres. | Anda cek dan setujui dulu sebelum masuk development. **[konfirmasi]** | Klien sebagai pelaku persetujuan (KerjainWeb). |
-| 3 judul | Bentuknya menyesuaikan siapa yang memakai. | Tidak selalu jadi aplikasi. | Diagnosis: "menyesuaikan" tanpa objek adalah kalke "adapts to". Diganti pernyataan yang bisa dibuktikan. |
-| 3 isi | Kadang jadinya aplikasi Android yang tersambung ke kamera aksi. Kadang sistem kantor di laptop, dashboard di HP, atau alur dari iklan sampai chat WhatsApp. | Kadang aplikasi Android yang tersambung ke kamera aksi. Kadang sistem kantor di laptop, dashboard di HP, atau alur dari iklan sampai chat WA. | Benda konkret dipertahankan; "WA" seperti ucapan orang. |
-| 4 judul | Bagian yang tidak kelihatan juga saya rapikan. | Server dan database juga saya urus. | Diagnosis: "bagian yang tidak kelihatan" klise abstrak. Sebut bendanya (pola "domain, hosting, CMS"). |
-| 4 isi | Sembilan dari sepuluh proyek di rak punya halaman arsitektur. Di situ Anda bisa ikuti satu permintaan dari layar sampai server, tanpa ada rahasia klien yang terbuka. | Sembilan dari sepuluh proyek di rak punya halaman arsitektur. Anda bisa lihat jalannya data dari layar sampai server, tanpa rahasia klien ikut terbuka. | Kalimat dipendekkan; "permintaan" (kalke "request") diganti "jalannya data". |
-| 5 judul | Saya bangun, lalu saya coba di alat yang benar-benar dipakai. | Lalu saya bangun, bertahap. | "bertahap" dipakai KerjainWeb untuk tahap development. |
-| 5 isi | YiheeCam saya uji langsung dengan kamera aksi aslinya. | YiheeCam saya uji langsung dengan kamera aksinya. **[konfirmasi]** | Bukti nyata, kalau benar. |
-| 6 judul | Anda selalu tahu sudah sampai mana. | Progresnya selalu bisa Anda cek. | "progres" kata yang dipakai klien dan vendor; klien jadi pelaku. |
-| 6 isi | Setiap keputusan penting saya catat, lengkap dengan alasannya. Statusnya juga saya tulis apa adanya: d-day sudah lulus uji di testnet, tapi belum pernah dipakai dengan uang sungguhan. | Keputusan penting saya catat beserta alasannya. Status juga saya tulis apa adanya: d-day sudah lulus uji di testnet, tapi belum pernah dipakai dengan uang sungguhan. | Dipendekkan. |
-| 7 judul | Yang sudah jalan, saya haluskan sampai enak dipakai. | Lalu dirapikan sampai enak dipakai. | Pasif sederhana seperti "Website diluncurkan" (KerjainWeb); pasif bukan tanda terjemahan. |
-| 7 isi | (belum ada) | **[konfirmasi]** satu contoh perbaikan setelah masukan pengguna. | |
-| 8 judul | Ada sinyal atau tidak, tetap jalan. | Sinyal hilang, catatan tetap tersimpan. | Diagnosis: putaran 2 terbaca balik "Signal or not, it works", subjeknya hilang. Sekarang ada benda dan akibatnya. |
-| 8 isi | Di Jeda, catatan tetap bisa ditulis walau tidak ada sinyal, lalu tersimpan sendiri begitu sinyal kembali. Waktu vendor kamera aksi berhenti merawat aplikasinya, YiheeCam yang menggantikan. | Di Jeda, catatan tetap bisa ditulis tanpa sinyal, lalu terkirim sendiri begitu sinyal kembali. Waktu vendor kamera aksi berhenti merawat aplikasinya, YiheeCam yang menggantikan. | Fakta sama. |
-| 9a judul | Yang bisa membaca cuma orang yang memang berhak. | Siapa boleh lihat apa, saya atur dari awal. | Pelaku jelas, kalimat yang diucapkan orang saat rapat. |
-| 9a isi | Di Jeda, psikolog cuma bisa membaca catatan yang dibagikan kliennya. Pohon keluarga di AkarKita hanya terbuka lewat undangan. | Di Jeda, psikolog cuma bisa baca catatan yang dibagikan kliennya. Pohon keluarga di AkarKita hanya terbuka lewat undangan. | Fakta sama. |
-| 9b judul | Klien bertambah, sistemnya tidak perlu dibuat ulang. | Klien bertambah, sistemnya tetap satu. | Lebih pendek; bisa dibuktikan lewat isi di bawahnya. |
-| 9b isi | ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus: distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan. | (sama) | Sudah lolos. |
-| 10 judul | Sampai akhirnya dipakai orang setiap hari. | Sampai akhirnya dipakai tiap hari. | Dipendekkan. |
-| 10 isi | Sepuluh di antaranya ada di rak ini. | (sama) | Sudah lolos. |
+| 1 | "Saya sendiri belum tahu persis butuhnya apa." | Ceritakan dulu masalahnya. | Tidak perlu tahu istilah teknisnya. Cukup cerita apa yang bikin repot. Cara menyelesaikannya, biar saya yang pikirkan. |
+| 2 | "Nanti hasilnya beda dari yang saya bayangkan." | Saya pelajari dulu cara kerja tim Anda. | Dari situ saya tulis apa saja yang harus bisa dilakukan sistemnya. Anda cek dan setujui dulu sebelum mulai dibuat. **[konfirmasi]** |
+| 3 | "Tim saya ada yang di kantor, ada yang di lapangan." | Tim lapangan pakai HP, tim kantor pakai laptop. | Bentuknya ikut cara tim Anda bekerja: aplikasi Android untuk kamera aksi, sistem kantor di laptop, dashboard di HP, sampai alur dari iklan ke chat WhatsApp. |
+| 4 | "Saya tidak paham teknisnya, takut tidak bisa mengecek." | Dapurnya juga boleh Anda intip. | Sembilan dari sepuluh proyek di rak punya halaman yang memperlihatkan cara kerja sistemnya, dari layar sampai tempat data disimpan. Rahasia klien tetap tertutup. |
+| 5 | "Takut baru kelihatan hasilnya di akhir." | Lalu saya bangun, sedikit demi sedikit. | Bagian yang sudah jadi bisa langsung Anda coba, jadi tidak ada kejutan di akhir. **[konfirmasi]** |
+| 6 | "Vendor sering menghilang, kabarnya tidak jelas." | Progresnya selalu bisa Anda cek. | Keputusan penting saya catat beserta alasannya. Status juga saya tulis apa adanya: d-day sudah lulus uji coba, tapi belum pernah dipakai dengan uang sungguhan. |
+| 7 | "Sistemnya jalan, tapi tim saya malas memakainya." | Lalu dirapikan sampai enak dipakai. | **[konfirmasi]** satu contoh perbaikan setelah masukan pengguna. |
+| 8 | "Kalau error pas lagi ramai, usaha saya yang rugi." | Sistem yang dipakai tiap hari tidak boleh rewel. | Catatan di Jeda tetap bisa ditulis walau sinyal hilang. Waktu vendor kamera aksi berhenti merawat aplikasinya, YiheeCam yang menggantikan. |
+| 9a | "Saya tidak mau data pelanggan dan gaji bisa dilihat sembarang orang." | Tidak semua orang perlu lihat semua data. | Di Jeda, psikolog cuma bisa membaca catatan yang memang dibagikan kliennya. Pohon keluarga di AkarKita hanya bisa dibuka lewat undangan. |
+| 9b | "Kalau usaha makin besar, apa harus bikin sistem baru lagi?" | Usaha tumbuh, sistemnya ikut tumbuh. | ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus, dari distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan. |
+| 10 | "Ujung-ujungnya, dipakai atau tidak?" | Sampai akhirnya dipakai tiap hari. | Sepuluh di antaranya ada di rak ini. |
+
+Kolom "yang dipikirkan" adalah dugaan dari pola kecemasan klien di riset (proyek molor, revisi
+bolak-balik, vendor menghilang, error saat dipakai, data bocor); belum diuji ke pemilik usaha.
+Kolom itu tidak tampil di halaman.
+
+## Perbaikan dari masukan Farrez (putaran 3 ke 4)
+
+| # | Putaran 3 | Kesan yang muncul | Putaran 4 |
+|---|---|---|---|
+| 3 | Tidak selalu jadi aplikasi. | Seperti gagal atau nanggung | Tim lapangan pakai HP, tim kantor pakai laptop. |
+| 4 | Server dan database juga saya urus. | Bernada mengeluh; teknis | Dapurnya juga boleh Anda intip. |
+| 8 | Sinyal hilang, catatan tetap tersimpan. | Seolah semua masalah soal sinyal | Sistem yang dipakai tiap hari tidak boleh rewel. |
+| 9 | Siapa boleh lihat apa, saya atur dari awal. | Teknis, tidak membumi | Tidak semua orang perlu lihat semua data. |
+| 9b | Klien bertambah, sistemnya tetap satu. | Teknis | Usaha tumbuh, sistemnya ikut tumbuh. |
+| 2 | Saya pelajari alurnya, lalu saya tulis jadi requirement. | Istilah teknis | Saya pelajari dulu cara kerja tim Anda. |
+| 6 isi | lulus uji di testnet | Istilah teknis | lulus uji coba |
+| semua | Label tahap film tampil di atas judul | Kita bukan studio film | Hanya nomor beat yang tampil |
+
+## Kekhawatiran lain yang belum punya beat (usulan, menunggu keputusan Farrez)
+
+Dari riset copy software house Indonesia, kekhawatiran klien yang sering dijawab di halaman
+mereka tapi belum ada di cerita ini:
+
+| Kekhawatiran | Contoh di situs Indonesia | Bisa masuk ke | Bukti dari Farrez |
+|---|---|---|---|
+| Biaya dan waktu membengkak | "estimasi biaya yang transparan sebelum proyek dimulai" (KerjainWeb) | Beat 2 | belum ada |
+| Setelah selesai, tergantung terus ke vendor | "Semua akses diserahkan ke Anda" (Olakses) | Beat 10 | belum ada |
+| Ada masalah setelah serah terima | "masa garansi bug" (Venturo) | Beat 10 | belum ada |
+| Tim tidak bisa memakai sistemnya | "pelatihan penggunaan aplikasi" (Sekawan Media) | Beat 7 | belum ada |
 
 ## Keluhan di beat 1 (kertas tempel)
-
-Ditulis seperti ucapan pemakainya.
 
 | Proyek | Teks |
 |---|---|
@@ -61,25 +77,20 @@ Ditulis seperti ucapan pemakainya.
 | nds-etl | Distributor yang sudah sepuh ingin cek dari HP: kapan harus repeat order, dan berapa. |
 | akarkita | Anak muda sering bingung harus memanggil kerabatnya apa. |
 
-## Catatan kamera di papan
+## Catatan kamera di papan (untuk tim, tidak tampil)
 
-Ditulis mengikuti cara shot list dan camera report Indonesia (`riset-teks.md` bagian 3): ukuran
-gambar, angle, dan gerak kamera dalam istilah Inggris atau singkatannya (MS, LS, CU, ECU, eye
-level, dolly, tracking, zoom out), subjeknya dalam bahasa Indonesia biasa. "Push in" tidak muncul
-di satu pun sumber Indonesia, dan "setinggi mata" adalah bentuk terjemahan mesin (blog Kling ID).
+Mengikuti cara shot list dan camera report Indonesia (`riset-teks.md` bagian 3): ukuran gambar,
+angle, dan gerak kamera dalam istilah Inggris atau singkatan, subjeknya dalam bahasa Indonesia.
 
-| # | Putaran 2 (aneh) | Putaran 3 |
-|---|---|---|
-| 1 | Push in pelan ke meja sutradara, setinggi mata. | MS meja sutradara, eye level, dolly mendekat pelan. |
-| 2 | Top shot tepat di atas mesin ketik. | Bird eye view ke mesin ketik, static. |
-| 3 | Tracking menyusuri dinding storyboard. | LS dinding storyboard, eye level, tracking ke kanan. |
-| 4 | Crane down ke set, lampu nyala satu-satu. | Crane shot turun ke set, high angle. Lampu menyala satu per satu. |
-| 5 | Handheld, ikut gerak kamera aksi dan HP. | MS laptop di set, handheld, follow kamera aksi dan HP. |
-| 6 | Push in ke dua monitor timeline. | MCU dua monitor timeline, eye level, dolly mendekat. |
-| 7 | Split screen, garis pembatasnya bergeser. | CU monitor grading, static. Garis pembatas sebelum dan sesudah bergeser. |
-| 8 | Dari kursi paling belakang, lalu masuk ke layar. | LS ruang tonton dari baris belakang, dolly mendekat ke layar. |
-| 9 | Close-up makro di segel, lalu pull back ke mesin duplikasi. | ECU segel lilin, lalu zoom out ke mesin duplikasi. |
-| 10 | Ikuti satu kotak CD di conveyor. | MS kotak CD di conveyor, low angle, tracking mengikuti kotak. |
-
-Sambungan yang ikut diganti: beat 7 "Mundur keluar dari ruang grading ke ruang tonton.", beat 10
-"Kamera masuk lewat tirai rak ke seksi rak proyek."
+| # | Catatan kamera |
+|---|---|
+| 1 | MS meja sutradara, eye level, dolly mendekat pelan. |
+| 2 | Bird eye view ke mesin ketik, static. |
+| 3 | LS dinding storyboard, eye level, tracking ke kanan. |
+| 4 | Crane shot turun ke set, high angle. Lampu menyala satu per satu. |
+| 5 | MS laptop di set, handheld, follow kamera aksi dan HP. |
+| 6 | MCU dua monitor timeline, eye level, dolly mendekat. |
+| 7 | CU monitor grading, static. Garis pembatas sebelum dan sesudah bergeser. |
+| 8 | LS ruang tonton dari baris belakang, dolly mendekat ke layar. |
+| 9 | ECU segel lilin, lalu zoom out ke mesin duplikasi. |
+| 10 | MS kotak CD di conveyor, low angle, tracking mengikuti kotak. |
