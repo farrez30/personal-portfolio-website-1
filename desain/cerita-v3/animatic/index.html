@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Animatic cerita v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --gelap: #161514; --beige: #e9e1d3; --merah: #e0574b; --abu: #b3ada4; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--gelap); color: var(--beige); }
+  body { font-family: "Schibsted Grotesk", system-ui, sans-serif; }
+  .pembuka, .rak { height: 100svh; display: grid; place-items: center; text-align: center; padding: 0 16px; }
+  .pembuka p, .rak p { font-family: "IBM Plex Mono", monospace; color: var(--abu); font-size: 14px; }
+  .rak { background: var(--beige); color: var(--gelap); }
+  .rak p { color: #5c574f; }
+  #lintasan { position: relative; }
+  .panggung { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+  .lapis { position: absolute; inset: 0; will-change: transform, opacity, clip-path; }
+  .lapis img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .lapis .mentah { position: absolute; inset: 0; filter: grayscale(0.9) contrast(0.7) brightness(1.15); }
+  .lapis .garis { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--merah); }
+  .butir { position: absolute; inset: -50%; pointer-events: none; opacity: 0.12; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .vignette { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 50%, rgba(10, 9, 8, 0.75) 100%); }
+  .kabut { position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(to top, rgba(12, 11, 10, 0.82), rgba(12, 11, 10, 0.35) 38%, transparent 62%),
+      radial-gradient(ellipse 60% 55% at 0% 100%, rgba(12, 11, 10, 0.6), transparent 70%); }
+  .tirai { position: absolute; inset: 0; background: var(--beige); opacity: 0; pointer-events: none; }
+  .bab { position: absolute; left: 6vw; bottom: 12vh; max-width: min(34rem, 88vw); }
+  .bab .no { font-family: "IBM Plex Mono", monospace; color: var(--merah); font-size: 14px; letter-spacing: 0.04em; }
+  .bab h2 { margin: 6px 0 0; font-weight: 600; font-size: clamp(26px, 3.4vw, 48px); line-height: 1.12;
+    text-shadow: 0 2px 24px rgba(0, 0, 0, 0.6); }
+  .hud { position: fixed; top: 12px; right: 12px; z-index: 5; font: 12px/1.4 "IBM Plex Mono", monospace;
+    background: rgba(22, 21, 20, 0.8); padding: 8px 10px; border-left: 2px solid var(--merah); }
+  .rel { position: fixed; left: 0; right: 0; bottom: 0; height: 6px; z-index: 5; display: flex; }
+  .rel span { border-right: 1px solid var(--gelap); background: #3a3733; }
+  .rel i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--merah); }
+  @media (max-width: 720px) {
+    .bab { left: 16px; right: 16px; bottom: 9vh; }
+  }
+</style>
+</head>
+<body>
+<section class="pembuka"><div><h1>Animatic cerita v3</h1><p>Gulir pelan. Angka di kanan atas: beat, progres beat, progres total.</p></div></section>
+<section id="lintasan">
+  <div class="panggung">
+    <div class="lapis" id="a"><img alt=""><div class="mentah" hidden><img alt=""></div><div class="garis" hidden></div></div>
+    <div class="lapis" id="b"><img alt=""></div>
+    <div class="butir"></div>
+    <div class="vignette"></div>
+    <div class="kabut"></div>
+    <div class="tirai"></div>
+    <div class="bab"><div class="no"></div><h2></h2></div>
+  </div>
+</section>
+<section class="rak"><div><h2>Seksi rak proyek</h2><p>Rak 3D yang sudah ada menyambung di sini.</p></div></section>
+<div class="hud" id="hud"></div>
+<div class="rel" id="rel"></div>
+<script type="module">
+import { BEAT, TOTAL_VH, SAMBUNG, cari, lapisan, masuk, halus } from "./naskah.js";
+
+const hp = matchMedia("(max-width: 720px)").matches;
+const skalaVh = hp ? 900 / TOTAL_VH : 1;
+const lintasan = document.getElementById("lintasan");
+lintasan.style.height = `calc(${TOTAL_VH * skalaVh}vh + 100svh)`;
+const src = (b) => `../styleframe/${b.gambar}.webp`;
+BEAT.forEach((b) => { new Image().src = src(b); });
+
+const A = document.getElementById("a"), B = document.getElementById("b");
+const imgA = A.querySelector("img"), imgB = B.querySelector("img");
+const mentah = A.querySelector(".mentah"), mentahImg = mentah.querySelector("img"), garis = A.querySelector(".garis");
+const tirai = document.querySelector(".tirai");
+const noEl = document.querySelector(".bab .no"), judulEl = document.querySelector(".bab h2"), babEl = document.querySelector(".bab");
+const hud = document.getElementById("hud");
+if (new URLSearchParams(location.search).get("hud") === "0") hud.hidden = true;
+
+const rel = document.getElementById("rel");
+BEAT.forEach((b) => { const s = document.createElement("span"); s.style.flex = b.vh; rel.append(s); });
+const relIsi = document.createElement("i"); rel.append(relIsi);
+
+// Titik fokus ditaruh di tengah layar, lalu diperbesar dari titik itu.
+function terapkan(el, pose, xHp) {
+  const fx = hp ? xHp : pose.x;
+  // Di layar tegak, cover hanya menampilkan sepertiga lebar gambar: geser potongannya ke subjek.
+  if (hp) el.querySelectorAll("img").forEach((im) => { im.style.objectPosition = `${xHp * 100}% 50%`; });
+  el.style.transformOrigin = `${fx * 100}% ${pose.y * 100}%`;
+  el.style.transform = `scale(${pose.s})`;
+}
+
+let g = 0, target = 0;
+const progres = () => {
+  const r = lintasan.getBoundingClientRect();
+  const panjang = lintasan.offsetHeight - innerHeight;
+  return Math.min(1, Math.max(0, -r.top / panjang));
+};
+
+function gambar() {
+  const { i, u } = cari(g);
+  const b = BEAT[i];
+  const L = lapisan(i, u);
+  if (!imgA.src.endsWith(src(b).slice(2))) { imgA.src = src(b); mentahImg.src = src(b); }
+  terapkan(A, L.pose, b.hp);
+
+  // Beat 4: lampu menyala satu per satu (tiga anak tangga terang).
+  const terang = b.lampu ? 0.35 + 0.65 * Math.min(1, Math.floor(halus((u - 0.08) / 0.55) * 3.999) / 3) : 1;
+  // Beat 5: kamera tangan.
+  const t = performance.now() / 1000;
+  const goyang = b.getar ? `translate(${Math.sin(t * 1.7) * 4}px, ${Math.sin(t * 2.3) * 3}px)` : "";
+  // Beat 8: film tersendat sekali.
+  const sendat = b.tersendat && Math.abs(u - b.tersendat) < 0.012;
+  A.style.filter = `brightness(${sendat ? 0.25 : terang})`;
+  if (goyang) A.style.transform += ` ${goyang}`;
+
+  // Beat 7: sibak sebelum dan sesudah, garis merah bergeser ke kanan.
+  mentah.hidden = garis.hidden = !b.sibak;
+  if (b.sibak) {
+    const x = 0.12 + 0.76 * halus((u - 0.1) / 0.65);
+    mentah.style.clipPath = `inset(0 0 0 ${x * 100}%)`;
+    garis.style.left = `${x * 100}%`;
+  }
+
+  // Sambungan ke beat berikutnya.
+  const M = L.k > 0 ? masuk(i, L.k, L.pose) : null;
+  B.hidden = !M;
+  if (M) {
+    const n = BEAT[i + 1];
+    if (!imgB.src.endsWith(src(n).slice(2))) imgB.src = src(n);
+    terapkan(B, M.pose, n.hp);
+    B.style.opacity = M.alfa;
+    B.style.clipPath = M.klip ? `inset(${M.klip.map((v) => `${(v * 100).toFixed(2)}%`).join(" ")})` : "none";
+  }
+  tirai.style.opacity = b.sambung.jenis === "tirai" ? halus(L.k * 1.15) : 0;
+
+  // Teks bab tampil di tengah beat, tidak saat sambungan.
+  const tampil = halus((u - 0.06) / 0.1) * (1 - halus((u - (0.92 - SAMBUNG)) / 0.1));
+  noEl.textContent = String(b.no).padStart(2, "0") + "  " + b.judul;
+  judulEl.textContent = b.teks;
+  babEl.style.opacity = tampil;
+  babEl.style.transform = `translateY(${(1 - tampil) * 16}px)`;
+
+  relIsi.style.width = `${g * 100}%`;
+  hud.textContent = `beat ${b.no}  u ${u.toFixed(2)}  total ${(g * 100).toFixed(1)}%`;
+  document.documentElement.dataset.beat = b.no;
+  document.documentElement.dataset.g = g.toFixed(4);
+}
+
+// Gulir dihaluskan seperti Lenis (ADR 0012), cukup untuk merasakan ritme.
+function putar() {
+  target = progres();
+  g += (target - g) * (matchMedia("(prefers-reduced-motion: reduce)").matches ? 1 : 0.12);
+  if (Math.abs(target - g) < 1e-5) g = target;
+  gambar();
+  requestAnimationFrame(putar);
+}
+// Untuk tangkapan headless: ?g=0.35 mengunci progres.
+const kunci = new URLSearchParams(location.search).get("g");
+if (kunci !== null) {
+  g = Number(kunci);
+  scrollTo(0, lintasan.offsetTop + 1);
+  gambar();
+  Promise.all([imgA, imgB, mentahImg].map((im) => (im.src ? im.decode().catch(() => {}) : null)))
+    .then(() => { document.documentElement.dataset.siap = "1"; });
+}
+else requestAnimationFrame(putar);
+</script>
+</body>
+</html>
