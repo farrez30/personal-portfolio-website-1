@@ -17,6 +17,20 @@ Label bukti di dokumen ini:
 
 Saran memilih foto sumber (I, praktisi; HeadshotPro V untuk layanannya sendiri): wajah menghadap depan atau tiga perempat tipis, cahaya rata, tajam, tanpa filter, kepala tidak terpotong, kacamata sama dengan yang biasa dipakai. Google tidak memberi resolusi minimum (V, tidak ditemukan di docs resmi). Nano Banana 2.1 menerima sampai 4 gambar karakter, Pro sampai 5 (V, docs AI Studio).
 
+### Memotret foto sumber baru
+
+Lima foto, satu sesi, satu baju, cahaya sama. Nano Banana 2.1 menerima sampai 4 foto orang sebagai referensi, Pro sampai 5 (V, docs AI Studio). Sudut 15 sampai 30 derajat dan foto depan diambil dari saran vendor headshot (U untuk angkanya, I untuk polanya).
+
+| No | Sudut | Ekspresi | Untuk |
+| --- | --- | --- | --- |
+| 1 | Depan lurus, mata ke lensa | netral, mulut tertutup | referensi utama semua prompt |
+| 2 | Depan lurus | senyum tipis mulut tertutup | Bank A |
+| 3 | Badan dan wajah diputar sekitar 30 derajat ke kiri, mata tetap ke lensa | netral | Bank B tiga perempat |
+| 4 | Sama, ke kanan | netral | Bank B tiga perempat |
+| 5 | Profil 90 derajat, menghadap ke kanan, pandangan sedikit turun | netral | B3 profil |
+
+Persiapan: menghadap jendela siang dengan cahaya tidak langsung, dinding polos di belakang, kaos polos gelap (kemeja kotak bisa membuat model salah membaca warna), kacamata yang biasa dipakai, rambut rapi. Kamera belakang setinggi mata, jarak 1,5 sampai 2 meter, zoom 2x, timer atau minta tolong orang lain. Matikan mode potret, mode cantik, dan filter. Kepala sampai dada masuk bingkai dan kepala tidak terpotong.
+
 ## Prinsip menulis prompt
 
 1. **Tulis seperti brief ke fotografer, bukan deretan kata kunci.** Google: "Describe the scene, don't just list keywords." (V, blog Google Developers 28 Agu 2025; templat serupa di docs AI Studio.)
@@ -121,8 +135,8 @@ Foto yang sudah ada dan dekat dengan rasa ini: `Farrez-studio-setengah-badan.png
 ```text
 Use the uploaded photo as the only identity reference. Keep the same man exactly: same face shape, eyes, nose, jawline, thin mustache, skin tone, apparent age and thin-framed glasses. Do not beautify or redesign the face.
 Editorial portrait, head and shoulders, body turned slightly to his left, face toward the camera, calm neutral expression, lips closed.
-Lighting: split lighting from a single warm tungsten key light at 90 degrees camera right, so the right half of his face is lit in warm amber and the left half falls into deep shadow. No fill light. Background: plain matte near-black wall.
-Plain black crew-neck t-shirt. Shot on an 85mm lens at f/8, eye-level. Clean digital capture, crisp detail, smooth tonal gradation in the shadows, sharp focus on the eyes, natural skin texture. Portrait 4:5, no text.
+Lighting: one hard warm amber light from directly camera right at 90 degrees, nothing else. The right side of his face is lit; the left cheek, left eye and left side of the nose are in complete darkness, a clean vertical line of shadow running down the middle of the face. Background: plain matte black.
+Black button-up shirt. Shot on an 85mm lens at f/8. Clean digital capture, crisp detail, sharp focus on the lit eye. No text.
 ```
 
 ### B2. Rembrandt low-key
@@ -171,7 +185,22 @@ Flow, Nano Banana 2.1, rasio 3:4 (Flow tidak menyediakan 4:5), 2 hasil per promp
 | B3 profil | Paling "semi rahasia": hanya tepi wajah yang terang, sisanya hitam. |
 | B4 cahaya monitor | Sesuai, pantulan layar di kacamata tanpa tulisan. Latar rak buku ikut muncul walau tidak diminta. |
 
-Pelajaran: untuk setengah wajah gelap, B3 (cahaya sempit dari depan profil) lebih patuh daripada istilah "split lighting". Kalau ingin mencoba B1 lagi, sebut posisi bayangannya secara konkret, misalnya "the left cheek, left eye and left side of the nose are in complete darkness".
+Putaran 2 (sore yang sama): sumber diganti 4 foto baru Farrez (depan netral, depan senyum, tiga perempat, profil; 1920x2560), kunci identitas disesuaikan dengan penampilan sekarang (rambut ikal, sisi tipis, kacamata logam tipis), dan B1 ditulis ulang dengan posisi bayangan yang konkret. Proyek Flow "Nov 10 - 20:01", asli di `D:\downloads\claude\2026-11-10-foto-farrez\putaran-2`.
+
+| Prompt | Hasil putaran 2 |
+| --- | --- |
+| A4 CV | Sesuai: kemeja navy, latar abu hangat, senyum mulut tertutup. |
+| A7 pas foto merah | Sesuai: jas navy, kemeja putih, latar merah rata. |
+| B1 split (ditulis ulang) | Sekarang patuh: garis bayangan tegas di tengah wajah. |
+| B2 Rembrandt | Sesuai. |
+| B3 profil | Sesuai, tetap yang paling "semi rahasia". |
+| B4 cahaya monitor | Sesuai; rak buku hilang setelah latar diminta polos. |
+
+Pelajaran:
+
+- Istilah "split lighting" saja tidak cukup. Sebut bagian wajah yang gelap ("left cheek, left eye and left side of the nose are in complete darkness") dan larang cahaya lain ("nothing else").
+- Beberapa foto referensi dari sudut berbeda plus kunci identitas yang menyebut ciri penampilan terbaru memberi hasil yang lebih mirip daripada satu foto lama.
+- Di pemilih aset Flow, klik biasa langsung menambahkan satu foto, sedangkan Ctrl+klik memilih beberapa. Daftarnya bergeser setiap ada hasil baru, jadi cek ulang jumlah "items selected" sebelum menambahkan.
 
 ## Cek setiap hasil sebelum dipilih
 
