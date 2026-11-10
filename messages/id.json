@@ -209,6 +209,12 @@
     "lewati": "Langsung ke rak proyek",
     "bukti": "Buktinya",
     "keRak": "Buka rak proyek",
-    "bab": "Bab {n} dari {total}"
+    "bab": "Bab {n} dari {total}",
+    "lapisan": {
+      "tutup": "Layar yang dipakai orang",
+      "buklet": "Dokumentasi dan ADR",
+      "cakram": "Data",
+      "nampan": "Server, API, dan cadangan"
+    }
   }
 }
