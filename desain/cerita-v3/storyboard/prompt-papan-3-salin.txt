@@ -1,0 +1,36 @@
+This file has one board frame named "[v1.0][REVIEW] STORY FILM, papan 2" with 3 panel columns. Turn it into board 3 by editing the existing nodes only, in small steps (one column per execute call). Do not create new frames or change any layout or style.
+
+1) Rename the frame to "[v1.0][REVIEW] STORY FILM, papan 3" and change the header text "Papan 2 dari 3" to "Papan 3 dari 3".
+2) In columns 1, 2 and 3 (left to right) replace the image fill url, the title, the chapter line, and the five values with the content below, in order. Keep the labels as they are.
+
+BEAT 08
+- image url: ./styleframe/08-screening.webp
+- title: "08  Test screening"
+- line (chapter text): "Tetap jalan di hari yang buruk."
+- KAMERA: "Dari baris belakang, menembus layar."
+- SAMBUNGAN: "Sorot proyektor jatuh ke kaleng film."
+- DURASI: "120vh"
+- POLA: "Pola 36 portal zoom-through"
+- BENANG MERAH: "Lampu merah"
+
+BEAT 09
+- image url: ./styleframe/09-segel.webp
+- title: "09  Segel dan penggandaan"
+- line (chapter text): "Yang bisa melihat hanya yang memang perlu. Dari satu klien ke banyak, tanpa mulai dari nol."
+- KAMERA: "Makro ke segel, lalu mundur ke jalur penggandaan."
+- SAMBUNGAN: "Satu cakram lepas dari tumpukan."
+- DURASI: "120vh"
+- POLA: "Pola 56 instanced field"
+- BENANG MERAH: "Segel lilin"
+
+BEAT 10
+- image url: ./styleframe/10-rilis.webp
+- title: "10  Rilis"
+- line (chapter text): "Lalu jadilah sistem yang dipakai tiap hari. Sepuluh di antaranya ada di rak ini."
+- KAMERA: "Ikuti satu kotak di ban berjalan."
+- SAMBUNGAN: "Tembus tirai rak ke seksi rak proyek."
+- DURASI: "180vh"
+- POLA: "Pola 40 benda berjalan, 36 portal"
+- BENANG MERAH: "Tirai rak"
+
+3) Check the export: three images visible, all texts updated, nothing clipped.

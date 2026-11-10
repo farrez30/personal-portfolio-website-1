@@ -1,0 +1,53 @@
+Create one storyboard board on an empty canvas. It is the final storyboard of a scroll story for a portfolio website: one continuous camera move through a dark film soundstage, from a vague idea to a CD filed in a rack. Board 1 of 3.
+
+1) One top-level frame named "[v1.0][REVIEW] STORY FILM, papan 1", width 1920, fit_content height, clip true, fill #161514, vertical layout, padding 64, gap 40. At the top a header row: left a text "Cerita gulir v3, konsep film" (Schibsted Grotesk 40 semibold, #e9e1d3), right a text "Papan 1 dari 3" (IBM Plex Mono 18, #e0574b).
+
+2) Below the header one horizontal row of 4 panel columns, gap 32, each column fill_container width, vertical layout, gap 14. In each column, top to bottom:
+   - an image rectangle, fill_container width, height 248, cornerRadius 4, with an IMAGE FILL using the given url (relative to this .pen file, mode cover). Do not generate or replace the image.
+   - a thin rule: rectangle fill_container width, height 2, fill #e0574b.
+   - the title (Schibsted Grotesk 28 semibold, #e9e1d3).
+   - the chapter line (Schibsted Grotesk 20, #e9e1d3 at 80% via #e9e1d3cc, fixed-width fill_container, lineHeight 1.35).
+   - five small labeled rows, each a vertical frame with gap 2: a label in IBM Plex Mono 13 #e0574b uppercase (KAMERA, SAMBUNGAN, DURASI, POLA, BENANG MERAH) and its value in IBM Plex Mono 15 #b3ada4 (fixed-width fill_container).
+   Use the exact Indonesian text below, no other copy, no lorem ipsum, no icons, no extra cards.
+
+BEAT 01
+- image url: ./styleframe/01-ide.webp
+- title: "01  Ide"
+- line (chapter text): "Sistem yang bagus sering berawal dari keluhan kecil."
+- KAMERA: "Dorong pelan di ketinggian mata ke meja sutradara."
+- SAMBUNGAN: "Kertas coretan ditarik ke mesin ketik."
+- DURASI: "120vh"
+- POLA: "Pola 89 coretan jadi benda"
+- BENANG MERAH: "Pensil merah"
+
+BEAT 02
+- image url: ./styleframe/02-naskah.webp
+- title: "02  Naskah"
+- line (chapter text): "Keluhan itu saya tulis ulang jadi daftar kebutuhan yang bisa dicek satu per satu."
+- KAMERA: "Top-down di atas mesin ketik."
+- SAMBUNGAN: "Halaman beterbangan ke dinding."
+- DURASI: "100vh"
+- POLA: "Pola 88 catatan jadi rencana"
+- BENANG MERAH: "Pita pembatas"
+
+BEAT 03
+- image url: ./styleframe/03-storyboard.webp
+- title: "03  Storyboard"
+- line (chapter text): "Bentuknya ikut kebutuhan."
+- KAMERA: "Menyusur dinding panel."
+- SAMBUNGAN: "Panel terakhir terbuka jadi set nyata."
+- DURASI: "140vh"
+- POLA: "Pola 86 gambar kerja jadi barang"
+- BENANG MERAH: "Benang di dinding"
+
+BEAT 04
+- image url: ./styleframe/04-set.webp
+- title: "04  Set dan lighting"
+- line (chapter text): "Yang tidak terlihat dirawat sama telitinya."
+- KAMERA: "Crane turun ke set, lampu menyala satu per satu."
+- SAMBUNGAN: "Kamera turun ke ketinggian set."
+- DURASI: "120vh"
+- POLA: "Pola 53 jalur kamera"
+- BENANG MERAH: "Kabel merah"
+
+3) Check the result: nothing clipped, all 4 images visible with their image fills, texts wrap inside their column, frame height fits all content. Remove placeholder when done.
