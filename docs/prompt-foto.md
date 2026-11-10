@@ -119,6 +119,16 @@ Clean, sharp, true-to-life colors, natural skin texture. Portrait 3:4, no text.
 
 Variasi: latar `plain solid blue` untuk instansi yang meminta biru. Untuk batik, detikJabar (1 Okt 2025) membuka semua 22 prompt dengan "Gunakan foto ini dengan mempertahankan wajah aslinya" lalu menyebut motifnya, misalnya "kemeja batik lengan panjang motif parang cokelat tua" (V).
 
+### A8. Edit rambut depan (dipakai 10 Nov, berhasil)
+
+Untuk menutup sudut jidat atas. Dijalankan di layar edit Flow pada hasil yang sudah jadi, satu perubahan saja. Kata "the split lighting", "sweater", atau "screen reflection" disesuaikan dengan foto yang diedit.
+
+```text
+Edit this exact photo. Keep everything else exactly the same: his face, eyes, glasses, smile, skin, clothes, lighting, background and framing. Change only his hair at the front: make the curly hair a little fuller and denser on top, with soft curls brought slightly forward so the receding corners of the hairline at the upper left and upper right of the forehead are covered. Keep the same curl texture, the same dark color and the same short faded sides. It should look like his own hair styled forward, natural, not a wig.
+```
+
+Hasil di 6 foto: sudut jidat tertutup dan wajah tidak berubah. Ikalnya jadi sedikit lebih rapat daripada rambut asli (paling terlihat di pas foto dan foto monitor), dan pantulan layar di kacamata foto monitor ikut melemah. Untuk CV dan LinkedIn, pastikan rambut bisa ditata seperti ini saat wawancara.
+
 ## Bank B: Portofolio, editorial "semi rahasia"
 
 Rasa yang dicari: potret sinematik yang sebagian wajahnya tenggelam dalam bayangan, cahaya samping hangat, latar gelap. Efek blur, pixel, dan grain dipasang lewat kode di situs, jadi fotonya harus **bersih**:
