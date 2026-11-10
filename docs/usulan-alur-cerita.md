@@ -2,6 +2,10 @@
 
 Draf 10 Nov 2026, bahan keputusan Farrez sebelum ada kode. Belum ada yang diimplementasikan.
 
+**Pilihan Farrez (10 Nov 2026):** arah "Dari demo ke rak", diletakkan antara hero dan rak,
+kontak dengan wizard kebutuhan, sapaan jam lokal, dan pita anggaran. Alasan dalam kata
+Farrez untuk ADR: `[menunggu satu kalimat]`. Slot klaim di bagian 3 masih terbuka.
+
 Label bukti: **[V]** dicek langsung (DOM, CSS, jaringan, berkas repo), **[B]** dari baca
 kode/dokumen, **[D]** dugaan. Teks bertanda `[slot]` menunggu bukti dari Farrez atau
 `karier-frz/claims-audit.md`, sama seperti aturan di `docs/naskah-adegan.md`.
