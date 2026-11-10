@@ -55,3 +55,29 @@ bergeser terbuka. Paling mulus karena satu ruang yang sama, tiap meja satu tahap
 
 Analog hangat dan sinematik: cahaya tungsten, butir film halus, vignette, depth of field dangkal,
 bahan nyata (plastik bening, kertas, logam), satu aksen merah. Bukan mainan 3D bergaya kartun.
+
+## Keputusan Farrez (10 Nov 2026)
+
+Konsep **B (produksi film)**, dipentaskan seperti **C**: satu soundstage utuh, kamera tidak pernah
+dipotong, tiap stasiun satu tahap. Alasannya (dari saran yang Farrez setujui): tahap produksi film
+hampir satu lawan satu dengan kerja nyata (rapat, PRD, desain, build, iterasi, polish, UAT, rilis),
+dan tombol Play di rak sudah menampilkan produk sebagai film. Akhirnya tetap CD masuk rak.
+
+### Lembar beat (10 beat, satu kamera menyusuri soundstage)
+
+| # | Beat | Yang terlihat | Pilar | Kamera dan sambungan |
+|---|---|---|---|---|
+| 1 | Ide | Lampu meja sutradara menyala; coretan di kertas berpendar, keluhan klien jadi catatan tempel | Kebutuhan abstrak | Mendekat pelan; kertas ditarik ke mesin ketik |
+| 2 | Naskah | Mesin ketik: keluhan jadi adegan bernomor | Requirement | Top-down; halaman beterbangan ke dinding |
+| 3 | Storyboard | Dinding panel: layar laptop, HP, kamera aksi digambar per panel | Desain sesuai kebutuhan | Menyusur dinding; satu panel jadi set nyata |
+| 4 | Set dan lighting | Rel kamera, kabel, lampu dinyalakan satu per satu | Infrastruktur | Crane turun ke set |
+| 5 | Syuting | Kamera aksi dan HP merekam laptop di set, lampu tally merah | Build | Handheld mengikuti; masuk monitor |
+| 6 | Editing | Meja dua monitor, timeline berversi, catatan keputusan | Transparansi | Dorong ke layar; potongan disambung |
+| 7 | Color grading | Gambar mentah menjadi hangat, roda grading berputar | Polish | Layar terbelah sebelum dan sesudah |
+| 8 | Test screening | Ruang kecil, film tersendat sekali lalu mulus | Keandalan, UAT | Dari baris belakang; proyektor ke kaleng film |
+| 9 | Segel dan penggandaan | Kaleng film disegel, mesin menggandakan ratusan cakram | Keamanan, skala | Makro ke segel; mundur ke jalur mesin |
+| 10 | Rilis | Gulungan jadi cakram dalam jewel case, masuk rak satu per satu, rak terbuka seperti tirai bioskop | Produk jadi | Ikuti satu kotak; tembus tirai ke seksi rak |
+
+Gaya styleframe: soundstage gelap hangat, cahaya tungsten dan practical, butir film halus,
+vignette, DOF dangkal, bahan nyata (kertas, logam, plastik bening, kabel), satu aksen merah (lampu
+tally, segel). Foto Farrez dari PR #46 bisa muncul sebagai siluet sutradara di beat 1.
