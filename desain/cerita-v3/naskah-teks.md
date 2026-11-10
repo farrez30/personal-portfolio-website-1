@@ -73,6 +73,30 @@ Alasan pilihan A:
 Catatan klaim: 9a adalah janji umum; buktinya (Jeda, AkarKita) menunjukkan akses dibatasi, bukan
 "data pelanggan" secara harfiah. 4 bergantung pada halaman arsitektur yang sudah tayang.
 
+## Putaran 6: Farrez memilih B, lalu nada B untuk semua beat
+
+Farrez (11 Nov 2026): "Pakai B semua", lalu minta dibandingkan dengan versi yang semua beatnya
+bernada seperti B. Pilihan B kini terpasang di animatic dan papan untuk beat 2, 3, 4, 7, 9, 10.
+
+Ciri nada B: tanpa "saya" atau "kita", subjeknya hasil atau masalahnya; pernyataan tenang yang
+yakin; pendek seperti slogan; satu kontras atau pasangan sejajar sesekali ("Usaha tumbuh, sistemnya
+sanggup mengikuti").
+
+| # | Versi utama (B untuk beat yang ditandai) | Semua bernada B (`?nada=b`) |
+|---|---|---|
+| 1 | Ceritakan dulu masalahnya. | Berawal dari keluhan sehari-hari. |
+| 2 | Semua dimulai dari rencana yang Anda setujui. | (sama) |
+| 3 | Bentuknya dipilih sesuai masalahnya. | (sama) |
+| 4 | Rapi sampai ke bagian yang tidak kelihatan. | (sama) |
+| 5 | Lalu saya bangun, sedikit demi sedikit. | Dibangun bertahap, bisa dicoba sejak awal. **[konfirmasi]** |
+| 6 | Progresnya selalu bisa Anda cek. | Progresnya jelas, kabarnya tidak putus. |
+| 7 | Enak dipakai, bukan cuma bisa dipakai. | (sama) |
+| 8 | Sistem yang dipakai tiap hari tidak boleh rewel. | Tetap bisa diandalkan saat paling dibutuhkan. |
+| 9 | Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti. | (sama) |
+| 10 | Dan akhirnya, dipakai tiap hari. | (sama) |
+
+Beat 1 nada B sengaja tidak memakai "Semua ..." supaya tidak berulang dengan beat 2.
+
 ## Perbaikan dari masukan Farrez (putaran 3 ke 4)
 
 | # | Putaran 3 | Kesan yang muncul | Putaran 4 |
