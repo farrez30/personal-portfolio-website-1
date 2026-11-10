@@ -28,7 +28,7 @@ Farrez picked GSAP plus Lenis over the recommendation (GSAP alone). At his reque
 tulis", 10 Nov 2026) the reason was written by Claude from what he had said in the same session:
 he wants the page to feel as cinematic and smooth as miftahul.com, and the gentle inertia from
 Lenis is part of that feel, alongside the pinned and scrubbed scenes from GSAP.
-Approved by Farrez in the same session; edit it if the wording does not match his intent.
+Edit it if the wording does not match his intent.
 
 ## Consequences
 
