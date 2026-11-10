@@ -8,6 +8,7 @@ import ThemeProvider from "@/components/providers/ThemeProvider";
 import ModeProvider from "@/components/mode/ModeProvider";
 import Bilah from "@/components/bilah/Bilah";
 import PemutarMusik from "@/components/musik/PemutarMusik";
+import GulirHalus from "@/components/gulir/GulirHalus";
 
 export const dynamicParams = false;
 
@@ -79,6 +80,7 @@ export default async function LocaleLayout({ children, params }) {
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
             <ModeProvider>
+              <GulirHalus />
               <a className="lewati" href="#isi">
                 {t("lewati")}
               </a>

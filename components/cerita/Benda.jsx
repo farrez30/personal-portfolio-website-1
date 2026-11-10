@@ -13,7 +13,7 @@ import Perangkat from "./Perangkat";
 // Gerak dibaca dari --p milik bab lewat CSS, jadi komponen ini tidak punya state.
 
 // Judul ADR yang memang ada di docs/decisions, dicetak seperti liner notes.
-const CATATAN = [
+export const CATATAN = [
   ["0001", "Rebuild on Next 16"],
   ["0004", "Immersive and Light modes"],
   ["0006", "Discography as inspiration"],

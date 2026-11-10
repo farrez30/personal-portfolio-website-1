@@ -50,22 +50,35 @@ nothing else.
 - `prefers-reduced-motion`: Light mode by default, headline in its final state, hologram tilt and
   dust off.
 
-## The scroll story (`components/cerita/`, ADR 0011)
+## The scroll story (`components/cerita/`, ADR 0011, 0012)
 
 Eight chapters between the hero and the rack, named like a track list after the steps of making
 an album: Demo, Arrangement, Liner notes, Sealed, On repeat, Press run, The plant, In the rack.
-Text and object alternate sides; on screens under 48rem the object drops below the text.
+The storyboard and the bank patterns behind each moment are in `docs/storyboard-gulir.md`.
 
-- Each chapter has its own `--p`, reaching 1 when the chapter is centred, so the finished state
-  is what a reader stops on. Text rises over the first 45%, the object plays over the rest.
-- Objects are CSS and inline SVG only, aria-hidden, drawn in the page tokens: a scribble and voice
-  memo, CSS 3D laptop, phone and action camera playing the Coderoach OS screen recordings, a
-  cream liner-notes card listing real ADRs, a sealed case with the accent lock, a disc that keeps
-  spinning while the signal bars drop, a pressing stack, a request path, and album spines landing
-  on a shelf in each project's `warna`.
-- The chapter label is the accent colour in the mono face, the only accent in the section apart
-  from the lock and the camera link line.
-- Every sentence is backed by a project on the rack and links to it under "Proof".
+**Immersive** is one 3D world (`dunia.js`) on a canvas that sticks behind the chapters. One
+jewel case (Coderoach OS, built by `buatKotak` like the rack) stays on screen all the way:
+- the section title rises letter by letter while the case comes up from below;
+- the lid opens and a marker writes "demo" on the disc;
+- the camera dives into the disc hole behind a closing iris, out onto a desk with a 3D laptop,
+  phone and action camera playing real screen recordings, then the laptop screen fills the view;
+- the booklet slides out beside a liner-notes card of real ADRs;
+- a clear seal sweeps over the case while a UV lamp follows the pointer and a lock appears;
+- the disc spins at 120 rpm while the picture loses signal (grain, scan lines, shake) and recovers;
+- the disc multiplies into a field of copies with its own print;
+- the case comes apart along one axis with labels for screen, docs, data and server, then closes;
+- the background turns into the rack's beige stage and the case drops into the rack.
+
+The scene script is data (`naskah.js`): a pose per chapter, held until 55% of the chapter, plus
+in-chapter moments that return to zero at both ends, so scrolling back gives the same frames.
+Text cards stick on the side opposite the object (top on desktop, bottom on phones), with a
+frosted page-colour surface. Headings rise word by word (GSAP SplitText, scrubbed).
+
+**Light** keeps the first version: CSS and SVG objects per chapter driven by `--p`.
+**Reduced motion** shows Light's final states, with no smooth scroll and no 3D.
+
+Smooth scroll is Lenis on the GSAP ticker for the whole page (`components/gulir/`), stopped while
+an album is open on the rack.
 
 The contact form opens with a greeting from the visitor's local clock and a brief of optional
 chips (need, users, timing, budget band in rupiah via `Intl`). The chosen chips are written at

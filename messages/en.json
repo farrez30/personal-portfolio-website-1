@@ -209,6 +209,12 @@
     "lewati": "Skip to the project shelf",
     "bukti": "Proof",
     "keRak": "Open the project shelf",
-    "bab": "Chapter {n} of {total}"
+    "bab": "Chapter {n} of {total}",
+    "lapisan": {
+      "tutup": "The screen people use",
+      "buklet": "Docs and ADRs",
+      "cakram": "Data",
+      "nampan": "Server, API and backups"
+    }
   }
 }
