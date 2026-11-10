@@ -9,8 +9,7 @@
 
 export const BEAT = [
   { no: 1, gambar: "01-ide", judul: "Ide", vh: 120,
-    teks: "Ceritakan dulu masalahnya.",
-    nadaB: "Berawal dari keluhan sehari-hari.",
+    teks: "Berawal dari keluhan sehari-hari.",
     kamera: { dari: { x: 0.45, y: 0.6, s: 1.0 }, ke: { x: 0.42, y: 0.72, s: 1.35 } },
     hp: 0.62, sambung: { jenis: "zoom", ke: { x: 0.38, y: 0.78, s: 2.4 } } },
   { no: 2, gambar: "02-naskah", judul: "Naskah", vh: 100,
@@ -26,13 +25,11 @@ export const BEAT = [
     kamera: { dari: { x: 0.5, y: 0.3, s: 1.3 }, ke: { x: 0.45, y: 0.55, s: 1.6 } },
     hp: 0.46, lampu: true, sambung: { jenis: "naik" } },
   { no: 5, gambar: "05-syuting", judul: "Syuting", vh: 120,
-    teks: "Lalu saya bangun, sedikit demi sedikit.",
-    nadaB: "Dibangun bertahap, bisa dicoba sejak awal.",
+    teks: "Dibangun bertahap, bisa dicoba sejak awal.",
     kamera: { dari: { x: 0.55, y: 0.5, s: 1.15 }, ke: { x: 0.6, y: 0.45, s: 1.3 } },
     hp: 0.55, getar: true, sambung: { jenis: "portal", kotak: [0.56, 0.67, 0.18, 0.16] } },
   { no: 6, gambar: "06-editing", judul: "Editing", vh: 120,
-    teks: "Progresnya selalu bisa Anda cek.",
-    nadaB: "Progresnya jelas, kabarnya tidak putus.",
+    teks: "Progresnya jelas, kabarnya tidak putus.",
     kamera: { dari: { x: 0.5, y: 0.5, s: 1.0 }, ke: { x: 0.42, y: 0.38, s: 1.55 } },
     hp: 0.5, sambung: { jenis: "zoom", ke: { x: 0.42, y: 0.36, s: 3 } } },
   { no: 7, gambar: "07-grading", judul: "Color grading", vh: 100,
@@ -40,8 +37,7 @@ export const BEAT = [
     kamera: { dari: { x: 0.55, y: 0.4, s: 1.35 }, ke: { x: 0.55, y: 0.45, s: 1.1 } },
     hp: 0.55, sibak: true, sambung: { jenis: "mundur" } },
   { no: 8, gambar: "08-screening", judul: "Test screening", vh: 120,
-    teks: "Sistem yang dipakai tiap hari tidak boleh rewel.",
-    nadaB: "Tetap bisa diandalkan saat paling dibutuhkan.",
+    teks: "Tetap bisa diandalkan saat paling dibutuhkan.",
     kamera: { dari: { x: 0.5, y: 0.6, s: 1.0 }, ke: { x: 0.55, y: 0.4, s: 1.45 } },
     hp: 0.55, tersendat: 0.5, sambung: { jenis: "zoom", ke: { x: 0.56, y: 0.36, s: 3.2 } } },
   { no: 9, gambar: "09-segel", judul: "Segel dan duplikasi", vh: 120,
@@ -53,9 +49,6 @@ export const BEAT = [
     kamera: { dari: { x: 0.5, y: 0.8, s: 1.3 }, ke: { x: 0.5, y: 0.42, s: 1.2 } },
     hp: 0.5, sambung: { jenis: "tirai", ke: { x: 0.5, y: 0.42, s: 4 } } },
 ];
-
-// nadaB: judul beat 1, 5, 6, 8 dengan nada pilihan B Farrez (11 Nov 2026), dibuka lewat ?nada=b
-// untuk dibandingkan dengan versi utama.
 
 // Porsi akhir tiap beat yang dipakai untuk sambungan (dan porsi awal beat berikutnya).
 export const SAMBUNG = 0.18;

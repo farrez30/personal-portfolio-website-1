@@ -17,14 +17,14 @@ muncul di sisi kiri (desktop) atau bawah (HP).
 
 | # | Beat | Durasi desktop | Pola bank | Benang merah | Teks bab (Anda), lihat naskah-teks.md | Status teks |
 |---|---|---|---|---|---|---|
-| 1 | Ide | 120vh | 89 coretan jadi benda | pensil merah | Ceritakan dulu masalahnya. | ada (bab demo) |
+| 1 | Ide | 120vh | 89 coretan jadi benda | pensil merah | Berawal dari keluhan sehari-hari. | ada (bab demo) |
 | 2 | Naskah | 100vh | 88 catatan jadi rencana | pita pembatas | Semua dimulai dari rencana yang Anda setujui. | draf, perlu bukti |
 | 3 | Storyboard | 140vh | 86 gambar kerja jadi barang | benang di dinding | Bentuknya dipilih sesuai masalahnya. | ada (bab aransemen) |
 | 4 | Set dan lighting | 120vh | 53 camera path (crane) | kabel merah | Rapi sampai ke bagian yang tidak kelihatan. | ada (bab infrastruktur) |
-| 5 | Syuting | 120vh | 55 objek persisten, 33 FLIP ke monitor | lampu tally | Lalu saya bangun, sedikit demi sedikit. | draf, perlu bukti |
-| 6 | Editing | 120vh | 18 timeline panggung sticky | playhead | Progresnya selalu bisa Anda cek. | ada (bab transparansi) |
+| 5 | Syuting | 120vh | 55 objek persisten, 33 FLIP ke monitor | lampu tally | Dibangun bertahap, bisa dicoba sejak awal. | draf, perlu bukti |
+| 6 | Editing | 120vh | 18 timeline panggung sticky | playhead | Progresnya jelas, kabarnya tidak putus. | ada (bab transparansi) |
 | 7 | Grading | 100vh | 01 sibak, 57 butir dan distorsi | cincin grading | Enak dipakai, bukan cuma bisa dipakai. | draf, perlu bukti |
-| 8 | Test screening | 120vh | 36 portal zoom-through | lampu merah | Sistem yang dipakai tiap hari tidak boleh rewel. | ada (bab keandalan) |
+| 8 | Test screening | 120vh | 36 portal zoom-through | lampu merah | Tetap bisa diandalkan saat paling dibutuhkan. | ada (bab keandalan) |
 | 9 | Segel dan duplikasi | 120vh | 56 instanced field | segel lilin | Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti. | ada (bab keamanan, skala) |
 | 10 | Rilis | 180vh | 40 traveling hero object, 36 portal | tirai rak | Dan akhirnya, dipakai tiap hari. Sepuluh di antaranya ada di rak ini. Ambil satu, lihat ceritanya. | ada (bab rak) |
 

@@ -76,7 +76,6 @@ const tirai = document.querySelector(".tirai");
 const noEl = document.querySelector(".bab .no"), judulEl = document.querySelector(".bab h2"), babEl = document.querySelector(".bab");
 const hud = document.getElementById("hud");
 if (new URLSearchParams(location.search).get("hud") === "0") hud.hidden = true;
-const nadaB = new URLSearchParams(location.search).get("nada") === "b";
 
 const rel = document.getElementById("rel");
 BEAT.forEach((b) => { const s = document.createElement("span"); s.style.flex = b.vh; rel.append(s); });
@@ -139,7 +138,7 @@ function gambar() {
   const tampil = halus((u - 0.06) / 0.1) * (1 - halus((u - (0.92 - SAMBUNG)) / 0.1));
   // Nama tahap film hanya untuk papan storyboard; halaman cukup nomor beat.
   noEl.textContent = String(b.no).padStart(2, "0");
-  judulEl.textContent = (nadaB && b.nadaB) || b.teks;
+  judulEl.textContent = b.teks;
   babEl.style.opacity = tampil;
   babEl.style.transform = `translateY(${(1 - tampil) * 16}px)`;
 

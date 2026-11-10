@@ -73,6 +73,24 @@ Alasan pilihan A:
 Catatan klaim: 9a adalah janji umum; buktinya (Jeda, AkarKita) menunjukkan akses dibatasi, bukan
 "data pelanggan" secara harfiah. 4 bergantung pada halaman arsitektur yang sudah tayang.
 
+## Teks final (keputusan Farrez 11 Nov 2026: "Pakai nada B")
+
+Judul yang dipakai di animatic, papan, dan nanti di build. Isi tiap beat mengikuti tabel putaran 4
+dan 5 (bagian isi pilihan A berlaku untuk judul B yang sepadan).
+
+| # | Judul |
+|---|---|
+| 1 | Berawal dari keluhan sehari-hari. |
+| 2 | Semua dimulai dari rencana yang Anda setujui. **[konfirmasi]** |
+| 3 | Bentuknya dipilih sesuai masalahnya. |
+| 4 | Rapi sampai ke bagian yang tidak kelihatan. |
+| 5 | Dibangun bertahap, bisa dicoba sejak awal. **[konfirmasi]** |
+| 6 | Progresnya jelas, kabarnya tidak putus. |
+| 7 | Enak dipakai, bukan cuma bisa dipakai. **[konfirmasi isi]** |
+| 8 | Tetap bisa diandalkan saat paling dibutuhkan. |
+| 9 | Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti. |
+| 10 | Dan akhirnya, dipakai tiap hari. |
+
 ## Putaran 6: Farrez memilih B, lalu nada B untuk semua beat
 
 Farrez (11 Nov 2026): "Pakai B semua", lalu minta dibandingkan dengan versi yang semua beatnya
