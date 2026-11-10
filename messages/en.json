@@ -147,7 +147,10 @@
       "perkecil": "Restore size",
       "memuat": "TUNING SIGNAL",
       "dijeda": "PAUSED",
-      "lanjutkan": "Resume playback"
+      "lanjutkan": "Resume playback",
+      "bisukan": "Mute",
+      "bunyikan": "Unmute",
+      "situsLangsung": "Live site"
     },
     "senter": "UV torch"
   },

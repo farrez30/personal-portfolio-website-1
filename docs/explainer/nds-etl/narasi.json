@@ -1,0 +1,74 @@
+{
+    "_catatan":  "Naskah explainer nds-etl, diturunkan dari content/buklet.js (disetujui Farrez 9 Nov 2026). Satu baris = satu babak = satu klip.",
+    "gaya":  {
+                 "id":  "Bacakan sebagai narator film dokumenter yang tenang, hangat, dan yakin, seperti video explainer sejarah. Tempo sedang, beri jeda panjang di antara paragraf.",
+                 "en":  "Read as a calm, warm, confident documentary narrator, like a history explainer video. Medium pace, with a long pause between paragraphs."
+             },
+    "baris":  [
+                  {
+                      "kode":  "1-konteks",
+                      "judul":  {
+                                    "id":  "DISTRIBUTOR DI GENGGAMAN",
+                                    "en":  "DISTRIBUTORS IN HAND"
+                                },
+                      "teks":  {
+                                   "id":  "Banyak distributor jaringan ini ibu-ibu yang membuka semuanya dari HP. Mereka perlu jawaban, bukan tabel.",
+                                   "en":  "Many of these distributors are older women who run everything from their phones. They need answers, not tables."
+                               },
+                      "label":  "Context"
+                  },
+                  {
+                      "kode":  "2-tantangan",
+                      "judul":  {
+                                    "id":  "DATA TANPA ARAH",
+                                    "en":  "DATA WITHOUT DIRECTION"
+                                },
+                      "teks":  {
+                                   "id":  "Portal hanya memberi chart dan tabel. Padahal pertanyaan mingguannya selalu sama: bonus cair berapa, beli berapa botol, posisi baru di mana, kapan repeat order.",
+                                   "en":  "The portal only gives charts and tables. But the weekly questions never change: what bonus, how many bottles, where to place, when to reorder."
+                               },
+                      "label":  "Challenge"
+                  },
+                  {
+                      "kode":  "3-rencana",
+                      "judul":  {
+                                    "id":  "RENCANA DI DEPAN",
+                                    "en":  "THE PLAN, UP FRONT"
+                                },
+                      "teks":  {
+                                   "id":  "Jadi rencananya ditaruh di depan. Empat aturan dari comp-plan dihitung otomatis, lalu diurutkan dari yang paling mendesak.",
+                                   "en":  "So the plan comes first. Four comp-plan rules are computed automatically and sorted by urgency."
+                               },
+                      "label":  "Solution"
+                  },
+                  {
+                      "kode":  "4-uji",
+                      "judul":  {
+                                    "id":  "UJI DULU JARINGANNYA",
+                                    "en":  "TEST THE NETWORK FIRST"
+                                },
+                      "teks":  {
+                                   "id":  "Penempatan dan repeat order bisa dicoba dulu di pohon jaringan sendiri, di layar yang besar dan mudah dibaca.",
+                                   "en":  "Placements and repeat orders can be tried on your own network tree first, on a big, readable screen."
+                               },
+                      "label":  "Solution"
+                  },
+                  {
+                      "kode":  "5-hasil",
+                      "judul":  {
+                                    "id":  "MASIH UJI COBA",
+                                    "en":  "STILL IN TRIAL"
+                                },
+                      "teks":  {
+                                   "id":  "Sekarang masih uji coba, dipakai beberapa distributor dengan masa coba tujuh hari.",
+                                   "en":  "It is still in trial, with a few distributors on a seven-day trial."
+                               },
+                      "label":  "Outcome"
+                  }
+              ],
+    "warna":  {
+                  "kertas":  "#efe4d0",
+                  "tinta":  "#141210",
+                  "aksen":  "#b3221c"
+              }
+}

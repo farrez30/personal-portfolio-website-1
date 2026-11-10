@@ -1,0 +1,80 @@
+{
+ "_catatan": "Naskah explainer yiheecam, diturunkan dari content/buklet.js (disetujui Farrez 9 Nov 2026).",
+ "gaya": {
+  "id": "Bacakan sebagai narator film dokumenter yang tenang, hangat, dan yakin, seperti video explainer sejarah. Tempo sedang, beri jeda panjang di antara paragraf.",
+  "en": "Read as a calm, warm, confident documentary narrator, like a history explainer video. Medium pace, with a long pause between paragraphs."
+ },
+ "warna": {
+  "kertas": "#fdf0ee",
+  "tinta": "#3a2a6a",
+  "aksen": "#ff6fa5"
+ },
+ "tampilan": {
+  "miring": -6,
+  "sapuan": "diagonal",
+  "sudut": 14
+ },
+ "baris": [
+  {
+   "kode": "1-konteks",
+   "label": "Context",
+   "judul": {
+    "id": "KAMERA YANG DITINGGAL",
+    "en": "THE CAMERA LEFT BEHIND"
+   },
+   "teks": {
+    "id": "Kameranya masih bagus, tapi aplikasi resminya sudah tidak bisa dipasang di Android 15.",
+    "en": "The camera still works fine, but its official app no longer installs on Android 15."
+   }
+  },
+  {
+   "kode": "2-tantangan",
+   "label": "Challenge",
+   "judul": {
+    "id": "SEKILAS DI BAWAH MATAHARI",
+    "en": "A GLANCE IN THE SUN"
+   },
+   "teks": {
+    "id": "HP dilirik sekilas di bawah matahari, kadang dengan sarung tangan. Tidak ada waktu untuk menu yang dalam.",
+    "en": "The phone gets a glance in bright sun, sometimes with gloves on. No time for deep menus."
+   }
+  },
+  {
+   "kode": "3-papan",
+   "label": "Solution",
+   "judul": {
+    "id": "PAPAN YANG TERBACA SEKILAS",
+    "en": "A BOARD YOU READ AT A GLANCE"
+   },
+   "teks": {
+    "id": "Sisa rekam, baterai, suhu HP, dan sinyal tampil besar seperti papan split-flap.",
+    "en": "Recording time left, battery, phone temperature and signal show large, like a split-flap board."
+   }
+  },
+  {
+   "kode": "4-stang",
+   "label": "Solution",
+   "judul": {
+    "id": "TANGAN TETAP DI STANG",
+    "en": "HANDS STAY ON THE BARS"
+   },
+   "teks": {
+    "id": "Tombol intercom helm menandai momen penting tanpa melepas tangan dari stang.",
+    "en": "The helmet intercom button marks moments without taking a hand off the bars."
+   }
+  },
+  {
+   "kode": "5-hasil",
+   "label": "Outcome",
+   "judul": {
+    "id": "JAKARTA KE PANGANDARAN",
+    "en": "JAKARTA TO PANGANDARAN"
+   },
+   "teks": {
+    "id": "Dipakai di perjalanan Jakarta ke Pangandaran, 17 sampai 20 Oktober 2026.",
+    "en": "Used on a ride from Jakarta to Pangandaran, 17 to 20 October 2026."
+   },
+   "klip": "sama:2-tantangan"
+  }
+ ]
+}

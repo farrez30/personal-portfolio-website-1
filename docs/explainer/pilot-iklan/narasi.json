@@ -1,0 +1,80 @@
+{
+ "_catatan": "Naskah explainer pilot-iklan, diturunkan dari content/buklet.js (disetujui Farrez 9 Nov 2026).",
+ "gaya": {
+  "id": "Bacakan sebagai narator film dokumenter yang tenang, hangat, dan yakin, seperti video explainer sejarah. Tempo sedang, beri jeda panjang di antara paragraf.",
+  "en": "Read as a calm, warm, confident documentary narrator, like a history explainer video. Medium pace, with a long pause between paragraphs."
+ },
+ "warna": {
+  "kertas": "#fffdf2",
+  "tinta": "#1a1a1a",
+  "aksen": "#e3262e"
+ },
+ "tampilan": {
+  "miring": -2,
+  "sapuan": "komik",
+  "bingkai": true
+ },
+ "baris": [
+  {
+   "kode": "1-konteks",
+   "label": "Context",
+   "judul": {
+    "id": "TOKO RUMAHAN!",
+    "en": "A HOME SHOP!"
+   },
+   "teks": {
+    "id": "Sebuah usaha keluarga menjual produk suplemen dan ingin mencoba iklan Meta untuk pertama kali.",
+    "en": "A family business selling a supplement wanted to try Meta ads for the first time."
+   },
+   "klip": "lama:pilot-iklan"
+  },
+  {
+   "kode": "2-tantangan",
+   "label": "Challenge",
+   "judul": {
+    "id": "SATU KALIMAT. LANGSUNG KENA!",
+    "en": "ONE SENTENCE. BUSTED!"
+   },
+   "teks": {
+    "id": "Iklan produk kesehatan diatur berlapis. Satu klaim yang salah bisa membuat akun iklan atau izin produk bermasalah.",
+    "en": "Health product ads face layered rules. One wrong claim can put the ad account or the product licence at risk."
+   }
+  },
+  {
+   "kode": "3-gerbang",
+   "label": "Solution",
+   "judul": {
+    "id": "GERBANG 41 ATURAN!",
+    "en": "A 41-RULE GATE!"
+   },
+   "teks": {
+    "id": "41 aturan dicek otomatis ke setiap draf iklan. Satu pelanggaran berat membuat drafnya ditolak.",
+    "en": "41 rules are checked against every ad draft automatically. One serious breach rejects the draft."
+   }
+  },
+  {
+   "kode": "4-klik",
+   "label": "Solution",
+   "judul": {
+    "id": "KLIK! LANGSUNG WHATSAPP",
+    "en": "CLICK! STRAIGHT TO WHATSAPP"
+   },
+   "teks": {
+    "id": "Pengunjung dari iklan langsung ke WhatsApp penjual. Setiap klik dicatat tanpa nomor, IP, atau ID peramban.",
+    "en": "Visitors from an ad go straight to the seller's WhatsApp. Each click is logged without phone number, IP or browser ID."
+   }
+  },
+  {
+   "kode": "5-hasil",
+   "label": "Outcome",
+   "judul": {
+    "id": "IKLAN UJI MENGUDARA!",
+    "en": "TEST ADS ON AIR!"
+   },
+   "teks": {
+    "id": "Empat iklan uji aktif sejak 3 November 2026. Hasil penjualan belum cukup untuk dilaporkan.",
+    "en": "Four test ads have run since 3 November 2026. Sales results aren't in yet."
+   }
+  }
+ ]
+}

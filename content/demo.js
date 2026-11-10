@@ -15,3 +15,13 @@ export const DEMO = {
 };
 
 export const demoUntuk = (slug) => DEMO[slug] ?? null;
+
+// Explainer bernarasi 30 sampai 50 detik per proyek, satu berkas per bahasa situs. Diputar
+// bersuara saat Play ditekan; mentah dan naskahnya di PROVENANCE.md.
+export const EXPLAINER = [
+  "erp-software-house", "viralytics", "coderoach-os", "fifofun", "nds-etl",
+  "akarkita", "pilot-iklan", "jeda", "yiheecam", "d-day",
+];
+
+export const explainerUntuk = (slug, lang) =>
+  EXPLAINER.includes(slug) ? `/assets/demo/explainer/${slug}-${lang === "id" ? "id" : "en"}.mp4` : null;

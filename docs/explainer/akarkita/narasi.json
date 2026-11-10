@@ -1,0 +1,80 @@
+{
+ "_catatan": "Naskah explainer akarkita, diturunkan dari content/buklet.js (disetujui Farrez 9 Nov 2026).",
+ "gaya": {
+  "id": "Bacakan sebagai narator film dokumenter yang tenang, hangat, dan yakin, seperti video explainer sejarah. Tempo sedang, beri jeda panjang di antara paragraf.",
+  "en": "Read as a calm, warm, confident documentary narrator, like a history explainer video. Medium pace, with a long pause between paragraphs."
+ },
+ "warna": {
+  "kertas": "#efe3c8",
+  "tinta": "#22305a",
+  "aksen": "#c58b2a"
+ },
+ "tampilan": {
+  "miring": 0,
+  "sapuan": "pudar",
+  "sudut": 4
+ },
+ "baris": [
+  {
+   "kode": "1-konteks",
+   "label": "Context",
+   "judul": {
+    "id": "CERITA DARI TERAS",
+    "en": "STORIES FROM THE PORCH"
+   },
+   "teks": {
+    "id": "Silsilah keluarga biasanya hidup di ingatan para tetua. Begitu mereka pergi, banyak sebutan dan cerita ikut hilang.",
+    "en": "Family trees usually live in the elders' memory. When they're gone, names and stories go with them."
+   }
+  },
+  {
+   "kode": "2-tantangan",
+   "label": "Challenge",
+   "judul": {
+    "id": "HARUS PANGGIL APA?",
+    "en": "WHAT DO I CALL THEM?"
+   },
+   "teks": {
+    "id": "Di acara keluarga, yang muda sering bingung harus memanggil siapa dengan sebutan apa. Apalagi kalau keluarganya Sunda dan Minang sekaligus.",
+    "en": "At family gatherings, the young often don't know what to call whom, especially in a family that's both Sundanese and Minang."
+   }
+  },
+  {
+   "kode": "3-pohon",
+   "label": "Solution",
+   "judul": {
+    "id": "POHON YANG BISA DIJELAJAHI",
+    "en": "A TREE TO WANDER"
+   },
+   "teks": {
+    "id": "Geser dan perbesar pohon di HP. Pilih satu orang, semua sebutan langsung dihitung dari sudut orang itu.",
+    "en": "Pan and zoom the tree on a phone. Pick a person and every kinship term is worked out from their point of view."
+   }
+  },
+  {
+   "kode": "4-adat",
+   "label": "Solution",
+   "judul": {
+    "id": "ADAT YANG TERCATAT",
+    "en": "CUSTOM, WRITTEN DOWN"
+   },
+   "teks": {
+    "id": "Sebutan Pancakaki Sunda dan garis suku Minang disimpan sebagai aturan. Masuk hanya lewat undangan, dan penjaga keluarga yang memutuskan perubahan.",
+    "en": "Sundanese Pancakaki terms and Minang clan lines are stored as rules. Entry is by invitation only, and the family keepers decide on changes."
+   }
+  },
+  {
+   "kode": "5-hasil",
+   "label": "Outcome",
+   "judul": {
+    "id": "SATU POHON, SATU KELUARGA",
+    "en": "ONE TREE, ONE FAMILY"
+   },
+   "teks": {
+    "id": "Sudah dipakai sungguhan oleh satu keluarga.",
+    "en": "Already used by one real family."
+   },
+   "klip": "sama:3-pohon"
+  }
+ ]
+}
