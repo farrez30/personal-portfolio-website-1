@@ -22,7 +22,7 @@ Sapaan "Anda" (keputusan Farrez 4 Nov 2026). Pola kalimat dari riset `riset-teks
 teknis (requirement, server, database, testnet) dibuang, karena pembaca utamanya bukan developer.
 Baris **[konfirmasi]** memuat klaim yang hanya Farrez tahu benar tidaknya, dan belum dipasang.
 
-## Judul dan isi per beat
+## Judul dan isi per beat (putaran 4; beat 2, 3, 4, 7, 9, 10 diganti putaran 5 di bawah)
 
 | # | Yang dipikirkan pemilik usaha | Judul | Isi (bukti) |
 |---|---|---|---|
@@ -41,6 +41,37 @@ Baris **[konfirmasi]** memuat klaim yang hanya Farrez tahu benar tidaknya, dan b
 Kolom "yang dipikirkan" adalah dugaan dari pola kecemasan klien di riset (proyek molor, revisi
 bolak-balik, vendor menghilang, error saat dipakai, data bocor); belum diuji ke pemilik usaha.
 Kolom itu tidak tampil di halaman.
+
+## Putaran 5: pilihan untuk beat yang ditandai Farrez
+
+Masukan Farrez atas putaran 4: beat 2 terdengar seperti belum tahu apa-apa, beat 3 memukul rata,
+beat 4 terlalu eksplisit ("kenapa harus mengintip dapur kita"), beat 7 dan 9 ambigu, beat 10 kurang.
+Beat 1, 5, 6, 8 tidak ditandai dan dibiarkan. Pilihan A dipasang di animatic dan papan.
+
+| # | Pilihan A (dipasang) | Pilihan B | Pilihan C | Isi untuk A |
+|---|---|---|---|---|
+| 2 | Sebelum ada kode, kita sepakat dulu. | Semua dimulai dari rencana yang Anda setujui. | Biar hasilnya sesuai bayangan Anda. | Keluhan tadi saya rangkum jadi daftar yang jelas: apa yang harus bisa dilakukan sistemnya dan siapa yang memakainya. Anda baca dan setujui dulu. **[konfirmasi]** |
+| 3 | Tidak semua masalah butuh aplikasi baru. | Bentuknya dipilih sesuai masalahnya. | Kadang cukup dashboard, kadang perlu aplikasi. | Kadang cukup dashboard di HP, kadang sistem kantor di laptop, kadang alur dari iklan sampai chat WhatsApp. Ada juga yang memang butuh aplikasi sendiri, seperti YiheeCam untuk kamera aksi. |
+| 4 | Fondasinya dibuat kokoh sejak awal. | Rapi sampai ke bagian yang tidak kelihatan. | Yang tidak terlihat pun tertata. | Sembilan dari sepuluh proyek di rak punya halaman arsitektur, kalau Anda atau tim IT ingin tahu cara kerjanya. |
+| 7 | Dirapikan sampai tim Anda betah memakainya. | Enak dipakai, bukan cuma bisa dipakai. | Dipoles sampai tidak perlu diajari dua kali. | **[konfirmasi]** satu contoh perbaikan setelah masukan pengguna. |
+| 9a | Data pelanggan hanya bisa dibuka orang yang Anda izinkan. | Data penting tetap di tangan yang berhak. | | Di Jeda, psikolog cuma bisa membaca catatan yang memang dibagikan kliennya. Pohon keluarga di AkarKita hanya bisa dibuka lewat undangan. |
+| 9b | Saat usaha membesar, sistemnya tidak perlu diganti. | Usaha tumbuh, sistemnya sanggup mengikuti. | | ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus, dari distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan. |
+| 10 | Sekarang sudah dipakai tiap hari. | Dan akhirnya, dipakai tiap hari. | Selesai dibuat itu baru setengah jalan. Sisanya: dipakai tiap hari. | Sepuluh di antaranya ada di rak ini. Ambil satu, lihat ceritanya. |
+
+Alasan pilihan A:
+- 2: "sepakat dulu" diucapkan orang saat rapat dengan vendor, dan langsung menjawab takut hasilnya
+  beda. Tidak mengesankan belum tahu apa-apa, karena yang ditonjolkan kesepakatannya.
+- 3: tidak memukul rata. Terdengar jujur, seperti saran orang yang tidak sedang menjual aplikasi,
+  dan isinya tetap menyebut bahwa ada yang memang butuh aplikasi.
+- 4: fondasi rumah dan ruko dipahami semua pemilik usaha. Halaman arsitektur cukup ditawarkan, bukan
+  disuruh diintip.
+- 7: "betah" kata sehari-hari untuk sesuatu yang enak dipakai lama, dan menunjuk siapa yang
+  diuntungkan (tim Anda).
+- 9: dua kalimat dipisah dan masing-masing menyebut benda yang jelas (data pelanggan, usaha membesar).
+- 10: menutup dengan ajakan ke rak, yang memang bisa diklik di halaman.
+
+Catatan klaim: 9a adalah janji umum; buktinya (Jeda, AkarKita) menunjukkan akses dibatasi, bukan
+"data pelanggan" secara harfiah. 4 bergantung pada halaman arsitektur yang sudah tayang.
 
 ## Perbaikan dari masukan Farrez (putaran 3 ke 4)
 
