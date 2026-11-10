@@ -54,6 +54,19 @@ test("tiap bab mencapai momen utamanya di tengah babak", () => {
   assert.ok(puncak("infrastruktur", "urai") > 0.99);
 });
 
+test("kotak dan meja perangkat bertukar hanya di balik tirai yang tertutup penuh", () => {
+  // Regresi 10 Nov 2026: alas laptop sempat terlihat menembus cakram saat kamera menyelam.
+  const c = BABAK.findIndex((b) => b.id === "aransemen");
+  let sebelum = keadaanPada(c);
+  for (let i = 1; i <= 2000; i++) {
+    const s = keadaanPada(c + i / 2000);
+    assert.ok(s.meja === 0 || s.meja === 1, `meja harus 0 atau 1, dapat ${s.meja}`);
+    if (s.meja !== sebelum.meja) assert.ok(Math.max(s.iris, sebelum.iris) > 0.98, `tukar di u=${i / 2000} saat iris ${s.iris}`);
+    if (s.meja === 0) assert.equal(s.perangkat, 0, `perangkat tampil tanpa meja di u=${i / 2000}`);
+    sebelum = s;
+  }
+});
+
 test("maju dan mundur memberi keadaan yang sama (tanpa ingatan)", () => {
   const maju = [];
   for (let i = 0; i <= 90; i++) maju.push(keadaanPada(i / 10));

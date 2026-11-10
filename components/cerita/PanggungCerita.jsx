@@ -82,6 +82,10 @@ export default function PanggungCerita({ akar }) {
       const titik = dunia.gambar(s, kini, s.uv > 0.01 ? penunjuk : null);
       el.style.setProperty("--iris", s.iris.toFixed(3));
       el.style.setProperty("--sisi", s.sisi.toFixed(3));
+      if (titik.pusat) {
+        el.style.setProperty("--ix", `${titik.pusat.x.toFixed(1)}px`);
+        el.style.setProperty("--iy", `${titik.pusat.y.toFixed(1)}px`);
+      }
       el.style.setProperty("--sinyal", s.sinyal.toFixed(3));
       el.style.setProperty("--ruang", s.ruang.toFixed(3));
       el.style.setProperty("--uv", s.uv.toFixed(3));
