@@ -6,6 +6,14 @@ Draf 10 Nov 2026, bahan keputusan Farrez sebelum ada kode. Belum ada yang diimpl
 kontak dengan wizard kebutuhan, sapaan jam lokal, dan pita anggaran. Alasan dalam kata
 Farrez untuk ADR: `[menunggu satu kalimat]`. Slot klaim di bagian 3 masih terbuka.
 
+**Dibangun 10 Nov 2026** (ADR 0011). Bedanya dengan usulan:
+- Kalimat ber-`[slot]` tidak ikut tayang. Bab 6 memakai daftar klien ERP yang sudah ada di
+  ringkasan proyek; bab 7 memakai "sembilan dari sepuluh proyek punya halaman arsitektur",
+  dihitung ulang oleh tes.
+- Atas permintaan Farrez, bab 2 memakai laptop, HP, dan kamera aksi CSS 3D yang memutar
+  rekaman layar Coderoach OS.
+- Bab 8 berakhir di papan rak dan tombol ke rak, tanpa animasi FLIP ke kanvas three.js.
+
 Label bukti: **[V]** dicek langsung (DOM, CSS, jaringan, berkas repo), **[B]** dari baca
 kode/dokumen, **[D]** dugaan. Teks bertanda `[slot]` menunggu bukti dari Farrez atau
 `karier-frz/claims-audit.md`, sama seperti aturan di `docs/naskah-adegan.md`.
