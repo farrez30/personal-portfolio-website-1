@@ -1,9 +1,9 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { teknologiDari } from "@/components/arsitektur/teknologi";
-import { demoUntuk } from "@/content/demo";
+import { demoUntuk, explainerUntuk } from "@/content/demo";
 import { useLocale, useTranslations } from "next-intl";
-import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpleBold, PiArrowsInSimpleBold, PiPauseFill, PiPlayFill } from "react-icons/pi";
+import { PiDesktopBold, PiDeviceMobileBold, PiArrowUpRightBold, PiArrowsOutSimpleBold, PiArrowsInSimpleBold, PiPauseFill, PiPlayFill, PiSpeakerHighBold, PiSpeakerSlashBold, PiGlobeBold } from "react-icons/pi";
 
 // Layar hologram yang naik dari sumur pemutar. Play menyalakan proyeksi, Pause
 // membekukannya, Keluarkan mematikannya. Layarnya melayang: sedikit miring
@@ -35,19 +35,43 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
   const [perangkat, setPerangkat] = useState("desktop");
   const [besar, setBesar] = useState(false);
   const bolehTanam = typeof window !== "undefined" && window.location.hostname === "farrez.vercel.app";
-  const langsung = bolehTanam && p.tanam && p.tautan.situs;
+  // Explainer bernarasi sesuai bahasa situs tampil lebih dulu; proyek yang situsnya bisa
+  // dibingkai punya tombol untuk pindah ke situs langsung.
+  const explainer = explainerUntuk(p.slug, locale);
+  const bisaLangsung = bolehTanam && p.tanam && p.tautan.situs;
+  const [pakaiSitus, setPakaiSitus] = useState(false);
+  const langsung = bisaLangsung && (!explainer || pakaiSitus);
   // Tanpa situs atau tangkapan layar, layar memutar ilustrasi orang yang memakainya.
   const gambar = p.layar?.[perangkat] ?? p.ilustrasi ?? null;
   // Klip demo dipakai bila situsnya tidak bisa dibingkai di sini; gambar jadi posternya.
-  const demo = langsung ? null : (demoUntuk(p.slug)?.[perangkat] ?? null);
+  const demo = langsung ? null : (explainer ?? demoUntuk(p.slug)?.[perangkat] ?? null);
+  const narasi = !langsung && !!explainer;
   const video = useRef(null);
-  // Klip ikut Play dan Pause pemutar; gerak dikurangi berarti klip tidak diputar sendiri.
+  const [bisu, setBisu] = useState(false);
+  // Klip ikut Play dan Pause pemutar. Klip demo bisu dan tidak diputar sendiri bila gerak
+  // dikurangi; explainer bersuara diputar karena pengunjung sendiri yang menekan Play.
   useEffect(() => {
     const v = video.current;
     if (!v) return;
-    if (jalan && !keluar && !matchMedia("(prefers-reduced-motion: reduce)").matches) v.play().catch(() => {});
-    else v.pause();
-  }, [jalan, keluar, demo]);
+    v.muted = !narasi || bisu;
+    if (jalan && !keluar && (narasi || !matchMedia("(prefers-reduced-motion: reduce)").matches)) {
+      // Peramban menolak suara tanpa gestur: putar bisu dan biarkan pengunjung menyalakannya.
+      v.play().catch(() => {
+        if (!narasi || v.muted) return;
+        v.muted = true;
+        setBisu(true);
+        v.play().catch(() => {});
+      });
+    } else v.pause();
+  }, [jalan, keluar, demo, narasi, bisu]);
+  // Selama explainer bersuara, lagu Spotify dijeda dan lanjut lagi sesudahnya.
+  const [main, setMain] = useState(false);
+  const bersuara = narasi && main && !bisu;
+  useEffect(() => {
+    if (!bersuara) return;
+    window.dispatchEvent(new CustomEvent("musik:redam", { detail: { redam: true } }));
+    return () => window.dispatchEvent(new CustomEvent("musik:redam", { detail: { redam: false } }));
+  }, [bersuara]);
   // Layar memuat ala terminal retro sampai isi yang sedang tampil selesai dimuat.
   // Yang dicatat adalah isi mana yang sudah siap, bukan saklar ya/tidak: kalau HP dan
   // Desktop memakai gambar yang sama, elemennya tidak dimuat ulang dan layar tetap siap.
@@ -165,11 +189,15 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
                 ref={video}
                 src={demo}
                 poster={gambar ?? undefined}
+                className={narasi ? "holo__explainer" : undefined}
                 muted
-                loop
+                loop={!narasi}
                 playsInline
                 preload="metadata"
                 aria-label={p.judul[locale]}
+                onPlay={() => setMain(true)}
+                onPause={() => setMain(false)}
+                onEnded={() => setMain(false)}
                 onLoadedData={() => selesai(isi)}
                 onError={() => selesai(isi, 0)}
               />
@@ -217,6 +245,16 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
             <button type="button" aria-pressed={perangkat === "hp"} onClick={() => setPerangkat("hp")}>
               <PiDeviceMobileBold aria-hidden="true" /> {t("hp")}
             </button>
+            {narasi && (
+              <button type="button" aria-pressed={bisu} onClick={() => setBisu(!bisu)}>
+                {bisu ? <PiSpeakerSlashBold aria-hidden="true" /> : <PiSpeakerHighBold aria-hidden="true" />} {t(bisu ? "bunyikan" : "bisukan")}
+              </button>
+            )}
+            {bisaLangsung && explainer && (
+              <button type="button" aria-pressed={pakaiSitus} onClick={() => setPakaiSitus(!pakaiSitus)}>
+                <PiGlobeBold aria-hidden="true" /> {t("situsLangsung")}
+              </button>
+            )}
             {tautanKeluar && (
               <a href={tautanKeluar} target="_blank" rel="noopener noreferrer">
                 {t(p.tautan.situs ? "bukaTab" : "caseStudy")} <PiArrowUpRightBold aria-hidden="true" />

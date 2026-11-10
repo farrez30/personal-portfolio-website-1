@@ -1,0 +1,22 @@
+[
+ {
+  "kode": "1-konteks",
+  "sumber": "lama:pilot-iklan"
+ },
+ {
+  "kode": "2-tantangan",
+  "prompt": "Animated 1960s pop art comic, Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy. A comic panel: a big red stop sign slams down in front of an empty advert poster, action lines burst, an anonymous shop owner gasps with hands on cheeks. Speech bubbles stay completely empty. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness."
+ },
+ {
+  "kode": "3-gerbang",
+  "prompt": "Animated 1960s pop art comic, Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy. A comic machine with a long conveyor of blank advert cards passes through a big checkpoint gate with flashing lights; most cards get a green check stamp, one gets a red cross and drops into a bin. Action lines, punchy motion. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness."
+ },
+ {
+  "kode": "4-klik",
+  "prompt": "Animated 1960s pop art comic, Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy. A finger taps a phone in a comic panel, a POW burst, then a plain green chat bubble flies across to the shop owner's phone; a small notebook ticks one line with a blank masked face icon. Speech bubbles stay completely empty, no logos. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness."
+ },
+ {
+  "kode": "5-hasil",
+  "prompt": "Animated 1960s pop art comic, Ben-Day halftone dots, thick black outlines, flat primary red, yellow and blue with white, comic panel energy. Four blank comic advert panels light up one after another like a marquee over a cheerful little shop front, the shop owner waves. Punchy comic animation. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness."
+ }
+]

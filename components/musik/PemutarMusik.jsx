@@ -214,6 +214,24 @@ export default function PemutarMusik() {
     return () => window.removeEventListener("musik", dengar);
   }, [putar, jeda]);
 
+  // Explainer proyek di hologram bersuara: lagu yang sedang jalan dijeda, lalu diputar
+  // lagi begitu explainer berhenti, dibisukan, atau CD-nya dikeluarkan.
+  const diredam = useRef(false);
+  useEffect(() => {
+    const dengar = (e) => {
+      if (e.detail?.redam) {
+        if (!mauPutar.current) return;
+        diredam.current = true;
+        jeda();
+      } else if (diredam.current) {
+        diredam.current = false;
+        putar();
+      }
+    };
+    window.addEventListener("musik:redam", dengar);
+    return () => window.removeEventListener("musik:redam", dengar);
+  }, [putar, jeda]);
+
   useEffect(() => {
     const dengar = (e) => setDilipat(e.detail?.keadaan === "buklet");
     window.addEventListener("panggung", dengar);

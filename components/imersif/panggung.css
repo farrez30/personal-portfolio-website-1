@@ -521,6 +521,11 @@
   background: #000;
 }
 
+/* Explainer membawa teks di gambarnya, jadi tampil utuh (berpita hitam di mode HP). */
+.holo__layar video.holo__explainer {
+  object-fit: contain;
+}
+
 /* Garis pindai dan vinyet tabung. */
 .holo__layar::after {
   content: "";
