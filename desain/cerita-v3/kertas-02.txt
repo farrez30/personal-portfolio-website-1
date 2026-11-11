@@ -1,0 +1,9 @@
+KEBUTUHAN SISTEM
+
+1. Pesanan dari WA masuk ke satu daftar.
+2. Stok gudang bisa dicek dari HP.
+3. Invoice keluar sendiri tiap akhir bulan.
+
+Dipakai oleh: admin, gudang, pemilik.
+
+Disetujui: ..................
