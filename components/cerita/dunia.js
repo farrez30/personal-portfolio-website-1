@@ -16,7 +16,8 @@ const CELAH = { x: [0.41, 0.59], y: [0.19, 0.63] };
 // atas, kanan atas, kanan bawah, kiri bawah; `tutup` kotak benda di depan layar (ponsel di gimbal,
 // kamera kecil) dan `potong` garis tepi kepala editor: piksel di kanan garis tetap styleframe.
 // `jenis` menentukan cara tempelnya: layar menyala (bawaan), sorot proyektor, atau kertas, yang
-// tintanya dikalikan ke warna kertas di bawahnya (daftar kebutuhan bab 2, sketsa layar bab 3).
+// tintanya dikalikan ke warna kertas di bawahnya (daftar kebutuhan bab 2, sketsa layar bab 3), atau
+// bersih: layar menutup penuh tanpa pantulan isi lama.
 // Satu panel memakai satu jenis. Asal tangkapan di public/assets/cerita/PROVENANCE.md.
 const UKURAN = [1376, 768];
 const LAYAR = {
@@ -50,8 +51,19 @@ const LAYAR = {
     },
   ],
   "06-editing": [
-    { src: "layar-06a", sudut: [[361, 316], [605, 323], [605, 480], [363, 512]] },
-    { src: "layar-06b", sudut: [[617, 324], [826, 326], [828, 465], [620, 477]], potong: [[821, 313], [790, 470]] },
+    // Kedua layar bertema terang, jadi tangkapannya sudah diredupkan (PROVENANCE) supaya senada
+    // dengan monitor gelap di styleframe. Sudut ditarik masuk 2 px dari bingkai.
+    { src: "layar-06a", jenis: "bersih", sudut: [[363, 318], [603, 325], [603, 478], [365, 510]] },
+    // Garis potong dijauhkan dari kepala editor: paralaks mendorong kepala ke depan, dan segitiga
+    // yang melar di tepinya dulu ikut membawa piksel layar keluar bingkai.
+    { src: "layar-06b", jenis: "bersih", sudut: [[619, 326], [826, 329], [828, 463], [622, 475]], potong: [[810, 313], [778, 470]] },
+  ],
+  // Monitor grading bab 7 menampilkan layar yang sama dalam dua versi: rancangan rapi (kiri garis,
+  // berwarna) dan versi buruk ala AI slop (kanan garis, setengah pudar). Garis sibak menggeser
+  // keduanya; sumber HTML-nya di desain/cerita-v3/layar-07/. Mode Ringan memakai versi terbelah.
+  "07-grading": [
+    { src: "layar-07a", jenis: "bersih", belah: true, ringan: "layar-07-belah", sudut: [[588, 214], [1112, 206], [1108, 500], [588, 486]] },
+    { src: "layar-07b", jenis: "bersih", sudut: [[588, 214], [1112, 206], [1108, 500], [588, 486]] },
   ],
   "08-screening": [{ src: "layar-08", jenis: "proyektor", sudut: [[558, 265], [843, 265], [843, 430], [558, 430]] }],
 };
@@ -80,8 +92,9 @@ function homografi(sudut) {
   return new THREE.Matrix3().set(h[0], h[1], h[2], h[3], h[4], h[5], h[6], h[7], 1);
 }
 
-// Panel: styleframe apa adanya (tanpa tone mapping), diredupkan oleh jarak dan lampu set,
-// dan untuk beat grading dibelah: kiri hangat, kanan abu-abu mentah, dipisah garis merah.
+// Panel: styleframe apa adanya (tanpa tone mapping), diredupkan oleh jarak dan lampu set.
+// Di beat grading hanya layar monitornya yang dibelah garis merah: kiri layar rapi, kanan layar
+// buruk yang setengah pudar.
 // Tepinya memudar ke gelap studio supaya panel terbaca sebagai bagian ruangan, bukan foto
 // berbingkai, dan panel yang jauh dari kamera diburamkan lewat mipmap (kedalaman ruang murah).
 // Paralaks 2.5D: jaring panel didorong maju menurut peta kedalaman styleframe (Depth Anything V2
@@ -143,6 +156,9 @@ const fragPanel = /* glsl */ `
   // tetapi serat dan bayangan kertasnya tetap.
   vec3 tempel(vec3 c, sampler2D layarPeta, vec2 suv, float m) {
     vec3 l = texture2D(layarPeta, suv, kabur + 0.6).rgb;
+    // Bersih: layar menutup penuh tanpa pantulan gambar asli, supaya isi lama styleframe (timeline,
+    // foto laptop) tidak membayang di balik layar baru.
+    if (jenis > 2.5) return mix(c, l * vec3(0.86, 0.83, 0.8), m);
     if (jenis > 1.5) {
       vec3 kertas = texture2D(peta, vUv, 4.0).rgb;
       return mix(c, kertas * l, m);
@@ -158,20 +174,27 @@ const fragPanel = /* glsl */ `
     vec3 c = w.rgb;
     vec2 px = vec2(vUv.x, 1.0 - vUv.y) * ukuran;
     vec2 suv;
-    if (jumlahLayar > 0) {
+    if (garis >= 0.0 && jumlahLayar > 1) {
+      // Satu layar, dua versi: garis di koordinat layar (0 kiri, 1 kanan).
       float m = dalamLayar(h0, px, tutup0[0], tutup0[1], potong0, suv);
-      if (m > 0.0) c = tempel(c, layar0, suv, m);
-    }
-    if (jumlahLayar > 1) {
-      float m = dalamLayar(h1, px, tutup1[0], tutup1[1], potong1, suv);
-      if (m > 0.0) c = tempel(c, layar1, suv, m);
-    }
-    if (garis >= 0.0) {
-      float abu = dot(c, vec3(0.299, 0.587, 0.114));
-      vec3 mentah = mix(vec3(abu), c, 0.12) * 0.82 + 0.06;
-      c = vUv.x < garis ? c : mentah;
-      float tepi = 1.0 - smoothstep(0.0012, 0.0026, abs(vUv.x - garis));
-      if (garis > 0.002 && garis < 0.998) c = mix(c, aksen, tepi);
+      if (m > 0.0) {
+        vec3 rapi = tempel(c, layar0, suv, m);
+        vec3 buruk = tempel(c, layar1, suv, m);
+        float abu = dot(buruk, vec3(0.299, 0.587, 0.114));
+        buruk = mix(vec3(abu), buruk, 0.35) * 0.9;
+        c = suv.x < garis ? rapi : buruk;
+        float tepi = 1.0 - smoothstep(0.003, 0.006, abs(suv.x - garis));
+        if (garis > 0.002 && garis < 0.998) c = mix(c, aksen, tepi * m);
+      }
+    } else {
+      if (jumlahLayar > 0) {
+        float m = dalamLayar(h0, px, tutup0[0], tutup0[1], potong0, suv);
+        if (m > 0.0) c = tempel(c, layar0, suv, m);
+      }
+      if (jumlahLayar > 1) {
+        float m = dalamLayar(h1, px, tutup1[0], tutup1[1], potong1, suv);
+        if (m > 0.0) c = tempel(c, layar1, suv, m);
+      }
     }
     float tepi = smoothstep(0.0, 0.1, vUv.x) * smoothstep(0.0, 0.1, 1.0 - vUv.x)
       * smoothstep(0.0, 0.16, vUv.y) * smoothstep(0.0, 0.12, 1.0 - vUv.y);
@@ -391,7 +414,7 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
       u[`h${j}`].value = homografi(l.sudut);
       (l.tutup ?? []).forEach((t, k) => u[`tutup${j}`].value[k].set(...t));
       if (l.potong) u[`potong${j}`].value.set(...l.potong[0], ...l.potong[1]);
-      u.jenis.value = { proyektor: 1, kertas: 2 }[l.jenis] ?? 0;
+      u.jenis.value = { proyektor: 1, kertas: 2, bersih: 3 }[l.jenis] ?? 0;
       pemuat.load(`/assets/cerita/${l.src}.webp`, (t) => {
         t.colorSpace = THREE.SRGBColorSpace;
         u[`layar${j}`].value = t;
@@ -551,19 +574,6 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
   const iRapi = BABAK.findIndex((b) => b.id === "rapi") - 1;
   const iAndal = BABAK.findIndex((b) => b.id === "andal") - 1;
 
-  // Garis sibak grading diukur dari bagian panel yang terlihat, bukan dari lebar gambar: di HP
-  // kamera hanya melihat sekitar seperempat panel, dan garis yang mulai dari tepi kiri gambar
-  // membuat layar abu-abu penuh. Sejak awal garis sudah di 30% pandangan, jadi mentah dan hasil
-  // grading terlihat berdampingan; di ujung beat garisnya keluar dari pandangan ke kanan.
-  function garisSibak(pos, sibak) {
-    if (sibak >= 1) return 1;
-    const jarak = Math.max(1, kamera.position.z - pos.z);
-    const separuh = Math.tan(THREE.MathUtils.degToRad(FOV / 2)) * jarak * kamera.aspect;
-    const kiri = THREE.MathUtils.clamp((sasaran.x - separuh - (pos.x - PANEL.w / 2)) / PANEL.w, 0, 1);
-    const kanan = THREE.MathUtils.clamp((sasaran.x + separuh - (pos.x - PANEL.w / 2)) / PANEL.w, 0, 1);
-    return kiri + (kanan - kiri) * (0.3 + 0.7 * sibak);
-  }
-
   function gambar(s, waktu) {
     kamera.position.fromArray(s.posisi);
     sasaran.fromArray(s.sasaran);
@@ -584,7 +594,7 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
       if (i === iFondasi) terang *= s.terang;
       if (i === iAndal && s.sendat) terang *= 0.25;
       pn.bahan.uniforms.terang.value = terang;
-      pn.bahan.uniforms.garis.value = i === iRapi ? garisSibak(pn.grup.position, s.sibak) : -1;
+      pn.bahan.uniforms.garis.value = i === iRapi ? 0.15 + 0.85 * s.sibak : -1;
       // Fokus di panel yang sedang didekati (jarak D0 / s, sekitar 9 sampai 14); makin jauh makin
       // buram. Bias mipmap di atas 1,6 mulai terlihat kotak-kotak di gambar pembuka.
       pn.bahan.uniforms.kabur.value = THREE.MathUtils.smoothstep(jarak, 18, 44) * 1.6;

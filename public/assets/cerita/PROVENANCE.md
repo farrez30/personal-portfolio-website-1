@@ -48,3 +48,14 @@ shader yang sama (jenis "kertas": tinta dikalikan ke warna kertas) dan dipanggan
   dan mikrofon mati, hanya ubin "Farrez". Kode rapat dan jam dipotong; rapat ditinggalkan sesudahnya.
 - `dalam-01-ide.webp` dibuat ulang dari gambar baru (Depth Anything V2 Small lokal, sigma 4).
 - `01-ide-layar.webp`: versi Ringan.
+
+**Bab 6 dan 7 (12 Nov 2026).**
+- `layar-06a.webp` dan `layar-06b.webp` dibuat ulang dari klip demo yang sama, lalu diredupkan
+  (`colorlevels=romax=0.66:gomax=0.68:bomax=0.74,eq=contrast=0.9`) supaya senada dengan monitor gelap
+  styleframe. Ditempel jenis "bersih": tanpa pantulan isi lama monitor.
+- `layar-07a.webp` (rapi) dan `layar-07b.webp` (buruk, sengaja ala AI slop): rancangan sendiri, HTML di
+  `desain/cerita-v3/layar-07/`, dirender Chrome headless 1480x800, diperkecil ke 740x400. Toko dan
+  nama pelanggan contoh; tidak memakai merek pihak lain. Versi rapi memakai token DESIGN.md
+  (Schibsted Grotesk, IBM Plex Mono, satu aksen merah, garis 1 px, angka tabular).
+- `layar-07-belah.webp`: separuh kiri versi rapi, separuh kanan versi buruk dipudarkan, dengan garis
+  merah, untuk mode Ringan (`07-grading-layar.webp`).
