@@ -26,3 +26,12 @@
 | 10 Rilis | `10-rilis.webp` | a | Ban berjalan, jewel case, rak CD dengan tirai merah |
 
 Semua 20 varian lolos pemeriksaan tulisan dan logo: tidak ada huruf yang terbaca, tidak ada watermark terlihat.
+
+## Edit bab 1 (12 Nov 2026)
+
+`styleframe/01-ide-laptop.jpg`: Nano Banana 2.1 edit di project yang sama, dari varian b (`2a2c9306`),
+hasil `a4c69078`, 0 kredit (saldo Flow 376 sebelum dan sesudah, reset 17 Nov). Prompt: "Keep everything
+in this image exactly the same ... Only add one open silver laptop standing on the desk behind the
+sketches ... The laptop screen is a plain, evenly lit, very light grey rectangle with nothing on it".
+Diperiksa: tidak ada tulisan, logo, atau perubahan lain yang terlihat. Layarnya diisi tangkapan Meet
+asli lewat shader (lihat public/assets/cerita/PROVENANCE.md).

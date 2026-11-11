@@ -38,3 +38,13 @@ shader yang sama (jenis "kertas": tinta dikalikan ke warna kertas) dan dipanggan
 | sketsa-03a.webp | `layar-05.webp` (Beranda Coderoach OS), edgedetect lalu negate, 560x350 | Garis pensil di layar sketsa laptop bab 3 |
 | sketsa-03b.webp | `public/assets/demo/d-day-hp.mp4` detik 3, edgedetect lalu negate, 300x600 | Garis pensil di layar sketsa ponsel bab 3 |
 | 02-naskah-layar.webp, 03-storyboard-layar.webp | styleframe + artefak di atas | Mode Ringan |
+
+**Bab 1, laptop dengan Google Meet (12 Nov 2026).**
+- `01-ide.webp` diganti versi berlaptop: edit Nano Banana 2.1 di Google Flow (project "Nov 10 - 23:54",
+  dari varian b `2a2c9306`, hasil `a4c69078`), 0 kredit, akun Google AI Pro Farrez. Prompt meminta
+  semua tetap sama dan hanya menambah satu laptop berlayar polos. Buatan AI. Asli di
+  `desain/cerita-v3/styleframe/01-ide-laptop.jpg`.
+- `layar-01.webp`: tangkapan Google Meet asli dari akun Farrez, rapat instan tanpa undangan, kamera
+  dan mikrofon mati, hanya ubin "Farrez". Kode rapat dan jam dipotong; rapat ditinggalkan sesudahnya.
+- `dalam-01-ide.webp` dibuat ulang dari gambar baru (Depth Anything V2 Small lokal, sigma 4).
+- `01-ide-layar.webp`: versi Ringan.
