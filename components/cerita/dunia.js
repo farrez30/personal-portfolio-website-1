@@ -20,6 +20,15 @@ const CELAH = { x: [0.41, 0.59], y: [0.19, 0.63] };
 // Satu panel memakai satu jenis. Asal tangkapan di public/assets/cerita/PROVENANCE.md.
 const UKURAN = [1376, 768];
 const LAYAR = {
+  "01-ide": [
+    {
+      // Rapat Google Meet di laptop meja: keluhan diceritakan lewat panggilan.
+      src: "layar-01",
+      sudut: [[490, 367], [714, 359], [730, 504], [505, 525]],
+      // Tepi bawah kap lampu yang menutupi pojok kiri atas layar.
+      potong: [[490, 378], [575, 360]],
+    },
+  ],
   "02-naskah": [
     {
       src: "kertas-02",
