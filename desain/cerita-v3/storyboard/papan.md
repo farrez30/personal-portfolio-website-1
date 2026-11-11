@@ -21,7 +21,7 @@ muncul di sisi kiri (desktop) atau bawah (HP).
 | 2 | Naskah | 100vh | 88 catatan jadi rencana | pita pembatas | Semua dimulai dari rencana yang Anda setujui. | draf, perlu bukti |
 | 3 | Storyboard | 140vh | 86 gambar kerja jadi barang | benang di dinding | Bentuknya dipilih sesuai masalahnya. | ada (bab aransemen) |
 | 4 | Set dan lighting | 120vh | 53 camera path (crane) | kabel merah | Rapi sampai ke bagian yang tidak kelihatan. | ada (bab infrastruktur) |
-| 5 | Syuting | 120vh | 55 objek persisten, 33 FLIP ke monitor | lampu tally | Dibangun bertahap, bisa dicoba sejak awal. | draf, perlu bukti |
+| 5 | Syuting | 120vh | 55 objek persisten, 33 FLIP ke monitor | lampu tally | Sudah kelihatan sebelum dibangun. | dikonfirmasi Farrez |
 | 6 | Editing | 120vh | 18 timeline panggung sticky | playhead | Progresnya jelas, kabarnya tidak putus. | ada (bab transparansi) |
 | 7 | Grading | 100vh | 01 sibak, 57 butir dan distorsi | cincin grading | Enak dipakai, bukan cuma bisa dipakai. | draf, perlu bukti |
 | 8 | Test screening | 120vh | 36 portal zoom-through | lampu merah | Tetap bisa diandalkan saat paling dibutuhkan. | ada (bab keandalan) |

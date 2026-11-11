@@ -81,15 +81,29 @@ dan 5 (bagian isi pilihan A berlaku untuk judul B yang sepadan).
 | # | Judul |
 |---|---|
 | 1 | Berawal dari keluhan sehari-hari. |
-| 2 | Semua dimulai dari rencana yang Anda setujui. **[konfirmasi]** |
+| 2 | Semua dimulai dari rencana yang Anda setujui. |
 | 3 | Bentuknya dipilih sesuai masalahnya. |
 | 4 | Rapi sampai ke bagian yang tidak kelihatan. |
-| 5 | Dibangun bertahap, bisa dicoba sejak awal. **[konfirmasi]** |
+| 5 | Sudah kelihatan sebelum dibangun. |
 | 6 | Progresnya jelas, kabarnya tidak putus. |
-| 7 | Enak dipakai, bukan cuma bisa dipakai. **[konfirmasi isi]** |
+| 7 | Enak dipakai, bukan cuma bisa dipakai. |
 | 8 | Tetap bisa diandalkan saat paling dibutuhkan. |
 | 9 | Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti. |
 | 10 | Dan akhirnya, dipakai tiap hari. |
+
+## Putaran 7: klaim dikonfirmasi (11 Nov 2026)
+
+Farrez memeriksa tiga klaim yang hanya ia tahu kebenarannya.
+
+| # | Klaim lama | Kebiasaan asli (kata Farrez) | Teks baru |
+|---|---|---|---|
+| 2 | Kebutuhan ditulis jadi daftar, klien membaca dan menyetujuinya dulu. | Sudah benar. | (tetap) |
+| 5 | "Dibangun bertahap, bisa dicoba sejak awal." Bagian yang sudah jadi langsung dicoba. | "di awal melihat dan merasakan dulu dan revisi jika ada dari mockup awal, lalu pembuatan dan UAT di akhir." | Judul: Sudah kelihatan sebelum dibangun. Isi: Sebelum mulai dibuat, Anda sudah bisa melihat dan mencoba rancangan tampilannya. Yang kurang pas diubah di situ, baru sesudahnya dibangun. |
+| 7 | Tampilan dirapikan sesudah sistemnya jalan. | Gabungan: rapi sejak desain, lalu dipoles dari masukan pemakai saat uji coba. "merapikan tampilan kenapa setelah sistem berjalan? kan sebelum harusnya?" | Judul tetap. Isi: Tampilannya sudah dirancang rapi sejak awal. Sebelum dipakai sehari-hari, tim Anda mencobanya dulu, dan langkah yang masih membingungkan dipangkas. |
+
+Judul bab 5 dipilih dari tiga versi (dua lainnya: "Tidak ada kejutan di akhir.", "Dilihat dulu, baru
+dibangun."); isi bab 7 dari dua versi. Mockup dan UAT ditulis dengan kata sehari-hari ("rancangan
+tampilan", "tim Anda mencobanya dulu") karena pembacanya pemilik usaha.
 
 ## Putaran 6: Farrez memilih B, lalu nada B untuk semua beat
 

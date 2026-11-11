@@ -25,7 +25,7 @@ export const BEAT = [
     kamera: { dari: { x: 0.5, y: 0.3, s: 1.3 }, ke: { x: 0.45, y: 0.55, s: 1.6 } },
     hp: 0.46, lampu: true, sambung: { jenis: "naik" } },
   { no: 5, gambar: "05-syuting", judul: "Syuting", vh: 120,
-    teks: "Dibangun bertahap, bisa dicoba sejak awal.",
+    teks: "Sudah kelihatan sebelum dibangun.",
     kamera: { dari: { x: 0.55, y: 0.5, s: 1.15 }, ke: { x: 0.6, y: 0.45, s: 1.3 } },
     hp: 0.55, getar: true, sambung: { jenis: "portal", kotak: [0.56, 0.67, 0.18, 0.16] } },
   { no: 6, gambar: "06-editing", judul: "Editing", vh: 120,

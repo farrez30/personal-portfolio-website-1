@@ -82,12 +82,12 @@ export const BAB = [
   {
     id: "bangun",
     judul: {
-      id: "Dibangun bertahap, bisa dicoba sejak awal.",
-      en: "Built in steps, usable from early on.",
+      id: "Sudah kelihatan sebelum dibangun.",
+      en: "You see it before it gets built.",
     },
     isi: {
-      id: "Bagian yang sudah jadi bisa langsung Anda coba, jadi tidak ada kejutan di akhir.",
-      en: "Finished parts are yours to try right away, so nothing surprises you at the end.",
+      id: "Sebelum mulai dibuat, Anda sudah bisa melihat dan mencoba rancangan tampilannya. Yang kurang pas diubah di situ, baru sesudahnya dibangun.",
+      en: "Before anything is built, you can see and try the design. Whatever feels off gets changed there, and only then does building start.",
     },
   },
   {
@@ -109,8 +109,8 @@ export const BAB = [
       en: "Pleasant to use, not just usable.",
     },
     isi: {
-      id: "Tampilannya dirapikan, langkah yang membingungkan dipangkas.",
-      en: "The look gets tidied, and the confusing steps get cut.",
+      id: "Tampilannya sudah dirancang rapi sejak awal. Sebelum dipakai sehari-hari, tim Anda mencobanya dulu, dan langkah yang masih membingungkan dipangkas.",
+      en: "The look is designed to be tidy from the start. Before everyday use, your team tries it first, and any step that still confuses gets cut.",
     },
   },
   {
