@@ -285,3 +285,22 @@ test("room tone cerita: lup hanya dibuat saat menyala, dijepit 0..1, dan bisu te
   s.setBisu(true);
   assert.equal(ctx.dibuat.find((n) => n.sambung.includes(ctx.destination)).gain.value, 0);
 });
+
+test("selama bisu rekaman tidak diunduh; baru dimuat sekali saat suara dinyalakan", async () => {
+  const diminta = [];
+  const s = buatSuara({
+    Konteks: KonteksPalsu,
+    simpanan: simpanan({ [KUNCI_BISU]: "1" }),
+    muat: (src) => (diminta.push(src), Promise.resolve(src.split("/").pop())),
+  });
+  s.buka();
+  await tunggu();
+  assert.equal(diminta.length, 0);
+  s.setBisu(false);
+  await tunggu();
+  assert.equal(diminta.length, semuaBerkas().length);
+  s.setBisu(true);
+  s.setBisu(false);
+  await tunggu();
+  assert.equal(diminta.length, semuaBerkas().length, "rekaman dimuat ulang");
+});

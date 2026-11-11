@@ -173,7 +173,10 @@ export function buatSuara({
     }
   };
 
+  let sudahDimuat = false;
   const muatRekaman = () => {
+    if (sudahDimuat) return;
+    sudahDimuat = true;
     for (const src of semuaBerkas()) {
       const nama = src.slice(AKAR.length, -4);
       Promise.resolve()
@@ -202,7 +205,8 @@ export function buatSuara({
     derauBuf = ctx.createBuffer(1, n, ctx.sampleRate);
     const d = derauBuf.getChannelData(0);
     for (let i = 0; i < n; i++) d[i] = acak() * 2 - 1;
-    muatRekaman();
+    // Selama bisu, rekaman belum diunduh; baru dimuat saat suara dinyalakan.
+    if (!bisu) muatRekaman();
     return ctx;
   };
 
@@ -439,6 +443,7 @@ export function buatSuara({
     setBisu(b) {
       bisu = !!b;
       simpanBisu(simpanan, bisu);
+      if (!bisu && ctx) muatRekaman();
       if (utama && ctx) utama.gain.setTargetAtTime(bisu ? 0 : TINGKAT, ctx.currentTime, 0.02);
       kabari();
     },

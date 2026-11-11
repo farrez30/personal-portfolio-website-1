@@ -128,12 +128,12 @@ export const BAB = [
   {
     id: "aman",
     judul: {
-      id: "Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti.",
-      en: "Important data stays with the right people. As the business grows, the system keeps up.",
+      id: "Data penting tetap di tangan yang berhak.",
+      en: "Important data stays with the right people.",
     },
     isi: {
-      id: "Di Jeda, psikolog cuma bisa membaca catatan yang memang dibagikan kliennya. Pohon keluarga di AkarKita hanya bisa dibuka lewat undangan. ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus, dari distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan.",
-      en: "In Jeda, a psychologist reads only the notes a client chooses to share. An AkarKita family tree opens by invitation only. The ERP at the software house where I work serves several clients at once, from distribution and service to health insurance and plantation payroll.",
+      id: "Di Jeda, psikolog cuma bisa membaca catatan yang memang dibagikan kliennya. Pohon keluarga di AkarKita hanya bisa dibuka lewat undangan. Usaha tumbuh, sistemnya sanggup mengikuti: ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus, dari distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan.",
+      en: "In Jeda, a psychologist reads only the notes a client chooses to share. An AkarKita family tree opens by invitation only. As the business grows, the system keeps up: the ERP at the software house where I work serves several clients at once, from distribution and service to health insurance and plantation payroll.",
     },
     bukti: ["jeda", "akarkita", "erp-software-house"],
   },

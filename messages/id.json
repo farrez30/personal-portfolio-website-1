@@ -209,6 +209,8 @@
     "lewati": "Langsung ke rak proyek",
     "bukti": "Buktinya",
     "keRak": "Buka rak proyek",
-    "bab": "Bab {n} dari {total}"
+    "bab": "Bab {n} dari {total}",
+    "rel": "Bab cerita",
+    "keBab": "Ke bab {n}: {judul}"
   }
 }

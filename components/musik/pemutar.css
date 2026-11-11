@@ -443,3 +443,20 @@
   outline-offset: 2px;
   border-radius: 4px;
 }
+
+/* Selama cerita gulir di layar panel menciut ke cakram ini, di bawah header kanan: tempat yang
+   tidak dipakai teks bab (teks di kiri di desktop, di bawah di HP) maupun penanda bab. */
+.vinyl-reopen--cerita {
+  left: auto;
+  right: 1.25rem;
+  bottom: auto;
+  top: 4.75rem;
+  transform-origin: top right;
+}
+
+@media screen and (max-width: 600px) {
+  .vinyl-reopen--cerita {
+    right: 0.75rem;
+    top: 4.15rem;
+  }
+}

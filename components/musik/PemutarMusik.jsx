@@ -66,7 +66,11 @@ export default function PemutarMusik() {
   // Dilipat sendiri selama buklet dibaca supaya panel tidak menutupi kolom teksnya;
   // musik tetap jalan. Terpisah dari pilihan pengguna, jadi kembali sendiri saat ditutup.
   const [dilipat, setDilipat] = useState(false);
-  const sembunyi = tersembunyi || dilipat;
+  // Selama cerita gulir di layar, panel menciut ke cakram supaya tidak menutupi judul bab
+  // (terukur di HP 390 px). Membuka cakram di dalam cerita tetap boleh, sampai cerita lewat.
+  const [diCerita, setDiCerita] = useState(false);
+  const [dibukaDiCerita, setDibukaDiCerita] = useState(false);
+  const sembunyi = tersembunyi || dilipat || (diCerita && !dibukaDiCerita);
   const [form, setForm] = useState(false);
   const [teks, setTeks] = useState("");
   const [galat, setGalat] = useState("");
@@ -238,6 +242,16 @@ export default function PemutarMusik() {
     return () => window.removeEventListener("panggung", dengar);
   }, []);
 
+  useEffect(() => {
+    const dengar = (e) => {
+      const tampil = !!e.detail?.tampil;
+      setDiCerita(tampil);
+      if (!tampil) setDibukaDiCerita(false);
+    };
+    window.addEventListener("cerita", dengar);
+    return () => window.removeEventListener("cerita", dengar);
+  }, []);
+
   const pasang = (e) => {
     e.preventDefault();
     const tautan = uraiTautan(teks);
@@ -374,10 +388,11 @@ export default function PemutarMusik() {
 
       <button
         type="button"
-        className={`vinyl-reopen ${mode === "imersif" ? "vinyl-reopen--imersif" : ""} ${sembunyi ? "is-shown" : ""}`}
+        className={`vinyl-reopen ${mode === "imersif" ? "vinyl-reopen--imersif" : ""} ${diCerita ? "vinyl-reopen--cerita" : ""} ${sembunyi ? "is-shown" : ""}`}
         onClick={() => {
           setTersembunyi(false);
           setDilipat(false);
+          if (diCerita) setDibukaDiCerita(true);
         }}
         aria-label={t("tampil")}
         title={t("tampil")}
