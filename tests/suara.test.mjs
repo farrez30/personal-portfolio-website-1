@@ -120,7 +120,7 @@ test("variasi nada dalam ±3%", () => {
 });
 
 test("setiap peristiwa punya resep dengan lapisan yang sah", () => {
-  for (const nama of ["bukaKotak", "rapat", "angkat", "duduk", "keluarkan", "tombol", "halaman", "kertas"]) {
+  for (const nama of ["bukaKotak", "rapat", "angkat", "duduk", "keluarkan", "tombol", "halaman", "kertas", "ketik", "lonceng", "papan", "relay", "tirai", "segel"]) {
     assert.ok(PERISTIWA.includes(nama), `tidak ada resep ${nama}`);
   }
   for (const [nama, lap] of Object.entries(RESEP)) {
@@ -174,7 +174,7 @@ test("lup motor dan proyektor hanya dibuat saat menyala, dijepit 0..1", () => {
   assert.equal(KonteksPalsu.terakhir.dibuat.length, awal);
   s.motor(2);
   s.proyektor(-1);
-  assert.deepEqual(s.lup, { motor: 1, proyektor: 0 });
+  assert.deepEqual(s.lup, { motor: 1, proyektor: 0, ruang: 0 });
   assert.ok(KonteksPalsu.terakhir.dibuat.length > awal);
 });
 
@@ -270,4 +270,18 @@ test("tanpa AudioContext (peramban lama, SSR) semuanya diam tanpa galat", () => 
   s.motor(1);
   s.proyektor(1);
   s.setBisu(true);
+});
+
+test("room tone cerita: lup hanya dibuat saat menyala, dijepit 0..1, dan bisu tetap menang", () => {
+  const s = buatSuara({ Konteks: KonteksPalsu, simpanan: simpanan() });
+  s.buka();
+  const ctx = KonteksPalsu.terakhir;
+  const awal = ctx.dibuat.length;
+  s.ruang(0);
+  assert.equal(ctx.dibuat.length, awal);
+  s.ruang(3);
+  assert.equal(s.lup.ruang, 1);
+  assert.ok(ctx.dibuat.length > awal);
+  s.setBisu(true);
+  assert.equal(ctx.dibuat.find((n) => n.sambung.includes(ctx.destination)).gain.value, 0);
 });

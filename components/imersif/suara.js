@@ -71,6 +71,30 @@ export const RESEP = {
   kertas: [{ jenis: "derau", filter: "highpass", f: 2200, f2: 1400, q: 0.6, kuat: 0.3, lama: 0.45 }],
   // Rak bergeser satu album: ketuk plastik kecil.
   rak: [{ jenis: "derau", filter: "bandpass", f: 2800, q: 5, kuat: 0.3, lama: 0.02 }],
+
+  // Cerita gulir v3: suara ruangan per bab.
+  // Mesin tik: ketukan logam yang tidak rata jaraknya.
+  ketik: [0, 0.11, 0.2, 0.34, 0.43, 0.58, 0.66, 0.8].map((tunda) => ({
+    jenis: "derau", filter: "bandpass", f: 2200, q: 3, kuat: 0.5, lama: 0.035, tunda,
+  })),
+  // Lonceng ujung baris.
+  lonceng: [{ jenis: "nada", gelombang: "sine", f: 2600, kuat: 0.4, lama: 0.6 }],
+  // Papan ketik laptop: klik pendek yang pelan.
+  papan: [0, 0.09, 0.17, 0.3, 0.37, 0.5].map((tunda) => ({
+    jenis: "derau", filter: "highpass", f: 3500, q: 0.7, kuat: 0.25, lama: 0.02, tunda,
+  })),
+  // Relay lampu set: klak tegas dan dentum rendah.
+  relay: [
+    { jenis: "derau", filter: "bandpass", f: 1400, q: 2, kuat: 0.9, lama: 0.05 },
+    { jenis: "nada", gelombang: "sine", f: 70, kuat: 0.8, lama: 0.25 },
+  ],
+  // Tirai ditarik: desis kain yang naik.
+  tirai: [{ jenis: "derau", filter: "bandpass", f: 700, f2: 2400, q: 0.8, kuat: 0.3, lama: 0.9 }],
+  // Segel ditekan: dentum pendek yang tumpul.
+  segel: [
+    { jenis: "nada", gelombang: "sine", f: 95, kuat: 0.9, lama: 0.16 },
+    { jenis: "derau", filter: "lowpass", f: 500, q: 0.7, kuat: 0.5, lama: 0.08 },
+  ],
 };
 
 export const PERISTIWA = Object.keys(RESEP);
@@ -90,9 +114,15 @@ export const REKAMAN = {
   halaman: { berkas: ["halaman-1", "halaman-2", "halaman-3"], kuat: 1.4 },
   kertas: { berkas: ["kertas-1"], kuat: 1 },
   rak: { berkas: ["rak-1", "rak-2", "rak-3"], kuat: 1.8 },
+  ketik: { berkas: ["ketik-1", "ketik-2"], kuat: 0.9 },
+  lonceng: { berkas: ["lonceng-1"], kuat: 0.7 },
+  papan: { berkas: ["papan-1", "papan-2"], kuat: 0.8 },
+  relay: { berkas: ["relay-1", "relay-2", "relay-3"], kuat: 1.3 },
+  tirai: { berkas: ["tirai-1"], kuat: 1 },
+  segel: { berkas: ["segel-1", "segel-2"], kuat: 1.3 },
 };
 // Lup (WAV, karena MP3 menambah jeda di ujung berkas dan sambungan lupnya berbunyi klik).
-export const LUP = { motor: "motor", proyektor: "proyektor" };
+export const LUP = { motor: "motor", proyektor: "proyektor", ruang: "ruang" };
 export const semuaBerkas = () => [
   ...Object.values(REKAMAN).flatMap((r) => r.berkas.map((n) => `${AKAR}${n}.mp3`)),
   ...Object.values(LUP).map((n) => `${AKAR}${n}.wav`),
@@ -114,8 +144,10 @@ export function buatSuara({
   const pendengar = new Set();
   let motor = null;
   let dengung = null;
+  let ruang = null;
   let lajuMotor = 0;
   let kuatDengung = 0;
+  let kuatRuang = 0;
   // Rekaman yang sudah terdekode, per nama berkas; dan take terakhir per peristiwa.
   const rekaman = new Map();
   const takeLalu = {};
@@ -133,6 +165,11 @@ export function buatSuara({
       dengung.g.disconnect?.();
       dengung = null;
       if (kuatDengung > 0) api.proyektor(kuatDengung);
+    }
+    if (nama === LUP.ruang && ruang?.sintesis) {
+      ruang.g.disconnect?.();
+      ruang = null;
+      if (kuatRuang > 0) api.ruang(kuatRuang);
     }
   };
 
@@ -325,6 +362,21 @@ export function buatSuara({
     return { g, f, sintesis: true };
   };
 
+  // Room tone cadangan: derau yang disaring rendah, nyaris tidak terdengar.
+  const buatRuang = () => {
+    const s = sumberDerau(true);
+    const f = ctx.createBiquadFilter();
+    f.type = "lowpass";
+    f.frequency.value = 260;
+    const g = ctx.createGain();
+    g.gain.value = 0;
+    s.connect(f);
+    f.connect(g);
+    g.connect(utama);
+    s.start();
+    return { g, sintesis: true };
+  };
+
   const buka = () => {
     siapkan();
     if (ctx?.state === "suspended") ctx.resume?.().catch?.(() => {});
@@ -373,6 +425,14 @@ export function buatSuara({
       }
       dengung.g.gain.setTargetAtTime(kuatDengung * 1.2 * kedip, t, 0.03);
     },
+    // k: 0..1 kehadiran soundstage; room tone pelan selama cerita gulir terlihat.
+    ruang(k) {
+      kuatRuang = Math.max(0, Math.min(1, k));
+      if (!ctx) return;
+      if (!ruang && kuatRuang > 0) ruang = lupRekaman(LUP.ruang) ?? buatRuang();
+      if (!ruang) return;
+      ruang.g.gain.setTargetAtTime(kuatRuang * (ruang.sintesis ? 0.25 : 0.55), ctx.currentTime, 0.4);
+    },
     get bisu() {
       return bisu;
     },
@@ -390,7 +450,7 @@ export function buatSuara({
       return ctx;
     },
     get lup() {
-      return { motor: lajuMotor, proyektor: kuatDengung };
+      return { motor: lajuMotor, proyektor: kuatDengung, ruang: kuatRuang };
     },
     // Jeda dari menjadwalkan bunyi sampai terdengar (detik). Bunyi kontak (tutup rapat,
     // cakram duduk) dipicu lebih awal sebesar ini supaya jatuh tepat di bingkai kontaknya.

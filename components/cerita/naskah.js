@@ -5,7 +5,9 @@
 //
 // Progres p berjalan dari 0 sampai BABAK.length; babak c memakai u = p - c (0 sampai 1).
 // Kamera per beat ditulis seperti di animatic: titik fokus x, y (0 sampai 1 dari gambar) dan
-// skala s, dari `dari` ke `ke`. `hp` adalah titik fokus x di layar tegak.
+// skala s, dari `dari` ke `ke`. `hp` adalah titik fokus x di layar tegak. `ringan` adalah gambar
+// mode Ringan bila berbeda: styleframe yang layar monitornya sudah diganti layar produk asli
+// (scripts/layar-ringan.mjs), sama dengan yang ditempel shader di panggung Imersif.
 
 export const PANEL = { w: 16, h: 9 };
 // Jarak kamera saat panel pas setinggi layar (fov 35 derajat): (h / 2) / tan(17,5 derajat).
@@ -20,10 +22,10 @@ export const BABAK = [
   { id: "rencana", bobot: 1, gambar: "02-naskah", kamera: { dari: { x: 0.4, y: 0.55, s: 1.25 }, ke: { x: 0.45, y: 0.4, s: 1.05 } }, hp: 0.4 },
   { id: "bentuk", bobot: 1.4, gambar: "03-storyboard", kamera: { dari: { x: 0.12, y: 0.45, s: 1.4 }, ke: { x: 0.62, y: 0.45, s: 1.15 } }, hp: 0.3 },
   { id: "fondasi", bobot: 1.2, gambar: "04-set", kamera: { dari: { x: 0.5, y: 0.3, s: 1.3 }, ke: { x: 0.45, y: 0.55, s: 1.6 } }, hp: 0.46 },
-  { id: "bangun", bobot: 1.2, gambar: "05-syuting", kamera: { dari: { x: 0.55, y: 0.5, s: 1.15 }, ke: { x: 0.6, y: 0.45, s: 1.3 } }, hp: 0.55 },
-  { id: "progres", bobot: 1.2, gambar: "06-editing", kamera: { dari: { x: 0.5, y: 0.5, s: 1 }, ke: { x: 0.42, y: 0.38, s: 1.55 } }, hp: 0.5 },
+  { id: "bangun", bobot: 1.2, gambar: "05-syuting", ringan: "05-syuting-layar", kamera: { dari: { x: 0.55, y: 0.5, s: 1.15 }, ke: { x: 0.6, y: 0.45, s: 1.3 } }, hp: 0.55 },
+  { id: "progres", bobot: 1.2, gambar: "06-editing", ringan: "06-editing-layar", kamera: { dari: { x: 0.5, y: 0.5, s: 1 }, ke: { x: 0.42, y: 0.38, s: 1.55 } }, hp: 0.5 },
   { id: "rapi", bobot: 1, gambar: "07-grading", kamera: { dari: { x: 0.55, y: 0.4, s: 1.35 }, ke: { x: 0.55, y: 0.45, s: 1.1 } }, hp: 0.55 },
-  { id: "andal", bobot: 1.2, gambar: "08-screening", kamera: { dari: { x: 0.5, y: 0.6, s: 1 }, ke: { x: 0.55, y: 0.4, s: 1.45 } }, hp: 0.55 },
+  { id: "andal", bobot: 1.2, gambar: "08-screening", ringan: "08-screening-layar", kamera: { dari: { x: 0.5, y: 0.6, s: 1 }, ke: { x: 0.55, y: 0.4, s: 1.45 } }, hp: 0.55 },
   { id: "aman", bobot: 1.2, gambar: "09-segel", kamera: { dari: { x: 0.62, y: 0.55, s: 1.5 }, ke: { x: 0.5, y: 0.5, s: 1 } }, hp: 0.72 },
   { id: "rilis", bobot: 2.4, gambar: "10-rilis", kamera: { dari: { x: 0.5, y: 0.8, s: 1.3 }, ke: { x: 0.5, y: 0.42, s: 1.2 } }, hp: 0.5 },
 ];
@@ -140,4 +142,26 @@ export function progresDari(tengah, blok) {
     if (tengah < b.atas + b.tinggi) return i + clamp((tengah - b.atas) / b.tinggi);
   }
   return blok.length;
+}
+
+// Suara ruangan: peristiwa yang dibunyikan saat gulir maju dari keadaan a ke b (keduanya hasil
+// keadaanPada). Mundur tidak berbunyi, dan lompatan jauh (tautan ke bab, muat ulang di tengah)
+// juga tidak, supaya tidak ada rentetan bunyi sekaligus.
+const BUNYI_MASUK = { ide: "kertas", rencana: "ketik", bentuk: "halaman", progres: "papan", rapi: "tombol" };
+export function bunyiAntara(a, b) {
+  const pa = a.babak + a.u;
+  const pb = b.babak + b.u;
+  if (!(pb > pa) || pb - pa > 0.6) return [];
+  const id = BABAK[b.babak].id;
+  const lewat = (x) => a.babak === b.babak && a.u < x && b.u >= x;
+  const bunyi = [];
+  if (b.babak > a.babak && BUNYI_MASUK[id]) bunyi.push(BUNYI_MASUK[id]);
+  if (id === "rencana" && lewat(0.55)) bunyi.push("lonceng");
+  if (id === "fondasi" && b.terang > a.terang) bunyi.push("relay");
+  if (id === "aman" && lewat(0.45)) bunyi.push("segel");
+  b.kotak.forEach((k, j) => {
+    if (k === 1 && a.kotak[j] < 1) bunyi.push("rapat");
+  });
+  if (b.tirai > 0 && a.tirai === 0) bunyi.push("tirai");
+  return bunyi;
 }
