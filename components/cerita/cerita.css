@@ -359,9 +359,15 @@
     top: auto;
     bottom: 1rem;
     translate: none;
-    max-height: 46svh;
-    overflow: auto;
+    /* Tanpa batas tinggi: kotak yang menggulir sendiri menyembunyikan ujung teks bab panjang
+       (bab 9 terpotong di 375 px), dan gulirannya berebut dengan gulir halaman. */
     padding: 1.1rem 1.2rem;
+  }
+
+  /* Bayangan ikut batas kotak. Bentangan desktop melewati tepi layar HP dan membuat halaman
+     lebih lebar dari layar, sehingga peramban mengecilkan seluruh halaman. */
+  .cerita-kerja--dunia .bab__teks::before {
+    inset: 0;
   }
 
   .cerita-kerja--dunia .bab__keluhan li {

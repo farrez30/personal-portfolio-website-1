@@ -126,3 +126,14 @@ test("brief hanya memuat pertanyaan yang dijawab, berurutan", () => {
   assert.equal(susunBrief({ waktu: "bulanIni", kebutuhan: "android" }, label), "- kebutuhan=android\n- waktu=bulanIni");
   assert.equal(susunBrief({ pemakai: undefined, anggaran: "belum" }, label), "- anggaran=belum");
 });
+
+test("teks bab di HP tidak dikurung kotak yang menggulir sendiri", () => {
+  // Kotak 46svh dengan overflow auto menyembunyikan ujung bab 9 di layar 375 px.
+  const css = baca("components/cerita/cerita.css");
+  for (const aturan of css.matchAll(/\.cerita-kerja--dunia \.bab__teks \{([^}]*)\}/g)) {
+    assert.doesNotMatch(aturan[1], /max-height|overflow\s*:\s*(auto|scroll|hidden)/);
+  }
+  // Bayangan selebar desktop (inset negatif) membuat halaman HP lebih lebar dari layar.
+  const hp = css.slice(css.lastIndexOf("@media (max-width: 47.99rem)"));
+  assert.match(hp, /\.cerita-kerja--dunia \.bab__teks::before \{\s*inset: 0;/);
+});
