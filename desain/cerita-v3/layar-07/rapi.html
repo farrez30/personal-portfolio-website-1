@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#161514; --bg2:#1f1e1c; --line:#3a3733; --ink:#ece8e1; --ink2:#b3ada4; --ink3:#847e75; --aksen:#e0574b; }
+  * { box-sizing:border-box; margin:0; }
+  body { width:1480px; height:800px; background:var(--bg); color:var(--ink); font-family:"Schibsted Grotesk",sans-serif; display:grid; grid-template-columns:240px 1fr; }
+  nav { border-right:1px solid var(--line); padding:56px 32px; display:flex; flex-direction:column; gap:30px; font-size:24px; color:var(--ink2); }
+  nav b { color:var(--ink); font-size:21px; margin-bottom:18px; }
+  nav .aktif { color:var(--ink); }
+  main { padding:72px 72px; align-content:center; display:grid; grid-template-columns:1fr 1fr; gap:48px; }
+  .mono { font-family:"IBM Plex Mono",monospace; font-size:19px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); }
+  h1 { font-size:44px; font-weight:600; margin-top:10px; }
+  .angka { font-size:180px; font-weight:700; line-height:1; margin-top:36px; font-variant-numeric:tabular-nums; }
+  .ket { font-size:26px; color:var(--ink2); margin-top:14px; }
+  .tombol { margin-top:40px; display:inline-block; background:var(--aksen); color:#161514; font-weight:600; font-size:26px; padding:20px 34px; border-radius:6px; }
+  table { width:100%; border-collapse:collapse; font-size:28px; margin-top:22px; }
+  td { padding:30px 0; border-bottom:1px solid var(--line); }
+  td.n { text-align:right; font-variant-numeric:tabular-nums; }
+  td.s { text-align:right; color:var(--ink3); font-size:23px; width:190px; }
+  .tunggu { color:var(--aksen); }
+</style>
+</head>
+<body>
+  <nav><b>Toko Sejahtera</b><span class="aktif">Pesanan</span><span>Stok</span><span>Invoice</span><span>Pelanggan</span></nav>
+  <main>
+    <section>
+      <p class="mono">Kamis, 12 November</p>
+      <h1>Pesanan hari ini</h1>
+      <p class="angka">128</p>
+      <p class="ket">14 menunggu dikirim</p>
+      <span class="tombol">Kirim semua</span>
+    </section>
+    <section>
+      <p class="mono">Terbaru</p>
+      <table>
+        <tr><td>Toko Makmur</td><td class="n">24</td><td class="s tunggu">Menunggu</td></tr>
+        <tr><td>Warung Bu Ani</td><td class="n">12</td><td class="s">Dikirim</td></tr>
+        <tr><td>CV Sinar Jaya</td><td class="n">40</td><td class="s">Dikirim</td></tr>
+        <tr><td>Toko Rizki</td><td class="n">8</td><td class="s tunggu">Menunggu</td></tr>
+        <tr><td>Agen Pak Darto</td><td class="n">31</td><td class="s">Dikirim</td></tr>
+      </table>
+    </section>
+  </main>
+</body>
+</html>
