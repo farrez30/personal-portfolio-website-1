@@ -2,7 +2,7 @@
 // Panel browser yang tersembunyi menghentikan requestAnimationFrame, jadi QA gerak dibuat di sini.
 //
 //   node scripts/kontak-cerita.mjs <url halaman> <folder> [--langkah 0.05] [--dari 0] [--sampai 1]
-//     [--hp] [--ringan] [--terang|--gelap]
+//     [--hp] [--ukuran 375x667] [--ringan] [--terang|--gelap]
 //
 // Menggulir #cerita dari atas sampai bawah per langkah, menunggu gerak yang dihaluskan selesai,
 // lalu memotret. Nama berkas: f-000.png (0%), f-050.png (5%), dan seterusnya.
@@ -21,6 +21,9 @@ const langkah = Number(opt("--langkah", "0.05"));
 const dari = Number(opt("--dari", "0"));
 const sampai = Number(opt("--sampai", "1"));
 const hp = args.includes("--hp");
+// HP lain selain 390x844, mis. iPhone SE 375x667.
+const [lebar, tinggi] = opt("--ukuran", hp ? "390x844" : "1440x810").split("x").map(Number);
+const ponsel = hp || lebar < 768;
 const mode = args.includes("--ringan") ? "ringan" : "imersif";
 if (!url || !out) {
   console.error("pakai: node scripts/kontak-cerita.mjs <url> <folder> [--langkah 0.05] [--hp] [--ringan]");
@@ -67,7 +70,7 @@ await kirim("Page.enable");
 await kirim("Runtime.enable");
 await kirim(
   "Emulation.setDeviceMetricsOverride",
-  hp ? { width: 390, height: 844, deviceScaleFactor: 1, mobile: true } : { width: 1440, height: 810, deviceScaleFactor: 1, mobile: false },
+  { width: lebar, height: tinggi, deviceScaleFactor: 1, mobile: ponsel },
 );
 if (args.includes("--terang") || args.includes("--gelap"))
   await kirim("Emulation.setEmulatedMedia", {
@@ -102,7 +105,11 @@ for (let f = dari; f <= sampai + 1e-4; f += langkah) {
       "p=" + (document.querySelector(".panggung-cerita")?.dataset.p ?? "-"),
       [...document.querySelectorAll(".bab")]
         .filter((b) => +getComputedStyle(b.querySelector(".bab__teks")).opacity * +getComputedStyle(b.querySelector(".bab__isi")).opacity > 0.5)
-        .map((b) => b.dataset.babak)
+        // Letak kotak teks, untuk mengecek tidak tertutup header atau terpotong ujung layar.
+        .map((b) => {
+          const r = b.querySelector(".bab__teks").getBoundingClientRect();
+          return b.dataset.babak + "@" + Math.round(r.top) + ".." + Math.round(r.bottom) + "/" + innerHeight;
+        })
         .join("+"),
     ].join(" ")`),
   );
