@@ -50,39 +50,34 @@ nothing else.
 - `prefers-reduced-motion`: Light mode by default, headline in its final state, hologram tilt and
   dust off.
 
-## The scroll story (`components/cerita/`, ADR 0011, 0012)
+## The scroll story (`components/cerita/`, ADR 0011, 0012, 0013)
 
-Eight chapters between the hero and the rack, named like a track list after the steps of making
-an album: Demo, Arrangement, Liner notes, Sealed, On repeat, Press run, The plant, In the rack.
-The storyboard and the bank patterns behind each moment are in `docs/storyboard-gulir.md`.
+Ten chapters between the hero and the rack, from an everyday complaint to a system used every
+day. The design pipeline (brief, research, styleframes, pen.dev storyboard, animatic, final copy)
+lives in `desain/cerita-v3/`.
 
-**Immersive** is one 3D world (`dunia.js`) on a canvas that sticks behind the chapters. One
-jewel case (Coderoach OS, built by `buatKotak` like the rack) stays on screen all the way:
-- the section title rises letter by letter while the case comes up from below;
-- the lid opens and a marker writes "demo" on the disc;
-- the camera dives into the disc hole behind a closing iris, out onto a desk with a 3D laptop,
-  phone and action camera playing real screen recordings, then the laptop screen fills the view;
-- the booklet slides out beside a liner-notes card of real ADRs;
-- a clear seal sweeps over the case while a UV lamp follows the pointer and a lock appears;
-- the disc spins at 120 rpm while the picture loses signal (grain, scan lines, shake) and recovers;
-- the disc multiplies into a field of copies with its own print;
-- the case comes apart along one axis with labels for screen, docs, data and server, then closes;
-- the background turns into the rack's beige stage and the case drops into the rack.
+**Immersive** is one 3D soundstage (`dunia.js`) on a canvas that sticks behind the chapters. Each
+chapter has one AI styleframe (`public/assets/cerita/`) on a panel standing on a dark, half-polished
+concrete floor; the camera never cuts, it flies between panels in the dark. A film production is
+the visual frame only (idea, script, storyboard, set, shoot, edit, grade, screening, seal, release);
+chapter text never names those stages.
+- the section title sits over a high shot of the whole stage, then the camera cranes down to the desk;
+- the foundation chapter's set lights switch on one at a time;
+- the shoot chapter is handheld;
+- the polish chapter's grading monitor is split raw grey and warm by a moving red line;
+- the screening flickers once;
+- a red 3D thread on the floor grows with the story and links every station;
+- at the end three real jewel cases (`buatKotak`) slide into the rack one by one, a red velvet
+  curtain opens, and the screen fades to the rack's beige; the last chapter's text turns to ink.
 
-The scene script is data (`naskah.js`): a pose per chapter, held until 55% of the chapter, plus
-in-chapter moments that return to zero at both ends, so scrolling back gives the same frames.
-Text cards stick on the side opposite the object (top on desktop, bottom on phones), with a
-frosted page-colour surface. Headings rise word by word (GSAP SplitText, scrubbed).
+Panels keep the styleframes' own colours (no tone mapping), dimmed with distance; the 3D objects use
+AgX. Grain and vignette are CSS overlays. The scene script is pure data (`naskah.js`, tested in
+`tests/naskah.test.mjs`), so scrolling back gives the same frames. Chapter text sits bottom left
+over a soft dark fog (bottom on phones), shows "03 / 10", and leaves before the next chapter's text
+arrives. If WebGL fails, the story falls back to Light.
 
-**Light** keeps the first version: CSS and SVG objects per chapter driven by `--p`.
-**Reduced motion** shows Light's final states, with no smooth scroll and no 3D.
-
-Smooth scroll is Lenis on the GSAP ticker for the whole page (`components/gulir/`), stopped while
-an album is open on the rack.
-
-The contact form opens with a greeting from the visitor's local clock and a brief of optional
-chips (need, users, timing, budget band in rupiah via `Intl`). The chosen chips are written at
-the top of the email or WhatsApp message.
+**Light** shows each chapter's styleframe as an image beside its text, pushed in slowly by `--p`.
+**Reduced motion** shows the final states.
 
 ## The jewel case (`components/imersif/benda.js`)
 

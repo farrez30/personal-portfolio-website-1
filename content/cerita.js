@@ -1,137 +1,151 @@
-// Cerita gulir "dari demo ke rak": delapan bab di antara hero dan rak. Tiap bab
-// meminjam satu tahap rekaman album dan ditutup bukti dari proyek yang ada di rak.
-// Usulan, pilihan Farrez, dan sumber tiap klaim: docs/usulan-alur-cerita.md.
+// Cerita gulir v3 "dari keluhan sampai dipakai tiap hari": sepuluh bab di antara hero dan rak,
+// satu bab per panel di soundstage (components/cerita/naskah.js). Judul memakai nada B pilihan
+// Farrez (11 Nov 2026); proses, pilihan, dan sumber tiap kalimat di desain/cerita-v3/naskah-teks.md.
+// Versi EN ditulis tersendiri dari isi yang sama, bukan diterjemahkan dari versi ID.
 // Kalimat yang belum ada buktinya tidak masuk ke sini.
 
 export const BAB = [
   {
-    id: "demo",
-    label: "Demo",
+    id: "ide",
     judul: {
-      id: "Sistem yang bagus sering berawal dari keluhan kecil.",
-      en: "Good systems often start as a small complaint.",
+      id: "Berawal dari keluhan sehari-hari.",
+      en: "It starts with an everyday complaint.",
     },
     isi: {
-      id: "Ceritakan masalahnya dengan kata Anda sendiri. Bagian teknisnya urusan saya.",
-      en: "Tell me the problem in your own words. The technical side is my job.",
+      id: "Tidak perlu tahu istilah teknisnya. Cukup cerita apa yang bikin repot. Cara menyelesaikannya, biar saya yang pikirkan.",
+      en: "No need for the technical terms. Just tell me what keeps getting in the way. Working out the fix is my job.",
     },
-    // Keluhan yang memang melahirkan proyek di rak, ditulis dari sisi pemakainya.
+    // Keluhan yang memang melahirkan proyek di rak, ditulis seperti ucapan pemakainya.
     keluhan: [
       {
         slug: "viralytics",
-        id: "Kampanye, kontrak, dan invoice masih tersebar di spreadsheet dan grup WhatsApp.",
-        en: "Campaigns, contracts and invoices still live in spreadsheets and WhatsApp groups.",
+        id: "Kampanye, kontrak, invoice, semuanya masih di spreadsheet dan grup WA.",
+        en: "Campaigns, contracts, invoices, all of it still in spreadsheets and WhatsApp groups.",
       },
       {
         slug: "yiheecam",
-        id: "Aplikasi kamera aksinya sudah ditinggalkan vendornya.",
-        en: "The action camera's app was abandoned by its vendor.",
+        id: "Aplikasi kamera aksinya sudah tidak diurus vendornya.",
+        en: "The action camera's app has been abandoned by its vendor.",
       },
       {
         slug: "fifofun",
-        id: "Anggaran rumah tangga tidak pernah cocok dengan saldo di bank.",
+        id: "Anggaran rumah tangga tidak pernah cocok sama saldo di bank.",
         en: "The household budget never matches the bank balance.",
       },
       {
         slug: "nds-etl",
-        id: "Distributor yang sudah sepuh perlu tahu kapan dan berapa repeat order, cukup dari HP.",
-        en: "Older distributors need to know when and how much to reorder, right from their phones.",
+        id: "Distributor yang sudah sepuh ingin cek dari HP: kapan harus repeat order, dan berapa.",
+        en: "Older distributors want to check from their phones when to reorder, and how much.",
       },
       {
         slug: "akarkita",
-        id: "Yang muda bingung harus memanggil kerabat dengan sebutan apa.",
+        id: "Anak muda sering bingung harus memanggil kerabatnya apa.",
         en: "The younger ones are never sure what to call which relative.",
       },
     ],
   },
   {
-    id: "aransemen",
-    label: "Arrangement",
+    id: "rencana",
     judul: {
-      id: "Bentuknya ikut kebutuhan.",
-      en: "The shape follows the need.",
+      id: "Semua dimulai dari rencana yang Anda setujui.",
+      en: "Everything starts with a plan you sign off on.",
     },
     isi: {
-      id: "Kadang jawabannya aplikasi Android yang tersambung ke kamera aksi. Kadang sistem kantor di laptop, dashboard di HP, atau alur dari iklan sampai obrolan WhatsApp.",
-      en: "Sometimes the answer is an Android app paired with an action camera. Sometimes an office system on a laptop, a dashboard on a phone, or a flow from an ad into a WhatsApp chat.",
+      id: "Keluhan tadi saya rangkum jadi daftar yang jelas: apa yang harus bisa dilakukan sistemnya dan siapa yang memakainya. Anda baca dan setujui dulu.",
+      en: "I turn the complaint into a clear list: what the system has to do and who will use it. You read it and approve it first.",
+    },
+  },
+  {
+    id: "bentuk",
+    judul: {
+      id: "Bentuknya dipilih sesuai masalahnya.",
+      en: "The shape follows the problem.",
+    },
+    isi: {
+      id: "Kadang cukup dashboard di HP, kadang sistem kantor di laptop, kadang alur dari iklan sampai chat WhatsApp. Ada juga yang memang butuh aplikasi sendiri, seperti YiheeCam untuk kamera aksi.",
+      en: "Sometimes a phone dashboard is enough, sometimes an office system on a laptop, sometimes a flow from an ad to a WhatsApp chat. Some problems do need their own app, like YiheeCam for an action camera.",
     },
     bukti: ["yiheecam", "erp-software-house", "nds-etl", "pilot-iklan"],
   },
   {
-    id: "transparansi",
-    label: "Liner notes",
+    id: "fondasi",
     judul: {
-      id: "Anda selalu tahu posisinya.",
-      en: "You always know where things stand.",
+      id: "Rapi sampai ke bagian yang tidak kelihatan.",
+      en: "Tidy all the way to the parts you don't see.",
     },
     isi: {
-      id: "Keputusan penting saya tulis bersama alasannya. Status juga ditulis apa adanya: d-day sudah lulus uji di testnet dan belum pernah memakai uang sungguhan.",
-      en: "Every key decision is written down with its reason. Status is stated as it is: d-day has passed testnet and has never used real money.",
-    },
-    bukti: ["d-day", "coderoach-os"],
-  },
-  {
-    id: "keamanan",
-    label: "Sealed",
-    judul: {
-      id: "Yang bisa melihat hanya yang memang perlu.",
-      en: "Only the people who need to see it can see it.",
-    },
-    isi: {
-      id: "Di Jeda, psikolog hanya membaca catatan yang dibagikan kliennya. Di AkarKita, pohon keluarga hanya terbuka lewat undangan.",
-      en: "In Jeda, the psychologist reads only what the client chooses to share. AkarKita opens a family tree by invitation only.",
-    },
-    bukti: ["jeda", "akarkita"],
-  },
-  {
-    id: "keandalan",
-    label: "On repeat",
-    judul: {
-      id: "Tetap jalan di hari yang buruk.",
-      en: "Still working on a bad day.",
-    },
-    isi: {
-      id: "Catatan di Jeda tetap bisa ditulis tanpa sinyal, lalu menyusul begitu sinyal kembali. Saat vendor kamera aksi berhenti merawat aplikasinya, YiheeCam menggantikannya.",
-      en: "Jeda lets you write with no signal and catches up once you are back online. When an action camera's vendor stopped looking after its app, YiheeCam took its place.",
-    },
-    bukti: ["jeda", "yiheecam"],
-  },
-  {
-    id: "skala",
-    label: "Press run",
-    judul: {
-      id: "Dari satu klien ke banyak, tanpa mulai dari nol.",
-      en: "From one client to many, without starting over.",
-    },
-    isi: {
-      id: "ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus: distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan.",
-      en: "The ERP at the software house where I work serves several clients at once: distribution and service, health insurance, plantation payroll.",
-    },
-    bukti: ["erp-software-house"],
-  },
-  {
-    id: "infrastruktur",
-    label: "The plant",
-    judul: {
-      id: "Yang tidak terlihat dirawat sama telitinya.",
-      en: "The parts nobody sees get the same care.",
-    },
-    isi: {
-      id: "Sembilan dari sepuluh proyek di rak punya halaman arsitektur. Anda bisa menelusuri satu permintaan dari layar sampai server, tanpa membuka rahasia klien.",
-      en: "Nine of the ten projects on the shelf have an architecture page. You can follow one request from the screen to the server, with no client secrets exposed.",
+      id: "Sembilan dari sepuluh proyek di rak punya halaman arsitektur, kalau Anda atau tim IT ingin tahu cara kerjanya.",
+      en: "Nine of the ten projects on the shelf have an architecture page, in case you or your IT team want to see how they work.",
     },
     bukti: ["coderoach-os", "fifofun"],
   },
   {
-    id: "rak",
-    label: "In the rack",
+    id: "bangun",
     judul: {
-      id: "Lalu jadilah sistem yang dipakai tiap hari.",
-      en: "And then it becomes a system people use every day.",
+      id: "Dibangun bertahap, bisa dicoba sejak awal.",
+      en: "Built in steps, usable from early on.",
     },
     isi: {
-      id: "Sepuluh di antaranya ada di rak ini.",
-      en: "Ten of them are on this shelf.",
+      id: "Bagian yang sudah jadi bisa langsung Anda coba, jadi tidak ada kejutan di akhir.",
+      en: "Finished parts are yours to try right away, so nothing surprises you at the end.",
+    },
+  },
+  {
+    id: "progres",
+    judul: {
+      id: "Progresnya jelas, kabarnya tidak putus.",
+      en: "Clear progress, steady updates.",
+    },
+    isi: {
+      id: "Keputusan penting saya catat beserta alasannya. Status juga saya tulis apa adanya: d-day sudah lulus uji coba, tapi belum pernah dipakai dengan uang sungguhan.",
+      en: "Every key decision is written down with its reason. Status is stated as it is: d-day has passed its trial run and has never touched real money.",
+    },
+    bukti: ["d-day", "coderoach-os"],
+  },
+  {
+    id: "rapi",
+    judul: {
+      id: "Enak dipakai, bukan cuma bisa dipakai.",
+      en: "Pleasant to use, not just usable.",
+    },
+    isi: {
+      id: "Tampilannya dirapikan, langkah yang membingungkan dipangkas.",
+      en: "The look gets tidied, and the confusing steps get cut.",
+    },
+  },
+  {
+    id: "andal",
+    judul: {
+      id: "Tetap bisa diandalkan saat paling dibutuhkan.",
+      en: "Dependable when it matters most.",
+    },
+    isi: {
+      id: "Catatan di Jeda tetap bisa ditulis walau sinyal hilang. Waktu vendor kamera aksi berhenti merawat aplikasinya, YiheeCam yang menggantikan.",
+      en: "Jeda keeps taking notes when the signal drops. When an action camera's vendor stopped looking after its app, YiheeCam took its place.",
+    },
+    bukti: ["jeda", "yiheecam"],
+  },
+  {
+    id: "aman",
+    judul: {
+      id: "Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti.",
+      en: "Important data stays with the right people. As the business grows, the system keeps up.",
+    },
+    isi: {
+      id: "Di Jeda, psikolog cuma bisa membaca catatan yang memang dibagikan kliennya. Pohon keluarga di AkarKita hanya bisa dibuka lewat undangan. ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus, dari distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan.",
+      en: "In Jeda, a psychologist reads only the notes a client chooses to share. An AkarKita family tree opens by invitation only. The ERP at the software house where I work serves several clients at once, from distribution and service to health insurance and plantation payroll.",
+    },
+    bukti: ["jeda", "akarkita", "erp-software-house"],
+  },
+  {
+    id: "rilis",
+    judul: {
+      id: "Dan akhirnya, dipakai tiap hari.",
+      en: "And in the end, used every day.",
+    },
+    isi: {
+      id: "Sepuluh di antaranya ada di rak ini. Ambil satu, lihat ceritanya.",
+      en: "Ten of them are on this shelf. Pick one and see its story.",
     },
   },
 ];

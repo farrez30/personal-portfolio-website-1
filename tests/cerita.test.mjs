@@ -19,16 +19,15 @@ const akar = new URL("../", import.meta.url);
 const baca = (p) => readFileSync(new URL(p, akar), "utf8");
 const pesan = (lang) => JSON.parse(baca(`messages/${lang}.json`));
 
-test("delapan bab dengan urutan dari demo sampai rak", () => {
+test("sepuluh bab dengan urutan dari keluhan sampai rilis", () => {
   assert.deepEqual(
     BAB.map((b) => b.id),
-    ["demo", "aransemen", "transparansi", "keamanan", "keandalan", "skala", "infrastruktur", "rak"],
+    ["ide", "rencana", "bentuk", "fondasi", "bangun", "progres", "rapi", "andal", "aman", "rilis"],
   );
 });
 
-test("setiap bab punya label, judul, dan isi dua bahasa", () => {
+test("setiap bab punya judul dan isi dua bahasa", () => {
   for (const b of BAB) {
-    assert.ok(b.label, `${b.id} tanpa label`);
     for (const lang of ["id", "en"]) {
       assert.ok(b.judul[lang]?.trim(), `${b.id}: judul ${lang} kosong`);
       assert.ok(b.isi[lang]?.trim(), `${b.id}: isi ${lang} kosong`);
@@ -48,18 +47,30 @@ test("setiap bukti dan keluhan menaut ke proyek yang ada di rak", () => {
 test("angka di kalimat cocok dengan isi rak", () => {
   const angka = { 9: ["Sembilan", "Nine"], 10: ["Sepuluh", "Ten"] };
   const denganArsitektur = proyek.filter((p) => p.arsitektur).length;
-  const infra = BAB.find((b) => b.id === "infrastruktur");
+  const infra = BAB.find((b) => b.id === "fondasi");
   assert.ok(infra.isi.id.startsWith(`${angka[denganArsitektur][0]} dari ${angka[proyek.length][0].toLowerCase()}`));
   assert.ok(infra.isi.en.startsWith(`${angka[denganArsitektur][1]} of the ${angka[proyek.length][1].toLowerCase()}`));
-  const rak = BAB.find((b) => b.id === "rak");
+  const rak = BAB.find((b) => b.id === "rilis");
   assert.ok(rak.isi.id.startsWith(angka[proyek.length][0]));
   assert.ok(rak.isi.en.startsWith(angka[proyek.length][1]));
 });
 
-test("liner notes hanya mencetak ADR yang memang ada", () => {
-  const adr = readdirSync(new URL("docs/decisions/", akar)).map((f) => f.slice(0, 4));
-  const src = baca("components/cerita/Benda.jsx");
-  for (const [, nomor] of src.matchAll(/\["(\d{4})", "/g)) assert.ok(adr.includes(nomor), `ADR ${nomor} tidak ada`);
+test("istilah tahap film tidak tampil di teks halaman", () => {
+  // Soundstage hanya kerangka visual; pembaca tidak perlu tahu nama tahap produksi film.
+  const film = /(syuting|editing|color grading|test screening|storyboard|naskah|shooting)/i;
+  for (const b of BAB)
+    for (const lang of ["id", "en"]) {
+      assert.doesNotMatch(b.judul[lang], film, `${b.id}: judul ${lang}`);
+      assert.doesNotMatch(b.isi[lang], film, `${b.id}: isi ${lang}`);
+    }
+});
+
+test("panggung tidak ikut terhitung sebagai babak", () => {
+  // Regresi 11 Nov 2026: panggung menulis data-babak pada dirinya, lalu terhitung sebagai blok
+  // saat diukur ulang, dan kamera di HP jadi satu bab di depan teksnya.
+  const src = baca("components/cerita/PanggungCerita.jsx");
+  assert.doesNotMatch(src, /dataset\.babak\s*=/);
+  assert.match(src, /querySelectorAll\("\.cerita-pembuka\[data-babak\], \.bab\[data-babak\]"\)/);
 });
 
 test("cerita ada di antara hero dan rak", () => {

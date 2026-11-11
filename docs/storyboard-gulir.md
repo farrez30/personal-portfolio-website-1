@@ -1,3 +1,5 @@
+> Diganti cerita v3 (ADR 0013, `desain/cerita-v3/`). Berkas ini catatan v2.
+
 # Storyboard gulir v2: satu kotak CD menemani delapan bab
 
 10 Nov 2026. Pengganti gerak di cerita "Dari demo ke rak" (ADR 0011) setelah Farrez menilai
