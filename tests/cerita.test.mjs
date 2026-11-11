@@ -170,3 +170,9 @@ test("dunia cerita dan teksturnya baru dibuat saat seksi tinggal satu layar lagi
   const efek = src.slice(src.indexOf("useEffect("), src.indexOf("function mulai("));
   assert.doesNotMatch(efek, /buatDunia\(/);
 });
+
+test("kabut di belakang teks bab tidak berujung tajam di desktop", () => {
+  const css = baca("components/cerita/cerita.css");
+  assert.match(css, /\.cerita-kerja--dunia \.bab__teks::before \{[^}]*mask-image:\s*linear-gradient\(to right, transparent/);
+  assert.match(css, /\.cerita-kerja--dunia \.bab__teks::before \{[^}]*mask-composite: intersect;/);
+});
