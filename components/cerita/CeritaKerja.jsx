@@ -191,7 +191,7 @@ export default function CeritaKerja() {
                 </div>
                 {!dunia && (
                   <figure className="bab__gambar">
-                    <img src={`/assets/cerita/${babak.gambar}.webp`} alt="" width={1376} height={768} loading="lazy" decoding="async" />
+                    <img src={`/assets/cerita/${babak.ringan ?? babak.gambar}.webp`} alt="" width={1376} height={768} loading="lazy" decoding="async" />
                   </figure>
                 )}
               </div>

@@ -31,3 +31,25 @@ Lup: WAV 16 bit, ujungnya disilang-pudar ke kepala (daya tetap), RMS ke -22 dBFS
 | kertas-1.mp3 | [eyesonlegs, PaperSlide (464302)](https://freesound.org/people/eyesonlegs/sounds/464302/) | CC0 | 0,06 s + 1,42 s |
 | motor.wav | [cmorris035, CD Player On Off Spin Cycles (207276)](https://freesound.org/people/cmorris035/sounds/207276/) | CC0 | 6,0 s + 4,0 s, lup 22,05 kHz, silang 0,4 s |
 | proyektor.wav | [IENBA, Projector (849795)](https://freesound.org/people/IENBA/sounds/849795/) | CC0 | 3,0 s + 6,0 s, lup 16 kHz, silang 0,5 s |
+
+## Suara ruangan cerita gulir v3
+
+Diunduh 11 November 2026 (pratinjau HQ, lisensi CC0 dicek di halaman tiap suara), aslinya di
+`D:\downloads\claude\2026-11-11-suara-cerita\asli`, skrip potongnya `docs/suara/potong-cerita.sh`.
+Pengolahan sama dengan di atas. Room tone diambil dari rekaman studio TV yang lampunya mati
+(-59 dB RMS), dinaikkan ke -22 dB lalu diputar pelan oleh kode.
+
+| Berkas | Sumber | Lisensi | Potongan |
+|---|---|---|---|
+| ketik-1.mp3 | [videog, Typing on a typewriter (240839)](https://freesound.org/people/videog/sounds/240839/) | CC0 | 0,33 s + 2,0 s, mesin tik Royal Quiet De Luxe |
+| ketik-2.mp3 | 240839 | CC0 | 3,93 s + 2,0 s |
+| lonceng-1.mp3 | 240839 | CC0 | 18,95 s + 1,1 s, lonceng ujung baris dan geser kereta |
+| papan-1.mp3 | [lmz36, quiet typing on laptop computer (721033)](https://freesound.org/people/lmz36/sounds/721033/) | CC0 | 5,0 s + 2,2 s |
+| papan-2.mp3 | 721033 | CC0 | 14,0 s + 2,2 s |
+| relay-1.mp3 | [CHallSmith, Electrical Relays, Very Large (870770)](https://freesound.org/people/CHallSmith/sounds/870770/) | CC0 | 1,83 s + 0,6 s, relay lampu tungsten soundstage |
+| relay-2.mp3 | 870770 | CC0 | 3,43 s + 0,6 s |
+| relay-3.mp3 | 870770 | CC0 | 5,58 s + 0,42 s |
+| tirai-1.mp3 | [RutgerMuller, Curtains Textile Texture (51140)](https://freesound.org/people/RutgerMuller/sounds/51140/) | CC0 | 0,0 s + 1,6 s |
+| segel-1.mp3 | [Cerise_Virtuelle, Wax seal (759526)](https://freesound.org/people/Cerise_Virtuelle/sounds/759526/) | CC0 | 0,27 s + 0,3 s |
+| segel-2.mp3 | [treesound1951, stamp, stamping, document, office (784653)](https://freesound.org/people/treesound1951/sounds/784653/) | CC0 | 1,06 s + 0,4 s |
+| ruang.wav | [LudwigMueller, AMBLM tv studio room tone ambience (329550)](https://freesound.org/people/LudwigMueller/sounds/329550/) | CC0 | 20 s + 10 s, lup 11,025 kHz, silang 1,0 s |

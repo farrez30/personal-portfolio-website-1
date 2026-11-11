@@ -42,5 +42,8 @@ In Farrez's words: "Paling mirip styleframe" (closest to the approved styleframe
   mapping applies to the 3D objects. Grain and vignette are CSS overlays.
 - Light mode shows the same styleframes as images; reduced motion shows the final states.
 - The film stages are a visual frame only; chapter text never names them (tested).
-- Revisit if phones struggle with two WebGL canvases (story and rack), or if Farrez wants real
-  parallax layers per panel (Flow edits, 0 credits) or sound.
+- Revisit if phones struggle with two WebGL canvases (story and rack).
+- Look-dev (11 Nov 2026, chosen by Farrez through a structured question: base package, 2.5D
+  parallax, room sound, real product screens): parallax comes from local Depth Anything V2 Small
+  depth maps (Apache-2.0; the Large model is CC-BY-NC and was not used), screens are composited
+  by a homography in the panel shader, sound reuses the rack's engine. No new runtime dependency.

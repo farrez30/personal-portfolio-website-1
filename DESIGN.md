@@ -71,12 +71,35 @@ chapter text never names those stages.
   curtain opens, and the screen fades to the rack's beige; the last chapter's text turns to ink.
 
 Panels keep the styleframes' own colours (no tone mapping), dimmed with distance; the 3D objects use
-AgX. Grain and vignette are CSS overlays. The scene script is pure data (`naskah.js`, tested in
+AgX. Grain and vignette are CSS overlays.
+
+Look-dev (11 Nov 2026), all in `dunia.js` without new runtime dependencies:
+- panel edges fade into the dark stage (no frames), and panels away from the camera are blurred
+  through a mipmap bias, so the stage reads as one room with depth instead of photos on stands;
+- each panel is a mesh pushed forward by its depth map (Depth Anything V2 Small, local), so people
+  and desks shift against the background as the camera moves (2.5D parallax); the release panel
+  stays flat;
+- monitors in the build, progress and screening chapters show real product screens (Coderoach OS,
+  d-day, Jeda) through a per-screen homography, with occluders kept in front and the same warm
+  grade; Light mode uses the same screens baked by `scripts/layar-ringan.mjs`;
+- dust motes hang in the air (static; parallax makes them live, no extra redraws), and a hanging
+  lamp with a light shaft and floor pool marks each gap between sets;
+- the curtain has real folds that bunch as it opens, and the rack light behind it is a warm
+  gradient that spills onto the frame;
+- grain is finer and lighter, and stops while the story is off screen.
+
+Sound (same engine and mute button as the rack, `components/imersif/suara.js`): a quiet studio room
+tone while the story is on screen, the projector hum in the screening chapter, and one-shots tied
+to the story beats (`bunyiAntara` in `naskah.js`, tested): paper, typewriter and its bell, pages,
+three relay clunks as the foundation lights come on, laptop keys, a knob click, the wax seal, each
+jewel case closing into the rack, and the curtain. Only forward scrolling sounds; long jumps are
+silent. CC0 recordings from Freesound (`public/assets/suara/PROVENANCE.md`). The scene script is pure data (`naskah.js`, tested in
 `tests/naskah.test.mjs`), so scrolling back gives the same frames. Chapter text sits bottom left
 over a soft dark fog (bottom on phones), shows "03 / 10", and leaves before the next chapter's text
 arrives. If WebGL fails, the story falls back to Light.
 
-**Light** shows each chapter's styleframe as an image beside its text, pushed in slowly by `--p`.
+**Light** shows each chapter's styleframe as an image beside its text, pushed in slowly by `--p`,
+with the same real product screens as the immersive stage.
 **Reduced motion** shows the final states.
 
 ## The jewel case (`components/imersif/benda.js`)

@@ -11,6 +11,7 @@ import {
   progresDari,
   bukit,
   halus,
+  bunyiAntara,
 } from "../components/cerita/naskah.js";
 import { BAB } from "../content/cerita.js";
 
@@ -193,4 +194,46 @@ test("progres dari gulir: nol di atas, naik per blok, berhenti di ujung", () => 
   assert.equal(progresDari(350, blok), 1.5);
   assert.equal(progresDari(9999, blok), 2);
   assert.equal(progresDari(50, []), 0);
+});
+
+test("suara ruangan: tiap bunyi sekali saat gulir maju, diam saat mundur atau melompat", () => {
+  const bunyiSepanjang = (dari, sampai, langkah) => {
+    const semua = [];
+    let lalu = keadaanPada(dari);
+    for (let p = dari + langkah; langkah > 0 ? p <= sampai + 1e-9 : p >= sampai - 1e-9; p += langkah) {
+      const kini = keadaanPada(p);
+      for (const b of bunyiAntara(lalu, kini)) semua.push([b, BABAK[kini.babak].id]);
+      lalu = kini;
+    }
+    return semua;
+  };
+  const maju = bunyiSepanjang(0, AKHIR, 0.01);
+  const hitung = (nama) => maju.filter(([b]) => b === nama).length;
+  assert.equal(hitung("ketik"), 1);
+  assert.equal(hitung("lonceng"), 1);
+  assert.equal(hitung("relay"), 3, "tiga lampu fondasi, tiga klak relay");
+  assert.equal(hitung("segel"), 1);
+  assert.equal(hitung("rapat"), 3, "satu bunyi per kotak CD yang masuk rak");
+  assert.equal(hitung("tirai"), 1);
+  for (const [b, id] of maju) {
+    if (b === "relay") assert.equal(id, "fondasi");
+    if (b === "segel") assert.equal(id, "aman");
+    if (b === "rapat" || b === "tirai") assert.equal(id, "rilis");
+  }
+  assert.deepEqual(bunyiSepanjang(AKHIR, 0, -0.01), [], "gulir mundur berbunyi");
+  assert.deepEqual(bunyiAntara(keadaanPada(1), keadaanPada(6)), [], "lompatan jauh berbunyi");
+});
+
+test("gambar mode Ringan dan aset paralaks serta layar produk ada di public", async () => {
+  const { existsSync, readFileSync } = await import("node:fs");
+  const ada = (n) => existsSync(new URL(`../public/assets/cerita/${n}.webp`, import.meta.url));
+  for (const b of BABAK.slice(1)) {
+    assert.ok(ada(b.ringan ?? b.gambar), `${b.id}: gambar Ringan tidak ada`);
+    if (b.id !== "rilis") assert.ok(ada(`dalam-${b.gambar}`), `${b.id}: peta kedalaman tidak ada`);
+  }
+  const dunia = readFileSync(new URL("../components/cerita/dunia.js", import.meta.url), "utf8");
+  for (const [, src] of dunia.matchAll(/src: "(layar-[\w-]+)"/g)) assert.ok(ada(src), `${src} tidak ada`);
+  // Setiap styleframe yang ditempeli layar produk di Imersif punya versi Ringan yang sama.
+  for (const [, g] of dunia.matchAll(/"(\d\d-[\w-]+)": \[/g))
+    assert.equal(BABAK.find((b) => b.gambar === g)?.ringan, `${g}-layar`, `${g}: mode Ringan masih layar lama`);
 });
