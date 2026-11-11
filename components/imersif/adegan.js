@@ -115,6 +115,20 @@ const LABEL = {
   architecture: "Architecture",
 };
 
+// Halaman teks buklet. Dulu 2048 px: tiap halaman 16 MB yang diunggah ke GPU saat album dibuka.
+// Di ukuran baca (sekitar 700 px CSS per halaman, rasio piksel 2) 1536 px masih tajam.
+export const UKURAN_HALAMAN = 1536;
+
+// Semua tekstur sebuah bahan, termasuk yang ada di uniform shader buatan sendiri.
+export function teksturBahan(m, ke = new Set()) {
+  if (!m) return ke;
+  for (const v of Object.values(m)) if (v?.isTexture) ke.add(v);
+  for (const u of Object.values(m.uniforms ?? {})) if (u?.value?.isTexture) ke.add(u.value);
+  return ke;
+}
+
+const bingkaiBerikut = () => new Promise((r) => requestAnimationFrame(() => r()));
+
 function halamanBuklet(p, locale, uv) {
   const hal = [];
   // Kanvas yang gambarnya menyusul (kanvas.siap) diberikan sebagai tekstur kita sendiri.
@@ -131,7 +145,7 @@ function halamanBuklet(p, locale, uv) {
   };
   hal.push({ src: tekstur(gambarSampul(p, locale, 2048)), alt: `${p.katalog} ${p.judul[locale]}` });
   hal.push({
-    src: gambarHalaman({ label: LABEL.overview, judul: p.judul[locale], isi: p.ringkas[locale], catatan: `${p.katalog}  ${p.periode}` }, 2048),
+    src: gambarHalaman({ label: LABEL.overview, judul: p.judul[locale], isi: p.ringkas[locale], catatan: `${p.katalog}  ${p.periode}` }, UKURAN_HALAMAN),
     alt: LABEL.overview,
     text: p.ringkas[locale],
   });
@@ -158,7 +172,7 @@ ${h.isi[locale]}` });
   for (const h of HALAMAN) {
     const b = p.buklet[h];
     if (!b) continue;
-    hal.push({ src: gambarHalaman({ label: LABEL[h], judul: b.judul[locale], isi: b.isi[locale] }, 2048), alt: LABEL[h], text: `${b.judul[locale]}\n\n${b.isi[locale]}` });
+    hal.push({ src: gambarHalaman({ label: LABEL[h], judul: b.judul[locale], isi: b.isi[locale] }, UKURAN_HALAMAN), alt: LABEL[h], text: `${b.judul[locale]}\n\n${b.isi[locale]}` });
   }
   if (uv) {
     // Halaman UV selalu di sisi kanan spread (indeks genap) supaya senter mudah diarahkan.
@@ -463,6 +477,12 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   let seret = null;
 
   const bingkai = (now) => {
+    // Sebelum dipanaskan (siapkan()), gambar pertama akan mengompilasi semua shader di main
+    // thread: 2,6 detik halaman membeku di GPU RX 6700 XT. Jadi belum ada yang digambar.
+    if (!hangat) {
+      lalu = now;
+      return;
+    }
     const dt = Math.min(0.05, Math.max(1e-4, (now - lalu) / 1000));
     lalu = now;
 
@@ -764,9 +784,16 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       kirim();
     }
 
+    // Rak diam di satu album sebentar: buklet album itu disiapkan di latar (lihat siapkanBuklet).
+    if (k_.keadaan === "rak" && !k_.buklet) {
+      k_.diam = Math.abs(k_.pos - sebelum) < 1e-4 ? (k_.diam ?? 0) + dt : 0;
+      const p = k_.diam > (sentuhKasar ? 1.2 : 0.6) ? kotak[Math.round(k_.pos)]?.p : null;
+      if (p && cadangan?.slug !== p.slug) siapkanBuklet(p);
+    }
+
     const perluBuklet = !!aktifK && aktifK.buka > 0.25;
     if (k_.buklet && (!perluBuklet || k_.buklet.userData.slug !== aktifK?.p.slug) && k_.baca < 0.001) buangBuklet();
-    if (perluBuklet && !k_.buklet) k_.buklet = buatBuklet(aktifK.p);
+    if (perluBuklet && !k_.buklet) k_.buklet = pakaiBuklet(aktifK.p);
     if (!k_.buklet) senterLampu.intensity = 0;
     // --- buklet: keluar dari tutup sambil melengkung, mendarat datar --------
     if (k_.buklet && aktifK) {
@@ -985,8 +1012,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       ilustrasi = new Image();
       ilustrasi.src = p.ilustrasi;
     }
-    k_.uv = p.arsitektur ? buatHalamanUV(p, locale, ilustrasi) : null;
-    const halaman = halamanBuklet(p, locale, k_.uv);
+    const uv = p.arsitektur ? buatHalamanUV(p, locale, ilustrasi) : null;
+    const halaman = halamanBuklet(p, locale, uv);
     const b = new LeafThroughObject(
       { renderer, camera, domElement: kanvas },
       {
@@ -1008,6 +1035,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     b.userData.deform = deform;
     b.userData.slug = p.slug;
     b.userData.teksturNaskah = halaman.milik;
+    b.userData.uv = uv;
     // Lantai tak terlihat tepat di belakang halaman, hanya menangkap bayangan buklet.
     const lantai = new THREE.Mesh(new THREE.PlaneGeometry(8, 8), new THREE.ShadowMaterial({ opacity: 0, transparent: true, depthWrite: false }));
     lantai.position.z = -0.24 / 120;
@@ -1016,19 +1044,95 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     lantai.raycast = () => {};
     b.add(lantai);
     b.userData.lantai = lantai;
-    scene.add(b);
     return b;
+  };
+
+  // Buklet yang sudah disiapkan di latar untuk album yang sedang di tengah rak: halamannya
+  // digambar saat peramban senggang, shadernya dikompilasi paralel, dan teksturnya diunggah satu
+  // per bingkai. Dulu semua itu terjadi di satu bingkai saat tutup kotak terbuka (746 ms).
+  let cadangan = null;
+  const lepasBuklet = (b) => {
+    b.userData.lantai.geometry.dispose();
+    b.userData.lantai.material.dispose();
+    b.dispose();
+    for (const t of b.userData.teksturNaskah ?? []) t.dispose();
+    b.userData.uv?.dispose();
+  };
+  const buangCadangan = () => {
+    if (cadangan?.b) lepasBuklet(cadangan.b);
+    if (cadangan?.idle) (window.cancelIdleCallback ?? clearTimeout)(cadangan.idle);
+    cadangan = null;
+  };
+  const siapkanBuklet = (p) => {
+    buangCadangan();
+    const ini = { slug: p.slug, b: null };
+    cadangan = ini;
+    const mulai = window.requestIdleCallback ?? ((f) => setTimeout(f, 200));
+    ini.idle = mulai(
+      async () => {
+        if (cadangan !== ini) return;
+        ini.b = buatBuklet(p);
+        try {
+          await renderer.compileAsync(ini.b, camera, scene);
+        } catch {}
+        const tx = new Set();
+        ini.b.traverse((o) => [].concat(o.material ?? []).forEach((m) => teksturBahan(m, tx)));
+        for (const t of tx) {
+          if (cadangan !== ini) return;
+          if (t.image) renderer.initTexture(t);
+          await bingkaiBerikut();
+        }
+      },
+      { timeout: 1500 },
+    );
+  };
+  const pakaiBuklet = (p) => {
+    let b;
+    if (cadangan?.slug === p.slug && cadangan.b) {
+      b = cadangan.b;
+      cadangan.b = null;
+      cadangan = null;
+    } else {
+      buangCadangan();
+      b = buatBuklet(p);
+    }
+    scene.add(b);
+    k_.uv = b.userData.uv;
+    return b;
+  };
+
+  // Pemanasan sebelum gambar pertama: shader semua benda (termasuk yang masih tersembunyi)
+  // dikompilasi lewat KHR_parallel_shader_compile, lalu tekstur diunggah satu per bingkai.
+  let hangat = false;
+  const siapkan = async () => {
+    const tersembunyi = [];
+    scene.traverse((o) => {
+      if (!o.visible) {
+        tersembunyi.push(o);
+        o.visible = true;
+      }
+    });
+    try {
+      await renderer.compileAsync(scene, camera);
+    } catch {}
+    for (const o of tersembunyi) o.visible = false;
+    const tx = new Set();
+    scene.traverse((o) => [].concat(o.material ?? []).forEach((m) => teksturBahan(m, tx)));
+    tx.add(scene.environment);
+    for (const t of tx) {
+      if (t?.image) renderer.initTexture(t);
+      await bingkaiBerikut();
+    }
+    hangat = true;
+    lalu = performance.now();
+    if (pernahTampil) k_.introMulai = lalu;
   };
 
   const buangBuklet = () => {
     const b = k_.buklet;
     scene.remove(b);
-    b.userData.lantai.geometry.dispose();
-    b.userData.lantai.material.dispose();
-    b.dispose();
-    for (const t of b.userData.teksturNaskah ?? []) t.dispose();
+    lepasBuklet(b);
     k_.buklet = null;
-    k_.uv?.dispose();
     k_.uv = null;
     k_.uvTerlihat = false;
     k_.senter = false;
@@ -1295,6 +1399,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   if (!gulirHalaman) kanvas.addEventListener("wheel", putarRoda, { passive: false });
 
   const api = {
+    // Panggung menampilkan cincin memuat sampai janji ini selesai.
+    siapkan,
     on(nama, fn) {
       dengar[nama] = fn;
     },
@@ -1357,7 +1463,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (k_.keadaan !== "buka" || k_.dengar > 0.001) return;
       const p = proyek.find((x) => x.slug === k_.aktif);
       k_.tutupMenunggu = false;
-      if (!k_.buklet) k_.buklet = buatBuklet(p);
+      if (!k_.buklet) k_.buklet = pakaiBuklet(p);
       pasangTween(k_.bacaT, k_.baca, 1, C.bacaMasuk * (1 - k_.baca), linear, performance.now());
       panggil("suara", "kertas", lamaKertas(C.bacaMasuk * (1 - k_.baca)));
       k_.keadaan = "buklet";
@@ -1507,6 +1613,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       kanvas.removeEventListener("pointerleave", keluar);
       kanvas.removeEventListener("wheel", putarRoda);
       k_.buklet?.dispose();
+      buangCadangan();
       panelHolo = null;
       scene.traverse((o) => {
         if (!o.isMesh) return;

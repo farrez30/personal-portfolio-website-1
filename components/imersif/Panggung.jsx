@@ -123,7 +123,22 @@ export default function Panggung({ gulir }) {
   useEffect(() => {
     let batal = false;
     let a = null;
-    document.fonts.ready.then(() => {
+    // Rak baru dibuat saat sudah dekat layar (atau langsung bila tautan menunjuk rak), supaya
+    // pengunjung yang masih di hero tidak menanggung renderer, tekstur, dan shadernya.
+    let hentiDekat = () => {};
+    const dekat = new Promise((ok) => {
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          ok();
+        },
+        { rootMargin: "150% 0px" },
+      );
+      io.observe(wadah.current);
+      hentiDekat = () => io.disconnect();
+    });
+    Promise.all([dekat, document.fonts.ready]).then(async () => {
       if (batal) return;
       const sfx = suara();
       a = buatAdegan(wadah.current, {
@@ -154,11 +169,15 @@ export default function Panggung({ gulir }) {
       // Selama ganti album, posisi gulir halaman ikut indeks baru tanpa menggeser rak lagi.
       a.on("indeks", (i) => keIndeksGulir(i, false));
       adegan.current = a;
+      // Cincin memuat tetap tampil sampai shader dan tekstur rak dipanaskan.
+      await a.siapkan();
+      if (batal) return;
       bacaHash(a, false, keIndeksGulir);
       setSiap(true);
     });
     return () => {
       batal = true;
+      hentiDekat();
       // Lup motor dan dengung berhenti saat rak dilepas (misalnya pindah ke mode Ringan).
       suara()?.motor(0);
       suara()?.proyektor(0);
