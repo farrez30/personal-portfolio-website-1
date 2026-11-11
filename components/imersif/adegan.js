@@ -1051,6 +1051,30 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   // digambar saat peramban senggang, shadernya dikompilasi paralel, dan teksturnya diunggah satu
   // per bingkai. Dulu semua itu terjadi di satu bingkai saat tutup kotak terbuka (746 ms).
   let cadangan = null;
+  // Gambar latihan ke kanvas sendiri, dipotong scissor ke satu piksel. compileAsync hanya
+  // menyiapkan shader; pipeline GPU, bahan bayangan, dan tekstur yang tertinggal baru dibuat pada
+  // gambar pertama (terukur: 261 ms saat buklet muncul di tutup, 112 ms pada gambar rak pertama).
+  // Semua benda di `akar`, juga yang tersembunyi dan di luar pandangan, digambar sekali beserta
+  // bayangannya. Bukan ke WebGLRenderTarget: di sana three.js mematikan tone mapping dan ruang
+  // warna layar, jadi mengompilasi 9 shader versi lain yang tak terpakai (2,4 detik terbuang).
+  const renderLatihan = (akar) => {
+    const pulih = [];
+    akar.traverse((o) => {
+      pulih.push([o, o.visible, o.frustumCulled]);
+      o.visible = true;
+      o.frustumCulled = false;
+    });
+    renderer.setScissorTest(true);
+    renderer.setScissor(0, 0, 1, 1);
+    renderer.shadowMap.needsUpdate = true;
+    renderer.render(scene, camera);
+    renderer.setScissorTest(false);
+    for (const [o, v, f] of pulih) {
+      o.visible = v;
+      o.frustumCulled = f;
+    }
+    renderer.shadowMap.needsUpdate = true;
+  };
   const lepasBuklet = (b) => {
     b.userData.lantai.geometry.dispose();
     b.userData.lantai.material.dispose();
@@ -1072,9 +1096,22 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       async () => {
         if (cadangan !== ini) return;
         ini.b = buatBuklet(p);
-        try {
-          await renderer.compileAsync(ini.b, camera, scene);
-        } catch {}
+        // Dikompilasi sebagai bagian scene, persis seperti nanti dipakai: kunci shadernya ikut lampu
+        // dan bayangan scene. Bagian sinkron compileAsync berjalan saat buklet masih di scene;
+        // sesudahnya buklet dikeluarkan lagi sebelum bingkai berikut sempat menggambarnya.
+        // Bagian yang baru tampil saat dibaca (lantai bayangan) ikut dikompilasi.
+        const sembunyi = [];
+        ini.b.traverse((o) => {
+          if (!o.visible) {
+            sembunyi.push(o);
+            o.visible = true;
+          }
+        });
+        scene.add(ini.b);
+        const kompilasi = renderer.compileAsync(scene, camera).catch(() => {});
+        scene.remove(ini.b);
+        for (const o of sembunyi) o.visible = false;
+        await kompilasi;
         const tx = new Set();
         ini.b.traverse((o) => [].concat(o.material ?? []).forEach((m) => teksturBahan(m, tx)));
         for (const t of tx) {
@@ -1082,6 +1119,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
           if (t.image) renderer.initTexture(t);
           await bingkaiBerikut();
         }
+        if (cadangan !== ini || k_.buklet) return;
+        scene.add(ini.b);
+        renderLatihan(ini.b);
+        scene.remove(ini.b);
       },
       { timeout: 1500 },
     );
@@ -1123,6 +1164,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (t?.image) renderer.initTexture(t);
       await bingkaiBerikut();
     }
+    renderLatihan(scene);
+    await bingkaiBerikut();
     hangat = true;
     lalu = performance.now();
     if (pernahTampil) k_.introMulai = lalu;
