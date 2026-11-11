@@ -41,7 +41,7 @@ export const BEAT = [
     kamera: { dari: { x: 0.5, y: 0.6, s: 1.0 }, ke: { x: 0.55, y: 0.4, s: 1.45 } },
     hp: 0.55, tersendat: 0.5, sambung: { jenis: "zoom", ke: { x: 0.56, y: 0.36, s: 3.2 } } },
   { no: 9, gambar: "09-segel", judul: "Segel dan duplikasi", vh: 120,
-    teks: "Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti.",
+    teks: "Data penting tetap di tangan yang berhak.",
     kamera: { dari: { x: 0.62, y: 0.55, s: 1.9 }, ke: { x: 0.5, y: 0.5, s: 1.0 } },
     hp: 0.72, sambung: { jenis: "mundur" } },
   { no: 10, gambar: "10-rilis", judul: "Rilis", vh: 180,

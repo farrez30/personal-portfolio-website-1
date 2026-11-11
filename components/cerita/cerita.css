@@ -85,6 +85,12 @@
   font-size: 0.9375rem;
 }
 
+/* Tautan bukti sebaris tetap mudah diketuk: padding sebaris memperbesar area sentuh tanpa
+   menggeser baris. */
+.bab__bukti a {
+  padding-block: 0.7rem;
+}
+
 .bab__bukti a,
 .bab__keluhan a {
   color: var(--ink);
@@ -174,8 +180,9 @@
 
 .cerita-kerja--dunia {
   --putih: 0;
-  /* Panggung selalu gelap: cincin fokus memakai nilai tema gelap supaya terlihat. */
-  --fokus: #f0b35a;
+  /* Panggung selalu gelap: cincin fokus memakai nilai tema gelap supaya terlihat, lalu berganti
+     ke nilai tema terang saat layar memutih ke beige rak (emas di beige hanya 1,43:1). */
+  --fokus: color-mix(in srgb, #8a4b00 calc(var(--putih) * 100%), #f0b35a);
   position: relative;
   padding-bottom: 0;
 }
@@ -211,6 +218,8 @@
 .panggung-cerita__vignette {
   position: absolute;
   inset: 0;
+  /* Hilang bersama gelapnya panggung, supaya tidak tertinggal sebagai kabut di atas beige. */
+  opacity: calc(1 - var(--putih));
   background: radial-gradient(ellipse 75% 70% at 50% 46%, transparent 55%, rgb(8 7 6 / 0.72) 100%);
 }
 
@@ -280,6 +289,12 @@
   opacity: 1 !important;
 }
 
+/* Serah terima ke beige: teks bab terakhir hilang dulu selagi latarnya setengah gelap setengah
+   terang (kontras sempat sekitar 1:1), lalu muncul lagi sebagai tinta gelap. */
+.cerita-kerja--dunia .bab--rilis .bab__isi {
+  opacity: max(calc(1 - var(--putih) * 4), calc((var(--putih) - 0.45) * 2.2));
+}
+
 .cerita-kerja--dunia .bab__bukti a,
 .cerita-kerja--dunia .bab__keluhan a {
   color: inherit;
@@ -333,7 +348,9 @@
 .cerita-kerja--dunia .bab__teks {
   position: sticky;
   isolation: isolate;
-  top: clamp(40svh, 52svh, 60svh);
+  /* Sedikit di bawah tengah, tapi naik sejauh perlu supaya kotak yang tinggi tetap utuh di layar
+     pendek (--tinggi diukur di CeritaKerja). Dulu clamp(40svh, 52svh, 60svh), yang selalu 52svh. */
+  top: max(4.5rem, min(52svh, calc(100svh - var(--tinggi, 0px) - 1.5rem)));
   max-width: 30rem;
   /* Saat layar memutih ke beige rak, teks berganti ke tinta gelap. */
   color: color-mix(in srgb, #1d1b19 calc(var(--putih) * 100%), #ece8e1);
@@ -378,5 +395,109 @@
 
   .cerita-kerja--dunia .bab__keluhan li {
     font-size: 0.875rem;
+  }
+}
+
+/* ---------- Penanda bab: sepuluh titik, bisa diketuk untuk lompat ke bab ---------- */
+
+.cerita-rel {
+  --titik: var(--ink-3);
+  --titik-aktif: var(--aksen);
+  position: fixed;
+  z-index: 3;
+  right: 1.25rem;
+  top: 50%;
+  translate: 0 -50%;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity var(--t-sedang) var(--ease),
+    visibility 0s linear var(--t-sedang);
+}
+
+.cerita-rel.is-tampil {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.cerita-rel ol {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cerita-rel__titik {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.cerita-rel__titik::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--titik);
+  transition:
+    height var(--t-cepat) var(--ease),
+    width var(--t-cepat) var(--ease),
+    background-color var(--t-cepat) var(--ease);
+}
+
+.cerita-rel__titik:hover::before,
+.cerita-rel__titik[aria-current]::before {
+  background: var(--titik-aktif);
+}
+
+.cerita-rel__titik[aria-current]::before {
+  height: 18px;
+}
+
+.cerita-rel__titik:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: -4px;
+  border-radius: 6px;
+}
+
+.cerita-kerja--dunia .cerita-rel {
+  --titik: color-mix(in srgb, #6f695f calc(var(--putih) * 100%), rgb(236 232 225 / 0.55));
+  --titik-aktif: color-mix(in srgb, #b3322a calc(var(--putih) * 100%), #e0574b);
+}
+
+/* HP: satu baris di bawah header, kiri; cakram pemutar menempati ujung kanannya. */
+@media (max-width: 47.99rem) {
+  .cerita-rel {
+    right: auto;
+    left: 0.5rem;
+    top: 4.15rem;
+    translate: none;
+  }
+
+  .cerita-rel ol {
+    flex-direction: row;
+  }
+
+  .cerita-rel__titik {
+    width: 1.875rem;
+  }
+
+  .cerita-rel__titik[aria-current]::before {
+    width: 18px;
+    height: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cerita-rel,
+  .cerita-rel__titik::before {
+    transition: none;
   }
 }

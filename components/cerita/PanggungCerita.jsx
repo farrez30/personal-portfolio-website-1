@@ -24,6 +24,24 @@ export default function PanggungCerita({ akar, onGagal }) {
     const seksi = akar.current;
     const el = panggung.current;
     if (!seksi || !el) return;
+    // Dunia (dan 23 teksturnya) baru dibuat saat seksi tinggal satu layar lagi.
+    let bongkar = null;
+    const dekat = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting || bongkar) return;
+        dekat.disconnect();
+        bongkar = mulai(seksi, el) ?? (() => {});
+      },
+      { rootMargin: "100% 0px" },
+    );
+    dekat.observe(seksi);
+    return () => {
+      dekat.disconnect();
+      bongkar?.();
+    };
+  }, [akar, locale, onGagal]);
+
+  function mulai(seksi, el) {
     gsap.registerPlugin(ScrollTrigger);
     const hp = matchMedia("(max-width: 47.99rem)").matches;
     let kotor = true;
@@ -137,7 +155,7 @@ export default function PanggungCerita({ akar, onGagal }) {
       ro.disconnect();
       dunia.hapus();
     };
-  }, [akar, locale, onGagal]);
+  }
 
   return (
     <div ref={panggung} className="panggung-cerita" aria-hidden="true">

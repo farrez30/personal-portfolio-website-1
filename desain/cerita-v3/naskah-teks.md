@@ -91,6 +91,13 @@ dan 5 (bagian isi pilihan A berlaku untuk judul B yang sepadan).
 | 9 | Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti. |
 | 10 | Dan akhirnya, dipakai tiap hari. |
 
+## Putaran 8: bab 9 satu janji di judul (11 Nov 2026)
+
+Dari QA akhir (impeccable critique): judul bab 9 memuat dua janji dan kotaknya paling tinggi di HP.
+Farrez memilih janji kedua pindah ke isi. Judul: "Data penting tetap di tangan yang berhak." Isi:
+"... hanya bisa dibuka lewat undangan. Usaha tumbuh, sistemnya sanggup mengikuti: ERP di software
+house tempat saya bekerja dipakai beberapa klien sekaligus, ..."
+
 ## Putaran 7: klaim dikonfirmasi (11 Nov 2026)
 
 Farrez memeriksa tiga klaim yang hanya ia tahu kebenarannya.

@@ -28,6 +28,67 @@ export default function CeritaKerja() {
   const akar = useRef(null);
   const [dunia, setDunia] = useState(false);
   const tanpaDunia = useCallback(() => setDunia(false), []);
+  const [tampil, setTampil] = useState(false);
+  const [aktif, setAktif] = useState(-1);
+
+  // Seksi di layar: penanda bab muncul, dan pemutar musik menciut ke cakram (event "cerita")
+  // supaya tidak menutupi judul bab.
+  useEffect(() => {
+    const el = akar.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => {
+      setTampil(e.isIntersecting);
+      window.dispatchEvent(new CustomEvent("cerita", { detail: { tampil: e.isIntersecting } }));
+    });
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      window.dispatchEvent(new CustomEvent("cerita", { detail: { tampil: false } }));
+    };
+  }, []);
+
+  // Tinggi kotak teks tiap bab (--tinggi), supaya posisi tempelnya naik di layar pendek dan
+  // kotak yang tinggi tidak terpotong di bawah (cerita.css).
+  useEffect(() => {
+    const el = akar.current;
+    if (!el || !dunia) return;
+    const ro = new ResizeObserver((isi) => {
+      for (const e of isi) e.target.style.setProperty("--tinggi", `${Math.ceil(e.borderBoxSize[0].blockSize)}px`);
+    });
+    el.querySelectorAll(".bab__teks").forEach((t) => ro.observe(t));
+    return () => ro.disconnect();
+  }, [dunia, locale]);
+
+  // Bab yang memuat garis tengah layar, untuk titik aktif di penanda bab.
+  useEffect(() => {
+    const el = akar.current;
+    if (!el) return;
+    const bab = [...el.querySelectorAll(".bab")];
+    const io = new IntersectionObserver(
+      (isi) => {
+        // Di atas bab pertama (judul seksi dan pembuka) tidak ada bab aktif, dan penanda belum tampil.
+        for (const e of isi) {
+          const i = bab.indexOf(e.target);
+          if (e.isIntersecting) setAktif(i);
+          else setAktif((a) => (a === i ? -1 : a));
+        }
+      },
+      { rootMargin: "-50% 0px -50% 0px" },
+    );
+    bab.forEach((b) => io.observe(b));
+    return () => io.disconnect();
+  }, [dunia]);
+
+  // Lompat ke bab: ke posisi saat teksnya sudah utuh (Imersif: sekitar 40% bab di garis tengah,
+  // seperti naskah membaca progres). Lompatan langsung; kamera menyusul dengan haluskannya sendiri.
+  const keBab = (i) => {
+    const bab = akar.current?.querySelectorAll(".bab")[i];
+    if (!bab) return;
+    const r = bab.getBoundingClientRect();
+    const y = window.scrollY + r.top + (dunia ? r.height * 0.4 - innerHeight / 2 : -innerHeight * 0.12);
+    window.scrollTo({ top: Math.max(0, y), behavior: "instant" });
+    bab.querySelector(".bab__judul")?.focus({ preventScroll: true });
+  };
 
   useEffect(() => {
     setDunia(mode === "imersif" && !matchMedia("(prefers-reduced-motion: reduce)").matches);
@@ -64,7 +125,7 @@ export default function CeritaKerja() {
           yPercent: 110,
           stagger: 0.06,
           ease: "power3.out",
-          scrollTrigger: { trigger: dunia ? bab : teks, start: awal, end: dunia ? "top 25%" : "top 45%", scrub: 0.8 },
+          scrollTrigger: { trigger: dunia ? bab : teks, start: awal, end: dunia ? "top 38%" : "top 55%", scrub: 0.8 },
         });
         if (dunia)
           gsap.from(teks, {
@@ -131,6 +192,24 @@ export default function CeritaKerja() {
 
       {dunia && <PanggungCerita akar={akar} onGagal={tanpaDunia} />}
 
+      <nav className={`cerita-rel ${tampil && aktif >= 0 ? "is-tampil" : ""}`} aria-label={t("rel")}>
+        <ol>
+          {BAB.map((b, i) => (
+            <li key={b.id}>
+              <button
+                type="button"
+                className="cerita-rel__titik"
+                aria-current={i === aktif ? "step" : undefined}
+                aria-label={t("keBab", { n: i + 1, judul: b.judul[locale] })}
+                title={`${i + 1}. ${b.judul[locale]}`}
+                tabIndex={tampil && aktif >= 0 ? 0 : -1}
+                onClick={() => keBab(i)}
+              />
+            </li>
+          ))}
+        </ol>
+      </nav>
+
       {dunia && (
         <div className="cerita-pembuka" data-babak="pembuka" style={{ "--bobot": BABAK[0].bobot }} aria-hidden="true">
           <p className="wadah cerita-pembuka__judul">{t("judul")}</p>
@@ -156,7 +235,7 @@ export default function CeritaKerja() {
                       {String(i + 1).padStart(2, "0")} / {String(BAB.length).padStart(2, "0")}
                     </span>
                   </p>
-                  <h3 id={`bab-${b.id}`} className="bab__judul">
+                  <h3 id={`bab-${b.id}`} className="bab__judul" tabIndex={-1}>
                     {b.judul[locale]}
                   </h3>
                   <p className="bab__teks-isi">{b.isi[locale]}</p>

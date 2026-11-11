@@ -143,8 +143,8 @@ const fragPanel = /* glsl */ `
       float tepi = 1.0 - smoothstep(0.0012, 0.0026, abs(vUv.x - garis));
       if (garis > 0.002 && garis < 0.998) c = mix(c, aksen, tepi);
     }
-    float tepi = smoothstep(0.0, 0.07, vUv.x) * smoothstep(0.0, 0.07, 1.0 - vUv.x)
-      * smoothstep(0.0, 0.1, vUv.y) * smoothstep(0.0, 0.12, 1.0 - vUv.y);
+    float tepi = smoothstep(0.0, 0.1, vUv.x) * smoothstep(0.0, 0.1, 1.0 - vUv.x)
+      * smoothstep(0.0, 0.16, vUv.y) * smoothstep(0.0, 0.12, 1.0 - vUv.y);
     gl_FragColor = vec4(c * terang, tepi);
     #include <colorspace_fragment>
   }
@@ -341,7 +341,7 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
   const geoPanel = new THREE.PlaneGeometry(PANEL.w, PANEL.h, hp ? 96 : 176, hp ? 54 : 99);
   // Seberapa jauh bagian terdekat maju dari bidang panel. Panel rilis tetap datar: kamera
   // mendorong sampai sekitar 3,6 satuan dari celah tirainya.
-  const TEBAL = 1.6;
+  const TEBAL = 1.3;
   const genangan = teksturGenangan();
   const panel = STASIUN.map((st, i) => {
     const grup = new THREE.Group();
@@ -521,6 +521,19 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
   const iRapi = BABAK.findIndex((b) => b.id === "rapi") - 1;
   const iAndal = BABAK.findIndex((b) => b.id === "andal") - 1;
 
+  // Garis sibak grading diukur dari bagian panel yang terlihat, bukan dari lebar gambar: di HP
+  // kamera hanya melihat sekitar seperempat panel, dan garis yang mulai dari tepi kiri gambar
+  // membuat layar abu-abu penuh. Sejak awal garis sudah di 30% pandangan, jadi mentah dan hasil
+  // grading terlihat berdampingan; di ujung beat garisnya keluar dari pandangan ke kanan.
+  function garisSibak(pos, sibak) {
+    if (sibak >= 1) return 1;
+    const jarak = Math.max(1, kamera.position.z - pos.z);
+    const separuh = Math.tan(THREE.MathUtils.degToRad(FOV / 2)) * jarak * kamera.aspect;
+    const kiri = THREE.MathUtils.clamp((sasaran.x - separuh - (pos.x - PANEL.w / 2)) / PANEL.w, 0, 1);
+    const kanan = THREE.MathUtils.clamp((sasaran.x + separuh - (pos.x - PANEL.w / 2)) / PANEL.w, 0, 1);
+    return kiri + (kanan - kiri) * (0.3 + 0.7 * sibak);
+  }
+
   function gambar(s, waktu) {
     kamera.position.fromArray(s.posisi);
     sasaran.fromArray(s.sasaran);
@@ -541,9 +554,10 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
       if (i === iFondasi) terang *= s.terang;
       if (i === iAndal && s.sendat) terang *= 0.25;
       pn.bahan.uniforms.terang.value = terang;
-      pn.bahan.uniforms.garis.value = i === iRapi ? s.sibak : -1;
-      // Fokus di panel yang sedang didekati (jarak D0 / s, sekitar 9 sampai 14); makin jauh makin buram.
-      pn.bahan.uniforms.kabur.value = THREE.MathUtils.smoothstep(jarak, 16, 40) * 2.5;
+      pn.bahan.uniforms.garis.value = i === iRapi ? garisSibak(pn.grup.position, s.sibak) : -1;
+      // Fokus di panel yang sedang didekati (jarak D0 / s, sekitar 9 sampai 14); makin jauh makin
+      // buram. Bias mipmap di atas 1,6 mulai terlihat kotak-kotak di gambar pembuka.
+      pn.bahan.uniforms.kabur.value = THREE.MathUtils.smoothstep(jarak, 18, 44) * 1.6;
       pn.cahaya.material.opacity = redupJauh * (i === iFondasi ? s.terang : 1);
     });
 
