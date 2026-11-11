@@ -63,7 +63,11 @@ for (const [gambar, semua] of Object.entries(LAYAR)) {
         : `[l${j}][asli${j}]blend=all_expr='min(A+0.18*B,255)'[campur${j}]`,
       // Masker jadi kanal alfa lapisan layar, lalu ditimpa ke gambar dasar. maskedmerge sempat
       // membocorkan lapisan di luar masker dan mewarnai separuh adegan.
-      `color=black:s=${W}x${H},format=gray,geq=lum='255*${topeng}'[t${j}]`,
+      l.batasDalam
+        ? `color=black:s=${W}x${H},format=gray,geq=lum='255*${topeng}'[tg${j}];` +
+          `movie=public/assets/cerita/dalam-${gambar}.webp,scale=${W}:${H},format=gray,` +
+          `lut=y='if(lt(val,${Math.round(l.batasDalam * 255)}),255,0)'[td${j}];[tg${j}][td${j}]blend=all_mode=multiply[t${j}]`
+        : `color=black:s=${W}x${H},format=gray,geq=lum='255*${topeng}'[t${j}]`,
       `[campur${j}]format=rgba[cr${j}];[cr${j}][t${j}]alphamerge[la${j}]`,
       `[dasar${j}][la${j}]overlay=format=auto,format=rgb24[h${j}]`,
     );

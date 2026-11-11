@@ -54,9 +54,10 @@ const LAYAR = {
     // Kedua layar bertema terang, jadi tangkapannya sudah diredupkan (PROVENANCE) supaya senada
     // dengan monitor gelap di styleframe. Sudut ditarik masuk 2 px dari bingkai.
     { src: "layar-06a", jenis: "bersih", sudut: [[363, 318], [603, 325], [603, 478], [365, 510]] },
-    // Garis potong dijauhkan dari kepala editor: paralaks mendorong kepala ke depan, dan segitiga
-    // yang melar di tepinya dulu ikut membawa piksel layar keluar bingkai.
-    { src: "layar-06b", jenis: "bersih", sudut: [[619, 326], [826, 329], [828, 463], [622, 475]], potong: [[810, 313], [778, 470]] },
+    // Layar kanan menerus sampai tepi monitor; kepala editor yang menutupinya diambil dari peta
+    // kedalaman (batasDalam), bukan garis lurus, jadi tidak tersisa pita timeline lama di sela
+    // layar dan kepala.
+    { src: "layar-06b", jenis: "bersih", batasDalam: 0.55, sudut: [[619, 326], [841, 329], [843, 462], [622, 475]] },
   ],
   // Monitor grading bab 7 menampilkan layar yang sama dalam dua versi: rancangan rapi (kiri garis,
   // berwarna) dan versi buruk ala AI slop (kanan garis, setengah pudar). Garis sibak menggeser
@@ -128,6 +129,8 @@ const fragPanel = /* glsl */ `
   uniform vec4 potong0;
   uniform vec4 potong1;
   uniform float jenis;
+  uniform sampler2D dalam;
+  uniform float batasDalam;
   varying vec2 vUv;
 
   // 0 di luar layar, 1 di dalamnya, dengan tepi halus satu dua piksel.
@@ -141,6 +144,8 @@ const fragPanel = /* glsl */ `
     vec2 jarak = min(suv, 1.0 - suv);
     float m = smoothstep(0.0, 0.006, min(jarak.x, jarak.y));
     m *= (1.0 - tertutup(px, t0)) * (1.0 - tertutup(px, t1));
+    // Benda yang lebih dekat dari monitor (kepala di depan layar) menutup layar menurut siluetnya.
+    if (batasDalam > 0.0) m *= 1.0 - smoothstep(batasDalam - 0.03, batasDalam + 0.03, texture2D(dalam, vUv).r);
     // Garis potong dari (x0, y0) ke (x1, y1): sisi kanannya milik benda di depan layar.
     // Tanpa garis potong, garisnya diletakkan jauh di kanan gambar (nilai awal uniform). Jangan
     // pakai Vector4() kosong: w-nya 1, jadi garisnya jatuh di tepi kiri dan seluruh layar hilang.
@@ -222,6 +227,7 @@ function bahanPanel() {
       potong0: { value: new THREE.Vector4(1e4, 0, 1e4, 1e4) },
       potong1: { value: new THREE.Vector4(1e4, 0, 1e4, 1e4) },
       jenis: { value: 0 },
+      batasDalam: { value: 0 },
       dalam: { value: null },
       tebal: { value: 0 },
     },
@@ -415,6 +421,7 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
       (l.tutup ?? []).forEach((t, k) => u[`tutup${j}`].value[k].set(...t));
       if (l.potong) u[`potong${j}`].value.set(...l.potong[0], ...l.potong[1]);
       u.jenis.value = { proyektor: 1, kertas: 2, bersih: 3 }[l.jenis] ?? 0;
+      if (l.batasDalam) u.batasDalam.value = l.batasDalam;
       pemuat.load(`/assets/cerita/${l.src}.webp`, (t) => {
         t.colorSpace = THREE.SRGBColorSpace;
         u[`layar${j}`].value = t;
