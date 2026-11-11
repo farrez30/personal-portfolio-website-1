@@ -15,9 +15,24 @@ const CELAH = { x: [0.41, 0.59], y: [0.19, 0.63] };
 // Layar produk asli di monitor styleframe (piksel gambar 1376 x 768). `sudut` berurutan kiri
 // atas, kanan atas, kanan bawah, kiri bawah; `tutup` kotak benda di depan layar (ponsel di gimbal,
 // kamera kecil) dan `potong` garis tepi kepala editor: piksel di kanan garis tetap styleframe.
-// Asal tangkapan di public/assets/cerita/PROVENANCE.md.
+// `jenis` menentukan cara tempelnya: layar menyala (bawaan), sorot proyektor, atau kertas, yang
+// tintanya dikalikan ke warna kertas di bawahnya (daftar kebutuhan bab 2, sketsa layar bab 3).
+// Satu panel memakai satu jenis. Asal tangkapan di public/assets/cerita/PROVENANCE.md.
 const UKURAN = [1376, 768];
 const LAYAR = {
+  "02-naskah": [
+    {
+      src: "kertas-02",
+      jenis: "kertas",
+      sudut: [[293, 252], [549, 215], [592, 375], [310, 412]],
+      // Batang penjepit kertas di depan halaman: yang di bawah garis ini tetap mesin tik.
+      potong: [[603, 346], [300, 395]],
+    },
+  ],
+  "03-storyboard": [
+    { src: "sketsa-03a", jenis: "kertas", sudut: [[190, 215], [264, 218], [263, 266], [191, 267]] },
+    { src: "sketsa-03b", jenis: "kertas", sudut: [[405, 243], [435, 245], [440, 320], [412, 322]] },
+  ],
   "05-syuting": [
     {
       src: "layar-05",
@@ -29,7 +44,7 @@ const LAYAR = {
     { src: "layar-06a", sudut: [[361, 316], [605, 323], [605, 480], [363, 512]] },
     { src: "layar-06b", sudut: [[617, 324], [826, 326], [828, 465], [620, 477]], potong: [[821, 313], [790, 470]] },
   ],
-  "08-screening": [{ src: "layar-08", sudut: [[558, 265], [843, 265], [843, 430], [558, 430]], proyektor: true }],
+  "08-screening": [{ src: "layar-08", jenis: "proyektor", sudut: [[558, 265], [843, 265], [843, 430], [558, 430]] }],
 };
 
 // Homografi dari piksel gambar ke koordinat tekstur layar (0 sampai 1, v ke atas), dari empat
@@ -90,7 +105,7 @@ const fragPanel = /* glsl */ `
   uniform vec4 tutup1[2];
   uniform vec4 potong0;
   uniform vec4 potong1;
-  uniform float proyektor;
+  uniform float jenis;
   varying vec2 vUv;
 
   // 0 di luar layar, 1 di dalamnya, dengan tepi halus satu dua piksel.
@@ -115,11 +130,17 @@ const fragPanel = /* glsl */ `
   }
 
   // Layar ikut grade styleframe: sedikit pudar dan hangat, dengan pantulan gambar aslinya.
-  vec3 tempel(vec3 c, sampler2D peta, vec2 suv, float m) {
-    vec3 l = texture2D(peta, suv, kabur + 0.6).rgb;
+  // Kertas: tinta dikalikan ke warna kertas yang diburamkan, jadi coretan lama di bawahnya hilang
+  // tetapi serat dan bayangan kertasnya tetap.
+  vec3 tempel(vec3 c, sampler2D layarPeta, vec2 suv, float m) {
+    vec3 l = texture2D(layarPeta, suv, kabur + 0.6).rgb;
+    if (jenis > 1.5) {
+      vec3 kertas = texture2D(peta, vUv, 4.0).rgb;
+      return mix(c, kertas * l, m);
+    }
     float abu = dot(l, vec3(0.299, 0.587, 0.114));
-    vec3 hangat = mix(l, vec3(abu) * vec3(1.04, 0.95, 0.82), proyektor > 0.5 ? 0.55 : 0.28);
-    vec3 layar = hangat * (proyektor > 0.5 ? vec3(0.86, 0.74, 0.58) : vec3(0.6)) + c * 0.18;
+    vec3 hangat = mix(l, vec3(abu) * vec3(1.04, 0.95, 0.82), jenis > 0.5 ? 0.55 : 0.28);
+    vec3 layar = hangat * (jenis > 0.5 ? vec3(0.86, 0.74, 0.58) : vec3(0.6)) + c * 0.18;
     return mix(c, layar, m);
   }
 
@@ -168,7 +189,7 @@ function bahanPanel() {
       tutup1: { value: [new THREE.Vector4(), new THREE.Vector4()] },
       potong0: { value: new THREE.Vector4(1e4, 0, 1e4, 1e4) },
       potong1: { value: new THREE.Vector4(1e4, 0, 1e4, 1e4) },
-      proyektor: { value: 0 },
+      jenis: { value: 0 },
       dalam: { value: null },
       tebal: { value: 0 },
     },
@@ -361,7 +382,7 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
       u[`h${j}`].value = homografi(l.sudut);
       (l.tutup ?? []).forEach((t, k) => u[`tutup${j}`].value[k].set(...t));
       if (l.potong) u[`potong${j}`].value.set(...l.potong[0], ...l.potong[1]);
-      if (l.proyektor) u.proyektor.value = 1;
+      u.jenis.value = { proyektor: 1, kertas: 2 }[l.jenis] ?? 0;
       pemuat.load(`/assets/cerita/${l.src}.webp`, (t) => {
         t.colorSpace = THREE.SRGBColorSpace;
         u[`layar${j}`].value = t;

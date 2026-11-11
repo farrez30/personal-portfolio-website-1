@@ -37,16 +37,23 @@ for (const [gambar, daftar] of Object.entries(LAYAR)) {
       topeng += `*gte((${x1 - x0})*(Y-${y0})-(${y1 - y0})*(X-${x0}),0)`;
     }
     // Grade sama dengan fungsi tempel() di shader: lebih pudar dan hangat, ditambah 18% gambar asli.
-    const grade = l.proyektor
-      ? "hue=s=0.45,colorchannelmixer=rr=0.86:gg=0.74:bb=0.58"
-      : "hue=s=0.72,colorchannelmixer=rr=0.62:gg=0.58:bb=0.52";
+    // Kertas: tinta dikalikan ke kertas yang diburamkan (mipmap 4 di shader, kira-kira blur 16 px).
+    const kertas = l.jenis === "kertas";
+    const grade =
+      l.jenis === "proyektor"
+        ? "hue=s=0.45,colorchannelmixer=rr=0.86:gg=0.74:bb=0.58"
+        : kertas
+          ? "null"
+          : "hue=s=0.72,colorchannelmixer=rr=0.62:gg=0.58:bb=0.52";
     const i = j + 1;
     rantai.push(
       `[${i}:v]scale=${W}:${H},format=rgb24,${grade},perspective=0:0:${W}:0:0:${H}:${W}:${H}:sense=source:eval=init,` +
         `perspective=${a[0]}:${a[1]}:${b[0]}:${b[1]}:${d[0]}:${d[1]}:${c[0]}:${c[1]}:sense=destination[l${j}]`,
       `[${alas}]format=rgb24,split[asli${j}][dasar${j}]`,
-      `[l${j}][asli${j}]blend=all_expr='min(A+0.18*B,255)'[campur${j}]`,
-      `color=black:s=${W}x${H},format=gray,geq=lum='255*${topeng}'[t${j}]`,
+      kertas
+        ? `[asli${j}]gblur=sigma=16,format=rgb24[kabur${j}];[l${j}][kabur${j}]blend=all_mode=multiply,format=rgb24[campur${j}]`
+        : `[l${j}][asli${j}]blend=all_expr='min(A+0.18*B,255)'[campur${j}]`,
+      `color=black:s=${W}x${H},format=gray,geq=lum='255*${topeng}',format=rgb24[t${j}]`,
       `[dasar${j}][campur${j}][t${j}]maskedmerge[h${j}]`,
     );
     alas = `h${j}`;
