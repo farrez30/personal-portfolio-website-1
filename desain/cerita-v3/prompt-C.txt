@@ -1,0 +1,12 @@
+Concept A and B boards live in another file; match their style.
+1) Make 3 frames, each 1920x1080, same style (dark #161514, 2x2 panels, sketch boxes in warm grey #b3ada4 with one red accent #e0574b, captions in IBM Plex Mono red and Schibsted Grotesk). Name them "[v0.1][WIP] STORY C, board 01", "board 02", "board 03". Board 01 panel 1 is a top-down floor plan of one loft studio with 8 numbered stations and a dashed camera path through them.
+2) Concept C, one studio room: the camera travels through a single loft studio, one station per stage, and never cuts.
+01 Floor plan: the whole loft from above, camera path dashed through stations 1 to 8.
+02 Idea wall: pinned notes and threads between them (abstract need). Camera: glide in.
+03 Writing desk: notes turn into a clean requirement sheet. Camera: dolly right.
+04 Recording corner: laptop, phone and action camera wired together (design matched to the need). Camera: arc around.
+05 Edit desk with two monitors: versioned timeline and a decision log on the second screen (transparency). Camera: push into the screens.
+06 Test rack: a turntable plays a test disc, signal dips and recovers; a lock on the cabinet (reliability, security). Camera: low orbit.
+07 Small press machine stamping copies (scalability). Camera: pull back.
+08 Packing table: booklet, disc, case, shrink wrap; then the wall of shelves slides open into the project rack. Camera: through the opening.
+3) Same margins and gaps as board A.

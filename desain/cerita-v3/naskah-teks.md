@@ -1,0 +1,183 @@
+# Teks cerita v3 (versi Indonesia)
+
+Putaran 4, 11 Nov 2026.
+
+| Putaran | Penilaian Farrez | Penyebab |
+|---|---|---|
+| 1 | Kaku, terasa terjemahan paksa | Disalin dari teks lama yang ditulis dari bahasa Inggris |
+| 2 | Tidak kaku, tapi aneh | Dirakit dari aturan, bukan dari contoh nyata |
+| 3 | Beberapa terdengar gagal, ketus, atau teknis | Ditulis dari sudut "apa yang saya kerjakan", bukan dari kekhawatiran pembaca |
+
+## Tujuan halaman (patokan setiap kalimat)
+
+Pemilik usaha, stakeholder, dan perusahaan membaca lalu merasa "ini masalah saya juga, dan orang
+ini bisa menuntaskannya". Jadi setiap beat dimulai dari hal yang ada di kepala mereka, dijawab
+dengan bahasa sehari-hari, lalu ditutup bukti dari proyek di rak.
+
+Soundstage film hanya kerangka visual. Nama tahap film (ide, naskah, syuting, editing, dan
+seterusnya) dipakai di papan storyboard untuk tim, tidak tampil di halaman. Teks yang tampil tidak
+menyebut film sama sekali.
+
+Sapaan "Anda" (keputusan Farrez 4 Nov 2026). Pola kalimat dari riset `riset-teks.md`. Istilah
+teknis (requirement, server, database, testnet) dibuang, karena pembaca utamanya bukan developer.
+Baris **[konfirmasi]** memuat klaim yang hanya Farrez tahu benar tidaknya, dan belum dipasang.
+
+## Judul dan isi per beat (putaran 4; beat 2, 3, 4, 7, 9, 10 diganti putaran 5 di bawah)
+
+| # | Yang dipikirkan pemilik usaha | Judul | Isi (bukti) |
+|---|---|---|---|
+| 1 | "Saya sendiri belum tahu persis butuhnya apa." | Ceritakan dulu masalahnya. | Tidak perlu tahu istilah teknisnya. Cukup cerita apa yang bikin repot. Cara menyelesaikannya, biar saya yang pikirkan. |
+| 2 | "Nanti hasilnya beda dari yang saya bayangkan." | Saya pelajari dulu cara kerja tim Anda. | Dari situ saya tulis apa saja yang harus bisa dilakukan sistemnya. Anda cek dan setujui dulu sebelum mulai dibuat. **[konfirmasi]** |
+| 3 | "Tim saya ada yang di kantor, ada yang di lapangan." | Tim lapangan pakai HP, tim kantor pakai laptop. | Bentuknya ikut cara tim Anda bekerja: aplikasi Android untuk kamera aksi, sistem kantor di laptop, dashboard di HP, sampai alur dari iklan ke chat WhatsApp. |
+| 4 | "Saya tidak paham teknisnya, takut tidak bisa mengecek." | Dapurnya juga boleh Anda intip. | Sembilan dari sepuluh proyek di rak punya halaman yang memperlihatkan cara kerja sistemnya, dari layar sampai tempat data disimpan. Rahasia klien tetap tertutup. |
+| 5 | "Takut baru kelihatan hasilnya di akhir." | Lalu saya bangun, sedikit demi sedikit. | Bagian yang sudah jadi bisa langsung Anda coba, jadi tidak ada kejutan di akhir. **[konfirmasi]** |
+| 6 | "Vendor sering menghilang, kabarnya tidak jelas." | Progresnya selalu bisa Anda cek. | Keputusan penting saya catat beserta alasannya. Status juga saya tulis apa adanya: d-day sudah lulus uji coba, tapi belum pernah dipakai dengan uang sungguhan. |
+| 7 | "Sistemnya jalan, tapi tim saya malas memakainya." | Lalu dirapikan sampai enak dipakai. | **[konfirmasi]** satu contoh perbaikan setelah masukan pengguna. |
+| 8 | "Kalau error pas lagi ramai, usaha saya yang rugi." | Sistem yang dipakai tiap hari tidak boleh rewel. | Catatan di Jeda tetap bisa ditulis walau sinyal hilang. Waktu vendor kamera aksi berhenti merawat aplikasinya, YiheeCam yang menggantikan. |
+| 9a | "Saya tidak mau data pelanggan dan gaji bisa dilihat sembarang orang." | Tidak semua orang perlu lihat semua data. | Di Jeda, psikolog cuma bisa membaca catatan yang memang dibagikan kliennya. Pohon keluarga di AkarKita hanya bisa dibuka lewat undangan. |
+| 9b | "Kalau usaha makin besar, apa harus bikin sistem baru lagi?" | Usaha tumbuh, sistemnya ikut tumbuh. | ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus, dari distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan. |
+| 10 | "Ujung-ujungnya, dipakai atau tidak?" | Sampai akhirnya dipakai tiap hari. | Sepuluh di antaranya ada di rak ini. |
+
+Kolom "yang dipikirkan" adalah dugaan dari pola kecemasan klien di riset (proyek molor, revisi
+bolak-balik, vendor menghilang, error saat dipakai, data bocor); belum diuji ke pemilik usaha.
+Kolom itu tidak tampil di halaman.
+
+## Putaran 5: pilihan untuk beat yang ditandai Farrez
+
+Masukan Farrez atas putaran 4: beat 2 terdengar seperti belum tahu apa-apa, beat 3 memukul rata,
+beat 4 terlalu eksplisit ("kenapa harus mengintip dapur kita"), beat 7 dan 9 ambigu, beat 10 kurang.
+Beat 1, 5, 6, 8 tidak ditandai dan dibiarkan. Pilihan A dipasang di animatic dan papan.
+
+| # | Pilihan A (dipasang) | Pilihan B | Pilihan C | Isi untuk A |
+|---|---|---|---|---|
+| 2 | Sebelum ada kode, kita sepakat dulu. | Semua dimulai dari rencana yang Anda setujui. | Biar hasilnya sesuai bayangan Anda. | Keluhan tadi saya rangkum jadi daftar yang jelas: apa yang harus bisa dilakukan sistemnya dan siapa yang memakainya. Anda baca dan setujui dulu. **[konfirmasi]** |
+| 3 | Tidak semua masalah butuh aplikasi baru. | Bentuknya dipilih sesuai masalahnya. | Kadang cukup dashboard, kadang perlu aplikasi. | Kadang cukup dashboard di HP, kadang sistem kantor di laptop, kadang alur dari iklan sampai chat WhatsApp. Ada juga yang memang butuh aplikasi sendiri, seperti YiheeCam untuk kamera aksi. |
+| 4 | Fondasinya dibuat kokoh sejak awal. | Rapi sampai ke bagian yang tidak kelihatan. | Yang tidak terlihat pun tertata. | Sembilan dari sepuluh proyek di rak punya halaman arsitektur, kalau Anda atau tim IT ingin tahu cara kerjanya. |
+| 7 | Dirapikan sampai tim Anda betah memakainya. | Enak dipakai, bukan cuma bisa dipakai. | Dipoles sampai tidak perlu diajari dua kali. | **[konfirmasi]** satu contoh perbaikan setelah masukan pengguna. |
+| 9a | Data pelanggan hanya bisa dibuka orang yang Anda izinkan. | Data penting tetap di tangan yang berhak. | | Di Jeda, psikolog cuma bisa membaca catatan yang memang dibagikan kliennya. Pohon keluarga di AkarKita hanya bisa dibuka lewat undangan. |
+| 9b | Saat usaha membesar, sistemnya tidak perlu diganti. | Usaha tumbuh, sistemnya sanggup mengikuti. | | ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus, dari distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan. |
+| 10 | Sekarang sudah dipakai tiap hari. | Dan akhirnya, dipakai tiap hari. | Selesai dibuat itu baru setengah jalan. Sisanya: dipakai tiap hari. | Sepuluh di antaranya ada di rak ini. Ambil satu, lihat ceritanya. |
+
+Alasan pilihan A:
+- 2: "sepakat dulu" diucapkan orang saat rapat dengan vendor, dan langsung menjawab takut hasilnya
+  beda. Tidak mengesankan belum tahu apa-apa, karena yang ditonjolkan kesepakatannya.
+- 3: tidak memukul rata. Terdengar jujur, seperti saran orang yang tidak sedang menjual aplikasi,
+  dan isinya tetap menyebut bahwa ada yang memang butuh aplikasi.
+- 4: fondasi rumah dan ruko dipahami semua pemilik usaha. Halaman arsitektur cukup ditawarkan, bukan
+  disuruh diintip.
+- 7: "betah" kata sehari-hari untuk sesuatu yang enak dipakai lama, dan menunjuk siapa yang
+  diuntungkan (tim Anda).
+- 9: dua kalimat dipisah dan masing-masing menyebut benda yang jelas (data pelanggan, usaha membesar).
+- 10: menutup dengan ajakan ke rak, yang memang bisa diklik di halaman.
+
+Catatan klaim: 9a adalah janji umum; buktinya (Jeda, AkarKita) menunjukkan akses dibatasi, bukan
+"data pelanggan" secara harfiah. 4 bergantung pada halaman arsitektur yang sudah tayang.
+
+## Teks final (keputusan Farrez 11 Nov 2026: "Pakai nada B")
+
+Judul yang dipakai di animatic, papan, dan nanti di build. Isi tiap beat mengikuti tabel putaran 4
+dan 5 (bagian isi pilihan A berlaku untuk judul B yang sepadan).
+
+| # | Judul |
+|---|---|
+| 1 | Berawal dari keluhan sehari-hari. |
+| 2 | Semua dimulai dari rencana yang Anda setujui. |
+| 3 | Bentuknya dipilih sesuai masalahnya. |
+| 4 | Rapi sampai ke bagian yang tidak kelihatan. |
+| 5 | Sudah kelihatan sebelum dibangun. |
+| 6 | Progresnya jelas, kabarnya tidak putus. |
+| 7 | Enak dipakai, bukan cuma bisa dipakai. |
+| 8 | Tetap bisa diandalkan saat paling dibutuhkan. |
+| 9 | Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti. |
+| 10 | Dan akhirnya, dipakai tiap hari. |
+
+## Putaran 7: klaim dikonfirmasi (11 Nov 2026)
+
+Farrez memeriksa tiga klaim yang hanya ia tahu kebenarannya.
+
+| # | Klaim lama | Kebiasaan asli (kata Farrez) | Teks baru |
+|---|---|---|---|
+| 2 | Kebutuhan ditulis jadi daftar, klien membaca dan menyetujuinya dulu. | Sudah benar. | (tetap) |
+| 5 | "Dibangun bertahap, bisa dicoba sejak awal." Bagian yang sudah jadi langsung dicoba. | "di awal melihat dan merasakan dulu dan revisi jika ada dari mockup awal, lalu pembuatan dan UAT di akhir." | Judul: Sudah kelihatan sebelum dibangun. Isi: Sebelum mulai dibuat, Anda sudah bisa melihat dan mencoba rancangan tampilannya. Yang kurang pas diubah di situ, baru sesudahnya dibangun. |
+| 7 | Tampilan dirapikan sesudah sistemnya jalan. | Gabungan: rapi sejak desain, lalu dipoles dari masukan pemakai saat uji coba. "merapikan tampilan kenapa setelah sistem berjalan? kan sebelum harusnya?" | Judul tetap. Isi: Tampilannya sudah dirancang rapi sejak awal. Sebelum dipakai sehari-hari, tim Anda mencobanya dulu, dan langkah yang masih membingungkan dipangkas. |
+
+Judul bab 5 dipilih dari tiga versi (dua lainnya: "Tidak ada kejutan di akhir.", "Dilihat dulu, baru
+dibangun."); isi bab 7 dari dua versi. Mockup dan UAT ditulis dengan kata sehari-hari ("rancangan
+tampilan", "tim Anda mencobanya dulu") karena pembacanya pemilik usaha.
+
+## Putaran 6: Farrez memilih B, lalu nada B untuk semua beat
+
+Farrez (11 Nov 2026): "Pakai B semua", lalu minta dibandingkan dengan versi yang semua beatnya
+bernada seperti B. Pilihan B kini terpasang di animatic dan papan untuk beat 2, 3, 4, 7, 9, 10.
+
+Ciri nada B: tanpa "saya" atau "kita", subjeknya hasil atau masalahnya; pernyataan tenang yang
+yakin; pendek seperti slogan; satu kontras atau pasangan sejajar sesekali ("Usaha tumbuh, sistemnya
+sanggup mengikuti").
+
+| # | Versi utama (B untuk beat yang ditandai) | Semua bernada B (`?nada=b`) |
+|---|---|---|
+| 1 | Ceritakan dulu masalahnya. | Berawal dari keluhan sehari-hari. |
+| 2 | Semua dimulai dari rencana yang Anda setujui. | (sama) |
+| 3 | Bentuknya dipilih sesuai masalahnya. | (sama) |
+| 4 | Rapi sampai ke bagian yang tidak kelihatan. | (sama) |
+| 5 | Lalu saya bangun, sedikit demi sedikit. | Dibangun bertahap, bisa dicoba sejak awal. **[konfirmasi]** |
+| 6 | Progresnya selalu bisa Anda cek. | Progresnya jelas, kabarnya tidak putus. |
+| 7 | Enak dipakai, bukan cuma bisa dipakai. | (sama) |
+| 8 | Sistem yang dipakai tiap hari tidak boleh rewel. | Tetap bisa diandalkan saat paling dibutuhkan. |
+| 9 | Data penting tetap di tangan yang berhak. Usaha tumbuh, sistemnya sanggup mengikuti. | (sama) |
+| 10 | Dan akhirnya, dipakai tiap hari. | (sama) |
+
+Beat 1 nada B sengaja tidak memakai "Semua ..." supaya tidak berulang dengan beat 2.
+
+## Perbaikan dari masukan Farrez (putaran 3 ke 4)
+
+| # | Putaran 3 | Kesan yang muncul | Putaran 4 |
+|---|---|---|---|
+| 3 | Tidak selalu jadi aplikasi. | Seperti gagal atau nanggung | Tim lapangan pakai HP, tim kantor pakai laptop. |
+| 4 | Server dan database juga saya urus. | Bernada mengeluh; teknis | Dapurnya juga boleh Anda intip. |
+| 8 | Sinyal hilang, catatan tetap tersimpan. | Seolah semua masalah soal sinyal | Sistem yang dipakai tiap hari tidak boleh rewel. |
+| 9 | Siapa boleh lihat apa, saya atur dari awal. | Teknis, tidak membumi | Tidak semua orang perlu lihat semua data. |
+| 9b | Klien bertambah, sistemnya tetap satu. | Teknis | Usaha tumbuh, sistemnya ikut tumbuh. |
+| 2 | Saya pelajari alurnya, lalu saya tulis jadi requirement. | Istilah teknis | Saya pelajari dulu cara kerja tim Anda. |
+| 6 isi | lulus uji di testnet | Istilah teknis | lulus uji coba |
+| semua | Label tahap film tampil di atas judul | Kita bukan studio film | Hanya nomor beat yang tampil |
+
+## Kekhawatiran lain yang belum punya beat (usulan, menunggu keputusan Farrez)
+
+Dari riset copy software house Indonesia, kekhawatiran klien yang sering dijawab di halaman
+mereka tapi belum ada di cerita ini:
+
+| Kekhawatiran | Contoh di situs Indonesia | Bisa masuk ke | Bukti dari Farrez |
+|---|---|---|---|
+| Biaya dan waktu membengkak | "estimasi biaya yang transparan sebelum proyek dimulai" (KerjainWeb) | Beat 2 | belum ada |
+| Setelah selesai, tergantung terus ke vendor | "Semua akses diserahkan ke Anda" (Olakses) | Beat 10 | belum ada |
+| Ada masalah setelah serah terima | "masa garansi bug" (Venturo) | Beat 10 | belum ada |
+| Tim tidak bisa memakai sistemnya | "pelatihan penggunaan aplikasi" (Sekawan Media) | Beat 7 | belum ada |
+
+## Keluhan di beat 1 (kertas tempel)
+
+| Proyek | Teks |
+|---|---|
+| viralytics | Kampanye, kontrak, invoice, semuanya masih di spreadsheet dan grup WA. |
+| yiheecam | Aplikasi kamera aksinya sudah tidak diurus vendornya. |
+| fifofun | Anggaran rumah tangga tidak pernah cocok sama saldo di bank. |
+| nds-etl | Distributor yang sudah sepuh ingin cek dari HP: kapan harus repeat order, dan berapa. |
+| akarkita | Anak muda sering bingung harus memanggil kerabatnya apa. |
+
+## Catatan kamera di papan (untuk tim, tidak tampil)
+
+Mengikuti cara shot list dan camera report Indonesia (`riset-teks.md` bagian 3): ukuran gambar,
+angle, dan gerak kamera dalam istilah Inggris atau singkatan, subjeknya dalam bahasa Indonesia.
+
+| # | Catatan kamera |
+|---|---|
+| 1 | MS meja sutradara, eye level, dolly mendekat pelan. |
+| 2 | Bird eye view ke mesin ketik, static. |
+| 3 | LS dinding storyboard, eye level, tracking ke kanan. |
+| 4 | Crane shot turun ke set, high angle. Lampu menyala satu per satu. |
+| 5 | MS laptop di set, handheld, follow kamera aksi dan HP. |
+| 6 | MCU dua monitor timeline, eye level, dolly mendekat. |
+| 7 | CU monitor grading, static. Garis pembatas sebelum dan sesudah bergeser. |
+| 8 | LS ruang tonton dari baris belakang, dolly mendekat ke layar. |
+| 9 | ECU segel lilin, lalu zoom out ke mesin duplikasi. |
+| 10 | MS kotak CD di conveyor, low angle, tracking mengikuti kotak. |

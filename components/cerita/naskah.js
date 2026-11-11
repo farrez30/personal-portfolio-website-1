@@ -1,59 +1,43 @@
-// Naskah adegan cerita gulir v2 (docs/storyboard-gulir.md): satu kotak CD di satu dunia 3D,
-// sembilan babak (0 pembuka, lalu delapan bab). Progres p berjalan dari 0 sampai BABAK.length;
-// babak c memakai u = p - c (0 sampai 1). Setiap babak bergerak dari POSE[c] ke POSE[c + 1],
-// jadi di batas babak keadaannya selalu sama (dites di tests/naskah.test.mjs). Gerak sisipan di
-// tengah babak (sinyal hilang, segel, layar penuh) memakai `bukit(u)` yang nol di kedua ujung.
-// Murni, tanpa three.js, supaya bisa dites di Node.
+// Naskah cerita gulir v3 (desain/cerita-v3, ADR 0013): satu kamera menyusuri soundstage gelap.
+// Tiap beat punya satu panel styleframe yang berdiri di lantai studio; kamera mendekati panel itu,
+// lalu terbang di kegelapan ke panel berikutnya tanpa potongan. Murni, tanpa three.js, supaya
+// bisa dites di Node (tests/naskah.test.mjs).
+//
+// Progres p berjalan dari 0 sampai BABAK.length; babak c memakai u = p - c (0 sampai 1).
+// Kamera per beat ditulis seperti di animatic: titik fokus x, y (0 sampai 1 dari gambar) dan
+// skala s, dari `dari` ke `ke`. `hp` adalah titik fokus x di layar tegak.
 
-// Bobot tinggi tiap babak dalam layar. Urutan sama dengan BAB di content/cerita.js, diawali pembuka.
-// `pindah` adalah jendela u tempat pose bergeser ke babak berikutnya; sebelum itu pose ditahan,
-// jadi benda tetap di sisi yang berlawanan dengan teks selama teks bab itu dibaca.
+export const PANEL = { w: 16, h: 9 };
+// Jarak kamera saat panel pas setinggi layar (fov 35 derajat): (h / 2) / tan(17,5 derajat).
+export const FOV = 35;
+const D0 = PANEL.h / 2 / Math.tan(((FOV / 2) * Math.PI) / 180);
+// Porsi akhir tiap beat untuk terbang ke panel berikutnya.
+const TERBANG = 0.24;
+
 export const BABAK = [
-  { id: "pembuka", bobot: 1.1, pindah: [0, 1] },
-  { id: "demo", bobot: 1.8 },
-  { id: "aransemen", bobot: 3 },
-  { id: "transparansi", bobot: 1.6 },
-  { id: "keamanan", bobot: 1.6 },
-  { id: "keandalan", bobot: 1.6 },
-  { id: "skala", bobot: 1.6 },
-  { id: "infrastruktur", bobot: 2.4 },
-  { id: "rak", bobot: 1.3, pindah: [0.35, 1] },
+  { id: "pembuka", bobot: 0.9 },
+  { id: "ide", bobot: 1.2, gambar: "01-ide", kamera: { dari: { x: 0.45, y: 0.6, s: 1 }, ke: { x: 0.42, y: 0.72, s: 1.35 } }, hp: 0.62 },
+  { id: "rencana", bobot: 1, gambar: "02-naskah", kamera: { dari: { x: 0.4, y: 0.55, s: 1.25 }, ke: { x: 0.45, y: 0.4, s: 1.05 } }, hp: 0.4 },
+  { id: "bentuk", bobot: 1.4, gambar: "03-storyboard", kamera: { dari: { x: 0.12, y: 0.45, s: 1.4 }, ke: { x: 0.62, y: 0.45, s: 1.15 } }, hp: 0.3 },
+  { id: "fondasi", bobot: 1.2, gambar: "04-set", kamera: { dari: { x: 0.5, y: 0.3, s: 1.3 }, ke: { x: 0.45, y: 0.55, s: 1.6 } }, hp: 0.46 },
+  { id: "bangun", bobot: 1.2, gambar: "05-syuting", kamera: { dari: { x: 0.55, y: 0.5, s: 1.15 }, ke: { x: 0.6, y: 0.45, s: 1.3 } }, hp: 0.55 },
+  { id: "progres", bobot: 1.2, gambar: "06-editing", kamera: { dari: { x: 0.5, y: 0.5, s: 1 }, ke: { x: 0.42, y: 0.38, s: 1.55 } }, hp: 0.5 },
+  { id: "rapi", bobot: 1, gambar: "07-grading", kamera: { dari: { x: 0.55, y: 0.4, s: 1.35 }, ke: { x: 0.55, y: 0.45, s: 1.1 } }, hp: 0.55 },
+  { id: "andal", bobot: 1.2, gambar: "08-screening", kamera: { dari: { x: 0.5, y: 0.6, s: 1 }, ke: { x: 0.55, y: 0.4, s: 1.45 } }, hp: 0.55 },
+  { id: "aman", bobot: 1.2, gambar: "09-segel", kamera: { dari: { x: 0.62, y: 0.55, s: 1.5 }, ke: { x: 0.5, y: 0.5, s: 1 } }, hp: 0.72 },
+  { id: "rilis", bobot: 2.4, gambar: "10-rilis", kamera: { dari: { x: 0.5, y: 0.8, s: 1.3 }, ke: { x: 0.5, y: 0.42, s: 1.2 } }, hp: 0.5 },
 ];
 
-// Pose di awal tiap babak, plus satu pose akhir. Satuan dunia: 1 = 100 mm.
-// sisi: 1 berarti teks di kiri dan benda di kanan, -1 sebaliknya.
-const DASAR = {
-  cam: [0, 0, 5.3], arah: [0, 0, 0], sisi: 0,
-  kotak: [0, -2.6, 0], putar: [0.35, -0.9, 0.12], skala: 0.8,
-  tutup: 0, cakramNaik: 0, putaran: 0, buklet: 0, segel: 0, uv: 0,
-  perangkat: 0, laptop: 0, layarPenuh: 0, tumpuk: 0, urai: 0, sinyal: 0, ruang: 0, coret: 0,
-  hilang: 0, iris: 0, selam: 0, meja: 0,
-};
+// Panel berdiri berjajar di lantai studio, selang-seling maju mundur supaya terasa satu ruang
+// yang dalam, bukan dinding galeri. Semua menghadap +z; kamera selalu di depan.
+export const STASIUN = BABAK.slice(1).map((_, i) => ({ x: i * 20, y: PANEL.h / 2, z: i % 2 ? -4 : 0 }));
 
-const pose = (ubah) => ({ ...DASAR, ...ubah });
-
-export const POSE = [
-  // 0 pembuka: kotak naik dari bawah judul seksi.
-  pose({}),
-  // 1 demo: kotak di kanan, tutup terbuka sedikit, coretan "DEMO" mulai.
-  pose({ kotak: [0, 0, 0], putar: [0.08, -0.35, 0.03], skala: 1, sisi: 1, tutup: 0.12 }),
-  // 2 aransemen: kamera menyelam ke lubang cakram, keluar di meja perangkat.
-  pose({ kotak: [0, 0, 0], putar: [0, 0, 0], skala: 1, sisi: -1, tutup: 0.85, coret: 1, cakramNaik: 0.2 }),
-  // 3 liner notes: kembali ke kotak, buklet keluar dari tutup.
-  pose({ kotak: [0, 0, 0], putar: [0.1, 0.45, 0], skala: 1, sisi: 1, tutup: 1, coret: 1 }),
-  // 4 sealed: kotak tertutup, segel membungkus, senter UV menyapu.
-  pose({ kotak: [0, 0, 0], putar: [0.05, -0.4, 0], skala: 1, sisi: -1, tutup: 0, coret: 1 }),
-  // 5 on repeat: cakram terangkat dan berputar.
-  pose({ cam: [0, 1.1, 6.3], arah: [0, -0.2, 0], kotak: [0, -0.25, 0], putar: [-0.95, 0.3, 0], skala: 1, sisi: 1, tutup: 1, cakramNaik: 1, putaran: 1, coret: 1 }),
-  // 6 press run: cakram berlipat ganda, kamera mundur.
-  pose({ cam: [0, 1.1, 6.3], arah: [0, -0.2, 0], kotak: [0, -0.25, 0], putar: [-0.95, -0.3, 0], skala: 1, sisi: -1, tutup: 1, cakramNaik: 1, putaran: 1, coret: 1 }),
-  // 7 the plant: kotak dirakit lagi, menghadap tiga perempat.
-  pose({ kotak: [0, 0, 0], putar: [0.15, -0.75, 0], skala: 1, sisi: 1, tutup: 0, coret: 1 }),
-  // 8 in the rack: kotak berdiri, ruang berubah ke panggung beige rak.
-  pose({ kotak: [0, 0, 0], putar: [0, -0.2, 0], skala: 0.9, sisi: -1, tutup: 0, coret: 1, ruang: 0.4 }),
-  // akhir: kotak turun ke rak di bawahnya.
-  pose({ kotak: [0, -3.4, 0.4], putar: [0.6, 0, 0], skala: 0.7, sisi: 0, tutup: 0, coret: 1, ruang: 1, hilang: 1 }),
-];
+// Kotak CD di beat rilis: masuk bergiliran, lalu tirai rak terbuka dan sempat dinikmati, baru
+// halaman memutih ke rak di ujung sekali.
+const KOTAK = { jumlah: 3, mulai: 0.04, lama: 0.15 };
+const TIRAI = [0.52, 0.72];
+const PUTIH = [0.94, 1];
+const DORONG = [0.76, 1];
 
 export const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 export const halus = (x) => {
@@ -62,72 +46,88 @@ export const halus = (x) => {
 };
 // Nol di 0 dan 1, puncak 1 di tengah, datar di puncak supaya momennya sempat ditahan.
 export const bukit = (u, naik = 0.3, turun = 0.3) => halus(u / naik) * halus((1 - u) / turun);
-const jendela = (u, a, b) => halus((u - a) / (b - a));
+const lerp = (a, b, t) => a + (b - a) * t;
+const lerp3 = (a, b, t) => a.map((v, i) => lerp(v, b[i], t));
 
-function campur(a, b, t) {
-  if (Array.isArray(a)) return a.map((v, i) => v + (b[i] - v) * t);
-  return a + (b - a) * t;
+// Titik pada panel stasiun i dari koordinat gambar (0 sampai 1, y ke bawah).
+function titikPanel(i, x, y) {
+  const st = STASIUN[i];
+  return [st.x + (x - 0.5) * PANEL.w, st.y + (0.5 - y) * PANEL.h, st.z];
 }
 
-function antara(A, B, t) {
-  const hasil = {};
-  for (const k of Object.keys(A)) hasil[k] = campur(A[k], B[k], t);
-  return hasil;
+// Kamera menatap titik fokus dari depan, sejauh skala s.
+function pose(i, f, hp) {
+  const sasaran = titikPanel(i, hp ? BABAK[i + 1].hp : f.x, f.y);
+  return { posisi: [sasaran[0], sasaran[1], sasaran[2] + D0 / f.s], sasaran };
 }
 
-// Gerak sisipan per babak: diterapkan di atas campuran dua pose, nilainya nol di u = 0 dan 1.
-const SISIPAN = {
-  demo: (s, u) => {
-    s.coret = jendela(u, 0.25, 0.85);
-  },
-  aransemen: (s, u) => {
-    // 0 sampai 0,2: kamera mendekat lurus ke lubang cakram. 0,14 sampai 0,3: tirai bulat
-    // menutup dari lubang itu dan membuka lagi; tepat saat tertutup penuh (0,22) kotak diganti
-    // meja perangkat, jadi keduanya tidak pernah terlihat bersamaan. 0,82 sampai 0,98: tirai
-    // kedua, meja diganti kotak lagi di 0,9.
-    s.selam = u < 0.22 ? halus(u / 0.2) : 0;
-    s.iris = bukit((u - 0.14) / 0.16, 0.5, 0.5) + bukit((u - 0.82) / 0.16, 0.5, 0.5);
-    s.meja = u >= 0.22 && u < 0.9 ? 1 : 0;
-    s.perangkat = s.meja * jendela(u, 0.22, 0.34) * (1 - jendela(u, 0.84, 0.9));
-    s.laptop = s.meja * jendela(u, 0.3, 0.45) * (1 - jendela(u, 0.84, 0.9));
-    s.layarPenuh = bukit((u - 0.55) / 0.27, 0.35, 0.35);
-    s.cam = [s.cam[0] * (1 - s.selam), s.cam[1] * (1 - s.selam), s.cam[2] - s.selam * 4.9];
-    s.arah = [s.arah[0] * (1 - s.selam), s.arah[1] * (1 - s.selam), s.arah[2]];
-    // Di meja perangkat kamera bergeser pelan dari kiri ke kanan dan sedikit naik.
-    s.cam = [s.cam[0] + s.perangkat * (u - 0.5) * 1.8, s.cam[1] + s.perangkat * 0.7, s.cam[2]];
-  },
-  transparansi: (s, u) => {
-    s.buklet = bukit(u, 0.35, 0.3);
-  },
-  keamanan: (s, u) => {
-    s.segel = bukit(u, 0.4, 0.2);
-    s.uv = bukit((u - 0.35) / 0.55, 0.3, 0.3) * (u > 0.35 && u < 0.9 ? 1 : 0);
-  },
-  keandalan: (s, u) => {
-    s.sinyal = bukit((u - 0.25) / 0.55, 0.25, 0.4) * (u > 0.25 && u < 0.8 ? 1 : 0);
-  },
-  skala: (s, u) => {
-    s.tumpuk = bukit(u, 0.45, 0.25);
-    const mundur = s.tumpuk;
-    s.cam = [s.cam[0], s.cam[1] + mundur * 1.6, s.cam[2] + mundur * 5.5];
-  },
-  infrastruktur: (s, u) => {
-    s.urai = bukit(u, 0.35, 0.25);
-  },
-};
+// Gambar utuh seluruh soundstage dari tinggi, sebelum turun ke meja sutradara.
+function poseBuka() {
+  const tengah = (STASIUN[0].x + STASIUN.at(-1).x) / 2;
+  return { posisi: [tengah * 0.35, 13, 46], sasaran: [tengah * 0.35, 3, -2] };
+}
 
-// Keadaan dunia pada progres p (0 sampai BABAK.length).
-export function keadaanPada(p) {
+function campur(a, b, t, angkat = 0) {
+  const posisi = lerp3(a.posisi, b.posisi, t);
+  // Kamera naik dan mundur sedikit di tengah perjalanan, seperti crane di antara set.
+  const busur = Math.sin(Math.PI * t) * angkat;
+  posisi[1] += busur * 0.35;
+  posisi[2] += busur;
+  return { posisi, sasaran: lerp3(a.sasaran, b.sasaran, t) };
+}
+
+function kameraPada(c, u, hp) {
+  if (c === 0) return campur(poseBuka(), pose(0, BABAK[1].kamera.dari, hp), halus(u));
+  const i = c - 1;
+  const { dari, ke } = BABAK[c].kamera;
+  const akhir = c === BABAK.length - 1;
+  // Beat terakhir: gerak awal harus tiba di `ke` tepat saat dorongan ke tirai mulai.
+  const tinggal = akhir ? DORONG[0] : 1 - TERBANG;
+  let k = pose(i, { x: lerp(dari.x, ke.x, halus(u / tinggal)), y: lerp(dari.y, ke.y, halus(u / tinggal)), s: lerp(dari.s, ke.s, halus(u / tinggal)) }, hp);
+  if (akhir) {
+    // Ujung cerita: kamera mendorong masuk ke celah tirai rak.
+    const d = halus((u - DORONG[0]) / (DORONG[1] - DORONG[0]));
+    if (d > 0) k = pose(i, { x: ke.x, y: ke.y, s: lerp(ke.s, 4, d) }, hp);
+    return k;
+  }
+  if (u <= tinggal) return k;
+  const t = halus((u - tinggal) / TERBANG);
+  return campur(pose(i, ke, hp), pose(i + 1, BABAK[c + 1].kamera.dari, hp), t, 7);
+}
+
+// Keadaan dunia pada progres p. Hanya bergantung pada p (tanpa ingatan), jadi gulir mundur
+// memberi gambar yang sama persis.
+export function keadaanPada(p, { hp = false } = {}) {
   const n = BABAK.length;
   const pp = clamp(p, 0, n);
   const c = Math.min(n - 1, Math.floor(pp));
   const u = pp - c;
-  const [a, b] = BABAK[c].pindah ?? [0.55, 1];
-  const s = antara(POSE[c], POSE[c + 1], halus((u - a) / (b - a)));
-  SISIPAN[BABAK[c].id]?.(s, u);
-  s.babak = c;
-  s.u = u;
-  return s;
+  const id = BABAK[c].id;
+  const { posisi, sasaran } = kameraPada(c, u, hp);
+  const iFondasi = BABAK.findIndex((b) => b.id === "fondasi");
+  const iRapi = BABAK.findIndex((b) => b.id === "rapi");
+  const iRilis = n - 1;
+
+  // Lampu set fondasi: redup sampai beat-nya, lalu tiga lampu menyala satu per satu.
+  const nyala = c < iFondasi ? 0 : c > iFondasi ? 3 : Math.min(3, Math.floor(halus((u - 0.08) / 0.55) * 3.999));
+  const rilis = c === iRilis ? u : c > iRilis ? 1 : -1;
+
+  return {
+    babak: c,
+    u,
+    posisi,
+    sasaran,
+    benang: clamp((pp - 1) / (n - 2)),
+    terang: 0.35 + (0.65 * nyala) / 3,
+    sibak: c < iRapi ? 0 : c > iRapi ? 1 : halus((u - 0.1) / 0.7),
+    getar: id === "bangun" ? bukit(u, 0.15, 0.15) : 0,
+    sendat: id === "andal" && Math.abs(u - 0.5) < 0.012 ? 1 : 0,
+    kotak: Array.from({ length: KOTAK.jumlah }, (_, j) =>
+      rilis < 0 ? 0 : clamp((rilis - KOTAK.mulai - j * KOTAK.lama) / KOTAK.lama),
+    ),
+    tirai: rilis < 0 ? 0 : halus((rilis - TIRAI[0]) / (TIRAI[1] - TIRAI[0])),
+    putih: rilis < 0 ? 0 : halus((rilis - PUTIH[0]) / (PUTIH[1] - PUTIH[0])),
+  };
 }
 
 // Progres dari posisi gulir: babak yang memuat garis tengah layar, ditambah posisi garis itu

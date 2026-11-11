@@ -1,0 +1,56 @@
+{
+  "catatan": "Prompt lengkap = adegan + spasi + gaya. Nano Banana 2.1 di Google Flow, 16:9, x2 per prompt.",
+  "gaya": "Cinematic film still, one continuous dark film soundstage at night, warm tungsten practical lights, shallow depth of field, fine 35mm film grain, soft vignette, real materials: paper, brushed metal, clear plastic, black rubber cables, matte black flats. Muted palette of deep warm charcoal and warm beige paper tones with exactly one signal red accent. Photographic and grounded, not a cartoon, not a toy-like 3D render. Absolutely no readable text, no letters, no numbers, no logos, no watermark anywhere. Any people are anonymous, seen from behind or in silhouette, faces not visible.",
+  "beat": [
+    {
+      "no": 1,
+      "slug": "01-ide",
+      "adegan": "Beat 1, the idea. A director's desk at the dark edge of a soundstage. A small brass desk lamp has just switched on and pools warm light over loose sheets of sketch paper covered in abstract pencil scribbles that seem to glow faintly, a few pale yellow sticky notes, and one red pencil. In the soft background, out of focus, the silhouette of a young man with curly dark hair and thin metal-frame glasses seen from behind, looking at the paper. At the edge of the light waits a vintage typewriter. Slow push-in at eye level."
+    },
+    {
+      "no": 2,
+      "slug": "02-naskah",
+      "adegan": "Beat 2, the script. Top-down shot of a vintage typewriter on the same wooden desk, a sheet rolled in with blurred illegible typed lines, a fanned stack of script pages beside it, sticky notes pinned to the pages, a red ribbon bookmark. A few loose pages are lifting into the air and drifting toward a dark wall at the top of the frame."
+    },
+    {
+      "no": 3,
+      "slug": "03-storyboard",
+      "adegan": "Beat 3, the storyboard. A long wall of pinned storyboard panels lit by a row of small clip lamps, each panel a rough pencil drawing on paper: a laptop screen, a smartphone, a small action camera on a helmet chin mount. Thin red string connects some panels. The camera tracks along the wall at shallow depth of field; the last panel is lit brighter and through a gap beside it the real physical film set is visible."
+    },
+    {
+      "no": 4,
+      "slug": "04-set",
+      "adegan": "Beat 4, set and lighting. High crane angle looking down at a small film set in the middle of the dark soundstage: a desk with an open laptop and a smartphone, a camera dolly track on the floor, black cables snaking across the concrete, C-stands, and three studio Fresnel lights switching on one by one so the set is half lit and half in darkness. One single red cable among the black ones."
+    },
+    {
+      "no": 5,
+      "slug": "05-syuting",
+      "adegan": "Beat 5, the shoot. Handheld eye-level shot on the set: a small action camera on a mini tripod and a smartphone on a gimbal are both recording an open laptop whose screen glows with an abstract interface of soft blocks and charts with no readable text. The small red tally light on the camera is lit. A field monitor in the blurred foreground shows the same shot."
+    },
+    {
+      "no": 6,
+      "slug": "06-editing",
+      "adegan": "Beat 6, the edit. An editing desk in a corner of the soundstage: two monitors showing a video editing timeline of colored clip blocks across stacked tracks with small version markers, abstract with no readable text, a thin red playhead line. On the desk a notebook with handwritten notes, a keyboard, a coffee cup. The room is dim, lit by the monitor glow and a desk lamp. Slow push toward the screens."
+    },
+    {
+      "no": 7,
+      "slug": "07-grading",
+      "adegan": "Beat 7, color grading. A color grading suite: a large reference monitor split down the middle, the left half flat grey washed-out footage of a laptop on a desk, the right half the very same frame warm, rich and contrasty. In the foreground a grading control panel with three trackballs and rings under soft light, one ring with a red accent."
+    },
+    {
+      "no": 8,
+      "slug": "08-screening",
+      "adegan": "Beat 8, the test screening. A small private screening room built inside the soundstage, seen from the back row: a few rows of seats with anonymous silhouetted viewers, a projector beam cutting through light haze toward a screen showing a warm image of a laptop on a desk. On the side a stack of round metal film cans. A small red lamp glows near the door."
+    },
+    {
+      "no": 9,
+      "slug": "09-segel",
+      "adegan": "Beat 9, seal and duplication. Macro close-up of a round metal film can being closed with a red wax seal pressed into it. Behind it, out of focus, a duplication line where a machine stacks hundreds of silver compact discs on spindles under cool industrial light mixed with warm tungsten."
+    },
+    {
+      "no": 10,
+      "slug": "10-rilis",
+      "adegan": "Beat 10, the release. A short conveyor track carries clear plastic CD jewel cases, each holding a silver compact disc, one by one into a tall dark wooden CD rack with softly lit shelves already holding rows of jewel cases. At the center of the rack a heavy red velvet cinema curtain is parting, revealing warm light beyond. The camera follows one case at low angle."
+    }
+  ]
+}

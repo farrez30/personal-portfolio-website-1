@@ -1,0 +1,16 @@
+This file already has storyboard boards for concept A. Do not change them.
+1) Add 3 new frames to the right of the existing ones, each 1920x1080, same style as the "STORY A" boards (dark #161514, 2x2 panels, sketch boxes in warm grey #b3ada4 with one red accent #e0574b, captions in IBM Plex Mono red and Schibsted Grotesk). Name them "[v0.1][WIP] STORY B, board 01", "board 02", "board 03".
+2) The 12 beats (Concept B, film production, from an abstract idea to a disc filed in a rack):
+01 Director's idea: a scribble on paper glows in a dark room. Camera: slow push in. Transition: paper becomes a script page.
+02 Script: client needs typed as scene headings. Camera: top-down on typewriter. Transition: pages fan into storyboard cards.
+03 Storyboard: cards pinned on a wall, each a screen of the product. Camera: pan along the wall.
+04 Set and lighting: crew builds the set, cables and lights (infrastructure). Camera: crane down.
+05 Shoot: an action camera and a phone record the product on a laptop. Camera: handheld follow.
+06 Edit: timeline with versioned cuts, each change labelled (transparency). Camera: monitor fills frame.
+07 Color grade: grading wheels turn, the raw image becomes warm and cinematic (polish). Camera: split before and after.
+08 Test screening: small audience, film stutters once then plays smoothly (reliability, QA). Camera: from the back row.
+09 Rating seal: a seal stamped on the reel can (security). Camera: macro on the stamp.
+10 Duplication: one reel becomes hundreds of copies (scalability). Camera: pull back on a duplication line.
+11 Reel to disc: the reel morphs into a CD in a jewel case and slides into a rack. Camera: follow the case.
+12 Curtain opens: the rack opens like a cinema curtain into the project shelf. Camera: push through.
+3) Same margins and gaps as board A.

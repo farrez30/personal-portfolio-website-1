@@ -1,0 +1,4601 @@
+{
+  "version": "2.21",
+  "children": [
+    {
+      "type": "frame",
+      "id": "Z7lXp",
+      "x": 0,
+      "y": 0,
+      "name": "[v0.1][WIP] STORY A, board 01",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "j5Clk",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "hHIbN",
+              "name": "Board Title",
+              "fill": "#e0574b",
+              "content": "[V0.1][WIP] STORY A, BOARD 01",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "BhXw0",
+              "name": "Subtitle",
+              "fill": "#b3ada4",
+              "content": "CONCEPT A — MUSIC ALBUM PRODUCTION (SCROLL STORYBOARD)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "BYYbp",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "D2bFA",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "UQS1E",
+                  "name": "Panel 01 - IDEA HUM",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "f2mbxU",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "C0NTw",
+                          "x": 100,
+                          "y": 80,
+                          "fill": "#b3ada4",
+                          "width": 6,
+                          "height": 6
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "E6DW6",
+                          "x": 220,
+                          "y": 140,
+                          "fill": "#b3ada4",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "jDzP6",
+                          "x": 350,
+                          "y": 60,
+                          "fill": "#e0574b",
+                          "width": 5,
+                          "height": 5
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "YfzDW",
+                          "x": 500,
+                          "y": 180,
+                          "fill": "#b3ada4",
+                          "width": 7,
+                          "height": 7
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "aJLmc",
+                          "x": 650,
+                          "y": 90,
+                          "fill": "#e0574b",
+                          "width": 6,
+                          "height": 6
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "b43IfA",
+                          "x": 740,
+                          "y": 160,
+                          "fill": "#b3ada4",
+                          "width": 5,
+                          "height": 5
+                        },
+                        {
+                          "type": "path",
+                          "id": "RS3ih",
+                          "x": 0,
+                          "y": 0,
+                          "geometry": "M80 130q170-110 330 0t330 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "eGNcU",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "eU0HU",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "01 // IDEA HUM",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "JuDOE",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Sound particles float in darkness and gather into one waveform. Camera: slow push in. Transition: wave settles onto paper.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "dhKoC",
+                  "name": "Panel 02 - LYRICS",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "opJMj",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "s2cYrc",
+                          "x": 120,
+                          "y": 40,
+                          "fill": "#1a1918",
+                          "width": 580,
+                          "height": 220,
+                          "stroke": "#2c2a29",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "Aof3O",
+                          "x": 160,
+                          "y": 70,
+                          "fill": "#2c2a29",
+                          "width": 500,
+                          "height": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "TsvjX",
+                          "x": 160,
+                          "y": 110,
+                          "fill": "#2c2a29",
+                          "width": 500,
+                          "height": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "IOGm8",
+                          "x": 160,
+                          "y": 150,
+                          "fill": "#2c2a29",
+                          "width": 500,
+                          "height": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "q3X9h9",
+                          "x": 160,
+                          "y": 190,
+                          "fill": "#2c2a29",
+                          "width": 350,
+                          "height": 2
+                        },
+                        {
+                          "type": "path",
+                          "id": "T08iV",
+                          "x": 0,
+                          "y": 0,
+                          "geometry": "M180 75q40-10 100 3t140-6 160 3",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "path",
+                          "id": "lGwcA",
+                          "x": 0,
+                          "y": 0,
+                          "geometry": "M180 115q60 10 140-3t180 6",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "path",
+                          "id": "TTYIo",
+                          "x": 0,
+                          "y": 0,
+                          "geometry": "M180 155q80-10 200 3t220-6",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "f6i3w",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "diKpG",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "02 // LYRICS",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "JNqwd",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The wave becomes handwriting in a notebook, complaints turn into requirements. Camera: top-down. Transition: pen taps a phone.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "qzCDn",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "HdcUI",
+                  "name": "Panel 03 - DEMO",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "l0UbFW",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 12,
+                          "id": "H6KkQv",
+                          "x": 180,
+                          "y": 50,
+                          "fill": "#222120",
+                          "width": 140,
+                          "height": 200,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "iuvLR",
+                          "x": 200,
+                          "y": 70,
+                          "fill": "#161514",
+                          "width": 100,
+                          "height": 140
+                        },
+                        {
+                          "type": "path",
+                          "id": "FBb7k",
+                          "x": 0,
+                          "y": 0,
+                          "geometry": "M220 120l15 0 10-25 10 60 10-30 15-5",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 8,
+                          "id": "wrhqW",
+                          "x": 360,
+                          "y": 70,
+                          "fill": "#2c2a29",
+                          "width": 320,
+                          "height": 160,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "Wq9mi",
+                          "x": 420,
+                          "y": 150,
+                          "fill": "#161514",
+                          "width": 48,
+                          "height": 48,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "nuraA",
+                          "x": 620,
+                          "y": 150,
+                          "fill": "#161514",
+                          "width": 48,
+                          "height": 48,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "Z9dMbS",
+                          "x": 455,
+                          "y": 95,
+                          "fill": "#e0574b",
+                          "width": 210,
+                          "height": 40
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "vGE0H",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "qulAz",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "03 // DEMO",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "jAmsx",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "A voice memo on a phone and a demo cassette with a hand label. Camera: macro. Transition: cassette slides into studio deck.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "MJY0q",
+                  "name": "Panel 04 - RECORDING SESSION",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "i9J5AA",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "id": "F3wZY",
+                          "x": 0,
+                          "y": 0,
+                          "geometry": "M320 230l80-140 80 140",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 3
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "NXCrD",
+                          "x": 390,
+                          "y": 80,
+                          "fill": "#e0574b",
+                          "width": 20,
+                          "height": 35
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "VKp3C",
+                          "x": 140,
+                          "y": 170,
+                          "fill": "#2c2a29",
+                          "width": 120,
+                          "height": 75,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "wNY9i",
+                          "x": 580,
+                          "y": 180,
+                          "fill": "#2c2a29",
+                          "width": 90,
+                          "height": 60,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "tkdBv",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "A326N8",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "04 // RECORDING SESSION",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "X4kQH",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Studio with microphone; laptop, phone and action camera play like instruments. Camera: dolly across desk. Transition: takes cut.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "ljlud",
+      "x": 2100,
+      "y": 0,
+      "name": "board 02",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "uyqAi",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "JIOpq",
+              "name": "Board Title",
+              "fill": "#e0574b",
+              "content": "BOARD 02",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "t8Gihi",
+              "name": "Subtitle",
+              "fill": "#b3ada4",
+              "content": "CONCEPT A — MUSIC ALBUM PRODUCTION (SCROLL STORYBOARD)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "h2Hqy",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "iodAE",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "t8ed4",
+                  "name": "Panel 05 - EDITING",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "gezU8",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "ROTP3",
+                          "x": 100,
+                          "y": 60,
+                          "fill": "#1c1b1a",
+                          "width": 620,
+                          "height": 180,
+                          "stroke": "#2c2a29",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "Y2oXH",
+                          "x": 130,
+                          "y": 80,
+                          "fill": "#e0574b",
+                          "width": 220,
+                          "height": 35
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "xLtGA",
+                          "x": 370,
+                          "y": 80,
+                          "fill": "#b3ada4",
+                          "width": 150,
+                          "height": 35
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "LjlW9",
+                          "x": 180,
+                          "y": 130,
+                          "fill": "#b3ada4",
+                          "width": 300,
+                          "height": 35
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "SS23X",
+                          "x": 500,
+                          "y": 130,
+                          "fill": "#2c2a29",
+                          "width": 180,
+                          "height": 35
+                        },
+                        {
+                          "type": "path",
+                          "id": "H4JK7k",
+                          "x": 0,
+                          "y": 0,
+                          "geometry": "M310 50l0 170",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "X1mP9",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "LzTiQ",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "05 // EDITING",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "W1lrJ",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Multitrack timeline, takes cut and joined; session notes become a decision log. Camera: screen fills frame. Transition: faders rise.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "B9HQs",
+                  "name": "Panel 06 - MIXING",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Um0Sy",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 8,
+                          "id": "hpDFl",
+                          "x": 140,
+                          "y": 60,
+                          "fill": "#222120",
+                          "width": 540,
+                          "height": 180,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "wpM9M",
+                          "x": 180,
+                          "y": 80,
+                          "fill": "#161514",
+                          "width": 80,
+                          "height": 50,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "dG4L0",
+                          "x": 300,
+                          "y": 80,
+                          "fill": "#161514",
+                          "width": 80,
+                          "height": 50,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "dQlLv",
+                          "x": 420,
+                          "y": 80,
+                          "fill": "#161514",
+                          "width": 80,
+                          "height": 50,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "gIJ9R",
+                          "x": 215,
+                          "y": 150,
+                          "fill": "#e0574b",
+                          "width": 10,
+                          "height": 70
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "h0CEh",
+                          "x": 335,
+                          "y": 170,
+                          "fill": "#b3ada4",
+                          "width": 10,
+                          "height": 70
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "E7yqhv",
+                          "x": 455,
+                          "y": 140,
+                          "fill": "#e0574b",
+                          "width": 10,
+                          "height": 70
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "fmOmX",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "EgpGc",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "06 // MIXING",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "a99Dn",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Faders rise, VU meters light up. Camera: low angle along the console. Transition: master sealed and locked.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "le1tC",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "l9YhH",
+                  "name": "Panel 07 - MASTERING",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "bI9rl",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 12,
+                          "id": "e0TfS1",
+                          "x": 280,
+                          "y": 70,
+                          "fill": "#2c2a29",
+                          "width": 260,
+                          "height": 160,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "DweI9",
+                          "x": 410,
+                          "y": 150,
+                          "fill": "#00000000",
+                          "width": 60,
+                          "height": 60,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 4
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "r1swXa",
+                          "x": 380,
+                          "y": 110,
+                          "fill": "#e0574b",
+                          "width": 60,
+                          "height": 40
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Q6PY7",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "EEHpi",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "07 // MASTERING",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ZJmFT",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The master is sealed and locked. Camera: close on a lock and shrink wrap. Transition: test disc plays.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "zZXdd",
+                  "name": "Panel 08 - TEST PRESSING",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "VEo9g",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "k38LJ",
+                          "x": 410,
+                          "y": 150,
+                          "fill": "#1c1b1a",
+                          "width": 150,
+                          "height": 150,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "z8ioe",
+                          "x": 410,
+                          "y": 150,
+                          "fill": "#e0574b",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "path",
+                          "id": "P5rfI",
+                          "x": 0,
+                          "y": 0,
+                          "geometry": "M120 150q80-70 160 0t160 0 260 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "RJOuc",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "ud2Ji",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "08 // TEST PRESSING",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "kfDA4",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Test disc plays, signal shakes then holds steady. Camera: orbit around turntable. Transition: press stamps discs.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "YAyI1",
+      "x": 4200,
+      "y": 0,
+      "name": "board 03",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "X8ELE8",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "U0O2Jl",
+              "name": "Board Title",
+              "fill": "#e0574b",
+              "content": "BOARD 03",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "LqdX2",
+              "name": "Subtitle",
+              "fill": "#b3ada4",
+              "content": "CONCEPT A — MUSIC ALBUM PRODUCTION (SCROLL STORYBOARD)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Z6XaVr",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "D0vWt",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "hAWRu",
+                  "name": "Panel 09 - PRESSING",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "PD3BW",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "C5rtNa",
+                          "x": 260,
+                          "y": 60,
+                          "fill": "#e0574b",
+                          "width": 300,
+                          "height": 40
+                        },
+                        {
+                          "type": "rectangle",
+                          "id": "M2GxPy",
+                          "x": 300,
+                          "y": 100,
+                          "fill": "#b3ada4",
+                          "width": 220,
+                          "height": 20
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "oCbNM",
+                          "x": 410,
+                          "y": 190,
+                          "fill": "#2c2a29",
+                          "width": 180,
+                          "height": 40,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "jLirY",
+                          "x": 410,
+                          "y": 210,
+                          "fill": "#1c1b1a",
+                          "width": 180,
+                          "height": 40,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MCVux",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "dH0qm",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "09 // PRESSING",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "X78q2M",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "A press stamps hundreds of discs. Camera: pull back to reveal the line. Transition: overhead conveyor.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "l9XMYc",
+                  "name": "Panel 10 - PACKAGING",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "WcsrQ",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "iOhDK",
+                          "x": 280,
+                          "y": 60,
+                          "fill": "#2c2a29",
+                          "width": 260,
+                          "height": 180,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "ayrx9",
+                          "x": 310,
+                          "y": 90,
+                          "fill": "#161514",
+                          "width": 120,
+                          "height": 120,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "ERqRY",
+                          "x": 500,
+                          "y": 150,
+                          "fill": "#1c1b1a",
+                          "width": 90,
+                          "height": 90,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MKXIP",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "HvipT",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "10 // PACKAGING",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "n6ouFz",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Booklet printed, disc placed in jewel case, case shrink wrapped. Camera: overhead conveyor. Transition: cases ride conveyor.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "Tgjpc",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "rWqof",
+                  "name": "Panel 11 - DISTRIBUTION",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "U6Ue7u",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "id": "l6rP8",
+                          "x": 100,
+                          "y": 180,
+                          "fill": "#b3ada4",
+                          "width": 620,
+                          "height": 20
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "L9jv4",
+                          "x": 180,
+                          "y": 110,
+                          "fill": "#e0574b",
+                          "width": 50,
+                          "height": 70
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "BI2io",
+                          "x": 280,
+                          "y": 110,
+                          "fill": "#2c2a29",
+                          "width": 50,
+                          "height": 70,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "gHKgU",
+                          "x": 500,
+                          "y": 60,
+                          "fill": "#1c1b1a",
+                          "width": 140,
+                          "height": 160,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "n2ezSI",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "DtXES",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "11 // DISTRIBUTION",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "awHlF",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Cases ride a conveyor and slot into a rack one by one. Camera: follow one case. Transition: rack doors slide open.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "b1h7r",
+                  "name": "Panel 12 - RACK OPENS",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "DXP7P",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "CY6SY",
+                          "x": 220,
+                          "y": 50,
+                          "fill": "#161514",
+                          "width": 380,
+                          "height": 180,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "bMirb",
+                          "x": 260,
+                          "y": 80,
+                          "fill": "#222120",
+                          "width": 300,
+                          "height": 120
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "amXBZ",
+                          "x": 290,
+                          "y": 100,
+                          "fill": "#e0574b",
+                          "width": 70,
+                          "height": 80
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "o24vmF",
+                          "x": 380,
+                          "y": 100,
+                          "fill": "#b3ada4",
+                          "width": 70,
+                          "height": 80
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "O3L56",
+                          "x": 470,
+                          "y": 100,
+                          "fill": "#2c2a29",
+                          "width": 70,
+                          "height": 80
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "TC5dk",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "I141Un",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "12 // RACK OPENS",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "IBvdV",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The rack doors slide open and the camera enters the project shelf. Camera: push through. Transition: end of story.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "e6Oi9",
+      "x": 6300,
+      "y": 0,
+      "name": "[v0.1][WIP] STORY B, board 01",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "nQ5Ea",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "G3y0EY",
+              "name": "Board Title",
+              "fill": "#e0574b",
+              "content": "[V0.1][WIP] STORY B, BOARD 01",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "kVjFC",
+              "name": "Subtitle",
+              "fill": "#b3ada4",
+              "content": "CONCEPT B — FILM PRODUCTION (IDEA TO ARCHIVE)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "r0L9Ol",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "NXLE1",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "qGnqF",
+                  "name": "Panel 01 - DIRECTORS IDEA",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "E5EXIx",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "cKZvX",
+                          "x": 260,
+                          "y": 55,
+                          "fill": "#211f1e",
+                          "width": 300,
+                          "height": 180,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "UdumG",
+                          "x": 390,
+                          "y": 130,
+                          "fill": "#e0574b",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "l4QFU",
+                          "x": 300,
+                          "y": 80,
+                          "fill": "#b3ada4",
+                          "width": 220,
+                          "height": 12
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "hdVPL",
+                          "x": 300,
+                          "y": 105,
+                          "fill": "#524d46",
+                          "width": 160,
+                          "height": 8
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "BJPPl",
+                          "x": 300,
+                          "y": 125,
+                          "fill": "#524d46",
+                          "width": 190,
+                          "height": 8
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "r6bkp4",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "aUjsq",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "01 // DIRECTOR'S IDEA",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ClUNE",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Director's idea: a scribble on paper glows in a dark room. Camera: slow push in. Transition: paper becomes a script page.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Eh40F",
+                  "name": "Panel 02 - SCRIPT",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "ySXjA",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "JmurS",
+                          "x": 210,
+                          "y": 70,
+                          "fill": "#211f1e",
+                          "width": 400,
+                          "height": 160,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "sxKzx",
+                          "x": 250,
+                          "y": 100,
+                          "fill": "#e0574b",
+                          "width": 320,
+                          "height": 12
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "Z7nWv6",
+                          "x": 250,
+                          "y": 125,
+                          "fill": "#b3ada4",
+                          "width": 260,
+                          "height": 8
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "mrVRP",
+                          "x": 250,
+                          "y": 145,
+                          "fill": "#b3ada4",
+                          "width": 290,
+                          "height": 8
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 2,
+                          "id": "L7qXSi",
+                          "x": 250,
+                          "y": 175,
+                          "fill": "#524d46",
+                          "width": 180,
+                          "height": 8
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "ZMET4",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "vMtIc",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "02 // SCRIPT",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "E3Puk2",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Script: client needs typed as scene headings. Camera: top-down on typewriter. Transition: pages fan into storyboard cards.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "MTF28",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "W8IoB9",
+                  "name": "Panel 03 - STORYBOARD",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "HTAJE",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "f5KKRX",
+                          "x": 120,
+                          "y": 75,
+                          "fill": "#211f1e",
+                          "width": 130,
+                          "height": 140,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "l1q5eq",
+                          "x": 175,
+                          "y": 85,
+                          "fill": "#e0574b",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "ero73",
+                          "x": 270,
+                          "y": 95,
+                          "fill": "#2c2a29",
+                          "width": 130,
+                          "height": 140,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "Skf1y",
+                          "x": 325,
+                          "y": 105,
+                          "fill": "#e0574b",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "jJTWQ",
+                          "x": 420,
+                          "y": 75,
+                          "fill": "#211f1e",
+                          "width": 130,
+                          "height": 140,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "acvmx",
+                          "x": 475,
+                          "y": 85,
+                          "fill": "#e0574b",
+                          "width": 8,
+                          "height": 8
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "CbqQO",
+                          "x": 570,
+                          "y": 95,
+                          "fill": "#211f1e",
+                          "width": 130,
+                          "height": 140,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "l9KYi",
+                          "x": 625,
+                          "y": 105,
+                          "fill": "#e0574b",
+                          "width": 8,
+                          "height": 8
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "LV6nl",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "MT3ca",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "03 // STORYBOARD",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "FEuBQ",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Storyboard: cards pinned on a wall, each a screen of the product. Camera: pan along the wall.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "WdPXP",
+                  "name": "Panel 04 - SET AND LIGHTING",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "wPvlA",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "J2GjJ",
+                          "x": 380,
+                          "y": 40,
+                          "fill": "#e0574b",
+                          "width": 60,
+                          "height": 30
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "gPeLB",
+                          "x": 360,
+                          "y": 70,
+                          "fill": "#211f1e",
+                          "width": 100,
+                          "height": 140,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "gLYmc",
+                          "x": 150,
+                          "y": 220,
+                          "fill": "#524d46",
+                          "width": 520,
+                          "height": 12
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "UKGMY",
+                          "x": 550,
+                          "y": 100,
+                          "fill": "#b3ada4",
+                          "width": 40,
+                          "height": 40
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "nsbor",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "Pmemq",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "04 // SET AND LIGHTING",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "VSUwV",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Set and lighting: crew builds the set, cables and lights (infrastructure). Camera: crane down.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "Q73S4",
+      "x": 8400,
+      "y": 0,
+      "name": "board 02",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "qeT2K",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "m9W1h",
+              "name": "Board Title",
+              "fill": "#e0574b",
+              "content": "[V0.1][WIP] STORY B, BOARD 02",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "fqkhZ",
+              "name": "Subtitle",
+              "fill": "#b3ada4",
+              "content": "CONCEPT B — FILM PRODUCTION (IDEA TO ARCHIVE)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "e5Aswo",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "GPlHO",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "iuZFW",
+                  "name": "Panel 01 - SHOOT",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "m4BgRK",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "zUFU0",
+                          "x": 260,
+                          "y": 90,
+                          "fill": "#211f1e",
+                          "width": 300,
+                          "height": 150,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "VRo4F",
+                          "x": 300,
+                          "y": 110,
+                          "fill": "#161514",
+                          "width": 220,
+                          "height": 100
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "nX6jk",
+                          "x": 400,
+                          "y": 160,
+                          "fill": "#e0574b",
+                          "width": 24,
+                          "height": 24
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "ZRmf8",
+                          "x": 220,
+                          "y": 140,
+                          "fill": "#b3ada4",
+                          "width": 60,
+                          "height": 40
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "a8FuLB",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "c43qK4",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "05 // SHOOT",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "NEEwX",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Shoot: an action camera and a phone record the product on a laptop. Camera: handheld follow.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Nlaqe",
+                  "name": "Panel 02 - EDIT",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Rocbj",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "diRzI",
+                          "x": 140,
+                          "y": 70,
+                          "fill": "#211f1e",
+                          "width": 540,
+                          "height": 160,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "p2aJ2",
+                          "x": 170,
+                          "y": 110,
+                          "fill": "#e0574b",
+                          "width": 140,
+                          "height": 35
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "WUTBR",
+                          "x": 320,
+                          "y": 110,
+                          "fill": "#b3ada4",
+                          "width": 180,
+                          "height": 35
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "t4o8Ly",
+                          "x": 510,
+                          "y": 110,
+                          "fill": "#524d46",
+                          "width": 110,
+                          "height": 35
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 3,
+                          "id": "zsvb2",
+                          "x": 320,
+                          "y": 170,
+                          "fill": "#2c2a29",
+                          "width": 300,
+                          "height": 20
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "l32WN",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "o4EEAZ",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "06 // EDIT",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "wE73w",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Edit: timeline with versioned cuts, each change labelled (transparency). Camera: monitor fills frame.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "y89dQ",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "qrPtP",
+                  "name": "Panel 03 - COLOR GRADE",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "jzKc3",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "aMVzC",
+                          "x": 180,
+                          "y": 70,
+                          "fill": "#211f1e",
+                          "width": 220,
+                          "height": 150,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "GYReq",
+                          "x": 420,
+                          "y": 70,
+                          "fill": "#2c2a29",
+                          "width": 220,
+                          "height": 150,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "rKAft",
+                          "x": 305,
+                          "y": 145,
+                          "fill": "#b3ada4",
+                          "width": 40,
+                          "height": 40
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "cMucv",
+                          "x": 530,
+                          "y": 145,
+                          "fill": "#e0574b",
+                          "width": 40,
+                          "height": 40
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "MFlA5",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "D1SnFK",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "07 // COLOR GRADE",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "MTnKg",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Color grade: grading wheels turn, the raw image becomes warm and cinematic (polish). Camera: split before and after.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g748j9",
+                  "name": "Panel 04 - TEST SCREENING",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "CXnv4",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "Z78GV",
+                          "x": 210,
+                          "y": 55,
+                          "fill": "#211f1e",
+                          "width": 400,
+                          "height": 120,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "M1alK9",
+                          "x": 280,
+                          "y": 210,
+                          "fill": "#b3ada4",
+                          "width": 16,
+                          "height": 16
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "WvW5s",
+                          "x": 360,
+                          "y": 210,
+                          "fill": "#b3ada4",
+                          "width": 16,
+                          "height": 16
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "TXPsk",
+                          "x": 440,
+                          "y": 210,
+                          "fill": "#b3ada4",
+                          "width": 16,
+                          "height": 16
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "QuzsI",
+                          "x": 520,
+                          "y": 210,
+                          "fill": "#b3ada4",
+                          "width": 16,
+                          "height": 16
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "c7H1h",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "W9ZuKT",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "08 // TEST SCREENING",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "rI68C",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Test screening: small audience, film stutters once then plays smoothly (reliability, QA). Camera: from the back row.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "t9Oa0J",
+      "x": 10500,
+      "y": 0,
+      "name": "board 03",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "id": "E6OiZb",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "lU03A",
+              "name": "Board Title",
+              "fill": "#e0574b",
+              "content": "[V0.1][WIP] STORY B, BOARD 03",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold"
+            },
+            {
+              "type": "text",
+              "id": "bsPAP",
+              "name": "Subtitle",
+              "fill": "#b3ada4",
+              "content": "CONCEPT B — FILM PRODUCTION (IDEA TO ARCHIVE)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Z5vFmR",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "IeICH",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "RJxfW",
+                  "name": "Panel 01 - RATING SEAL",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Wn2wn",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "c8MYB5",
+                          "x": 330,
+                          "y": 50,
+                          "fill": "#211f1e",
+                          "width": 160,
+                          "height": 160,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "zOOvt",
+                          "x": 370,
+                          "y": 90,
+                          "fill": "#e0574b",
+                          "width": 80,
+                          "height": 80
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "VI0XM",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "GreOP",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "09 // RATING SEAL",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "CLA5l",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Rating seal: a seal stamped on the reel can (security). Camera: macro on the stamp.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Y708T",
+                  "name": "Panel 02 - DUPLICATION",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "qn34Z",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "ellipse",
+                          "id": "RyMPg",
+                          "x": 120,
+                          "y": 105,
+                          "fill": "#e0574b",
+                          "width": 90,
+                          "height": 90,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "HH6f5",
+                          "x": 155,
+                          "y": 140,
+                          "fill": "#161514",
+                          "width": 20,
+                          "height": 20
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "nr8nC",
+                          "x": 250,
+                          "y": 105,
+                          "fill": "#211f1e",
+                          "width": 90,
+                          "height": 90,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "xr10Z",
+                          "x": 285,
+                          "y": 140,
+                          "fill": "#161514",
+                          "width": 20,
+                          "height": 20
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "VGa2M",
+                          "x": 380,
+                          "y": 105,
+                          "fill": "#211f1e",
+                          "width": 90,
+                          "height": 90,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "r42V44",
+                          "x": 415,
+                          "y": 140,
+                          "fill": "#161514",
+                          "width": 20,
+                          "height": 20
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "N6noYa",
+                          "x": 510,
+                          "y": 105,
+                          "fill": "#211f1e",
+                          "width": 90,
+                          "height": 90,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "LA2Zp",
+                          "x": 545,
+                          "y": 140,
+                          "fill": "#161514",
+                          "width": 20,
+                          "height": 20
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "i68Ex",
+                          "x": 640,
+                          "y": 105,
+                          "fill": "#211f1e",
+                          "width": 90,
+                          "height": 90,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "f8aaaP",
+                          "x": 675,
+                          "y": 140,
+                          "fill": "#161514",
+                          "width": 20,
+                          "height": 20
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "W7ieJ",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "r68Qob",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "10 // DUPLICATION",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "ODqRy",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Duplication: one reel becomes hundreds of copies (scalability). Camera: pull back on a duplication line.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "ynFcA",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "CzT9C",
+                  "name": "Panel 03 - REEL TO DISC",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "a99Xl0",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 8,
+                          "id": "X2ccm",
+                          "x": 260,
+                          "y": 70,
+                          "fill": "#211f1e",
+                          "width": 300,
+                          "height": 160,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "ellipse",
+                          "id": "OqkmQ",
+                          "x": 360,
+                          "y": 110,
+                          "fill": "#e0574b",
+                          "width": 80,
+                          "height": 80
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "A21TH",
+                          "x": 310,
+                          "y": 95,
+                          "fill": "#2c2a29",
+                          "width": 200,
+                          "height": 110,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "Zr8Aw",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "e6vbp",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "11 // REEL TO DISC",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "Dy3Zt",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Reel to disc: the reel morphs into a CD in a jewel case and slides into a rack. Camera: follow the case.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Px15t",
+                  "name": "Panel 04 - CURTAIN OPENS",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "id": "Pxogb",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 6,
+                          "id": "ZN5C5",
+                          "x": 210,
+                          "y": 55,
+                          "fill": "#211f1e",
+                          "width": 400,
+                          "height": 180,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "LTwq6",
+                          "x": 240,
+                          "y": 85,
+                          "fill": "#161514",
+                          "width": 140,
+                          "height": 120,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        },
+                        {
+                          "type": "rectangle",
+                          "cornerRadius": 4,
+                          "id": "LNdIZ",
+                          "x": 440,
+                          "y": 85,
+                          "fill": "#161514",
+                          "width": 140,
+                          "height": 120,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "id": "BlSKR",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "b0Uqc",
+                          "name": "Beat Title",
+                          "fill": "#e0574b",
+                          "content": "12 // CURTAIN OPENS",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold"
+                        },
+                        {
+                          "type": "text",
+                          "id": "MGnLE",
+                          "name": "Beat Description",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Curtain opens: the rack opens like a cinema curtain into the project shelf. Camera: push through.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "story_c_board_01",
+      "x": 12600,
+      "y": 0,
+      "name": "[v0.1][WIP] STORY C, board 01",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "fill": "#e0574b",
+              "content": "[V0.1][WIP] STORY C, BOARD 01",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold",
+              "name": "Board Title"
+            },
+            {
+              "type": "text",
+              "fill": "#b3ada4",
+              "content": "CONCEPT C — ONE LOFT STUDIO, CONTINUOUS CAMERA (SCROLL STORYBOARD)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal",
+              "name": "Subtitle"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Panel 01 - FLOOR PLAN",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 120,
+                          "y": 45,
+                          "width": 580,
+                          "height": 200,
+                          "fill": "#161514",
+                          "stroke": "#2c2a29",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M150 90l100 0 100 60 120-60 140 80",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 140,
+                          "y": 80,
+                          "width": 20,
+                          "height": 20,
+                          "fill": "#2c2a29",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 240,
+                          "y": 80,
+                          "width": 20,
+                          "height": 20,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 340,
+                          "y": 140,
+                          "width": 20,
+                          "height": 20,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 460,
+                          "y": 80,
+                          "width": 20,
+                          "height": 20,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 600,
+                          "y": 160,
+                          "width": 20,
+                          "height": 20,
+                          "fill": "#2c2a29",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "01 // FLOOR PLAN",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The whole loft from above, camera path dashed through stations 1 to 8. Camera: top-down overview. Transition: glide into station 1.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "name": "Panel 02 - IDEA WALL",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 160,
+                          "y": 40,
+                          "width": 500,
+                          "height": 210,
+                          "fill": "#222120",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 200,
+                          "y": 70,
+                          "width": 80,
+                          "height": 60,
+                          "fill": "#b3ada4",
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 340,
+                          "y": 60,
+                          "width": 90,
+                          "height": 70,
+                          "fill": "#e0574b",
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 500,
+                          "y": 120,
+                          "width": 80,
+                          "height": 60,
+                          "fill": "#b3ada4",
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M240 100l100-10l60 50",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 1.5
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "02 // IDEA WALL",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Pinned notes and threads between them representing abstract needs. Camera: glide in. Transition: zoom into requirement sticky.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Panel 03 - WRITING DESK",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 180,
+                          "y": 160,
+                          "width": 460,
+                          "height": 80,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 280,
+                          "y": 70,
+                          "width": 140,
+                          "height": 100,
+                          "fill": "#ece8e1",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2,
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M300 100l100 0M300 130l70 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#2c2a29",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "03 // WRITING DESK",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Notes turn into a clean requirement sheet on a wooden desk. Camera: dolly right. Transition: pan to recording corner.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "name": "Panel 04 - RECORDING CORNER",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "geometry": "M320 230l80-140 80 140",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 3
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 390,
+                          "y": 80,
+                          "width": 20,
+                          "height": 35,
+                          "fill": "#e0574b"
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 180,
+                          "y": 150,
+                          "width": 140,
+                          "height": 90,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M320 190q80-40 180 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "04 // RECORDING CORNER",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Laptop, phone and action camera wired together, design matched to need. Camera: arc around. Transition: push into monitor timeline.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "story_c_board_02",
+      "x": 14700,
+      "y": 0,
+      "name": "[v0.1][WIP] STORY C, board 02",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "fill": "#e0574b",
+              "content": "[V0.1][WIP] STORY C, BOARD 02",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold",
+              "name": "Board Title"
+            },
+            {
+              "type": "text",
+              "fill": "#b3ada4",
+              "content": "CONCEPT C — ONE LOFT STUDIO, CONTINUOUS CAMERA (SCROLL STORYBOARD)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal",
+              "name": "Subtitle"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Panel 05 - EDIT DESK",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 120,
+                          "y": 60,
+                          "width": 270,
+                          "height": 160,
+                          "fill": "#222120",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 430,
+                          "y": 60,
+                          "width": 270,
+                          "height": 160,
+                          "fill": "#222120",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M140 140q70-40 230 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M450 100l220 0M450 130l160 0M450 160l200 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "05 // EDIT DESK",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Edit desk with two monitors: versioned timeline and decision log on second screen (transparency). Camera: push into screens.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "name": "Panel 06 - TEST RACK",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 180,
+                          "y": 80,
+                          "width": 220,
+                          "height": 140,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 250,
+                          "y": 110,
+                          "width": 80,
+                          "height": 80,
+                          "fill": "#161514",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M450 150q50-50 100 0t100 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "06 // TEST RACK",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Test rack: a turntable plays a test disc, signal dips and recovers; a lock on the cabinet (reliability, security). Camera: low orbit.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Panel 07 - SMALL PRESS",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 300,
+                          "y": 50,
+                          "width": 220,
+                          "height": 190,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 390,
+                          "y": 80,
+                          "width": 40,
+                          "height": 40,
+                          "fill": "#e0574b"
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 150,
+                          "y": 200,
+                          "width": 520,
+                          "height": 20,
+                          "fill": "#3a3836",
+                          "cornerRadius": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "07 // SMALL PRESS",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Small press machine stamping copies (scalability). Camera: pull back. Transition: pan to packing table.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "name": "Panel 08 - PACKING TABLE",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 160,
+                          "y": 170,
+                          "width": 500,
+                          "height": 70,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 320,
+                          "y": 110,
+                          "width": 180,
+                          "height": 60,
+                          "fill": "#ece8e1",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M550 50l120 0 0 180-120 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "08 // PACKING TABLE",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Packing table: booklet, disc, case, shrink wrap; then the wall of shelves slides open into project rack. Camera: through opening.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "story_c_board_03",
+      "x": 16800,
+      "y": 0,
+      "name": "[v0.1][WIP] STORY C, board 03",
+      "clip": true,
+      "width": 1920,
+      "height": 1080,
+      "fill": "#161514",
+      "layout": "none",
+      "children": [
+        {
+          "type": "frame",
+          "x": 80,
+          "y": 40,
+          "name": "Board Header",
+          "width": 1760,
+          "height": 40,
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "fill": "#e0574b",
+              "content": "[V0.1][WIP] STORY C, BOARD 03",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 20,
+              "fontWeight": "bold",
+              "name": "Board Title"
+            },
+            {
+              "type": "text",
+              "fill": "#b3ada4",
+              "content": "CONCEPT C — ONE LOFT STUDIO, CONTINUOUS CAMERA (SCROLL STORYBOARD)",
+              "fontFamily": "Inter",
+              "fontSize": 14,
+              "fontWeight": "normal",
+              "name": "Subtitle"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "x": 80,
+          "y": 100,
+          "name": "Panels Grid",
+          "width": 1760,
+          "height": 920,
+          "layout": "vertical",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "name": "Row 1",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Panel 09 - CONTINUOUS TRACK",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "path",
+                          "geometry": "M100 200q150-150 310 0t310 0",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 3
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 400,
+                          "y": 110,
+                          "width": 30,
+                          "height": 30,
+                          "fill": "#2c2a29",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "09 // CONTINUOUS TRACK",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Seamless single-take camera glide across all studio zones without a single cut. Camera: continuous steadycam.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "name": "Panel 10 - TELEMETRY & SYNC",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 160,
+                          "y": 60,
+                          "width": 500,
+                          "height": 170,
+                          "fill": "#222120",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "path",
+                          "geometry": "M190 140q60-40 120 0t120-40t120 40",
+                          "fill": "#00000000",
+                          "width": 0,
+                          "height": 0,
+                          "stroke": "#e0574b",
+                          "strokeWidth": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "10 // TELEMETRY & SYNC",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Real-time telemetry syncing recording, edit decisions, and test results. Camera: split monitor sweep.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "name": "Row 2",
+              "width": 1760,
+              "height": 440,
+              "gap": 40,
+              "children": [
+                {
+                  "type": "frame",
+                  "name": "Panel 11 - SCALED LINE",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 140,
+                          "y": 100,
+                          "width": 540,
+                          "height": 20,
+                          "fill": "#2c2a29",
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 140,
+                          "y": 160,
+                          "width": 540,
+                          "height": 20,
+                          "fill": "#2c2a29",
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 200,
+                          "y": 105,
+                          "width": 10,
+                          "height": 10,
+                          "fill": "#e0574b"
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 380,
+                          "y": 105,
+                          "width": 10,
+                          "height": 10,
+                          "fill": "#e0574b"
+                        },
+                        {
+                          "type": "ellipse",
+                          "x": 560,
+                          "y": 105,
+                          "width": 10,
+                          "height": 10,
+                          "fill": "#e0574b"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "11 // SCALED LINE",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Automated manufacturing line churning out packaged project units simultaneously. Camera: wide overhead crane.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "name": "Panel 12 - PROJECT ARCHIVE",
+                  "width": 860,
+                  "height": 440,
+                  "fill": "#1c1b1a",
+                  "cornerRadius": 8,
+                  "stroke": "#2c2a29",
+                  "strokeWidth": 1,
+                  "layout": "vertical",
+                  "gap": 16,
+                  "padding": 20,
+                  "children": [
+                    {
+                      "type": "frame",
+                      "name": "Sketch Box",
+                      "width": 820,
+                      "height": 290,
+                      "fill": "#161514",
+                      "cornerRadius": 6,
+                      "stroke": "#2c2a29",
+                      "strokeWidth": 1,
+                      "layout": "none",
+                      "children": [
+                        {
+                          "type": "rectangle",
+                          "x": 180,
+                          "y": 40,
+                          "width": 460,
+                          "height": 210,
+                          "fill": "#222120",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 2,
+                          "cornerRadius": 4
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 220,
+                          "y": 70,
+                          "width": 100,
+                          "height": 40,
+                          "fill": "#2c2a29",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 1,
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 360,
+                          "y": 70,
+                          "width": 100,
+                          "height": 40,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1,
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 500,
+                          "y": 70,
+                          "width": 100,
+                          "height": 40,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1,
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 220,
+                          "y": 140,
+                          "width": 100,
+                          "height": 40,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1,
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 360,
+                          "y": 140,
+                          "width": 100,
+                          "height": 40,
+                          "fill": "#2c2a29",
+                          "stroke": "#e0574b",
+                          "strokeWidth": 1,
+                          "cornerRadius": 2
+                        },
+                        {
+                          "type": "rectangle",
+                          "x": 500,
+                          "y": 140,
+                          "width": 100,
+                          "height": 40,
+                          "fill": "#2c2a29",
+                          "stroke": "#b3ada4",
+                          "strokeWidth": 1,
+                          "cornerRadius": 2
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "name": "Caption Block",
+                      "width": "fill_container",
+                      "layout": "vertical",
+                      "gap": 4,
+                      "children": [
+                        {
+                          "type": "text",
+                          "fill": "#e0574b",
+                          "content": "12 // PROJECT ARCHIVE",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 18,
+                          "fontWeight": "bold",
+                          "name": "Beat Title"
+                        },
+                        {
+                          "type": "text",
+                          "fill": "#ece8e1",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "The final project rack fully loaded, glowing warm LED compartments, project complete. Camera: final push-in & fade.",
+                          "fontFamily": "Inter",
+                          "fontSize": 18,
+                          "fontWeight": "normal",
+                          "name": "Beat Description"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

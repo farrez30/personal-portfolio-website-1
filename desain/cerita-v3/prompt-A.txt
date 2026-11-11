@@ -1,0 +1,16 @@
+Create a storyboard for a scroll-driven website story. Canvas only, no images.
+1) Make 3 frames, each 1920x1080, dark background #161514, named "[v0.1][WIP] STORY A, board 01", "board 02", "board 03". Each frame holds 4 panels in a 2x2 grid. Each panel: a 16:9 sketch box (rough storyboard drawing made from simple shapes and lines in warm grey #b3ada4 and one red accent #e0574b), and under it a caption block: beat number and title in IBM Plex Mono 18px uppercase red #e0574b, then 2 short lines in Schibsted Grotesk 20px #ece8e1: what we see, camera move, and how it transitions to the next beat.
+2) The 12 beats (Concept A, music album production, from an abstract idea to a CD filed in a rack):
+01 Idea hum: sound particles float in darkness and gather into one waveform. Camera: slow push in. Transition: the wave settles down onto paper.
+02 Lyrics: the wave becomes handwriting in a notebook, complaints turn into requirements. Camera: top-down. Transition: pen taps a phone.
+03 Demo: a voice memo on a phone and a demo cassette with a hand label. Camera: macro. Transition: cassette slides into a studio deck.
+04 Recording session: studio with microphone; a laptop, a phone and an action camera play like instruments. Camera: dolly across the desk.
+05 Editing: multitrack timeline, takes cut and joined; session notes become a decision log. Camera: screen fills frame.
+06 Mixing: faders rise, VU meters light up. Camera: low angle along the console.
+07 Mastering: the master is sealed and locked. Camera: close on a lock and shrink wrap.
+08 Test pressing: test disc plays, signal shakes then holds steady. Camera: orbit around turntable.
+09 Pressing: a press stamps hundreds of discs. Camera: pull back to reveal the line.
+10 Packaging: booklet printed, disc placed in jewel case, case shrink wrapped. Camera: overhead conveyor.
+11 Distribution: cases ride a conveyor and slot into a rack one by one. Camera: follow one case.
+12 Rack opens: the rack doors slide open and the camera enters the project shelf. Camera: push through.
+3) Keep generous margins (80px), 40px gaps, readable text, no lorem ipsum.

@@ -1,0 +1,43 @@
+Create one storyboard board on an empty canvas. It is the final storyboard of a scroll story for a portfolio website: one continuous camera move through a dark film soundstage, from a vague idea to a CD filed in a rack. Board 3 of 3.
+
+1) One top-level frame named "[v1.0][REVIEW] STORY FILM, papan 3", width 1920, fit_content height, clip true, fill #161514, vertical layout, padding 64, gap 40. At the top a header row: left a text "Cerita gulir v3, konsep film" (Schibsted Grotesk 40 semibold, #e9e1d3), right a text "Papan 3 dari 3" (IBM Plex Mono 18, #e0574b).
+
+2) Below the header one horizontal row of 3 panel columns, gap 32, each column fill_container width, vertical layout, gap 14. In each column, top to bottom:
+   - an image rectangle, fill_container width, height 328, cornerRadius 4, with an IMAGE FILL using the given url (relative to this .pen file, mode cover). Do not generate or replace the image.
+   - a thin rule: rectangle fill_container width, height 2, fill #e0574b.
+   - the title (Schibsted Grotesk 28 semibold, #e9e1d3).
+   - the chapter line (Schibsted Grotesk 20, #e9e1d3 at 80% via #e9e1d3cc, fixed-width fill_container, lineHeight 1.35).
+   - five small labeled rows, each a vertical frame with gap 2: a label in IBM Plex Mono 13 #e0574b uppercase (KAMERA, SAMBUNGAN, DURASI, POLA, BENANG MERAH) and its value in IBM Plex Mono 15 #b3ada4 (fixed-width fill_container).
+   Use the exact Indonesian text below, no other copy, no lorem ipsum, no icons, no extra cards.
+
+BEAT 08
+- image url: ./styleframe/08-screening.webp
+- title: "08  Test screening"
+- line (chapter text): "Tetap jalan di hari yang buruk."
+- KAMERA: "Dari baris belakang, menembus layar."
+- SAMBUNGAN: "Sorot proyektor jatuh ke kaleng film."
+- DURASI: "120vh"
+- POLA: "Pola 36 portal zoom-through"
+- BENANG MERAH: "Lampu merah"
+
+BEAT 09
+- image url: ./styleframe/09-segel.webp
+- title: "09  Segel dan penggandaan"
+- line (chapter text): "Yang bisa melihat hanya yang memang perlu. Dari satu klien ke banyak, tanpa mulai dari nol."
+- KAMERA: "Makro ke segel, lalu mundur ke jalur penggandaan."
+- SAMBUNGAN: "Satu cakram lepas dari tumpukan."
+- DURASI: "120vh"
+- POLA: "Pola 56 instanced field"
+- BENANG MERAH: "Segel lilin"
+
+BEAT 10
+- image url: ./styleframe/10-rilis.webp
+- title: "10  Rilis"
+- line (chapter text): "Lalu jadilah sistem yang dipakai tiap hari. Sepuluh di antaranya ada di rak ini."
+- KAMERA: "Ikuti satu kotak di ban berjalan."
+- SAMBUNGAN: "Tembus tirai rak ke seksi rak proyek."
+- DURASI: "180vh"
+- POLA: "Pola 40 benda berjalan, 36 portal"
+- BENANG MERAH: "Tirai rak"
+
+3) Check the result: nothing clipped, all 3 images visible with their image fills, texts wrap inside their column, frame height fits all content. Remove placeholder when done.

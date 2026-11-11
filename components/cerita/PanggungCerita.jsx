@@ -1,46 +1,60 @@
 "use client";
 import { useEffect, useRef } from "react";
-import { useLocale, useTranslations } from "next-intl";
+import { useLocale } from "next-intl";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { PiLockSimpleBold, PiWifiSlashBold } from "react-icons/pi";
 import { cariProyek } from "@/content/proyek";
 import { buatDunia } from "./dunia";
 import { keadaanPada, progresDari } from "./naskah";
-import { CATATAN } from "./Benda";
 
-// Panggung menempel di belakang bab (mode Imersif): kanvas dunia 3D plus lapisan DOM kecil
-// (tirai portal, butir sinyal hilang, label lapisan, liner notes). Progres dibaca dari blok
+// Kotak CD yang masuk rak di ujung cerita: proyek sungguhan dari rak.
+const KOTAK = ["coderoach-os", "jeda", "akarkita"];
+
+// Panggung menempel di belakang bab (mode Imersif): kanvas soundstage plus butir film,
+// vignette, dan selubung beige yang menyerahkan layar ke seksi rak. Progres dibaca dari blok
 // babak `[data-babak]`, dihaluskan sedikit, lalu dunia digambar hanya saat ada yang berubah.
-const LAPISAN = ["tutup", "buklet", "cakram", "nampan"];
-
-export default function PanggungCerita({ akar }) {
-  const t = useTranslations("cerita");
+export default function PanggungCerita({ akar, onGagal }) {
   const locale = useLocale();
   const panggung = useRef(null);
   const wadah = useRef(null);
-  const label = useRef({});
 
   useEffect(() => {
     const seksi = akar.current;
     const el = panggung.current;
     if (!seksi || !el) return;
     gsap.registerPlugin(ScrollTrigger);
-    const dunia = buatDunia(wadah.current, { proyek: cariProyek("coderoach-os"), locale });
+    const hp = matchMedia("(max-width: 47.99rem)").matches;
+    let kotor = true;
+    let dunia;
+    try {
+      dunia = buatDunia(wadah.current, {
+        locale,
+        hp,
+        kotak: KOTAK.map(cariProyek).filter(Boolean),
+        ubah: () => (kotor = true),
+      });
+    } catch {
+      // WebGL tidak tersedia (driver, mode hemat daya, peramban lama): cerita pindah ke mode Ringan.
+      onGagal?.();
+      return;
+    }
 
     let blok = [];
     const ukurBlok = () => {
-      blok = [...seksi.querySelectorAll("[data-babak]")].map((b) => {
+      blok = [...seksi.querySelectorAll(".cerita-pembuka[data-babak], .bab[data-babak]")].map((b) => {
         const r = b.getBoundingClientRect();
         return { atas: r.top + window.scrollY, tinggi: r.height };
       });
+      // Babak terakhir selesai saat ujung seksi menyentuh bawah layar (bukan tengahnya), jadi
+      // layar sudah beige penuh sebelum panggung tergulir pergi dan rak muncul di bawahnya.
+      const akhir = blok.at(-1);
+      if (akhir) akhir.tinggi = Math.max(1, akhir.tinggi - innerHeight / 2);
     };
     ukurBlok();
-    let tujuan = progresDari(window.scrollY + innerHeight / 2, blok);
+    const tengah = () => window.scrollY + innerHeight / 2;
+    let tujuan = progresDari(tengah(), blok);
     let p = tujuan;
     let terlihat = false;
-    let kotor = true;
-    let penunjuk = null;
 
     const pemicu = ScrollTrigger.create({
       trigger: seksi,
@@ -51,21 +65,16 @@ export default function PanggungCerita({ akar }) {
         kotor = true;
       },
       onUpdate: () => {
-        tujuan = progresDari(window.scrollY + innerHeight / 2, blok);
+        tujuan = progresDari(tengah(), blok);
       },
       onRefresh: () => {
         ukurBlok();
-        tujuan = progresDari(window.scrollY + innerHeight / 2, blok);
+        dunia.ukur();
+        tujuan = progresDari(tengah(), blok);
         kotor = true;
       },
     });
     terlihat = pemicu.isActive;
-
-    const gerakPenunjuk = (e) => {
-      penunjuk = { x: (e.clientX / innerWidth) * 2 - 1, y: (e.clientY / innerHeight) * 2 - 1 };
-      kotor = true;
-    };
-    window.addEventListener("pointermove", gerakPenunjuk, { passive: true });
 
     let waktuLalu = performance.now();
     const detak = () => {
@@ -74,29 +83,19 @@ export default function PanggungCerita({ akar }) {
       waktuLalu = kini;
       if (!terlihat) return;
       const beda = tujuan - p;
-      p = Math.abs(beda) < 1e-4 ? tujuan : p + beda * (1 - Math.exp(-7 * dt));
-      const s = keadaanPada(p);
-      const hidup = s.putaran > 0.01 || s.perangkat > 0.3 || s.uv > 0.01 || s.tumpuk > 0.01 || s.sinyal > 0.01;
+      p = Math.abs(beda) < 1e-4 ? tujuan : p + beda * (1 - Math.exp(-6 * dt));
+      const s = keadaanPada(p, { hp });
+      // Kamera tangan dan kotak yang sedang meluncur tetap bergerak walau gulir berhenti.
+      const hidup = s.getar > 0.01 || s.kotak.some((k) => k > 0 && k < 1);
       if (!kotor && Math.abs(beda) < 1e-4 && !hidup) return;
       kotor = false;
-      const titik = dunia.gambar(s, kini, s.uv > 0.01 ? penunjuk : null);
-      el.style.setProperty("--iris", s.iris.toFixed(3));
-      el.style.setProperty("--sisi", s.sisi.toFixed(3));
-      if (titik.pusat) {
-        el.style.setProperty("--ix", `${titik.pusat.x.toFixed(1)}px`);
-        el.style.setProperty("--iy", `${titik.pusat.y.toFixed(1)}px`);
-      }
-      el.style.setProperty("--sinyal", s.sinyal.toFixed(3));
-      el.style.setProperty("--ruang", s.ruang.toFixed(3));
-      el.style.setProperty("--uv", s.uv.toFixed(3));
-      el.style.setProperty("--buklet", s.buklet.toFixed(3));
-      el.style.setProperty("--urai", s.urai.toFixed(3));
-      for (const nama of LAPISAN) {
-        const node = label.current[nama];
-        const q = titik[nama];
-        if (!node) continue;
-        if (q) node.style.transform = `translate(${q.x.toFixed(1)}px, ${q.y.toFixed(1)}px)`;
-      }
+      dunia.gambar(s, kini);
+      // Di seksi, bukan hanya panggung: teks bab ikut berganti warna saat layar memutih.
+      seksi.style.setProperty("--putih", s.putih.toFixed(3));
+      // Untuk QA (scripts/kontak-cerita.mjs). Bukan data-babak: selektor blok di atas akan ikut
+      // menghitung panggung sebagai babak, dan kamera jadi satu bab di depan teksnya.
+      el.dataset.adegan = s.babak;
+      el.dataset.p = p.toFixed(3);
     };
     gsap.ticker.add(detak);
 
@@ -106,41 +105,18 @@ export default function PanggungCerita({ akar }) {
 
     return () => {
       gsap.ticker.remove(detak);
-      window.removeEventListener("pointermove", gerakPenunjuk);
       pemicu.kill();
       ro.disconnect();
       dunia.hapus();
     };
-  }, [akar, locale]);
+  }, [akar, locale, onGagal]);
 
   return (
     <div ref={panggung} className="panggung-cerita" aria-hidden="true">
       <div ref={wadah} className="panggung-cerita__kanvas" />
-      <div className="panggung-cerita__iris" />
+      <div className="panggung-cerita__vignette" />
       <div className="panggung-cerita__butir" />
-      <div className="panggung-cerita__sinyal">
-        {[0, 1, 2, 3].map((i) => (
-          <span key={i} style={{ "--i": i }} />
-        ))}
-        <PiWifiSlashBold />
-      </div>
-      <div className="panggung-cerita__gembok">
-        <PiLockSimpleBold />
-      </div>
-      <div className="panggung-cerita__catatan mono">
-        <span className="panggung-cerita__catatan-kepala">Liner notes</span>
-        {CATATAN.map(([a, b], i) => (
-          <span key={a} className="panggung-cerita__baris" style={{ "--i": i }}>
-            <span>{a}</span>
-            <span>{b}</span>
-          </span>
-        ))}
-      </div>
-      {LAPISAN.map((nama) => (
-        <span key={nama} ref={(n) => (label.current[nama] = n)} className="panggung-cerita__label mono">
-          {t(`lapisan.${nama}`)}
-        </span>
-      ))}
+      <div className="panggung-cerita__putih" />
     </div>
   );
 }

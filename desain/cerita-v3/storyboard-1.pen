@@ -1,0 +1,920 @@
+{
+  "version": "2.22",
+  "children": [
+    {
+      "type": "frame",
+      "id": "QjhAt",
+      "x": 0,
+      "y": 0,
+      "name": "[v1.0][REVIEW] STORY FILM, papan 1",
+      "clip": true,
+      "width": 1920,
+      "fill": "#161514",
+      "layout": "vertical",
+      "gap": 40,
+      "padding": 64,
+      "children": [
+        {
+          "type": "frame",
+          "id": "x346MY",
+          "name": "Header Row",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "text",
+              "id": "ao6Hf",
+              "name": "Header Title",
+              "fill": "#e9e1d3",
+              "content": "Cerita gulir v3, konsep film",
+              "fontFamily": "Schibsted Grotesk",
+              "fontSize": 40,
+              "fontWeight": "600"
+            },
+            {
+              "type": "text",
+              "id": "ltBRk",
+              "name": "Header Subtitle",
+              "fill": "#e0574b",
+              "content": "Papan 1 dari 3",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 18,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "AIB2A",
+          "name": "Panels Row",
+          "width": "fill_container",
+          "gap": 32,
+          "children": [
+            {
+              "type": "frame",
+              "id": "FCrTQ",
+              "name": "Column 01  Ide",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 4,
+                  "id": "XRMEZ",
+                  "name": "Image 01  Ide",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "styleframe/01-ide.webp",
+                    "mode": "cover"
+                  },
+                  "width": "fill_container",
+                  "height": 248
+                },
+                {
+                  "type": "rectangle",
+                  "id": "o3uwn",
+                  "name": "Rule",
+                  "fill": "#e0574b",
+                  "width": "fill_container",
+                  "height": 2
+                },
+                {
+                  "type": "text",
+                  "id": "xogin",
+                  "name": "Title",
+                  "fill": "#e9e1d3",
+                  "content": "01  Ide",
+                  "fontFamily": "Schibsted Grotesk",
+                  "fontSize": 28,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "c0jG4S",
+                  "name": "Chapter Line",
+                  "fill": "#e9e1d3cc",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Berawal dari keluhan sehari-hari.",
+                  "lineHeight": 1.35,
+                  "fontFamily": "Schibsted Grotesk",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "Z4m5G",
+                  "name": "KAMERA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "m1gnV",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "KAMERA",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "T0qdIH",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "MS meja sutradara, eye level, dolly mendekat pelan.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "o7dDq",
+                  "name": "SAMBUNGAN",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LJA6l",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "SAMBUNGAN",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "IZx01",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Kertas coretan ditarik ke mesin ketik.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "HpFuW",
+                  "name": "DURASI",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "fvOWe",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "DURASI",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ZxIl3",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "120vh",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Y4gb72",
+                  "name": "POLA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ZwNbH",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "POLA",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "I8CJHm",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Pola 89 coretan jadi benda",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "I0qdx",
+                  "name": "BENANG MERAH",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "YhVc3",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "BENANG MERAH",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "ZSCaL",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Pensil merah",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "j301q",
+              "name": "Column 02  Naskah",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 4,
+                  "id": "QvdRh",
+                  "name": "Image 02  Naskah",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "styleframe/02-naskah.webp",
+                    "mode": "cover"
+                  },
+                  "width": "fill_container",
+                  "height": 248
+                },
+                {
+                  "type": "rectangle",
+                  "id": "xzgxn",
+                  "name": "Rule",
+                  "fill": "#e0574b",
+                  "width": "fill_container",
+                  "height": 2
+                },
+                {
+                  "type": "text",
+                  "id": "TKI8G",
+                  "name": "Title",
+                  "fill": "#e9e1d3",
+                  "content": "02  Naskah",
+                  "fontFamily": "Schibsted Grotesk",
+                  "fontSize": 28,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "lZT7p",
+                  "name": "Chapter Line",
+                  "fill": "#e9e1d3cc",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Semua dimulai dari rencana yang Anda setujui.",
+                  "lineHeight": 1.35,
+                  "fontFamily": "Schibsted Grotesk",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "o1neQ",
+                  "name": "KAMERA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "KGlJE",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "KAMERA",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "zpU3D",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Bird eye view ke mesin ketik, static.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "VsMMV",
+                  "name": "SAMBUNGAN",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "t8tKqR",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "SAMBUNGAN",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "t9nys",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Halaman beterbangan ke dinding.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "tsVIe",
+                  "name": "DURASI",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "D5wK9",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "DURASI",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "bX5XE",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "100vh",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "S39cB",
+                  "name": "POLA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "oA6rz",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "POLA",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "G0VQi",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Pola 88 catatan jadi rencana",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "pqH0I",
+                  "name": "BENANG MERAH",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ukL6Z",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "BENANG MERAH",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "A8w883",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Pita pembatas",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "rduSI",
+              "name": "Column 03  Storyboard",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 4,
+                  "id": "aReiq",
+                  "name": "Image 03  Storyboard",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "styleframe/03-storyboard.webp",
+                    "mode": "cover"
+                  },
+                  "width": "fill_container",
+                  "height": 248
+                },
+                {
+                  "type": "rectangle",
+                  "id": "mskcI",
+                  "name": "Rule",
+                  "fill": "#e0574b",
+                  "width": "fill_container",
+                  "height": 2
+                },
+                {
+                  "type": "text",
+                  "id": "KlWX6",
+                  "name": "Title",
+                  "fill": "#e9e1d3",
+                  "content": "03  Storyboard",
+                  "fontFamily": "Schibsted Grotesk",
+                  "fontSize": 28,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "j5UmN",
+                  "name": "Chapter Line",
+                  "fill": "#e9e1d3cc",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Bentuknya dipilih sesuai masalahnya.",
+                  "lineHeight": 1.35,
+                  "fontFamily": "Schibsted Grotesk",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "AVSCt",
+                  "name": "KAMERA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Rlman",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "KAMERA",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "abEx8",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "LS dinding storyboard, eye level, tracking ke kanan.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "wQDKd",
+                  "name": "SAMBUNGAN",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "H4Zac",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "SAMBUNGAN",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "WSPdp",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Panel terakhir terbuka jadi set nyata.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "g04Pm",
+                  "name": "DURASI",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "R13HQ",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "DURASI",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "M5kKA",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "140vh",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "ZsD0A",
+                  "name": "POLA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "v9YSz1",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "POLA",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "a63Glh",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Pola 86 gambar kerja jadi barang",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "D2Uflb",
+                  "name": "BENANG MERAH",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "zCGdk",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "BENANG MERAH",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "V9wDea",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Benang di dinding",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "i0n934",
+              "name": "Column 04  Set dan lighting",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "rectangle",
+                  "cornerRadius": 4,
+                  "id": "p98P6",
+                  "name": "Image 04  Set dan lighting",
+                  "fill": {
+                    "type": "image",
+                    "enabled": true,
+                    "url": "styleframe/04-set.webp",
+                    "mode": "cover"
+                  },
+                  "width": "fill_container",
+                  "height": 248
+                },
+                {
+                  "type": "rectangle",
+                  "id": "NCHfA",
+                  "name": "Rule",
+                  "fill": "#e0574b",
+                  "width": "fill_container",
+                  "height": 2
+                },
+                {
+                  "type": "text",
+                  "id": "S9kuoI",
+                  "name": "Title",
+                  "fill": "#e9e1d3",
+                  "content": "04  Set dan lighting",
+                  "fontFamily": "Schibsted Grotesk",
+                  "fontSize": 28,
+                  "fontWeight": "600"
+                },
+                {
+                  "type": "text",
+                  "id": "ygKCQ",
+                  "name": "Chapter Line",
+                  "fill": "#e9e1d3cc",
+                  "textGrowth": "fixed-width",
+                  "width": "fill_container",
+                  "content": "Rapi sampai ke bagian yang tidak kelihatan.",
+                  "lineHeight": 1.35,
+                  "fontFamily": "Schibsted Grotesk",
+                  "fontSize": 20,
+                  "fontWeight": "normal"
+                },
+                {
+                  "type": "frame",
+                  "id": "y5zKYQ",
+                  "name": "KAMERA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ujAFw",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "KAMERA",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "JI3u7",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Crane shot turun ke set, high angle. Lampu menyala satu per satu.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "cVaFd",
+                  "name": "SAMBUNGAN",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Y3p2AI",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "SAMBUNGAN",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "q9elE",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Kamera turun ke ketinggian set.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "Nc3Wn",
+                  "name": "DURASI",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "NCIqS",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "DURASI",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "HUefE",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "120vh",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "hUEOw",
+                  "name": "POLA",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "LI6nl",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "POLA",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "lr7Ri",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Pola 53 jalur kamera",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "v9BqBg",
+                  "name": "BENANG MERAH",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 2,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "Pmk5G",
+                      "name": "Label",
+                      "fill": "#e0574b",
+                      "content": "BENANG MERAH",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 13,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "y7sph",
+                      "name": "Value",
+                      "fill": "#b3ada4",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Kabel merah",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 15,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "fileToken": "6945279d-3116-4a45-b2a8-c3c99b8a1434"
+}
