@@ -19,8 +19,8 @@ const TERBANG = 0.24;
 export const BABAK = [
   { id: "pembuka", bobot: 0.9 },
   { id: "ide", bobot: 1.2, gambar: "01-ide", kamera: { dari: { x: 0.45, y: 0.6, s: 1 }, ke: { x: 0.42, y: 0.72, s: 1.35 } }, hp: 0.62 },
-  { id: "rencana", bobot: 1, gambar: "02-naskah", kamera: { dari: { x: 0.4, y: 0.55, s: 1.25 }, ke: { x: 0.45, y: 0.4, s: 1.05 } }, hp: 0.4 },
-  { id: "bentuk", bobot: 1.4, gambar: "03-storyboard", kamera: { dari: { x: 0.12, y: 0.45, s: 1.4 }, ke: { x: 0.62, y: 0.45, s: 1.15 } }, hp: 0.3 },
+  { id: "rencana", bobot: 1, gambar: "02-naskah", ringan: "02-naskah-layar", kamera: { dari: { x: 0.4, y: 0.55, s: 1.25 }, ke: { x: 0.45, y: 0.4, s: 1.05 } }, hp: 0.4 },
+  { id: "bentuk", bobot: 1.4, gambar: "03-storyboard", ringan: "03-storyboard-layar", kamera: { dari: { x: 0.12, y: 0.45, s: 1.4 }, ke: { x: 0.62, y: 0.45, s: 1.15 } }, hp: 0.3 },
   { id: "fondasi", bobot: 1.2, gambar: "04-set", kamera: { dari: { x: 0.5, y: 0.3, s: 1.3 }, ke: { x: 0.45, y: 0.55, s: 1.6 } }, hp: 0.46 },
   { id: "bangun", bobot: 1.2, gambar: "05-syuting", ringan: "05-syuting-layar", kamera: { dari: { x: 0.55, y: 0.5, s: 1.15 }, ke: { x: 0.6, y: 0.45, s: 1.3 } }, hp: 0.55 },
   { id: "progres", bobot: 1.2, gambar: "06-editing", ringan: "06-editing-layar", kamera: { dari: { x: 0.5, y: 0.5, s: 1 }, ke: { x: 0.42, y: 0.38, s: 1.55 } }, hp: 0.5 },

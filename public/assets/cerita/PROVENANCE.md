@@ -28,3 +28,13 @@ fiktif atau demo, sama dengan klip hologram (`public/assets/demo/PROVENANCE.md`)
 `@huggingface/transformers` 4.3.2, dijalankan lokal di laptop Farrez, tanpa kuota. Diburamkan
 sigma 2, diperkecil ke 344x192, WebP q85 abu-abu. Versi Large tidak dipakai karena berlisensi
 CC-BY-NC-4.0. Panel rilis tanpa peta: kamera mendorong terlalu dekat ke tirainya.
+
+**Artefak pembeli (12 Nov 2026).** Properti bab 2 dan 3 memuat dunia pembeli, ditempel dengan
+shader yang sama (jenis "kertas": tinta dikalikan ke warna kertas) dan dipanggang untuk Ringan.
+
+| Berkas | Sumber | Catatan |
+|---|---|---|
+| kertas-02.webp | Teks `desain/cerita-v3/kertas-02.txt`, ditik ffmpeg drawtext dengan Courier New Bold, 1000x640 | Daftar kebutuhan contoh di kertas mesin tik bab 2 |
+| sketsa-03a.webp | `layar-05.webp` (Beranda Coderoach OS), edgedetect lalu negate, 560x350 | Garis pensil di layar sketsa laptop bab 3 |
+| sketsa-03b.webp | `public/assets/demo/d-day-hp.mp4` detik 3, edgedetect lalu negate, 300x600 | Garis pensil di layar sketsa ponsel bab 3 |
+| 02-naskah-layar.webp, 03-storyboard-layar.webp | styleframe + artefak di atas | Mode Ringan |
