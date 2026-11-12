@@ -45,8 +45,10 @@ def ncc_peta(gambar, templat):
     return kor[: var.shape[0], : var.shape[1]] / (np.sqrt(var) * tn)
 
 
-def cari(gambar_abu, logo_rgb, alfa):
-    abu_logo = 1 - (1 - logo_rgb.mean(axis=2)) * alfa  # logo di atas putih
+def cari(gambar_abu, logo_rgb, alfa, latar=1.0):
+    # Templat = logo di atas latar polos: putih untuk logo gelap, hitam (--latar-gelap)
+    # untuk logo terang yang dicetak di latar gelap.
+    abu_logo = latar + (logo_rgb.mean(axis=2) - latar) * alfa
     terbaik = (-1, None)
     W = gambar_abu.shape[1]
     # AI kadang memipihkan atau melebarkan logo sedikit, jadi rasio ikut dicari (±15%).
@@ -64,7 +66,10 @@ def cari(gambar_abu, logo_rgb, alfa):
     return terbaik
 
 
-UKURAN = 640  # sisi akhir muka cakram; logo asli ditempel di ukuran ini supaya hanya diperkecil
+UKURAN = 640
+# Jarak warna maksimum ke palet tinta logo supaya piksel dianggap tinta AI. Naikkan
+# (--toleransi=0.28) bila sisa logo AI berwarna lebih gelap atau terang dari aslinya.
+TOLERANSI = float(next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--toleransi=")), 0.16))  # sisi akhir muka cakram; logo asli ditempel di ukuran ini supaya hanya diperkecil
 
 
 def potong_cakram(gambar, sisi):
@@ -93,7 +98,7 @@ def main():
     # Cari di resolusi kecil dulu supaya cepat, lalu pakai koordinat di resolusi asli.
     kecil = 512 / gambar.width
     abu = np.asarray(gambar.resize((512, round(gambar.height * kecil))).convert("L")) / 255
-    skor, (x, y, w, h) = cari(abu, logo_rgb, alfa)
+    skor, (x, y, w, h) = cari(abu, logo_rgb, alfa, 0.0 if "--latar-gelap" in sys.argv else 1.0)
     x, y, w, h = (round(v / kecil) for v in (x, y, w, h))
     print(f"skor {skor:.3f} kotak x={x} y={y} w={w} h={h}")
     if skor < 0.45:
@@ -123,7 +128,7 @@ def main():
     rgb = np.clip(np.dstack([kecilkan(logo_rgb[..., i] * alfa) for i in range(3)]) / np.maximum(a[..., None], 1e-3), 0, 1)
 
     # Kotak kerja dilebarkan: logo AI bisa sedikit lebih besar atau bergeser dari logo asli.
-    m = min(max(round(w * 0.06), abs(ai_h - h) // 2 + 4), x, y, g.shape[1] - x - w, g.shape[0] - y - h)
+    m = min(max(round(w * 0.06), abs(ai_h - h) // 2 + 4, round(ai_h * 0.3) if "--hapus-kotak" in sys.argv else 0), x, y, g.shape[1] - x - w, g.shape[0] - y - h)
     a = np.pad(a, m)
     rgb = np.pad(rgb, ((m, m), (m, m), (0, 0)), mode="edge")
     x, y, w, h = x - m, y - m, w + 2 * m, h + 2 * m
@@ -157,7 +162,12 @@ def main():
         jarak = np.min(np.linalg.norm(kotak[..., None, :] - palet[None, None], axis=-1), axis=-1)
         kotak_ai = np.zeros_like(a)
         kotak_ai[max(0, ai_y - y):ai_y - y + ai_h, ai_x - x:ai_x - x + w - 2 * m] = 1
-        tinta_ai = np.maximum(tinta_ai, np.maximum(kotak_ai, dekat) * (jarak < 0.16) * (beda > 0.04))
+        tinta_ai = np.maximum(tinta_ai, np.maximum(kotak_ai, dekat) * (jarak < TOLERANSI) * (beda > 0.04))
+        if "--hapus-kotak" in sys.argv:  # latar polos atau gelap: kosongkan seluruh kotak logo AI
+            tepi = int(ai_h * 0.25)
+            lebar_kotak = np.zeros_like(a)
+            lebar_kotak[max(0, ai_y - y - tepi):ai_y - y + ai_h + tepi, max(0, ai_x - x - tepi):ai_x - x + w - 2 * m + tepi] = 1
+            tinta_ai = np.maximum(tinta_ai, lebar_kotak)
     tinta_ai = lebarkan(tinta_ai, 3)
     keras = tinta_ai
     sisa = 1 - keras

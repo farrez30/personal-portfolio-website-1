@@ -34,3 +34,8 @@ Atas revisi Farrez ("harus jelas ada logonya"). Unduhan mentah di `D:/downloads/
 | pribadi-fifofun, -nds-etl (b), -akarkita, -jeda (b), -yiheecam, -d-day (b) | | lockup-<slug>.png | gaya dari label album, dua bahan Flow; d-day a gugur (skor 0,36) |
 
 Dihapus: saksama.webp, acms.webp (tanpa logo), pribadi-pilot-iklan.webp (proyek tanpa logo, menunggu keputusan Farrez).
+
+## Susulan 12 Nov 2026
+
+- `pribadi-d-day.webp` digambar ulang dengan `lockup-d-day-terang.png` (tulisan d-day diwarnai ulang gading, bentuk sama) karena tulisan hitam di latar biru gelap kurang kontras; varian d, ditimpa dengan `--latar-gelap --hapus-kotak`.
+- `saksama.webp` dipulihkan dari commit a16628b atas keputusan Farrez ("pakai apa adanya"): nama ditulis Nano Banana, belum ada logo resmi.
