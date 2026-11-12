@@ -52,6 +52,8 @@ export const ANCHOR = [
     lihat: [-4.4, 1.0, 0.52],
     benda: [-4.4, 1.05, 0.28],
     fov: 40,
+    // Rak pajang di sudut yang jauh dari lampu gantung: diafragma dibuka sedikit.
+    paparan: 1.35,
     cerita: true,
     seksi: [{ sel: ".bab--bentuk", di: 0 }],
   },
@@ -243,4 +245,45 @@ export function anchorAktif(y, tinggiLayar, titik) {
 export function kekuatanBlur(kecepatan, kurangiGerak = false) {
   if (kurangiGerak || !(kecepatan > 0.15)) return 0;
   return jepit(kecepatan / 6);
+}
+
+// Bunyi tur cerita: peristiwa yang dibunyikan saat gulir maju dari a ke b, masing-masing
+// { id, u } (anchor dan progres di dalamnya). Mundur dan lompatan jauh (tautan bab, muat ulang)
+// tidak berbunyi, supaya tidak ada rentetan bunyi sekaligus. Nama bunyi dari RESEP suara.js.
+const BUNYI_MASUK = { ide: "kertas", rencana: "kertas", bentuk: "halaman", progres: "halaman", rapi: "tombol" };
+const BUNYI_TITIK = {
+  rencana: [[0.5, "rapat"]],
+  andal: [
+    [0.42, "relay"],
+    [0.72, "relay"],
+  ],
+  aman: [[0.45, "segel"]],
+  // Tiga kotak CD mendarat di rak (props.js, babak rilis).
+  rilis: [
+    [0.32, "rapat"],
+    [0.44, "rapat"],
+    [0.56, "rapat"],
+  ],
+};
+// Jumlah lampu status rak hi-fi yang menyala di babak fondasi (0..3). Dipakai dunia.js untuk
+// lampunya dan bunyiCerita untuk relay-nya, supaya bunyi jatuh tepat saat lampu menyala.
+export function nyalaFondasi(u) {
+  const x = jepit((u - 0.08) / 0.55);
+  return Math.min(3, Math.floor(x * x * (3 - 2 * x) * 3.999));
+}
+
+export function bunyiCerita(a, b) {
+  if (!a || !b) return [];
+  const ia = ANCHOR.findIndex((x) => x.id === a.id);
+  const ib = ANCHOR.findIndex((x) => x.id === b.id);
+  if (ib < ia || ib - ia > 1) return [];
+  const bunyi = [];
+  if (ib === ia + 1) {
+    if (BUNYI_MASUK[b.id]) bunyi.push(BUNYI_MASUK[b.id]);
+    return bunyi;
+  }
+  if (!(b.u > a.u) || b.u - a.u > 0.6) return bunyi;
+  for (const [x, nama] of BUNYI_TITIK[b.id] ?? []) if (a.u < x && b.u >= x) bunyi.push(nama);
+  if (b.id === "fondasi") for (let i = nyalaFondasi(a.u); i < nyalaFondasi(b.u); i++) bunyi.push("relay");
+  return bunyi;
 }

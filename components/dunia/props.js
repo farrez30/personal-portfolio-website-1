@@ -31,9 +31,17 @@ function uvDunia(geo, perMeter = 1) {
   return geo;
 }
 
-export function buatPropsCerita({ bahan, tekstur, tambahBayang }) {
+// Dibuat sesudah dunia siap (muatCerita di dunia.js), supaya loader tidak menunggu aset cerita.
+// Lampu yang dipakai props (`lampuMeja`, `lampuDarurat`) sudah ada di adegan sejak awal: lampu
+// baru di tengah jalan memaksa semua shader dikompilasi ulang.
+export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lampuMeja, lampuDarurat }) {
+  const tunggu = [];
+  const tekstur = (...a) => {
+    const p = muatTekstur(...a);
+    tunggu.push(p);
+    return p;
+  };
   const grup = new THREE.Group();
-  const lampu = [];
   const momen = {};
   const tungguModel = []; // [nama, fn(scene)] dipasang di pasangModel()
 
@@ -116,14 +124,6 @@ export function buatPropsCerita({ bahan, tekstur, tambahBayang }) {
     isi.position.set(x, y + 0.082, z);
     induk.add(isi);
     return g;
-  };
-  // Lampu kecil setempat, bila lampu gantung tidak menjangkau.
-  const lampuKecil = (x, y, z, kuat) => {
-    const l = new THREE.PointLight(0xffb46a, 1, 3.5, 2);
-    l.position.set(x, y, z);
-    l.userData.kuat = kuat;
-    lampu.push(l);
-    grup.add(l);
   };
 
   // ---- 01 ide: papan titipan pelanggan, laptop dengan rapat Meet -----------------------------
@@ -462,7 +462,6 @@ export function buatPropsCerita({ bahan, tekstur, tambahBayang }) {
     hp.add(lh);
     r.add(hp);
     gelasKopi(0.35, 0.78, -0.1, r);
-    lampuKecil(4.2, 2.1, -3.4, 0.35);
     tambahBayang(4.2, -3.72, 0.6);
   }
 
@@ -508,7 +507,6 @@ export function buatPropsCerita({ bahan, tekstur, tambahBayang }) {
   }
 
   // ---- 08 andal: bangku, pemutar kaset baterai, ponsel, lampu darurat ------------------------
-  let darurat;
   {
     tungguModel.push([
       "wooden_stool_01",
@@ -536,13 +534,10 @@ export function buatPropsCerita({ bahan, tekstur, tambahBayang }) {
     ld.add(strip);
     kotak(0.12, 0.014, 0.014, b.gelap, 0, 0.14, 0, ld, 0.006);
     grup.add(ld);
-    darurat = new THREE.PointLight(0xfff1dc, 0, 3, 2);
-    darurat.position.set(3.18, 0.25, -1.75);
-    grup.add(darurat);
     momen.andal = (u) => {
       const padam = u > 0.42 && u < 0.72;
       strip.material.color.setHex(padam ? 0xffffff : 0x3a3430).multiplyScalar(padam ? 2.2 : 1);
-      darurat.intensity = padam ? 2.2 : 0;
+      lampuDarurat.intensity = padam ? 2.2 : 0;
     };
     tambahBayang(3.55, -1.6, 0.35);
   }
@@ -619,19 +614,13 @@ export function buatPropsCerita({ bahan, tekstur, tambahBayang }) {
 
   return {
     grup,
-    lampu,
+    tunggu: () => Promise.all(tunggu),
     modelDibutuhkan: tungguModel.map(([n]) => n),
-    // Model CC0 yang sudah dimuat dunia.js dipasang di sini. `headphone` dipakai ulang di stasiun dengar.
+    // Model CC0 yang sudah dimuat dunia.js dipasang di sini. `headphone` dipakai ulang di stasiun
+    // dengar. Tanda bayangan dipasang dunia.js untuk seluruh adegan sekaligus.
     pasangModel(peta) {
       for (const [n, fn] of tungguModel) if (peta[n]) fn(peta[n]);
       if (peta.headphone && hpStasiun) hpStasiun.add(peta.headphone.clone());
-      grup.traverse((o) => {
-        if (!o.isMesh) return;
-        const m = o.material;
-        if (m?.isMeshBasicMaterial || m?.transparent) return;
-        o.castShadow = true;
-        o.receiveShadow = true;
-      });
     },
     perbarui(id, u, s = {}) {
       if (piringan) piringan.rotation.y = s.waktu ? -s.waktu * 3.5 : 0;

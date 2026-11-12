@@ -12,12 +12,18 @@ import {
   poseAntara,
   kekuatanBlur,
   pemicuAnchor,
+  anchorTegak,
+  bunyiCerita,
+  nyalaFondasi,
 } from "../components/dunia/naskah.js";
+import { BAB } from "../content/cerita.js";
 
-test("lima anchor berurutan sesuai seksi halaman", () => {
+const BABAK = BAB.map((b) => b.id);
+
+test("anchor berurutan: bilik, pembuka cerita, sepuluh babak, rak, kasir, pintu", () => {
   assert.deepEqual(
     ANCHOR.map((a) => a.id),
-    ["bilik", "dinding", "rak", "kasir", "pintu"],
+    ["bilik", "dinding", ...BABAK, "rak", "kasir", "pintu"],
   );
   for (const a of ANCHOR) {
     assert.equal(a.posisi.length, 3, `${a.id} posisi`);
@@ -26,7 +32,61 @@ test("lima anchor berurutan sesuai seksi halaman", () => {
     // Kamera tidak boleh menembus lantai atau langit-langit ruangan (tinggi 3,2 m).
     assert.ok(a.posisi[1] > 0.4 && a.posisi[1] < 3, `${a.id} tinggi kamera ${a.posisi[1]}`);
     assert.ok(a.seksi.length > 0, `${a.id} tanpa seksi`);
+    // Kamera tetap di dalam ruangan toko (x -5..5, z -4..4).
+    assert.ok(Math.abs(a.posisi[0]) < 4.95 && Math.abs(a.posisi[2]) < 3.95, `${a.id} di luar toko`);
   }
+});
+
+test("tiap babak cerita punya benda, dipicu blok bab-nya sendiri, dan menghadap bendanya", () => {
+  for (const id of BABAK) {
+    const a = ANCHOR.find((x) => x.id === id);
+    assert.ok(a?.cerita, `${id} bukan anchor cerita`);
+    assert.equal(a.seksi[0].sel, `.bab--${id}`);
+    assert.equal(a.benda?.length, 3, `${id} tanpa benda`);
+    // Benda ada di depan kamera: sudut antara arah pandang dan arah ke benda di bawah 35 derajat.
+    const d = (p, q) => p.map((v, i) => q[i] - v);
+    const lihat = d(a.posisi, a.lihat);
+    const benda = d(a.posisi, a.benda);
+    const kos = lihat.reduce((s, v, i) => s + v * benda[i], 0) / (Math.hypot(...lihat) * Math.hypot(...benda));
+    assert.ok(kos > Math.cos((35 * Math.PI) / 180), `${id}: benda di luar arah pandang`);
+  }
+  // Anchor di luar cerita tidak punya benda dan tidak ditandai cerita.
+  for (const a of ANCHOR.filter((x) => !BABAK.includes(x.id))) assert.ok(!a.cerita && !a.benda, a.id);
+});
+
+test("layar tegak: kamera mundur dari benda dan menunduk, anchor biasa tidak berubah", () => {
+  for (const id of BABAK) {
+    const a = ANCHOR.find((x) => x.id === id);
+    const t = anchorTegak(a);
+    const jauh = (p) => Math.hypot(...p.map((v, i) => v - a.benda[i]));
+    assert.ok(jauh(t.posisi) > jauh(a.posisi), `${id} tidak mundur`);
+    // Membidik di bawah benda, supaya benda naik ke separuh atas layar (teks ada di bawah).
+    assert.ok(t.lihat[1] < a.benda[1], `${id} tidak menunduk`);
+    assert.equal(t.lihat[0], a.benda[0]);
+    assert.equal(t.lihat[2], a.benda[2]);
+    assert.equal(t.fov, a.fov);
+  }
+  const rak = ANCHOR.find((x) => x.id === "rak");
+  assert.equal(anchorTegak(rak), rak);
+});
+
+test("bunyi babak: masuk babak, momen yang dilewati maju, dan diam saat mundur atau melompat", () => {
+  const b = (id, u) => ({ id, u });
+  assert.deepEqual(bunyiCerita(b("dinding", 0.9), b("ide", 0)), ["kertas"]);
+  assert.deepEqual(bunyiCerita(b("rencana", 0.45), b("rencana", 0.55)), ["rapat"]);
+  assert.deepEqual(bunyiCerita(b("aman", 0.4), b("aman", 0.5)), ["segel"]);
+  // Tiga kotak CD mendarat berurutan; satu gulir panjang tetap maksimal 0,6 babak.
+  assert.deepEqual(bunyiCerita(b("rilis", 0.3), b("rilis", 0.6)), ["rapat", "rapat", "rapat"]);
+  assert.deepEqual(bunyiCerita(b("rencana", 0.55), b("rencana", 0.45)), [], "mundur berbunyi");
+  assert.deepEqual(bunyiCerita(b("rencana", 0.1), b("rencana", 0.9)), [], "lompatan jauh berbunyi");
+  assert.deepEqual(bunyiCerita(b("ide", 0.5), b("bentuk", 0.1)), [], "lompat dua babak berbunyi");
+  assert.deepEqual(bunyiCerita(b("bentuk", 0.1), b("rencana", 0.9)), [], "mundur babak berbunyi");
+  assert.deepEqual(bunyiCerita(null, b("ide", 0.5)), []);
+  // Lampu fondasi: satu relay tiap lampu status yang baru menyala, tidak lebih.
+  assert.deepEqual([0, 0.2, 0.3, 0.4, 0.5, 1].map(nyalaFondasi), [0, 0, 1, 2, 3, 3]);
+  assert.deepEqual(bunyiCerita(b("fondasi", 0), b("fondasi", 0.3)), ["relay"]);
+  assert.deepEqual(bunyiCerita(b("fondasi", 0.3), b("fondasi", 0.6)), ["relay", "relay"]);
+  assert.deepEqual(bunyiCerita(b("fondasi", 0.6), b("fondasi", 1)), []);
 });
 
 test("easeInOut diam di kedua ujung, simetris, dan naik terus", () => {
@@ -88,17 +148,18 @@ test("pemicu anchor memakai seksi pengganti bila seksi utamanya belum ada", () =
   const ukur = (sel) => (sel in atas ? { atas: atas[sel], tinggi: tinggi[sel] } : null);
   const p = pemicuAnchor(ukur);
   assert.deepEqual(p.map((x) => x.id), ANCHOR.map((a) => a.id));
+  const y = (r, id) => r.find((x) => x.id === id).y;
   // Belum ada seksi klien: meja kasir di awal kontak, pintu di tengahnya.
-  assert.equal(p[3].y, 9000);
-  assert.equal(p[4].y, 9600);
+  assert.equal(y(p, "kasir"), 9000);
+  assert.equal(y(p, "pintu"), 9600);
   // Pemicu selalu maju, supaya urutan anchor tidak pernah terbalik.
   for (let i = 1; i < p.length; i++) assert.ok(p[i].y >= p[i - 1].y, `${p[i].id} mundur`);
 
   atas["[data-dunia=kasir]"] = 8800;
   tinggi["[data-dunia=kasir]"] = 900;
   const q = pemicuAnchor(ukur);
-  assert.equal(q[3].y, 8800);
-  assert.equal(q[4].y, 9000);
+  assert.equal(y(q, "kasir"), 8800);
+  assert.equal(y(q, "pintu"), 9000);
 });
 
 test("durasi perpindahan tetap cepat, lebih lama untuk jarak jauh", () => {
@@ -106,7 +167,8 @@ test("durasi perpindahan tetap cepat, lebih lama untuk jarak jauh", () => {
   for (let i = 0; i < ANCHOR.length; i++)
     for (let j = 0; j < ANCHOR.length; j++) if (i !== j) d.push(durasiBlend(ANCHOR[i], ANCHOR[j]));
   for (const x of d) assert.ok(x >= 0.7 && x <= 1.3, `durasi ${x}`);
-  assert.ok(durasiBlend(ANCHOR[0], ANCHOR[4]) >= durasiBlend(ANCHOR[0], ANCHOR[1]));
+  const cari = (id) => ANCHOR.find((a) => a.id === id);
+  assert.ok(durasiBlend(cari("bilik"), cari("pintu")) >= durasiBlend(cari("bilik"), cari("dinding")));
 });
 
 test("blur nol saat diam, sebanding dengan kecepatan, lalu dibatasi", () => {

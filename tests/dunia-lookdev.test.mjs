@@ -74,7 +74,42 @@ test("dinding depan terisi benda, isinya InstancedMesh tanpa tekstur", () => {
   assert.doesNotMatch(poster, /fillText|strokeText/);
 });
 
-test("satu lampu gantung untuk tiap tempat, termasuk kiri pintu", () => {
+test("satu lampu gantung untuk tiap tempat, plus dinding kiri dan gondola cerita", () => {
   const daftar = kode.slice(kode.indexOf("const lampu = ["), kode.indexOf("].map((p) => {"));
-  assert.equal((daftar.match(/yLampu/g) ?? []).length, 5);
+  assert.equal((daftar.match(/yLampu/g) ?? []).length, 7);
+});
+
+// Masukan Farrez 13 Nov 2026: benda yang disinari harus berbayang dan punya kedalaman, bukan
+// "3D polosan". Yang dikunci: setiap lampu gantung membuat bayangan, jadwalnya per lampu supaya
+// lampu yang diam tidak dihitung ulang tiap bingkai, dan bidang ruangan tidak ikut membuat bayangan.
+test("setiap lampu gantung, lampu jalan, dan lampu kunci membuat bayangan dengan jadwal sendiri", () => {
+  const lampu = kode.slice(kode.indexOf("].map((p) => {"), kode.indexOf("const nyala = buatNyala(lampu);"));
+  assert.match(lampu, /l\.castShadow = !hp;/);
+  assert.match(lampu, /l\.shadow\.autoUpdate = false;/);
+  assert.match(kode, /cahayaJalan\.castShadow = true;\s*cahayaJalan\.shadow\.autoUpdate = false;/);
+  assert.match(kode, /kunciLampu\.castShadow = true;/);
+  assert.match(kode, /kunciLampu\.shadow\.autoUpdate = false;/);
+  // Tanpa PCFSoftShadowMap: dihapus di three 0.187.
+  assert.match(kode, /renderer\.shadowMap\.type = THREE\.PCFShadowMap;/);
+  // Lampu diam dicicil satu per bingkai, bukan sekaligus.
+  assert.match(kode, /for \(const l of lampuBerbayang\(\)\) \{\s*l\.shadow\.needsUpdate = true;[\s\S]*?await bingkaiBerikut\(\);/);
+});
+
+test("lantai, dinding, dan plafon menerima bayangan tapi tidak membuatnya", () => {
+  assert.match(kode, /const bidangRuang = new Set\(\[bahan\.dinding, bahan\.plafon, bahan\.lantai\]\);/);
+  assert.match(kode, /o\.castShadow = !bidangRuang\.has\(m\);/);
+});
+
+test("lintasan layar memberi ambient occlusion dan depth of field, AO hanya di desktop", () => {
+  assert.match(kode, /uAo: \{ value: hp \? 0 : 1 \}/);
+  assert.match(kode, /if \(uDof > 0\.001 && uKuat <= 0\.001\)/);
+  assert.match(kode, /if \(uAo > 0\.5 && zKini < 15\.0\)/);
+  // Fokus hanya di babak cerita dan saat kamera sudah mendarat; gerak dikurangi tanpa kabur.
+  assert.match(kode, /const dofTujuan = a\.cerita && !blend && !kurangiGerak \? 1 : 0;/);
+});
+
+test("model CC0 memakai AO dari peta ARM, dinding bertekstur plester", () => {
+  assert.match(kode, /m\.roughnessMap === m\.metalnessMap && !m\.aoMap\) m\.aoMap = m\.roughnessMap;/);
+  assert.match(kode, /tekstur\("bahan\/plester-normal\.webp"/);
+  for (const b of ["plester-warna", "plester-normal", "plester-kasar"]) statSync(new URL(`../public/assets/dunia/bahan/${b}.webp`, import.meta.url));
 });

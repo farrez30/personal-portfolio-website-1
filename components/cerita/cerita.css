@@ -176,13 +176,11 @@
   }
 }
 
-/* ---------- Imersif: soundstage 3D yang menempel di belakang bab ---------- */
+/* ---------- Imersif: tur props di dunia toko (components/dunia), di belakang bab ---------- */
 
 .cerita-kerja--dunia {
-  --putih: 0;
-  /* Panggung selalu gelap: cincin fokus memakai nilai tema gelap supaya terlihat, lalu berganti
-     ke nilai tema terang saat layar memutih ke beige rak (emas di beige hanya 1,43:1). */
-  --fokus: color-mix(in srgb, #8a4b00 calc(var(--putih) * 100%), #f0b35a);
+  /* Teks cerita selalu di atas kabut gelap: cincin fokus memakai nilai tema gelap. */
+  --fokus: #f0b35a;
   position: relative;
   padding-bottom: 0;
 }
@@ -190,69 +188,6 @@
 .cerita-kerja--dunia .cerita-kerja__kepala {
   position: relative;
   z-index: 2;
-}
-
-.panggung-cerita {
-  position: sticky;
-  top: 0;
-  z-index: 0;
-  height: 100svh;
-  margin-bottom: -100svh;
-  overflow: hidden;
-  pointer-events: none;
-  background: #0b0a09;
-}
-
-.panggung-cerita__kanvas {
-  position: absolute;
-  inset: 0;
-}
-
-.panggung-cerita__kanvas canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-/* Vignette dan butir film menyatukan panel styleframe dan benda 3D jadi satu gambar. */
-.panggung-cerita__vignette {
-  position: absolute;
-  inset: 0;
-  /* Hilang bersama gelapnya panggung, supaya tidak tertinggal sebagai kabut di atas beige. */
-  opacity: calc(1 - var(--putih));
-  background: radial-gradient(ellipse 75% 70% at 50% 46%, transparent 55%, rgb(8 7 6 / 0.72) 100%);
-}
-
-.panggung-cerita__butir {
-  position: absolute;
-  inset: -50%;
-  opacity: 0.08;
-  mix-blend-mode: overlay;
-  background-size: 220px;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: cerita-butir 0.32s steps(3) infinite;
-}
-
-/* Butir berhenti saat cerita tidak terlihat: tidak ada gunanya menggambar ulang di luar layar. */
-.panggung-cerita:not([data-tampak]) .panggung-cerita__butir {
-  animation-play-state: paused;
-}
-
-@keyframes cerita-butir {
-  33% {
-    translate: 3% -2%;
-  }
-  66% {
-    translate: -2% 3%;
-  }
-}
-
-/* Ujung cerita: layar memutih ke beige panggung rak (panggung.css) sebelum rak tampil. */
-.panggung-cerita__putih {
-  position: absolute;
-  inset: 0;
-  background: #e9e1d3;
-  opacity: var(--putih);
 }
 
 /* Teks bab menempel di kiri bawah dengan kabut gelap di belakangnya, bukan kartu. */
@@ -268,37 +203,30 @@
     linear-gradient(to right, transparent, #000 12%, #000 78%, transparent),
     linear-gradient(to bottom, transparent, #000 12%, #000 82%, transparent);
   mask-composite: intersect;
-  opacity: calc(1 - var(--putih));
   pointer-events: none;
 }
 
-/* Panggung selalu gelap, apa pun tema halaman: judul pembuka, tautan, dan kertas keluhan ikut
-   panggung. */
+/* Teks cerita selalu terang di atas kabut gelapnya sendiri, apa pun tema halaman dan suasana
+   toko di belakangnya. */
 .cerita-kerja--dunia .cerita-pembuka__judul {
   color: #ece8e1;
 }
 
 .cerita-kerja--dunia .bab__nomor {
-  color: color-mix(in srgb, #b3322a calc(var(--putih) * 100%), #f2897f);
+  color: #f2897f;
   text-shadow: 0 1px 12px rgb(0 0 0 / 0.6);
 }
 
 .cerita-kerja--dunia .bab__judul,
 .cerita-kerja--dunia .bab__teks-isi {
-  text-shadow: 0 1px 18px rgb(11 10 9 / calc(0.7 * (1 - var(--putih))));
+  text-shadow: 0 1px 18px rgb(11 10 9 / 0.7);
 }
 
 /* Teks bab yang sedang tersembunyi tetap bisa dijangkau keyboard; begitu ada fokus di dalamnya,
-   teksnya tampil (peramban juga menggulir ke bab itu, jadi panggung ikut pindah). */
+   teksnya tampil (peramban juga menggulir ke bab itu, jadi kamera dunia ikut pindah). */
 .cerita-kerja--dunia .bab__isi:focus-within,
 .cerita-kerja--dunia .bab__teks:focus-within {
   opacity: 1 !important;
-}
-
-/* Serah terima ke beige: teks bab terakhir hilang dulu selagi latarnya setengah gelap setengah
-   terang (kontras sempat sekitar 1:1), lalu muncul lagi sebagai tinta gelap. */
-.cerita-kerja--dunia .bab--rilis .bab__isi {
-  opacity: max(calc(1 - var(--putih) * 4), calc((var(--putih) - 0.45) * 2.2));
 }
 
 .cerita-kerja--dunia .bab__bukti a,
@@ -312,13 +240,7 @@
   background: rgb(18 16 14 / 0.72);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .panggung-cerita__butir {
-    animation: none;
-  }
-}
-
-/* Pembuka: judul seksi sebagai tipografi besar di atas gambar soundstage dari ketinggian. */
+/* Pembuka: judul seksi sebagai tipografi besar di atas toko yang terlihat dari depan. */
 .cerita-pembuka {
   position: relative;
   z-index: 1;
@@ -359,12 +281,12 @@
   top: max(4.5rem, min(52svh, calc(100svh - var(--tinggi, 0px) - 1.5rem)));
   max-width: 30rem;
   /* Saat layar memutih ke beige rak, teks berganti ke tinta gelap. */
-  color: color-mix(in srgb, #1d1b19 calc(var(--putih) * 100%), #ece8e1);
+  color: #ece8e1;
 }
 
 .cerita-kerja--dunia .bab__teks-isi,
 .cerita-kerja--dunia .bab__bukti {
-  color: color-mix(in srgb, #4a4640 calc(var(--putih) * 100%), rgb(236 232 225 / 0.82));
+  color: rgb(236 232 225 / 0.82);
 }
 
 .cerita-kerja--dunia .bab__judul {
@@ -475,8 +397,8 @@
 }
 
 .cerita-kerja--dunia .cerita-rel {
-  --titik: color-mix(in srgb, #6f695f calc(var(--putih) * 100%), rgb(236 232 225 / 0.55));
-  --titik-aktif: color-mix(in srgb, #b3322a calc(var(--putih) * 100%), #e0574b);
+  --titik: rgb(236 232 225 / 0.55);
+  --titik-aktif: #e0574b;
 }
 
 /* HP: satu baris di bawah header, kiri; cakram pemutar menempati ujung kanannya. */

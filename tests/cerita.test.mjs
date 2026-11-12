@@ -79,12 +79,22 @@ test("istilah tahap film tidak tampil di teks halaman", () => {
     }
 });
 
-test("panggung tidak ikut terhitung sebagai babak", () => {
-  // Regresi 11 Nov 2026: panggung menulis data-babak pada dirinya, lalu terhitung sebagai blok
-  // saat diukur ulang, dan kamera di HP jadi satu bab di depan teksnya.
-  const src = baca("components/cerita/PanggungCerita.jsx");
-  assert.doesNotMatch(src, /dataset\.babak\s*=/);
-  assert.match(src, /querySelectorAll\("\.cerita-pembuka\[data-babak\], \.bab\[data-babak\]"\)/);
+test("mode Ringan memakai render dunia 3D untuk tiap bab, bukan styleframe", () => {
+  const src = baca("components/cerita/CeritaKerja.jsx");
+  assert.match(src, /src=\{`\/assets\/cerita\/\$\{b\.id\}\.webp`\}/);
+  for (const b of BAB) readFileSync(new URL(`public/assets/cerita/${b.id}.webp`, akar));
+  // Panggung styleframe v3 sudah dilepas dari beranda.
+  assert.doesNotMatch(src, /PanggungCerita|from "\.\/naskah"/);
+  const ada = readdirSync(new URL("components/cerita/", akar));
+  assert.ok(!ada.includes("PanggungCerita.jsx") && !ada.includes("dunia.js"), "sisa panggung v3");
+});
+
+test("tinggi blok tersedia untuk pembuka dan setiap bab", () => {
+  const src = baca("components/cerita/CeritaKerja.jsx");
+  const m = src.match(/const BOBOT = (\{[^}]*\});/);
+  assert.ok(m, "BOBOT tidak ditemukan");
+  const bobot = Function(`return ${m[1]}`)();
+  for (const id of ["pembuka", ...BAB.map((b) => b.id)]) assert.ok(bobot[id] >= 0.8 && bobot[id] <= 3, id);
 });
 
 test("cerita ada di antara hero dan rak", () => {
@@ -151,16 +161,17 @@ test("teks bab di HP tidak dikurung kotak yang menggulir sendiri", () => {
   assert.match(css, /@media \(max-width: 47\.99rem\) \{[^@]*\.cerita-kerja--dunia \.bab__teks::before \{\s*inset: 0;/);
 });
 
-test("teks bab di layar pendek tetap utuh, dan serah terima ke beige tidak melewati teks samar", () => {
+test("teks bab di layar pendek tetap utuh, di atas kabut gelapnya sendiri", () => {
   const css = baca("components/cerita/cerita.css");
   // clamp() dengan tiga nilai bersatuan sama selalu jatuh ke nilai tengah; posisi tempel harus
   // bergantung pada tinggi kotak.
   assert.doesNotMatch(css, /top: clamp\(40svh, 52svh, 60svh\)/);
   assert.match(css, /top: max\(4\.5rem, min\(52svh, calc\(100svh - var\(--tinggi, 0px\) - 1\.5rem\)\)\);/);
   assert.match(baca("components/cerita/CeritaKerja.jsx"), /style\.setProperty\("--tinggi"/);
-  assert.match(css, /\.bab--rilis \.bab__isi \{\s*opacity: max\(calc\(1 - var\(--putih\) \* 4\), calc\(\(var\(--putih\) - 0\.45\) \* 2\.2\)\);/);
-  // Cincin fokus ikut berganti ke nilai tema terang di beige.
-  assert.match(css, /--fokus: color-mix\(in srgb, #8a4b00 calc\(var\(--putih\) \* 100%\), #f0b35a\);/);
+  // Sejak v4 tidak ada lagi layar yang memutih ke beige: teks dan cincin fokus selalu bernilai
+  // tema gelap di atas kabutnya sendiri.
+  assert.doesNotMatch(css, /var\(--putih\)/);
+  assert.match(css, /--fokus: #f0b35a;/);
 });
 
 test("penanda bab: sepuluh tombol berlabel, satu aktif, dan bisa dijangkau keyboard hanya saat tampil", () => {
@@ -175,14 +186,6 @@ test("penanda bab: sepuluh tombol berlabel, satu aktif, dan bisa dijangkau keybo
   }
   // Area ketuk titik minimal 44 px tingginya.
   assert.match(baca("components/cerita/cerita.css"), /\.cerita-rel__titik \{[^}]*height: 2\.75rem;/);
-});
-
-test("dunia cerita dan teksturnya baru dibuat saat seksi tinggal satu layar lagi", () => {
-  const src = baca("components/cerita/PanggungCerita.jsx");
-  assert.match(src, /new IntersectionObserver\([\s\S]*bongkar = mulai\(seksi, el\)[\s\S]*rootMargin: "100% 0px"/);
-  // buatDunia hanya dipanggil di dalam mulai(), bukan langsung di efek.
-  const efek = src.slice(src.indexOf("useEffect("), src.indexOf("function mulai("));
-  assert.doesNotMatch(efek, /buatDunia\(/);
 });
 
 test("kabut di belakang teks bab tidak berujung tajam di desktop", () => {

@@ -67,6 +67,11 @@ for (let i = 0; i < 400; i++) {
   const d = await js(`document.documentElement.dataset.dunia`);
   if (d === "siap" || d === "gagal") break;
 }
+// Tunggu props cerita yang dimuat sesudah hero (data-cerita di .dunia).
+for (let i = 0; i < 200; i++) {
+  if ((await js(`document.querySelector(".dunia")?.dataset.cerita`)) === "siap") break;
+  await tidur(100);
+}
 await tidur(800);
 const titik = (await js(`document.querySelector(".dunia")?.dataset.titik`)).split(" ").map((x) => {
   const [n, y] = x.split(":");

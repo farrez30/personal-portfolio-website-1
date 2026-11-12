@@ -1,7 +1,7 @@
 # 0013. Styleframe soundstage for the scroll story (v3)
 
 - Date: 2026-11-11
-- Status: Accepted (replaces the one-jewel-case world of v2; ADR 0011 and 0012 still apply)
+- Status: Superseded by ADR 0016 (13 Nov 2026). Was: accepted, replacing the one-jewel-case world of v2
 
 ## Context
 
