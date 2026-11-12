@@ -1,0 +1,14 @@
+Styleframe look-dev dunia toko kaset, gaya realistis sinematik (dipilih Farrez 12 Nov 2026).
+Google Flow, Nano Banana 2.1, 16:9, x2, 0 kredit. Project "Nov 12 - 17:12".
+
+Blok gaya (ditempel di ujung setiap prompt):
+Photorealistic cinematic film still of a small independent record and cassette shop after closing time at night. Warm tungsten pendant lamps around 2700K make soft pools of amber light; cool blue streetlight spills in from the glass door. Soft highlight roll-off, gentle warm grade, deep warm brown shadows that keep detail, fine 35mm film grain, subtle vignette, a little haze in the air so the light beams show. Real worn materials: oiled wood, dark pyramid acoustic foam, brushed brass, scuffed concrete floor. 35mm lens at eye level, moderate depth of field. Palette: shadows #1a1410, lamp amber #ffb46a, street blue #6f8fd6. No people, no text, no letters, no logos, no brand names.
+
+1. bilik
+A listening booth corner lined with dark pyramid acoustic foam. On a wooden shelf: a portable cassette player and a pair of dark matte over-ear headphones resting on a small stand. A round wooden bar stool in front. One pendant lamp hangs above the shelf.
+
+2. rak
+A tall wall of wooden CD racks filled with jewel cases showing colourful album spines, lit from above by one pendant lamp; the far end of the rack falls into darkness.
+
+3. kasir
+A wooden shop counter with a slatted front. Colourful round label stickers are scattered on the dark countertop, a small portable cassette player sits at the end, a bar stool stands beside it, a pendant lamp hangs above, and blue street light falls across the floor from the door on the left.
