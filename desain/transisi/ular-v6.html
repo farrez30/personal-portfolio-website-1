@@ -240,7 +240,7 @@ function aturTulang(t, skala) {
 
 const keLayar = (p, W, H) => { const v = p.clone().project(kamera); return [(v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H, v.z]; };
 function gambar(t) {
-  const dpr = Math.min(devicePixelRatio || 1, 2), W = layar.clientWidth, H = layar.clientHeight;
+  const dpr = Math.min(devicePixelRatio || 1, 2), W = layar.parentElement.clientWidth, H = layar.parentElement.clientHeight;
   // Sebelum tata letak selesai ukurannya 0: jalur yang dibangun saat itu berisi NaN.
   if (!W || !H) return;
   if (layar.width !== Math.round(W * dpr)) { layar.width = Math.round(W * dpr); layar.height = Math.round(H * dpr); jalurLepas = null; }
