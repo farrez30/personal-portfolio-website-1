@@ -1,0 +1,125 @@
+// Naskah kamera dunia toko kaset (ADR 0014). Satu ruangan, lima tempat; tiap tempat terikat ke
+// satu seksi halaman. Gulir hanya memilih tempat tujuan; perpindahannya diputar dalam waktu
+// seperti camera blend di menu game: cepat, ease in-out, dan buram sebanding kecepatannya.
+// Dipisah dari three.js supaya bisa dites di Node.
+//
+// Satuan meter. Ruangan x -5..5, z -4..4, tinggi 3,2. Pintu di dinding depan (z = 4).
+
+export const ANCHOR = [
+  {
+    id: "bilik",
+    // Bilik dengar di pojok belakang kiri; headphone di kanan bingkai, teks hero di kiri.
+    posisi: [-2.15, 1.36, -1.55],
+    lihat: [-4.6, 1.1, -3.6],
+    fov: 38,
+    seksi: [{ sel: ".gerbang", di: 0 }],
+  },
+  {
+    id: "dinding",
+    // Dinding catatan sampul di belakang kanan.
+    posisi: [2.4, 1.6, -0.9],
+    lihat: [1.6, 1.5, -4],
+    fov: 44,
+    seksi: [{ sel: "#cerita", di: 0 }],
+  },
+  {
+    id: "rak",
+    // Rak CD sepanjang dinding kanan; rak 3D yang sudah ada tampil di depannya.
+    posisi: [2.1, 1.45, 0.3],
+    lihat: [5, 1.3, 0.1],
+    fov: 46,
+    seksi: [{ sel: "#rak", di: 0 }],
+  },
+  {
+    id: "kasir",
+    // Meja kasir dekat pintu, stiker label di atasnya. Selama seksi klien belum ada,
+    // tempat ini dipicu awal seksi kontak.
+    posisi: [0.4, 1.8, 0.9],
+    lihat: [1.9, 0.95, 3],
+    fov: 42,
+    seksi: [
+      { sel: "[data-dunia=kasir]", di: 0 },
+      { sel: "#kontak", di: 0 },
+    ],
+  },
+  {
+    id: "pintu",
+    // Pintu kaca dan lonceng di dinding depan.
+    posisi: [-1.3, 1.55, 1.1],
+    lihat: [-1.7, 1.6, 4],
+    fov: 46,
+    seksi: [{ sel: "#kontak", di: 0 }],
+  },
+];
+
+const jepit = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+
+// Kubik in-out: kecepatan nol di kedua ujung, jadi kamera tidak tersentak saat lepas dan mendarat.
+export function easeInOut(u) {
+  const x = jepit(u);
+  return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+}
+
+const lerp = (a, b, u) => a + (b - a) * u;
+const jarak = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+
+// Pose kamera di u (0..1, sudah di-ease) antara dua anchor. Jalurnya sedikit naik di tengah,
+// seperti kamera yang diangkat saat dipindah, supaya tidak terasa menggeser lurus.
+export function poseAntara(a, b, u) {
+  const naik = Math.sin(Math.PI * u) * Math.min(0.22, 0.04 + jarak(a.posisi, b.posisi) * 0.03);
+  return {
+    posisi: a.posisi.map((v, i) => lerp(v, b.posisi[i], u) + (i === 1 ? naik : 0)),
+    lihat: a.lihat.map((v, i) => lerp(v, b.lihat[i], u)),
+    fov: lerp(a.fov, b.fov, u),
+  };
+}
+
+// Lama perpindahan dalam detik: 0,7 s untuk tempat bersebelahan, sampai 1,3 s untuk yang jauh
+// atau yang membuat kamera berputar banyak.
+export function durasiBlend(a, b) {
+  const arah = (x) => {
+    const d = [x.lihat[0] - x.posisi[0], x.lihat[2] - x.posisi[2]];
+    return Math.atan2(d[1], d[0]);
+  };
+  let putar = Math.abs(arah(a) - arah(b));
+  if (putar > Math.PI) putar = 2 * Math.PI - putar;
+  return jepit(0.7 + jarak(a.posisi, b.posisi) * 0.06 + putar * 0.12, 0.7, 1.3);
+}
+
+// Posisi gulir (y halaman) tiap anchor dari seksinya. `ukur(sel)` mengembalikan
+// { atas, tinggi } seksi itu atau null bila belum ada di halaman. Dua anchor yang jatuh di
+// titik sama (kasir dan pintu di awal kontak) dipisah setengah tinggi seksinya.
+export function pemicuAnchor(ukur) {
+  const hasil = [];
+  for (const a of ANCHOR) {
+    let y = null;
+    let tinggi = 0;
+    for (const s of a.seksi) {
+      const u = ukur(s.sel);
+      if (!u) continue;
+      y = u.atas + u.tinggi * s.di;
+      tinggi = u.tinggi;
+      break;
+    }
+    const lalu = hasil[hasil.length - 1];
+    if (y == null) y = lalu ? lalu.y : 0;
+    if (lalu && y <= lalu.y) y = lalu.y + tinggi * 0.5;
+    hasil.push({ id: a.id, y });
+  }
+  return hasil;
+}
+
+// Anchor yang aktif: yang seksinya sudah melewati garis tengah layar.
+export function anchorAktif(y, tinggiLayar, titik) {
+  const garis = y + tinggiLayar / 2;
+  let i = 0;
+  for (let j = 0; j < titik.length; j++) if (titik[j].y <= garis) i = j;
+  return i;
+}
+
+// Kekuatan motion blur 0..1 dari kecepatan kamera (meter per detik). Di bawah 0,15 m/s nol,
+// supaya kamera yang hanya bergoyang pelan oleh gulir tetap tajam. Gerak dikurangi: tanpa blur.
+export function kekuatanBlur(kecepatan, kurangiGerak = false) {
+  if (kurangiGerak || !(kecepatan > 0.15)) return 0;
+  return jepit(kecepatan / 6);
+}

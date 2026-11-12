@@ -59,6 +59,9 @@ export default function PanggungCerita({ akar, onGagal }) {
       return;
     }
 
+    // Shader dan tekstur disiapkan sekarang, saat seksi masih satu layar di bawah.
+    dunia.panaskan();
+
     let blok = [];
     const ukurBlok = () => {
       blok = [...seksi.querySelectorAll(".cerita-pembuka[data-babak], .bab[data-babak]")].map((b) => {

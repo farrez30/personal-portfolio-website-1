@@ -148,6 +148,7 @@ export default function Panggung({ gulir }) {
         onUbah: setS,
         gulirHalaman: true,
         latensiSuara: () => sfx?.latensi ?? 0,
+        kabut: warnaKabut(),
       });
       a.on("klikKotak", (slug) => a.buka(slug));
       a.on("klikCakram", () => (a.keadaan === "putar" ? a.keluarkan() : a.dengarkan()));
@@ -444,4 +445,13 @@ function bacaHash(a, dariLuar, keIndeksGulir) {
     if (aksi === "putar") setTimeout(() => a.dengarkan(), 1200);
     if (aksi === "buklet") setTimeout(() => a.bukaBuklet(), 1200);
   }
+}
+
+// Rak di dalam dunia toko kaset (data-dunia di <html>) berkabut warna latar ruangan,
+// bukan krem, supaya CD di kejauhan tidak memudar ke warna yang tidak ada di toko.
+function warnaKabut() {
+  const html = document.documentElement;
+  const dunia = html.dataset.dunia;
+  if (!dunia || dunia === "gagal") return undefined;
+  return html.dataset.theme === "light" ? 0xe6dccd : 0x0f0d0b;
 }
