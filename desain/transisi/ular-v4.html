@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loader ular v4</title>
+<style>
+  :root { --bg:#161514; --ink:#ede8e0; --ink2:#9a948b; --line:#3a3734; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; padding:20px 16px 48px; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  .sub { color:var(--ink2); margin:0 0 14px; font:13px ui-monospace, monospace; }
+  .kendali { display:flex; gap:12px; align-items:center; flex-wrap:wrap; position:sticky; top:0; z-index:5; background:var(--bg); padding:10px 0 14px; }
+  .kendali input { width:min(520px, 60vw); }
+  button { background:var(--ink); color:var(--bg); border:0; border-radius:6px; padding:8px 14px; font:inherit; cursor:pointer; }
+  .vp { position:relative; aspect-ratio:16/10; max-width:1100px; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#000 url(hero-bilik.webp) center/cover; }
+  .vp canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .fase { position:absolute; left:10px; bottom:8px; z-index:3; font:11px ui-monospace, monospace; color:var(--ink2); text-shadow:0 1px 2px #000; }
+  .persen { position:absolute; left:0; right:0; bottom:9%; z-index:3; text-align:center; font:12px ui-monospace, monospace; letter-spacing:.12em; color:#9a948b; }
+  .kosong { position:absolute; inset:0; display:grid; place-items:center; z-index:4; color:var(--ink2); font:13px ui-monospace, monospace; background:#0b0a09; padding:20px; text-align:center; }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
+</head>
+<body>
+<h1>Kobra jadi yang merayap mengikuti lintasan</h1>
+<p class="sub">Model kobra Imagigoo (CC-BY). Tulang tubuhnya digerakkan mengikuti jejak kepala: melingkar, memutar ke dalam, mengangkat kepala, lalu menerjang.</p>
+<div class="kendali">
+  <button id="putar">Jeda</button>
+  <button id="lambat">Lambat 0,25x</button>
+  <input id="waktu" type="range" min="0" max="1000" value="0">
+  <span id="angka" class="sub" style="margin:0">0.0 s</span>
+</div>
+<div class="vp" id="vp"><canvas id="latar"></canvas><canvas id="gl"></canvas><div class="persen" id="persen"></div><div class="fase" id="fase"></div><div class="kosong" id="kosong">model belum termuat: buka lewat http (server storyboard), bukan file://</div></div>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
+
+const MUAT = 3.4, WUJUD = 0.8, LIUK = 1.6, TERKAM = 0.75, DUR = MUAT + WUJUD + LIUK + TERKAM + 1.6;
+const tSiap = MUAT + WUJUD, tTerkam = tSiap + LIUK;
+const jepit = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const halus = (x) => x * x * (3 - 2 * x);
+const halusDi = (a, b, x) => halus(jepit((x - a) / (b - a)));
+const qs = new URLSearchParams(location.search);
+
+// Lintasan kepala, halus di semua sambungan (tidak ada lompatan arah atau kecepatan):
+// berputar di lingkaran selama memuat, lalu memutar ke dalam sambil sedikit mengayun, mengangkat
+// kepala ke arah kamera, dan menerjang. Satuan: sisi pendek layar, z dalam satuan dunia.
+const OMEGA = 3.2, R0 = 0.25;
+function jalur(t) {
+  const masuk = halusDi(tSiap, tTerkam, t);
+  const r = R0 * (1 - 0.88 * masuk);
+  const a = OMEGA * t;
+  const ayun = Math.sin((t - tSiap) * 7) * 0.035 * halusDi(tSiap, tSiap + 0.4, t) * (1 - halusDi(tTerkam - 0.3, tTerkam, t));
+  const s = t >= tTerkam ? jepit((t - tTerkam) / TERKAM) : 0;
+  return {
+    x: Math.cos(a) * r + ayun * -Math.sin(a),
+    y: Math.sin(a) * r + ayun * Math.cos(a) + 0.04 * masuk,
+    z: 0.55 * halusDi(tTerkam - 0.8, tTerkam, t) + 3.3 * s * s,
+  };
+}
+const suara = (t, i) => 0.55 + 0.45 * Math.abs(Math.sin(t * 7.3 + i * 0.7) * Math.sin(t * 2.1 + i * 0.23));
+const ukurKanvas = (c, dpr = Math.min(devicePixelRatio || 1, 2)) => {
+  const W = c.clientWidth, H = c.clientHeight;
+  if (c.width !== Math.round(W * dpr)) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
+  return { W, H, dpr };
+};
+
+// ---- three.js ----
+const kanvas = document.getElementById("gl"), latar = document.getElementById("latar");
+const renderer = new THREE.WebGLRenderer({ canvas: kanvas, alpha: true, antialias: true });
+renderer.setClearColor(0, 0);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
+const scene = new THREE.Scene();
+const kamera = new THREE.PerspectiveCamera(40, 1.6, 0.05, 50);
+kamera.position.set(0, 0, 6);
+// Cahaya mengikuti lembar look-dev toko: lampu hangat dari atas depan, isi dingin lemah, tepi.
+scene.add(new THREE.HemisphereLight(0xe9f0ff, 0x2a1d10, 0.6));
+const kunci = new THREE.DirectionalLight(0xffd7a8, 3.0); kunci.position.set(1.5, 3, 5); scene.add(kunci);
+const isi = new THREE.DirectionalLight(0xbfd8ff, 0.6); isi.position.set(-3, -2, 3); scene.add(isi);
+const tepi = new THREE.DirectionalLight(0xffe2b8, 2.0); tepi.position.set(-2, 3, -3); scene.add(tepi);
+const U = () => 2 * kamera.position.z * Math.tan(THREE.MathUtils.degToRad(kamera.fov / 2)) * Math.min(1, kamera.aspect);
+const keDunia = (p) => new THREE.Vector3(p.x * U(), -p.y * U(), p.z);
+
+// ---- Kobra ber-rig ----
+// Rantai tulang dari kepala ke ujung ekor. Tiap tulang diletakkan di jejak kepala pada jarak
+// busur yang sama dengan jarak aslinya di pose ikat, lalu sumbu +y lokalnya (arah tulang)
+// diarahkan ke tetangganya dan sumbu punggungnya ke kamera.
+const RANTAI = ["BN_Head_01", "BN__Neck_02", "BN__Neck_01", "BN_Spine_03", "BN_Spine_02", "BN_Spine_01", "Hips", "BN_Tail_01", "BN_Tail_02", "BN_Tail_03", "BN_Tail_04", "BN_Tail_05", "BN_Tail_06", "BN_Tail_07"];
+const SUMBU_PUNGGUNG = new THREE.Vector3(...(qs.get("punggung") || "0,0,1").split(",").map(Number));
+let k = null;
+const gltf = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+gltf.load(qs.get("m") || "ular/model3.glb", (g) => {
+  const akar = g.scene;
+  let kulit = null;
+  akar.traverse((o) => {
+    if (!o.isMesh) return;
+    if (o.material.name === "Material_0") o.visible = false; // kobra hitam
+    else { kulit = o; o.frustumCulled = false; o.material.transparent = true; }
+  });
+  scene.add(akar);
+  const tulang = kulit.skeleton.bones;
+  // GLTFLoader membuang titik dari nama node ("BN_Head_01.10_26" jadi "BN_Head_0110_26").
+  const cari = (awal) => tulang.find((b) => b.name.startsWith(awal));
+  const rantai = RANTAI.map(cari);
+  const mulut = cari("BN_Mouth_01");
+  // Pose ikat: posisi dunia tiap tulang, lalu jarak antartulang berurutan.
+  kulit.skeleton.pose();
+  akar.updateMatrixWorld(true);
+  const ikat = rantai.map((b) => b.getWorldPosition(new THREE.Vector3()));
+  const jarak = ikat.slice(1).map((p, i) => p.distanceTo(ikat[i]));
+  const panjang = jarak.reduce((a, b) => a + b, 0);
+  // Dari setiap tulang: arah anaknya di rantai (kepala ke ekor untuk ekor, ekor ke kepala untuk tubuh).
+  const anakDiRantai = rantai.map((b) => b.children.find((c) => rantai.includes(c)) ?? null);
+  const skalaIkat = rantai.map((b) => b.getWorldScale(new THREE.Vector3()));
+  // Tulang ekor (sesudah pinggul) menghadap terbalik dari tulang tubuh: sumbu +y-nya ke arah ekor,
+  // jadi sumbu punggungnya dibalik. Pose ikat kobra ini sedang tegak, jadi arah dunianya tidak
+  // bisa dipakai untuk menebak tanda ini.
+  const iPinggul = RANTAI.indexOf("Hips");
+  const tandaPunggung = rantai.map((_, i) => (i > iPinggul ? -1 : 1));
+  const lokalAsal = new Map(tulang.map((b) => [b, { p: b.position.clone(), q: b.quaternion.clone(), s: b.scale.clone() }]));
+  k = { akar, kulit, rantai, mulut, jarak, panjang, anakDiRantai, skalaIkat, lokalAsal, tandaPunggung };
+  document.getElementById("kosong").remove();
+});
+
+// Jejak kepala sebagai polyline halus (sampel tiap 4 ms), dengan panjang busur kumulatif.
+function jejak(t, panjangDunia) {
+  const titik = [keDunia(jalur(t))], busur = [0];
+  for (let i = 1; i < 4000 && busur.at(-1) < panjangDunia * 1.05; i++) {
+    const p = keDunia(jalur(t - i * 0.004));
+    busur.push(busur.at(-1) + p.distanceTo(titik.at(-1)));
+    titik.push(p);
+  }
+  return { titik, busur };
+}
+function diBusur({ titik, busur }, s) {
+  let i = 1;
+  while (i < busur.length - 1 && busur[i] < s) i++;
+  const u = jepit((s - busur[i - 1]) / Math.max(1e-9, busur[i] - busur[i - 1]));
+  return titik[i - 1].clone().lerp(titik[i], u);
+}
+
+const m4 = new THREE.Matrix4(), mInv = new THREE.Matrix4(), qTmp = new THREE.Quaternion();
+const sumbuY = new THREE.Vector3(0, 1, 0);
+function aturTulang(t, skalaUlar) {
+  const { akar, rantai, jarak, panjang, anakDiRantai, skalaIkat, lokalAsal, mulut, tandaPunggung } = k;
+  akar.scale.setScalar(skalaUlar);
+  akar.updateMatrixWorld(true);
+  for (const [b, a] of lokalAsal) { b.position.copy(a.p); b.quaternion.copy(a.q); b.scale.copy(a.s); }
+  const L = panjang * skalaUlar;
+  const j = jejak(t, L);
+  // Posisi dunia tiap tulang rantai di jejak.
+  const pos = [];
+  let s = 0;
+  for (let i = 0; i < rantai.length; i++) { pos.push(diBusur(j, s)); s += (jarak[i] ?? 0) * skalaUlar; }
+  const arahKe = (i, ke) => new THREE.Vector3().subVectors(pos[ke], pos[i]).normalize();
+  const kepalaMaju = new THREE.Vector3().subVectors(pos[0], diBusur(j, 0.02 * L)).normalize();
+  const dunia = rantai.map((b, i) => {
+    // Arah tulang (+y lokal) menuju anaknya di rantai; tulang tanpa anak di rantai (kepala, ujung
+    // ekor) mengikuti arah jejak di titiknya.
+    const anak = anakDiRantai[i];
+    let arah;
+    if (anak) arah = arahKe(i, rantai.indexOf(anak));
+    else if (i === 0) arah = kepalaMaju.clone();
+    else arah = arahKe(i - 1, i);
+    // Punggung menghadap kamera saat ular merayap di bidang layar; saat kepala menghadap kamera,
+    // punggung beralih ke atas layar.
+    const keKamera = new THREE.Vector3(0, 0, 1);
+    const punggung = keKamera.clone().lerp(new THREE.Vector3(0, 1, 0), Math.abs(arah.z)).normalize();
+    punggung.sub(arah.clone().multiplyScalar(punggung.dot(arah))).normalize();
+    const samping = new THREE.Vector3().crossVectors(arah, punggung).normalize();
+    // Basis lokal tulang: +y = arah, SUMBU_PUNGGUNG = punggung.
+    const pb = SUMBU_PUNGGUNG.clone().normalize().multiplyScalar(tandaPunggung[i]);
+    const sb = new THREE.Vector3().crossVectors(sumbuY, pb).normalize();
+    const lokal = new THREE.Matrix4().makeBasis(sb, sumbuY, pb);
+    const duniaRot = new THREE.Matrix4().makeBasis(samping, arah, punggung);
+    const q = new THREE.Quaternion().setFromRotationMatrix(duniaRot.multiply(lokal.clone().invert()));
+    return new THREE.Matrix4().compose(pos[i], q, skalaIkat[i].clone().multiplyScalar(skalaUlar));
+  });
+  // Dari induk ke anak: matriks lokal = induk^-1 x dunia. Urutan dari pinggul supaya induk sudah benar.
+  const urutan = [...rantai.keys()].sort((a, b) => kedalaman(rantai[a]) - kedalaman(rantai[b]));
+  for (const i of urutan) {
+    const b = rantai[i];
+    b.parent.updateMatrixWorld(true);
+    mInv.copy(b.parent.matrixWorld).invert();
+    m4.multiplyMatrices(mInv, dunia[i]);
+    m4.decompose(b.position, b.quaternion, b.scale);
+    b.updateMatrixWorld(true);
+  }
+  return mulut;
+}
+const kedalaman = (o) => { let d = 0; while (o.parent) { d++; o = o.parent; } return d; };
+
+function gambar(t) {
+  const { W, H, dpr } = ukurKanvas(latar);
+  renderer.setPixelRatio(dpr); renderer.setSize(W, H, false);
+  kamera.aspect = W / H; kamera.updateProjectionMatrix();
+  const g = latar.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  document.getElementById("fase").textContent = t < MUAT ? `memuat ${Math.round(jepit(t / MUAT) * 100)}%` : t < tSiap ? "wujud" : t < tTerkam ? "memutar ke dalam, mengangkat kepala" : t < tTerkam + TERKAM ? "menerjang" : "di hero";
+  document.getElementById("persen").textContent = t < MUAT ? `${Math.round(jepit(t / MUAT) * 100)}%` : "";
+  const selesai = t >= tTerkam + TERKAM;
+  latar.style.display = kanvas.style.display = selesai ? "none" : "";
+  if (selesai) return;
+  g.globalCompositeOperation = "source-over"; g.globalAlpha = 1; g.shadowBlur = 0;
+  g.fillStyle = "#0b0a09"; g.fillRect(0, 0, W, H);
+  // Fase digital: tiang equalizer di jejak kepala, memudar saat kobra mewujud.
+  const wujud = halusDi(MUAT, tSiap, t), Ul = Math.min(W, H), cx = W / 2, cy = H / 2;
+  if (wujud < 1) {
+    const n = Math.round(10 + jepit(t / MUAT) * 30);
+    g.globalAlpha = 1 - wujud;
+    for (let i = n; i >= 0; i--) {
+      const p = jalur(t - i * 0.03), x = cx + p.x * Ul, y = cy + p.y * Ul;
+      const amp = suara(t, i) * Ul * 0.03 * (1 - (i / (n + 1)) * 0.6), lebar = Math.max(1.5, Ul * 0.008);
+      g.fillStyle = i === 0 ? "#e8fbff" : `hsl(${190 - i * 1.5} 95% ${62 + (i % 3) * 6}%)`;
+      g.shadowColor = "#5ee7ff"; g.shadowBlur = 10;
+      g.beginPath(); g.roundRect(x - lebar / 2, y - amp - lebar / 2, lebar, amp * 2 + lebar, lebar / 2); g.fill();
+    }
+    g.shadowBlur = 0; g.globalAlpha = 1;
+  }
+  if (!k || t < MUAT) { renderer.clear(); return; }
+  // Panjang tubuh sekitar 80% keliling lingkaran spinner, supaya kobra melingkar utuh di situ.
+  const skala = (2 * Math.PI * R0 * U() * 0.8) / k.panjang;
+  const mulut = aturTulang(t, skala);
+  const s = t >= tTerkam ? jepit((t - tTerkam) / TERKAM) : 0;
+  // Rahang membuka saat mengangkat kepala, paling lebar saat menerjang.
+  mulut.rotation.x += Number(qs.get("arahMulut") || -1) * (0.35 * halusDi(tTerkam - 0.4, tTerkam, t) + 0.6 * halus(jepit(s * 2)));
+  k.kulit.material.opacity = wujud * (1 - halusDi(0.62, 0.9, s));
+  renderer.render(scene, kamera);
+  // Lubang ke hero di mulut, melebar sampai menutup layar.
+  if (s > 0.05) {
+    const p = mulut.getWorldPosition(new THREE.Vector3()).project(kamera);
+    const r = Ul * 0.03 * (1 + s * 6) + halusDi(0.45, 0.9, s) * Math.hypot(W, H);
+    g.globalCompositeOperation = "destination-out";
+    g.beginPath(); g.ellipse((p.x * 0.5 + 0.5) * W, (-p.y * 0.5 + 0.5) * H, r, r * 0.8, 0, 0, Math.PI * 2); g.fill();
+    g.globalCompositeOperation = "source-over";
+  }
+}
+
+const geser = document.getElementById("waktu"), angka = document.getElementById("angka"), tombol = document.getElementById("putar"), lambat = document.getElementById("lambat");
+let main = true, laju = 1, t = 0, lalu = performance.now();
+tombol.onclick = () => { main = !main; tombol.textContent = main ? "Jeda" : "Putar"; };
+lambat.onclick = () => { laju = laju === 1 ? 0.25 : 1; lambat.textContent = laju === 1 ? "Lambat 0,25x" : "Normal 1x"; };
+geser.oninput = () => { main = false; tombol.textContent = "Putar"; t = (geser.value / 1000) * DUR; };
+function lup(now) {
+  const dt = (now - lalu) / 1000; lalu = now;
+  if (main) { t = (t + dt * laju) % DUR; geser.value = (t / DUR) * 1000; }
+  angka.textContent = t.toFixed(1) + " s";
+  gambar(t);
+  requestAnimationFrame(lup);
+}
+requestAnimationFrame(lup);
+window.__setT = (x) => { t = x; main = false; gambar(t); };
+</script>
+</body>
+</html>
