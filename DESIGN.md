@@ -102,6 +102,17 @@ arrives. If WebGL fails, the story falls back to Light.
 with the same real product screens as the immersive stage.
 **Reduced motion** shows the final states.
 
+## The record-shop world (`components/dunia/`, ADR 0014)
+
+Realistic cinematic night, set by the look-dev sheet `docs/look-dev.md` (target styleframes in
+`desain/look-dev/`). Each place has one pendant lamp you can see: bulb, halo sprite, a faint
+light cone in the air and a pool on the floor, all additive with no extra pass. Warm `#ffb46a`
+inside, blue `#6f8fd6` only from the street door, shadows and fog warm brown `#1a1410`. AgX tone
+mapping (exposure 1.3); no environment map. Floor is worn concrete baked by `scripts/beton.py`.
+The screen pass after motion blur lifts the shadows, adds a soft vignette and a film grain that
+only changes when the scene redraws. Light mode is the shop in the morning: same rig with the
+cones and grain turned down.
+
 ## The jewel case (`components/imersif/benda.js`)
 
 Built in millimetres, 1 scene unit = 100 mm. Case 142 × 125 × 10.4 mm. Clear base with a printed

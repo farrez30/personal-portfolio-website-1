@@ -8,12 +8,13 @@ kasir, pintu, lonceng, dan dudukan headphone dibangun dari primitif three.js di
 |---|---|---|---|
 | `kayu.webp` | Google Flow, Nano Banana 2.1, akun Google AI Pro Farrez, project "Nov 12 - 14:03", 0 kredit. **Buatan AI.** | Ketentuan Google untuk konten buatan pengguna | PNG 1024 px ke WebP q80 (ffmpeg) |
 | `busa.webp` | Sama seperti di atas (`busa-2.png`). **Buatan AI.** | Sama | Diperkecil ke 512 px, WebP q80 |
+| `beton.webp`, `beton-kasar.webp` | Dibuat kode: `scripts/beton.py` (numpy, derau disaring FFT supaya menyambung, goresan Pillow), 12 Nov 2026. Lantai beton dari lembar look-dev (`docs/look-dev.md`). Bukan buatan AI. | Milik project | 512 px, WebP q82. `beton-kasar` adalah peta roughness (dibaca tanpa konversi warna) |
 | `bar_chair_round_01.glb` | Poly Haven, glTF 1k | CC0 | Tekstur diperkecil ke 512 px (JPEG q4, ffmpeg), lalu `@gltf-transform/cli@4.1.0 optimize --compress meshopt --texture-compress false` |
 | `hanging_industrial_lamp.glb` | Poly Haven, glTF 1k | CC0 | Sama. Kaca transmission diganti kaca transparan saat dimuat (lihat dunia.js) |
 | `portable_cassette_player.glb` | Poly Haven, glTF 1k, karya Mateusz Sadek | CC0 | Sama |
 | `headphone.glb` | Hunyuan3D-2 (Space `tencent/Hunyuan3D-2`, `/shape_generation`, steps 30, guidance 5, seed 1234, octree 384, rembg) dari gambar Flow `headphone-1.png`. **Buatan AI.** | Tencent Hunyuan 3D 2.0 Community License | weld + simplify 4% (lab), lalu `@gltf-transform/cli@4.1.0 meshopt` (776 ke 218 KB). Bentuk saja: normal dihitung saat dimuat, bahan matte gelap |
 
-Total 1,2 MB (model 1,1 MB, tekstur ruangan 118 KB). Bahan aslinya ada di folder catatan sesi
+Total 1,3 MB (model 1,1 MB, tekstur ruangan 191 KB). Bahan aslinya ada di folder catatan sesi
 `lab3d/` (12 Nov 2026), dengan PROVENANCE lab yang mencatat prompt Flow dan parameter Hunyuan.
 
 ## Risiko lisensi headphone (diputuskan Farrez, 12 Nov 2026)

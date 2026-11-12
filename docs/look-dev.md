@@ -4,7 +4,7 @@ Skill `farrez:look-dev` (coderoach-app PR #257). Adegan: dunia 3D di belakang be
 `components/dunia/`). Lembar ini menentukan tampilan setiap aset yang masuk dunia itu, termasuk
 ular 3D di akhir loader. Isinya target; DESIGN.md tetap mencatat yang sudah dikirim.
 
-Status: draf, gaya disetujui Farrez 12 Nov 2026, isi lembar menunggu dibaca.
+Status: disetujui dan diterapkan Farrez 12 Nov 2026 ("Ya, terapkan"). Hasil ukur di bagian "Cek per aset".
 
 ## Konteks
 
@@ -55,8 +55,9 @@ Status: draf, gaya disetujui Farrez 12 Nov 2026, isi lembar menunggu dibaca.
 | Aksen situs | `#e0574b` | Hanya untuk benda UI di dunia (mis. jarum), bukan cahaya |
 
 - Rentang nilai: terang rata-rata layar (abu 0 sampai 255) **35 sampai 50** di setiap tempat.
-  Styleframe terukur 31 sampai 52; dunia sekarang 6 (kasir) dan 11 (bilik). Ukur dengan
-  `ffmpeg -i tangkapan.png -vf "format=gray,scale=1:1" -f rawvideo - | od -An -tu1`.
+  Styleframe terukur 31 sampai 52. Ukur kanvas dunia saja, tanpa teks halaman:
+  `node scripts/ukur-dunia.mjs <url> 1440x900 --gpu --tanpa-teks --keluar <folder>`, lalu per
+  tangkapan `*-dunia.png`: `ffmpeg -i x.png -vf "format=gray,scale=1:1" -f rawvideo - | od -An -tu1`.
 - Titik terang hanya di bola lampu dan berkas cahaya; benda utama di kolam cahaya minimal 2x lebih
   terang dari dinding di belakangnya.
 - Saturasi: seni album dan stiker penuh; sisanya di bawah saturasi kayu.
@@ -75,7 +76,7 @@ Status: draf, gaya disetujui Farrez 12 Nov 2026, isi lembar menunggu dibaca.
 | Peta | Dipakai | Color space | Sumber |
 |---|---|---|---|
 | Albedo kayu, busa | Ya | sRGB | `kayu.webp`, `busa.webp` (Flow, ada) |
-| Albedo dan roughness lantai beton | Ya, baru | sRGB / linear | Poly Haven CC0, 512 px (mis. seri `concrete_floor_worn`) |
+| Albedo dan roughness lantai beton | Ya | sRGB / linear | `beton.webp`, `beton-kasar.webp` dari `scripts/beton.py` (bukan unduhan, bukan dibuat di peramban) |
 | Normal busa piramida | Ya, baru | linear (NoColorSpace) | Diturunkan dari tinggi piramida secara prosedural |
 | Normal sisik ular | Ya, baru | linear | Prosedural (sel Voronoi) atau Flow tampak atas lalu diturunkan |
 | AO | Hanya di props Poly Haven | linear | Bawaan glTF |
@@ -109,8 +110,9 @@ Status: draf, gaya disetujui Farrez 12 Nov 2026, isi lembar menunggu dibaca.
   disetel dengan ukuran nilai.
 - Grade: hangat ringan di bayangan (lift ke `#1a1410`), tanpa LUT berkas.
 - Urutan: render adegan ke target HalfFloat (ada), lalu satu lintasan layar: motion blur (ada),
-  tone mapping, grade, vignette, grain. Grain dan vignette pindah dari CSS ke lintasan yang sama
-  supaya tidak ada lapisan DOM tambahan; grain berhenti saat dunia diam (pola cerita v3).
+  tone mapping, angkat bayangan, vignette, grain (`SUASANA.*.layar`). Dunia tidak pernah punya
+  grain CSS, jadi tidak ada lapisan DOM yang dipindah; grain berganti hanya saat adegan digambar
+  ulang, jadi diam saat dunia diam.
 - Efek: halo bola lampu sebagai sprite additive, bukan bloom post (tanpa pass tambahan). Vignette
   lembut. Grain halus. Tanpa chromatic aberration, tanpa DOF real-time.
 - Di HP: halo dan grain tetap (murah), motion blur sudah turun ke 0 sampel MSAA.
@@ -154,18 +156,42 @@ tanpa blok suasana di atas, karena bayangan dan warna lampu ikut terpanggang ke 
 
 ## Cek per aset
 
-Keadaan sekarang (tangkapan `desain/look-dev/sekarang-*.webp`, 12 Nov 2026, mode gelap, 1440x900):
+Diukur 12 Nov 2026 dengan `ukur-dunia.mjs --gpu --tanpa-teks` di `next dev` (RX 6700 XT), mode
+gelap. Tangkapan sebelum: `desain/look-dev/sekarang-*.webp`.
 
-| Aset | Clay | Nilai | Siluet | Berdampingan | Warna asli | Performa | Catatan |
-|---|---|---|---|---|---|---|---|
-| Ruangan bilik | belum | gagal (11) | - | - | - | - | Dinding busa terbaca, rak dan headphone tenggelam |
-| Kasir dan stiker | belum | gagal (6) | - | - | belum | - | Hanya stiker yang terlihat |
-| Headphone Hunyuan | belum | belum | belum | belum | - | 218 KB | Bahan matte gelap, sesuai lembar |
-| Props Poly Haven | - | belum | - | belum | - | 512 px | Realistis, sudah cocok gayanya |
-| Ular 3D | belum dibuat | | | | | | |
+| Tempat / aset | Nilai sebelum | Nilai sesudah | Siluet | Berdampingan | Catatan |
+|---|---|---|---|---|---|
+| Bilik dengar (1440x900) | 14 | 39 | lolos | lolos | Busa, rak, headphone di kolam lampu; teks hero tetap terbaca |
+| Dinding catatan | - | 49 | lolos | lolos | |
+| Rak CD | - | 40 | lolos | lolos | Berkas cahaya terlihat di antara rak |
+| Kasir dan stiker | 6 | 15 | lolos | lolos | Meja dan stiker terang; rata-rata tertahan dinding kosong (lihat di bawah) |
+| Pintu | - | 13 | lolos | - | Lampu kecil di atas pintu, cahaya jalan biru di lantai |
+| Bilik / rak / kasir di HP 390x844 | - | 30 / 34 / 17 | lolos | lolos | |
+| Mode terang (bilik / rak / kasir) | - | 146 / 175 / 213 | lolos | lolos | Berkas dan butir diredam (`berkas 0,25`) |
+| Headphone Hunyuan | - | - | lolos | lolos | Bahan matte gelap, sesuai lembar |
+| Ular 3D | - | - | - | - | Belum dibuat |
+
+Belum mencapai target 35: **kasir dan pintu**. Benda utamanya sudah di kolam cahaya, tetapi
+setengah bingkai adalah dinding polos gelap, sedangkan di styleframe dinding itu penuh rak kaset,
+peti piringan, dan poster. Menaikkan paparan lagi membuat bilik dan dinding lewat dari 50. Yang
+kurang adalah benda, bukan setelan: rak kaset dekat pintu dan peti di bawah meja (aset-visual-web
+§7, keputusan sumber bentuk per benda).
+
+Performa (dua putaran per versi, sama mesin): pembuatan dunia 36 sampai 40 ms (sebelum 44 ms);
+tugas panjang saat muat setara; perpindahan kamera tanpa tugas panjang baru. Tugas panjang 210
+sampai 400 ms saat pindah ke rak sudah ada di versi sebelumnya juga (rak 3D menyiapkan dirinya),
+bukan dari lembar ini. Di build produksi (`next build`, dua putaran bergantian per versi) jarak
+"modul" ke "dibuat" 171 sampai 435 ms sebelum dan 329 sampai 377 ms sesudah, dengan satu tugas
+panjang 378 sampai 473 ms di kedua versi: sebarannya lebih besar dari selisihnya, dan tugas itu
+sudah ada sebelum lembar ini. Draw call dan FPS di HP fisik belum diukur.
 
 ## Riwayat keputusan
 
 - 2026-11-12: gaya realistis sinematik malam dipilih Farrez; styleframe Flow 6 gambar (0 kredit,
-  sisa 376) dipakai sebagai target. Tone mapping AgX diusulkan menggantikan ACES (menunggu
-  persetujuan lembar).
+  sisa 376) dipakai sebagai target.
+- 2026-11-12: lembar diterapkan. AgX menggantikan ACES; kabut dan latar `#1a1410`; lampu tanpa
+  batas jangkauan, lampu kasir dipindah ke atas meja; bola lampu, halo, kerucut berkas, dan
+  kolam cahaya; lampu kecil di atas pintu dan cahaya jalan di lantai; lantai beton dari
+  `scripts/beton.py`; angkat bayangan, vignette, dan butir di lintasan layar; paparan 1,3.
+  Tekstur beton sempat dibuat di peramban dan terukur sekitar 150 ms sinkron per peta, jadi
+  dipindah ke berkas.
