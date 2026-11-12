@@ -4,11 +4,11 @@ import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { ANCHOR, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
 
 // Dunia toko kaset (ADR 0014): satu ruangan di belakang seluruh beranda. Ruang dari primitif plus
-// tekstur Flow, perabot CC0 Poly Haven (tekstur 512 px, meshopt), headphone prosedural.
+// tekstur Flow, perabot CC0 Poly Haven (tekstur 512 px, meshopt), headphone Hunyuan3D.
 // Kamera berpindah antar-anchor naskah.js; adegan digambar hanya saat ada yang berubah.
 
 const ASET = "/assets/dunia/";
-const MODEL = ["bar_chair_round_01", "hanging_industrial_lamp", "portable_cassette_player"];
+const MODEL = ["bar_chair_round_01", "hanging_industrial_lamp", "portable_cassette_player", "headphone"];
 
 // Dua suasana mengikuti tema situs, supaya teks di atas kanvas tetap terbaca:
 // gelap = toko setelah tutup, terang = toko pagi hari.
@@ -122,8 +122,6 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     gelapMatte: new THREE.MeshStandardMaterial({ color: 0x1c1b1d, roughness: 0.55, metalness: 0.1 }),
     logam: new THREE.MeshStandardMaterial({ color: 0xb9b2a6, roughness: 0.32, metalness: 0.9 }),
     kuningan: new THREE.MeshStandardMaterial({ color: 0xc9a25a, roughness: 0.3, metalness: 1 }),
-    aksen: new THREE.MeshStandardMaterial({ color: 0xe05a4a, roughness: 0.45 }),
-    bantalan: new THREE.MeshStandardMaterial({ color: 0x2d2a2c, roughness: 0.9 }),
     jalan: new THREE.MeshBasicMaterial({ toneMapped: true }),
     kaca: new THREE.MeshStandardMaterial({ color: 0x9fb4c8, roughness: 0.05, metalness: 0.2, transparent: true, opacity: 0.18 }),
     bayang: new THREE.MeshBasicMaterial({ map: teksturBayang(), transparent: true, depthWrite: false, color: 0x000000 }),
@@ -176,7 +174,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   rakDengar.material = bahan.kayu;
   kotak(0.04, 0.2, 0.36, bahan.gelapMatte, -4.3, 0.92, -3.76);
   kotak(0.04, 0.2, 0.36, bahan.gelapMatte, -2.9, 0.92, -3.76);
-  const headphone = buatHeadphone(bahan);
+  const headphone = buatDudukan(bahan);
   headphone.position.set(-3.5, 1.045, -3.7);
   headphone.rotation.y = -0.5;
   scene.add(headphone);
@@ -448,7 +446,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
 
   // ---- Muat dan pemanasan ------------------------------------------------------------------
   const muat = async () => {
-    const [kayu, busa, kursi, lampuGantung, kaset] = await Promise.all([
+    const [kayu, busa, kursi, lampuGantung, kaset, hp] = await Promise.all([
       tekstur("kayu.webp", [1, 1]),
       tekstur("busa.webp", [3, 3]),
       ...MODEL.map(model),
@@ -475,6 +473,19 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     taruh(kursi, 2.5, 0, 2.2, 0.4);
     for (const l of lampu) taruh(lampuGantung, l.position.x, 3.2, l.position.z, 0, SKALA_LAMPU);
     taruh(kaset, -4.05, 1.045, -3.74, 0.35, 1.5);
+    // Headphone Hunyuan3D hanya berisi bentuk (tanpa normal dan tekstur): normal dihitung di sini,
+    // ukurannya disetel ke tinggi 22 cm, lalu digantung di puncak dudukan.
+    hp.traverse((o) => {
+      if (!o.isMesh) return;
+      o.geometry.computeVertexNormals();
+      o.material = bahan.gelapMatte;
+    });
+    const batas = new THREE.Box3().setFromObject(hp);
+    const skala = 0.22 / batas.getSize(new THREE.Vector3()).y;
+    const pusat = batas.getCenter(new THREE.Vector3()).multiplyScalar(skala);
+    hp.scale.setScalar(skala);
+    hp.position.set(-pusat.x, 0.2 - pusat.y, -pusat.z);
+    headphone.add(hp);
     taruh(kaset, 1.35, 1.01, 3.0, -0.6, 1.4);
     kotor = true;
   };
@@ -573,37 +584,14 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   };
 }
 
-// Headphone prosedural: bando setengah torus, dua mangkuk, bantalan, dan dudukan. Pengganti
-// sementara mesh Hunyuan3D sampai Farrez memutuskan soal batas wilayah lisensinya.
-function buatHeadphone(b) {
+// Dudukan headphone: tiang logam dan alas.
+function buatDudukan(b) {
   const g = new THREE.Group();
-  const dudukan = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.3, 12), b.logam);
-  dudukan.position.y = 0.15;
+  const tiang = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, 0.3, 12), b.logam);
+  tiang.position.y = 0.15;
   const alas = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, 0.012, 32), b.gelapMatte);
   alas.position.y = 0.006;
-  const bando = new THREE.Mesh(new THREE.TorusGeometry(0.095, 0.011, 12, 48, Math.PI), b.gelapMatte);
-  bando.position.y = 0.21;
-  const kulit = new THREE.Mesh(new THREE.TorusGeometry(0.088, 0.008, 10, 40, Math.PI * 0.7), b.bantalan);
-  kulit.position.y = 0.21;
-  kulit.rotation.z = Math.PI * 0.15;
-  g.add(dudukan, alas, bando, kulit);
-  for (const s of [-1, 1]) {
-    const sisi = new THREE.Group();
-    sisi.position.set(s * 0.095, 0.2, 0);
-    const garpu = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.07, 0.012), b.logam);
-    garpu.position.y = -0.02;
-    const mangkuk = new THREE.Mesh(new THREE.CylinderGeometry(0.048, 0.044, 0.034, 32), b.gelapMatte);
-    mangkuk.rotation.z = Math.PI / 2;
-    mangkuk.position.set(s * 0.012, -0.075, 0);
-    const cincin = new THREE.Mesh(new THREE.TorusGeometry(0.04, 0.004, 8, 32), b.aksen);
-    cincin.rotation.y = Math.PI / 2;
-    cincin.position.set(s * 0.03, -0.075, 0);
-    const bantal = new THREE.Mesh(new THREE.TorusGeometry(0.034, 0.013, 12, 32), b.bantalan);
-    bantal.rotation.y = Math.PI / 2;
-    bantal.position.set(-s * 0.008, -0.075, 0);
-    sisi.add(garpu, mangkuk, cincin, bantal);
-    g.add(sisi);
-  }
+  g.add(tiang, alas);
   return g;
 }
 
