@@ -19,11 +19,14 @@ function fontMono() {
   return v.trim() || "ui-monospace, monospace";
 }
 
-function kanvas(w, h) {
+// `baca`: kanvas yang pikselnya dibaca getImageData. Tanpa willReadFrequently kanvas 2D hidup di
+// GPU, dan tiap pembacaan menunggu GPU mengirim piksel balik (trace 13 Nov 2026: 143 ms beku saat
+// rak mulai tampil).
+function kanvas(w, h, baca = false) {
   const c = document.createElement("canvas");
   c.width = w;
   c.height = h;
-  return [c, c.getContext("2d")];
+  return [c, c.getContext("2d", baca ? { willReadFrequently: true } : undefined)];
 }
 
 // Memecah teks ke baris sesuai lebar; mengembalikan y sesudah baris terakhir.
@@ -367,7 +370,7 @@ export function gambarHalamanAlbum(p, a, halaman, nomor, locale, ukuran = 2048) 
       g.fillStyle = pudar;
       g.fillRect(x0, 0, ukuran - x0, ukuran);
     }
-    const gelap = im && !berkertas && terangArea(g, Math.round(kiri), Math.round(ukuran * 0.06), Math.round(lebar), Math.round(ukuran * 0.6)) < 0.45;
+    const gelap = im && !berkertas && terangGambar(im, kiri / ukuran, 0.06, lebar / ukuran, 0.6) < 0.45;
     const tinta = gelap ? "#f4efe7" : a.tinta;
     g.textBaseline = "top";
     g.textAlign = "left";
@@ -395,7 +398,7 @@ export function gambarHalamanAlbum(p, a, halaman, nomor, locale, ukuran = 2048) 
 function simpanganKolom(im) {
   const w = 96;
   const h = 96;
-  const [, gk] = kanvas(w, h);
+  const [, gk] = kanvas(w, h, true);
   gk.drawImage(im, 0, 0, w, h);
   const d = gk.getImageData(0, 0, w, h).data;
   const y0 = Math.round(h * 0.05);
@@ -417,9 +420,13 @@ function simpanganKolom(im) {
   return hasil;
 }
 
-// Terang rata-rata (0..1) satu kotak kanvas.
-function terangArea(g, x, y, w, h) {
-  const d = g.getImageData(x, y, Math.max(1, w), Math.max(1, h)).data;
+// Terang rata-rata (0..1) satu kotak gambar sumber, dalam pecahan lebar dan tinggi. Dibaca dari
+// salinan kecil di CPU, bukan dari kanvas halaman 2048 px yang hidup di GPU.
+function terangGambar(im, fx, fy, fw, fh) {
+  const n = 64;
+  const [, g] = kanvas(n, n, true);
+  g.drawImage(im, 0, 0, n, n);
+  const d = g.getImageData(Math.round(fx * n), Math.round(fy * n), Math.max(1, Math.round(fw * n)), Math.max(1, Math.round(fh * n))).data;
   let t = 0;
   for (let i = 0; i < d.length; i += 16) t += 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2];
   return t / (d.length / 16) / 255;
@@ -501,7 +508,7 @@ export const SISIPAN = { panel: 138, punggung: 6.5, tinggi: 118 };
 function simpanganBaris(im) {
   const lebar = 96;
   const tinggi = Math.max(2, Math.round((lebar * im.naturalHeight) / im.naturalWidth));
-  const [, gk] = kanvas(lebar, tinggi);
+  const [, gk] = kanvas(lebar, tinggi, true);
   gk.drawImage(im, 0, 0, lebar, tinggi);
   const d = gk.getImageData(0, 0, lebar, tinggi).data;
   const x0 = Math.round(lebar * 0.1);
@@ -818,7 +825,7 @@ export function gambarAlur(arsitektur, locale, { latar, garis, kotak, teks, redu
 // titik 45 derajat yang samar, lalu butir. Acaknya berbenih, jadi hasilnya tetap.
 // `im` boleh gambar atau kanvas yang sudah termuat (dan lolos CORS).
 export function cetakKertas(im, { ukuran = 1024, benih = 7, butir: kuatButir = 0.07, raster = 0.22, pudar = 0.16 } = {}) {
-  const [c, g] = kanvas(ukuran, ukuran);
+  const [c, g] = kanvas(ukuran, ukuran, true);
   const lw = im.naturalWidth || im.width;
   const lh = im.naturalHeight || im.height;
   const sk = Math.max(ukuran / lw, ukuran / lh);
@@ -867,7 +874,7 @@ export function cetakKertas(im, { ukuran = 1024, benih = 7, butir: kuatButir = 0
 
 // Warna rata-rata gambar, digelapkan sedikit, untuk pita sampul dan cakram.
 export function warnaRata(c, gelap = 0.72) {
-  const [k, g] = kanvas(8, 8);
+  const [k, g] = kanvas(8, 8, true);
   g.drawImage(c, 0, 0, 8, 8);
   const px = g.getImageData(0, 0, 8, 8).data;
   let r = 0;

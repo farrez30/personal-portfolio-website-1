@@ -68,7 +68,7 @@ them like the rest of the world. Product screens are textures on the object's ow
   with a red note;
 - polish: a listening station tablet where a red line wipes a raw cashier form into a tidy one;
 - dependable: the shop's power cuts out, a battery player, a phone and an emergency lamp stay on;
-- safe: a six-drawer filing cabinet barred and padlocked mid-chapter, beside a key board for cashier, warehouse and owner;
+- safe: a glass case holding a leather ledger and tabbed archive folders; its lid closes and a padlock locks on the front hasp, beside a key board for cashier, warehouse and owner;
 - release: three real jewel-case covers slide into the rack.
 
 Chapter text names situations common to any business; project names stay in the proof links

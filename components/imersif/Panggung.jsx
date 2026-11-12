@@ -133,10 +133,11 @@ export default function Panggung({ gulir }) {
           io.disconnect();
           ok();
         },
-        // Cukup jauh di depan supaya rak dibuat saat pengunjung masih membaca babak akhir cerita,
-        // bukan saat kamera dunia terbang ke rak (terukur 13 Nov 2026: tugas panjang 66 sampai 198 ms
-        // tepat di penerbangan itu dengan 150%).
-        { rootMargin: "300% 0px" },
+        // Jauh di depan: rak dan buklet pertamanya dipanaskan selama sekitar 3,7 s, dan pemeriksaan
+        // status shader di ANGLE menahan main thread sampai 630 ms. Dengan 150% atau 300% itu jatuh
+        // saat kamera dunia terbang ke rak (terukur 13 Nov 2026); dengan 1000% ia jatuh saat
+        // pengunjung masih membaca babak awal cerita, ketika dunia diam.
+        { rootMargin: "1000% 0px" },
       );
       io.observe(wadah.current);
       hentiDekat = () => io.disconnect();

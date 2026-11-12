@@ -11,9 +11,9 @@ const adegan = baca("components/imersif/adegan.js");
 const panggung = baca("components/imersif/Panggung.jsx");
 
 test("rak baru dibuat saat dekat layar, dan cincin memuat tetap tampil sampai pemanasan selesai", () => {
-  // Tiga layar di depan dan menunggu senggang: dibuat saat pengunjung membaca babak akhir cerita,
+  // Sepuluh layar di depan dan menunggu senggang: dibuat saat pengunjung membaca babak akhir cerita,
   // bukan saat kamera dunia terbang ke rak (tugas panjang 66 sampai 198 ms di penerbangan itu).
-  assert.match(panggung, /new IntersectionObserver\([\s\S]*rootMargin: "300% 0px"/);
+  assert.match(panggung, /new IntersectionObserver\([\s\S]*rootMargin: "1000% 0px"/);
   assert.match(panggung, /Promise\.all\(\[dekat, document\.fonts\.ready\]\)\.then\(async \(\) => \{[\s\S]{0,140}await new Promise\(\(ok\) => \("requestIdleCallback" in window/);
   const tunggu = panggung.indexOf("await a.siapkan()");
   assert.ok(tunggu > 0, "Panggung tidak menunggu siapkan()");
@@ -60,4 +60,22 @@ test("buklet album di tengah disiapkan saat senggang dan dipakai ulang saat dibu
 test("halaman teks buklet 1536 px, bukan 2048", () => {
   assert.match(adegan, /export const UKURAN_HALAMAN = 1536;/);
   assert.doesNotMatch(adegan, /gambarHalaman\([^)]*\}, 2048\)/);
+});
+
+test("buklet pertama dipanaskan bersama rak, bukan 1,5 s setelah rak dilihat", () => {
+  // Trace 13 Nov 2026: GetProgramiv 524 ms saat buklet pertama dikompilasi di depan pengunjung.
+  const siapkan = adegan.slice(adegan.indexOf("const siapkan = async"), adegan.indexOf("hangat = true;", adegan.indexOf("const siapkan = async")));
+  assert.match(siapkan, /const bAwal = awal \? buatBuklet\(awal\) : null;\s*if \(bAwal\) scene\.add\(bAwal\);/);
+  assert.match(siapkan, /cadangan = \{ slug: awal\.slug, b: bAwal \};/);
+});
+
+test("kanvas yang dibaca pikselnya tinggal di CPU, tanpa membaca kanvas halaman di GPU", () => {
+  // Trace 13 Nov 2026: getImageData pada kanvas 2D di GPU menunggu 143 ms piksel dikirim balik.
+  const gambar = baca("components/imersif/gambar.js");
+  assert.match(gambar, /c\.getContext\("2d", baca \? \{ willReadFrequently: true \} : undefined\)/);
+  // Setiap getImageData memakai kanvas yang dibuat dengan baca = true.
+  const buat = [...gambar.matchAll(/const \[[^\]]*\] = kanvas\(([^)]*)\);[\s\S]{0,160}?getImageData/g)].map((m) => m[1]);
+  assert.ok(buat.length >= 4, `pemakaian getImageData terhitung ${buat.length}`);
+  for (const arg of buat) assert.match(arg, /, true$/, `kanvas(${arg}) dibaca tanpa willReadFrequently`);
+  assert.doesNotMatch(gambar, /terangArea\(g,/);
 });

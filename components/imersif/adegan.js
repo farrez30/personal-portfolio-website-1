@@ -1149,6 +1149,12 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   // dikompilasi lewat KHR_parallel_shader_compile, lalu tekstur diunggah satu per bingkai.
   let hangat = false;
   const siapkan = async () => {
+    // Buklet album pertama ikut dipanaskan di sini, sekali, bersama rak. Dulu shadernya baru
+    // dikompilasi 1,5 s setelah rak diam (siapkanBuklet), dan pemeriksaan status shader di ANGLE
+    // menunggu kompilasi selesai: trace 13 Nov 2026, GetProgramiv 524 ms saat rak sedang dilihat.
+    const awal = kotak[Math.round(k_.pos ?? 0)]?.p ?? kotak[0]?.p;
+    const bAwal = awal ? buatBuklet(awal) : null;
+    if (bAwal) scene.add(bAwal);
     const tersembunyi = [];
     scene.traverse((o) => {
       if (!o.visible) {
@@ -1168,7 +1174,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       await bingkaiBerikut();
     }
     renderLatihan(scene);
+    if (bAwal) {
+      scene.remove(bAwal);
+      buangCadangan();
+      cadangan = { slug: awal.slug, b: bAwal };
+    }
     await bingkaiBerikut();
+    // Jumlah program shader rak, untuk skrip ukur (scripts/ukur-dunia.mjs).
+    wadah.dataset.program = String(renderer.info.programs?.length ?? 0);
     hangat = true;
     lalu = performance.now();
     if (pernahTampil) k_.introMulai = lalu;
