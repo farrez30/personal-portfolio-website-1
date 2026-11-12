@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="21 21 66 66" width="512" height="512">
+<!-- Disalin dari ikon launcher YiheeCam (ic_launcher_background/foreground.xml), zona aman 66dp, sudut membulat seperti ikon adaptif. -->
+<clipPath id="k"><rect x="21" y="21" width="66" height="66" rx="15"/></clipPath>
+<g clip-path="url(#k)">
+<path fill="#262625" d="M0,0h108v53.4h-108z"/><path fill="#1C1C1B" d="M0,54.6h108v53.4h-108z"/><path fill="#0A0A09" d="M0,53.4h108v1.2h-108z"/>
+<path fill="#F1F0EA" d="M31.8,33.6H41.9L48.6,48.7L55.3,33.6H65.4L53.6,57.7V78.4H43.6V57.7Z"/><path fill="#0A0A09" d="M40,53.4h17v1.2h-17z"/>
+<path fill="#E3262A" d="M68.3,35a4.2,4.2 0,1 0,8.4 0a4.2,4.2 0,1 0,-8.4 0"/>
+</g></svg>
