@@ -507,6 +507,7 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
   }
 
   // ---- 08 andal: bangku, pemutar kaset baterai, ponsel, lampu darurat ------------------------
+  let tinggiDudukan = 0.44;
   {
     tungguModel.push([
       "wooden_stool_01",
@@ -514,10 +515,15 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
         m.position.set(3.55, 0, -1.6);
         m.rotation.y = 0.4;
         grup.add(m);
+        m.updateMatrixWorld(true);
+        // Benda di atas bangku diletakkan dari tinggi dudukan sebenarnya, bukan angka tebakan,
+        // supaya tidak tenggelam ke kayunya.
+        tinggiDudukan = new THREE.Box3().setFromObject(m).max.y;
+        hp.position.y = tinggiDudukan + 0.005;
       },
     ]);
     const hp = new THREE.Group();
-    hp.position.set(3.65, 0.452, -1.52);
+    hp.position.set(3.6, 0.45, -1.52);
     hp.rotation.set(-Math.PI / 2, 0, -0.4);
     kotak(0.075, 0.155, 0.008, b.gelap, 0, 0, 0, hp, 0.006);
     const l = layar(0.068, 0.145, "08-jeda.webp");
@@ -542,25 +548,41 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     tambahBayang(3.55, -1.6, 0.35);
   }
 
-  // ---- 09 aman: vitrin koleksi langka terkunci, papan kunci berlabel --------------------------
+  // ---- 09 aman: lemari arsip berlaci, dikunci palang dan gembok; papan kunci per bagian -------
   {
     const g = new THREE.Group();
+    // Lemari arsip enam laci CC0 (model dipasang di pasangModel), diperkecil jadi lemari meja,
+    // muka laci menghadap sisi belakang gondola tempat kamera babak ini.
     g.position.set(0.25, 0.88, 0.2);
-    kotak(0.68, 0.045, 0.36, b.kayuTua, 0, 0.0225, 0, g, 0.008);
-    const kaca = kotak(0.64, 0.3, 0.32, bahan.kaca, 0, 0.195, 0, g, 0.004);
-    kaca.renderOrder = 3;
-    kotak(0.68, 0.02, 0.36, b.kayuTua, 0, 0.355, 0, g, 0.006);
-    for (const sx of [-0.33, 0.33]) for (const sz of [-0.17, 0.17]) kotak(0.016, 0.3, 0.016, b.kuningan, sx, 0.195, sz, g, 0.004);
-    ["#3f6fa8", "#e05a4a", "#d9a441", "#2b2a2e", "#4d8a5c"].forEach((w, i) => {
-      kotak(0.125, 0.142, 0.012, new THREE.MeshStandardMaterial({ color: w, roughness: 0.35 }), -0.24 + i * 0.12, 0.12, 0.02, g, 0.002).rotation.x = 0.15;
-    });
-    const kunci = new THREE.Group();
-    kunci.position.set(0, 0.2, -0.168);
-    kotak(0.045, 0.055, 0.012, b.kuningan, 0, 0, 0, kunci, 0.006);
-    const lubang = kotak(0.008, 0.03, 0.006, b.kuningan, 0, -0.004, -0.01, kunci, 0.002);
-    g.add(kunci);
+    g.rotation.y = Math.PI;
     grup.add(g);
-    // Papan kunci berdiri di sisi vitrin: kunci kasir, gudang, dan pemilik, tiap kunci satu warna.
+    let laci = null;
+    tungguModel.push([
+      "vintage_wooden_drawer_01",
+      (m) => {
+        m.scale.setScalar(0.3);
+        g.add(m);
+        m.traverse((o) => /drawer02$/.test(o.name) && (laci = o));
+      },
+    ]);
+    // Palang kuningan melintang di depan tiga laci atas, dikaitkan gembok di tengah.
+    const z = 0.47 * 0.3 + 0.012;
+    kotak(0.5, 0.016, 0.006, b.kuningan, 0, 0.3 * 0.86, z, g, 0.003);
+    for (const x of [-0.25, 0.25]) kotak(0.02, 0.04, 0.012, b.gelap, x, 0.3 * 0.86, z - 0.004, g, 0.003);
+    const gembok = new THREE.Group();
+    gembok.position.set(0, 0.3 * 0.86 - 0.035, z + 0.006);
+    kotak(0.042, 0.038, 0.016, b.kuningan, 0, 0, 0, gembok, 0.006);
+    // Lubang kunci di muka gembok.
+    tabung(0.004, 0.003, b.gelap, 0, 0.002, 0.0085, gembok, 12).rotation.x = Math.PI / 2;
+    kotak(0.002, 0.008, 0.002, b.gelap, 0, -0.004, 0.0088, gembok, 0.0005);
+    const lengkung = new THREE.Mesh(new THREE.TorusGeometry(0.013, 0.0032, 10, 24, Math.PI), bahan.logam);
+    gembok.add(lengkung);
+    for (const sx of [-0.013, 0.013]) {
+      const kaki = tabung(0.0032, 0.014, bahan.logam, sx, 0, 0, lengkung, 10);
+      kaki.position.y = -0.007;
+    }
+    g.add(gembok);
+    // Papan kunci berdiri di sisi lemari: kunci kasir, gudang, dan pemilik, tiap kunci satu warna.
     const pk = new THREE.Group();
     pk.position.set(-0.45, 0.88, 0.12);
     pk.rotation.y = Math.PI + 0.3;
@@ -580,7 +602,12 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
       pk.add(k);
     }
     grup.add(pk);
-    momen.aman = (u) => (lubang.rotation.z = (-Math.PI / 2) * halus((u - 0.38) / 0.12));
+    momen.aman = (u) => {
+      // Laci yang masih terbuka sedikit didorong masuk, lalu lengkung gembok turun dan terkunci.
+      if (laci) laci.position.z = 0.12 * (1 - halus((u - 0.18) / 0.16));
+      lengkung.position.y = 0.019 + 0.018 * (1 - halus((u - 0.4) / 0.08));
+    };
+    momen.aman(0);
   }
 
   // ---- 10 rilis: tiga kotak CD proyek masuk ke celah rak -------------------------------------
@@ -604,10 +631,14 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
   });
   momen.rilis = (u) =>
     kotakRilis.forEach((k, i) => {
-      const t = halus((u - 0.1 - i * 0.12) / 0.22);
-      // Dari udara di depan rak, sampul menghadap kamera, lalu berputar dan meluncur masuk.
-      k.position.set(4.8 - 0.65 * (1 - t), 1.52 + 0.071 - 0.22 * (1 - t), k.userData.z + 0.25 * (1 - t) - i * 0.05 * (1 - t));
-      k.rotation.set(0, (1 - t) * 1.2, (1 - t) * 0.2);
+      const t = (u - 0.1 - i * 0.12) / 0.22;
+      // Dua tahap supaya tidak menembus papan rak: dulu naik dan berputar ke depan celahnya
+      // (sampul menghadap kamera di awal), baru meluncur masuk lurus.
+      const naik = halus(t / 0.6);
+      const masuk = halus((t - 0.6) / 0.4);
+      const z0 = k.userData.z + 0.25 - i * 0.05;
+      k.position.set(4.15 + 0.17 * naik + 0.48 * masuk, 1.37 + (1.591 - 1.37) * naik, z0 + (k.userData.z - z0) * naik);
+      k.rotation.set(0, (1 - naik) * 1.2, (1 - naik) * 0.2);
       k.visible = u > 0.05;
     });
   momen.rilis(0);
@@ -621,6 +652,16 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     pasangModel(peta) {
       for (const [n, fn] of tungguModel) if (peta[n]) fn(peta[n]);
       if (peta.headphone && hpStasiun) hpStasiun.add(peta.headphone.clone());
+      if (peta.kaset) {
+        // Pemutar kaset baterai berdiri di dudukan bangku, alasnya tepat di permukaan kayu.
+        const k = peta.kaset.clone();
+        k.scale.setScalar(1.4);
+        k.rotation.y = 0.5;
+        k.position.set(3.48, 0, -1.68);
+        grup.add(k);
+        k.updateMatrixWorld(true);
+        k.position.y = tinggiDudukan - new THREE.Box3().setFromObject(k).min.y + 0.002;
+      }
     },
     perbarui(id, u, s = {}) {
       if (piringan) piringan.rotation.y = s.waktu ? -s.waktu * 3.5 : 0;

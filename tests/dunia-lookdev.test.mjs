@@ -113,3 +113,21 @@ test("model CC0 memakai AO dari peta ARM, dinding bertekstur plester", () => {
   assert.match(kode, /tekstur\("bahan\/plester-normal\.webp"/);
   for (const b of ["plester-warna", "plester-normal", "plester-kasar"]) statSync(new URL(`../public/assets/dunia/bahan/${b}.webp`, import.meta.url));
 });
+
+// Masukan Farrez 13 Nov 2026: cahaya tiba-tiba berubah saat pindah babak, dan kabut putih mode
+// terang terlalu tebal.
+test("lampu kunci terbang bersama kamera, tidak melompat atau menyala mendadak", () => {
+  assert.match(kode, /pose = poseAntara\(blend\.dari, blend\.ke, easeInOut\(u\)\);\s*pasangKunci\(easeInOut\(u\)\);/);
+  // Nyala ikut diinterpolasi, bukan saklar.
+  assert.match(kode, /nyala: kunciDari\.nyala \+ \(kunciKe\.nyala - kunciDari\.nyala\) \* e/);
+  // Bayangannya digambar ulang hanya saat benda bergerak, bukan tiap bingkai.
+  assert.match(kode, /if \(Math\.abs\(geserTujuan - geser\) > 1e-4 \|\| kotor\) kunciLampu\.shadow\.needsUpdate = true;/);
+});
+
+test("mode terang: kabut tipis, dan selubung teks dilepas di babak cerita", () => {
+  const terang = kode.slice(kode.indexOf("terang: {"), kode.indexOf("};", kode.indexOf("terang: {")));
+  const [dekat] = terang.match(/kabut: \[(\d+), (\d+)\]/).slice(1).map(Number);
+  assert.ok(dekat >= 10, `kabut mulai ${dekat} m, menutup toko`);
+  const css = readFileSync(new URL("../components/dunia/dunia.css", import.meta.url), "utf8");
+  assert.match(css, /\.dunia\[data-tur="1"\]::after \{\s*opacity: 0\.2;/);
+});

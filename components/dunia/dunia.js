@@ -34,7 +34,8 @@ export const SUASANA = {
   },
   terang: {
     latar: 0xe6dccd,
-    kabut: [6, 18],
+    // Kabut pagi tipis: kabut 6 sampai 18 m menutup toko dengan putih tebal (masukan Farrez 13 Nov).
+    kabut: [12, 32],
     dinding: 0xd8cbb6,
     plafon: 0xe9e1d3,
     ambien: 1.4,
@@ -325,22 +326,35 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   kunciLampu.shadow.autoUpdate = false;
   scene.add(kunciLampu, kunciLampu.target);
   let faktorRedup = 1;
-  const arahkanKunci = (a) => {
+  // Pose lampu kunci untuk satu anchor: dari atas dan sedikit dari arah kamera, miring ke samping
+  // supaya bayangan memanjang dan terlihat. Menyala hanya di babak cerita.
+  const poseKunci = (a) => {
     const t = a.benda ?? a.lihat;
-    kunciLampu.target.position.set(...t);
-    // Dari atas dan sedikit dari arah kamera, seperti lampu sorot di plafon.
     const dx = a.posisi[0] - t[0];
     const dz = a.posisi[2] - t[2];
-    // Miring dari arah kamera dan sedikit ke samping, supaya bayangan memanjang dan terlihat.
     const k = 1 / Math.max(0.01, Math.hypot(dx, dz));
-    kunciLampu.position.set(t[0] + dx * k * 0.8 - dz * k * 0.5, 2.75, t[2] + dz * k * 0.8 + dx * k * 0.5);
-    kunciLampu.target.updateMatrixWorld();
-    kunciLampu.shadow.needsUpdate = true;
-    // Hanya menyala di babak cerita; tempat lain sudah punya lampu gantungnya sendiri.
-    kunciLampu.userData.aktif = !!a.cerita;
-    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * (a.cerita ? faktorRedup : 0);
+    return { p: [t[0] + dx * k * 0.8 - dz * k * 0.5, 2.75, t[2] + dz * k * 0.8 + dx * k * 0.5], t: [...t], nyala: a.cerita ? 1 : 0 };
   };
-  arahkanKunci(ANCHOR[0]);
+  let kunciKini = poseKunci(ANCHOR[0]);
+  let kunciDari = kunciKini;
+  let kunciKe = kunciKini;
+  // Lampu kunci ikut terbang bersama kamera (e = progres blend yang sudah di-ease), jadi cahaya
+  // tidak melompat atau menyala mendadak saat pindah babak.
+  const pasangKunci = (e) => {
+    const l = (a, b) => a.map((v, i) => v + (b[i] - v) * e);
+    kunciKini = { p: l(kunciDari.p, kunciKe.p), t: l(kunciDari.t, kunciKe.t), nyala: kunciDari.nyala + (kunciKe.nyala - kunciDari.nyala) * e };
+    kunciLampu.position.set(...kunciKini.p);
+    kunciLampu.target.position.set(...kunciKini.t);
+    kunciLampu.target.updateMatrixWorld();
+    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * faktorRedup;
+    kunciLampu.shadow.needsUpdate = true;
+  };
+  const arahkanKunci = (a, langsung) => {
+    kunciDari = kunciKini;
+    kunciKe = poseKunci(a);
+    if (langsung) pasangKunci(1);
+  };
+  arahkanKunci(ANCHOR[0], true);
 
   let paparanTema = 1;
   const terapkanTema = (nama) => {
@@ -365,7 +379,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     for (const l of lampu) l.userData.dasar = l.intensity;
     kunciLampu.color.setHex(s.lampu);
     kunciLampu.userData.dasar = s.kuatLampu * 1.5;
-    kunciLampu.intensity = kunciLampu.userData.aktif ? kunciLampu.userData.dasar : 0;
+    kunciLampu.intensity = kunciLampu.userData.dasar * kunciKini.nyala * faktorRedup;
     lampuPintu.color.setHex(s.lampu);
     lampuPintu.intensity = s.kuatLampu * 0.8;
     cahayaJalan.color.setHex(s.jalan);
@@ -445,7 +459,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
             float putar = acak(gl_FragCoord.xy) * 6.2832;
             for (int i = 1; i < 13; i++) {
               float fi = float(i);
-              float r = sqrt(fi / 12.0) * coc * 7.0;
+              float r = sqrt(fi / 12.0) * coc * 4.5;
               float a = fi * 2.39996 + putar;
               vec2 uv = vUv + vec2(cos(a), sin(a)) * r * uPiksel;
               float zS = linear(texture2D(tDalam, uv).x);
@@ -563,7 +577,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     if (i === indeks && !blend) return;
     const ke = camera.aspect < 0.8 ? anchorTegak(ANCHOR[i]) : ANCHOR[i];
     indeks = i;
-    arahkanKunci(ANCHOR[i]);
+    arahkanKunci(ANCHOR[i], kurangiGerak);
     if (kurangiGerak) {
       pose = salinPose(ke);
       blend = null;
@@ -611,6 +625,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     if (buruk >= 2 && rasio > 0.75) {
       buruk = 0;
       rasio = Math.max(0.75, rasio - 0.2);
+      // Langkah pertama yang dikorbankan: AO layar, efek termahal per piksel.
+      blur.uniforms.uAo.value = 0;
       ukur();
     }
   };
@@ -629,6 +645,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     if (blend) {
       const u = (now - blend.t0) / blend.dur;
       pose = poseAntara(blend.dari, blend.ke, easeInOut(u));
+      pasangKunci(easeInOut(u));
       if (u >= 1) {
         pose = salinPose(blend.ke);
         blend = null;
@@ -650,7 +667,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       const padam = a.id === "andal" && u > 0.42 && u < 0.72;
       redup(padam ? (u < 0.45 ? 0.3 + 0.3 * Math.sin(now / 30) : 0.05) : 1);
       if (props.berputar(a.id) && !kurangiGerak) bergerak = true;
-      kunciLampu.shadow.needsUpdate = true;
+      // Bayangan kunci digambar ulang hanya saat benda babak bergerak mengikuti gulir.
+      if (Math.abs(geserTujuan - geser) > 1e-4 || kotor) kunciLampu.shadow.needsUpdate = true;
     } else redup(1);
     // Fokus ke benda babak hanya saat kamera sudah mendarat; selama terbang yang bekerja motion blur.
     const dofTujuan = a.cerita && !blend && !kurangiGerak ? 1 : 0;
@@ -666,7 +684,9 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const kecepatan = dt > 0 ? Math.max(camera.position.distanceTo(posLalu), lihat.distanceTo(lihatLalu) * 0.6) / dt : 0;
     const kuat = kekuatanBlur(kecepatan, kurangiGerak);
     gambar(kuat > 0 ? Math.min(1, kuat * 5) * 1.6 : 0);
-    if (blend) jagaKualitas(dt * 1000);
+    // Penjaga kualitas juga saat menggambar terus (piringan berputar, geser gulir), bukan hanya
+    // saat terbang: di sana lag terasa paling lama.
+    if (bergerak) jagaKualitas(dt * 1000);
     kotor = false;
   };
 
@@ -674,7 +694,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     if (f === faktorRedup) return;
     faktorRedup = f;
     for (const l of [...lampu, lampuMeja]) l.intensity = (l.userData.dasar ?? l.intensity) * f;
-    kunciLampu.intensity = kunciLampu.userData.aktif ? (kunciLampu.userData.dasar ?? 0) * f : 0;
+    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * f;
     nyala.grup.visible = f > 0.5;
     kotor = true;
   };
@@ -738,14 +758,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     hp.position.set(-pusat.x, 0.2 - pusat.y, -pusat.z);
     headphone.add(hp);
     taruh(kaset, 1.35, 1.01, 3.0, -0.6, 1.4);
-    taruh(kaset, 3.47, 0.44, -1.68, 0.5, 1.4);
     modelHeadphone = hp;
+    modelKaset = kaset;
     // Ruangan menerima bayangan lampu kunci; yang membuatnya hanya props cerita.
     tandaiBayangan(scene);
     kotor = true;
   };
 
   let modelHeadphone = null;
+  let modelKaset = null;
 
   // Semua benda menerima bayangan; yang membuat bayangan adalah benda, bukan bidang ruangan.
   const bidangRuang = new Set([bahan.dinding, bahan.plafon, bahan.lantai]);
@@ -795,7 +816,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const calon = buatPropsCerita({ bahan, tekstur, tambahBayang: bayang, lampuMeja, lampuDarurat });
     const daftar = calon.modelDibutuhkan;
     const [hasil] = await Promise.all([Promise.all(daftar.map(model)), calon.tunggu()]);
-    calon.pasangModel({ ...Object.fromEntries(daftar.map((n, i) => [n, hasil[i]])), headphone: modelHeadphone });
+    calon.pasangModel({ ...Object.fromEntries(daftar.map((n, i) => [n, hasil[i]])), headphone: modelHeadphone, kaset: modelKaset });
     tandaiBayangan(calon.grup);
     calon.grup.visible = false;
     scene.add(calon.grup);

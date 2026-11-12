@@ -133,14 +133,21 @@ export default function Panggung({ gulir }) {
           io.disconnect();
           ok();
         },
-        { rootMargin: "150% 0px" },
+        // Cukup jauh di depan supaya rak dibuat saat pengunjung masih membaca babak akhir cerita,
+        // bukan saat kamera dunia terbang ke rak (terukur 13 Nov 2026: tugas panjang 66 sampai 198 ms
+        // tepat di penerbangan itu dengan 150%).
+        { rootMargin: "300% 0px" },
       );
       io.observe(wadah.current);
       hentiDekat = () => io.disconnect();
     });
     Promise.all([dekat, document.fonts.ready]).then(async () => {
+      // Tunggu peramban senggang: pembuatan rak sinkron, jangan berebut bingkai dengan gulir.
+      await new Promise((ok) => ("requestIdleCallback" in window ? requestIdleCallback(ok, { timeout: 1500 }) : setTimeout(ok, 300)));
       if (batal) return;
       const sfx = suara();
+      // Tanda waktu tahap rak, dibaca scripts/ukur-dunia.mjs bersama tanda dunia:*.
+      performance.mark("rak:mulai");
       a = buatAdegan(wadah.current, {
         proyek,
         locale,
@@ -170,8 +177,10 @@ export default function Panggung({ gulir }) {
       // Selama ganti album, posisi gulir halaman ikut indeks baru tanpa menggeser rak lagi.
       a.on("indeks", (i) => keIndeksGulir(i, false));
       adegan.current = a;
+      performance.mark("rak:dibuat");
       // Cincin memuat tetap tampil sampai shader dan tekstur rak dipanaskan.
       await a.siapkan();
+      performance.mark("rak:hangat");
       if (batal) return;
       bacaHash(a, false, keIndeksGulir);
       setSiap(true);

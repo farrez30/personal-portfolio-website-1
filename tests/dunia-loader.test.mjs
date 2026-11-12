@@ -142,3 +142,18 @@ test("loader menunggu pemanasan dunia sebelum membuka", () => {
   assert.match(siapkan.slice(0, 1500), /initTexture/);
   assert.match(mesin, /new THREE\.LoadingManager\(/);
 });
+
+test("pindah ke Ringan lalu kembali ke Imersif tidak memuat dunia lagi", () => {
+  // Masukan Farrez 13 Nov 2026: setiap kembali ke Imersif loader muncul lagi. Sekali dibuat,
+  // dunia tetap dipasang dan hanya disembunyikan; Ringan sebelum pernah Imersif tetap ringan.
+  const src = readFileSync(new URL("../components/dunia/Dunia.jsx", import.meta.url), "utf8");
+  assert.match(src, /if \(mode === "imersif"\) setPernah\(true\);/);
+  assert.match(src, /if \(!pernah && mode !== "imersif"\) return <LepasTirai mode=\{mode\} \/>;/);
+  assert.match(src, /return <DuniaImersif aktif=\{mode === "imersif"\} \/>;/);
+  // Disembunyikan: tanpa gambar, tanpa loader; muncul lagi langsung "siap" bila sudah siap.
+  const kontrol = src.slice(src.indexOf("kontrol.current = (v) =>"), src.indexOf("const ro = new ResizeObserver"));
+  assert.match(kontrol, /d\?\.setTerlihat\(v\);/);
+  assert.match(kontrol, /loader\.current\?\.setAttribute\("hidden", ""\);/);
+  assert.match(kontrol, /akar\(\)\.setAttribute\("data-dunia", "siap"\);/);
+  assert.match(readFileSync(new URL("../components/dunia/dunia.css", import.meta.url), "utf8"), /\.dunia\[hidden\] \{\s*display: none;/);
+});

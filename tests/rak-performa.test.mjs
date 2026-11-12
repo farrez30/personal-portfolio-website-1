@@ -11,8 +11,10 @@ const adegan = baca("components/imersif/adegan.js");
 const panggung = baca("components/imersif/Panggung.jsx");
 
 test("rak baru dibuat saat dekat layar, dan cincin memuat tetap tampil sampai pemanasan selesai", () => {
-  assert.match(panggung, /new IntersectionObserver\([\s\S]*rootMargin: "150% 0px"/);
-  assert.match(panggung, /Promise\.all\(\[dekat, document\.fonts\.ready\]\)/);
+  // Tiga layar di depan dan menunggu senggang: dibuat saat pengunjung membaca babak akhir cerita,
+  // bukan saat kamera dunia terbang ke rak (tugas panjang 66 sampai 198 ms di penerbangan itu).
+  assert.match(panggung, /new IntersectionObserver\([\s\S]*rootMargin: "300% 0px"/);
+  assert.match(panggung, /Promise\.all\(\[dekat, document\.fonts\.ready\]\)\.then\(async \(\) => \{[\s\S]{0,140}await new Promise\(\(ok\) => \("requestIdleCallback" in window/);
   const tunggu = panggung.indexOf("await a.siapkan()");
   assert.ok(tunggu > 0, "Panggung tidak menunggu siapkan()");
   assert.ok(panggung.indexOf("setSiap(true)", tunggu) > tunggu, "setSiap(true) sebelum pemanasan selesai");

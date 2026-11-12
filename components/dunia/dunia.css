@@ -44,6 +44,18 @@ html[data-dunia="ular"] {
     linear-gradient(0deg, color-mix(in srgb, var(--bg) 80%, transparent) 0%, transparent 24%),
     linear-gradient(180deg, color-mix(in srgb, var(--bg) 60%, transparent) 0%, transparent 16%),
     linear-gradient(90deg, color-mix(in srgb, var(--bg) 88%, transparent) 0%, color-mix(in srgb, var(--bg) 72%, transparent) 42%, transparent 74%);
+  transition: opacity 0.6s linear;
+}
+
+/* Babak cerita: teksnya sudah punya kabut gelapnya sendiri, jadi selubung warna latar hampir
+   dilepas. Di tema terang selubung ini yang membuat toko tertutup kabut putih tebal. */
+.dunia[data-tur="1"]::after {
+  opacity: 0.2;
+}
+
+/* Mode Ringan sesudah pernah Imersif: dunia tetap di memori, tidak digambar dan tidak terlihat. */
+.dunia[hidden] {
+  display: none;
 }
 
 @media (max-width: 47.99rem) {
