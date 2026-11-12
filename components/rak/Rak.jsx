@@ -31,7 +31,6 @@ export default function Rak() {
         <h2 id="rak-judul" className="rak__judul">
           {t("judul")}
         </h2>
-        <p className="rak__petunjuk">{t("petunjuk")}</p>
       </div>
 
       <ul className="wadah rak__kisi">

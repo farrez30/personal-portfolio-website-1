@@ -7,7 +7,7 @@ import * as THREE from "three";
 // browser), dan tidak pernah berbunyi sendiri.
 const NADA = [261.63, 293.66, 329.63, 392.0, 440.0, 523.25, 587.33, 659.25, 783.99, 880.0];
 
-export default function Helix({ label }) {
+export default function Helix() {
   const wadah = useRef(null);
 
   useEffect(() => {
@@ -131,7 +131,6 @@ export default function Helix({ label }) {
   return (
     <figure className="helix">
       <div ref={wadah} className="helix__panggung" aria-hidden="true" />
-      <figcaption className="mono">{label}</figcaption>
     </figure>
   );
 }
