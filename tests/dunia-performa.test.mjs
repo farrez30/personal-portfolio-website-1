@@ -20,9 +20,15 @@ test("kaca transmission dari model CC0 diganti kaca transparan biasa", () => {
 });
 
 test("gambar latihan dicicil per kelompok benda, satu kelompok per bingkai, ke 1 piksel", () => {
+  const latih = dunia.slice(dunia.indexOf("const latih = (kelompok) => {"));
+  assert.match(latih.slice(0, 900), /target\.scissor\.set\(0, 0, 1, 1\);\s*target\.scissorTest = true;/);
+  // Benda di luar pandangan dan yang tersembunyi ikut tergambar, lalu keadaannya dipulihkan.
+  // Tanpa ini program benda jauh baru diselesaikan ANGLE saat pertama terlihat (778 ms di dekat rak).
+  assert.match(latih.slice(0, 900), /o\.visible = true;\s*o\.frustumCulled = false;/);
+  assert.match(latih.slice(0, 900), /o\.visible = v;\s*o\.frustumCulled = f;/);
   const siapkan = dunia.slice(dunia.indexOf("const siapkan = async"));
-  assert.match(siapkan, /target\.scissor\.set\(0, 0, 1, 1\);\s*target\.scissorTest = true;/);
-  assert.match(siapkan, /for \(let i = 0; i < benda\.length; i \+= 3\)[\s\S]*?await bingkaiBerikut\(\);/);
+  assert.match(siapkan, /scene\.traverse\(\(o\) => o\.isMesh && benda\.push\(o\)\);/);
+  assert.match(siapkan, /for \(let i = 0; i < benda\.length; i \+= 3\) \{\s*latih\(benda\.slice\(i, i \+ 3\)\);[\s\S]*?await bingkaiBerikut\(\);/);
   // compileAsync memakai render target yang sama dengan gambar sesungguhnya: tone mapping dan
   // ruang warna adalah bagian dari kunci program.
   assert.match(siapkan, /setRenderTarget\(target\);\s*try \{\s*await renderer\.compileAsync\(scene, camera\);/);

@@ -1060,11 +1060,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   // Semua benda di `akar`, juga yang tersembunyi dan di luar pandangan, digambar sekali beserta
   // bayangannya. Bukan ke WebGLRenderTarget: di sana three.js mematikan tone mapping dan ruang
   // warna layar, jadi mengompilasi 9 shader versi lain yang tak terpakai (2,4 detik terbuang).
-  const renderLatihan = (akar) => {
+  // `hanya`: bila diisi, mesh lain di `akar` disembunyikan, supaya latihan bisa dicicil per
+  // beberapa benda. ANGLE baru menyelesaikan program (juga shader bayangan, yang tidak ikut
+  // compileAsync) saat draw pertama; sekaligus terukur 1 s beku (trace 13 Nov 2026).
+  const renderLatihan = (akar, hanya = null) => {
     const pulih = [];
     akar.traverse((o) => {
       pulih.push([o, o.visible, o.frustumCulled]);
-      o.visible = true;
+      o.visible = !hanya || !o.isMesh || hanya.has(o);
       o.frustumCulled = false;
     });
     renderer.setScissorTest(true);
@@ -1173,7 +1176,12 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       if (t?.image) renderer.initTexture(t);
       await bingkaiBerikut();
     }
-    renderLatihan(scene);
+    const benda = [];
+    scene.traverse((o) => o.isMesh && benda.push(o));
+    for (let i = 0; i < benda.length; i += 3) {
+      renderLatihan(scene, new Set(benda.slice(i, i + 3)));
+      await bingkaiBerikut();
+    }
     if (bAwal) {
       scene.remove(bAwal);
       buangCadangan();

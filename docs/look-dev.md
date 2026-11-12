@@ -197,7 +197,7 @@ Sepuluh benda tur cerita gulir mengikuti lembar ini, dengan tambahan atas permin
 | Bentuk | Model CC0 Poly Haven (laptop klasik, papan jepit, kotak listrik, bangku kayu), sisanya kode dengan `RoundedBoxGeometry` bertepi 2 sampai 12 mm |
 | Bahan | Tekstur PBR CC0 512 px: `wood_table_001`, `plywood`, `metal_plate`, plester dinding `plastered_wall_04` (warna, normal GL, roughness). UV kotak diproyeksikan per meter supaya serat tidak melar. AO model dari kanal merah peta ARM |
 | Bayangan | Semua lampu gantung (peta kubus 512, HP tanpa), lampu jalan (1024), dan lampu kunci babak (SpotLight, 1024, HP 512, 1,5 kali kuat lampu). Jadwal per lampu: yang diam dihitung sekali, dicicil satu lampu per bingkai; lampu kunci hanya saat benda bergerak. Bidang ruangan menerima, tidak membuat |
-| Layar | AO dari peta kedalaman (8 titik, jangkauan 30 cm, desktop saja) dan depth of field 12 titik ke benda babak saat kamera diam. Dimatikan saat gerak dikurangi |
+| Layar | AO N8AO sejak ADR 0017 (radius 1,1 m, kuat 5, warna `#1a1410`, 16 titik, HP 8, tanpa setengah resolusi; penjaga kualitas menurunkan titik lalu mematikannya) dan depth of field 12 titik ke benda babak saat kamera diam. Dimatikan saat gerak dikurangi |
 | Isi bayangan | Hemisphere malam turun dari 0,7 ke 0,5 supaya bayangan berkontras |
 | Layar produk | MeshBasic tanpa tone mapping, terang 0,85 sampai 0,95 |
 
@@ -226,6 +226,16 @@ Kompilasi async, loader tetap bergerak. Tanpa tugas panjang saat props dimuat di
   digambar ulang hanya saat benda bergerak.
 - Mode terang: kabut 12 sampai 32 m (dulu 6 sampai 18), selubung teks dilepas di babak cerita
   (opacity 0,2), depth of field maksimal 4,5 px (dulu 7).
+
+### Bayangan kontak dan jeda rak (13 Nov 2026 malam, ADR 0017)
+
+- AO buatan sendiri diganti N8AO: benda kini menempel di meja, ada gelap di sela benda.
+- Perampingan bahan rak (fisik ke standar) diukur tidak mengubah apa pun (13 program, jeda 628
+  dan 912 ms), jadi dibatalkan. Penyebab yang terukur: ANGLE baru menyelesaikan program saat draw
+  pertama. Gambar latihan dunia kini ikut menggambar benda di luar pandangan dan yang tersembunyi,
+  rak dilatih tiga mesh per bingkai. Jeda terbesar dekat rak 912 ke 546 ms (desktop), bingkai
+  terburuk HP saat masuk babak andal 685 ke 170 ms. Sisa: PMREM dan geometri saat rak dibuat.
+- Gambar mode Ringan dibuat ulang dengan AO baru.
 
 ## Riwayat keputusan
 
