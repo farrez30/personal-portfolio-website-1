@@ -126,6 +126,25 @@ the title in the genre face and the site logo. Every back insert has its own lay
 the catalogue number, the site logo as record label, the project's own logo when it has one, and
 a small credit line. The plain band Flow left at the bottom of the art is detected and cropped. Projects without album art fall back to the old cream cover with a colour band.
 
+## Clients and partners (`components/klien/`, `content/klien.js`)
+
+Between the rack and contact, tagged `data-dunia="kasir"` so the shop camera stops at the cashier
+counter. Every client is a fully printed CD (`public/assets/klien/cakram/`): the art is Nano Banana
+in Flow with the client's real logo as an ingredient, and `scripts/logo-cakram.py` then replaces
+the logo with the original file's pixels (never redrawn, only downscaled; provenance per file).
+Personal projects reuse their album label style with a lockup of the project icon and name.
+
+- Three tabs: Coderoach (studio clients), Mitraplus (office clients), Personal. The spindle in the
+  middle shows the group's own logo.
+- **Immersive, 60rem and wider:** the section is pinned for 260vh. The stack blooms into a tilted
+  ring over the first 18% and turns once over the next 70%; the ring can also be dragged, and
+  arrows or focus bring a disc to the front. The shape is a pure function of progress
+  (`cincin.js`, tested), drawn as 2.5D transforms without a WebGL canvas.
+- **Light, narrow, and reduced motion:** a snap-scrolling row of discs; reduced motion turns it into
+  a static grid.
+- A company with several brands is a box set (Masaya Food: Chicken Wow and Geprek Wow): child
+  discs peek behind the parent, and the detail card opens both side by side.
+
 ## Icons and text
 
 Phosphor icons through `react-icons/pi`. UI text follows the `bahasa-lisan` rules: plain
