@@ -131,3 +131,11 @@ test("mode terang: kabut tipis, dan selubung teks dilepas di babak cerita", () =
   const css = readFileSync(new URL("../components/dunia/dunia.css", import.meta.url), "utf8");
   assert.match(css, /\.dunia\[data-tur="1"\]::after \{\s*opacity: 0\.2;/);
 });
+
+test("tidak ada variabel bingkai yang menutupi objek nyala lampu", () => {
+  // Regresi 13 Nov 2026: `const nyala` (jumlah lampu status) di dalam bingkai menutupi objek
+  // nyala lampu, dan nyala.kerucut() melempar galat di setiap bingkai babak cerita.
+  const bingkai = kode.slice(kode.indexOf("const bingkai = (now) =>"), kode.indexOf("// ---- Muat dan pemanasan"));
+  assert.doesNotMatch(bingkai, /\b(const|let) nyala\b/);
+  assert.match(bingkai, /nyala\.kerucut\(a\.id === "dinding"\)/);
+});

@@ -157,6 +157,7 @@ console.log("rak, menggulir antar album 2 s:", JSON.stringify(await bingkai(2000
 await js(`scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }); true`);
 await tidur(1800);
 await foto("05-pintu");
+console.log("program shader rak:", await js(`[...document.querySelectorAll("[data-program]")].map(e => e.dataset.program).join(",")`));
 console.log("tahap rak (ms):", JSON.stringify(await js(`performance.getEntriesByType("mark").filter(m => m.name.startsWith("rak:")).map(m => [m.name.slice(4), Math.round(m.startTime)])`)));
 console.log("semua tugas panjang sejak siap [mulai, lama]:", JSON.stringify(await js("window.__ltSemua")));
 console.log("titik:", await js(`document.querySelector(".dunia")?.dataset.titik`));

@@ -46,9 +46,16 @@ graphics: "jelas gitu ada efek bayangannya dan ada depth".
   styleframes, depth maps, `PanggungCerita` and its scripts are gone from the site.
 - Chapter copy names no project in its sentence (tested); proof links keep the names.
 - Revision, 13 Nov 2026 (Farrez's review): the key light now travels with the camera blend
-  instead of jumping; the safe chapter shows a padlocked filing cabinet; release cases rise first
+  instead of jumping; the safe chapter shows a glass case with a ledger and archive folders, padlocked at the lid; release cases rise first
   and then slide in, so they never cross a shelf; the light theme's white haze is lifted in story
   chapters; the world stays mounted when switching to Light; the rack canvas is created three
   screens early, while the reader is still in the story, not during the camera's flight to it.
+- Second revision, 13 Nov 2026: the safe chapter went back to the glass case (filing cabinet read
+  as foreign), with a ledger and archive folders inside and the padlock on the lid hasp; the key
+  light comes from the side so shadows fall where the camera sees them; lamp light cones hide in
+  close shots. Rack stalls traced in Chrome: a GPU readback in getImageData (143 ms, fixed with
+  CPU canvases) and shader status checks while the rack and its first booklet compile (13
+  programs, 600 to 750 ms). The rack now warms ten screens early with its first booklet, so the
+  stall lands while the story is still, not in the camera's flight or on the rack itself.
 - Revisit if a mid-range phone takes more than about 5 s to the hero, or if the measured value range
   of a chapter stays outside the look-dev sheet after one more lighting pass.

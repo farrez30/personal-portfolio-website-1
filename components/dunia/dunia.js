@@ -316,7 +316,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   scene.add(lampuMeja, lampuDarurat);
 
   // Lampu kunci: satu-satunya yang membuat bayangan, dipindah ke benda babak yang aktif.
-  const kunciLampu = new THREE.SpotLight(0xffffff, 1, 7, 0.6, 0.55, 2);
+  // Sudut lebar dan penumbra penuh: tanpa lingkaran sorot bertepi tajam di lantai.
+  const kunciLampu = new THREE.SpotLight(0xffffff, 1, 7, 0.85, 1, 2);
   kunciLampu.castShadow = true;
   kunciLampu.shadow.mapSize.setScalar(hp ? 512 : 1024);
   kunciLampu.shadow.camera.near = 0.3;
@@ -328,12 +329,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   let faktorRedup = 1;
   // Pose lampu kunci untuk satu anchor: dari atas dan sedikit dari arah kamera, miring ke samping
   // supaya bayangan memanjang dan terlihat. Menyala hanya di babak cerita.
+  // Dari samping dan sedikit di belakang benda, tidak dari arah kamera: bayangan lalu jatuh ke
+  // sisi yang terlihat kamera, bukan tersembunyi di balik bendanya (masukan Farrez 13 Nov).
   const poseKunci = (a) => {
     const t = a.benda ?? a.lihat;
     const dx = a.posisi[0] - t[0];
     const dz = a.posisi[2] - t[2];
     const k = 1 / Math.max(0.01, Math.hypot(dx, dz));
-    return { p: [t[0] + dx * k * 0.8 - dz * k * 0.5, 2.75, t[2] + dz * k * 0.8 + dx * k * 0.5], t: [...t], nyala: a.cerita ? 1 : 0 };
+    const [ax, az] = [dx * k, dz * k];
+    return { p: [t[0] - az * 1.1 - ax * 0.35, 2.4, t[2] + ax * 1.1 - az * 0.35], t: [...t], nyala: a.cerita ? 1 : 0 };
   };
   let kunciKini = poseKunci(ANCHOR[0]);
   let kunciDari = kunciKini;
@@ -660,16 +664,21 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const a = ANCHOR[indeks];
     if (a.cerita && !blend && props) {
       const u = geser + 0.5;
-      const nyala = a.id === "fondasi" ? nyalaFondasi(u) : 0;
-      props.perbarui(a.id, u, { waktu: now / 1000, nyala });
+      const lampuStatus = a.id === "fondasi" ? nyalaFondasi(u) : 0;
+      props.perbarui(a.id, u, { waktu: now / 1000, nyala: lampuStatus });
       // Listrik toko padam di tengah babak andal, didahului kedip singkat. Pemutar kaset, ponsel,
       // dan lampu darurat tetap menyala.
       const padam = a.id === "andal" && u > 0.42 && u < 0.72;
       redup(padam ? (u < 0.45 ? 0.3 + 0.3 * Math.sin(now / 30) : 0.05) : 1);
       if (props.berputar(a.id) && !kurangiGerak) bergerak = true;
+      // Kerucut berkas lampu gantung hanya untuk gambar lebar; dari dekat ia jadi segitiga putih.
+      if (nyala.kerucut(a.id === "dinding")) kotor = true;
       // Bayangan kunci digambar ulang hanya saat benda babak bergerak mengikuti gulir.
       if (Math.abs(geserTujuan - geser) > 1e-4 || kotor) kunciLampu.shadow.needsUpdate = true;
-    } else redup(1);
+    } else {
+      redup(1);
+      if (nyala.kerucut(true)) kotor = true;
+    }
     // Fokus ke benda babak hanya saat kamera sudah mendarat; selama terbang yang bekerja motion blur.
     const dofTujuan = a.cerita && !blend && !kurangiGerak ? 1 : 0;
     const dof = blur.uniforms.uDof;
@@ -1245,6 +1254,7 @@ function buatNyala(lampu) {
   const kerucut = new THREE.MeshBasicMaterial(tambah({ map: tegak, opacity: 0.07, side: THREE.DoubleSide }));
   const kolam = new THREE.MeshBasicMaterial(tambah({ map: radial, opacity: 0.22 }));
   const geoBola = new THREE.SphereGeometry(0.035, 16, 10);
+  let kuatBerkas = 1;
   for (const l of lampu) {
     const { x, y, z } = l.position;
     const b = new THREE.Mesh(geoBola, bola);
@@ -1272,7 +1282,15 @@ function buatNyala(lampu) {
       h.scale.setScalar(0.35);
       grup.add(b, h);
     },
+    // Mengembalikan true bila tampilannya berubah, supaya pemanggil menggambar ulang.
+    kerucut(v) {
+      const tampak = v && kuatBerkas > 0.3;
+      if (kerucut.visible === tampak) return false;
+      kerucut.visible = tampak;
+      return true;
+    },
     setel(warna, kuat) {
+      kuatBerkas = kuat;
       bola.color.setHex(warna).multiplyScalar(6);
       for (const [m, dasar] of [
         [halo, 0.55],

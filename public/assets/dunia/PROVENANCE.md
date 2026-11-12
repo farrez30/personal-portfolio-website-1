@@ -33,7 +33,6 @@ Sumber: https://raw.githubusercontent.com/Tencent/Hunyuan3D-2/main/LICENSE.
 | Berkas | Asal | Lisensi | Pengolahan |
 |---|---|---|---|
 | `classic_laptop.glb`, `clipboard.glb`, `power_box_01.glb`, `wooden_stool_01.glb` | Poly Haven, glTF 1k (karya Arrangemonk; ProgrammerOnCoffee; Rico Cilliers dan Yann Kervran; Rico Cilliers) | CC0 | Tekstur diperkecil ke 512 px (JPEG q4, ffmpeg), lalu `@gltf-transform/cli@4.1.0 optimize --compress meshopt --texture-compress false --simplify-ratio 0.5 --simplify-error 0.002`. Layar laptop diganti tekstur saat dimuat |
-| `vintage_wooden_drawer_01.glb` | Poly Haven, glTF 1k (karya James Ray Cock), lemari arsip enam laci untuk babak aman (13 Nov 2026) | CC0 | Sama seperti di atas, tanpa simplify (5 ribu segitiga). Gembok dan palang dibuat dari kode, karena katalog Poly Haven tidak punya gembok |
 | `bahan/plester-*.webp` | Poly Haven `plastered_wall_04`, tekstur 1k | CC0 | 512 px WebP |
 | `bahan/wood_table_001-*.webp`, `bahan/plywood-*.webp`, `bahan/metal_plate-*.webp` | Poly Haven, tekstur 1k (warna, normal GL, roughness) | CC0 | 512 px WebP; normal dan roughness dibaca tanpa konversi warna |
 | `layar/01-meet.webp`, `layar/05-rancangan.webp`, `layar/06-*.webp`, `layar/08-jeda.webp` | Tangkapan produk asli (lihat `public/assets/cerita/PROVENANCE.md`); `05-rancangan` dari `demo/erp-software-house.mp4` detik 4 | Milik project | WebP |

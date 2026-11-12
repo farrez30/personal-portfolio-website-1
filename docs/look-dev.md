@@ -243,4 +243,4 @@ Kompilasi async, loader tetap bergerak. Tanpa tugas panjang saat props dimuat di
 - 2026-11-13: props cerita v4 (ADR 0016). Bayangan dari semua lampu gantung di desktop, AO dan depth
   of field di lintasan layar, tekstur PBR CC0, isi bayangan 0,5. HP tanpa bayangan lampu gantung.
 - 2026-11-13: alat ukur tanpa selubung UI, lampu kunci bergerak halus, kabut terang ditipiskan,
-  lemari arsip dan gembok di babak aman.
+  vitrin berisi buku kas dan map arsip dengan gembok di tutup, di babak aman.

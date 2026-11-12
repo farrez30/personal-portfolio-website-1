@@ -109,7 +109,7 @@ export const ANCHOR = [
   },
   {
     id: "aman",
-    // Lemari arsip berlaci yang dikunci palang dan gembok, papan kunci per bagian, di belakang gondola.
+    // Vitrin kaca berisi buku kas dan map arsip, tutupnya dikunci gembok; papan kunci per bagian.
     posisi: [0.85, 1.35, -0.95],
     lihat: [0.3, 1.0, 0.25],
     benda: [0.0, 1.02, 0.2],
