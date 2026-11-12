@@ -1,0 +1,15 @@
+Create ONE storyboard board, 2400 x 2200, dark background #161514, text color #EDE8E0, accent #E05A4A (red) and #FFD84A (yellow). Font: Inter for labels, JetBrains Mono for small notes. No stock icons, no emojis, no decorative gradients.
+
+Purpose: compare 6 ways to transition between two sections of a dark personal portfolio website, while the visitor scrolls down. Section A = "Cerita" (a scroll story: big white headline "Dari demo ke rak" and a small paper card). Section B = "Rak CD" (a 3D shelf of CD jewel cases, draw it as a row of 7 thin vertical rectangles in perspective with one square CD cover in the center).
+
+Layout: 6 horizontal rows, one per option. Each row has: a left label column 420 px wide with the option number and title (24 px bold) plus a one-line description (14 px), then 4 browser-viewport frames side by side, each 16:10 (about 440 x 275), with a thin #3A3734 border, labeled above in mono 12 px: "0%", "33%", "66%", "100%" meaning scroll progress across the boundary. Under each frame one short caption (mono 12 px) describing what moves. Draw a small down arrow at the right edge of each frame to suggest scrolling.
+
+Row 1 "Tumpang tindih + warna menyatu": frames show Section A pinned in place while Section B slides up and covers it from the bottom; the page background color shifts from warm dark brown #1E1A17 to cool dark blue #141821 across the 4 frames. No visible hard edge between sections.
+Row 2 "Benda yang menyeberang": the small paper card from Section A detaches, shrinks and travels down, rotating, and lands as the center square CD cover on the shelf in Section B. Show the card's path as a dashed yellow curve across frames.
+Row 3 "Rak bocor keluar seksinya": the CD shelf fades in faintly BEHIND Section A's headline (very low opacity) at 33%, grows clearer at 66% while the headline fades out, fully clear at 100%.
+Row 4 "Topeng shader di batas rak": Section B appears through an irregular frost/noise mask that grows from the center, edges look like cracked ice, with a slight red/blue color fringe (chromatic aberration) on the mask edge.
+Row 5 "Gulir berbobot (desktop)": same simple cut as a normal page, but draw motion ghosts (3 faint copies offset vertically) to show the page easing and settling smoothly after each scroll. Caption mentions "inersia, hanya desktop".
+Row 6 "Model Igloo penuh": everything in one 3D world. Frame 0% shows a full-screen loading progress bar "Memuat 42%", then the camera flies through space past floating ice-like crystal blocks toward the CD shelf; text is rendered inside the 3D scene.
+
+Top of board: title "Transisi antarseksi: 6 pilihan" (40 px bold) and a subtitle in mono 14 px "Baca kiri ke kanan: posisi gulir melewati batas seksi". Mark rows 1 and 2 with a small red tag "Rekomendasi" next to the title.
+Keep everything aligned on an 8 px grid. Make the frames simple, flat vector shapes; clarity over detail.
