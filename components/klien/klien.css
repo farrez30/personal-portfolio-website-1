@@ -55,11 +55,6 @@
   font-weight: 600;
 }
 
-.klien__keterangan {
-  color: var(--ink-3);
-  font-size: 0.8rem;
-  margin-top: 0.75rem;
-}
 
 .klien__nama {
   font-weight: 600;
@@ -347,13 +342,8 @@
   margin-top: 0.5rem;
 }
 
-.klien__tautan {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  margin-top: 0.5rem;
-  color: var(--aksen);
-  min-height: 44px;
+.klien__detail-kartu .klien__aksi {
+  margin-top: 0.75rem;
 }
 
 @media (max-width: 40rem) {

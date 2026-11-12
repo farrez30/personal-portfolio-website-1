@@ -25,7 +25,6 @@
   },
   "rak": {
     "judul": "Rak proyek",
-    "petunjuk": "Pilih satu album untuk dibuka.",
     "sebelumnya": "Album sebelumnya",
     "berikutnya": "Album berikutnya",
     "buka": "Buka album",
@@ -44,10 +43,10 @@
     "tutup": "Tutup album",
     "buklet": "Baca buklet",
     "putar": "Putar cakram",
-    "kembali": "Kembali ke rak",
-    "bukaSitus": "Buka situs",
-    "lihatRepo": "Lihat repo",
-    "caseStudy": "Lihat case study",
+    "kembali": "Kembali",
+    "bukaSitus": "Situs",
+    "lihatRepo": "Repo",
+    "caseStudy": "Case study",
     "halaman": {
       "overview": "Overview",
       "challenge": "Challenge",
@@ -76,12 +75,11 @@
     "subjekIsi": "Tentang proyek atau posisi",
     "pesan": "Pesan",
     "pesanIsi": "Halo Farrez,\n\nSaya melihat portofolio Anda dan ingin ngobrol soal",
-    "kirimEmail": "Kirim lewat email",
-    "kirimWa": "Kirim lewat WhatsApp",
+    "kirimEmail": "Email",
+    "kirimWa": "WhatsApp",
     "galatJudul": "Nama, email, dan pesan wajib diisi.",
     "galatKirim": "Pesan belum terkirim. Coba lagi, atau hubungi saya lewat WhatsApp.",
     "terkirim": "Pesan terkirim. Terima kasih.",
-    "helix": "Klik sekali, lalu sapukan kursor di helix ini.",
     "sapa": {
       "pagi": "Selamat pagi.",
       "siang": "Selamat siang.",
@@ -90,7 +88,6 @@
     },
     "bantu": "Ada yang bisa saya bantu?",
     "briefJudul": "Biar obrolannya langsung ke inti",
-    "briefLewati": "Semua pilihan boleh dilewati.",
     "kebutuhan": {
       "judul": "Apa yang mau Anda bereskan?",
       "android": "Aplikasi Android",
@@ -136,11 +133,11 @@
     "pasang": "Putar",
     "batal": "Batal",
     "salah": "Itu bukan tautan lagu, album, atau playlist Spotify.",
-    "kembali": "Kembali ke playlist Farrez",
-    "kosong": "Tempel tautan Spotify untuk mulai.",
+    "kembali": "Kembali",
+    "kosong": "Tempel tautan Spotify.",
     "disimpan": "Tautanmu hanya disimpan di browser ini.",
     "cuplikan": "Masih cuplikan? <login>Login Spotify</login>, lalu izinkan cookie spotify.com di setelan browser, atau buka di Spotify.",
-    "bukaSpotify": "Buka di Spotify"
+    "bukaSpotify": "Spotify"
   },
   "umum": {
     "bahasa": "Bahasa",
@@ -156,7 +153,7 @@
     "keluarkan": "Keluarkan",
     "buklet": "Buklet",
     "putarCakram": "Putar",
-    "bukaTab": "Buka di tab baru",
+    "bukaTab": "Buka",
     "caseStudy": "Case study",
     "memuat": "Memuat rak",
     "pemutar": "Pemutar",
@@ -178,7 +175,7 @@
       "sinarx": "Sinar-x",
       "tampilan": "Tampilan layar",
       "sedangDisiapkan": "Tampilan langsung sedang disiapkan.",
-      "bukaTab": "Buka di tab baru",
+      "bukaTab": "Buka",
       "caseStudy": "Case study",
       "perbesar": "Perbesar layar",
       "perkecil": "Kembalikan ukuran",
@@ -198,9 +195,9 @@
       "stack": "Stack",
       "infrastruktur": "Infrastruktur"
     },
-    "lihatDiagram": "Lihat alur lengkapnya",
+    "lihatDiagram": "Alur lengkap",
     "judulHalaman": "Arsitektur {judul}",
-    "kembali": "Kembali ke {judul}",
+    "kembali": "Kembali",
     "diagram": "Diagram alur satu permintaan",
     "teknologi": "Teknologi"
   },
@@ -208,7 +205,7 @@
     "judul": "Dari ide sampai dipakai",
     "lewati": "Langsung ke rak proyek",
     "bukti": "Buktinya",
-    "keRak": "Buka rak proyek",
+    "keRak": "Ke rak",
     "bab": "Bab {n} dari {total}",
     "rel": "Bab cerita",
     "keBab": "Ke bab {n}: {judul}"
@@ -219,22 +216,16 @@
   "klien": {
     "label": "Klien dan partner",
     "judul": "Dipakai dari dapur sampai kantor asuransi.",
-    "pengantar": "Klien studio, klien kantor, dan proyek pribadi. Ketuk cakram untuk melihat apa yang dikerjakan.",
+    "pengantar": "Klien studio, klien kantor, dan proyek pribadi.",
     "tab": {
       "coderoach": "Coderoach",
       "mitraplus": "Mitraplus",
       "pribadi": "Personal"
     },
-    "keterangan": {
-      "coderoach": "Klien studio Coderoach",
-      "mitraplus": "Klien Mitraplus, tempat saya bekerja",
-      "pribadi": "Proyek pribadi di rak"
-    },
-    "set": "{n} merek dalam satu set",
-    "buka": "Lihat detail {nama}",
+    "set": "{n} merek",
+    "buka": "Buka {nama}",
     "tutup": "Tutup",
-    "kasus": "Lihat studi kasus",
-    "album": "Buka albumnya di rak",
+    "kasus": "Studi kasus",
     "sebelumnya": "Cakram sebelumnya",
     "berikutnya": "Cakram berikutnya",
     "jenis": {
@@ -253,6 +244,7 @@
       "android": "Android",
       "tools": "Tools"
     },
-    "detail": "Lihat detail"
+    "detail": "Buka",
+    "bukaAlbum": "Buka"
   }
 }

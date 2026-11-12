@@ -63,7 +63,13 @@ export default function Klien() {
           buka={setDibuka}
         />
       )}
-      <Detail t={t} bahasa={bahasa} item={dibuka} tutup={() => setDibuka(null)} />
+      <Detail
+        t={t}
+        bahasa={bahasa}
+        item={dibuka}
+        tutup={() => setDibuka(null)}
+        album={(slug) => (mode === "imersif" ? `#/${slug}/buka` : `/${locale}/proyek/${slug}`)}
+      />
     </section>
   );
 }
@@ -92,7 +98,6 @@ function Kepala({ t, kelompok, setKelompok }) {
           </button>
         ))}
       </div>
-      <p className="mono klien__keterangan">{t(`keterangan.${kelompok}`)}</p>
     </header>
   );
 }
@@ -271,7 +276,7 @@ function Cincin({ t, bahasa, daftar, induk, kelompok, setKelompok, buka }) {
                 <div className="klien__aksi">
                   <button
                     type="button"
-                    className="tombol"
+                    className="tombol tombol--utama"
                     aria-label={t("buka", { nama: item.nama })}
                     onClick={() => buka(item)}
                   >
@@ -331,7 +336,7 @@ function Cincin({ t, bahasa, daftar, induk, kelompok, setKelompok, buka }) {
   );
 }
 
-function Detail({ t, bahasa, item, tutup }) {
+function Detail({ t, bahasa, item, tutup, album }) {
   const ref = useRef(null);
   useEffect(() => {
     const d = ref.current;
@@ -366,15 +371,27 @@ function Detail({ t, bahasa, item, tutup }) {
                 <p className="mono klien__industri">{bahasa(x.industri)}</p>
                 <Chip t={t} jenis={x.jenis} />
                 {x.kerja ? <p className="klien__kerja">{bahasa(x.kerja)}</p> : null}
-                {x.tautan ? (
-                  <a className="klien__tautan" href={x.tautan} target="_blank" rel="noopener noreferrer">
-                    {t("kasus")} <PiArrowUpRightBold aria-hidden />
-                  </a>
-                ) : null}
-                {x.album ? (
-                  <a className="klien__tautan" href="#rak" onClick={tutup}>
-                    {t("album")}
-                  </a>
+                {x.tautan || x.album ? (
+                  <div className="klien__aksi">
+                    {x.album ? (
+                      <a
+                        className="tombol tombol--utama"
+                        href={album(x.album)}
+                        onClick={() => {
+                          tutup();
+                          // Rute #/slug/buka tidak punya elemen tujuan, jadi gulir ke rak sendiri.
+                          if (album(x.album).startsWith("#")) document.getElementById("rak")?.scrollIntoView();
+                        }}
+                      >
+                        {t("bukaAlbum")}
+                      </a>
+                    ) : null}
+                    {x.tautan ? (
+                      <a className="tombol" href={x.tautan} target="_blank" rel="noopener noreferrer">
+                        {t("kasus")} <PiArrowUpRightBold aria-hidden />
+                      </a>
+                    ) : null}
+                  </div>
                 ) : null}
               </article>
             ))}

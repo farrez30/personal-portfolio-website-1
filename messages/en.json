@@ -25,7 +25,6 @@
   },
   "rak": {
     "judul": "The shelf",
-    "petunjuk": "Pick an album to open.",
     "sebelumnya": "Previous album",
     "berikutnya": "Next album",
     "buka": "Open album",
@@ -44,10 +43,10 @@
     "tutup": "Close album",
     "buklet": "Read the booklet",
     "putar": "Play the disc",
-    "kembali": "Back to the shelf",
-    "bukaSitus": "Open site",
-    "lihatRepo": "View repo",
-    "caseStudy": "View case study",
+    "kembali": "Back",
+    "bukaSitus": "Site",
+    "lihatRepo": "Repo",
+    "caseStudy": "Case study",
     "halaman": {
       "overview": "Overview",
       "challenge": "Challenge",
@@ -76,12 +75,11 @@
     "subjekIsi": "About a project or a role",
     "pesan": "Message",
     "pesanIsi": "Hi Farrez,\n\nI saw your portfolio and would like to talk about",
-    "kirimEmail": "Send by email",
-    "kirimWa": "Send on WhatsApp",
+    "kirimEmail": "Email",
+    "kirimWa": "WhatsApp",
     "galatJudul": "Name, email, and message are required.",
     "galatKirim": "That didn't send. Try again, or reach me on WhatsApp.",
     "terkirim": "Sent. Thank you.",
-    "helix": "Click once, then sweep your cursor across the helix.",
     "sapa": {
       "pagi": "Good morning.",
       "siang": "Good afternoon.",
@@ -90,7 +88,6 @@
     },
     "bantu": "What can I help with?",
     "briefJudul": "So we can get straight to the point",
-    "briefLewati": "Every choice is optional.",
     "kebutuhan": {
       "judul": "What do you want sorted?",
       "android": "An Android app",
@@ -136,11 +133,11 @@
     "pasang": "Play",
     "batal": "Cancel",
     "salah": "That isn't a Spotify track, album, or playlist link.",
-    "kembali": "Back to Farrez's playlist",
-    "kosong": "Paste a Spotify link to start.",
+    "kembali": "Back",
+    "kosong": "Paste a Spotify link.",
     "disimpan": "Your link is only saved in this browser.",
     "cuplikan": "Still a preview? <login>Log in to Spotify</login>, then allow cookies from spotify.com in your browser settings, or open it in Spotify.",
-    "bukaSpotify": "Open in Spotify"
+    "bukaSpotify": "Spotify"
   },
   "umum": {
     "bahasa": "Language",
@@ -156,7 +153,7 @@
     "keluarkan": "Eject",
     "buklet": "Booklet",
     "putarCakram": "Play",
-    "bukaTab": "Open in new tab",
+    "bukaTab": "Open",
     "caseStudy": "Case study",
     "memuat": "Loading the shelf",
     "pemutar": "Player",
@@ -178,7 +175,7 @@
       "sinarx": "X-ray",
       "tampilan": "Screen view",
       "sedangDisiapkan": "The live view is being set up.",
-      "bukaTab": "Open in new tab",
+      "bukaTab": "Open",
       "caseStudy": "Case study",
       "perbesar": "Enlarge screen",
       "perkecil": "Restore size",
@@ -198,9 +195,9 @@
       "stack": "Stack",
       "infrastruktur": "Infrastructure"
     },
-    "lihatDiagram": "See the full flow",
+    "lihatDiagram": "Full flow",
     "judulHalaman": "{judul} architecture",
-    "kembali": "Back to {judul}",
+    "kembali": "Back",
     "diagram": "Diagram of one request",
     "teknologi": "Technology"
   },
@@ -208,7 +205,7 @@
     "judul": "From idea to everyday use",
     "lewati": "Skip to the project shelf",
     "bukti": "Proof",
-    "keRak": "Open the project shelf",
+    "keRak": "To the rack",
     "bab": "Chapter {n} of {total}",
     "rel": "Story chapters",
     "keBab": "Go to chapter {n}: {judul}"
@@ -219,22 +216,16 @@
   "klien": {
     "label": "Clients and partners",
     "judul": "In use from kitchens to insurance offices.",
-    "pengantar": "Studio clients, office clients, and personal projects. Tap a disc to see what was built.",
+    "pengantar": "Studio clients, office clients, and personal projects.",
     "tab": {
       "coderoach": "Coderoach",
       "mitraplus": "Mitraplus",
       "pribadi": "Personal"
     },
-    "keterangan": {
-      "coderoach": "Coderoach studio clients",
-      "mitraplus": "Clients at Mitraplus, where I work",
-      "pribadi": "Personal projects on the rack"
-    },
-    "set": "{n} brands in one set",
-    "buka": "See details for {nama}",
+    "set": "{n} brands",
+    "buka": "Open {nama}",
     "tutup": "Close",
-    "kasus": "See the case study",
-    "album": "Open its album on the rack",
+    "kasus": "Case study",
     "sebelumnya": "Previous disc",
     "berikutnya": "Next disc",
     "jenis": {
@@ -253,6 +244,7 @@
       "android": "Android",
       "tools": "Tools"
     },
-    "detail": "See details"
+    "detail": "Open",
+    "bukaAlbum": "Open"
   }
 }

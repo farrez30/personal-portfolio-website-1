@@ -6,10 +6,6 @@
   font-size: clamp(1.5rem, 3vw, 2rem);
 }
 
-.rak__petunjuk {
-  color: var(--ink-2);
-  margin-top: 0.5rem;
-}
 
 .rak__kisi {
   display: grid;

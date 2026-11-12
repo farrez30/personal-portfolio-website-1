@@ -109,12 +109,11 @@ export default function Contact() {
               </li>
             ))}
           </ul>
-          {mode === "imersif" && <Helix label={t("helix")} />}
+          {mode === "imersif" && <Helix />}
         </div>
 
         <form ref={formRef} className="kontak__form" onSubmit={kirimEmail}>
           <h3 className="mono kontak__label">{t("briefJudul")}</h3>
-          <p className="kontak__catatan">{t("briefLewati")}</p>
           {PERTANYAAN.map((q) => (
             <fieldset key={q.kunci} className="kontak__brief">
               <legend>{t(`${q.kunci}.judul`)}</legend>
