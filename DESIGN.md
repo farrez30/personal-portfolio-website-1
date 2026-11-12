@@ -108,7 +108,10 @@ Realistic cinematic night, set by the look-dev sheet `docs/look-dev.md` (target 
 `desain/look-dev/`). Each place has one pendant lamp you can see: bulb, halo sprite, a faint
 light cone in the air and a pool on the floor, all additive with no extra pass. Warm `#ffb46a`
 inside, blue `#6f8fd6` only from the street door, shadows and fog warm brown `#1a1410`. AgX tone
-mapping (exposure 1.3); no environment map. Floor is worn concrete baked by `scripts/beton.py`.
+mapping (exposure 1.3, times a per-place `paparan` in `naskah.js` for the counter and the door,
+eased during camera moves); no environment map. The front wall holds a cassette rack behind the
+counter, a record crate and a low sleeve shelf on either side of the door, and two posters with
+shapes but no lettering, all primitives and InstancedMesh. Floor is worn concrete baked by `scripts/beton.py`.
 The screen pass after motion blur lifts the shadows, adds a soft vignette and a film grain that
 only changes when the scene redraws. Light mode is the shop in the morning: same rig with the
 cones and grain turned down.
