@@ -47,6 +47,16 @@ html[data-dunia="ular"] {
   transition: opacity 0.6s linear;
 }
 
+/* Tema terang: selubung krem 88% di separuh kiri terbaca sebagai kabut putih tebal yang menutup
+   toko (masukan Farrez 13 Nov 2026). Lebih tipis dan lebih sempit; teks gelap tetap terbaca karena
+   ruangan pagi sudah terang. */
+html[data-theme="light"] .dunia::after {
+  background:
+    linear-gradient(0deg, color-mix(in srgb, var(--bg) 55%, transparent) 0%, transparent 20%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 40%, transparent) 0%, transparent 14%),
+    linear-gradient(90deg, color-mix(in srgb, var(--bg) 68%, transparent) 0%, color-mix(in srgb, var(--bg) 42%, transparent) 38%, transparent 62%);
+}
+
 /* Babak cerita: teksnya sudah punya kabut gelapnya sendiri, jadi selubung warna latar hampir
    dilepas. Di tema terang selubung ini yang membuat toko tertutup kabut putih tebal. */
 .dunia[data-tur="1"]::after {
@@ -61,6 +71,9 @@ html[data-dunia="ular"] {
 @media (max-width: 47.99rem) {
   .dunia::after {
     background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 35%, transparent) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 38%, color-mix(in srgb, var(--bg) 74%, transparent) 100%);
+  }
+  html[data-theme="light"] .dunia::after {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 20%, transparent) 0%, color-mix(in srgb, var(--bg) 58%, transparent) 38%, color-mix(in srgb, var(--bg) 52%, transparent) 100%);
   }
 }
 
