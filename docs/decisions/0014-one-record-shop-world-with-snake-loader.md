@@ -1,7 +1,7 @@
 # 0014. One record-shop world with a snake loader
 
 - Date: 2026-11-12
-- Status: Accepted. Reverses the "no full-screen loader" decision made earlier the same day. Will supersede ADR 0013 (soundstage) once the shop world ships.
+- Status: Accepted. Reverses the "no full-screen loader" decision made earlier the same day. The story fold-in shipped as ADR 0016 (props tour, 13 Nov 2026).
 
 ## Context
 

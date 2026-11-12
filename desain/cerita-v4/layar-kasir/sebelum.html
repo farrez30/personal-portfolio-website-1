@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<style>
+* { box-sizing:border-box; }
+body { margin:0; width:1200px; height:800px; overflow:hidden; font:12px Tahoma, Arial, sans-serif; background:#e9e9e9; color:#222; }
+.judul { background:#3a5fa0; color:#fff; padding:6px 10px; font-size:14px; font-weight:bold; }
+.menu { background:#d4d0c8; border-bottom:1px solid #888; padding:4px 6px; }
+.menu span { margin-right:14px; }
+.isi { padding:8px; }
+fieldset { border:1px solid #999; margin:0 0 8px; padding:6px 8px; background:#f4f4f4; }
+legend { font-weight:bold; }
+.baris { display:flex; gap:8px; margin:3px 0; align-items:center; }
+.baris label { width:86px; }
+input { border:1px solid #7a7a7a; height:20px; width:150px; font-size:12px; }
+.tombol { display:flex; gap:6px; margin:6px 0 8px; }
+.tombol span { border:1px solid #555; background:linear-gradient(#fafafa,#cfcfcf); padding:3px 0; width:96px; text-align:center; }
+table { border-collapse:collapse; width:100%; background:#fff; font-size:11px; }
+th, td { border:1px solid #9a9a9a; padding:3px 4px; white-space:nowrap; }
+th { background:#c9c9c9; text-align:left; }
+tr:nth-child(even) td { background:#f2f2f2; }
+.kaki { margin-top:6px; font-size:11px; color:#555; }
+</style></head><body>
+<div class="judul">FORM INPUT PENJUALAN - TOKO SINAR v1.0</div>
+<div class="menu"><span>File</span><span>Master</span><span>Transaksi</span><span>Laporan</span><span>Utility</span><span>Window</span><span>Help</span></div>
+<div class="isi">
+<fieldset><legend>Data Transaksi</legend>
+<div class="baris"><label>No Faktur</label><input value="PJ/11/2026/00381"><label>Tanggal</label><input value="13/11/2026"><label>Kd Pelanggan</label><input value="UMUM"><label>Kd Sales</label><input></div>
+<div class="baris"><label>Kd Barang</label><input><label>Qty</label><input><label>Harga</label><input><label>Disc %</label><input></div>
+<div class="baris"><label>Gudang</label><input value="GD01"><label>Shift</label><input value="1"><label>Ket</label><input style="width:400px"></div>
+</fieldset>
+<div class="tombol"><span>Baru</span><span>Simpan</span><span>Edit</span><span>Hapus</span><span>Cetak</span><span>Batal</span><span>Cari</span><span>Keluar</span></div>
+<table><tr><th>No</th><th>Kd Brg</th><th>Nama Barang</th><th>Sat</th><th>Qty</th><th>Harga</th><th>Disc</th><th>Subtotal</th><th>Gdg</th><th>Stok</th><th>Min</th><th>Ket</th></tr>
+<tr><td>1</td><td>BRG1001</td><td>Gula Pasir 1kg</td><td>PCS</td><td>4</td><td>28000</td><td>0</td><td>112000</td><td>GD01</td><td>34</td><td>10</td><td></td></tr>
+<tr><td>2</td><td>BRG1002</td><td>Minyak Goreng 2L</td><td>PCS</td><td>3</td><td>12500</td><td>0</td><td>37500</td><td>GD01</td><td>58</td><td>10</td><td></td></tr>
+<tr><td>3</td><td>BRG1003</td><td>Beras Pandan 5kg</td><td>PCS</td><td>10</td><td>14500</td><td>0</td><td>145000</td><td>GD01</td><td>40</td><td>10</td><td></td></tr>
+<tr><td>4</td><td>BRG1004</td><td>Telur Ayam 1kg</td><td>PCS</td><td>10</td><td>3500</td><td>0</td><td>35000</td><td>GD01</td><td>38</td><td>10</td><td></td></tr>
+<tr><td>5</td><td>BRG1005</td><td>Kopi Bubuk 200g</td><td>PCS</td><td>1</td><td>65500</td><td>0</td><td>65500</td><td>GD01</td><td>30</td><td>10</td><td></td></tr>
+<tr><td>6</td><td>BRG1006</td><td>Teh Celup isi 25</td><td>PCS</td><td>5</td><td>28000</td><td>0</td><td>140000</td><td>GD01</td><td>14</td><td>10</td><td></td></tr>
+<tr><td>7</td><td>BRG1007</td><td>Mie Instan Goreng</td><td>PCS</td><td>4</td><td>32500</td><td>0</td><td>130000</td><td>GD01</td><td>30</td><td>10</td><td></td></tr>
+<tr><td>8</td><td>BRG1008</td><td>Sabun Cuci Piring</td><td>PCS</td><td>9</td><td>65500</td><td>0</td><td>589500</td><td>GD01</td><td>35</td><td>10</td><td></td></tr>
+<tr><td>9</td><td>BRG1009</td><td>Susu Kental Manis</td><td>PCS</td><td>8</td><td>14500</td><td>0</td><td>116000</td><td>GD01</td><td>40</td><td>10</td><td></td></tr>
+<tr><td>10</td><td>BRG1010</td><td>Kecap Manis 600ml</td><td>PCS</td><td>3</td><td>7800</td><td>0</td><td>23400</td><td>GD01</td><td>40</td><td>10</td><td></td></tr>
+<tr><td>11</td><td>BRG1011</td><td>Tepung Terigu 1kg</td><td>PCS</td><td>3</td><td>65500</td><td>0</td><td>196500</td><td>GD01</td><td>59</td><td>10</td><td></td></tr>
+<tr><td>12</td><td>BRG1012</td><td>Air Mineral 600ml</td><td>PCS</td><td>9</td><td>14500</td><td>0</td><td>130500</td><td>GD01</td><td>47</td><td>10</td><td></td></tr>
+<tr><td>13</td><td>BRG1013</td><td>Garam Dapur 250g</td><td>PCS</td><td>1</td><td>32500</td><td>0</td><td>32500</td><td>GD01</td><td>49</td><td>10</td><td></td></tr>
+<tr><td>14</td><td>BRG1014</td><td>Saus Sambal 340ml</td><td>PCS</td><td>2</td><td>7800</td><td>0</td><td>15600</td><td>GD01</td><td>48</td><td>10</td><td></td></tr>
+<tr><td>15</td><td>BRG1015</td><td>Biskuit Kelapa</td><td>PCS</td><td>10</td><td>3500</td><td>0</td><td>35000</td><td>GD01</td><td>19</td><td>10</td><td></td></tr>
+<tr><td>16</td><td>BRG1016</td><td>Detergen 800g</td><td>PCS</td><td>1</td><td>65500</td><td>0</td><td>65500</td><td>GD01</td><td>55</td><td>10</td><td></td></tr>
+<tr><td>17</td><td>BRG1017</td><td>Pasta Gigi 190g</td><td>PCS</td><td>5</td><td>14500</td><td>0</td><td>72500</td><td>GD01</td><td>38</td><td>10</td><td></td></tr>
+<tr><td>18</td><td>BRG1018</td><td>Shampo Sachet</td><td>PCS</td><td>12</td><td>14500</td><td>0</td><td>174000</td><td>GD01</td><td>45</td><td>10</td><td></td></tr>
+<tr><td>19</td><td>BRG1019</td><td>Roti Tawar</td><td>PCS</td><td>7</td><td>14500</td><td>0</td><td>101500</td><td>GD01</td><td>46</td><td>10</td><td></td></tr>
+<tr><td>20</td><td>BRG1020</td><td>Margarin 200g</td><td>PCS</td><td>10</td><td>14500</td><td>0</td><td>145000</td><td>GD01</td><td>59</td><td>10</td><td></td></tr>
+</table><div class="kaki">Total Item: 20 &nbsp; Total: 4250000 &nbsp; F2=Simpan F3=Cari F4=Hapus F5=Refresh F8=Cetak F12=Keluar &nbsp; User: ADMIN</div></div></body></html>

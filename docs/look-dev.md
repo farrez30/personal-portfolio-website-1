@@ -187,6 +187,31 @@ bukan dari lembar ini. Di build produksi (`next build`, dua putaran bergantian p
 panjang 378 sampai 473 ms di kedua versi: sebarannya lebih besar dari selisihnya, dan tugas itu
 sudah ada sebelum lembar ini. Draw call dan FPS di HP fisik belum diukur.
 
+## Props cerita v4 (13 Nov 2026, ADR 0016)
+
+Sepuluh benda tur cerita gulir mengikuti lembar ini, dengan tambahan atas permintaan Farrez
+("efek bayangan dan depth, bukan 3D polosan"):
+
+| Butir | Isi |
+|---|---|
+| Bentuk | Model CC0 Poly Haven (laptop klasik, papan jepit, kotak listrik, bangku kayu), sisanya kode dengan `RoundedBoxGeometry` bertepi 2 sampai 12 mm |
+| Bahan | Tekstur PBR CC0 512 px: `wood_table_001`, `plywood`, `metal_plate`, plester dinding `plastered_wall_04` (warna, normal GL, roughness). UV kotak diproyeksikan per meter supaya serat tidak melar. AO model dari kanal merah peta ARM |
+| Bayangan | Semua lampu gantung (peta kubus 512, HP tanpa), lampu jalan (1024), dan lampu kunci babak (SpotLight, 1024, HP 512, 1,5 kali kuat lampu). Jadwal per lampu: yang diam dihitung sekali, dicicil satu lampu per bingkai; lampu kunci hanya saat benda bergerak. Bidang ruangan menerima, tidak membuat |
+| Layar | AO dari peta kedalaman (8 titik, jangkauan 30 cm, desktop saja) dan depth of field 12 titik ke benda babak saat kamera diam. Dimatikan saat gerak dikurangi |
+| Isi bayangan | Hemisphere malam turun dari 0,7 ke 0,5 supaya bayangan berkontras |
+| Layar produk | MeshBasic tanpa tone mapping, terang 0,85 sampai 0,95 |
+
+Nilai (metode di atas, 1440x900, build produksi, RX 6700 XT): bilik 35, dinding (pembuka) 31,
+rak 35, kasir 19, pintu 22, babak bentuk 22 dengan paparan 1,35, babak andal 30. Bilik dan rak
+turun 4 sampai 5 dari sebelumnya karena isi bayangan diturunkan; kasir, pintu, dan bentuk masih di
+bawah 35. Langkah berikutnya bila perlu: lampu setempat untuk kasir dan rak pajang, bukan ambien.
+
+Performa (dua putaran per versi, mesin sama, dibandingkan dengan versi tayang): kompilasi shader
+desktop 1,9 s (sebelumnya 0,4 s), siap 5,3 sampai 5,4 s (tayang 3,6 sampai 4,6 s). HP 390x844
+sesudah tingkat kualitas: kompilasi 0,9 s, siap 4,3 sampai 4,8 s (tayang 3,3 sampai 4,3 s).
+Kompilasi async, loader tetap bergerak. Tanpa tugas panjang saat props dimuat di hero (jendela
+4 s, bingkai terburuk 12 ms) dan saat pindah antarbabak.
+
 ## Riwayat keputusan
 
 - 2026-11-12: gaya realistis sinematik malam dipilih Farrez; styleframe Flow 6 gambar (0 kredit,
@@ -200,3 +225,5 @@ sudah ada sebelum lembar ini. Draw call dan FPS di HP fisik belum diukur.
 - 2026-11-12: dinding depan diisi (rak kaset, peti piringan, rak sampul, dua poster), lampu
   gantung kelima di kiri pintu, paparan per tempat (kasir 1,5, pintu 1,4). Kasir 21, pintu 25.
   `ukur-dunia.mjs` memotret kasir lewat seksi klien (`[data-dunia=kasir]`).
+- 2026-11-13: props cerita v4 (ADR 0016). Bayangan dari semua lampu gantung di desktop, AO dan depth
+  of field di lintasan layar, tekstur PBR CC0, isi bayangan 0,5. HP tanpa bayangan lampu gantung.

@@ -107,9 +107,15 @@ await foto("01-bilik");
 const bingkai = (ms, aksi = "") =>
   js(`(async () => { window.__lt = []; const fr = []; let last = performance.now(); const t0 = last; ${aksi}; await new Promise(res => { const f = t => { fr.push(t - last); last = t; if (t - t0 < ${ms}) requestAnimationFrame(f); else res(); }; requestAnimationFrame(f); }); const s = [...fr].sort((a,b)=>a-b); return { n: fr.length, median: +s[s.length>>1].toFixed(1), p95: +s[Math.floor(s.length*.95)].toFixed(1), terburuk: +s[s.length-1].toFixed(1), lt: window.__lt.map(x=>x[1]) }; })()`);
 
-console.log("diam di hero 2 s:", JSON.stringify(await bingkai(2000)));
+// Sesudah loader: props cerita v4 dimuat dan dipanaskan di sini (requestIdleCallback), jadi jendela
+// ini juga mengukur apakah hero tersendat saat itu.
+console.log("diam di hero 4 s (props cerita dimuat):", JSON.stringify(await bingkai(4000)));
+console.log("props cerita:", await js(`document.querySelector(".dunia")?.dataset.cerita ?? "belum"`));
 const tempat = [
   ["02-dinding", "#cerita"],
+  // Dua babak tur props: pindah dari babak ke babak di dalam cerita.
+  ["02b-bentuk", ".bab--bentuk"],
+  ["02c-andal", ".bab--andal"],
   ["03-rak", "#rak"],
   ["04-kasir", "[data-dunia=kasir]"],
 ];

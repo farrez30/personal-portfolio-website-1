@@ -1,8 +1,8 @@
 // Dunia toko kaset tidak boleh membekukan loader atau perpindahan kamera. Terukur di RX 6700 XT
 // (Chrome headless GPU, scripts/ukur-dunia.mjs, 12 Nov 2026): peta lingkungan PMREM 462 ms,
-// kaca transmission lampu CC0 293 ms, draw pertama sekaligus 386 ms, panggung cerita tanpa
-// pemanasan 550 ms tepat saat kamera terbang ke dinding, dan buklet rak 370 ms saat kamera
-// masih terbang ke anchor rak. Tes ini mengunci perbaikannya.
+// kaca transmission lampu CC0 293 ms, draw pertama sekaligus 386 ms, dan buklet rak 370 ms saat
+// kamera masih terbang ke anchor rak. Tes ini mengunci perbaikannya, termasuk props cerita v4
+// yang dimuat sesudah hero.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -38,10 +38,22 @@ test("penjaga kualitas mengabaikan tugas panjang di luar dunia", () => {
   assert.match(dunia, /buruk >= 2/);
 });
 
-test("panggung cerita dipanaskan saat dibuat, sebelum terlihat", () => {
-  const cerita = baca("components/cerita/dunia.js");
-  assert.match(cerita, /function panaskan\(\)[\s\S]*compileAsync\(scene, kamera\)[\s\S]*initTexture/);
-  assert.match(baca("components/cerita/PanggungCerita.jsx"), /dunia\.panaskan\(\);/);
+test("props cerita dimuat sesudah hero, dipanaskan dicicil, tanpa lampu baru", () => {
+  // Props dibuat di muatCerita, bukan di buatDunia: loader tidak menunggu aset sepuluh babak.
+  const pembuat = kode.slice(0, kode.indexOf("const muatCerita = async"));
+  assert.doesNotMatch(pembuat, /buatPropsCerita\(/);
+  const muat = kode.slice(kode.indexOf("const muatCerita = async"), kode.indexOf("// Pemanasan sebelum gambar pertama"));
+  assert.match(muat, /compileAsync\(calon\.grup, camera, scene\)/);
+  assert.match(muat, /renderer\.initTexture\(t\);\s*await bingkaiBerikut\(\);/);
+  assert.match(muat, /latih\(benda\.slice\(i, i \+ 3\)\);\s*await bingkaiBerikut\(\);/);
+  // Lampu baru di tengah jalan memaksa semua shader dikompilasi ulang: props tidak membuat lampu.
+  const props = baca("components/dunia/props.js").replace(/\/\/.*$/gm, "");
+  assert.doesNotMatch(props, /new THREE\.(Point|Spot|Directional|Hemisphere)Light/);
+  // Dunia.jsx memanggilnya saat peramban senggang, sesudah dunia siap.
+  const komponen = baca("components/dunia/Dunia.jsx");
+  const siap = komponen.indexOf("keadaan.siap = true;");
+  const panggil = komponen.indexOf("requestIdleCallback(muatCerita");
+  assert.ok(siap > 0 && panggil > siap, "muatCerita tidak menunggu dunia siap");
 });
 
 test("buklet rak baru disiapkan setelah kamera dunia mendarat (>= 1,5 s diam)", () => {

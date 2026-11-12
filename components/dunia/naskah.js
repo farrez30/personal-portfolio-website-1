@@ -1,4 +1,4 @@
-// Naskah kamera dunia toko kaset (ADR 0014). Satu ruangan, lima tempat; tiap tempat terikat ke
+// Naskah kamera dunia toko kaset (ADR 0014). Satu ruangan, lima tempat plus sepuluh babak cerita; tiap tempat terikat ke
 // satu seksi halaman. Gulir hanya memilih tempat tujuan; perpindahannya diputar dalam waktu
 // seperti camera blend di menu game: cepat, ease in-out, dan buram sebanding kecepatannya.
 // Dipisah dari three.js supaya bisa dites di Node.
@@ -16,11 +16,116 @@ export const ANCHOR = [
   },
   {
     id: "dinding",
-    // Dinding catatan sampul di belakang kanan.
-    posisi: [2.4, 1.6, -0.9],
-    lihat: [1.6, 1.5, -4],
-    fov: 44,
+    // Pembuka cerita: gambar lebar toko dari depan, semua props cerita terlihat sekaligus.
+    posisi: [-0.6, 1.95, 2.5],
+    lihat: [0.6, 1.0, -2.6],
+    fov: 52,
     seksi: [{ sel: "#cerita", di: 0 }],
+  },
+  // Tur props cerita gulir (10 babak): satu benda per babak, kamera berhenti di depannya.
+  // `cerita` menandai anchor babak; `hp` menimpa pose di layar tegak, tempat teks ada di bawah,
+  // jadi bendanya dinaikkan ke separuh atas bingkai.
+  {
+    id: "ide",
+    // Papan titipan pelanggan di dinding catatan, laptop dengan rapat Meet di meja kecil.
+    posisi: [1.3, 1.25, -2.2],
+    lihat: [2.15, 0.95, -3.7],
+    benda: [2.5, 1.0, -3.6],
+    fov: 40,
+    cerita: true,
+    seksi: [{ sel: ".bab--ide", di: 0 }],
+  },
+  {
+    id: "rencana",
+    // Meja tulis di dinding kiri: daftar kebutuhan di papan jepit, distempel setuju.
+    posisi: [-3.55, 1.35, -0.75],
+    lihat: [-4.3, 0.72, -1.15],
+    benda: [-4.5, 0.74, -1.4],
+    fov: 38,
+    cerita: true,
+    seksi: [{ sel: ".bab--rencana", di: 0 }],
+  },
+  {
+    id: "bentuk",
+    // Satu album dalam empat format (piringan, CD, kaset, ponsel): bentuk dipilih sesuai pendengarnya.
+    posisi: [-2.95, 1.4, 0.45],
+    lihat: [-4.4, 1.0, 0.52],
+    benda: [-4.4, 1.05, 0.28],
+    fov: 40,
+    // Rak pajang di sudut yang jauh dari lampu gantung: diafragma dibuka sedikit.
+    paparan: 1.35,
+    cerita: true,
+    seksi: [{ sel: ".bab--bentuk", di: 0 }],
+  },
+  {
+    id: "fondasi",
+    // Rak hi-fi dilihat dari belakang: kabel rapi, lampu menyala satu per satu.
+    posisi: [-2.75, 1.05, 1.55],
+    lihat: [-3.92, 0.62, 2.38],
+    benda: [-4.05, 0.5, 1.95],
+    fov: 40,
+    cerita: true,
+    seksi: [{ sel: ".bab--fondasi", di: 0 }],
+  },
+  {
+    id: "bangun",
+    // Turntable di gondola tengah: test pressing diputar sebelum dicetak, layar rancangan.
+    posisi: [-1.6, 1.35, 1.75],
+    lihat: [-0.64, 0.95, 0.2],
+    benda: [-0.3, 1.0, 0.5],
+    fov: 40,
+    cerita: true,
+    seksi: [{ sel: ".bab--bangun", di: 0 }],
+  },
+  {
+    id: "progres",
+    // Papan pre-order di pojok belakang kanan: kartu pesanan bergeser dari dipesan ke sudah tiba.
+    posisi: [3.0, 1.45, -2.25],
+    lihat: [3.85, 1.2, -3.9],
+    benda: [4.2, 1.2, -3.85],
+    fov: 42,
+    cerita: true,
+    seksi: [{ sel: ".bab--progres", di: 0 }],
+  },
+  {
+    id: "rapi",
+    // Stasiun dengar coba di ujung gondola: layar kasir sebelum dan sesudah dirapikan.
+    posisi: [0.55, 1.35, 1.45],
+    lihat: [0.61, 1.0, 0.52],
+    benda: [0.85, 1.05, 0.6],
+    fov: 36,
+    cerita: true,
+    seksi: [{ sel: ".bab--rapi", di: 0 }],
+  },
+  {
+    id: "andal",
+    // Listrik toko padam: pemutar kaset baterai, ponsel, dan lampu darurat tetap menyala.
+    posisi: [2.75, 1.0, -0.7],
+    lihat: [3.27, 0.5, -1.85],
+    benda: [3.55, 0.55, -1.6],
+    fov: 36,
+    cerita: true,
+    seksi: [{ sel: ".bab--andal", di: 0 }],
+  },
+  {
+    id: "aman",
+    // Vitrin koleksi langka terkunci dan papan kunci berlabel, di sisi belakang gondola.
+    posisi: [0.85, 1.35, -0.95],
+    lihat: [0.3, 1.0, 0.25],
+    benda: [0.0, 1.02, 0.2],
+    fov: 40,
+    cerita: true,
+    seksi: [{ sel: ".bab--aman", di: 0 }],
+  },
+  {
+    id: "rilis",
+    // Tiga kotak CD masuk ke celah rak, lalu kamera mundur ke rak.
+    posisi: [3.5, 1.3, 0.6],
+    lihat: [4.58, 1.15, -0.59],
+    benda: [4.8, 1.55, -0.33],
+    fov: 40,
+    cerita: true,
+    seksi: [{ sel: ".bab--rilis", di: 0 }],
   },
   {
     id: "rak",
@@ -55,6 +160,19 @@ export const ANCHOR = [
     seksi: [{ sel: "#kontak", di: 0 }],
   },
 ];
+
+// Pose di layar tegak. Di desktop teks babak di kiri, jadi `lihat` digeser supaya benda duduk
+// di kanan bingkai. Di HP teks ada di separuh bawah: kamera membidik benda di tengah, mundur
+// sedikit, dan menunduk supaya benda naik ke separuh atas.
+export function anchorTegak(a) {
+  if (!a.benda) return a;
+  const mundur = 1.15;
+  return {
+    ...a,
+    posisi: a.posisi.map((v, i) => a.benda[i] + (v - a.benda[i]) * mundur),
+    lihat: [a.benda[0], a.benda[1] - 0.42, a.benda[2]],
+  };
+}
 
 const jepit = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 
@@ -127,4 +245,45 @@ export function anchorAktif(y, tinggiLayar, titik) {
 export function kekuatanBlur(kecepatan, kurangiGerak = false) {
   if (kurangiGerak || !(kecepatan > 0.15)) return 0;
   return jepit(kecepatan / 6);
+}
+
+// Bunyi tur cerita: peristiwa yang dibunyikan saat gulir maju dari a ke b, masing-masing
+// { id, u } (anchor dan progres di dalamnya). Mundur dan lompatan jauh (tautan bab, muat ulang)
+// tidak berbunyi, supaya tidak ada rentetan bunyi sekaligus. Nama bunyi dari RESEP suara.js.
+const BUNYI_MASUK = { ide: "kertas", rencana: "kertas", bentuk: "halaman", progres: "halaman", rapi: "tombol" };
+const BUNYI_TITIK = {
+  rencana: [[0.5, "rapat"]],
+  andal: [
+    [0.42, "relay"],
+    [0.72, "relay"],
+  ],
+  aman: [[0.45, "segel"]],
+  // Tiga kotak CD mendarat di rak (props.js, babak rilis).
+  rilis: [
+    [0.32, "rapat"],
+    [0.44, "rapat"],
+    [0.56, "rapat"],
+  ],
+};
+// Jumlah lampu status rak hi-fi yang menyala di babak fondasi (0..3). Dipakai dunia.js untuk
+// lampunya dan bunyiCerita untuk relay-nya, supaya bunyi jatuh tepat saat lampu menyala.
+export function nyalaFondasi(u) {
+  const x = jepit((u - 0.08) / 0.55);
+  return Math.min(3, Math.floor(x * x * (3 - 2 * x) * 3.999));
+}
+
+export function bunyiCerita(a, b) {
+  if (!a || !b) return [];
+  const ia = ANCHOR.findIndex((x) => x.id === a.id);
+  const ib = ANCHOR.findIndex((x) => x.id === b.id);
+  if (ib < ia || ib - ia > 1) return [];
+  const bunyi = [];
+  if (ib === ia + 1) {
+    if (BUNYI_MASUK[b.id]) bunyi.push(BUNYI_MASUK[b.id]);
+    return bunyi;
+  }
+  if (!(b.u > a.u) || b.u - a.u > 0.6) return bunyi;
+  for (const [x, nama] of BUNYI_TITIK[b.id] ?? []) if (a.u < x && b.u >= x) bunyi.push(nama);
+  if (b.id === "fondasi") for (let i = nyalaFondasi(a.u); i < nyalaFondasi(b.u); i++) bunyi.push("relay");
+  return bunyi;
 }

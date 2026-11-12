@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
-import { ANCHOR, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
+import { ANCHOR, anchorTegak, nyalaFondasi, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
+import { buatPropsCerita } from "./props";
 
 // Dunia toko kaset (ADR 0014): satu ruangan di belakang seluruh beranda. Ruang dari primitif plus
 // tekstur Flow, perabot CC0 Poly Haven (tekstur 512 px, meshopt), headphone Hunyuan3D.
@@ -20,7 +21,8 @@ export const SUASANA = {
     kabut: [5, 15],
     dinding: 0x2b2520,
     plafon: 0x1a1410,
-    ambien: 0.7,
+    // Isi bayangan rendah, supaya bayangan dari lampu tetap punya kontras (lembar look-dev).
+    ambien: 0.5,
     lampu: 0xffb46a,
     kuatLampu: 7,
     jalan: 0x6f8fd6,
@@ -58,6 +60,11 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   // AgX, bukan ACES: ACES menggeser hue warna jenuh (stiker, seni album) dan cerita v3 sudah AgX.
   renderer.toneMapping = THREE.AgXToneMapping;
+  // Bayangan dari setiap lampu gantung, lampu jalan, dan lampu kunci babak cerita. Tiap lampu
+  // memegang jadwalnya sendiri (shadow.autoUpdate = false): lampu yang diam dihitung sekali dan
+  // dicicil satu lampu per bingkai (perbaruiBayangan), lampu kunci hanya saat benda bergerak.
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFShadowMap;
   let rasio = Math.min(devicePixelRatio || 1, hp ? 1.25 : 1.5);
   renderer.setPixelRatio(rasio);
   const kanvas = renderer.domElement;
@@ -83,7 +90,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     aset.set(nama, 0);
     return new Promise((ok, gagal) =>
       pemuatTekstur.load(
-        ASET + nama,
+        nama.startsWith("/") ? nama : ASET + nama,
         (t) => {
           t.colorSpace = THREE.SRGBColorSpace;
           t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -108,6 +115,9 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
           // dengan shader lain: terukur 293 ms beku di gambar pertama. Diganti kaca transparan.
           g.scene.traverse((o) => {
             const m = o.material;
+            // Peta ARM Poly Haven: AO di kanal merah, roughness hijau, metalness biru. GLTFLoader
+            // memasangnya sebagai roughness dan metalness; AO-nya dipakai juga supaya celah gelap.
+            if (m?.roughnessMap && m.roughnessMap === m.metalnessMap && !m.aoMap) m.aoMap = m.roughnessMap;
             if (m?.transmission > 0) {
               m.transmission = 0;
               m.transparent = true;
@@ -201,6 +211,9 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   const rakCD = buatRakCD(bahan);
   scene.add(rakCD);
 
+  // Props tur cerita dibuat belakangan (muatCerita), sesudah hero tampil.
+  let props = null;
+
   // ---- Meja kasir (klien) ------------------------------------------------------------------
   kotak(2.6, 0.96, 0.62, bahan.kayu, 2, 0.48, 3.0);
   kotak(2.7, 0.05, 0.72, bahan.mejaAtas, 2, 0.985, 3.0);
@@ -254,10 +267,21 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     [3.9, yLampu, 0.2],
     [2.1, yLampu, 2.95], // tepat di atas meja kasir, supaya stiker berada di kolam cahaya
     [-3.6, yLampu, 3.15], // di atas rak sampul kiri pintu (tempat kontak)
+    [-3.95, yLampu, -0.45], // dinding kiri: meja tulis dan papan storyboard
+    [0.1, yLampu, 0.4], // gondola tengah
   ].map((p) => {
     // Jangkauan tak terbatas (decay fisik): dengan distance 7 meja kasir hampir tak tersentuh.
     const l = new THREE.PointLight(0xffffff, 1, 0, 2);
     l.position.set(...p);
+    // Di HP bayangan hanya dari lampu kunci babak dan lampu jalan: tujuh peta kubus menaikkan
+    // kompilasi shader dari 0,4 ke 1,9 detik (terukur 13 Nov 2026), terlalu berat untuk HP.
+    l.castShadow = !hp;
+    l.shadow.autoUpdate = false;
+    l.shadow.mapSize.setScalar(hp ? 256 : 512);
+    l.shadow.camera.near = 0.1;
+    l.shadow.camera.far = 7;
+    l.shadow.bias = -0.003;
+    l.shadow.normalBias = 0.03;
     scene.add(l);
     return l;
   });
@@ -268,6 +292,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   const cahayaJalan = new THREE.SpotLight(0xffffff, 1, 9, 0.9, 0.7, 1.6);
   cahayaJalan.position.set(-1.6, 1.6, 4.6);
   cahayaJalan.target.position.set(-1, 0, 0.5);
+  cahayaJalan.castShadow = true;
+  cahayaJalan.shadow.autoUpdate = false;
+  cahayaJalan.shadow.mapSize.setScalar(hp ? 512 : 1024);
+  cahayaJalan.shadow.bias = -0.0006;
   scene.add(cahayaJalan, cahayaJalan.target);
   // Lampu kecil di atas pintu (dalam toko): tanpa ini kusen dan dinding pintu tenggelam, dan
   // tempat kontak tidak punya sumber cahaya yang terlihat.
@@ -275,6 +303,44 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   lampuPintu.position.set(-1.6, 2.5, 3.75);
   scene.add(lampuPintu);
   nyala.tambahBola(lampuPintu);
+
+  // Lampu props cerita, dibuat sejak awal supaya jumlah lampu (bagian dari kunci program shader)
+  // tidak berubah saat props dimuat belakangan: lampu dinding di atas papan pre-order, dan lampu
+  // darurat babak andal yang padam sampai listrik toko mati.
+  const lampuMeja = new THREE.PointLight(0xffffff, 1, 3.5, 2);
+  lampuMeja.position.set(4.2, 2.1, -3.4);
+  lampuMeja.userData.kuat = 0.35;
+  const lampuDarurat = new THREE.PointLight(0xfff1dc, 0, 3, 2);
+  lampuDarurat.position.set(3.18, 0.25, -1.75);
+  scene.add(lampuMeja, lampuDarurat);
+
+  // Lampu kunci: satu-satunya yang membuat bayangan, dipindah ke benda babak yang aktif.
+  const kunciLampu = new THREE.SpotLight(0xffffff, 1, 7, 0.6, 0.55, 2);
+  kunciLampu.castShadow = true;
+  kunciLampu.shadow.mapSize.setScalar(hp ? 512 : 1024);
+  kunciLampu.shadow.camera.near = 0.3;
+  kunciLampu.shadow.camera.far = 6;
+  kunciLampu.shadow.bias = -0.0004;
+  kunciLampu.shadow.normalBias = 0.02;
+  kunciLampu.shadow.autoUpdate = false;
+  scene.add(kunciLampu, kunciLampu.target);
+  let faktorRedup = 1;
+  const arahkanKunci = (a) => {
+    const t = a.benda ?? a.lihat;
+    kunciLampu.target.position.set(...t);
+    // Dari atas dan sedikit dari arah kamera, seperti lampu sorot di plafon.
+    const dx = a.posisi[0] - t[0];
+    const dz = a.posisi[2] - t[2];
+    // Miring dari arah kamera dan sedikit ke samping, supaya bayangan memanjang dan terlihat.
+    const k = 1 / Math.max(0.01, Math.hypot(dx, dz));
+    kunciLampu.position.set(t[0] + dx * k * 0.8 - dz * k * 0.5, 2.75, t[2] + dz * k * 0.8 + dx * k * 0.5);
+    kunciLampu.target.updateMatrixWorld();
+    kunciLampu.shadow.needsUpdate = true;
+    // Hanya menyala di babak cerita; tempat lain sudah punya lampu gantungnya sendiri.
+    kunciLampu.userData.aktif = !!a.cerita;
+    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * (a.cerita ? faktorRedup : 0);
+  };
+  arahkanKunci(ANCHOR[0]);
 
   let paparanTema = 1;
   const terapkanTema = (nama) => {
@@ -294,6 +360,12 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       l.color.setHex(s.lampu);
       l.intensity = s.kuatLampu;
     }
+    lampuMeja.color.setHex(s.lampu);
+    lampuMeja.userData.dasar = lampuMeja.intensity = s.kuatLampu * lampuMeja.userData.kuat;
+    for (const l of lampu) l.userData.dasar = l.intensity;
+    kunciLampu.color.setHex(s.lampu);
+    kunciLampu.userData.dasar = s.kuatLampu * 1.5;
+    kunciLampu.intensity = kunciLampu.userData.aktif ? kunciLampu.userData.dasar : 0;
     lampuPintu.color.setHex(s.lampu);
     lampuPintu.intensity = s.kuatLampu * 0.8;
     cahayaJalan.color.setHex(s.jalan);
@@ -326,6 +398,13 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       uButir: { value: 0 },
       uBenih: { value: 0 },
       uAspek: { value: 1 },
+      // Kedalaman layar: ambient occlusion dari peta kedalaman, dan depth of field ke benda babak.
+      uDekat: { value: 0.05 },
+      uJauh: { value: 40 },
+      uPiksel: { value: new THREE.Vector2(1, 1) },
+      uAo: { value: hp ? 0 : 1 },
+      uFokus: { value: 2 },
+      uDof: { value: 0 },
     },
     vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }",
     // Blur kamera lewat proyeksi ulang kedalaman (GPU Gems 3 bab 27): tiap piksel diproyeksikan
@@ -342,9 +421,59 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       uniform float uButir;
       uniform float uBenih;
       uniform float uAspek;
+      uniform float uDekat;
+      uniform float uJauh;
+      uniform vec2 uPiksel;
+      uniform float uAo;
+      uniform float uFokus;
+      uniform float uDof;
       float acak(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+      float linear(float d) {
+        float z = d * 2.0 - 1.0;
+        return 2.0 * uDekat * uJauh / (uJauh + uDekat - z * (uJauh - uDekat));
+      }
       void main() {
         vec4 c = texture2D(tWarna, vUv);
+        float zKini = linear(texture2D(tDalam, vUv).x);
+        // Depth of field: lingkaran kabur sebanding jarak dari bidang fokus, diambil 12 titik
+        // berpola sudut emas. Hanya saat kamera diam di babak cerita.
+        if (uDof > 0.001 && uKuat <= 0.001) {
+          float coc = clamp(abs(zKini - uFokus) / max(zKini, 0.1) * 1.6, 0.0, 1.0) * uDof;
+          if (coc > 0.02) {
+            vec3 jumlah = c.rgb;
+            float bobot = 1.0;
+            float putar = acak(gl_FragCoord.xy) * 6.2832;
+            for (int i = 1; i < 13; i++) {
+              float fi = float(i);
+              float r = sqrt(fi / 12.0) * coc * 7.0;
+              float a = fi * 2.39996 + putar;
+              vec2 uv = vUv + vec2(cos(a), sin(a)) * r * uPiksel;
+              float zS = linear(texture2D(tDalam, uv).x);
+              // Titik yang lebih dekat dan tajam tidak dioles ke latar.
+              float w = smoothstep(0.0, 0.25, abs(zS - uFokus) / max(zS, 0.1));
+              jumlah += texture2D(tWarna, uv).rgb * w;
+              bobot += w;
+            }
+            c.rgb = jumlah / bobot;
+          }
+        }
+        // Ambient occlusion layar: delapan titik di sekitar piksel, gelap bila tetangganya lebih
+        // dekat ke kamera dalam jangkauan 30 cm. Membuat sudut, celah, dan kaki benda menyatu.
+        if (uAo > 0.5 && zKini < 15.0) {
+          float ao = 0.0;
+          float putar = acak(gl_FragCoord.xy + 7.0) * 6.2832;
+          float rad = 0.22 / zKini;
+          for (int i = 0; i < 8; i++) {
+            float fi = float(i);
+            float a = fi * 0.7854 + putar;
+            float r = rad * (0.35 + 0.65 * fract(fi * 0.618 + putar));
+            vec2 uv = vUv + vec2(cos(a) / uAspek, sin(a)) * r;
+            float zS = linear(texture2D(tDalam, uv).x);
+            float beda = zKini - zS;
+            ao += step(0.015, beda) * (1.0 - smoothstep(0.0, 0.3, beda));
+          }
+          c.rgb *= 1.0 - (ao / 8.0) * 0.55;
+        }
         if (uKuat > 0.001) {
           float d = texture2D(tDalam, vUv).x;
           vec4 p = uBalik * vec4(vUv * 2.0 - 1.0, d * 2.0 - 1.0, 1.0);
@@ -390,6 +519,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     blur.uniforms.uBalik.value.copy(vpKini).invert();
     blur.uniforms.uLalu.value.copy(vpLalu);
     blur.uniforms.uKuat.value = kuat;
+    blur.uniforms.uFokus.value = camera.position.distanceTo(lihat);
     // Butir berganti hanya saat adegan digambar ulang; diam berarti butir ikut diam.
     if (!kurangiGerak) blur.uniforms.uBenih.value = (blur.uniforms.uBenih.value + 37.13) % 1000;
     renderer.setRenderTarget(target);
@@ -431,8 +561,9 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
 
   const keAnchor = (i) => {
     if (i === indeks && !blend) return;
-    const ke = ANCHOR[i];
+    const ke = camera.aspect < 0.8 ? anchorTegak(ANCHOR[i]) : ANCHOR[i];
     indeks = i;
+    arahkanKunci(ANCHOR[i]);
     if (kurangiGerak) {
       pose = salinPose(ke);
       blend = null;
@@ -454,6 +585,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     target.setSize(pw, ph);
     camera.aspect = w / h;
     blur.uniforms.uAspek.value = w / h;
+    blur.uniforms.uPiksel.value.set(1 / pw, 1 / ph);
     // Layar tegak: bidang pandang dilebarkan supaya benda kunci tetap masuk bingkai.
     camera.zoom = w / h < 0.8 ? 0.62 : 1;
     camera.updateProjectionMatrix();
@@ -508,6 +640,25 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       geser += sisa * (1 - Math.exp(-dt / 0.18));
       bergerak = true;
     }
+    const a = ANCHOR[indeks];
+    if (a.cerita && !blend && props) {
+      const u = geser + 0.5;
+      const nyala = a.id === "fondasi" ? nyalaFondasi(u) : 0;
+      props.perbarui(a.id, u, { waktu: now / 1000, nyala });
+      // Listrik toko padam di tengah babak andal, didahului kedip singkat. Pemutar kaset, ponsel,
+      // dan lampu darurat tetap menyala.
+      const padam = a.id === "andal" && u > 0.42 && u < 0.72;
+      redup(padam ? (u < 0.45 ? 0.3 + 0.3 * Math.sin(now / 30) : 0.05) : 1);
+      if (props.berputar(a.id) && !kurangiGerak) bergerak = true;
+      kunciLampu.shadow.needsUpdate = true;
+    } else redup(1);
+    // Fokus ke benda babak hanya saat kamera sudah mendarat; selama terbang yang bekerja motion blur.
+    const dofTujuan = a.cerita && !blend && !kurangiGerak ? 1 : 0;
+    const dof = blur.uniforms.uDof;
+    if (Math.abs(dofTujuan - dof.value) > 0.01) {
+      dof.value += (dofTujuan - dof.value) * (1 - Math.exp(-dt / 0.25));
+      bergerak = true;
+    } else dof.value = dofTujuan;
     if (!bergerak && !kotor) return;
     posLalu.copy(camera.position);
     lihatLalu.copy(lihat);
@@ -519,6 +670,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     kotor = false;
   };
 
+  const redup = (f) => {
+    if (f === faktorRedup) return;
+    faktorRedup = f;
+    for (const l of [...lampu, lampuMeja]) l.intensity = (l.userData.dasar ?? l.intensity) * f;
+    kunciLampu.intensity = kunciLampu.userData.aktif ? (kunciLampu.userData.dasar ?? 0) * f : 0;
+    nyala.grup.visible = f > 0.5;
+    kotor = true;
+  };
+
   // ---- Muat dan pemanasan ------------------------------------------------------------------
   const muat = async () => {
     const [kayu, busa, beton, betonKasar, kursi, lampuGantung, kaset, hp] = await Promise.all([
@@ -528,6 +688,17 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       tekstur("beton-kasar.webp", [3, 2.4]),
       ...MODEL.map(model),
     ]);
+    // Dinding plester (Poly Haven CC0): warna dinding tetap dari suasana, teksturnya memberi
+    // serat dan pantulan yang tidak rata.
+    const [plester, plesterNormal, plesterKasar] = await Promise.all([
+      tekstur("bahan/plester-warna.webp", [3, 1]),
+      tekstur("bahan/plester-normal.webp", [3, 1]),
+      tekstur("bahan/plester-kasar.webp", [3, 1]),
+    ]);
+    plesterNormal.colorSpace = plesterKasar.colorSpace = THREE.NoColorSpace;
+    Object.assign(bahan.dinding, { map: plester, normalMap: plesterNormal, roughnessMap: plesterKasar, roughness: 1 });
+    bahan.dinding.normalScale.setScalar(0.7);
+    bahan.dinding.needsUpdate = true;
     // Peta roughness adalah data, bukan warna: dibaca tanpa konversi sRGB.
     betonKasar.colorSpace = THREE.NoColorSpace;
     bahan.lantai.map = beton;
@@ -567,6 +738,92 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     hp.position.set(-pusat.x, 0.2 - pusat.y, -pusat.z);
     headphone.add(hp);
     taruh(kaset, 1.35, 1.01, 3.0, -0.6, 1.4);
+    taruh(kaset, 3.47, 0.44, -1.68, 0.5, 1.4);
+    modelHeadphone = hp;
+    // Ruangan menerima bayangan lampu kunci; yang membuatnya hanya props cerita.
+    tandaiBayangan(scene);
+    kotor = true;
+  };
+
+  let modelHeadphone = null;
+
+  // Semua benda menerima bayangan; yang membuat bayangan adalah benda, bukan bidang ruangan.
+  const bidangRuang = new Set([bahan.dinding, bahan.plafon, bahan.lantai]);
+  const tandaiBayangan = (akar) =>
+    akar.traverse((o) => {
+      if (!o.isMesh) return;
+      const m = o.material;
+      if (m?.isMeshBasicMaterial || m?.transparent || m?.isSpriteMaterial) return;
+      o.receiveShadow = true;
+      o.castShadow = !bidangRuang.has(m);
+    });
+  // Peta bayangan lampu yang diam dihitung satu lampu per bingkai: enam sisi kubus per lampu
+  // titik sekaligus untuk tujuh lampu terlalu panjang untuk satu bingkai.
+  const lampuBerbayang = () => [...lampu, cahayaJalan, kunciLampu];
+  const perbaruiBayangan = async () => {
+    for (const l of lampuBerbayang()) {
+      l.shadow.needsUpdate = true;
+      // Seluruh adegan ke 1 piksel: peta bayangan dihitung dari semua benda, layarnya tidak berubah.
+      target.scissor.set(0, 0, 1, 1);
+      target.scissorTest = true;
+      renderer.setRenderTarget(target);
+      renderer.render(scene, camera);
+      renderer.setRenderTarget(null);
+      target.scissorTest = false;
+      await bingkaiBerikut();
+    }
+  };
+
+  // Gambar latihan sekelompok benda ke render target 1 piksel. Benda lain disembunyikan hanya
+  // di dalam panggilan ini, jadi bingkai biasa tidak pernah melihat adegan yang setengah.
+  const latih = (kelompok) => {
+    const sembunyi = [];
+    scene.traverse((o) => o.isMesh && o.visible && !kelompok.includes(o) && (sembunyi.push(o), (o.visible = false)));
+    target.scissor.set(0, 0, 1, 1);
+    target.scissorTest = true;
+    renderer.setRenderTarget(target);
+    renderer.render(scene, camera);
+    renderer.setRenderTarget(null);
+    target.scissorTest = false;
+    for (const o of sembunyi) o.visible = true;
+  };
+
+  // Props cerita sesudah dunia siap: dimuat, dikompilasi, teksturnya diunggah satu per bingkai,
+  // lalu digambar latihan per tiga benda, baru tampil. Sama dengan siapkan(), tapi tanpa loader.
+  const muatCerita = async () => {
+    if (props) return;
+    const calon = buatPropsCerita({ bahan, tekstur, tambahBayang: bayang, lampuMeja, lampuDarurat });
+    const daftar = calon.modelDibutuhkan;
+    const [hasil] = await Promise.all([Promise.all(daftar.map(model)), calon.tunggu()]);
+    calon.pasangModel({ ...Object.fromEntries(daftar.map((n, i) => [n, hasil[i]])), headphone: modelHeadphone });
+    tandaiBayangan(calon.grup);
+    calon.grup.visible = false;
+    scene.add(calon.grup);
+    renderer.setRenderTarget(target);
+    try {
+      await renderer.compileAsync(calon.grup, camera, scene);
+    } catch {}
+    renderer.setRenderTarget(null);
+    const tx = new Set();
+    calon.grup.traverse((o) =>
+      [].concat(o.material ?? []).forEach((m) => {
+        for (const k of ["map", "normalMap", "roughnessMap", "metalnessMap", "aoMap"]) if (m[k]) tx.add(m[k]);
+        for (const u of Object.values(m.uniforms ?? {})) if (u.value?.isTexture) tx.add(u.value);
+      }),
+    );
+    for (const t of tx) {
+      if (t.image) renderer.initTexture(t);
+      await bingkaiBerikut();
+    }
+    calon.grup.visible = true;
+    const benda = [];
+    calon.grup.traverse((o) => o.isMesh && benda.push(o));
+    for (let i = 0; i < benda.length; i += 3) {
+      latih(benda.slice(i, i + 3));
+      await bingkaiBerikut();
+    }
+    props = calon;
+    await perbaruiBayangan();
     kotor = true;
   };
 
@@ -616,6 +873,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     }
     for (const o of benda) o.visible = true;
     target.scissorTest = false;
+    await perbaruiBayangan();
+    performance.mark("dunia:bayangan");
     gambar(0);
     await bingkaiBerikut();
     hangat = true;
@@ -629,6 +888,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     kanvas,
     muat,
     siapkan,
+    muatCerita,
     keAnchor,
     get indeks() {
       return indeks;
@@ -788,6 +1048,11 @@ function buatRakCD(b) {
       // Celah sesekali, seperti rak toko yang tidak pernah penuh rapat.
       if (acak() < 0.02) {
         z += 0.05 + acak() * 0.08;
+        continue;
+      }
+      // Celah untuk tiga kotak CD yang masuk di akhir cerita (props.js, babak rilis).
+      if (y === 1.52 && z > -0.37 && z < -0.29) {
+        z = -0.29;
         continue;
       }
       if (Math.abs(z - (z0 + z1) / 2) < 0.03) {

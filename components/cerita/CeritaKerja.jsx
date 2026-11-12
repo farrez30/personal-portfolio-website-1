@@ -1,6 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { scroll } from "motion";
 import { gsap } from "gsap";
@@ -11,23 +10,24 @@ import { Link } from "@/i18n/navigation";
 import { BAB } from "@/content/cerita";
 import { cariProyek } from "@/content/proyek";
 import { useMode } from "@/components/mode/ModeProvider";
-import { BABAK } from "./naskah";
 import "./cerita.css";
 
-const PanggungCerita = dynamic(() => import("./PanggungCerita"), { ssr: false });
+// Tinggi tiap blok dalam layar (Imersif): cukup lama untuk momen benda di dunia toko
+// (components/dunia/props.js). Babak rilis paling panjang: kotak CD masuk satu per satu.
+const BOBOT = { pembuka: 0.9, ide: 1.2, rencana: 1, bentuk: 1.4, fondasi: 1.2, bangun: 1.2, progres: 1.2, rapi: 1, andal: 1.2, aman: 1.2, rilis: 2.4 };
 
-// Cerita gulir di antara hero dan rak (ADR 0011, v3 di ADR 0013 dan desain/cerita-v3).
-// Imersif: soundstage 3D di panggung yang menempel di belakang bab; tiap bab setinggi bobotnya
-// di naskah.js dan teksnya menempel di kiri (atau di bawah pada HP).
-// Ringan: styleframe tiap bab sebagai gambar yang bergerak pelan mengikuti --p, tanpa kanvas.
-// Gerak dikurangi: teks dan gambar dalam keadaan akhir, tanpa gulir halus atau 3D.
+
+// Cerita gulir di antara hero dan rak (ADR 0011, v4 di ADR 0016 dan desain/cerita-v4).
+// Imersif: kamera dunia toko (components/dunia) berhenti di satu benda per bab; tiap bab setinggi
+// BOBOT dan teksnya menempel di kiri (atau di bawah pada HP).
+// Ringan: render benda yang sama dari dunia 3D sebagai gambar yang bergerak pelan mengikuti --p.
+// Gerak dikurangi: teks dan gambar dalam keadaan akhir, tanpa gulir halus.
 export default function CeritaKerja() {
   const t = useTranslations("cerita");
   const locale = useLocale();
   const { mode } = useMode();
   const akar = useRef(null);
   const [dunia, setDunia] = useState(false);
-  const tanpaDunia = useCallback(() => setDunia(false), []);
   const [tampil, setTampil] = useState(false);
   const [aktif, setAktif] = useState(-1);
 
@@ -190,8 +190,6 @@ export default function CeritaKerja() {
         </a>
       </div>
 
-      {dunia && <PanggungCerita akar={akar} onGagal={tanpaDunia} />}
-
       <nav className={`cerita-rel ${tampil && aktif >= 0 ? "is-tampil" : ""}`} aria-label={t("rel")}>
         <ol>
           {BAB.map((b, i) => (
@@ -211,21 +209,20 @@ export default function CeritaKerja() {
       </nav>
 
       {dunia && (
-        <div className="cerita-pembuka" data-babak="pembuka" style={{ "--bobot": BABAK[0].bobot }} aria-hidden="true">
+        <div className="cerita-pembuka" data-babak="pembuka" style={{ "--bobot": BOBOT.pembuka }} aria-hidden="true">
           <p className="wadah cerita-pembuka__judul">{t("judul")}</p>
         </div>
       )}
 
       <ol className="cerita-kerja__daftar">
         {BAB.map((b, i) => {
-          const babak = BABAK[i + 1];
           return (
             <li
               key={b.id}
               className={`bab bab--${b.id}`}
               aria-labelledby={`bab-${b.id}`}
               data-babak={b.id}
-              style={dunia ? { "--bobot": babak.bobot } : undefined}
+              style={dunia ? { "--bobot": BOBOT[b.id] } : undefined}
             >
               <div className="wadah bab__isi">
                 <div className="bab__teks">
@@ -250,13 +247,21 @@ export default function CeritaKerja() {
                     </ul>
                   )}
 
-                  {b.bukti && (
+                  {(b.bukti || b.luar) && (
                     <p className="bab__bukti">
                       <span className="mono">{t("bukti")}:</span>{" "}
-                      {b.bukti.map((slug, j) => (
+                      {(b.bukti ?? []).map((slug, j) => (
                         <span key={slug}>
                           {j > 0 && ", "}
                           <Link href={`/proyek/${slug}`}>{cariProyek(slug)?.judul[locale] ?? slug}</Link>
+                        </span>
+                      ))}
+                      {(b.luar ?? []).map((l, j) => (
+                        <span key={l.href}>
+                          {(b.bukti?.length || j > 0) && ", "}
+                          <a href={l.href} target="_blank" rel="noopener noreferrer">
+                            {l.nama}
+                          </a>
                         </span>
                       ))}
                     </p>
@@ -270,7 +275,7 @@ export default function CeritaKerja() {
                 </div>
                 {!dunia && (
                   <figure className="bab__gambar">
-                    <img src={`/assets/cerita/${babak.ringan ?? babak.gambar}.webp`} alt="" width={1376} height={768} loading="lazy" decoding="async" />
+                    <img src={`/assets/cerita/${b.id}.webp`} alt="" width={1376} height={774} loading="lazy" decoding="async" />
                   </figure>
                 )}
               </div>

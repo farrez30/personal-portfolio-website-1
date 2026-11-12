@@ -27,3 +27,13 @@ risiko ini setelah melihat perbandingan dengan versi prosedural (ADR 0015). Sank
 tertulis: Tencent boleh mengakhiri lisensi (Pasal 8(b)); jalan keluarnya mengganti berkas ini
 dengan headphone prosedural (commit 718117d) atau memblokir wilayah lewat header negara Vercel.
 Sumber: https://raw.githubusercontent.com/Tencent/Hunyuan3D-2/main/LICENSE.
+
+## Props cerita v4 (13 Nov 2026)
+
+| Berkas | Asal | Lisensi | Pengolahan |
+|---|---|---|---|
+| `classic_laptop.glb`, `clipboard.glb`, `power_box_01.glb`, `wooden_stool_01.glb` | Poly Haven, glTF 1k (karya Arrangemonk; ProgrammerOnCoffee; Rico Cilliers dan Yann Kervran; Rico Cilliers) | CC0 | Tekstur diperkecil ke 512 px (JPEG q4, ffmpeg), lalu `@gltf-transform/cli@4.1.0 optimize --compress meshopt --texture-compress false --simplify-ratio 0.5 --simplify-error 0.002`. Layar laptop diganti tekstur saat dimuat |
+| `bahan/wood_table_001-*.webp`, `bahan/plywood-*.webp`, `bahan/metal_plate-*.webp` | Poly Haven, tekstur 1k (warna, normal GL, roughness) | CC0 | 512 px WebP; normal dan roughness dibaca tanpa konversi warna |
+| `layar/01-meet.webp`, `layar/05-rancangan.webp`, `layar/06-*.webp`, `layar/08-jeda.webp` | Tangkapan produk asli (lihat `public/assets/cerita/PROVENANCE.md`); `05-rancangan` dari `demo/erp-software-house.mp4` detik 4 | Milik project | WebP |
+| `layar/03-format-*.webp` | Bingkai `demo/nds-etl.mp4` detik 5, `demo/pilot-iklan.mp4` detik 5, `layar/yiheecam-hp.webp`, `cerita/layar-05.webp` | Milik project | Dipotong ke rasio sampul tiap format |
+| `layar/02-kebutuhan.webp`, `layar/07-kasir-sebelum.webp`, `layar/07-kasir-sesudah.webp` | Rancangan sendiri, HTML di `desain/cerita-v4/layar-kasir/`, dirender Chrome headless. Toko dan angka contoh. Bukan buatan AI | Milik project | WebP q82 sampai q85 |

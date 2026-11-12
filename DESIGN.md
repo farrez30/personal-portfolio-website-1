@@ -50,57 +50,36 @@ nothing else.
 - `prefers-reduced-motion`: Light mode by default, headline in its final state, hologram tilt and
   dust off.
 
-## The scroll story (`components/cerita/`, ADR 0011, 0012, 0013)
+## The scroll story (`components/cerita/`, ADR 0011, 0012, 0016)
 
 Ten chapters between the hero and the rack, from an everyday complaint to a system used every
-day. The design pipeline (brief, research, styleframes, pen.dev storyboard, animatic, final copy)
-lives in `desain/cerita-v3/`.
+day. Pipeline (research, data on what business owners struggle with, previs renders, pen.dev
+storyboard v0.1 and v0.2, final copy) lives in `desain/cerita-v4/`; v3 history in `desain/cerita-v3/`.
 
-**Immersive** is one 3D soundstage (`dunia.js`) on a canvas that sticks behind the chapters. Each
-chapter has one AI styleframe (`public/assets/cerita/`) on a panel standing on a dark, half-polished
-concrete floor; the camera never cuts, it flies between panels in the dark. A film production is
-the visual frame only (idea, script, storyboard, set, shoot, edit, grade, screening, seal, release);
-chapter text never names those stages.
-- the section title sits over a high shot of the whole stage, then the camera cranes down to the desk;
-- the foundation chapter's set lights switch on one at a time;
-- the shoot chapter is handheld;
-- the polish chapter's grading monitor is split raw grey and warm by a moving red line;
-- the screening flickers once;
-- a red 3D thread on the floor grows with the story and links every station;
-- at the end three real jewel cases (`buatKotak`) slide into the rack one by one, a red velvet
-  curtain opens, and the screen fades to the rack's beige; the last chapter's text turns to ink.
+**Immersive** is a props tour inside the record-shop world: the camera stops at one object per
+chapter (`components/dunia/props.js`), each taken from record-shop vocabulary, and blends between
+them like the rest of the world. Product screens are textures on the object's own screen or paper.
+- complaint: a customer request board and a laptop showing a Meet call;
+- plan: a requirements sheet on a clipboard, stamped approved mid-chapter;
+- shape: one album in four formats (vinyl, CD, cassette, phone), each lifted in turn;
+- foundation: a hi-fi rack seen from behind, labelled cables, three status lights;
+- build: a turntable spinning a white-label test pressing beside a design monitor;
+- progress: a pre-order board (ordered, on the way, arrived, icons only), one card moving, one held
+  with a red note;
+- polish: a listening station tablet where a red line wipes a raw cashier form into a tidy one;
+- dependable: the shop's power cuts out, a battery player, a phone and an emergency lamp stay on;
+- safe: a locked rare-records case and a key board for cashier, warehouse and owner;
+- release: three real jewel-case covers slide into the rack.
 
-Panels keep the styleframes' own colours (no tone mapping), dimmed with distance; the 3D objects use
-AgX. Grain and vignette are CSS overlays.
+Chapter text names situations common to any business; project names stay in the proof links
+(tested). Text sits bottom left over a soft dark fog (bottom on phones), shows "03 / 10", and leaves
+before the next chapter's text arrives. Sound uses the rack's engine (`bunyiCerita` in
+`components/dunia/naskah.js`, tested): one-shots on entering a chapter and at its moments, only
+when scrolling forward.
 
-Look-dev (11 Nov 2026), all in `dunia.js` without new runtime dependencies:
-- panel edges fade into the dark stage (no frames), and panels away from the camera are blurred
-  through a mipmap bias, so the stage reads as one room with depth instead of photos on stands;
-- each panel is a mesh pushed forward by its depth map (Depth Anything V2 Small, local), so people
-  and desks shift against the background as the camera moves (2.5D parallax); the release panel
-  stays flat;
-- monitors in the build, progress and screening chapters show real product screens (Coderoach OS,
-  d-day, Jeda) through a per-screen homography, with occluders kept in front and the same warm
-  grade; Light mode uses the same screens baked by `scripts/layar-ringan.mjs`;
-- dust motes hang in the air (static; parallax makes them live, no extra redraws), and a hanging
-  lamp with a light shaft and floor pool marks each gap between sets;
-- the curtain has real folds that bunch as it opens, and the rack light behind it is a warm
-  gradient that spills onto the frame;
-- grain is finer and lighter, and stops while the story is off screen.
-
-Sound (same engine and mute button as the rack, `components/imersif/suara.js`): a quiet studio room
-tone while the story is on screen, the projector hum in the screening chapter, and one-shots tied
-to the story beats (`bunyiAntara` in `naskah.js`, tested): paper, typewriter and its bell, pages,
-three relay clunks as the foundation lights come on, laptop keys, a knob click, the wax seal, each
-jewel case closing into the rack, and the curtain. Only forward scrolling sounds; long jumps are
-silent. CC0 recordings from Freesound (`public/assets/suara/PROVENANCE.md`). The scene script is pure data (`naskah.js`, tested in
-`tests/naskah.test.mjs`), so scrolling back gives the same frames. Chapter text sits bottom left
-over a soft dark fog (bottom on phones), shows "03 / 10", and leaves before the next chapter's text
-arrives. If WebGL fails, the story falls back to Light.
-
-**Light** shows each chapter's styleframe as an image beside its text, pushed in slowly by `--p`,
-with the same real product screens as the immersive stage.
-**Reduced motion** shows the final states.
+**Light** shows a render of the same object from the world (`public/assets/cerita/<chapter>.webp`)
+beside its text, pushed in slowly by `--p`. **Reduced motion** shows the final states, and the
+world cuts between chapters behind a short crossfade.
 
 ## The record-shop world (`components/dunia/`, ADR 0014)
 

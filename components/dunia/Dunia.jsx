@@ -3,7 +3,8 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { useMode } from "@/components/mode/ModeProvider";
-import { anchorAktif, pemicuAnchor } from "./naskah";
+import { anchorAktif, pemicuAnchor, bunyiCerita } from "./naskah";
+import { suara } from "@/components/imersif/suara";
 import { gabungProgres, kejar, faseLoader, gambarLoader, PUDAR } from "./ular";
 import "./dunia.css";
 
@@ -109,6 +110,8 @@ function DuniaImersif() {
     };
 
     let anchorKini = -1;
+    let idle = 0;
+    let gulirLalu = null;
     let pindah = 0;
     const saatGulir = () => {
       if (!d || !titik.length) return;
@@ -129,11 +132,12 @@ function DuniaImersif() {
       }
       const awal = titik[i].y;
       const akhir = titik[i + 1]?.y ?? document.documentElement.scrollHeight;
-      d.setGeser((y + innerHeight / 2 - awal) / Math.max(1, akhir - awal) - 0.5);
-      // Panggung cerita yang menutupi layar penuh: dunia tidak perlu digambar di belakangnya.
-      const pc = document.querySelector(".panggung-cerita");
-      const r = pc?.getBoundingClientRect();
-      d.setTerlihat(!(r && r.top <= 64 && r.bottom >= innerHeight - 1 && getComputedStyle(pc).opacity === "1"));
+      const k = (y + innerHeight / 2 - awal) / Math.max(1, akhir - awal);
+      d.setGeser(k - 0.5);
+      // Bunyi momen babak cerita, mengikuti mesin suara rak (ikut tombol bisu).
+      const kini = { id: titik[i].id, u: Math.min(1, Math.max(0, k)) };
+      for (const nama of bunyiCerita(gulirLalu, kini)) suara()?.mainkan(nama);
+      gulirLalu = kini;
     };
 
     const ro = new ResizeObserver(() => {
@@ -169,6 +173,19 @@ function DuniaImersif() {
         tema.observe(akar(), { attributes: true, attributeFilter: ["data-theme"] });
         addEventListener("scroll", saatGulir, { passive: true });
         saatGulir();
+        // Props cerita dimuat sesudah hero tampil, saat peramban senggang, supaya loader tidak
+        // menunggu aset sepuluh babak (dunia.js muatCerita).
+        const muatCerita = () => {
+          if (batal) return;
+          d.muatCerita()
+            .then(() => {
+              performance.mark("dunia:cerita");
+              if (wadah.current) wadah.current.dataset.cerita = "siap";
+            })
+            .catch((e) => console.error(e));
+        };
+        if ("requestIdleCallback" in window) idle = requestIdleCallback(muatCerita, { timeout: 2500 });
+        else idle = setTimeout(muatCerita, 1200);
       } catch (e) {
         // WebGL gagal dibuat atau aset tidak termuat: halaman tetap utuh tanpa dunia.
         console.error(e);
@@ -181,6 +198,8 @@ function DuniaImersif() {
       cancelAnimationFrame(raf);
       clearTimeout(habisWaktu);
       clearTimeout(pindah);
+      if ("cancelIdleCallback" in window) cancelIdleCallback(idle);
+      clearTimeout(idle);
       removeEventListener("resize", ukurUlar);
       removeEventListener("scroll", saatGulir);
       ro.disconnect();
