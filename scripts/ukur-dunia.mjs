@@ -111,7 +111,7 @@ console.log("diam di hero 2 s:", JSON.stringify(await bingkai(2000)));
 const tempat = [
   ["02-dinding", "#cerita"],
   ["03-rak", "#rak"],
-  ["04-kasir", "#kontak"],
+  ["04-kasir", "[data-dunia=kasir]"],
 ];
 for (const [nama, sel] of tempat) {
   // Lompat ke seksi, lalu ukur bingkai selama kamera terbang. Satu tangkapan di tengah jalan

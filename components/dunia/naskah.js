@@ -37,6 +37,9 @@ export const ANCHOR = [
     posisi: [0.4, 1.8, 0.9],
     lihat: [1.9, 0.95, 3],
     fov: 42,
+    // Paparan relatif per tempat, seperti diafragma yang dibuka untuk shot yang lebih gelap
+    // (lembar look-dev: kasir dan pintu jauh dari lampu gantung). Bawaan 1.
+    paparan: 1.5,
     seksi: [
       { sel: "[data-dunia=kasir]", di: 0 },
       { sel: "#kontak", di: 0 },
@@ -48,6 +51,7 @@ export const ANCHOR = [
     posisi: [-1.3, 1.55, 1.1],
     lihat: [-1.7, 1.6, 4],
     fov: 46,
+    paparan: 1.4,
     seksi: [{ sel: "#kontak", di: 0 }],
   },
 ];
@@ -71,6 +75,7 @@ export function poseAntara(a, b, u) {
     posisi: a.posisi.map((v, i) => lerp(v, b.posisi[i], u) + (i === 1 ? naik : 0)),
     lihat: a.lihat.map((v, i) => lerp(v, b.lihat[i], u)),
     fov: lerp(a.fov, b.fov, u),
+    paparan: lerp(a.paparan ?? 1, b.paparan ?? 1, u),
   };
 }
 

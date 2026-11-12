@@ -119,3 +119,18 @@ test("blur nol saat diam, sebanding dengan kecepatan, lalu dibatasi", () => {
   assert.equal(kekuatanBlur(1000), 1);
   assert.equal(kekuatanBlur(4, true), 0, "gerak dikurangi tetap mendapat blur");
 });
+
+test("paparan per tempat: bawaan 1, dalam rentang wajar, dan ikut dihaluskan selama terbang", () => {
+  for (const a of ANCHOR) {
+    const p = a.paparan ?? 1;
+    assert.ok(p >= 1 && p <= 1.8, `${a.id} paparan ${p}`);
+  }
+  const kasir = ANCHOR.find((a) => a.id === "kasir");
+  const pintu = ANCHOR.find((a) => a.id === "pintu");
+  assert.ok(kasir.paparan > 1 && pintu.paparan > 1, "kasir dan pintu jauh dari lampu gantung");
+  const bilik = ANCHOR[0];
+  assert.equal(poseAntara(bilik, kasir, 0).paparan, 1);
+  assert.equal(poseAntara(bilik, kasir, 1).paparan, kasir.paparan);
+  const tengah = poseAntara(bilik, kasir, 0.5).paparan;
+  assert.ok(tengah > 1 && tengah < kasir.paparan);
+});

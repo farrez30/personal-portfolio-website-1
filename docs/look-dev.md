@@ -164,18 +164,20 @@ gelap. Tangkapan sebelum: `desain/look-dev/sekarang-*.webp`.
 | Bilik dengar (1440x900) | 14 | 39 | lolos | lolos | Busa, rak, headphone di kolam lampu; teks hero tetap terbaca |
 | Dinding catatan | - | 49 | lolos | lolos | |
 | Rak CD | - | 40 | lolos | lolos | Berkas cahaya terlihat di antara rak |
-| Kasir dan stiker | 6 | 15 | lolos | lolos | Meja dan stiker terang; rata-rata tertahan dinding kosong (lihat di bawah) |
-| Pintu | - | 13 | lolos | - | Lampu kecil di atas pintu, cahaya jalan biru di lantai |
+| Kasir dan stiker | 6 | 15, lalu 21 | lolos | lolos | Rak kaset di belakang meja, paparan tempat 1,5 |
+| Pintu | - | 13, lalu 25 | lolos | lolos | Lampu gantung kelima di kiri pintu, peti piringan, rak sampul, dua poster, paparan 1,4 |
 | Bilik / rak / kasir di HP 390x844 | - | 30 / 34 / 17 | lolos | lolos | |
 | Mode terang (bilik / rak / kasir) | - | 146 / 175 / 213 | lolos | lolos | Berkas dan butir diredam (`berkas 0,25`) |
 | Headphone Hunyuan | - | - | lolos | lolos | Bahan matte gelap, sesuai lembar |
 | Ular 3D | - | - | - | - | Belum dibuat |
 
-Belum mencapai target 35: **kasir dan pintu**. Benda utamanya sudah di kolam cahaya, tetapi
-setengah bingkai adalah dinding polos gelap, sedangkan di styleframe dinding itu penuh rak kaset,
-peti piringan, dan poster. Menaikkan paparan lagi membuat bilik dan dinding lewat dari 50. Yang
-kurang adalah benda, bukan setelan: rak kaset dekat pintu dan peti di bawah meja (aset-visual-web
-§7, keputusan sumber bentuk per benda).
+Kasir dan pintu masih di bawah 35. Dinding depan sekarang terisi (rak kaset di belakang meja,
+peti piringan dan rak sampul di kedua sisi pintu, dua poster tanpa tulisan, semua primitif dan
+InstancedMesh), tiap tempat punya lampu gantung, dan kamera memakai paparan per tempat
+(`paparan` di `naskah.js`, dihaluskan selama terbang). Sisa gelapnya adalah kedalaman ruangan di
+sisi bingkai (tengah toko untuk kasir, kusen kanan pintu). Paparan 1,6 sampai 1,8 sempat dicoba:
+angka naik ke 22, tetapi kabut ikut terang dan gambar pudar, jadi diturunkan lagi. Langkah
+berikutnya bila perlu: benda di tengah ruangan (rak gondola rendah), bukan paparan.
 
 Performa (dua putaran per versi, sama mesin): pembuatan dunia 36 sampai 40 ms (sebelum 44 ms);
 tugas panjang saat muat setara; perpindahan kamera tanpa tugas panjang baru. Tugas panjang 210
@@ -195,3 +197,6 @@ sudah ada sebelum lembar ini. Draw call dan FPS di HP fisik belum diukur.
   `scripts/beton.py`; angkat bayangan, vignette, dan butir di lintasan layar; paparan 1,3.
   Tekstur beton sempat dibuat di peramban dan terukur sekitar 150 ms sinkron per peta, jadi
   dipindah ke berkas.
+- 2026-11-12: dinding depan diisi (rak kaset, peti piringan, rak sampul, dua poster), lampu
+  gantung kelima di kiri pintu, paparan per tempat (kasir 1,5, pintu 1,4). Kasir 21, pintu 25.
+  `ukur-dunia.mjs` memotret kasir lewat seksi klien (`[data-dunia=kasir]`).

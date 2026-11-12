@@ -62,3 +62,19 @@ test("lembar look-dev mencatat cara mengukur nilai", () => {
   assert.match(lembar, /--tanpa-teks/);
   assert.match(baca("scripts/ukur-dunia.mjs"), /const tanpaTeks = arg\.includes\("--tanpa-teks"\);/);
 });
+
+test("dinding depan terisi benda, isinya InstancedMesh tanpa tekstur", () => {
+  const depan = kode.slice(kode.indexOf("function buatDindingDepan"), kode.indexOf("function teksturPoster"));
+  assert.match(kode, /scene\.add\(buatDindingDepan\(bahan\)\);/);
+  // Rak kaset, peti piringan, dan rak sampul: tiga isi instance, bukan ratusan mesh.
+  assert.equal((depan.match(/isi\(new THREE\.BoxGeometry/g) ?? []).length, 3);
+  assert.match(depan, /new THREE\.InstancedMesh\(/);
+  // Poster tanpa tulisan: tidak ada fillText di teksturnya.
+  const poster = kode.slice(kode.indexOf("function teksturPoster"), kode.indexOf("function buatStiker"));
+  assert.doesNotMatch(poster, /fillText|strokeText/);
+});
+
+test("satu lampu gantung untuk tiap tempat, termasuk kiri pintu", () => {
+  const daftar = kode.slice(kode.indexOf("const lampu = ["), kode.indexOf("].map((p) => {"));
+  assert.equal((daftar.match(/yLampu/g) ?? []).length, 5);
+});

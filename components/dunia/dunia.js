@@ -210,6 +210,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   scene.add(buatStiker());
   bayang(2, 2.6, 1.5);
 
+  // Dinding depan tidak boleh kosong (lembar look-dev: kasir dan pintu terukur 15 dan 13, target
+  // 35). Rak kaset di belakang meja, peti piringan dan rak sampul di kedua sisi pintu, dua poster.
+  scene.add(buatDindingDepan(bahan));
+
   // ---- Pintu dan lonceng (kontak) ----------------------------------------------------------
   kotak(0.08, 2.2, 0.14, bahan.gelapMatte, -2.2, 1.1, 4); // kusen
   kotak(0.08, 2.2, 0.14, bahan.gelapMatte, -1.0, 1.1, 4);
@@ -249,6 +253,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     [1.7, yLampu, -3.25],
     [3.9, yLampu, 0.2],
     [2.1, yLampu, 2.95], // tepat di atas meja kasir, supaya stiker berada di kolam cahaya
+    [-3.6, yLampu, 3.15], // di atas rak sampul kiri pintu (tempat kontak)
   ].map((p) => {
     // Jangkauan tak terbatas (decay fisik): dengan distance 7 meja kasir hampir tak tersentuh.
     const l = new THREE.PointLight(0xffffff, 1, 0, 2);
@@ -271,6 +276,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   scene.add(lampuPintu);
   nyala.tambahBola(lampuPintu);
 
+  let paparanTema = 1;
   const terapkanTema = (nama) => {
     const s = SUASANA[nama] ?? SUASANA.gelap;
     scene.background = new THREE.Color(s.latar);
@@ -289,7 +295,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       l.intensity = s.kuatLampu;
     }
     lampuPintu.color.setHex(s.lampu);
-    lampuPintu.intensity = s.kuatLampu * 0.35;
+    lampuPintu.intensity = s.kuatLampu * 0.8;
     cahayaJalan.color.setHex(s.jalan);
     cahayaJalan.intensity = s.kuatJalan;
     bahan.jalan.map?.dispose();
@@ -298,7 +304,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     bahan.jalan.needsUpdate = true;
     tumpahJalan.material.color.setHex(s.jalan);
     tumpahJalan.material.opacity = 0.5 * s.berkas;
-    renderer.toneMappingExposure = s.paparan;
+    paparanTema = s.paparan;
+    renderer.toneMappingExposure = paparanTema * pose.paparan;
     kotor = true;
   };
 
@@ -393,7 +400,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   };
 
   // ---- Kamera ------------------------------------------------------------------------------
-  const salinPose = (p) => ({ posisi: [...p.posisi], lihat: [...p.lihat], fov: p.fov });
+  const salinPose = (p) => ({ posisi: [...p.posisi], lihat: [...p.lihat], fov: p.fov, paparan: p.paparan ?? 1 });
   let pose = salinPose(ANCHOR[0]);
   let blend = null; // { dari, ke, t0, dur }
   let indeks = 0;
@@ -415,6 +422,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     camera.position.add(samping).add(maju);
     lihat.add(samping);
     camera.lookAt(lihat);
+    renderer.toneMappingExposure = paparanTema * pose.paparan;
     if (camera.fov !== pose.fov) {
       camera.fov = pose.fov;
       camera.updateProjectionMatrix();
@@ -798,6 +806,128 @@ function buatRakCD(b) {
   cd.count = n;
   g.add(cd);
   return g;
+}
+
+// Benda di dinding depan (z = 4): semua dari primitif, isinya InstancedMesh supaya ratusan
+// kaset dan sampul tetap beberapa draw call. Satu warna instance per benda, tanpa tekstur.
+function buatDindingDepan(b) {
+  const g = new THREE.Group();
+  const acak = mulberry(47);
+  const papan = (w, h, d, x, y, z) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), b.kayu);
+    m.position.set(x, y, z);
+    g.add(m);
+  };
+  const isi = (geo, warna, posisi) => {
+    const im = new THREE.InstancedMesh(geo, new THREE.MeshStandardMaterial({ roughness: 0.42, metalness: 0.02 }), posisi.length);
+    const m = new THREE.Matrix4();
+    const q = new THREE.Quaternion();
+    const e = new THREE.Euler();
+    posisi.forEach(([x, y, z, rz = 0, rx = 0], i) => {
+      e.set(rx, 0, rz);
+      q.setFromEuler(e);
+      m.compose(new THREE.Vector3(x, y, z), q, new THREE.Vector3(1, 1, 1));
+      im.setMatrixAt(i, m);
+      im.setColorAt(i, warna[Math.floor(acak() * warna.length)]);
+    });
+    g.add(im);
+  };
+  const tinta = (daftar) => daftar.map((w) => new THREE.Color(w));
+
+  // Rak kaset di belakang meja kasir: 5 papan, kaset berdiri dengan punggung menghadap ruangan.
+  const x0 = 0.6;
+  const x1 = 4.4;
+  const zr = 3.86;
+  for (const y of [1.2, 1.5, 1.8, 2.1, 2.4]) papan(x1 - x0, 0.025, 0.16, (x0 + x1) / 2, y, zr);
+  for (const x of [x0, (x0 + x1) / 2, x1]) papan(0.03, 1.34, 0.16, x, 1.86, zr);
+  const kaset = [];
+  for (const y of [1.2, 1.5, 1.8, 2.1]) {
+    let x = x0 + 0.03;
+    while (x < x1 - 0.03) {
+      if (acak() < 0.03) x += 0.06 + acak() * 0.1;
+      else if (Math.abs(x - (x0 + x1) / 2) < 0.03) x += 0.04;
+      else {
+        kaset.push([x, y + 0.0675, zr + 0.01 + (acak() - 0.5) * 0.01, (acak() - 0.5) * 0.04]);
+        x += 0.0175;
+      }
+    }
+  }
+  isi(new THREE.BoxGeometry(0.017, 0.11, 0.07), tinta(["#e9e1d3", "#2b2a2e", "#c9443a", "#d9a441", "#3f6fa8", "#4d8a5c", "#8a8378", "#c7c2b8"]), kaset);
+
+  // Peti piringan di kanan pintu: kotak kayu terbuka di atas kaki pendek, sampul condong ke belakang.
+  const petiX = -0.15;
+  const petiZ = 3.55;
+  papan(0.82, 0.02, 0.38, petiX, 0.55, petiZ);
+  papan(0.82, 0.3, 0.02, petiX, 0.7, petiZ - 0.18);
+  papan(0.82, 0.3, 0.02, petiX, 0.7, petiZ + 0.18);
+  papan(0.02, 0.3, 0.38, petiX - 0.4, 0.7, petiZ);
+  papan(0.02, 0.3, 0.38, petiX + 0.4, 0.7, petiZ);
+  for (const dx of [-0.36, 0.36]) for (const dz of [-0.15, 0.15]) papan(0.04, 0.55, 0.04, petiX + dx, 0.275, petiZ + dz);
+  const piringan = [];
+  for (let i = 0; i < 46; i++) piringan.push([petiX - 0.37 + i * 0.016, 0.72, petiZ, -0.18 - acak() * 0.08]);
+  isi(new THREE.BoxGeometry(0.004, 0.31, 0.31), tinta(["#e05a4a", "#efe6d4", "#2b2a2e", "#3f6fa8", "#d9a441", "#8a5a9e", "#4d8a5c", "#c46b3a"]), piringan);
+
+  // Rak sampul piringan di kiri pintu: lemari rendah dua tingkat, sampul berdiri rapat.
+  const rx0 = -4.8;
+  const rx1 = -2.45;
+  const zs = 3.78;
+  for (const y of [0.02, 0.48, 0.94]) papan(rx1 - rx0, 0.03, 0.36, (rx0 + rx1) / 2, y, zs);
+  for (const x of [rx0, (rx0 + rx1) / 2, rx1]) papan(0.03, 0.95, 0.36, x, 0.475, zs);
+  const sampul = [];
+  for (const y of [0.035, 0.495])
+    for (let x = rx0 + 0.04; x < rx1 - 0.04; x += 0.0065) {
+      if (Math.abs(x - (rx0 + rx1) / 2) < 0.03 || acak() < 0.015) continue;
+      sampul.push([x, y + 0.155, zs + (acak() - 0.5) * 0.02, (acak() - 0.5) * 0.03]);
+    }
+  isi(new THREE.BoxGeometry(0.0045, 0.31, 0.31), tinta(["#efe6d4", "#2b2a2e", "#e05a4a", "#d9a441", "#3f6fa8", "#6b645a", "#c7c2b8"]), sampul);
+
+  // Dua poster tanpa tulisan: komposisi bidang seperti poster konser lama, sudut ditempel selotip.
+  for (const [x, y, w, h, benih] of [
+    [0.05, 1.95, 0.5, 0.7, 3],
+    [-3.6, 1.75, 0.62, 0.86, 9],
+  ]) {
+    const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: teksturPoster(benih), roughness: 0.9 }));
+    m.position.set(x, y, 3.985);
+    m.rotation.set(0, Math.PI, (mulberry(benih)() - 0.5) * 0.04);
+    g.add(m);
+  }
+  return g;
+}
+
+function teksturPoster(benih) {
+  const kv = document.createElement("canvas");
+  kv.width = 256;
+  kv.height = 352;
+  const c = kv.getContext("2d");
+  const acak = mulberry(benih);
+  const palet = ["#e05a4a", "#d9a441", "#3f6fa8", "#2b2a2e", "#4d8a5c"];
+  c.fillStyle = "#e7dcc6";
+  c.fillRect(0, 0, 256, 352);
+  c.fillStyle = palet[benih % palet.length];
+  c.fillRect(18, 18, 220, 230);
+  for (let i = 0; i < 4; i++) {
+    c.fillStyle = palet[Math.floor(acak() * palet.length)];
+    c.beginPath();
+    c.arc(40 + acak() * 176, 50 + acak() * 170, 18 + acak() * 50, 0, Math.PI * 2);
+    c.fill();
+  }
+  // Baris-baris abu di bawah gambar meniru susunan huruf tanpa menulis apa pun.
+  c.fillStyle = "#2b2a2e";
+  c.fillRect(18, 266, 150, 16);
+  c.fillStyle = "#8a8378";
+  for (let i = 0; i < 3; i++) c.fillRect(18, 294 + i * 14, 120 + acak() * 90, 6);
+  c.fillStyle = "rgba(240,232,210,0.75)";
+  for (const [x, y] of [
+    [0, 0],
+    [216, 0],
+    [0, 324],
+    [216, 324],
+  ])
+    c.fillRect(x, y, 40, 28);
+  const t = new THREE.CanvasTexture(kv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 4;
+  return t;
 }
 
 // Stiker label di meja kasir: cakram kecil berwarna, satu InstancedMesh.
