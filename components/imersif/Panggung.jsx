@@ -123,7 +123,22 @@ export default function Panggung({ gulir }) {
   useEffect(() => {
     let batal = false;
     let a = null;
-    document.fonts.ready.then(() => {
+    // Rak baru dibuat saat sudah dekat layar (atau langsung bila tautan menunjuk rak), supaya
+    // pengunjung yang masih di hero tidak menanggung renderer, tekstur, dan shadernya.
+    let hentiDekat = () => {};
+    const dekat = new Promise((ok) => {
+      const io = new IntersectionObserver(
+        ([e]) => {
+          if (!e.isIntersecting) return;
+          io.disconnect();
+          ok();
+        },
+        { rootMargin: "150% 0px" },
+      );
+      io.observe(wadah.current);
+      hentiDekat = () => io.disconnect();
+    });
+    Promise.all([dekat, document.fonts.ready]).then(async () => {
       if (batal) return;
       const sfx = suara();
       a = buatAdegan(wadah.current, {
@@ -133,6 +148,7 @@ export default function Panggung({ gulir }) {
         onUbah: setS,
         gulirHalaman: true,
         latensiSuara: () => sfx?.latensi ?? 0,
+        kabut: warnaKabut(),
       });
       a.on("klikKotak", (slug) => a.buka(slug));
       a.on("klikCakram", () => (a.keadaan === "putar" ? a.keluarkan() : a.dengarkan()));
@@ -154,11 +170,15 @@ export default function Panggung({ gulir }) {
       // Selama ganti album, posisi gulir halaman ikut indeks baru tanpa menggeser rak lagi.
       a.on("indeks", (i) => keIndeksGulir(i, false));
       adegan.current = a;
+      // Cincin memuat tetap tampil sampai shader dan tekstur rak dipanaskan.
+      await a.siapkan();
+      if (batal) return;
       bacaHash(a, false, keIndeksGulir);
       setSiap(true);
     });
     return () => {
       batal = true;
+      hentiDekat();
       // Lup motor dan dengung berhenti saat rak dilepas (misalnya pindah ke mode Ringan).
       suara()?.motor(0);
       suara()?.proyektor(0);
@@ -425,4 +445,13 @@ function bacaHash(a, dariLuar, keIndeksGulir) {
     if (aksi === "putar") setTimeout(() => a.dengarkan(), 1200);
     if (aksi === "buklet") setTimeout(() => a.bukaBuklet(), 1200);
   }
+}
+
+// Rak di dalam dunia toko kaset (data-dunia di <html>) berkabut warna latar ruangan,
+// bukan krem, supaya CD di kejauhan tidak memudar ke warna yang tidak ada di toko.
+function warnaKabut() {
+  const html = document.documentElement;
+  const dunia = html.dataset.dunia;
+  if (!dunia || dunia === "gagal") return undefined;
+  return html.dataset.theme === "light" ? 0xe6dccd : 0x0f0d0b;
 }

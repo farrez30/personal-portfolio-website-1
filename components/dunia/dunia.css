@@ -1,0 +1,135 @@
+/* Dunia toko kaset (ADR 0014). data-dunia di <html>:
+   muat   = tirai pra-gambar (TiraiDunia), sebelum kanvas loader menggambar;
+   ular   = loader ular memuat;
+   portal = ular meliuk dan menerjang, mulutnya memperlihatkan hero;
+   siap   = dunia tampil di belakang seksi;
+   gagal  = dunia tidak jadi, halaman tampil seperti mode biasa. */
+
+html[data-dunia="muat"]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: #0d0c0b;
+}
+
+/* Selama loader tampil halaman tidak ikut tergulir. */
+html[data-dunia="muat"],
+html[data-dunia="ular"] {
+  overflow: hidden;
+}
+
+.dunia {
+  position: fixed;
+  inset: 0;
+  /* Di belakang isi halaman yang tidak diposisikan, di atas latar body (yang dilukis di akar). */
+  z-index: -1;
+  pointer-events: none;
+  transition: opacity 0.16s linear;
+}
+
+.dunia canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Selubung di sisi teks (kiri) serta tepi atas dan bawah tempat judul rak, supaya teks HTML
+   tetap terbaca di atas ruangan di kedua tema. */
+.dunia::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, color-mix(in srgb, var(--bg) 80%, transparent) 0%, transparent 24%),
+    linear-gradient(180deg, color-mix(in srgb, var(--bg) 60%, transparent) 0%, transparent 16%),
+    linear-gradient(90deg, color-mix(in srgb, var(--bg) 88%, transparent) 0%, color-mix(in srgb, var(--bg) 72%, transparent) 42%, transparent 74%);
+}
+
+@media (max-width: 47.99rem) {
+  .dunia::after {
+    background: linear-gradient(180deg, color-mix(in srgb, var(--bg) 35%, transparent) 0%, color-mix(in srgb, var(--bg) 80%, transparent) 38%, color-mix(in srgb, var(--bg) 74%, transparent) 100%);
+  }
+}
+
+/* Kontak penuh teks dan isian: ruangan diredupkan ke warna latar di meja kasir dan pintu. */
+.dunia::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--bg);
+  opacity: 0;
+  transition: opacity 0.6s linear;
+}
+
+.dunia[data-anchor="kasir"]::before,
+.dunia[data-anchor="pintu"]::before {
+  opacity: 0.5;
+}
+
+html[data-dunia="gagal"] .dunia {
+  display: none;
+}
+
+.dunia-ular {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  transition: opacity var(--pudar) linear;
+}
+
+.dunia-ular[hidden] {
+  display: none;
+}
+
+.dunia-ular__kanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.dunia-ular__persen {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: clamp(2rem, 9vh, 4.5rem);
+  margin: 0;
+  text-align: center;
+  color: #9a948b;
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-dunia="portal"] .dunia-ular__persen {
+  visibility: hidden;
+}
+
+/* Rak CD di anchor rak: latar krem diganti ruangan toko, tinta ikut tema. */
+html[data-dunia="siap"] .panggung,
+html[data-dunia="portal"] .panggung {
+  background: transparent;
+}
+
+html[data-dunia]:not([data-dunia="gagal"])[data-theme="dark"] .panggung {
+  --ruang-tinta: #ede8e0;
+  --ruang-tinta-2: #a39b8f;
+}
+
+/* Ujung cerita: di luar dunia, layar memutih ke beige rak. Di dunia toko, panggung cerita justru
+   memudar dan memperlihatkan ruangan yang sudah menunggu di anchor rak. */
+html[data-dunia]:not([data-dunia="gagal"]) .panggung-cerita {
+  opacity: calc(1 - var(--putih));
+}
+
+html[data-dunia]:not([data-dunia="gagal"]) .panggung-cerita__putih {
+  display: none;
+}
+
+/* --putih juga membalik teks bab ke tinta gelap untuk layar beige. Di toko gelap teks tetap
+   terang; hanya panggungnya yang memudar (aturan di atas). */
+html[data-dunia]:not([data-dunia="gagal"])[data-theme="dark"] .cerita-kerja--dunia :is(.bab, .cerita-rel, .cerita-pembuka) {
+  --putih: 0;
+}

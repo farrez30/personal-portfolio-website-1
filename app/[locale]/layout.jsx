@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import ThemeScript from "../ThemeScript";
+import TiraiDunia from "@/components/dunia/TiraiDunia";
 import ThemeProvider from "@/components/providers/ThemeProvider";
 import ModeProvider from "@/components/mode/ModeProvider";
 import Bilah from "@/components/bilah/Bilah";
@@ -77,6 +78,7 @@ export default async function LocaleLayout({ children, params }) {
     <html lang={locale} className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
       <body>
         <ThemeScript />
+        <TiraiDunia />
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
             <ModeProvider>

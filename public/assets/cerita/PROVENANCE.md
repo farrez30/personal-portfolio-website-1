@@ -28,3 +28,34 @@ fiktif atau demo, sama dengan klip hologram (`public/assets/demo/PROVENANCE.md`)
 `@huggingface/transformers` 4.3.2, dijalankan lokal di laptop Farrez, tanpa kuota. Diburamkan
 sigma 2, diperkecil ke 344x192, WebP q85 abu-abu. Versi Large tidak dipakai karena berlisensi
 CC-BY-NC-4.0. Panel rilis tanpa peta: kamera mendorong terlalu dekat ke tirainya.
+
+**Artefak pembeli (12 Nov 2026).** Properti bab 2 dan 3 memuat dunia pembeli, ditempel dengan
+shader yang sama (jenis "kertas": tinta dikalikan ke warna kertas) dan dipanggang untuk Ringan.
+
+| Berkas | Sumber | Catatan |
+|---|---|---|
+| kertas-02.webp | Teks `desain/cerita-v3/kertas-02.txt`, ditik ffmpeg drawtext dengan Courier New Bold, 1000x640 | Daftar kebutuhan contoh di kertas mesin tik bab 2 |
+| sketsa-03a.webp | `layar-05.webp` (Beranda Coderoach OS), edgedetect lalu negate, 560x350 | Garis pensil di layar sketsa laptop bab 3 |
+| sketsa-03b.webp | `public/assets/demo/d-day-hp.mp4` detik 3, edgedetect lalu negate, 300x600 | Garis pensil di layar sketsa ponsel bab 3 |
+| 02-naskah-layar.webp, 03-storyboard-layar.webp | styleframe + artefak di atas | Mode Ringan |
+
+**Bab 1, laptop dengan Google Meet (12 Nov 2026).**
+- `01-ide.webp` diganti versi berlaptop: edit Nano Banana 2.1 di Google Flow (project "Nov 10 - 23:54",
+  dari varian b `2a2c9306`, hasil `a4c69078`), 0 kredit, akun Google AI Pro Farrez. Prompt meminta
+  semua tetap sama dan hanya menambah satu laptop berlayar polos. Buatan AI. Asli di
+  `desain/cerita-v3/styleframe/01-ide-laptop.jpg`.
+- `layar-01.webp`: tangkapan Google Meet asli dari akun Farrez, rapat instan tanpa undangan, kamera
+  dan mikrofon mati, hanya ubin "Farrez". Kode rapat dan jam dipotong; rapat ditinggalkan sesudahnya.
+- `dalam-01-ide.webp` dibuat ulang dari gambar baru (Depth Anything V2 Small lokal, sigma 4).
+- `01-ide-layar.webp`: versi Ringan.
+
+**Bab 6 dan 7 (12 Nov 2026).**
+- `layar-06a.webp` dan `layar-06b.webp` dibuat ulang dari klip demo yang sama, lalu diredupkan
+  (`colorlevels=romax=0.66:gomax=0.68:bomax=0.74,eq=contrast=0.9`) supaya senada dengan monitor gelap
+  styleframe. Ditempel jenis "bersih": tanpa pantulan isi lama monitor.
+- `layar-07a.webp` (rapi) dan `layar-07b.webp` (buruk, sengaja ala AI slop): rancangan sendiri, HTML di
+  `desain/cerita-v3/layar-07/`, dirender Chrome headless 1480x800, diperkecil ke 740x400. Toko dan
+  nama pelanggan contoh; tidak memakai merek pihak lain. Versi rapi memakai token DESIGN.md
+  (Schibsted Grotesk, IBM Plex Mono, satu aksen merah, garis 1 px, angka tabular).
+- `layar-07-belah.webp`: separuh kiri versi rapi, separuh kanan versi buruk dipudarkan, dengan garis
+  merah, untuk mode Ringan (`07-grading-layar.webp`).

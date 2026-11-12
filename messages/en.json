@@ -212,5 +212,8 @@
     "bab": "Chapter {n} of {total}",
     "rel": "Story chapters",
     "keBab": "Go to chapter {n}: {judul}"
+  },
+  "dunia": {
+    "memuat": "Opening the shop"
   }
 }

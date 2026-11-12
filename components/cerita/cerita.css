@@ -262,6 +262,12 @@
   inset: -40% -60% -30% -40%;
   z-index: -1;
   background: radial-gradient(ellipse at 30% 60%, rgb(11 10 9 / 0.88), rgb(11 10 9 / 0.62) 50%, transparent 78%);
+  /* Gradien elips belum habis di tepi kotaknya dan meninggalkan garis tegak di panel; tepinya
+     dipudarkan dengan masker supaya kabut tidak pernah berujung tajam. */
+  mask-image:
+    linear-gradient(to right, transparent, #000 12%, #000 78%, transparent),
+    linear-gradient(to bottom, transparent, #000 12%, #000 82%, transparent);
+  mask-composite: intersect;
   opacity: calc(1 - var(--putih));
   pointer-events: none;
 }
@@ -391,6 +397,7 @@
      lebih lebar dari layar, sehingga peramban mengecilkan seluruh halaman. */
   .cerita-kerja--dunia .bab__teks::before {
     inset: 0;
+    mask-image: none;
   }
 
   .cerita-kerja--dunia .bab__keluhan li {

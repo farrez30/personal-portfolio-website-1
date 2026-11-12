@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loader ular v2</title>
+<style>
+  :root { --bg:#161514; --ink:#ede8e0; --ink2:#9a948b; --line:#3a3734; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; padding:20px 16px 48px; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  .sub { color:var(--ink2); margin:0 0 16px; font:13px ui-monospace, monospace; }
+  .kendali { display:flex; gap:12px; align-items:center; flex-wrap:wrap; position:sticky; top:0; z-index:5; background:var(--bg); padding:10px 0 14px; }
+  .kendali input { width:min(520px, 60vw); }
+  button { background:var(--ink); color:var(--bg); border:0; border-radius:6px; padding:8px 14px; font:inherit; cursor:pointer; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(420px, 1fr)); gap:24px; }
+  .kartu h2 { font-size:17px; margin:0; }
+  .kartu p { margin:4px 0 10px; color:var(--ink2); font-size:13.5px; }
+  .vp { position:relative; aspect-ratio:16/10; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#000 url(hero-bilik.webp) center/cover; }
+  .vp canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .fase { position:absolute; left:10px; bottom:8px; z-index:3; font:11px ui-monospace, monospace; color:var(--ink2); text-shadow:0 1px 2px #000; }
+  .persen { position:absolute; left:0; right:0; bottom:9%; z-index:3; text-align:center; font:12px ui-monospace, monospace; letter-spacing:.12em; color:#9a948b; }
+  @media (max-width: 460px) { .grid { grid-template-columns:1fr; } }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js" } }</script>
+</head>
+<body>
+<h1>Loader ular: dua arah</h1>
+<p class="sub">Waktu dibuat-buat supaya bisa digeser; di situs, progres memuat berasal dari aset sungguhan.</p>
+<div class="kendali">
+  <button id="putar">Jeda</button>
+  <button id="lambat">Lambat 0,25x</button>
+  <input id="waktu" type="range" min="0" max="1000" value="0">
+  <span id="angka" class="sub" style="margin:0">0.0 s</span>
+</div>
+<div class="grid">
+  <div class="kartu">
+    <h2>1. Digital lalu ular 3D</h2>
+    <p>Memuat: titik cahaya ala equalizer berputar dan memanjang. Di 100% titiknya memadat, sisik muncul dari kepala ke ekor, lalu ular 3D mengilap menerjang dan mulutnya jadi pintu ke hero.</p>
+    <div class="vp" id="vp1"><canvas id="latar1"></canvas><canvas id="gl1"></canvas><div class="persen" id="p1"></div><div class="fase" id="f1"></div></div>
+  </div>
+  <div class="kartu">
+    <h2>3. Ular cahaya semi-digital</h2>
+    <p>Dari awal sampai akhir digital: tubuhnya jejak osiloskop yang bergetar mengikuti suara, kepala dari garis cahaya. Saat menerjang, rahang cahaya membuka dan di dalamnya hero.</p>
+    <div class="vp" id="vp3"><canvas id="latar3"></canvas><div class="persen" id="p3"></div><div class="fase" id="f3"></div></div>
+  </div>
+</div>
+<script type="module">
+import * as THREE from "three";
+
+// Garis waktu contoh: memuat 0..MUAT, wujud (titik memadat jadi sisik), liuk, terkam, hero.
+const MUAT = 3.4, WUJUD = 0.7, LIUK = 1.1, TERKAM = 0.85, DUR = MUAT + WUJUD + LIUK + TERKAM + 1.6;
+const jepit = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const halus = (x) => x * x * (3 - 2 * x);
+const PUTAR = 4.2, JARI = 0.24;
+
+// Lintasan kepala (satuan sisi terpendek layar, relatif tengah), sama dengan loader yang tayang.
+function kepala(t, tSiap) {
+  const putaran = (s) => { const a = s * PUTAR; return { x: Math.cos(a) * JARI, y: Math.sin(a) * JARI, s: 1, a: a + Math.PI / 2, terkam: 0, z: 0 }; };
+  if (t <= tSiap) return putaran(t);
+  const p0 = putaran(tSiap), k = t - tSiap;
+  if (k < LIUK) {
+    const u = halus(k / LIUK);
+    const ayun = Math.sin(u * Math.PI * 4) * 0.14 * (1 - u) * u * 4;
+    return { x: p0.x * (1 - u) + ayun, y: p0.y + (0.08 - p0.y) * u, s: 1 + u * 1.2, a: 0, terkam: 0, z: u };
+  }
+  const u = jepit((k - LIUK) / TERKAM);
+  return { x: 0, y: 0.08 * (1 - u), s: 2.2 + u * u * u * 40, a: -Math.PI / 2, terkam: u, z: 1 + u };
+}
+const ukurKanvas = (c, dpr = Math.min(devicePixelRatio || 1, 2)) => {
+  const W = c.clientWidth, H = c.clientHeight;
+  if (c.width !== Math.round(W * dpr)) { c.width = Math.round(W * dpr); c.height = Math.round(H * dpr); }
+  return { W, H, dpr };
+};
+
+// Suara palsu untuk contoh: amplitudo seperti musik yang berdenyut.
+const suara = (t, i) => 0.55 + 0.45 * Math.abs(Math.sin(t * 7.3 + i * 0.7) * Math.sin(t * 2.1 + i * 0.23));
+
+// ========================== 1. Digital lalu ular 3D ==========================
+const latar1 = document.getElementById("latar1"), gl1 = document.getElementById("gl1");
+const renderer = new THREE.WebGLRenderer({ canvas: gl1, alpha: true, antialias: true });
+renderer.setClearColor(0x000000, 0);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.35;
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(40, 1.6, 0.05, 50);
+camera.position.set(0, 0, 6);
+scene.add(new THREE.HemisphereLight(0xcfe8ff, 0x1a1208, 0.5));
+const kunci = new THREE.DirectionalLight(0xfff1dc, 3.6); kunci.position.set(2, 3, 5); scene.add(kunci);
+const tepi = new THREE.DirectionalLight(0x6fe4ff, 2.2); tepi.position.set(-3, 1.5, -3); scene.add(tepi);
+
+// Sisik: peta tinggi digambar di kanvas, warna dan normal diturunkan darinya.
+function teksturSisik() {
+  const W = 512, H = 256;
+  const tinggi = document.createElement("canvas"); tinggi.width = W; tinggi.height = H;
+  const t = tinggi.getContext("2d");
+  t.fillStyle = "#000"; t.fillRect(0, 0, W, H);
+  const kolom = 16, baris = 8, sw = W / kolom, sh = H / baris;
+  for (let r = -1; r <= baris; r++) for (let c = -1; c <= kolom; c++) {
+    const x = (c + (r % 2 ? 0.5 : 0)) * sw, y = r * sh;
+    const g = t.createRadialGradient(x, y + sh * 0.25, 0, x, y + sh * 0.25, sw * 0.75);
+    g.addColorStop(0, "#fff"); g.addColorStop(0.7, "#777"); g.addColorStop(1, "#000");
+    t.fillStyle = g;
+    t.beginPath(); t.moveTo(x, y - sh * 0.55); t.lineTo(x + sw * 0.55, y + sh * 0.2); t.lineTo(x, y + sh * 0.95); t.lineTo(x - sw * 0.55, y + sh * 0.2); t.closePath(); t.fill();
+  }
+  const ht = t.getImageData(0, 0, W, H).data;
+  const warna = document.createElement("canvas"); warna.width = W; warna.height = H;
+  const w = warna.getContext("2d");
+  // Pola punggung ala sanca: dasar zaitun gelap, belah ketupat cokelat bertepi hitam, perut krem.
+  const dasar = w.createLinearGradient(0, 0, 0, H);
+  dasar.addColorStop(0, "#d8c9a0"); dasar.addColorStop(0.18, "#5d5a2e"); dasar.addColorStop(0.5, "#3c3a1d"); dasar.addColorStop(0.82, "#5d5a2e"); dasar.addColorStop(1, "#d8c9a0");
+  w.fillStyle = dasar; w.fillRect(0, 0, W, H);
+  for (let i = -1; i < 9; i++) {
+    const cx = i * 64 + 32;
+    w.fillStyle = "#14110a"; w.beginPath(); w.moveTo(cx, 60); w.lineTo(cx + 34, 128); w.lineTo(cx, 196); w.lineTo(cx - 34, 128); w.fill();
+    w.fillStyle = "#7a5a2a"; w.beginPath(); w.moveTo(cx, 72); w.lineTo(cx + 26, 128); w.lineTo(cx, 184); w.lineTo(cx - 26, 128); w.fill();
+  }
+  const img = w.getImageData(0, 0, W, H), d = img.data;
+  const nrm = new ImageData(W, H), n = nrm.data;
+  const h = (x, y) => ht[(((y + H) % H) * W + ((x + W) % W)) * 4] / 255;
+  for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+    const i = (y * W + x) * 4, v = h(x, y);
+    // Celah antarsisik lebih gelap, puncak sisik sedikit lebih terang.
+    const f = 0.55 + 0.6 * v;
+    d[i] *= f; d[i + 1] *= f; d[i + 2] *= f;
+    const dx = (h(x + 1, y) - h(x - 1, y)) * 2.2, dy = (h(x, y + 1) - h(x, y - 1)) * 2.2;
+    const l = Math.hypot(dx, dy, 1);
+    n[i] = (-dx / l * 0.5 + 0.5) * 255; n[i + 1] = (dy / l * 0.5 + 0.5) * 255; n[i + 2] = (1 / l * 0.5 + 0.5) * 255; n[i + 3] = 255;
+  }
+  w.putImageData(img, 0, 0);
+  const nk = document.createElement("canvas"); nk.width = W; nk.height = H; nk.getContext("2d").putImageData(nrm, 0, 0);
+  const tw = new THREE.CanvasTexture(warna); tw.colorSpace = THREE.SRGBColorSpace;
+  const tn = new THREE.CanvasTexture(nk);
+  for (const x of [tw, tn]) { x.wrapS = x.wrapT = THREE.RepeatWrapping; x.repeat.set(6, 1); x.anisotropy = 8; }
+  return { tw, tn };
+}
+const { tw, tn } = teksturSisik();
+
+// Muncul dari kepala ke ekor: piksel di belakang batas dibuang, tepinya menyala biru seperti
+// sisa wujud digital.
+const ungkap = { value: 0 };
+const kulit = new THREE.MeshPhysicalMaterial({ map: tw, normalMap: tn, normalScale: new THREE.Vector2(1.1, 1.1), roughness: 0.38, clearcoat: 0.9, clearcoatRoughness: 0.25, sheen: 0.3 });
+kulit.onBeforeCompile = (sh) => {
+  sh.uniforms.uUngkap = ungkap;
+  sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying float vS;").replace("#include <uv_vertex>", "#include <uv_vertex>\nvS = uv.x;");
+  sh.fragmentShader = sh.fragmentShader
+    .replace("#include <common>", "#include <common>\nvarying float vS;\nuniform float uUngkap;")
+    .replace("#include <clipping_planes_fragment>", "#include <clipping_planes_fragment>\nfloat batas = 1.0 - uUngkap * 1.08;\nif (vS < batas) discard;")
+    .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(0.35, 0.9, 1.0) * 3.0 * (1.0 - smoothstep(0.0, 0.05, vS - batas));");
+};
+
+// Tubuh: tabung yang dibangun ulang tiap bingkai dari riwayat kepala, menipis ke ekor.
+const RUAS = 140, KELILING = 18;
+const geo = new THREE.BufferGeometry();
+const pos = new Float32Array(RUAS * KELILING * 3), nor = new Float32Array(RUAS * KELILING * 3), uvs = new Float32Array(RUAS * KELILING * 2), idx = [];
+for (let i = 0; i < RUAS; i++) for (let j = 0; j < KELILING; j++) {
+  uvs[(i * KELILING + j) * 2] = i / (RUAS - 1);
+  uvs[(i * KELILING + j) * 2 + 1] = j / (KELILING - 1);
+  if (i < RUAS - 1 && j < KELILING - 1) { const a = i * KELILING + j; idx.push(a, a + KELILING, a + 1, a + 1, a + KELILING, a + KELILING + 1); }
+}
+geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+geo.setAttribute("normal", new THREE.BufferAttribute(nor, 3));
+geo.setAttribute("uv", new THREE.BufferAttribute(uvs, 2));
+geo.setIndex(idx);
+const tubuh = new THREE.Mesh(geo, kulit);
+tubuh.frustumCulled = false;
+scene.add(tubuh);
+
+// Kepala: tengkorak atas dan rahang bawah yang berengsel di belakang, mata kuning menyala.
+const kepala3 = new THREE.Group();
+const bahanKepala = kulit.clone(); bahanKepala.onBeforeCompile = () => {}; bahanKepala.vertexColors = true; bahanKepala.transparent = true;
+// Setengah bola dibentuk ulang: memanjang ke depan, pipih, dan meruncing ke moncong. Bagian
+// dalamnya sengaja tidak digambar, jadi saat rahang terbuka kita melihat menembus mulut.
+function separuhKepala(atasnya) {
+  const gk = new THREE.SphereGeometry(1, 40, 24);
+  gk.rotateX(Math.PI / 2); // sumbu kutub ke depan (+z)
+  const p = gk.attributes.position;
+  const warna = [];
+  for (let i = 0; i < p.count; i++) {
+    let x = p.getX(i), y = p.getY(i), z = p.getZ(i);
+    // Separuh lain dipipihkan jadi langit-langit (atau dasar) mulut yang rata dan merah gelap.
+    const langit = atasnya ? y < 0 : y > 0;
+    if (langit) y = 0;
+    const depan = (z + 1) / 2; // 0 belakang, 1 moncong
+    const runcing = 1 - 0.45 * depan * depan;
+    x *= 0.2 * runcing * (1 + 0.25 * Math.sin(depan * Math.PI) * (1 - depan));
+    y *= (atasnya ? 0.11 : 0.075) * runcing;
+    z = z * 0.34 + 0.3;
+    p.setXYZ(i, x, y + (langit ? (atasnya ? -0.002 : 0.002) : 0), z);
+    // Langit-langit mulut makin tembus ke arah tenggorokan: di situ pintu ke hero.
+    const tembus = langit ? halus(jepit((depan - 0.15) / 0.55)) : 1;
+    warna.push(...(langit ? [0.55, 0.12, 0.15, tembus] : [1, 1, 1, 1]));
+  }
+  gk.setAttribute("color", new THREE.Float32BufferAttribute(warna, 4));
+  gk.computeVertexNormals();
+  return new THREE.Mesh(gk, bahanKepala);
+}
+const atas = separuhKepala(true), bawah = separuhKepala(false);
+const engselA = new THREE.Group(), engselB = new THREE.Group();
+engselA.add(atas); engselB.add(bawah);
+const mataB = new THREE.MeshStandardMaterial({ color: 0x111, emissive: 0xffc23a, emissiveIntensity: 2.2 });
+for (const s of [-1, 1]) { const m = new THREE.Mesh(new THREE.SphereGeometry(0.03, 16, 8), mataB); m.position.set(s * 0.13, 0.06, 0.36); engselA.add(m); }
+const taringB = new THREE.MeshStandardMaterial({ color: 0xf3ecdf, roughness: 0.3 });
+for (const s of [-1, 1]) { const f = new THREE.Mesh(new THREE.ConeGeometry(0.018, 0.09, 10), taringB); f.rotation.x = Math.PI; f.position.set(s * 0.06, -0.03, 0.55); engselA.add(f); }
+kepala3.add(engselA, engselB);
+scene.add(kepala3);
+
+const satuan = () => 2 * camera.position.z * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.min(1, camera.aspect);
+const keDunia = (p) => { const U = satuan(); return new THREE.Vector3(p.x * U, -p.y * U, Math.min(p.z, 1.6) * 2); };
+const tmp = new THREE.Vector3(), maju = new THREE.Vector3(), samping = new THREE.Vector3(), naik = new THREE.Vector3(), atasDunia = new THREE.Vector3(0, 1, 0);
+
+function bangunTubuh(titik, R) {
+  const kurva = new THREE.CatmullRomCurve3(titik);
+  const rangka = kurva.computeFrenetFrames(RUAS - 1, false);
+  for (let i = 0; i < RUAS; i++) {
+    const s = i / (RUAS - 1);
+    kurva.getPointAt(s, tmp);
+    const r = R * (0.18 + 0.82 * halus(jepit(s * 1.6))) * (1 - 0.25 * halus(jepit((s - 0.9) / 0.1)));
+    const N = rangka.normals[i], B = rangka.binormals[i];
+    for (let j = 0; j < KELILING; j++) {
+      const a = (j / (KELILING - 1)) * Math.PI * 2;
+      const nx = Math.cos(a) * N.x + Math.sin(a) * B.x, ny = Math.cos(a) * N.y + Math.sin(a) * B.y, nz = Math.cos(a) * N.z + Math.sin(a) * B.z;
+      const k = (i * KELILING + j) * 3;
+      pos[k] = tmp.x + nx * r; pos[k + 1] = tmp.y + ny * r; pos[k + 2] = tmp.z + nz * r;
+      nor[k] = nx; nor[k + 1] = ny; nor[k + 2] = nz;
+    }
+  }
+  geo.attributes.position.needsUpdate = true;
+  geo.attributes.normal.needsUpdate = true;
+  geo.computeBoundingSphere();
+}
+
+function gambar1(t) {
+  const { W, H, dpr } = ukurKanvas(latar1);
+  renderer.setPixelRatio(dpr); renderer.setSize(W, H, false);
+  camera.aspect = W / H; camera.updateProjectionMatrix();
+  const g = latar1.getContext("2d");
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.globalCompositeOperation = "source-over"; g.globalAlpha = 1; g.clearRect(0, 0, W, H);
+  const tSiap = MUAT + WUJUD, progres = jepit(t / MUAT), U = Math.min(W, H), cx = W / 2, cy = H / 2;
+  const fase = t < MUAT ? `memuat ${Math.round(progres * 100)}%` : t < tSiap ? "wujud: titik jadi sisik" : t < tSiap + LIUK ? "meliuk" : t < tSiap + LIUK + TERKAM ? "menerjang" : "di hero";
+  document.getElementById("f1").textContent = fase;
+  document.getElementById("p1").textContent = t < MUAT ? `${Math.round(progres * 100)}%` : "";
+  const selesai = t >= tSiap + LIUK + TERKAM;
+  latar1.style.display = gl1.style.display = selesai ? "none" : "";
+  if (selesai) return;
+  g.fillStyle = "#0b0a09"; g.fillRect(0, 0, W, H);
+
+  // Titik equalizer: riwayat kepala, tiap titik tiang pendek yang naik turun mengikuti suara.
+  const n = Math.round(10 + progres * 30);
+  const wujud = jepit((t - MUAT) / WUJUD);
+  const titik2D = [];
+  for (let i = n; i >= 0; i--) { const ti = t - i * 0.03; if (ti >= 0) titik2D.push([kepala(ti, tSiap), i]); }
+  if (wujud < 1) {
+    g.globalAlpha = 1 - wujud;
+    for (const [p, i] of titik2D) {
+      const x = cx + p.x * U, y = cy + p.y * U;
+      const amp = suara(t, i) * U * 0.03 * (1 - i / (n + 1) * 0.6) * (1 - wujud);
+      const lebar = Math.max(1.5, U * 0.008);
+      g.fillStyle = i === 0 ? "#e8fbff" : `hsl(${190 - i * 1.5} 95% ${62 + (i % 3) * 6}%)`;
+      g.shadowColor = "#5ee7ff"; g.shadowBlur = 10;
+      // Saat memadat, tiang menyusut jadi titik bulat yang rapat.
+      g.beginPath(); g.roundRect(x - lebar / 2, y - amp - lebar / 2, lebar, amp * 2 + lebar, lebar / 2); g.fill();
+    }
+    g.shadowBlur = 0; g.globalAlpha = 1;
+  }
+  // Ular 3D muncul sejak wujud dimulai; sebelumnya hanya titik digital.
+  const ada = t >= MUAT;
+  tubuh.visible = kepala3.visible = ada;
+  if (ada) {
+    const hist = [];
+    for (let i = 40; i >= 0; i--) hist.push(keDunia(kepala(Math.max(0, t - i * 0.03), tSiap)));
+    const h = kepala(t, tSiap);
+    const R = 0.085 * (1 + (Math.min(h.s, 2.2) - 1) * 0.45);
+    bangunTubuh(hist, R);
+    ungkap.value = wujud;
+    // Kepala di ujung lintasan, menghadap arah gerak (saat menerjang: ke kamera).
+    const ujung = hist[hist.length - 1], sebelum = hist[hist.length - 3];
+    kepala3.position.copy(ujung);
+    maju.subVectors(ujung, sebelum).normalize();
+    if (h.terkam > 0 || maju.lengthSq() < 1e-6) maju.set(0, 0.05, 1).normalize();
+    const lihat = maju.clone().lerp(new THREE.Vector3(0, 0.05, 1), halus(jepit(h.terkam * 4))).normalize();
+    kepala3.lookAt(tmp.copy(ujung).add(lihat));
+    const skala = (R / 0.085) * 0.9 * (1 + h.terkam * h.terkam * 9);
+    kepala3.scale.setScalar(skala * jepit(wujud * 3));
+    const buka = halus(jepit((h.terkam - 0.05) / 0.5));
+    engselA.rotation.x = -buka * 1.0; engselB.rotation.x = buka * 1.15;
+    // Rahang memudar saat mulut sudah lebih besar dari layar, supaya hero tidak tertutup kepala.
+    const pudar = 1 - halus(jepit((h.terkam - 0.55) / 0.3));
+    bahanKepala.opacity = pudar; mataB.transparent = taringB.transparent = pudar < 1; mataB.opacity = taringB.opacity = pudar;
+    tubuh.visible = h.terkam < 0.22;
+    kulit.opacity = 1;
+    // Lubang mulut di layar gelap: titik tengah dan tepi rahang diproyeksikan ke layar.
+    if (buka > 0.02) {
+      kepala3.updateMatrixWorld(true);
+      const pusat = new THREE.Vector3(0, 0, 0.42).applyMatrix4(kepala3.matrixWorld).project(camera);
+      const tepiX = new THREE.Vector3(0.15, 0, 0.42).applyMatrix4(kepala3.matrixWorld).project(camera);
+      const tepiY = new THREE.Vector3(0, Math.sin(buka * 1.0) * 0.3, 0.42).applyMatrix4(kepala3.matrixWorld).project(camera);
+      const sx = (v) => (v.x * 0.5 + 0.5) * W, sy = (v) => (-v.y * 0.5 + 0.5) * H;
+      const penuh = halus(jepit((h.terkam - 0.5) / 0.4)) * Math.hypot(W, H);
+      const rx = Math.max(Math.abs(sx(tepiX) - sx(pusat)) * 0.8, penuh), ry = Math.max(Math.abs(sy(tepiY) - sy(pusat)) * 0.8, penuh);
+      kepala3.visible = h.terkam < 0.92;
+      g.globalCompositeOperation = "destination-out";
+      g.beginPath(); g.ellipse(sx(pusat), sy(pusat), Math.max(1, rx), Math.max(1, ry), 0, 0, Math.PI * 2); g.fill();
+      g.globalCompositeOperation = "source-over";
+    }
+  }
+  renderer.render(scene, camera);
+}
+
+// ========================== 3. Ular cahaya semi-digital ==========================
+const latar3 = document.getElementById("latar3");
+function gambar3(t) {
+  const { W, H, dpr } = ukurKanvas(latar3);
+  const g = latar3.getContext("2d");
+  g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  g.globalCompositeOperation = "source-over"; g.globalAlpha = 1; g.shadowBlur = 0; g.clearRect(0, 0, W, H);
+  const tSiap = MUAT + WUJUD, progres = jepit(t / MUAT), U = Math.min(W, H), cx = W / 2, cy = H / 2;
+  // Di arah ini tidak ada fase wujud: jeda di 100% hanya membuat ular berputar sekali lagi.
+  const fase = t < MUAT ? `memuat ${Math.round(progres * 100)}%` : t < tSiap ? "100%" : t < tSiap + LIUK ? "meliuk" : t < tSiap + LIUK + TERKAM ? "menerjang" : "di hero";
+  document.getElementById("f3").textContent = fase;
+  document.getElementById("p3").textContent = t < MUAT ? `${Math.round(progres * 100)}%` : "";
+  const selesai = t >= tSiap + LIUK + TERKAM;
+  latar3.style.display = selesai ? "none" : "";
+  if (selesai) return;
+  g.fillStyle = "#07080b"; g.fillRect(0, 0, W, H);
+  const h = kepala(t, tSiap);
+  const n = Math.round(14 + jepit(t / MUAT) * 40);
+  const jejak = [];
+  for (let i = n; i >= 0; i--) { const ti = t - i * 0.022; if (ti >= 0) jejak.push(kepala(ti, tSiap)); }
+  // Tubuh: jejak osiloskop. Garis ditarik melalui riwayat kepala dengan getaran tegak lurus arah
+  // gerak, yang besarnya mengikuti suara.
+  g.globalAlpha = 1 - h.terkam;
+  const garis = (lebar, warna, blur, amp) => {
+    g.lineWidth = lebar; g.strokeStyle = warna; g.shadowColor = warna; g.shadowBlur = blur; g.lineJoin = g.lineCap = "round";
+    g.beginPath();
+    for (let i = 1; i < jejak.length; i++) {
+      const a = jejak[i - 1], b = jejak[i];
+      const dx = b.x - a.x, dy = b.y - a.y, l = Math.hypot(dx, dy) || 1;
+      const k = i / jejak.length;
+      const getar = Math.sin(i * 1.7 - t * 26) * suara(t, i) * amp * U * k * b.s;
+      const x = cx + b.x * U + (-dy / l) * getar, y = cy + b.y * U + (dx / l) * getar;
+      i === 1 ? g.moveTo(x, y) : g.lineTo(x, y);
+    }
+    g.stroke();
+  };
+  garis(U * 0.022, "rgba(255,70,190,0.35)", 24, 0.028);
+  garis(U * 0.012, "#33e6ff", 18, 0.022);
+  garis(U * 0.004, "#eafcff", 6, 0.022);
+  g.shadowBlur = 0; g.globalAlpha = 1;
+
+  if (h.terkam < 0.12) {
+    // Kepala: belah ketupat dari garis cahaya, dua mata titik.
+    const x = cx + h.x * U, y = cy + h.y * U, r = U * 0.04 * h.s;
+    const b4 = jejak.at(-4) ?? h;
+    g.save(); g.translate(x, y); g.rotate(Math.atan2(h.y - b4.y, h.x - b4.x));
+    g.strokeStyle = "#eafcff"; g.shadowColor = "#33e6ff"; g.shadowBlur = 20; g.lineWidth = Math.max(1.5, r * 0.12);
+    g.beginPath(); g.moveTo(-r * 0.6, 0); g.lineTo(0, -r * 0.7); g.lineTo(r * 1.4, 0); g.lineTo(0, r * 0.7); g.closePath(); g.stroke();
+    g.fillStyle = "#ff46be"; g.shadowColor = "#ff46be";
+    g.beginPath(); g.arc(r * 0.35, -r * 0.3, r * 0.1, 0, 7); g.arc(r * 0.35, r * 0.3, r * 0.1, 0, 7); g.fill();
+    g.restore();
+    return;
+  }
+  // Menerjang: kepala menghadap kita. Rahang atas dan bawah berupa busur cahaya yang membuka;
+  // ruang di antara keduanya dilubangi sampai hero terlihat.
+  const R = U * 0.045 * h.s, my = cy + h.y * U;
+  const buka = halus(jepit((h.terkam - 0.1) / 0.55));
+  const ry = R * 0.8 * buka;
+  g.save();
+  g.globalCompositeOperation = "destination-out";
+  g.beginPath(); g.ellipse(cx, my, R, Math.max(0.5, ry), 0, 0, Math.PI * 2); g.fill();
+  g.restore();
+  g.lineWidth = Math.max(2, R * 0.06);
+  for (const [w, b] of [["#ff46be", 40], ["#33e6ff", 22], ["#eafcff", 6]]) {
+    g.strokeStyle = w; g.shadowColor = w; g.shadowBlur = b;
+    g.beginPath(); g.ellipse(cx, my, R, Math.max(0.5, ry), 0, 0, Math.PI * 2); g.stroke();
+  }
+  // Taring dan mata cahaya di atas rahang.
+  g.fillStyle = "#eafcff";
+  for (const s of [-1, 1]) {
+    g.beginPath(); g.moveTo(cx + s * R * 0.45, my - ry); g.lineTo(cx + s * R * 0.38, my - ry + R * 0.25 * buka); g.lineTo(cx + s * R * 0.55, my - ry * 0.96); g.fill();
+    g.fillStyle = "#ff46be"; g.shadowColor = "#ff46be"; g.beginPath(); g.arc(cx + s * R * 0.55, my - ry - R * 0.35, R * 0.08, 0, 7); g.fill(); g.fillStyle = "#eafcff";
+  }
+  g.shadowBlur = 0;
+}
+
+// ========================== Waktu ==========================
+const geser = document.getElementById("waktu"), angka = document.getElementById("angka"), tombol = document.getElementById("putar"), lambat = document.getElementById("lambat");
+let main = true, laju = 1, t = 0, lalu = performance.now();
+tombol.onclick = () => { main = !main; tombol.textContent = main ? "Jeda" : "Putar"; };
+lambat.onclick = () => { laju = laju === 1 ? 0.25 : 1; lambat.textContent = laju === 1 ? "Lambat 0,25x" : "Normal 1x"; };
+geser.oninput = () => { main = false; tombol.textContent = "Putar"; t = (geser.value / 1000) * DUR; };
+const q = new URLSearchParams(location.search);
+if (q.has("t")) { t = Number(q.get("t")); main = false; }
+function lup(now) {
+  const dt = (now - lalu) / 1000; lalu = now;
+  if (main) { t = (t + dt * laju) % DUR; geser.value = (t / DUR) * 1000; }
+  angka.textContent = t.toFixed(1) + " s";
+  gambar1(t); gambar3(t);
+  requestAnimationFrame(lup);
+}
+requestAnimationFrame(lup);
+window.__setT = (x) => { t = x; main = false; gambar1(t); gambar3(t); };
+</script>
+</body>
+</html>
