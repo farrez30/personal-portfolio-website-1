@@ -43,7 +43,7 @@
   <div class="kartu">
     <h2>3. Model ular jadi</h2>
     <p id="ket3">Model ber-rig dari luar dengan animasi menyerangnya sendiri.</p>
-    <div class="vp" id="vp3"><canvas id="latar3"></canvas><canvas id="gl3"></canvas><div class="persen" id="p3"></div><div class="fase" id="f3"></div><div class="kosong" id="kosong3">model belum diunduh</div></div>
+    <div class="vp" id="vp3"><canvas id="latar3"></canvas><canvas id="gl3"></canvas><div class="persen" id="p3"></div><div class="fase" id="f3"></div><div class="kosong" id="kosong3">model belum termuat: buka lewat http (server storyboard), bukan file://</div></div>
   </div>
 </div>
 <script type="module">
@@ -374,6 +374,7 @@ function gambar3(t) {
       m3.grup.updateMatrixWorld(true);
       const kini = m3.kepalaTulang.getWorldPosition(new THREE.Vector3());
       m3.grup.position.add(tujuan.clone().sub(kini));
+      if (!Number.isFinite(m3.grup.position.x)) m3.grup.position.set(0, 0, 0);
     }
   }
   const pudar3 = 1 - halus(jepit((h.terkam - 0.6) / 0.3));
@@ -402,6 +403,7 @@ function lup(now) {
 }
 requestAnimationFrame(lup);
 window.__setT = (x) => { t = x; main = false; gambar1(t); gambar3(t); };
+window.__dbg = { m3: () => m3, P3, THREE };
 </script>
 </body>
 </html>
