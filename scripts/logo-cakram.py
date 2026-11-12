@@ -49,14 +49,18 @@ def cari(gambar_abu, logo_rgb, alfa):
     abu_logo = 1 - (1 - logo_rgb.mean(axis=2)) * alfa  # logo di atas putih
     terbaik = (-1, None)
     W = gambar_abu.shape[1]
-    for lebar in range(int(W * 0.15), int(W * 0.75), max(2, W // 200)):
-        skala = lebar / abu_logo.shape[1]
-        h = max(4, round(abu_logo.shape[0] * skala))
-        t = np.asarray(Image.fromarray((abu_logo * 255).astype(np.uint8)).resize((lebar, h), Image.LANCZOS)) / 255
-        peta = ncc_peta(gambar_abu, t)
-        i = np.unravel_index(np.argmax(peta), peta.shape)
-        if peta[i] > terbaik[0]:
-            terbaik = (float(peta[i]), (int(i[1]), int(i[0]), lebar, h))
+    # AI kadang memipihkan atau melebarkan logo sedikit, jadi rasio ikut dicari (±15%).
+    for rasio in (1.0, 0.92, 1.08, 0.85, 1.15):
+        for lebar in range(int(W * 0.15), int(W * 0.75), max(2, W // 200)):
+            skala = lebar / abu_logo.shape[1]
+            h = max(4, round(abu_logo.shape[0] * skala * rasio))
+            if h >= gambar_abu.shape[0]:
+                continue
+            t = np.asarray(Image.fromarray((abu_logo * 255).astype(np.uint8)).resize((lebar, h), Image.LANCZOS)) / 255
+            peta = ncc_peta(gambar_abu, t)
+            i = np.unravel_index(np.argmax(peta), peta.shape)
+            if peta[i] > terbaik[0]:
+                terbaik = (float(peta[i]), (int(i[1]), int(i[0]), lebar, h))
     return terbaik
 
 
@@ -95,6 +99,12 @@ def main():
     if skor < 0.45:
         sys.exit("logo tidak ketemu dengan yakin; periksa gambarnya")
 
+    # Kotak AI hanya penunjuk letak. Logo asli tetap memakai rasionya sendiri, dipusatkan
+    # tegak di kotak AI, jadi tidak pernah ikut dipipihkan.
+    ai_x, ai_y, ai_h = x, y, h
+    h = round(alfa.shape[0] * w / alfa.shape[1])
+    y = max(0, min(ai_y + (ai_h - h) // 2, gambar.height - h))
+
     g = np.asarray(gambar).astype(np.float32) / 255
     # Perkecil dalam bentuk premultiplied supaya warna piksel transparan (sering hitam)
     # tidak merembes jadi pinggiran gelap.
@@ -105,7 +115,7 @@ def main():
     rgb = np.clip(np.dstack([kecilkan(logo_rgb[..., i] * alfa) for i in range(3)]) / np.maximum(a[..., None], 1e-3), 0, 1)
 
     # Kotak kerja dilebarkan: logo AI bisa sedikit lebih besar atau bergeser dari logo asli.
-    m = min(round(w * 0.06), x, y, g.shape[1] - x - w, g.shape[0] - y - h)
+    m = min(max(round(w * 0.06), abs(ai_h - h) // 2 + 4), x, y, g.shape[1] - x - w, g.shape[0] - y - h)
     a = np.pad(a, m)
     rgb = np.pad(rgb, ((m, m), (m, m), (0, 0)), mode="edge")
     x, y, w, h = x - m, y - m, w + 2 * m, h + 2 * m
@@ -130,7 +140,16 @@ def main():
     dekat = lebarkan((a > 0.05).astype(np.float32), 2 * max(3, w // 30) + 1)
     lokal = buram(kotak, w / 25)
     beda = np.abs(kotak - lokal).max(axis=2)
-    tinta_ai = np.clip(dekat * np.maximum(beda > 0.08, a > 0.05), 0, 1)
+    tinta_ai = (a > 0.05).astype(np.float32)
+    # Di sekitar logo asli dan di kotak logo AI (bisa lebih lebar dari logo asli), hapus hanya piksel yang warnanya
+    # mirip warna tinta logo asli, supaya latar bertekstur di sekitarnya tidak ikut rata.
+    palet = rgb[a > 0.9]
+    if len(palet):
+        palet = palet[np.linspace(0, len(palet) - 1, min(96, len(palet))).astype(int)]
+        jarak = np.min(np.linalg.norm(kotak[..., None, :] - palet[None, None], axis=-1), axis=-1)
+        kotak_ai = np.zeros_like(a)
+        kotak_ai[max(0, ai_y - y):ai_y - y + ai_h, ai_x - x:ai_x - x + w - 2 * m] = 1
+        tinta_ai = np.maximum(tinta_ai, np.maximum(kotak_ai, dekat) * (jarak < 0.16) * (beda > 0.04))
     tinta_ai = lebarkan(tinta_ai, 3)
     keras = tinta_ai
     sisa = 1 - keras
