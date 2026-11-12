@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
-import { ANCHOR, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
+import { ANCHOR, anchorTegak, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
+import { buatPropsCerita } from "./props";
 
 // Dunia toko kaset (ADR 0014): satu ruangan di belakang seluruh beranda. Ruang dari primitif plus
 // tekstur Flow, perabot CC0 Poly Haven (tekstur 512 px, meshopt), headphone Hunyuan3D.
@@ -47,6 +48,10 @@ export const SUASANA = {
   },
 };
 
+const halus = (x) => {
+  const t = Math.min(1, Math.max(0, x));
+  return t * t * (3 - 2 * t);
+};
 const bingkaiBerikut = () => new Promise((r) => requestAnimationFrame(() => r()));
 
 // Gerak kamera di dalam satu tempat mengikuti gulir: geser ke samping dan sedikit maju.
@@ -83,7 +88,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     aset.set(nama, 0);
     return new Promise((ok, gagal) =>
       pemuatTekstur.load(
-        ASET + nama,
+        nama.startsWith("/") ? nama : ASET + nama,
         (t) => {
           t.colorSpace = THREE.SRGBColorSpace;
           t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -201,6 +206,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   const rakCD = buatRakCD(bahan);
   scene.add(rakCD);
 
+  // ---- Props tur cerita (10 babak) --------------------------------------------------------
+  const props = buatPropsCerita({ bahan, tekstur, tambahBayang: bayang });
+  scene.add(props.grup);
+
   // ---- Meja kasir (klien) ------------------------------------------------------------------
   kotak(2.6, 0.96, 0.62, bahan.kayu, 2, 0.48, 3.0);
   kotak(2.7, 0.05, 0.72, bahan.mejaAtas, 2, 0.985, 3.0);
@@ -254,6 +263,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     [3.9, yLampu, 0.2],
     [2.1, yLampu, 2.95], // tepat di atas meja kasir, supaya stiker berada di kolam cahaya
     [-3.6, yLampu, 3.15], // di atas rak sampul kiri pintu (tempat kontak)
+    [-3.95, yLampu, -0.45], // dinding kiri: meja tulis dan papan storyboard
+    [0.1, yLampu, 0.4], // gondola tengah
   ].map((p) => {
     // Jangkauan tak terbatas (decay fisik): dengan distance 7 meja kasir hampir tak tersentuh.
     const l = new THREE.PointLight(0xffffff, 1, 0, 2);
@@ -294,6 +305,12 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       l.color.setHex(s.lampu);
       l.intensity = s.kuatLampu;
     }
+    for (const l of props.lampu) {
+      l.color.setHex(s.lampu);
+      l.intensity = s.kuatLampu * l.userData.kuat;
+      l.userData.dasar = l.intensity;
+    }
+    for (const l of lampu) l.userData.dasar = l.intensity;
     lampuPintu.color.setHex(s.lampu);
     lampuPintu.intensity = s.kuatLampu * 0.8;
     cahayaJalan.color.setHex(s.jalan);
@@ -431,7 +448,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
 
   const keAnchor = (i) => {
     if (i === indeks && !blend) return;
-    const ke = ANCHOR[i];
+    const ke = camera.aspect < 0.8 ? anchorTegak(ANCHOR[i]) : ANCHOR[i];
     indeks = i;
     if (kurangiGerak) {
       pose = salinPose(ke);
@@ -508,6 +525,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       geser += sisa * (1 - Math.exp(-dt / 0.18));
       bergerak = true;
     }
+    const a = ANCHOR[indeks];
+    if (a.cerita && !blend) {
+      const u = geser + 0.5;
+      const nyala = a.id === "fondasi" ? Math.min(3, Math.floor(halus((u - 0.08) / 0.55) * 3.999)) : 0;
+      props.perbarui(a.id, u, { waktu: now / 1000, nyala });
+      // Listrik toko berkedip di tengah babak andal; pemutar dan ponsel tetap menyala.
+      redup(a.id === "andal" && u > 0.46 && u < 0.6 ? 0.12 + 0.1 * Math.sin(now / 40) : 1);
+      if (props.berputar(a.id)) bergerak = true;
+    } else redup(1);
     if (!bergerak && !kotor) return;
     posLalu.copy(camera.position);
     lihatLalu.copy(lihat);
@@ -517,6 +543,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     gambar(kuat > 0 ? Math.min(1, kuat * 5) * 1.6 : 0);
     if (blend) jagaKualitas(dt * 1000);
     kotor = false;
+  };
+
+  let faktorRedup = 1;
+  const redup = (f) => {
+    if (f === faktorRedup) return;
+    faktorRedup = f;
+    for (const l of [...lampu, ...props.lampu]) l.intensity = (l.userData.dasar ?? l.intensity) * f;
+    nyala.grup.visible = f > 0.5;
+    kotor = true;
   };
 
   // ---- Muat dan pemanasan ------------------------------------------------------------------
@@ -567,6 +602,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     hp.position.set(-pusat.x, 0.2 - pusat.y, -pusat.z);
     headphone.add(hp);
     taruh(kaset, 1.35, 1.01, 3.0, -0.6, 1.4);
+    taruh(kaset, 3.47, 0.48, -1.68, 0.5, 1.4);
     kotor = true;
   };
 
@@ -788,6 +824,11 @@ function buatRakCD(b) {
       // Celah sesekali, seperti rak toko yang tidak pernah penuh rapat.
       if (acak() < 0.02) {
         z += 0.05 + acak() * 0.08;
+        continue;
+      }
+      // Celah untuk tiga kotak CD yang masuk di akhir cerita (props.js, babak rilis).
+      if (y === 1.52 && z > -0.37 && z < -0.29) {
+        z = -0.29;
         continue;
       }
       if (Math.abs(z - (z0 + z1) / 2) < 0.03) {

@@ -130,10 +130,6 @@ function DuniaImersif() {
       const awal = titik[i].y;
       const akhir = titik[i + 1]?.y ?? document.documentElement.scrollHeight;
       d.setGeser((y + innerHeight / 2 - awal) / Math.max(1, akhir - awal) - 0.5);
-      // Panggung cerita yang menutupi layar penuh: dunia tidak perlu digambar di belakangnya.
-      const pc = document.querySelector(".panggung-cerita");
-      const r = pc?.getBoundingClientRect();
-      d.setTerlihat(!(r && r.top <= 64 && r.bottom >= innerHeight - 1 && getComputedStyle(pc).opacity === "1"));
     };
 
     const ro = new ResizeObserver(() => {

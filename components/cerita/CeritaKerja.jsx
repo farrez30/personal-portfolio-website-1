@@ -1,6 +1,5 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 import { scroll } from "motion";
 import { gsap } from "gsap";
@@ -14,7 +13,6 @@ import { useMode } from "@/components/mode/ModeProvider";
 import { BABAK } from "./naskah";
 import "./cerita.css";
 
-const PanggungCerita = dynamic(() => import("./PanggungCerita"), { ssr: false });
 
 // Cerita gulir di antara hero dan rak (ADR 0011, v3 di ADR 0013 dan desain/cerita-v3).
 // Imersif: soundstage 3D di panggung yang menempel di belakang bab; tiap bab setinggi bobotnya
@@ -189,8 +187,6 @@ export default function CeritaKerja() {
           {t("lewati")}
         </a>
       </div>
-
-      {dunia && <PanggungCerita akar={akar} onGagal={tanpaDunia} />}
 
       <nav className={`cerita-rel ${tampil && aktif >= 0 ? "is-tampil" : ""}`} aria-label={t("rel")}>
         <ol>
