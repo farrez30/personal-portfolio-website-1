@@ -52,7 +52,9 @@ const js = async (expression) => (await kirim("Runtime.evaluate", { expression, 
 // --tanpa-teks: tiap tangkapan ditambah versi kanvas dunia saja (<nama>-dunia.png), untuk cek
 // nilai di lembar look-dev (docs/look-dev.md), karena teks dan panel seksi ikut menggelapkan.
 const tanpaTeks = arg.includes("--tanpa-teks");
-const SEMBUNYI = `body * { visibility: hidden !important; } .dunia, .dunia * { visibility: visible !important; }`;
+// Selubung UI di atas kanvas (.dunia::before di kasir dan pintu, .dunia::after di sisi teks) ikut
+// disembunyikan: yang diukur terang ruangannya, bukan redupan untuk keterbacaan seksi.
+const SEMBUNYI = `body * { visibility: hidden !important; } .dunia, .dunia * { visibility: visible !important; } .dunia::before, .dunia::after { display: none !important; }`;
 const foto = async (nama) => {
   if (!keluar) return;
   const r = await kirim("Page.captureScreenshot", { format: "png" });
@@ -72,7 +74,7 @@ if (kurangi) await kirim("Emulation.setEmulatedMedia", { features: [{ name: "pre
 // Catat sejak dokumen dibuat: tugas panjang dan tiap perubahan data-dunia serta persen loader.
 await kirim("Page.addScriptToEvaluateOnNewDocument", {
   source: `localStorage.setItem("mode", "imersif"); localStorage.setItem("theme", ${JSON.stringify(tema)});
-  window.__lt = []; new PerformanceObserver(l => { for (const e of l.getEntries()) window.__lt.push([Math.round(e.startTime), Math.round(e.duration)]); }).observe({ type: "longtask", buffered: true });
+  window.__lt = []; window.__ltSemua = []; new PerformanceObserver(l => { for (const e of l.getEntries()) { window.__lt.push([Math.round(e.startTime), Math.round(e.duration)]); window.__ltSemua.push([Math.round(e.startTime), Math.round(e.duration)]); } }).observe({ type: "longtask", buffered: true });
   window.__fase = []; window.__persen = [];
   new MutationObserver(() => { const d = document.documentElement.dataset.dunia; const l = window.__fase[window.__fase.length - 1]; if (!l || l[0] !== d) window.__fase.push([d, Math.round(performance.now())]); }).observe(document, { subtree: true, attributes: true, attributeFilter: ["data-dunia"] });
   setInterval(() => { const p = document.querySelector(".dunia-ular__persen"); if (p) window.__persen.push([Math.round(performance.now()), +p.getAttribute("aria-valuenow")]); }, 100);`,
@@ -128,6 +130,7 @@ for (const [nama, sel] of tempat) {
   await js(`(() => { const el = document.querySelector(${JSON.stringify(sel)}); scrollTo({ top: el.getBoundingClientRect().top + scrollY - innerHeight, behavior: "instant" }); return true; })()`);
   await tidur(3000);
   const aksi = `(() => { const awal = scrollY, t0 = performance.now(); const f = (t) => { const u = Math.min(1, (t - t0) / 300); scrollTo({ top: awal + innerHeight * 0.7 * u, behavior: "instant" }); if (u < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); })()`;
+  console.log(`  mulai pindah ke ${nama} (ms):`, await js("Math.round(performance.now())"));
   const ukur = bingkai(1500, aksi);
   // Tangkapan di tengah terbang menahan bingkai (di 390x844 DPR 3 sampai 1 detik), jadi hanya
   // diambil dengan --foto-terbang, dan angka bingkainya tidak dipakai.
@@ -139,6 +142,13 @@ for (const [nama, sel] of tempat) {
   await tidur(1500);
   await foto(nama);
 }
+// Diam di babak bangun: piringan berputar, jadi dunia digambar tiap bingkai dengan AO dan depth
+// of field. Ini beban terberat yang bertahan lama, tempat lag paling terasa.
+if (await js(`!!document.querySelector(".bab--bangun")`)) {
+  await js(`(() => { const el = document.querySelector(".bab--bangun"); scrollTo({ top: el.getBoundingClientRect().top + scrollY + el.offsetHeight * 0.4 - innerHeight / 2, behavior: "instant" }); return true; })()`);
+  await tidur(2500);
+  console.log("diam di babak bangun 2 s (gambar terus):", JSON.stringify(await bingkai(2000)));
+}
 // Di dalam seksi rak: rak 3D yang sudah ada di depan rak toko, dua kanvas menggambar bersamaan.
 await js(`(() => { const el = document.querySelector("#rak"); scrollTo({ top: el.getBoundingClientRect().top + scrollY + innerHeight * 0.4, behavior: "instant" }); return true; })()`);
 await tidur(3000);
@@ -147,6 +157,8 @@ console.log("rak, menggulir antar album 2 s:", JSON.stringify(await bingkai(2000
 await js(`scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }); true`);
 await tidur(1800);
 await foto("05-pintu");
+console.log("tahap rak (ms):", JSON.stringify(await js(`performance.getEntriesByType("mark").filter(m => m.name.startsWith("rak:")).map(m => [m.name.slice(4), Math.round(m.startTime)])`)));
+console.log("semua tugas panjang sejak siap [mulai, lama]:", JSON.stringify(await js("window.__ltSemua")));
 console.log("titik:", await js(`document.querySelector(".dunia")?.dataset.titik`));
 console.log("anchor akhir, piksel kanvas:", await js(`(() => { const c = document.querySelector(".dunia canvas"); return c ? c.width + "x" + c.height : "tidak ada"; })()`));
 console.log(log.join("\n"));

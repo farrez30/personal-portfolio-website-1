@@ -212,6 +212,21 @@ sesudah tingkat kualitas: kompilasi 0,9 s, siap 4,3 sampai 4,8 s (tayang 3,3 sam
 Kompilasi async, loader tetap bergerak. Tanpa tugas panjang saat props dimuat di hero (jendela
 4 s, bingkai terburuk 12 ms) dan saat pindah antarbabak.
 
+### Revisi 13 Nov 2026 sore (masukan Farrez)
+
+- Alat ukur diperbaiki: `ukur-dunia.mjs --tanpa-teks` sekarang juga menyembunyikan `.dunia::before`
+  dan `.dunia::after`. Selubung warna latar 50% di kasir dan pintu (untuk keterbacaan kontak,
+  sejak commit 718117d) ikut terukur sebelumnya, jadi angka kasir dan pintu di atas sekitar separuh
+  terang ruangannya. Angka dunia saja, metode baru: bilik 57, dinding 45, rak 59, kasir 52,
+  pintu 61, babak bentuk 40, babak andal 51. Angka lama di lembar ini tidak sebanding dengan angka
+  metode baru.
+- Lampu setempat untuk kasir, pintu, dan rak pajang dicoba lalu dibatalkan: nilai naik 1 sampai
+  4 poin, kompilasi shader bertambah sekitar 0,6 s. Rak pajang cukup diberi paparan 1,55.
+- Lampu kunci ikut terbang bersama kamera (posisi, sasaran, dan nyala diinterpolasi), bayangannya
+  digambar ulang hanya saat benda bergerak.
+- Mode terang: kabut 12 sampai 32 m (dulu 6 sampai 18), selubung teks dilepas di babak cerita
+  (opacity 0,2), depth of field maksimal 4,5 px (dulu 7).
+
 ## Riwayat keputusan
 
 - 2026-11-12: gaya realistis sinematik malam dipilih Farrez; styleframe Flow 6 gambar (0 kredit,
@@ -227,3 +242,5 @@ Kompilasi async, loader tetap bergerak. Tanpa tugas panjang saat props dimuat di
   `ukur-dunia.mjs` memotret kasir lewat seksi klien (`[data-dunia=kasir]`).
 - 2026-11-13: props cerita v4 (ADR 0016). Bayangan dari semua lampu gantung di desktop, AO dan depth
   of field di lintasan layar, tekstur PBR CC0, isi bayangan 0,5. HP tanpa bayangan lampu gantung.
+- 2026-11-13: alat ukur tanpa selubung UI, lampu kunci bergerak halus, kabut terang ditipiskan,
+  lemari arsip dan gembok di babak aman.

@@ -53,7 +53,7 @@ export const ANCHOR = [
     benda: [-4.4, 1.05, 0.28],
     fov: 40,
     // Rak pajang di sudut yang jauh dari lampu gantung: diafragma dibuka sedikit.
-    paparan: 1.35,
+    paparan: 1.55,
     cerita: true,
     seksi: [{ sel: ".bab--bentuk", di: 0 }],
   },
@@ -109,7 +109,7 @@ export const ANCHOR = [
   },
   {
     id: "aman",
-    // Vitrin koleksi langka terkunci dan papan kunci berlabel, di sisi belakang gondola.
+    // Lemari arsip berlaci yang dikunci palang dan gembok, papan kunci per bagian, di belakang gondola.
     posisi: [0.85, 1.35, -0.95],
     lihat: [0.3, 1.0, 0.25],
     benda: [0.0, 1.02, 0.2],

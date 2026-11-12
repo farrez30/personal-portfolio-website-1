@@ -1,9 +1,9 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { useMode } from "@/components/mode/ModeProvider";
-import { anchorAktif, pemicuAnchor, bunyiCerita } from "./naskah";
+import { ANCHOR, anchorAktif, pemicuAnchor, bunyiCerita } from "./naskah";
 import { suara } from "@/components/imersif/suara";
 import { gabungProgres, kejar, faseLoader, gambarLoader, PUDAR } from "./ular";
 import "./dunia.css";
@@ -15,10 +15,16 @@ const BATAS_MUAT = 20000;
 
 // Dunia toko kaset di belakang beranda (ADR 0014), hanya di mode Imersif. Teks seksi tetap HTML
 // hasil server di atas kanvas; komponen ini hanya menambah kanvas, loader cakram CD, dan kamera.
+// Sekali dunia dibuat, ia tetap di memori saat pengunjung pindah ke Ringan: hanya disembunyikan
+// dan berhenti menggambar. Kembali ke Imersif langsung tampil tanpa loader lagi.
 export default function Dunia() {
   const { mode } = useMode();
-  if (mode !== "imersif") return <LepasTirai mode={mode} />;
-  return <DuniaImersif />;
+  const [pernah, setPernah] = useState(false);
+  useEffect(() => {
+    if (mode === "imersif") setPernah(true);
+  }, [mode]);
+  if (!pernah && mode !== "imersif") return <LepasTirai mode={mode} />;
+  return <DuniaImersif aktif={mode === "imersif"} />;
 }
 
 // Mode Ringan (atau tanpa WebGL2): tirai pra-gambar dilepas, halaman tampil biasa.
@@ -29,8 +35,10 @@ function LepasTirai({ mode }) {
   return null;
 }
 
-function DuniaImersif() {
+function DuniaImersif({ aktif }) {
   const t = useTranslations("dunia");
+  const kontrol = useRef(null);
+  useEffect(() => kontrol.current?.(aktif), [aktif]);
   const wadah = useRef(null);
   const loader = useRef(null);
   const kanvasUlar = useRef(null);
@@ -41,6 +49,8 @@ function DuniaImersif() {
     let batal = false;
     let d = null;
     const keadaan = { modul: false, aset: [], hangat: 0, gagal: false, siap: false };
+    // false selama mode Ringan: dunia dan loader disembunyikan, pemuatan tetap berjalan.
+    let aktifMode = true;
     if (!akar().dataset.dunia) akar().setAttribute("data-dunia", "muat");
 
     // ---- Loader cakram CD --------------------------------------------------------------------
@@ -69,6 +79,11 @@ function DuniaImersif() {
     };
 
     const putar = (now) => {
+      if (!aktifMode) {
+        lalu = now;
+        raf = requestAnimationFrame(putar);
+        return;
+      }
       const dt = (now - lalu) / 1000;
       lalu = now;
       const waktu = (now - mulai) / 1000;
@@ -114,12 +129,14 @@ function DuniaImersif() {
     let gulirLalu = null;
     let pindah = 0;
     const saatGulir = () => {
-      if (!d || !titik.length) return;
+      if (!d || !titik.length || !aktifMode) return;
       const y = scrollY;
       const i = anchorAktif(y, innerHeight, titik);
       if (i !== anchorKini) {
         anchorKini = i;
         wadah.current.dataset.anchor = titik[i].id;
+        // Penanda babak cerita untuk CSS (selubung teks dilepas, dunia.css).
+        wadah.current.dataset.tur = ANCHOR.find((a) => a.id === titik[i].id)?.cerita ? "1" : "";
         if (kurangiGerak) {
           // Gerak dikurangi: potong langsung di balik crossfade singkat, tanpa terbang.
           wadah.current.style.opacity = "0";
@@ -138,6 +155,28 @@ function DuniaImersif() {
       const kini = { id: titik[i].id, u: Math.min(1, Math.max(0, k)) };
       for (const nama of bunyiCerita(gulirLalu, kini)) suara()?.mainkan(nama);
       gulirLalu = kini;
+    };
+
+    // Pindah mode: Ringan menyembunyikan dunia dan loader, Imersif memunculkannya lagi. Dunia yang
+    // sudah siap langsung tampil tanpa loader; yang masih memuat melanjutkan loader-nya.
+    kontrol.current = (v) => {
+      aktifMode = v;
+      wadah.current?.toggleAttribute("hidden", !v);
+      d?.setTerlihat(v);
+      if (!v) {
+        loader.current?.setAttribute("hidden", "");
+        akar().removeAttribute("data-dunia");
+        return;
+      }
+      if (!keadaan.siap) {
+        loader.current?.removeAttribute("hidden");
+        akar().setAttribute("data-dunia", "ular");
+        return;
+      }
+      akar().setAttribute("data-dunia", "siap");
+      hitungTitik();
+      anchorKini = -1;
+      saatGulir();
     };
 
     const ro = new ResizeObserver(() => {

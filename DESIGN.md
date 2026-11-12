@@ -68,7 +68,7 @@ them like the rest of the world. Product screens are textures on the object's ow
   with a red note;
 - polish: a listening station tablet where a red line wipes a raw cashier form into a tidy one;
 - dependable: the shop's power cuts out, a battery player, a phone and an emergency lamp stay on;
-- safe: a locked rare-records case and a key board for cashier, warehouse and owner;
+- safe: a six-drawer filing cabinet barred and padlocked mid-chapter, beside a key board for cashier, warehouse and owner;
 - release: three real jewel-case covers slide into the rack.
 
 Chapter text names situations common to any business; project names stay in the proof links
@@ -78,7 +78,8 @@ before the next chapter's text arrives. Sound uses the rack's engine (`bunyiCeri
 when scrolling forward.
 
 **Light** shows a render of the same object from the world (`public/assets/cerita/<chapter>.webp`)
-beside its text, pushed in slowly by `--p`. **Reduced motion** shows the final states, and the
+beside its text, pushed in slowly by `--p`. Switching from Immersive to Light keeps the world in
+memory, hidden and not drawing, so switching back shows it at once without the loader. **Reduced motion** shows the final states, and the
 world cuts between chapters behind a short crossfade.
 
 ## The record-shop world (`components/dunia/`, ADR 0014)
