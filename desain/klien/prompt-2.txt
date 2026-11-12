@@ -1,0 +1,17 @@
+Delete every frame on the canvas and start over. The previous result ignored the brief. Draw exactly what is described below and nothing else: no hero, no data ticker, no CTA blocks, no toggles.
+
+The subject is a ring of compact discs (CDs). Draw every CD as two concentric circles: an outer circle filled light grey #d9d4cb with a thin rainbow-ish stroke, and an inner white circle (the label) with a small dark text "Klien 01", "Klien 02"... in the middle, plus a tiny hole dot in the very centre.
+
+Make 2 frames, each 1920x1080, background #e9e1d3, ink #1d1b19, accent #b3322a. Each frame: title at top left, then a 3x2 grid of 6 panels (each panel 560x315, background #f2efe9). Under each panel a caption in IBM Plex Mono 14px: "01 Enter" style label in red, then one sentence.
+
+Frame 1 name "[v0.1][WIP] KLIEN board 01, desktop", title "Klien dan partner: desktop".
+Panel 01 Enter: 8 CDs stacked on top of each other (slightly offset, like a cake box of discs) in the centre. Caption: "CDs sit stacked on a spindle on the beige table".
+Panel 02 Bloom: the CDs spread into an ellipse (a tilted ring) around one central CD labelled "Coderoach". Caption: "The stack fans out into a tilted ring".
+Panel 03 Rotate: same ellipse ring, the CD at the front-bottom of the ellipse drawn 1.6x bigger with a red outline; below the panel's ring a text line "Nama klien, industri" and two small pill chips "ERP" and "F&B". Caption: "Scrolling turns the ring, the front disc is lit".
+Panel 04 Switch: two tabs at the top left of the panel, "Coderoach" and "Mitraplus", with "Mitraplus" filled red; ring around a central CD labelled "Mitraplus". Caption: "Tab switches the side, the spindle label changes".
+Panel 05 Select: ring on the left, one CD pulled out to the right and larger, next to it a white card with 3 grey text lines and a red link line. Caption: "Tap a disc, it slides out with a detail card".
+Panel 06 Exit: ring small at the top, a dark band rising from the bottom labelled "Kontak". Caption: "Ring settles, the contact section rises".
+
+Frame 2 name "[v0.1][WIP] KLIEN board 02, mobile dan reduced motion", title "Klien dan partner: HP dan gerak dikurangi".
+Panels 01-03: a phone outline (portrait, 180x340) in each panel. Inside: two tabs on top, then a horizontal row of 3 CDs with the middle one larger, chips under it. Panel 02 the row has shifted one disc to the left, panel 03 a detail card under the centred disc. Captions: "Row of discs, snap scroll", "Swipe moves to the next disc", "Tap shows the details".
+Panels 04-06: a static grid of 4x2 CDs, each with a text line and two chips under it, tabs above. Captions: "Reduced motion: static grid", "Same information, no rotation", "Mitraplus tab shows its own grid".

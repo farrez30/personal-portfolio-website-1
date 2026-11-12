@@ -1,0 +1,11 @@
+Storyboard for one website section. Make 2 frames, each 1920x1080, beige background #e9e1d3, dark ink #1d1b19, one red accent #b3322a, captions in IBM Plex Mono, titles in Schibsted Grotesk. Each frame is a 3x2 grid of 6 panels (16:9 sketches with simple shapes, no photos), each panel with a short caption under it: number, what happens, camera or interaction. Name frames "[v0.1][WIP] KLIEN board 01, desktop" and "[v0.1][WIP] KLIEN board 02, mobile dan reduced motion".
+
+Board 01 desktop, section "clients" pinned while scrolling. Left column: section title placeholder and two tabs "Coderoach" and "Mitraplus". Right: a ring of 12 CDs (circles with a white centre label holding a client logo placeholder "Klien 01".."Klien 12") arranged as a tilted 3D carousel around a central spindle disc labelled "Coderoach".
+01 Enter: the CDs sit stacked on the spindle like a CD cake box on a beige table.
+02 Bloom: the stack fans out into the tilted ring; logos face the reader.
+03 Rotate: scrolling turns the ring; the front CD is larger and lit, under it name, industry, and two category chips (e.g. "ERP", "F&B").
+04 Switch side: tab "Mitraplus" selected; spindle label changes to "Mitraplus", the ring swaps to other CDs.
+05 Select: a tapped CD slides out of the ring toward the reader; a detail card opens beside it (what was built, year, link).
+06 Exit: the ring settles, pin releases, the contact section rises from below.
+
+Board 02: 01-03 phone 390x844 inside each panel: a horizontal row of CDs with snap scrolling, the centred CD enlarged with its caption and chips; tabs above. 04-06 reduced motion: a static grid of CD labels with name, industry and chips under each, tabs above, no rotation.
