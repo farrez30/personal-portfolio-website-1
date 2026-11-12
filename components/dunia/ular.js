@@ -1,7 +1,8 @@
 // Loader cakram CD (storyboard desain/transisi/loader.html, varian 3; dipilih Farrez 12 Nov 2026
 // setelah semua versi ular ditolak). Selama dunia dimuat cakram berputar makin cepat dan kilau
-// pelanginya mengisi mengikuti progres nyata. Di 100% cakram menegak menghadap kita (LIUK), lalu
-// lubang tengahnya membesar sampai menutup layar dan hero terlihat di dalamnya (TERKAM).
+// pelanginya mengisi mengikuti progres nyata. Lubang tengahnya gelap seperti latar, jadi hero belum
+// terlihat. Di 100% cakram menegak menghadap kita (LIUK), lalu lubangnya tembus dan membesar sampai
+// menutup layar, dan hero terlihat di dalamnya (TERKAM).
 // Kanvas 2D, bukan three.js: loader harus tampil sebelum satu aset dunia pun tiba.
 
 export const LIUK = 0.45;
@@ -40,7 +41,8 @@ const masuk = (x) => x * x * x;
 
 // Keadaan cakram `t` detik sejak mulai, `tSiap` = waktu saat 100% (null selama memuat).
 // r: jari-jari dalam satuan sisi terpendek layar; miring: 0,35 (terbaring) sampai 1 (menghadap);
-// lubang: jari-jari lubang tembus dalam satuan sisi terpendek; putar: sudut putaran (radian).
+// lubang: jari-jari lubang dalam satuan sisi terpendek; tembus: 0 (lubang gelap, hero tertutup)
+// sampai 1 (hero terlihat), naik di awal TERKAM; putar: sudut putaran (radian).
 export function cakramPada(t, tSiap, progres) {
   const k = tSiap == null ? 0 : Math.max(0, t - tSiap);
   const tegak = halus(jepit(k / LIUK));
@@ -49,7 +51,8 @@ export function cakramPada(t, tSiap, progres) {
   const lubang = r * 0.13 * (1 + halus(buka) * 2.5);
   // Laju putar naik dengan progres dan makin kencang saat menegak dan membuka.
   const putar = t * (2 + jepit(progres) * 10) + k * k * 20;
-  return { r, miring: 0.35 + 0.65 * tegak, lubang, putar, isi: tSiap == null ? jepit(progres) : 1 };
+  const tembus = halus(jepit(buka / 0.25));
+  return { r, miring: 0.35 + 0.65 * tegak, lubang, tembus, putar, isi: tSiap == null ? jepit(progres) : 1 };
 }
 
 const PELANGI = ["#c0c4cc", "#ff6b6b", "#ffd84a", "#6bff9e", "#5aa8ff", "#c46bff", "#c0c4cc"];
@@ -79,9 +82,22 @@ export function gambarLoader(g, W, H, t, { tSiap = null, progres = 0, diam = fal
   g.fillStyle = "#e9ecf0";
   g.beginPath(); g.arc(0, 0, r * 0.3, 0, Math.PI * 2); g.fill();
   g.restore();
-  g.globalCompositeOperation = "destination-out";
-  g.beginPath();
-  g.ellipse(W / 2, H / 2, c.lubang * U, c.lubang * U * c.miring, 0, 0, Math.PI * 2);
-  g.fill();
-  g.globalCompositeOperation = "source-over";
+  // Lubang digambar segelap latar dulu, lalu dihapus sebanyak `tembus` supaya hero baru terlihat
+  // setelah 100%. Hapusnya lewat globalAlpha dengan isi #000 pekat; isi semi-transparan hanya
+  // menghapus sebagian kecil.
+  const lubang = () => {
+    g.beginPath();
+    g.ellipse(W / 2, H / 2, c.lubang * U, c.lubang * U * c.miring, 0, 0, Math.PI * 2);
+    g.fill();
+  };
+  g.fillStyle = "#0d0c0b";
+  lubang();
+  if (c.tembus > 0) {
+    g.globalCompositeOperation = "destination-out";
+    g.globalAlpha = c.tembus;
+    g.fillStyle = "#000";
+    lubang();
+    g.globalAlpha = 1;
+    g.globalCompositeOperation = "source-over";
+  }
 }
