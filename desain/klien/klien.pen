@@ -2911,7 +2911,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "../../public/assets/klien/cakram/acms.webp",
+                            "url": "../../public/assets/klien/cakram/bni.webp",
                             "mode": "cover"
                           },
                           "width": 69.4970583144992,
@@ -7172,7 +7172,7 @@
                           "fill": {
                             "type": "image",
                             "enabled": true,
-                            "url": "../../public/assets/klien/cakram/acms.webp",
+                            "url": "../../public/assets/klien/cakram/bni.webp",
                             "mode": "cover"
                           },
                           "width": 70,
@@ -7864,6 +7864,785 @@
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
                       "content": "Sama dengan HP, ukuran desktop.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "DSnJS",
+      "x": 4000,
+      "y": 2360,
+      "name": "Lockup proyek pribadi",
+      "fill": "#f2efe9",
+      "layout": "vertical",
+      "gap": 40,
+      "padding": 40,
+      "children": [
+        {
+          "type": "frame",
+          "id": "gbDVh",
+          "name": "lockup-fifofun",
+          "gap": 28,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "rFx3o",
+              "name": "Ikon",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "logo/ikon-fifofun.png",
+                "mode": "contain"
+              },
+              "width": 160,
+              "height": 160
+            },
+            {
+              "type": "text",
+              "id": "C9Pyz",
+              "name": "Nama",
+              "fill": "#1d1b19",
+              "content": "FiFoFun",
+              "fontFamily": "IBM Plex Sans",
+              "fontSize": 120,
+              "fontWeight": "600",
+              "letterSpacing": -2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "N9qt9",
+          "name": "lockup-nds-etl",
+          "gap": 28,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "wOPH3",
+              "name": "Ikon",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "logo/ikon-nds-etl.png",
+                "mode": "contain"
+              },
+              "width": 160,
+              "height": 160
+            },
+            {
+              "type": "text",
+              "id": "pfLQv",
+              "name": "Nama",
+              "fill": "#1d1b19",
+              "content": "NDS RO",
+              "fontFamily": "Roboto",
+              "fontSize": 120,
+              "fontWeight": "600",
+              "letterSpacing": -2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "yplFH",
+          "name": "lockup-akarkita",
+          "gap": 28,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "MFtW9",
+              "name": "Ikon",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "logo/ikon-akarkita.png",
+                "mode": "contain"
+              },
+              "width": 160,
+              "height": 160
+            },
+            {
+              "type": "text",
+              "id": "MVPo3",
+              "name": "Nama",
+              "fill": "#1d1b19",
+              "content": "AkarKita",
+              "fontFamily": "Archivo",
+              "fontSize": 120,
+              "fontWeight": "700",
+              "letterSpacing": -2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "akrpd",
+          "name": "lockup-jeda",
+          "gap": 28,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "kv3yN",
+              "name": "Ikon",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "logo/ikon-jeda.png",
+                "mode": "contain"
+              },
+              "width": 160,
+              "height": 160
+            },
+            {
+              "type": "text",
+              "id": "Y09hn",
+              "name": "Nama",
+              "fill": "#1d1b19",
+              "content": "Jeda",
+              "fontFamily": "Nunito Sans",
+              "fontSize": 120,
+              "fontWeight": "600",
+              "letterSpacing": -2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "uYEYO",
+          "name": "lockup-yiheecam",
+          "gap": 28,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "hGLGe",
+              "name": "Ikon",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "logo/ikon-yiheecam.png",
+                "mode": "contain"
+              },
+              "width": 160,
+              "height": 160
+            },
+            {
+              "type": "text",
+              "id": "C1aamu",
+              "name": "Nama",
+              "fill": "#1d1b19",
+              "content": "YiheeCam",
+              "fontFamily": "Barlow Condensed",
+              "fontSize": 150,
+              "fontWeight": "600"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "Q6B33V",
+          "name": "lockup-d-day",
+          "gap": 28,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "vDugV",
+              "name": "Ikon",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "logo/ikon-d-day.png",
+                "mode": "contain"
+              },
+              "width": 160,
+              "height": 160
+            },
+            {
+              "type": "text",
+              "id": "ajaVT",
+              "name": "Nama",
+              "fill": "#1d1b19",
+              "content": "d-day",
+              "fontFamily": "Roboto",
+              "fontSize": 120,
+              "fontWeight": "600",
+              "letterSpacing": -2
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gogp6",
+          "name": "lockup-chicken-wow",
+          "gap": 24,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "ZkslV",
+              "name": "Ikon",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "logo/ikon-chicken-wow.png",
+                "mode": "contain"
+              },
+              "width": 120,
+              "height": 120
+            },
+            {
+              "type": "frame",
+              "id": "J447bu",
+              "name": "Teks",
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "UqAg6",
+                  "name": "Nama",
+                  "fill": "#0E2371",
+                  "content": "CHICKEN WOW",
+                  "fontFamily": "Poppins",
+                  "fontSize": 50,
+                  "fontWeight": "900",
+                  "letterSpacing": -1
+                },
+                {
+                  "type": "text",
+                  "id": "C1q4W",
+                  "name": "Tagline",
+                  "fill": "#E8361E",
+                  "content": "SOLUSI MAMA GAK MASAK",
+                  "fontFamily": "Nunito",
+                  "fontSize": 24,
+                  "fontWeight": "800",
+                  "letterSpacing": 3.8
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "gBGho",
+          "name": "lockup-geprek-wow",
+          "gap": 24,
+          "padding": [
+            8,
+            12
+          ],
+          "alignItems": "center",
+          "children": [
+            {
+              "type": "rectangle",
+              "id": "j8Deh",
+              "name": "Ikon",
+              "fill": {
+                "type": "image",
+                "enabled": true,
+                "url": "logo/ikon-chicken-wow.png",
+                "mode": "contain"
+              },
+              "width": 120,
+              "height": 120
+            },
+            {
+              "type": "frame",
+              "id": "D7aNd6",
+              "name": "Teks",
+              "layout": "vertical",
+              "gap": 2,
+              "children": [
+                {
+                  "type": "text",
+                  "id": "Yvmrt",
+                  "name": "Nama",
+                  "fill": "#0E2371",
+                  "content": "GEPREK WOW",
+                  "fontFamily": "Poppins",
+                  "fontSize": 50,
+                  "fontWeight": "900",
+                  "letterSpacing": -1
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "frame",
+      "id": "O9XZoA",
+      "x": 4000,
+      "y": 4152,
+      "name": "[v0.3][REVIEW] KLIEN papan 03, box set Masaya Food",
+      "clip": true,
+      "width": 1920,
+      "height": 720,
+      "fill": "#e9e1d3",
+      "layout": "vertical",
+      "gap": 36,
+      "padding": [
+        64,
+        80
+      ],
+      "children": [
+        {
+          "type": "frame",
+          "id": "CeEc6",
+          "name": "Kepala",
+          "width": "fill_container",
+          "justifyContent": "space_between",
+          "alignItems": "end",
+          "children": [
+            {
+              "type": "text",
+              "id": "hQNdS",
+              "name": "Judul",
+              "fill": "#1d1b19",
+              "content": "Klien dan partner: box set Masaya Food",
+              "fontFamily": "Schibsted Grotesk",
+              "fontSize": 40,
+              "fontWeight": "600",
+              "letterSpacing": -0.6
+            },
+            {
+              "type": "text",
+              "id": "YGqvO",
+              "name": "Meta",
+              "fill": "#b3322a",
+              "content": "SATU PERUSAHAAN, DUA MEREK, DUA PEKERJAAN",
+              "fontFamily": "IBM Plex Mono",
+              "fontSize": 14,
+              "fontWeight": "normal"
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "id": "MtOSp",
+          "name": "Baris",
+          "width": "fill_container",
+          "gap": 40,
+          "children": [
+            {
+              "type": "frame",
+              "id": "aEbLp",
+              "name": "Kolom",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "AFkwX",
+                  "name": "Panel",
+                  "clip": true,
+                  "width": 560,
+                  "height": 315,
+                  "fill": "#f2efe9",
+                  "cornerRadius": 4,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "E8pGDB",
+                      "x": 255,
+                      "y": 65,
+                      "name": "CD geprek-wow",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "../../public/assets/klien/cakram/geprek-wow.webp",
+                        "mode": "cover"
+                      },
+                      "width": 150,
+                      "height": 150,
+                      "stroke": "#a39e95",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "pOURE",
+                      "x": 225,
+                      "y": 75,
+                      "name": "CD chicken-wow",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "../../public/assets/klien/cakram/chicken-wow.webp",
+                        "mode": "cover"
+                      },
+                      "width": 150,
+                      "height": 150,
+                      "stroke": "#a39e95",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "kmcQm",
+                      "x": 185,
+                      "y": 75,
+                      "name": "CD masaya-food",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "../../public/assets/klien/cakram/masaya-food.webp",
+                        "mode": "cover"
+                      },
+                      "width": 170,
+                      "height": 170,
+                      "stroke": "#b3322a",
+                      "strokeWidth": 3
+                    },
+                    {
+                      "type": "text",
+                      "id": "GpYrp",
+                      "x": 200,
+                      "y": 262,
+                      "name": "Nama",
+                      "fill": "#1d1b19",
+                      "content": "Masaya Food",
+                      "fontFamily": "Schibsted Grotesk",
+                      "fontSize": 16,
+                      "fontWeight": "600"
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "T2gjuV",
+                  "name": "Keterangan",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "E6m19",
+                      "name": "Nomor",
+                      "fill": "#b3322a",
+                      "content": "01 DI CINCIN",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "Wqmg6",
+                      "name": "Isi",
+                      "fill": "#1d1b19",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Masaya Food tampil sebagai satu set: dua cakram anak menyembul di belakang cakram induk, seperti album dobel.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Schibsted Grotesk",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "f3cEfH",
+                      "name": "Gerak",
+                      "fill": "#4f4a43",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Ikut berputar bersama cincin.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "K4KC9",
+              "name": "Kolom",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "uNdQr",
+                  "name": "Panel",
+                  "clip": true,
+                  "width": 560,
+                  "height": 315,
+                  "fill": "#f2efe9",
+                  "cornerRadius": 4,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "LC3ER",
+                      "x": 100,
+                      "y": 110,
+                      "name": "CD masaya-food",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "../../public/assets/klien/cakram/masaya-food.webp",
+                        "mode": "cover"
+                      },
+                      "width": 120,
+                      "height": 120,
+                      "stroke": "#a39e95",
+                      "strokeWidth": 1
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "HENWp",
+                      "x": 215,
+                      "y": 65,
+                      "name": "CD chicken-wow",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "../../public/assets/klien/cakram/chicken-wow.webp",
+                        "mode": "cover"
+                      },
+                      "width": 170,
+                      "height": 170,
+                      "stroke": "#b3322a",
+                      "strokeWidth": 3
+                    },
+                    {
+                      "type": "ellipse",
+                      "id": "mxfUp",
+                      "x": 375,
+                      "y": 65,
+                      "name": "CD geprek-wow",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "../../public/assets/klien/cakram/geprek-wow.webp",
+                        "mode": "cover"
+                      },
+                      "width": 170,
+                      "height": 170,
+                      "stroke": "#b3322a",
+                      "strokeWidth": 3
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "flP4U",
+                  "name": "Keterangan",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "F9Fr9Q",
+                      "name": "Nomor",
+                      "fill": "#b3322a",
+                      "content": "02 KETUK",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "yq8Wg",
+                      "name": "Isi",
+                      "fill": "#1d1b19",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Set terbuka: Chicken Wow dan Geprek Wow keluar berdampingan, cakram induk mundur ke belakang.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Schibsted Grotesk",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "atcZh",
+                      "name": "Gerak",
+                      "fill": "#4f4a43",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Kedua anak bergeser keluar dengan pegas yang sama seperti cakram lain.",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 12,
+                      "fontWeight": "normal"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "id": "srRTc",
+              "name": "Kolom",
+              "width": "fill_container",
+              "layout": "vertical",
+              "gap": 14,
+              "children": [
+                {
+                  "type": "frame",
+                  "id": "RHcXO",
+                  "name": "Panel",
+                  "clip": true,
+                  "width": 560,
+                  "height": 315,
+                  "fill": "#f2efe9",
+                  "cornerRadius": 4,
+                  "layout": "none",
+                  "children": [
+                    {
+                      "type": "ellipse",
+                      "id": "NFipF",
+                      "x": 55,
+                      "y": 65,
+                      "name": "CD geprek-wow",
+                      "fill": {
+                        "type": "image",
+                        "enabled": true,
+                        "url": "../../public/assets/klien/cakram/geprek-wow.webp",
+                        "mode": "cover"
+                      },
+                      "width": 170,
+                      "height": 170,
+                      "stroke": "#b3322a",
+                      "strokeWidth": 3
+                    },
+                    {
+                      "type": "frame",
+                      "id": "QLPDD",
+                      "x": 250,
+                      "y": 60,
+                      "name": "Kartu",
+                      "width": 280,
+                      "fill": "#ffffff",
+                      "cornerRadius": 6,
+                      "layout": "vertical",
+                      "gap": 8,
+                      "padding": 16,
+                      "children": [
+                        {
+                          "type": "text",
+                          "id": "QmCfM",
+                          "name": "Nama",
+                          "fill": "#1d1b19",
+                          "content": "Geprek Wow",
+                          "fontFamily": "Schibsted Grotesk",
+                          "fontSize": 18,
+                          "fontWeight": "600"
+                        },
+                        {
+                          "type": "text",
+                          "id": "aSzSq",
+                          "name": "Industri",
+                          "fill": "#4f4a43",
+                          "content": "F&B, 12 gerai. Masaya Food",
+                          "fontFamily": "IBM Plex Mono",
+                          "fontSize": 11,
+                          "fontWeight": "normal"
+                        },
+                        {
+                          "type": "text",
+                          "id": "IfiA9",
+                          "name": "Isi",
+                          "fill": "#4f4a43",
+                          "textGrowth": "fixed-width",
+                          "width": "fill_container",
+                          "content": "Aplikasi operasional gerai: stok, setoran, laporan harian ke WhatsApp.",
+                          "lineHeight": 1.4,
+                          "fontFamily": "Schibsted Grotesk",
+                          "fontSize": 13,
+                          "fontWeight": "normal"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "frame",
+                  "id": "PJ2OH",
+                  "name": "Keterangan",
+                  "width": "fill_container",
+                  "layout": "vertical",
+                  "gap": 6,
+                  "children": [
+                    {
+                      "type": "text",
+                      "id": "ABVnM",
+                      "name": "Nomor",
+                      "fill": "#b3322a",
+                      "content": "03 KARTU",
+                      "fontFamily": "IBM Plex Mono",
+                      "fontSize": 14,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "VkmP6",
+                      "name": "Isi",
+                      "fill": "#1d1b19",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Tiap anak punya kartunya sendiri: Geprek Wow untuk aplikasi operasional 12 gerai, Chicken Wow untuk situs dan link-in-bio.",
+                      "lineHeight": 1.4,
+                      "fontFamily": "Schibsted Grotesk",
+                      "fontSize": 16,
+                      "fontWeight": "normal"
+                    },
+                    {
+                      "type": "text",
+                      "id": "v4pvnX",
+                      "name": "Gerak",
+                      "fill": "#4f4a43",
+                      "textGrowth": "fixed-width",
+                      "width": "fill_container",
+                      "content": "Esc atau ketuk di luar untuk menutup, set kembali menumpuk.",
                       "fontFamily": "IBM Plex Mono",
                       "fontSize": 12,
                       "fontWeight": "normal"
