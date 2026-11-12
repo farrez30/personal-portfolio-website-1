@@ -60,3 +60,11 @@ separate boxes, and only a single world makes the transitions truly seamless.
   (Tencent Hunyuan 3D 2.0 Community License, which excludes the EU, UK and South Korea).
 - Revisit if phones cannot hold a steady frame rate after the quality tiers are in, or if
   first load passes about 5 s on a mid-range phone.
+
+## Update 2026-11-12: CD loader instead of the snake
+
+Farrez rejected every snake version (2D snake, Hunyuan head, rigged cobra v3 to v6, digital
+ring with a pixel-tear gate; storyboards `desain/transisi/ular-v*.html`) and chose the CD option
+from the original loader storyboard: "kita pakai putaran cakram CD saja deh, yang awal itu."
+The disc spins faster as real progress fills its rainbow sheen, turns to face the viewer, and its
+centre hole opens into the hero. Progress, warm-up and reduced-motion rules above are unchanged.

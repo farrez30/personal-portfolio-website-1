@@ -4,7 +4,7 @@ import { createPortal } from "react-dom";
 import { useTranslations } from "next-intl";
 import { useMode } from "@/components/mode/ModeProvider";
 import { anchorAktif, pemicuAnchor } from "./naskah";
-import { gabungProgres, kejar, faseLoader, gambarUlar, PUDAR } from "./ular";
+import { gabungProgres, kejar, faseLoader, gambarLoader, PUDAR } from "./ular";
 import "./dunia.css";
 
 const akar = () => document.documentElement;
@@ -13,7 +13,7 @@ const temaSitus = () => (akar().dataset.theme === "light" ? "terang" : "gelap");
 const BATAS_MUAT = 20000;
 
 // Dunia toko kaset di belakang beranda (ADR 0014), hanya di mode Imersif. Teks seksi tetap HTML
-// hasil server di atas kanvas; komponen ini hanya menambah kanvas, loader ular, dan kamera.
+// hasil server di atas kanvas; komponen ini hanya menambah kanvas, loader cakram CD, dan kamera.
 export default function Dunia() {
   const { mode } = useMode();
   if (mode !== "imersif") return <LepasTirai mode={mode} />;
@@ -42,7 +42,7 @@ function DuniaImersif() {
     const keadaan = { modul: false, aset: [], hangat: 0, gagal: false, siap: false };
     if (!akar().dataset.dunia) akar().setAttribute("data-dunia", "muat");
 
-    // ---- Loader ular --------------------------------------------------------------------
+    // ---- Loader cakram CD --------------------------------------------------------------------
     const kv = kanvasUlar.current;
     const g = kv.getContext("2d");
     let tampil = 0;
@@ -83,7 +83,7 @@ function DuniaImersif() {
       const fase = faseLoader(tSiap == null ? null : waktu - tSiap, kurangiGerak || keadaan.gagal);
       if (fase.nama === "selesai") return selesai();
       if (fase.nama === "pudar") loader.current.style.opacity = String(1 - fase.u);
-      else gambarUlar(g, innerWidth, innerHeight, waktu, { tSiap, progres: tampil, diam: kurangiGerak });
+      else gambarLoader(g, innerWidth, innerHeight, waktu, { tSiap, progres: tampil, diam: kurangiGerak });
       if (fase.nama !== "muat") akar().setAttribute("data-dunia", "portal");
       if (gambarPertama) {
         gambarPertama = false;
