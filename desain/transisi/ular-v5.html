@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Loader ular v5</title>
+<style>
+  :root { --bg:#161514; --ink:#ede8e0; --ink2:#9a948b; --line:#3a3734; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; padding:20px 16px 48px; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  .sub { color:var(--ink2); margin:0 0 14px; font:13px ui-monospace, monospace; }
+  .kendali { display:flex; gap:12px; align-items:center; flex-wrap:wrap; position:sticky; top:0; z-index:5; background:var(--bg); padding:10px 0 14px; }
+  .kendali input { width:min(520px, 60vw); }
+  button { background:var(--ink); color:var(--bg); border:0; border-radius:6px; padding:8px 14px; font:inherit; cursor:pointer; }
+  .vp { position:relative; aspect-ratio:16/10; max-width:1100px; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#000 url(hero-bilik.webp) center/cover; }
+  .vp canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .fase { position:absolute; left:10px; bottom:8px; z-index:3; font:11px ui-monospace, monospace; color:var(--ink2); text-shadow:0 1px 2px #000; }
+  .persen { position:absolute; left:0; right:0; bottom:7%; z-index:3; text-align:center; font:12px ui-monospace, monospace; letter-spacing:.12em; color:#9a948b; }
+  .kosong { position:absolute; inset:0; display:grid; place-items:center; z-index:4; color:var(--ink2); font:13px ui-monospace, monospace; background:#0b0a09; padding:20px; text-align:center; }
+</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
+</head>
+<body>
+<h1>Kobra: berubah wujud bertahap, terus melaju, mulut melahap layar</h1>
+<p class="sub">Model kobra Imagigoo (CC-BY), tulangnya digerakkan mengikuti jejak kepala. Kecepatan tidak pernah turun.</p>
+<div class="kendali">
+  <button id="putar">Jeda</button>
+  <button id="lambat">Lambat 0,25x</button>
+  <input id="waktu" type="range" min="0" max="1000" value="0">
+  <span id="angka" class="sub" style="margin:0">0.0 s</span>
+</div>
+<div class="vp" id="vp"><canvas id="layar"></canvas><div class="persen" id="persen"></div><div class="fase" id="fase"></div><div class="kosong" id="kosong">model belum termuat: buka lewat http (server storyboard), bukan file://</div></div>
+<script type="module">
+import * as THREE from "three";
+import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
+
+const qs = new URLSearchParams(location.search);
+const jepit = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const halus = (x) => x * x * (3 - 2 * x);
+const halusDi = (a, b, x) => halus(jepit((x - a) / (b - a)));
+
+// ---- Kamera dan ukuran dunia ----
+const kamera = new THREE.PerspectiveCamera(40, 1.6, 0.02, 50);
+kamera.position.set(0, 0, 6);
+const sisiPendek = () => 2 * kamera.position.z * Math.tan(THREE.MathUtils.degToRad(kamera.fov / 2)) * Math.min(1, kamera.aspect);
+
+// ---- Garis waktu ----
+// Memuat: kepala berputar di lingkaran dengan kecepatan tetap. Wujud: sisik muncul dari kepala ke
+// ekor sambil terus berputar. Lepas: tanpa berhenti, kepala keluar dari lingkaran lewat satu
+// lengkungan lebar menuju kamera dan makin cepat. Mulut membuka di perjalanan, lalu bagian dalam
+// mulut memenuhi layar dan tenggorokannya terbuka ke hero.
+const MUAT = 3.4, WUJUD = 1.3, tLepas = MUAT + WUJUD;
+const JARI = 0.3; // jari-jari lingkaran, satuan sisi pendek layar
+const PERCEPATAN = 3.5; // satuan dunia per detik kuadrat
+let jalurLepas = null; // dibangun sekali per ukuran layar
+
+function bangunJalur() {
+  const R = JARI * sisiPendek(), v = R * Math.PI * 0.9; // kecepatan putar: 0,45 putaran per detik
+  const w = v / R;
+  const a0 = w * tLepas;
+  const P0 = new THREE.Vector3(Math.cos(a0) * R, Math.sin(a0) * R, 0);
+  const T0 = new THREE.Vector3(-Math.sin(a0), Math.cos(a0), 0);
+  // Lengkung keluar: Bezier kubik yang bersinggungan dengan lingkaran di titik lepas, menyapu
+  // lebar melintasi layar, lalu lurus ke kamera di ujungnya (moncong berhenti tepat di depan lensa).
+  // Lengkung berakhir di depan layar, menghadap kamera. Dari situ kepala terus mendekat dengan
+  // jarak ke lensa yang menyusut eksponensial: selalu bergerak, dan ukuran di layar tumbuh rata,
+  // bukan meledak di detik terakhir. Kecepatan di sambungan sama, jadi tidak ada sentakan.
+  const dA = Number(qs.get("dA") || 2.4);
+  const ujung = new THREE.Vector3(0, -0.02 * R, kamera.position.z - dA);
+  const P1 = P0.clone().addScaledVector(T0, R * 1.6);
+  const P2 = ujung.clone().add(new THREE.Vector3(0, 0, -R * 2.2));
+  const kurva = new THREE.CubicBezierCurve3(P0, P1, P2, ujung);
+  const L = kurva.getLength();
+  const tempuh = (-v + Math.sqrt(v * v + 2 * PERCEPATAN * L)) / PERCEPATAN;
+  const vA = v + PERCEPATAN * tempuh, laju = vA / dA;
+  const tA = tLepas + tempuh;
+  // Tenggorokan mulai terbuka saat tulang kepala 0,95 dari lensa (mulut sudah hampir memenuhi
+  // layar), dan lubang menutup layar saat jaraknya 0,42.
+  const dLubang = Number(qs.get("dLubang") || 0.6), dTiba = Number(qs.get("dTiba") || 0.24);
+  jalurLepas = { R, v, w, kurva, L, tempuh, tA, dA, laju, ujung, tLubang: tA + Math.log(dA / dLubang) / laju, tTiba: tA + Math.log(dA / dTiba) / laju };
+}
+// Posisi kepala di waktu t (dunia). Sebelum lepas: lingkaran, juga untuk waktu negatif (jejak tubuh).
+function kepala(t) {
+  const { R, w, v, kurva, L, tA, dA, laju, ujung, tTiba } = jalurLepas;
+  if (t <= tLepas) return new THREE.Vector3(Math.cos(w * t) * R, Math.sin(w * t) * R, 0);
+  if (t <= tA) {
+    const tau = t - tLepas;
+    return kurva.getPointAt(jepit((v * tau + 0.5 * PERCEPATAN * tau * tau) / L));
+  }
+  const d = dA * Math.exp(-laju * (Math.min(t, tTiba) - tA));
+  return new THREE.Vector3(ujung.x, ujung.y, kamera.position.z - d);
+}
+const suara = (t, i) => 0.55 + 0.45 * Math.abs(Math.sin(t * 7.3 + i * 0.7) * Math.sin(t * 2.1 + i * 0.23));
+
+// ---- Renderer di kanvas tersembunyi, digambar ke kanvas 2D supaya lubang mulut memotong keduanya ----
+const layar = document.getElementById("layar");
+const gl3 = document.createElement("canvas");
+const renderer = new THREE.WebGLRenderer({ canvas: gl3, alpha: true, antialias: true });
+renderer.setClearColor(0, 0);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.2;
+const scene = new THREE.Scene();
+scene.add(new THREE.HemisphereLight(0xe9f0ff, 0x2a1d10, 0.6));
+const kunci = new THREE.DirectionalLight(0xffd7a8, 3.0); kunci.position.set(1.5, 3, 5); scene.add(kunci);
+const isi = new THREE.DirectionalLight(0xbfd8ff, 0.6); isi.position.set(-3, -2, 3); scene.add(isi);
+const tepi = new THREE.DirectionalLight(0xffe2b8, 2.0); tepi.position.set(-2, 3, -3); scene.add(tepi);
+// Cahaya kecil di depan kamera: begitu kepala mendekat, bagian dalam mulut tetap terlihat.
+const mulutCahaya = new THREE.PointLight(0xffb59a, 0, 3, 2); scene.add(mulutCahaya);
+
+// ---- Kobra ----
+const RANTAI = ["BN_Head_01", "BN__Neck_02", "BN__Neck_01", "BN_Spine_03", "BN_Spine_02", "BN_Spine_01", "Hips", "BN_Tail_01", "BN_Tail_02", "BN_Tail_03", "BN_Tail_04", "BN_Tail_05", "BN_Tail_06", "BN_Tail_07"];
+const ungkap = { panjang: { value: 0 }, sudut: { value: 0 }, jari: { value: 1 }, aktif: { value: 1 } };
+let k = null;
+new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).load(qs.get("m") || "ular/model3.glb", (g) => {
+  const akar = g.scene;
+  let kulit = null;
+  akar.traverse((o) => {
+    if (!o.isMesh) return;
+    if (o.material.name === "Material_0") o.visible = false;
+    else { kulit = o; o.frustumCulled = false; }
+  });
+  // Berubah wujud dari kepala ke ekor: piksel tubuh yang jarak busurnya di belakang kepala lebih
+  // dari batas belum muncul, dan tepi batasnya menyala biru seperti titik digital yang memadat.
+  const m = kulit.material;
+  m.onBeforeCompile = (sh) => {
+    Object.assign(sh.uniforms, { uPanjang: ungkap.panjang, uSudut: ungkap.sudut, uJari: ungkap.jari, uAktif: ungkap.aktif });
+    sh.vertexShader = sh.vertexShader
+      .replace("#include <common>", "#include <common>\nvarying vec3 vW;")
+      .replace("#include <skinning_vertex>", "#include <skinning_vertex>\nvW = (modelMatrix * vec4(transformed, 1.0)).xyz;");
+    sh.fragmentShader = sh.fragmentShader
+      .replace("#include <common>", "#include <common>\nvarying vec3 vW; uniform float uPanjang, uSudut, uJari, uAktif;")
+      .replace("#include <clipping_planes_fragment>", `#include <clipping_planes_fragment>
+        float di = mod(uSudut - atan(vW.y, vW.x) + 6.2831853, 6.2831853) * uJari;
+        float lewat = (di - uPanjang) * uAktif;
+        if (lewat > 0.0) discard;`)
+      .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\ntotalEmissiveRadiance += vec3(0.37, 0.9, 1.0) * 2.2 * uAktif * (1.0 - smoothstep(0.0, 0.18, -lewat));");
+  };
+  scene.add(akar);
+  const tulang = kulit.skeleton.bones;
+  const cari = (awal) => tulang.find((b) => b.name.startsWith(awal));
+  const rantai = RANTAI.map(cari);
+  const mulut = cari("BN_Mouth_01");
+  kulit.skeleton.pose();
+  akar.updateMatrixWorld(true);
+  const ikat = rantai.map((b) => b.getWorldPosition(new THREE.Vector3()));
+  const jarak = ikat.slice(1).map((p, i) => p.distanceTo(ikat[i]));
+  const panjang = jarak.reduce((a, b) => a + b, 0);
+  const anak = rantai.map((b) => b.children.find((c) => rantai.includes(c)) ?? null);
+  const skalaIkat = rantai.map((b) => b.getWorldScale(new THREE.Vector3()));
+  const iPinggul = RANTAI.indexOf("Hips");
+  const tanda = rantai.map((_, i) => (i > iPinggul ? -1 : 1));
+  const asal = new Map(tulang.map((b) => [b, { p: b.position.clone(), q: b.quaternion.clone(), s: b.scale.clone() }]));
+  const urutan = [...rantai.keys()].sort((a, b) => kedalaman(rantai[a]) - kedalaman(rantai[b]));
+  k = { akar, kulit, rantai, mulut, jarak, panjang, anak, skalaIkat, tanda, asal, urutan };
+  document.getElementById("kosong").remove();
+});
+const kedalaman = (o) => { let d = 0; while (o.parent) { d++; o = o.parent; } return d; };
+
+// Jejak kepala: sampel rapat ke belakang dari waktu sekarang, dengan panjang busur kumulatif.
+function jejak(t, perlu) {
+  const titik = [kepala(t)], busur = [0];
+  for (let i = 1; i < 6000 && busur.at(-1) < perlu; i++) {
+    const p = kepala(t - i * 0.003);
+    busur.push(busur.at(-1) + p.distanceTo(titik.at(-1)));
+    titik.push(p);
+  }
+  return { titik, busur };
+}
+function diBusur({ titik, busur }, s) {
+  let lo = 0, hi = busur.length - 1;
+  while (hi - lo > 1) { const mid = (lo + hi) >> 1; if (busur[mid] < s) lo = mid; else hi = mid; }
+  const u = jepit((s - busur[lo]) / Math.max(1e-9, busur[hi] - busur[lo]));
+  return titik[lo].clone().lerp(titik[hi], u);
+}
+const sumbuY = new THREE.Vector3(0, 1, 0), m4 = new THREE.Matrix4(), mInv = new THREE.Matrix4();
+function aturTulang(t, skala) {
+  const { akar, rantai, jarak, panjang, anak, skalaIkat, tanda, asal, urutan } = k;
+  akar.scale.setScalar(skala); akar.updateMatrixWorld(true);
+  for (const [b, a] of asal) { b.position.copy(a.p); b.quaternion.copy(a.q); b.scale.copy(a.s); }
+  const L = panjang * skala, j = jejak(t, L * 1.1);
+  const pos = []; let s = 0;
+  for (let i = 0; i < rantai.length; i++) { pos.push(diBusur(j, s)); s += (jarak[i] ?? 0) * skala; }
+  const maju = new THREE.Vector3().subVectors(pos[0], diBusur(j, 0.03 * L)).normalize();
+  const dunia = rantai.map((b, i) => {
+    let arah;
+    if (anak[i]) arah = new THREE.Vector3().subVectors(pos[rantai.indexOf(anak[i])], pos[i]).normalize();
+    else if (i === 0) arah = maju.clone();
+    else arah = new THREE.Vector3().subVectors(pos[i], pos[i - 1]).normalize();
+    const punggung = new THREE.Vector3(0, 0, 1).lerp(new THREE.Vector3(0, 1, 0), Math.abs(arah.z)).normalize();
+    punggung.sub(arah.clone().multiplyScalar(punggung.dot(arah))).normalize();
+    const samping = new THREE.Vector3().crossVectors(arah, punggung).normalize();
+    const pb = new THREE.Vector3(0, 0, tanda[i]);
+    const sb = new THREE.Vector3().crossVectors(sumbuY, pb).normalize();
+    const lokal = new THREE.Matrix4().makeBasis(sb, sumbuY, pb);
+    const q = new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(samping, arah, punggung).multiply(lokal.invert()));
+    return new THREE.Matrix4().compose(pos[i], q, skalaIkat[i].clone().multiplyScalar(skala));
+  });
+  for (const i of urutan) {
+    const b = rantai[i];
+    b.parent.updateMatrixWorld(true);
+    mInv.copy(b.parent.matrixWorld).invert();
+    m4.multiplyMatrices(mInv, dunia[i]);
+    m4.decompose(b.position, b.quaternion, b.scale);
+    b.updateMatrixWorld(true);
+  }
+}
+
+const keLayar = (p, W, H) => { const v = p.clone().project(kamera); return [(v.x * 0.5 + 0.5) * W, (-v.y * 0.5 + 0.5) * H, v.z]; };
+function gambar(t) {
+  const dpr = Math.min(devicePixelRatio || 1, 2), W = layar.clientWidth, H = layar.clientHeight;
+  if (layar.width !== Math.round(W * dpr)) { layar.width = Math.round(W * dpr); layar.height = Math.round(H * dpr); jalurLepas = null; }
+  kamera.aspect = W / H; kamera.updateProjectionMatrix();
+  if (!jalurLepas) bangunJalur();
+  renderer.setPixelRatio(dpr); renderer.setSize(W, H, false);
+  const g = layar.getContext("2d"); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const { tTiba, R, tLubang } = jalurLepas;
+  const tSelesai = tTiba;
+  const progres = jepit(t / MUAT);
+  document.getElementById("fase").textContent = t < MUAT ? `memuat ${Math.round(progres * 100)}%` : t < tLepas ? "berubah wujud sambil berputar" : t < tTiba - 0.5 ? "melaju keluar lingkaran" : t < tSelesai ? "mulut melahap layar" : "di hero";
+  document.getElementById("persen").textContent = t < MUAT ? `${Math.round(progres * 100)}%` : "";
+  layar.style.display = t >= tSelesai ? "none" : "";
+  if (t >= tSelesai) return;
+  g.globalCompositeOperation = "source-over"; g.globalAlpha = 1; g.shadowBlur = 0;
+  g.fillStyle = "#0b0a09"; g.fillRect(0, 0, W, H);
+
+  // Panjang tubuh: setengah lebih sedikit keliling lingkaran, supaya lekuknya landai.
+  const panjangTubuh = 2 * Math.PI * R * 0.55;
+  // Seberapa jauh dari kepala sisik sudah muncul (satuan dunia).
+  const muncul = panjangTubuh * 1.08 * halusDi(MUAT, tLepas, t);
+  // Titik digital: sepanjang jejak kepala, ikut memanjang dengan progres; yang sudah tertutup sisik hilang.
+  const jt = jejak(t, panjangTubuh * 1.05);
+  const panjangTitik = panjangTubuh * (0.25 + 0.75 * progres);
+  const n = 46;
+  for (let i = 0; i <= n; i++) {
+    const s = (i / n) * panjangTitik;
+    if (s < muncul) continue;
+    const p = diBusur(jt, s), [x, y] = keLayar(p, W, H);
+    const Ul = Math.min(W, H), amp = suara(t, i) * Ul * 0.028 * (1 - (i / n) * 0.55), lebar = Math.max(1.5, Ul * 0.007);
+    g.fillStyle = i === 0 ? "#e8fbff" : `hsl(${190 - i * 1.2} 95% ${62 + (i % 3) * 6}%)`;
+    g.shadowColor = "#5ee7ff"; g.shadowBlur = 10;
+    g.beginPath(); g.roundRect(x - lebar / 2, y - amp - lebar / 2, lebar, amp * 2 + lebar, lebar / 2); g.fill();
+  }
+  g.shadowBlur = 0;
+
+  if (!k || t < MUAT) return;
+  aturTulang(t, panjangTubuh / k.panjang);
+  // Ungkap hanya selama kobra masih di lingkaran; sesudah lepas seluruh tubuh sudah tampak.
+  ungkap.panjang.value = muncul; ungkap.sudut.value = jalurLepas.w * t; ungkap.jari.value = R; ungkap.aktif.value = t < tLepas ? 1 : 0;
+  // Mulut: mulai membuka di tengah perjalanan, terbuka lebar sebelum moncong sampai di lensa.
+  const buka = halusDi(tLepas + (tTiba - tLepas) * 0.3, tLubang, t);
+  k.mulut.rotation.x += -1.05 * buka;
+  const pKepala = kepala(t);
+  mulutCahaya.position.set(0, 0, kamera.position.z - 0.3);
+  mulutCahaya.intensity = 1.2 * halusDi(tLubang - 0.3, tTiba, t);
+  renderer.render(scene, kamera);
+  if (gl3.width > 0 && gl3.height > 0) g.drawImage(gl3, 0, 0, W, H);
+  // Tenggorokan terbuka ke hero: setelah moncong sampai di lensa, lubang tumbuh dari pusat mulut
+  // sampai menutup layar. Lubang memotong layar gelap sekaligus kepala kobra yang sudah tergambar.
+  const tumbuh = jepit((t - tLubang) / Math.max(0.05, tTiba - tLubang));
+  if (tumbuh > 0) {
+    const [mx, my] = keLayar(k.mulut.getWorldPosition(new THREE.Vector3()), W, H);
+    const cx = Number.isFinite(mx) ? mx * (1 - tumbuh) + (W / 2) * tumbuh : W / 2;
+    const cy = Number.isFinite(my) ? my * (1 - tumbuh) + (H / 2) * tumbuh : H / 2;
+    const r = Math.hypot(W, H) * 0.8 * Math.pow(tumbuh, 1.6) + 2;
+    g.globalCompositeOperation = "destination-out";
+    const lembut = g.createRadialGradient(cx, cy, r * 0.7, cx, cy, r);
+    lembut.addColorStop(0, "rgba(0,0,0,1)"); lembut.addColorStop(1, "rgba(0,0,0,0)");
+    g.fillStyle = lembut;
+    g.beginPath(); g.ellipse(cx, cy, r, r * 0.82, 0, 0, Math.PI * 2); g.fill();
+    g.globalCompositeOperation = "source-over";
+  }
+}
+
+const geser = document.getElementById("waktu"), angka = document.getElementById("angka"), tombol = document.getElementById("putar"), lambat = document.getElementById("lambat");
+let main = true, laju = 1, t = 0, lalu = performance.now();
+const DUR = () => (jalurLepas ? jalurLepas.tTiba + 2 : 9);
+tombol.onclick = () => { main = !main; tombol.textContent = main ? "Jeda" : "Putar"; };
+lambat.onclick = () => { laju = laju === 1 ? 0.25 : 1; lambat.textContent = laju === 1 ? "Lambat 0,25x" : "Normal 1x"; };
+geser.oninput = () => { main = false; tombol.textContent = "Putar"; t = (geser.value / 1000) * DUR(); };
+function lup(now) {
+  const dt = (now - lalu) / 1000; lalu = now;
+  if (main) { t = (t + dt * laju) % DUR(); geser.value = (t / DUR()) * 1000; }
+  angka.textContent = t.toFixed(2) + " s";
+  gambar(t);
+  requestAnimationFrame(lup);
+}
+requestAnimationFrame(lup);
+window.__setT = (x) => { t = x; main = false; gambar(t); };
+window.__jalur = () => jalurLepas && { tTiba: jalurLepas.tTiba, tLubang: jalurLepas.tLubang, L: jalurLepas.L };
+
+</script>
+</body>
+</html>
