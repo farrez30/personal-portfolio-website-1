@@ -45,14 +45,28 @@ test("setiap bukti dan keluhan menaut ke proyek yang ada di rak", () => {
 });
 
 test("angka di kalimat cocok dengan isi rak", () => {
-  const angka = { 9: ["Sembilan", "Nine"], 10: ["Sepuluh", "Ten"] };
-  const denganArsitektur = proyek.filter((p) => p.arsitektur).length;
-  const infra = BAB.find((b) => b.id === "fondasi");
-  assert.ok(infra.isi.id.startsWith(`${angka[denganArsitektur][0]} dari ${angka[proyek.length][0].toLowerCase()}`));
-  assert.ok(infra.isi.en.startsWith(`${angka[denganArsitektur][1]} of the ${angka[proyek.length][1].toLowerCase()}`));
+  const angka = { 10: ["Sepuluh", "Ten"] };
   const rak = BAB.find((b) => b.id === "rilis");
   assert.ok(rak.isi.id.startsWith(angka[proyek.length][0]));
   assert.ok(rak.isi.en.startsWith(angka[proyek.length][1]));
+});
+
+test("isi bab memakai keadaan umum, nama proyek hanya di tautan bukti", () => {
+  // Masukan Farrez 13 Nov 2026: pemilik usaha belum kenal Jeda, YiheeCam, atau AkarKita, jadi
+  // nama itu tidak berarti apa pun di kalimat utama. Nama proyek tetap boleh di daftar keluhan
+  // dan tautan bukti, karena di situ ia tautan, bukan isi kalimat.
+  const nama = proyek.flatMap((p) => [p.judul.id, p.judul.en, p.slug.replace(/-/g, " ")]);
+  for (const b of BAB)
+    for (const lang of ["id", "en"])
+      for (const n of nama) assert.ok(!b.isi[lang].toLowerCase().includes(n.toLowerCase()), `${b.id} ${lang} menyebut ${n}`);
+});
+
+test("tautan luar bab menuju halaman https", () => {
+  for (const b of BAB)
+    for (const l of b.luar ?? []) {
+      assert.ok(l.nama, `${b.id}: tautan luar tanpa nama`);
+      assert.match(l.href, /^https:\/\//, `${b.id}: ${l.href}`);
+    }
 });
 
 test("istilah tahap film tidak tampil di teks halaman", () => {

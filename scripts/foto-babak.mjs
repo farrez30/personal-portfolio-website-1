@@ -34,6 +34,7 @@ let id = 0;
 const tunggu = new Map();
 ws.addEventListener("message", (e) => {
   const m = JSON.parse(e.data);
+  if (m.method === "Runtime.consoleAPICalled" && m.params.type === "error") console.log("ERR", m.params.args.map((x) => x.value ?? x.description).join(" ").slice(0, 300));
   if (m.method === "Runtime.exceptionThrown") console.log("EXC", m.params.exceptionDetails.exception?.description?.slice(0, 300));
   tunggu.get(m.id)?.(m);
   tunggu.delete(m.id);

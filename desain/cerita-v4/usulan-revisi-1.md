@@ -170,3 +170,34 @@ Penyebab kesan mentah, dan perbaikannya:
 
 Cek setiap benda sebelum masuk: clay pass, nilai abu 35 sampai 50, siluet, berdampingan di HP
 (skill look-dev). Anggaran: aset tambahan dimuat sesudah hero tampil, tidak menambah waktu loader.
+
+## Keputusan Farrez (13 Nov 2026, lewat pertanyaan terstruktur)
+
+- Teks: semua rekomendasi (R). Daftar keluhan babak ide memakai usulan; baris AkarKita tetap.
+- Benda progres: papan pre-order.
+- Layar rapi: keduanya, layar kasir buatan sendiri di tablet, The Global Review di tautan bukti.
+- Benda lain: setuju semua, lanjut ke storyboard v0.2 dengan look-dev.
+
+## Data kendala usaha (riset 13 Nov 2026, atas permintaan Farrez)
+
+Peringkat dari survei, label V dibaca langsung, I dari media atau cuplikan:
+1. Pencatatan keuangan masih manual: 77% UMKM sudah mencatat, 77% dari mereka manual (OCBC
+   Business Fitness Index 2024, 620 pemilik dan manajer di 4 kota, V). Edisi 2023: 80% mencatat
+   keuangan dan stok manual (I).
+2. Uang pribadi dan usaha tercampur: 54% belum memisahkan (OCBC BFI 2024, V).
+3. Internet lemah saat berjualan: 55,1% (Mandiri Institute, 2.944 UMKM, Des 2021, I).
+4. Rugi akibat serangan siber: 49% usaha kecil Indonesia (CPA Australia Asia-Pacific Small
+   Business Survey 2025, V).
+5. Tools digital punya tapi tidak dimanfaatkan: 81% punya media sosial, 35% memaksimalkannya
+   (OCBC BFI 2024, V).
+6. Pembanding global: 54% pemilik usaha AS mengeluh tugas manual berulang, 25 jam per minggu untuk
+   entri data (Intuit QuickBooks 2024, 630 responden, V).
+
+Akses modal adalah kendala nomor satu (Apindo 2024: 51%, V), tetapi tidak diselesaikan sistem,
+jadi tidak dipakai. Tidak ada survei berangka untuk: stok, pesanan di WhatsApp, absensi, kesalahan
+input, ketergantungan pada satu orang atau vendor. Kalimat babak fondasi dan progres memakai
+keadaan umum tanpa angka.
+
+Dipakai di: layar kasir babak rapi (pencatatan penjualan dan stok, kendala 1), daftar keluhan
+babak ide (spreadsheet dan grup WA; saldo yang tidak cocok), babak andal (sinyal dan listrik),
+babak aman (akses per peran, kendala 4).

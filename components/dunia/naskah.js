@@ -27,7 +27,7 @@ export const ANCHOR = [
   // jadi bendanya dinaikkan ke separuh atas bingkai.
   {
     id: "ide",
-    // Kartu keluhan di dinding catatan, laptop dengan rapat Meet di meja kecil.
+    // Papan titipan pelanggan di dinding catatan, laptop dengan rapat Meet di meja kecil.
     posisi: [1.3, 1.25, -2.2],
     lihat: [2.15, 0.95, -3.7],
     benda: [2.5, 1.0, -3.6],
@@ -37,7 +37,7 @@ export const ANCHOR = [
   },
   {
     id: "rencana",
-    // Meja tulis di dinding kiri: daftar kebutuhan yang distempel setuju.
+    // Meja tulis di dinding kiri: daftar kebutuhan di papan jepit, distempel setuju.
     posisi: [-3.55, 1.35, -0.75],
     lihat: [-4.3, 0.72, -1.15],
     benda: [-4.5, 0.74, -1.4],
@@ -47,11 +47,11 @@ export const ANCHOR = [
   },
   {
     id: "bentuk",
-    // Papan storyboard berkaki: sketsa layar yang berubah jadi layar sungguhan.
-    posisi: [-2.6, 1.4, 0.85],
-    lihat: [-4.35, 1.25, 0.8],
-    benda: [-4.3, 1.3, 0.35],
-    fov: 42,
+    // Satu album dalam empat format (piringan, CD, kaset, ponsel): bentuk dipilih sesuai pendengarnya.
+    posisi: [-2.95, 1.4, 0.45],
+    lihat: [-4.4, 1.0, 0.52],
+    benda: [-4.4, 1.05, 0.28],
+    fov: 40,
     cerita: true,
     seksi: [{ sel: ".bab--bentuk", di: 0 }],
   },
@@ -77,17 +77,17 @@ export const ANCHOR = [
   },
   {
     id: "progres",
-    // Meja kerja di pojok belakang kanan, dua monitor dan lampu meja.
-    posisi: [2.7, 1.35, -1.85],
-    lihat: [3.55, 1.05, -3.76],
-    benda: [3.95, 1.1, -3.45],
+    // Papan pre-order di pojok belakang kanan: kartu pesanan bergeser dari dipesan ke sudah tiba.
+    posisi: [3.0, 1.45, -2.25],
+    lihat: [3.85, 1.2, -3.9],
+    benda: [4.2, 1.2, -3.85],
     fov: 42,
     cerita: true,
     seksi: [{ sel: ".bab--progres", di: 0 }],
   },
   {
     id: "rapi",
-    // Stasiun dengar coba di ujung gondola: layar yang dirapikan.
+    // Stasiun dengar coba di ujung gondola: layar kasir sebelum dan sesudah dirapikan.
     posisi: [0.55, 1.35, 1.45],
     lihat: [0.61, 1.0, 0.52],
     benda: [0.85, 1.05, 0.6],
@@ -97,7 +97,7 @@ export const ANCHOR = [
   },
   {
     id: "andal",
-    // Pemutar kaset baterai di bangku: tetap jalan saat listrik toko berkedip.
+    // Listrik toko padam: pemutar kaset baterai, ponsel, dan lampu darurat tetap menyala.
     posisi: [2.75, 1.0, -0.7],
     lihat: [3.27, 0.5, -1.85],
     benda: [3.55, 0.55, -1.6],
@@ -107,11 +107,11 @@ export const ANCHOR = [
   },
   {
     id: "aman",
-    // Vitrin koleksi langka di sisi belakang gondola, terkunci.
-    posisi: [0.75, 1.35, -0.9],
-    lihat: [0.48, 1.0, 0.3],
-    benda: [0.25, 1.05, 0.2],
-    fov: 38,
+    // Vitrin koleksi langka terkunci dan papan kunci berlabel, di sisi belakang gondola.
+    posisi: [0.85, 1.35, -0.95],
+    lihat: [0.3, 1.0, 0.25],
+    benda: [0.0, 1.02, 0.2],
+    fov: 40,
     cerita: true,
     seksi: [{ sel: ".bab--aman", di: 0 }],
   },

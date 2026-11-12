@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { scroll } from "motion";
 import { gsap } from "gsap";
@@ -25,7 +25,6 @@ export default function CeritaKerja() {
   const { mode } = useMode();
   const akar = useRef(null);
   const [dunia, setDunia] = useState(false);
-  const tanpaDunia = useCallback(() => setDunia(false), []);
   const [tampil, setTampil] = useState(false);
   const [aktif, setAktif] = useState(-1);
 
@@ -246,13 +245,21 @@ export default function CeritaKerja() {
                     </ul>
                   )}
 
-                  {b.bukti && (
+                  {(b.bukti || b.luar) && (
                     <p className="bab__bukti">
                       <span className="mono">{t("bukti")}:</span>{" "}
-                      {b.bukti.map((slug, j) => (
+                      {(b.bukti ?? []).map((slug, j) => (
                         <span key={slug}>
                           {j > 0 && ", "}
                           <Link href={`/proyek/${slug}`}>{cariProyek(slug)?.judul[locale] ?? slug}</Link>
+                        </span>
+                      ))}
+                      {(b.luar ?? []).map((l, j) => (
+                        <span key={l.href}>
+                          {(b.bukti?.length || j > 0) && ", "}
+                          <a href={l.href} target="_blank" rel="noopener noreferrer">
+                            {l.nama}
+                          </a>
                         </span>
                       ))}
                     </p>

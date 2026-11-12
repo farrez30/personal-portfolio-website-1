@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --bg:#f6f4f0; --kartu:#ffffff; --garis:#e6e1d8; --tinta:#1f1d1a; --tinta2:#6b655c; --hijau:#1f7a4d; --hijau-muda:#e5f2ea; --oranye:#b45309; --oranye-muda:#fdf0e2; }
+* { box-sizing:border-box; margin:0; }
+body { width:1200px; height:800px; overflow:hidden; font-family:"Plus Jakarta Sans", sans-serif; background:var(--bg); color:var(--tinta); padding:36px 44px; display:grid; grid-template-columns:1.35fr 1fr; grid-template-rows:auto 1fr; gap:24px 28px; }
+header { grid-column:1 / 3; display:flex; justify-content:space-between; align-items:center; }
+.toko { font-size:22px; font-weight:700; }
+.tgl { color:var(--tinta2); font-size:17px; margin-top:2px; }
+.simpan { display:flex; align-items:center; gap:8px; color:var(--hijau); font-size:16px; font-weight:600; background:var(--hijau-muda); padding:8px 14px; border-radius:999px; }
+.simpan i { width:9px; height:9px; border-radius:50%; background:var(--hijau); display:block; }
+.kartu { background:var(--kartu); border:1px solid var(--garis); border-radius:18px; padding:28px; }
+.utama { display:flex; flex-direction:column; justify-content:space-between; }
+.label { color:var(--tinta2); font-size:18px; font-weight:500; }
+.angka { font-size:76px; font-weight:700; letter-spacing:-0.03em; font-variant-numeric:tabular-nums; margin-top:6px; }
+.sub { color:var(--tinta2); font-size:19px; margin-top:6px; }
+.sub b { color:var(--hijau); font-weight:600; }
+.tombol { margin-top:20px; background:var(--tinta); color:#fff; font-size:26px; font-weight:600; border-radius:16px; padding:26px 0; text-align:center; }
+.kanan { display:flex; flex-direction:column; gap:24px; }
+h2 { font-size:20px; font-weight:700; margin-bottom:16px; }
+.stok div { display:flex; justify-content:space-between; align-items:center; padding:14px 0; border-top:1px solid var(--garis); font-size:19px; }
+.stok div:first-of-type { border-top:0; }
+.sisa { font-weight:600; color:var(--oranye); background:var(--oranye-muda); padding:4px 12px; border-radius:999px; font-size:16px; }
+.akhir div { display:flex; justify-content:space-between; padding:11px 0; border-top:1px solid var(--garis); font-size:18px; font-variant-numeric:tabular-nums; }
+.akhir div:first-of-type { border-top:0; }
+.akhir span:first-child { color:var(--tinta2); }
+.grafik { display:flex; align-items:flex-end; gap:10px; height:170px; margin-top:30px; }
+.grafik div { flex:1; background:#d9d3c8; border-radius:6px 6px 0 0; }
+.grafik div.kini { background:var(--hijau); }
+.jam { display:flex; justify-content:space-between; color:var(--tinta2); font-size:14px; margin-top:8px; }
+</style></head><body>
+<header><div><div class="toko">Toko Sinar</div><div class="tgl">Kamis, 13 November</div></div><div class="simpan"><i></i>Tersimpan</div></header>
+<section class="kartu utama"><div><div class="label">Penjualan hari ini</div><div class="angka">Rp4.250.000</div><div class="sub">38 transaksi, <b>naik 12%</b> dari kemarin</div><div class="grafik"><div style="height:28%"></div><div style="height:45%"></div><div style="height:62%"></div><div style="height:40%"></div><div style="height:55%"></div><div style="height:78%"></div><div style="height:92%"></div><div style="height:66%"></div><div style="height:84%"></div><div style="height:100%" class=kini></div></div><div class="jam"><span>08.00</span><span>11.00</span><span>14.00</span></div></div><div class="tombol">Catat penjualan</div></section>
+<div class="kanan">
+<section class="kartu stok"><h2>Stok menipis</h2><div><span>Minyak Goreng 2L</span><span class="sisa">sisa 3</span></div><div><span>Gula Pasir 1kg</span><span class="sisa">sisa 5</span></div><div><span>Telur Ayam 1kg</span><span class="sisa">sisa 6</span></div></section>
+<section class="kartu akhir"><h2>Transaksi terakhir</h2><div><span>14.32</span><span>Rp86.500</span></div><div><span>14.18</span><span>Rp32.000</span></div><div><span>14.05</span><span>Rp154.000</span></div></section>
+</div>
+</body></html>

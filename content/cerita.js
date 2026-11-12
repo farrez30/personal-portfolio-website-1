@@ -1,8 +1,10 @@
-// Cerita gulir v3 "dari keluhan sampai dipakai tiap hari": sepuluh bab di antara hero dan rak,
-// satu bab per panel di soundstage (components/cerita/naskah.js). Judul memakai nada B pilihan
+// Cerita gulir "dari keluhan sampai dipakai tiap hari": sepuluh bab di antara hero dan rak,
+// satu benda per bab di dunia toko kaset (components/dunia/props.js, cerita v4). Judul memakai nada B pilihan
 // Farrez (11 Nov 2026); proses, pilihan, dan sumber tiap kalimat di desain/cerita-v3/naskah-teks.md.
 // Versi EN ditulis tersendiri dari isi yang sama, bukan diterjemahkan dari versi ID.
-// Kalimat yang belum ada buktinya tidak masuk ke sini.
+// Kalimat yang belum ada buktinya tidak masuk ke sini. Sejak v4 (13 Nov 2026) isi bab memakai
+// keadaan umum di usaha, bukan nama proyek; nama proyek ada di tautan bukti. Dasar dan pilihan
+// tiap kalimat: desain/cerita-v4/usulan-revisi-1.md.
 
 export const BAB = [
   {
@@ -24,13 +26,13 @@ export const BAB = [
       },
       {
         slug: "yiheecam",
-        id: "Aplikasi kamera aksinya sudah tidak diurus vendornya.",
-        en: "The action camera's app has been abandoned by its vendor.",
+        id: "Aplikasi dari vendor lama sudah tidak ada yang merawat.",
+        en: "Nobody looks after the app from the old vendor anymore.",
       },
       {
         slug: "fifofun",
-        id: "Anggaran rumah tangga tidak pernah cocok sama saldo di bank.",
-        en: "The household budget never matches the bank balance.",
+        id: "Catatan uang masuk dan keluar tidak pernah cocok dengan saldo bank.",
+        en: "Money in and money out never match the bank balance.",
       },
       {
         slug: "nds-etl",
@@ -62,8 +64,8 @@ export const BAB = [
       en: "The shape follows the problem.",
     },
     isi: {
-      id: "Kadang cukup dashboard di HP, kadang sistem kantor di laptop, kadang alur dari iklan sampai chat WhatsApp. Ada juga yang memang butuh aplikasi sendiri, seperti YiheeCam untuk kamera aksi.",
-      en: "Sometimes a phone dashboard is enough, sometimes an office system on a laptop, sometimes a flow from an ad to a WhatsApp chat. Some problems do need their own app, like YiheeCam for an action camera.",
+      id: "Kadang cukup dashboard di HP, kadang sistem kantor di laptop, kadang alur dari iklan sampai chat WhatsApp. Aplikasi sendiri hanya kalau memang perlu.",
+      en: "Sometimes a phone dashboard is enough, sometimes an office system on a laptop, sometimes a flow from an ad to a WhatsApp chat. A dedicated app only when it is really needed.",
     },
     bukti: ["yiheecam", "erp-software-house", "nds-etl", "pilot-iklan"],
   },
@@ -74,8 +76,8 @@ export const BAB = [
       en: "Tidy all the way to the parts you don't see.",
     },
     isi: {
-      id: "Sembilan dari sepuluh proyek di rak punya halaman arsitektur, kalau Anda atau tim IT ingin tahu cara kerjanya.",
-      en: "Nine of the ten projects on the shelf have an architecture page, in case you or your IT team want to see how they work.",
+      id: "Setiap bagian punya catatan cara kerjanya, jadi sistem Anda tidak bergantung pada satu orang.",
+      en: "Every part comes with notes on how it works, so your system never depends on one person.",
     },
     bukti: ["coderoach-os", "fifofun"],
   },
@@ -97,8 +99,8 @@ export const BAB = [
       en: "Clear progress, steady updates.",
     },
     isi: {
-      id: "Keputusan penting saya catat beserta alasannya. Status juga saya tulis apa adanya: d-day sudah lulus uji coba, tapi belum pernah dipakai dengan uang sungguhan.",
-      en: "Every key decision is written down with its reason. Status is stated as it is: d-day has passed its trial run and has never touched real money.",
+      id: "Anda tidak perlu menagih kabar. Yang sudah jadi, yang belum, dan alasannya tercatat di satu tempat.",
+      en: "You never have to chase for updates. What is done, what is not, and why, all written down in one place.",
     },
     bukti: ["d-day", "coderoach-os"],
   },
@@ -112,6 +114,8 @@ export const BAB = [
       id: "Tampilannya sudah dirancang rapi sejak awal. Sebelum dipakai sehari-hari, tim Anda mencobanya dulu, dan langkah yang masih membingungkan dipangkas.",
       en: "The look is designed to be tidy from the start. Before everyday use, your team tries it first, and any step that still confuses gets cut.",
     },
+    // Contoh rombakan nyata di luar rak: situs klien Coderoach sebelum dan sesudah.
+    luar: [{ nama: "The Global Review", href: "https://coderoach.id/work/the-global-review" }],
   },
   {
     id: "andal",
@@ -120,10 +124,10 @@ export const BAB = [
       en: "Dependable when it matters most.",
     },
     isi: {
-      id: "Catatan di Jeda tetap bisa ditulis walau sinyal hilang. Waktu vendor kamera aksi berhenti merawat aplikasinya, YiheeCam yang menggantikan.",
-      en: "Jeda keeps taking notes when the signal drops. When an action camera's vendor stopped looking after its app, YiheeCam took its place.",
+      id: "Sinyal hilang atau listrik padam, pencatatan tetap jalan. Datanya menyusul begitu tersambung lagi.",
+      en: "Lost signal or a power cut, the recording keeps going. The data catches up once you are back online.",
     },
-    bukti: ["jeda", "yiheecam"],
+    bukti: ["jeda"],
   },
   {
     id: "aman",
@@ -132,8 +136,8 @@ export const BAB = [
       en: "Important data stays with the right people.",
     },
     isi: {
-      id: "Di Jeda, psikolog cuma bisa membaca catatan yang memang dibagikan kliennya. Pohon keluarga di AkarKita hanya bisa dibuka lewat undangan. Usaha tumbuh, sistemnya sanggup mengikuti: ERP di software house tempat saya bekerja dipakai beberapa klien sekaligus, dari distribusi dan servis, asuransi kesehatan, sampai payroll perkebunan.",
-      en: "In Jeda, a psychologist reads only the notes a client chooses to share. An AkarKita family tree opens by invitation only. As the business grows, the system keeps up: the ERP at the software house where I work serves several clients at once, from distribution and service to health insurance and plantation payroll.",
+      id: "Kasir membuka bagian kasir, gudang membuka bagian gudang, laporan keuangan hanya untuk Anda. Usaha tumbuh, sistemnya sanggup mengikuti.",
+      en: "Cashiers open the cashier side, the warehouse opens the warehouse side, and the financial reports are yours alone. As the business grows, the system keeps up.",
     },
     bukti: ["jeda", "akarkita", "erp-software-house"],
   },
