@@ -50,7 +50,13 @@ separate boxes, and only a single world makes the transitions truly seamless.
 - The soundstage story (ADR 0013, PR #51 to #53) and the rack canvas get folded into the shop.
   Their code is reused where it fits, for example `buatKotak` and the warm-up from PR #54.
 - The hero intro from PR #57 is replaced by the snake hand-off.
-- The asset source (primitives, image-to-3D, or CC0 models) is still open. Farrez wants samples
-  of all three side by side first.
+- Section transitions are camera blends: one fast eased move between fixed camera anchors, with
+  motion blur scaled to camera speed. No themed effects (Farrez, 12 Nov 2026, after the storyboard
+  showed rainbow and light-leak transitions as forced).
+- Asset source is a mix, chosen by Farrez after a side-by-side test (12 Nov 2026). The room is
+  primitives plus Flow textures. Supporting props are CC0 from Poly Haven, with textures reduced
+  to 512 px. Image-to-3D (Hunyuan3D-2) is only for key objects that have no CC0 model, such as
+  the headphones and the snake. Hunyuan output still needs the external-component audit
+  (Tencent Hunyuan 3D 2.0 Community License, which excludes the EU, UK and South Korea).
 - Revisit if phones cannot hold a steady frame rate after the quality tiers are in, or if
   first load passes about 5 s on a mid-range phone.

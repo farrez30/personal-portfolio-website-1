@@ -58,10 +58,10 @@
 <script>
 // Lima tempat, satu per seksi situs. a..b = rentang gulir; trans = efek ke tempat berikutnya.
 const tempat = [
-  { n:"Hero: bilik dengar", a:0, b:.18, kecil:"Implementation, business analysis, dan delivery.", besar:"Bukan sekadar sistem yang selesai dibuat,", trans:"Fokus bergeser dari headphone ke dinding, gambar sedikit bergoyang seperti suara berdengung.", w:"#2a2018" },
-  { n:"Cerita: dinding catatan sampul", a:.2, b:.42, kecil:"Cerita", besar:"Dari demo ke dipakai tiap hari", trans:"Kamera menoleh cepat ke rak; garis-garis gerak menyamarkan potongannya.", w:"#2b241c" },
-  { n:"Proyek: rak CD", a:.45, b:.66, kecil:"Proyek", besar:"Ambil satu album", trans:"CD diangkat ke lampu; kilau pelangi CD memenuhi layar lalu reda di meja kasir.", w:"#161b24" },
-  { n:"Klien: meja kasir", a:.7, b:.84, kecil:"Klien dan mitra", besar:"Stiker label di meja kasir", trans:"Pintu terbuka; cahaya jalan masuk dan membawa kita ke kontak.", w:"#251c14" },
+  { n:"Hero: bilik dengar", a:0, b:.18, kecil:"Implementation, business analysis, dan delivery.", besar:"Bukan sekadar sistem yang selesai dibuat,", trans:"Kamera bergeser cepat ke kanan, dari bilik ke dinding catatan sampul.", w:"#2a2018" },
+  { n:"Cerita: dinding catatan sampul", a:.2, b:.42, kecil:"Cerita", besar:"Dari demo ke dipakai tiap hari", trans:"Kamera bergeser cepat ke kanan, dari dinding ke rak CD.", w:"#2b241c" },
+  { n:"Proyek: rak CD", a:.45, b:.66, kecil:"Proyek", besar:"Ambil satu album", trans:"Kamera bergeser cepat ke kiri, dari rak ke meja kasir.", w:"#161b24" },
+  { n:"Klien: meja kasir", a:.7, b:.84, kecil:"Klien dan mitra", besar:"Stiker label di meja kasir", trans:"Kamera bergeser cepat ke kanan, dari kasir ke pintu.", w:"#251c14" },
   { n:"Kontak: pintu dan lonceng", a:.88, b:1, kecil:"Kontak", besar:"Lonceng pintu berbunyi. Mari ngobrol.", trans:"Akhir halaman.", w:"#2a1f1a" },
 ];
 const catatan = document.getElementById("catatan");
@@ -118,10 +118,20 @@ function gambar(p) {
   const j = tempat.findIndex((t) => p < t.a) - 1, u = halus((p - tempat[j].b) / (tempat[j + 1].a - tempat[j].b));
   besar.parentElement.style.opacity = 0;
   document.getElementById("label-pov").textContent = "TRANSISI: " + tempat[j].trans;
-  if (j === 0) { g.filter = `blur(${Math.sin(u * Math.PI) * 6}px)`; adegan(u < .5 ? 0 : 1, W, H, u < .5 ? 1 : 0); g.filter = "none"; g.fillStyle = "#ffffff10"; for (let y = 0; y < H; y += 6) g.fillRect(Math.sin(y * .2 + u * 30) * 6 * Math.sin(u * Math.PI), y, W, 2); }
-  else if (j === 1) { const dx = (u - .5) * W * 1.4; g.save(); g.translate(-dx * .3, 0); g.filter = `blur(${Math.sin(u * Math.PI) * 14}px)`; adegan(u < .5 ? 1 : 2, W, H, .5); g.restore(); g.filter = "none"; g.strokeStyle = "#ffffff22"; for (let y = 10; y < H; y += 14) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); } }
-  else if (j === 2) { adegan(u < .5 ? 2 : 3, W, H, .5); const r = Math.sin(u * Math.PI); const gr = g.createConicGradient(u * 6, W / 2, H / 2); ["#ff6b6b", "#ffd84a", "#6bff9e", "#5aa8ff", "#c46bff", "#ff6b6b"].forEach((w, q) => gr.addColorStop(q / 5, w)); g.globalAlpha = r * .85; g.fillStyle = gr; g.beginPath(); g.arc(W / 2, H / 2, r * W * .8, 0, 7); g.fill(); g.globalAlpha = 1; }
-  else { adegan(u < .6 ? 3 : 4, W, H, 0); const gr = g.createLinearGradient(W, 0, 0, 0); gr.addColorStop(0, `rgba(255,233,184,${Math.sin(u * Math.PI)})`); gr.addColorStop(1, "rgba(255,233,184,0)"); g.fillStyle = gr; g.fillRect(0, 0, W, H); }
+  // Perpindahan kamera: pelan di awal, cepat di tengah, mengendap di akhir (ease in-out).
+  // Kedua tempat berdampingan di satu ruang, kamera menggeser di antaranya. Motion blur
+  // sebanding dengan kecepatan kamera: beberapa salinan tipis sepanjang arah gerak.
+  const e = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const kec = Math.abs(e(Math.min(1, u + .02)) - e(Math.max(0, u - .02))) / .04;
+  const arah = [1, 1, -1, 1][j];
+  const salinan = Math.max(1, Math.round(kec * 6));
+  for (let s = 0; s < salinan; s++) {
+    const geser = e(u) * W - (s / salinan) * kec * W * .06;
+    g.globalAlpha = s === 0 ? 1 : .35 / salinan * (salinan - s);
+    g.save(); g.translate(-geser * arah, 0); adegan(j, W, H, 1); g.restore();
+    g.save(); g.translate((W - geser) * arah, 0); adegan(j + 1, W, H, 0); g.restore();
+  }
+  g.globalAlpha = 1;
 }
 
 const gulir = document.getElementById("gulir"), angka = document.getElementById("angka"), tombol = document.getElementById("putar");
