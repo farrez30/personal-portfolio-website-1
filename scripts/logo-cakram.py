@@ -99,6 +99,14 @@ def main():
     if skor < 0.45:
         sys.exit("logo tidak ketemu dengan yakin; periksa gambarnya")
 
+    # --tempel=<berkas>: logo untuk mencari letak berbeda dari logo yang ditempel, misalnya
+    # versi gelap dicari lalu versi terang (bentuk sama, warna dibalik) ditempel di latar gelap.
+    # Warna tinta AI tetap dikenali dari logo pencarian.
+    palet_cari = logo_rgb[alfa > 0.9]
+    tempel = next((a.split("=", 1)[1] for a in sys.argv if a.startswith("--tempel=")), None)
+    if tempel:
+        logo_rgb, alfa = topeng_logo(Image.open(tempel), False)
+
     # Kotak AI hanya penunjuk letak. Logo asli tetap memakai rasionya sendiri, dipusatkan
     # tegak di kotak AI, jadi tidak pernah ikut dipipihkan.
     ai_x, ai_y, ai_h = x, y, h
@@ -143,7 +151,7 @@ def main():
     tinta_ai = (a > 0.05).astype(np.float32)
     # Di sekitar logo asli dan di kotak logo AI (bisa lebih lebar dari logo asli), hapus hanya piksel yang warnanya
     # mirip warna tinta logo asli, supaya latar bertekstur di sekitarnya tidak ikut rata.
-    palet = rgb[a > 0.9]
+    palet = np.concatenate([rgb[a > 0.9], palet_cari])
     if len(palet):
         palet = palet[np.linspace(0, len(palet) - 1, min(96, len(palet))).astype(int)]
         jarak = np.min(np.linalg.norm(kotak[..., None, :] - palet[None, None], axis=-1), axis=-1)
