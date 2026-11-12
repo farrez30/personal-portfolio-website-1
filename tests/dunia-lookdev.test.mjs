@@ -100,12 +100,23 @@ test("lantai, dinding, dan plafon menerima bayangan tapi tidak membuatnya", () =
   assert.match(kode, /o\.castShadow = !bidangRuang\.has\(m\);/);
 });
 
-test("lintasan layar memberi ambient occlusion dan depth of field, AO hanya di desktop", () => {
-  assert.match(kode, /uAo: \{ value: hp \? 0 : 1 \}/);
+test("ambient occlusion N8AO memakai gambar adegan yang sama, depth of field di lintasan layar", () => {
+  // ADR 0017: benda harus menapak (masukan Farrez 13 Nov 2026). Adegan digambar sekali; N8AO
+  // membaca target yang sama, dan hasilnya linear supaya tone mapping tetap di lintasan layar.
+  assert.match(kode, /import \{ N8AOPass \} from "n8ao";/);
+  assert.match(kode, /ao\.beautyRenderTarget = target;/);
+  assert.match(kode, /autoRenderBeauty: false,\s*gammaCorrection: false,/);
+  assert.match(kode, /renderer\.render\(scene, camera\);\s*if \(aoAktif\) ao\.render\(renderer, hasilAO\);/);
+  assert.match(kode, /tWarna: \{ value: hasilAO\.texture \}/);
+  // HP: sampel lebih sedikit. Jalur halfRes N8AO melempar galat dengan target pinjaman, jadi
+  // tidak pernah dinyalakan; penjaga kualitas menurunkan sampel lalu mematikan AO.
+  assert.match(kode, /aoSamples: hp \? 8 : 16,/);
+  assert.doesNotMatch(kode, /halfRes/);
+  assert.match(kode, /aoAktif = false;\s*blur\.uniforms\.tWarna\.value = target\.texture;/);
   assert.match(kode, /if \(uDof > 0\.001 && uKuat <= 0\.001\)/);
-  assert.match(kode, /if \(uAo > 0\.5 && zKini < 15\.0\)/);
-  // Fokus hanya di babak cerita dan saat kamera sudah mendarat; gerak dikurangi tanpa kabur.
   assert.match(kode, /const dofTujuan = a\.cerita && !blend && !kurangiGerak \? 1 : 0;/);
+  const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+  assert.equal(pkg.dependencies.n8ao, "2.0.1", "versi n8ao harus dikunci tepat");
 });
 
 test("model CC0 memakai AO dari peta ARM, dinding bertekstur plester", () => {

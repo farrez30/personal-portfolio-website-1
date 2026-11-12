@@ -26,22 +26,23 @@ test("bingkai tidak menggambar apa pun sebelum rak hangat", () => {
   assert.match(adegan, /hangat = true;/);
 });
 
-test("pemanasan: shader dikompilasi paralel, tekstur diunggah per bingkai, lalu satu gambar latihan", () => {
+test("pemanasan: shader dikompilasi paralel, tekstur diunggah per bingkai, lalu gambar latihan dicicil", () => {
   const siapkan = adegan.slice(adegan.indexOf("const siapkan = async () => {"));
   const isi = siapkan.slice(0, siapkan.indexOf("hangat = true;"));
   assert.match(isi, /await renderer\.compileAsync\(scene, camera\)/);
   assert.match(isi, /renderer\.initTexture\(t\);\s*await bingkaiBerikut\(\);/);
-  assert.match(isi, /renderLatihan\(scene\)/);
+  // Per tiga mesh per bingkai: ANGLE menyelesaikan program dan shader bayangan saat draw pertama.
+  assert.match(isi, /for \(let i = 0; i < benda\.length; i \+= 3\) \{\s*renderLatihan\(scene, new Set\(benda\.slice\(i, i \+ 3\)\)\);\s*await bingkaiBerikut\(\);/);
 });
 
 test("gambar latihan ke kanvas sendiri lewat scissor, bukan ke render target", () => {
-  const latihan = adegan.slice(adegan.indexOf("const renderLatihan = (akar) => {"));
+  const latihan = adegan.slice(adegan.indexOf("const renderLatihan = (akar, hanya = null) => {"));
   const isi = latihan.slice(0, latihan.indexOf("};"));
   // Render target mematikan tone mapping dan ruang warna layar: shadernya versi lain (2,4 s).
   assert.doesNotMatch(isi, /setRenderTarget|WebGLRenderTarget/);
   assert.match(isi, /setScissorTest\(true\)[\s\S]*setScissor\(0, 0, 1, 1\)[\s\S]*setScissorTest\(false\)/);
   // Benda tersembunyi dan di luar pandangan ikut, lalu keadaannya dipulihkan.
-  assert.match(isi, /o\.visible = true;\s*o\.frustumCulled = false;/);
+  assert.match(isi, /o\.visible = !hanya \|\| !o\.isMesh \|\| hanya\.has\(o\);\s*o\.frustumCulled = false;/);
   assert.match(isi, /o\.visible = v;\s*o\.frustumCulled = f;/);
 });
 

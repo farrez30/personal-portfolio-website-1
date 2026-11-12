@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
+import { N8AOPass } from "n8ao";
 import { ANCHOR, anchorTegak, nyalaFondasi, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
 import { buatPropsCerita } from "./props";
 
@@ -403,9 +404,30 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   const sampel = hp ? 0 : 4;
   const kedalaman = new THREE.DepthTexture(1, 1);
   const target = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType, samples: sampel, depthTexture: kedalaman });
+  // Ambient occlusion N8AO (ADR 0017): sudut, kolong, dan kaki benda gelap alami, supaya benda
+  // menapak. Adegan tetap digambar sekali ke `target`; N8AO memakai warna dan kedalamannya
+  // (autoRenderBeauty mati), lalu hasilnya, masih linear, dibaca lintasan layar di bawah.
+  const ao = new N8AOPass(scene, camera, 1, 1);
+  ao.beautyRenderTarget.dispose();
+  ao.beautyRenderTarget = target;
+  Object.assign(ao.configuration, {
+    autoRenderBeauty: false,
+    gammaCorrection: false,
+    aoRadius: 1.1,
+    distanceFalloff: 1,
+    intensity: 5,
+    aoSamples: hp ? 8 : 16,
+    denoiseSamples: hp ? 4 : 8,
+  });
+  // Jalur setengah resolusi N8AO (halfRes) tidak dipakai: dengan target adegan pinjaman ia
+  // melempar galat tiap bingkai (terukur 13 Nov 2026). HP memakai sampel lebih sedikit.
+  let aoAktif = true;
+  ao.configuration.color.setHex(0x1a1410);
+  const hasilAO = new THREE.WebGLRenderTarget(1, 1, { type: THREE.HalfFloatType });
+
   const blur = new THREE.ShaderMaterial({
     uniforms: {
-      tWarna: { value: target.texture },
+      tWarna: { value: hasilAO.texture },
       tDalam: { value: kedalaman },
       uBalik: { value: new THREE.Matrix4() },
       uLalu: { value: new THREE.Matrix4() },
@@ -420,7 +442,6 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       uDekat: { value: 0.05 },
       uJauh: { value: 40 },
       uPiksel: { value: new THREE.Vector2(1, 1) },
-      uAo: { value: hp ? 0 : 1 },
       uFokus: { value: 2 },
       uDof: { value: 0 },
     },
@@ -442,7 +463,6 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       uniform float uDekat;
       uniform float uJauh;
       uniform vec2 uPiksel;
-      uniform float uAo;
       uniform float uFokus;
       uniform float uDof;
       float acak(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
@@ -474,23 +494,6 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
             }
             c.rgb = jumlah / bobot;
           }
-        }
-        // Ambient occlusion layar: delapan titik di sekitar piksel, gelap bila tetangganya lebih
-        // dekat ke kamera dalam jangkauan 30 cm. Membuat sudut, celah, dan kaki benda menyatu.
-        if (uAo > 0.5 && zKini < 15.0) {
-          float ao = 0.0;
-          float putar = acak(gl_FragCoord.xy + 7.0) * 6.2832;
-          float rad = 0.22 / zKini;
-          for (int i = 0; i < 8; i++) {
-            float fi = float(i);
-            float a = fi * 0.7854 + putar;
-            float r = rad * (0.35 + 0.65 * fract(fi * 0.618 + putar));
-            vec2 uv = vUv + vec2(cos(a) / uAspek, sin(a)) * r;
-            float zS = linear(texture2D(tDalam, uv).x);
-            float beda = zKini - zS;
-            ao += step(0.015, beda) * (1.0 - smoothstep(0.0, 0.3, beda));
-          }
-          c.rgb *= 1.0 - (ao / 8.0) * 0.55;
         }
         if (uKuat > 0.001) {
           float d = texture2D(tDalam, vUv).x;
@@ -542,6 +545,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     if (!kurangiGerak) blur.uniforms.uBenih.value = (blur.uniforms.uBenih.value + 37.13) % 1000;
     renderer.setRenderTarget(target);
     renderer.render(scene, camera);
+    if (aoAktif) ao.render(renderer, hasilAO);
     renderer.setRenderTarget(null);
     renderer.render(adeganLayar, kameraLayar);
     vpLalu.copy(vpKini);
@@ -601,6 +605,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const pw = Math.max(1, Math.floor(w * rasio));
     const ph = Math.max(1, Math.floor(h * rasio));
     target.setSize(pw, ph);
+    ao.setSize(pw, ph);
+    hasilAO.setSize(pw, ph);
     camera.aspect = w / h;
     blur.uniforms.uAspek.value = w / h;
     blur.uniforms.uPiksel.value.set(1 / pw, 1 / ph);
@@ -629,8 +635,14 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     if (buruk >= 2 && rasio > 0.75) {
       buruk = 0;
       rasio = Math.max(0.75, rasio - 0.2);
-      // Langkah pertama yang dikorbankan: AO layar, efek termahal per piksel.
-      blur.uniforms.uAo.value = 0;
+      // Yang pertama dikorbankan AO: sampelnya dikurangi, lalu dimatikan.
+      if (ao.configuration.aoSamples > 8) {
+        ao.configuration.aoSamples = 8;
+        ao.configuration.denoiseSamples = 4;
+      } else if (aoAktif) {
+        aoAktif = false;
+        blur.uniforms.tWarna.value = target.texture;
+      }
       ukur();
     }
   };
@@ -806,15 +818,27 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
 
   // Gambar latihan sekelompok benda ke render target 1 piksel. Benda lain disembunyikan hanya
   // di dalam panggilan ini, jadi bingkai biasa tidak pernah melihat adegan yang setengah.
+  // frustumCulled dimatikan: benda di luar pandangan kamera saat itu juga harus tergambar, kalau
+  // tidak programnya baru diselesaikan ANGLE saat pertama terlihat (trace 13 Nov 2026: 778 ms
+  // beku di dekat rak, karena GPU sedang mengompilasi shader rak).
   const latih = (kelompok) => {
     const sembunyi = [];
     scene.traverse((o) => o.isMesh && o.visible && !kelompok.includes(o) && (sembunyi.push(o), (o.visible = false)));
+    const pulih = kelompok.map((o) => [o, o.visible, o.frustumCulled]);
+    for (const o of kelompok) {
+      o.visible = true;
+      o.frustumCulled = false;
+    }
     target.scissor.set(0, 0, 1, 1);
     target.scissorTest = true;
     renderer.setRenderTarget(target);
     renderer.render(scene, camera);
     renderer.setRenderTarget(null);
     target.scissorTest = false;
+    for (const [o, v, f] of pulih) {
+      o.visible = v;
+      o.frustumCulled = f;
+    }
     for (const o of sembunyi) o.visible = true;
   };
 
@@ -886,23 +910,14 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     // Gambar latihan per beberapa benda, satu kelompok per bingkai, ke 1 piksel render target.
     // ANGLE (D3D11) baru menyelesaikan program saat draw pertama; sekaligus semuanya terukur
     // 386 ms beku. Dicicil begini, loader tetap bergerak.
+    // Termasuk benda yang masih tersembunyi atau di luar pandangan (lihat latih()).
     const benda = [];
-    scene.traverse((o) => o.isMesh && o.visible && benda.push(o));
-    target.scissor.set(0, 0, 1, 1);
-    target.scissorTest = true;
-    for (const o of benda) o.visible = false;
+    scene.traverse((o) => o.isMesh && benda.push(o));
     for (let i = 0; i < benda.length; i += 3) {
-      const kelompok = benda.slice(i, i + 3);
-      for (const o of kelompok) o.visible = true;
-      renderer.setRenderTarget(target);
-      renderer.render(scene, camera);
-      renderer.setRenderTarget(null);
-      for (const o of kelompok) o.visible = false;
+      latih(benda.slice(i, i + 3));
       onHangat(0.9 + (0.08 * (i + 3)) / benda.length);
       await bingkaiBerikut();
     }
-    for (const o of benda) o.visible = true;
-    target.scissorTest = false;
     await perbaruiBayangan();
     performance.mark("dunia:bayangan");
     gambar(0);
@@ -945,6 +960,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
         });
       });
       target.dispose();
+      ao.dispose?.();
+      hasilAO.dispose();
       kedalaman.dispose();
       blur.dispose();
       segitiga.dispose();
