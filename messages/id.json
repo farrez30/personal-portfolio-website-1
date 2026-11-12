@@ -215,5 +215,44 @@
   },
   "dunia": {
     "memuat": "Menyiapkan toko"
+  },
+  "klien": {
+    "label": "Klien dan partner",
+    "judul": "Dipakai dari dapur sampai kantor asuransi.",
+    "pengantar": "Klien studio, klien kantor, dan proyek pribadi. Ketuk cakram untuk melihat apa yang dikerjakan.",
+    "tab": {
+      "coderoach": "Coderoach",
+      "mitraplus": "Mitraplus",
+      "pribadi": "Personal"
+    },
+    "keterangan": {
+      "coderoach": "Klien studio Coderoach",
+      "mitraplus": "Klien Mitraplus, tempat saya bekerja",
+      "pribadi": "Proyek pribadi di rak"
+    },
+    "set": "{n} merek dalam satu set",
+    "buka": "Lihat detail {nama}",
+    "tutup": "Tutup",
+    "kasus": "Lihat studi kasus",
+    "album": "Buka albumnya di rak",
+    "sebelumnya": "Cakram sebelumnya",
+    "berikutnya": "Cakram berikutnya",
+    "jenis": {
+      "company-profile": "Company profile",
+      "erp": "ERP",
+      "website": "Website",
+      "landing": "Landing page",
+      "operasional": "Operasional",
+      "keuangan": "Keuangan",
+      "aplikasi-web": "Aplikasi web",
+      "pwa": "PWA",
+      "saas": "SaaS",
+      "enterprise": "Enterprise",
+      "link-in-bio": "Link-in-bio",
+      "dashboard": "Dashboard",
+      "android": "Android",
+      "tools": "Tools"
+    },
+    "detail": "Lihat detail"
   }
 }

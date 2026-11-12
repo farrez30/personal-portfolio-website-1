@@ -3,6 +3,7 @@ import Gerbang from "@/components/gerbang/Gerbang";
 import RakSesuaiMode from "@/components/rak/RakSesuaiMode";
 import CeritaKerja from "@/components/cerita/CeritaKerja";
 import Contact from "@/components/contact/Contact";
+import Klien from "@/components/klien/Klien";
 import Dunia from "@/components/dunia/Dunia";
 
 export default async function Beranda({ params }) {
@@ -15,6 +16,7 @@ export default async function Beranda({ params }) {
       <Gerbang />
       <CeritaKerja />
       <RakSesuaiMode />
+      <Klien />
       <Contact />
     </>
   );

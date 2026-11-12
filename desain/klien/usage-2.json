@@ -1,0 +1,18 @@
+{
+  "agentType": "pi",
+  "model": "pi;google;gemini-3.5-flash",
+  "reason": "failed",
+  "usage": {
+    "inputTokens": 18145,
+    "outputTokens": 982,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "numTurns": 1,
+    "totalCostUsd": 0.036055500000000004,
+    "durationMs": 8863,
+    "contextTokens": 19127,
+    "contextWindow": 1048576,
+    "skillDocsTokensEstimate": 12864,
+    "injectedPromptTokensEstimate": 289
+  }
+}

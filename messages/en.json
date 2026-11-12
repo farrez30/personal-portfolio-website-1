@@ -215,5 +215,44 @@
   },
   "dunia": {
     "memuat": "Opening the shop"
+  },
+  "klien": {
+    "label": "Clients and partners",
+    "judul": "In use from kitchens to insurance offices.",
+    "pengantar": "Studio clients, office clients, and personal projects. Tap a disc to see what was built.",
+    "tab": {
+      "coderoach": "Coderoach",
+      "mitraplus": "Mitraplus",
+      "pribadi": "Personal"
+    },
+    "keterangan": {
+      "coderoach": "Coderoach studio clients",
+      "mitraplus": "Clients at Mitraplus, where I work",
+      "pribadi": "Personal projects on the rack"
+    },
+    "set": "{n} brands in one set",
+    "buka": "See details for {nama}",
+    "tutup": "Close",
+    "kasus": "See the case study",
+    "album": "Open its album on the rack",
+    "sebelumnya": "Previous disc",
+    "berikutnya": "Next disc",
+    "jenis": {
+      "company-profile": "Company profile",
+      "erp": "ERP",
+      "website": "Website",
+      "landing": "Landing page",
+      "operasional": "Operations",
+      "keuangan": "Finance",
+      "aplikasi-web": "Web app",
+      "pwa": "PWA",
+      "saas": "SaaS",
+      "enterprise": "Enterprise",
+      "link-in-bio": "Link-in-bio",
+      "dashboard": "Dashboard",
+      "android": "Android",
+      "tools": "Tools"
+    },
+    "detail": "See details"
   }
 }

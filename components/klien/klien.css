@@ -1,0 +1,363 @@
+.klien {
+  border-top: 1px solid var(--line);
+}
+
+.klien--daftar {
+  padding-block: clamp(4rem, 10vh, 7rem);
+}
+
+.klien__label {
+  color: var(--aksen);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.klien__judul {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  margin-top: 0.5rem;
+  max-width: 20ch;
+}
+
+.klien__pengantar {
+  color: var(--ink-2);
+  margin-top: 0.75rem;
+  max-width: 46ch;
+}
+
+.klien__tab {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.klien__tab button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--line);
+  border-radius: var(--r-kecil);
+  background: transparent;
+  color: var(--ink);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background var(--t-cepat) var(--ease), border-color var(--t-cepat) var(--ease);
+}
+
+.klien__tab button:hover {
+  border-color: var(--ink-3);
+}
+
+.klien__tab button[aria-selected="true"] {
+  background: var(--aksen);
+  border-color: var(--aksen);
+  color: var(--aksen-ink);
+  font-weight: 600;
+}
+
+.klien__keterangan {
+  color: var(--ink-3);
+  font-size: 0.8rem;
+  margin-top: 0.75rem;
+}
+
+.klien__nama {
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.klien__nama--besar {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+}
+
+.klien__industri {
+  color: var(--ink-3);
+  font-size: 0.8rem;
+}
+
+.klien__chip {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+}
+
+.klien__chip li {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--ink-2);
+}
+
+/* Muka cakram: gambar sudah bulat dengan lubang tengah transparan. */
+.muka {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  /* Tempat cakram selama gambarnya dimuat, supaya cincin tidak kosong sesaat. */
+  border-radius: 50%;
+  background: radial-gradient(circle, transparent 0 7%, var(--bg-3) 7.5% 99%, transparent 100%);
+}
+
+.muka:has(.muka__utama[data-muat="selesai"]) {
+  background: none;
+}
+
+.muka img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+}
+
+.muka__utama {
+  filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.35));
+}
+
+.muka__anak {
+  filter: drop-shadow(0 4px 10px rgb(0 0 0 / 0.3));
+}
+
+/* Box set: cakram anak menyembul di belakang, seperti album dobel. */
+.muka__anak--0 {
+  transform: translate(14%, -9%) scale(0.92);
+}
+
+.muka__anak--1 {
+  transform: translate(26%, -3%) scale(0.86);
+}
+
+.muka--besar {
+  max-width: 14rem;
+  margin-inline: auto;
+}
+
+/* Mode Ringan dan HP: satu baris cakram yang digeser. */
+.klien__baris {
+  list-style: none;
+  padding: 0.5rem 0 1rem;
+  margin: 2rem 0 0;
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(9.5rem, 40vw, 12rem);
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+}
+
+.klien__baris > li {
+  scroll-snap-align: start;
+}
+
+.klien__kartu {
+  display: grid;
+  gap: 0.35rem;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.klien__kartu .muka {
+  margin-bottom: 0.4rem;
+  transition: transform var(--t-sedang) var(--ease);
+}
+
+.klien__kartu:hover .muka {
+  transform: rotate(-8deg) scale(1.03);
+}
+
+/* Gerak dikurangi: kisi statis, semua cakram langsung terlihat. */
+@media (prefers-reduced-motion: reduce) {
+  .klien__baris {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+    overflow: visible;
+  }
+
+  .klien__kartu:hover .muka {
+    transform: none;
+  }
+}
+
+/* Mode Imersif: seksi dipin, cincin di kanan. */
+.klien__gulir {
+  height: 260vh;
+}
+
+.klien__lekat {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: grid;
+  align-items: center;
+  overflow: clip;
+}
+
+.klien--cincin .klien__isi {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: clamp(1.5rem, 4vw, 3rem);
+  align-items: center;
+}
+
+.klien__sorot {
+  margin-top: 2rem;
+  min-height: 11rem;
+}
+
+.klien__aksi {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.klien__panah {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.klien__panah:hover {
+  border-color: var(--ink-3);
+}
+
+.klien__panggung {
+  position: relative;
+  aspect-ratio: 1.15;
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.klien__panggung:active {
+  cursor: grabbing;
+}
+
+.klien__spindel,
+.klien__cakram {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+}
+
+.klien__spindel {
+  width: 11%;
+  aspect-ratio: 1;
+  margin: -5.5% 0 0 -5.5%;
+  border-radius: 50%;
+  background: var(--bg-3);
+  border: 1px solid var(--line);
+  display: grid;
+  place-items: center;
+  z-index: 50;
+}
+
+.klien__spindel img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+}
+
+.klien__cakram {
+  width: 23%;
+  margin: -11.5% 0 0 -11.5%;
+  padding: 0;
+  border: 0;
+  background: none;
+  border-radius: 50%;
+  cursor: pointer;
+  will-change: transform, opacity;
+}
+
+.klien__cakram[data-depan="true"] .muka__utama {
+  filter: drop-shadow(0 10px 24px rgb(0 0 0 / 0.45));
+}
+
+.klien__cakram:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: 4px;
+}
+
+/* Kartu detail */
+.klien__detail {
+  width: min(44rem, calc(100vw - 2 * var(--tepi)));
+  max-height: calc(100vh - 4rem);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-kotak);
+  background: var(--bg-2);
+  color: var(--ink);
+}
+
+.klien__detail::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+
+.klien__detail-isi {
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.klien__detail-kepala {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.klien__detail-kepala h3 {
+  font-size: 1.4rem;
+}
+
+.klien__detail-set {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.klien__detail-set--dua {
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.klien__detail-kartu {
+  display: grid;
+  gap: 0.4rem;
+  align-content: start;
+}
+
+.klien__kerja {
+  color: var(--ink-2);
+  margin-top: 0.5rem;
+}
+
+.klien__tautan {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  color: var(--aksen);
+  min-height: 44px;
+}
+
+@media (max-width: 40rem) {
+  .klien__detail {
+    max-height: calc(100vh - 2rem);
+  }
+}
