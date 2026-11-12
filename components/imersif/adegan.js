@@ -196,7 +196,7 @@ const mulaiGeserBaca = (sisi) => Math.max(0.4, MULAI[sisi]);
 
 const tween = () => ({ aktif: false, dari: 0, ke: 0, mulai: 0, durasi: 1, kurva: luncur });
 
-export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirHalaman = false, latensiSuara }) {
+export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirHalaman = false, latensiSuara, kabut = 0xebe3d4 }) {
   // Ambang pemicu bunyi kontak, dimajukan sejauh gerak yang terjadi selama latensi audio
   // (`laju` per detik). Tween geraknya linear dalam waktu, jadi majunya juga tepat dalam waktu.
   const ambangKontak = (dasar, laju) => dasar + Math.max(0, laju) * Math.min(0.15, latensiSuara?.() ?? 0);
@@ -222,7 +222,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
 
   const scene = new THREE.Scene();
   scene.environment = buatLingkungan(renderer);
-  scene.fog = new THREE.Fog(0xebe3d4, 7 * U, 14 * U);
+  // Kabut krem ruang rak; di dunia toko kaset warnanya mengikuti latar ruangan.
+  scene.fog = new THREE.Fog(kabut, 7 * U, 14 * U);
   const camera = new THREE.PerspectiveCamera(C.fovRak, 1, 0.6, 100);
 
   const ambien = new THREE.AmbientLight(0xffffff, 0.25);
@@ -785,9 +786,11 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     }
 
     // Rak diam di satu album sebentar: buklet album itu disiapkan di latar (lihat siapkanBuklet).
+    // Minimal 1,5 s: penyiapan itu menahan main thread sekitar 370 ms, dan saat rak baru masuk
+    // layar kamera dunia toko kaset masih terbang ke anchor rak (sampai 1,3 s, ADR 0014).
     if (k_.keadaan === "rak" && !k_.buklet) {
       k_.diam = Math.abs(k_.pos - sebelum) < 1e-4 ? (k_.diam ?? 0) + dt : 0;
-      const p = k_.diam > (sentuhKasar ? 1.2 : 0.6) ? kotak[Math.round(k_.pos)]?.p : null;
+      const p = k_.diam > 1.5 ? kotak[Math.round(k_.pos)]?.p : null;
       if (p && cadangan?.slug !== p.slug) siapkanBuklet(p);
     }
 

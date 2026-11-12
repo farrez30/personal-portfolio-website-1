@@ -635,9 +635,43 @@ export function buatDunia(wadah, { locale, kotak: proyekKotak = [], hp = false, 
     renderer.render(scene, kamera);
   }
 
+  // Pemanasan selagi seksi masih di bawah layar (pola siapkan() rak, PR #54): shader semua benda,
+  // termasuk kotak yang masih tersembunyi, dikompilasi paralel, lalu tekstur diunggah satu per
+  // bingkai. Tanpa ini gambar pertama membeku sekitar 550 ms tepat saat kamera dunia toko
+  // kaset terbang ke dinding catatan sampul.
+  let panas = null;
+  function panaskan() {
+    panas ??= (async () => {
+      const tersembunyi = [];
+      scene.traverse((o) => {
+        if (!o.visible) {
+          tersembunyi.push(o);
+          o.visible = true;
+        }
+      });
+      try {
+        await renderer.compileAsync(scene, kamera);
+      } catch {}
+      for (const o of tersembunyi) o.visible = false;
+      const tx = new Set();
+      scene.traverse((o) =>
+        [].concat(o.material ?? []).forEach((b) => {
+          for (const v of Object.values(b)) if (v?.isTexture) tx.add(v);
+          for (const u of Object.values(b.uniforms ?? {})) if (u?.value?.isTexture) tx.add(u.value);
+        }),
+      );
+      for (const t of tx) {
+        if (t.image) renderer.initTexture(t);
+        await new Promise((r) => requestAnimationFrame(r));
+      }
+    })();
+    return panas;
+  }
+
   return {
     gambar,
     ukur,
+    panaskan,
     hapus() {
       renderer.dispose();
       scene.traverse((o) => {

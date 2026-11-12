@@ -212,5 +212,8 @@
     "bab": "Bab {n} dari {total}",
     "rel": "Bab cerita",
     "keBab": "Ke bab {n}: {judul}"
+  },
+  "dunia": {
+    "memuat": "Menyiapkan toko"
   }
 }
