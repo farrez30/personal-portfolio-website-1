@@ -661,40 +661,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/uruzin.webp",
+                            "mode": "cover"
                           },
                           "width": 150,
                           "height": 150,
@@ -707,6 +677,7 @@
                           "x": 32.99999999999999,
                           "y": 32.99999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 84.00000000000001,
                           "height": 84.00000000000001,
@@ -768,7 +739,7 @@
                       "fill": "$tinta",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Cakram bertumpuk di spindel seperti cake box CD, warna latar masih beige rak.",
+                      "content": "Cakram bertumpuk di spindel seperti cake box CD. Tiap cakram dicetak penuh, logo klien bagian dari cetakannya.",
                       "lineHeight": 1.4,
                       "fontFamily": "Schibsted Grotesk",
                       "fontSize": 16,
@@ -888,6 +859,31 @@
                               "fontWeight": "normal"
                             }
                           ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lw51Z",
+                          "name": "Tab Personal",
+                          "fill": "#00000000",
+                          "cornerRadius": 4,
+                          "stroke": "#4f4a43",
+                          "strokeWidth": 1,
+                          "padding": [
+                            5,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "EWMYq",
+                              "name": "Label",
+                              "fill": "#1d1b19",
+                              "content": "Personal",
+                              "fontFamily": "IBM Plex Mono",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     },
@@ -908,40 +904,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/chicken-wow.webp",
+                            "mode": "cover"
                           },
                           "width": 43.73109323139345,
                           "height": 43.73109323139345,
@@ -954,6 +920,7 @@
                           "x": 9.620840510906557,
                           "y": 9.620840510906557,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 24.489412209580337,
                           "height": 24.489412209580337,
@@ -991,40 +958,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/geprek-wow.webp",
+                            "mode": "cover"
                           },
                           "width": 43.99402469462944,
                           "height": 43.99402469462944,
@@ -1037,6 +974,7 @@
                           "x": 9.678685432818476,
                           "y": 9.678685432818476,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 24.636653828992486,
                           "height": 24.636653828992486,
@@ -1082,40 +1020,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/viralytics.webp",
+                            "mode": "cover"
                           },
                           "width": 46.9431698635201,
                           "height": 46.9431698635201,
@@ -1128,6 +1036,7 @@
                           "x": 10.32749736997442,
                           "y": 10.32749736997442,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 26.288175123571257,
                           "height": 26.288175123571257,
@@ -1165,40 +1074,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/rpn-agro.webp",
+                            "mode": "cover"
                           },
                           "width": 47.66151197998926,
                           "height": 47.66151197998926,
@@ -1211,6 +1090,7 @@
                           "x": 10.485532635597636,
                           "y": 10.485532635597636,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 26.690446708793985,
                           "height": 26.690446708793985,
@@ -1248,40 +1128,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/terasol.webp",
+                            "mode": "cover"
                           },
                           "width": 52.76958125140419,
                           "height": 52.76958125140419,
@@ -1294,6 +1144,7 @@
                           "x": 11.60930787530892,
                           "y": 11.60930787530892,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 29.55096550078635,
                           "height": 29.55096550078635,
@@ -1331,40 +1182,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tumtim.webp",
+                            "mode": "cover"
                           },
                           "width": 53.75085483110933,
                           "height": 53.75085483110933,
@@ -1377,6 +1198,7 @@
                           "x": 11.82518806284405,
                           "y": 11.82518806284405,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 30.100478705421228,
                           "height": 30.100478705421228,
@@ -1422,40 +1244,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/studentchanges.webp",
+                            "mode": "cover"
                           },
                           "width": 59.64914516889066,
                           "height": 59.64914516889066,
@@ -1468,6 +1260,7 @@
                           "x": 13.122811937155944,
                           "y": 13.122811937155944,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 33.40352129457877,
                           "height": 33.40352129457877,
@@ -1505,40 +1298,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/uruzin.webp",
+                            "mode": "cover"
                           },
                           "width": 60.63041874859582,
                           "height": 60.63041874859582,
@@ -1551,6 +1314,7 @@
                           "x": 13.338692124691079,
                           "y": 13.338692124691079,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 33.953034499213665,
                           "height": 33.953034499213665,
@@ -1588,40 +1352,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/success-career.webp",
+                            "mode": "cover"
                           },
                           "width": 65.73848802001073,
                           "height": 65.73848802001073,
@@ -1634,6 +1368,7 @@
                           "x": 14.462467364402361,
                           "y": 14.462467364402361,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 36.81355329120601,
                           "height": 36.81355329120601,
@@ -1671,40 +1406,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tgr.webp",
+                            "mode": "cover"
                           },
                           "width": 66.4568301364799,
                           "height": 66.4568301364799,
@@ -1717,6 +1422,7 @@
                           "x": 14.620502630025577,
                           "y": 14.620502630025577,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 37.21582487642874,
                           "height": 37.21582487642874,
@@ -1754,40 +1460,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/saychick.webp",
+                            "mode": "cover"
                           },
                           "width": 69.40597530537056,
                           "height": 69.40597530537056,
@@ -1800,6 +1476,7 @@
                           "x": 15.269314567181521,
                           "y": 15.269314567181521,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 38.86734617100752,
                           "height": 38.86734617100752,
@@ -1837,40 +1514,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/raja-roti.webp",
+                            "mode": "cover"
                           },
                           "width": 69.66890676860656,
                           "height": 69.66890676860656,
@@ -1883,6 +1530,7 @@
                           "x": 15.327159489093443,
                           "y": 15.327159489093443,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.014587790419675,
                           "height": 39.014587790419675,
@@ -2076,6 +1724,31 @@
                               "fontWeight": "normal"
                             }
                           ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "drgtF",
+                          "name": "Tab Personal",
+                          "fill": "#00000000",
+                          "cornerRadius": 4,
+                          "stroke": "#4f4a43",
+                          "strokeWidth": 1,
+                          "padding": [
+                            5,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "GqlMf",
+                              "name": "Label",
+                              "fill": "#1d1b19",
+                              "content": "Personal",
+                              "fontFamily": "IBM Plex Mono",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     },
@@ -2183,40 +1856,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/terasol.webp",
+                            "mode": "cover"
                           },
                           "width": 43.4,
                           "height": 43.4,
@@ -2229,6 +1872,7 @@
                           "x": 9.547999999999998,
                           "y": 9.547999999999998,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 24.304000000000002,
                           "height": 24.304000000000002,
@@ -2266,40 +1910,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/studentchanges.webp",
+                            "mode": "cover"
                           },
                           "width": 45.18186212966696,
                           "height": 45.18186212966696,
@@ -2312,6 +1926,7 @@
                           "x": 9.94000966852673,
                           "y": 9.94000966852673,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 25.3018427926135,
                           "height": 25.3018427926135,
@@ -2349,40 +1964,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/viralytics.webp",
+                            "mode": "cover"
                           },
                           "width": 45.18186212966697,
                           "height": 45.18186212966697,
@@ -2395,6 +1980,7 @@
                           "x": 9.940009668526733,
                           "y": 9.940009668526733,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 25.301842792613503,
                           "height": 25.301842792613503,
@@ -2432,40 +2018,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/chicken-wow.webp",
+                            "mode": "cover"
                           },
                           "width": 50.04999999999999,
                           "height": 50.04999999999999,
@@ -2478,6 +2034,7 @@
                           "x": 11.010999999999996,
                           "y": 11.010999999999996,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 28.028,
                           "height": 28.028,
@@ -2515,40 +2072,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/success-career.webp",
+                            "mode": "cover"
                           },
                           "width": 50.050000000000004,
                           "height": 50.050000000000004,
@@ -2561,6 +2088,7 @@
                           "x": 11.011,
                           "y": 11.011,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 28.028000000000006,
                           "height": 28.028000000000006,
@@ -2598,40 +2126,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/geprek-wow.webp",
+                            "mode": "cover"
                           },
                           "width": 56.699999999999996,
                           "height": 56.699999999999996,
@@ -2644,6 +2142,7 @@
                           "x": 12.473999999999998,
                           "y": 12.473999999999998,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 31.752,
                           "height": 31.752,
@@ -2689,40 +2188,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/saychick.webp",
+                            "mode": "cover"
                           },
                           "width": 56.7,
                           "height": 56.7,
@@ -2735,6 +2204,7 @@
                           "x": 12.473999999999998,
                           "y": 12.473999999999998,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 31.752000000000006,
                           "height": 31.752000000000006,
@@ -2772,40 +2242,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/rpn-agro.webp",
+                            "mode": "cover"
                           },
                           "width": 63.35,
                           "height": 63.35,
@@ -2818,6 +2258,7 @@
                           "x": 13.936999999999998,
                           "y": 13.936999999999998,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 35.476000000000006,
                           "height": 35.476000000000006,
@@ -2855,40 +2296,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/raja-roti.webp",
+                            "mode": "cover"
                           },
                           "width": 63.35,
                           "height": 63.35,
@@ -2901,6 +2312,7 @@
                           "x": 13.936999999999998,
                           "y": 13.936999999999998,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 35.476000000000006,
                           "height": 35.476000000000006,
@@ -2938,40 +2350,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tumtim.webp",
+                            "mode": "cover"
                           },
                           "width": 68.21813787033304,
                           "height": 68.21813787033304,
@@ -2984,6 +2366,7 @@
                           "x": 15.007990331473266,
                           "y": 15.007990331473266,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 38.202157207386506,
                           "height": 38.202157207386506,
@@ -3029,40 +2412,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tgr.webp",
+                            "mode": "cover"
                           },
                           "width": 68.21813787033304,
                           "height": 68.21813787033304,
@@ -3075,6 +2428,7 @@
                           "x": 15.007990331473266,
                           "y": 15.007990331473266,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 38.202157207386506,
                           "height": 38.202157207386506,
@@ -3112,40 +2466,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/uruzin.webp",
+                            "mode": "cover"
                           },
                           "width": 105,
                           "height": 105,
@@ -3158,6 +2482,7 @@
                           "x": 23.099999999999998,
                           "y": 23.099999999999998,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 58.800000000000004,
                           "height": 58.800000000000004,
@@ -3360,6 +2685,31 @@
                               "fontWeight": "normal"
                             }
                           ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "gQHXd",
+                          "name": "Tab Personal",
+                          "fill": "#00000000",
+                          "cornerRadius": 4,
+                          "stroke": "#4f4a43",
+                          "strokeWidth": 1,
+                          "padding": [
+                            5,
+                            10
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "cfbB5",
+                              "name": "Label",
+                              "fill": "#1d1b19",
+                              "content": "Personal",
+                              "fontFamily": "IBM Plex Mono",
+                              "fontSize": 11,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     },
@@ -3443,40 +2793,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/saksama.webp",
+                            "mode": "cover"
                           },
                           "width": 52.5029416855008,
                           "height": 52.5029416855008,
@@ -3489,6 +2809,7 @@
                           "x": 11.550647170810175,
                           "y": 11.550647170810175,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 29.40164734388045,
                           "height": 29.40164734388045,
@@ -3534,40 +2855,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/sanden.webp",
+                            "mode": "cover"
                           },
                           "width": 52.5029416855008,
                           "height": 52.5029416855008,
@@ -3580,6 +2871,7 @@
                           "x": 11.550647170810175,
                           "y": 11.550647170810175,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 29.40164734388045,
                           "height": 29.40164734388045,
@@ -3617,40 +2909,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/acms.webp",
+                            "mode": "cover"
                           },
                           "width": 69.4970583144992,
                           "height": 69.4970583144992,
@@ -3663,6 +2925,7 @@
                           "x": 15.289352829189824,
                           "y": 15.289352829189824,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 38.91835265611955,
                           "height": 38.91835265611955,
@@ -3708,40 +2971,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/pbt.webp",
+                            "mode": "cover"
                           },
                           "width": 69.4970583144992,
                           "height": 69.4970583144992,
@@ -3754,6 +2987,7 @@
                           "x": 15.289352829189824,
                           "y": 15.289352829189824,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 38.91835265611955,
                           "height": 38.91835265611955,
@@ -3791,40 +3025,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/jasindo.webp",
+                            "mode": "cover"
                           },
                           "width": 120,
                           "height": 120,
@@ -3837,6 +3041,7 @@
                           "x": 26.4,
                           "y": 26.4,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 67.2,
                           "height": 67.2,
@@ -3910,7 +3115,7 @@
                       "fill": "$tinta",
                       "textGrowth": "fixed-width",
                       "width": "fill_container",
-                      "content": "Tab Mitraplus dipilih: spindel berganti label, cincin bertukar cakram.",
+                      "content": "Tiga tab: Coderoach, Mitraplus, Personal. Ganti tab, spindel berganti label, cincin bertukar cakram.",
                       "lineHeight": 1.4,
                       "fontFamily": "Schibsted Grotesk",
                       "fontSize": 16,
@@ -3968,40 +3173,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/geprek-wow.webp",
+                            "mode": "cover"
                           },
                           "width": 32.56499341604079,
                           "height": 32.56499341604079,
@@ -4014,6 +3189,7 @@
                           "x": 7.164298551528974,
                           "y": 7.164298551528974,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 18.236396312982844,
                           "height": 18.236396312982844,
@@ -4059,40 +3235,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/chicken-wow.webp",
+                            "mode": "cover"
                           },
                           "width": 32.72307039199546,
                           "height": 32.72307039199546,
@@ -4105,6 +3251,7 @@
                           "x": 7.199075486239002,
                           "y": 7.199075486239002,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 18.32491941951746,
                           "height": 18.32491941951746,
@@ -4142,40 +3289,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/rpn-agro.webp",
+                            "mode": "cover"
                           },
                           "width": 35.44056351804278,
                           "height": 35.44056351804278,
@@ -4188,6 +3305,7 @@
                           "x": 7.796923973969411,
                           "y": 7.796923973969411,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 19.846715570103957,
                           "height": 19.846715570103957,
@@ -4225,40 +3343,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/viralytics.webp",
+                            "mode": "cover"
                           },
                           "width": 35.86460612295973,
                           "height": 35.86460612295973,
@@ -4271,6 +3359,7 @@
                           "x": 7.890213347051139,
                           "y": 7.890213347051139,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 20.08417942885745,
                           "height": 20.08417942885745,
@@ -4308,40 +3397,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tumtim.webp",
+                            "mode": "cover"
                           },
                           "width": 40.43680750842322,
                           "height": 40.43680750842322,
@@ -4354,6 +3413,7 @@
                           "x": 8.896097651853108,
                           "y": 8.896097651853108,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 22.644612204717006,
                           "height": 22.644612204717006,
@@ -4399,40 +3459,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/terasol.webp",
+                            "mode": "cover"
                           },
                           "width": 40.992185211383195,
                           "height": 40.992185211383195,
@@ -4445,6 +3475,7 @@
                           "x": 9.018280746504301,
                           "y": 9.018280746504301,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 22.955623718374593,
                           "height": 22.955623718374593,
@@ -4482,40 +3513,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tgr.webp",
+                            "mode": "cover"
                           },
                           "width": 45.96745322200947,
                           "height": 45.96745322200947,
@@ -4528,6 +3529,7 @@
                           "x": 10.112839708842081,
                           "y": 10.112839708842081,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 25.741773804325305,
                           "height": 25.741773804325305,
@@ -4565,40 +3567,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/studentchanges.webp",
+                            "mode": "cover"
                           },
                           "width": 46.477837526433994,
                           "height": 46.477837526433994,
@@ -4611,6 +3583,7 @@
                           "x": 10.225124255815478,
                           "y": 10.225124255815478,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 26.027589014803038,
                           "height": 26.027589014803038,
@@ -4648,40 +3621,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/raja-roti.webp",
+                            "mode": "cover"
                           },
                           "width": 50.276559722413126,
                           "height": 50.276559722413126,
@@ -4694,6 +3637,7 @@
                           "x": 11.060843138930887,
                           "y": 11.060843138930887,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 28.154873444551352,
                           "height": 28.154873444551352,
@@ -4731,40 +3675,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/success-career.webp",
+                            "mode": "cover"
                           },
                           "width": 50.5799072178506,
                           "height": 50.5799072178506,
@@ -4777,6 +3691,7 @@
                           "x": 11.12757958792713,
                           "y": 11.12757958792713,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 28.324748041996337,
                           "height": 28.324748041996337,
@@ -4814,40 +3729,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/saychick.webp",
+                            "mode": "cover"
                           },
                           "width": 51.99601614244765,
                           "height": 51.99601614244765,
@@ -4860,6 +3745,7 @@
                           "x": 11.439123551338481,
                           "y": 11.439123551338481,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 29.11776903977069,
                           "height": 29.11776903977069,
@@ -4923,40 +3809,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/uruzin.webp",
+                            "mode": "cover"
                           },
                           "width": 150,
                           "height": 150,
@@ -4969,6 +3825,7 @@
                           "x": 32.99999999999999,
                           "y": 32.99999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 84.00000000000001,
                           "height": 84.00000000000001,
@@ -5122,40 +3979,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/geprek-wow.webp",
+                            "mode": "cover"
                           },
                           "width": 23.56,
                           "height": 23.56,
@@ -5168,6 +3995,7 @@
                           "x": 5.183199999999999,
                           "y": 5.183199999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 13.1936,
                           "height": 13.1936,
@@ -5213,40 +4041,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/rpn-agro.webp",
+                            "mode": "cover"
                           },
                           "width": 24.527296584676353,
                           "height": 24.527296584676353,
@@ -5259,6 +4057,7 @@
                           "x": 5.396005248628797,
                           "y": 5.396005248628797,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 13.735286087418759,
                           "height": 13.735286087418759,
@@ -5296,40 +4095,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/chicken-wow.webp",
+                            "mode": "cover"
                           },
                           "width": 24.527296584676353,
                           "height": 24.527296584676353,
@@ -5342,6 +4111,7 @@
                           "x": 5.396005248628797,
                           "y": 5.396005248628797,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 13.735286087418759,
                           "height": 13.735286087418759,
@@ -5379,40 +4149,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tumtim.webp",
+                            "mode": "cover"
                           },
                           "width": 27.169999999999995,
                           "height": 27.169999999999995,
@@ -5425,6 +4165,7 @@
                           "x": 5.9773999999999985,
                           "y": 5.9773999999999985,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 15.215199999999998,
                           "height": 15.215199999999998,
@@ -5470,40 +4211,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/viralytics.webp",
+                            "mode": "cover"
                           },
                           "width": 27.169999999999998,
                           "height": 27.169999999999998,
@@ -5516,6 +4227,7 @@
                           "x": 5.9773999999999985,
                           "y": 5.9773999999999985,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 15.215200000000001,
                           "height": 15.215200000000001,
@@ -5553,40 +4265,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/uruzin.webp",
+                            "mode": "cover"
                           },
                           "width": 30.78,
                           "height": 30.78,
@@ -5599,6 +4281,7 @@
                           "x": 6.771599999999999,
                           "y": 6.771599999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 17.236800000000002,
                           "height": 17.236800000000002,
@@ -5636,40 +4319,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/terasol.webp",
+                            "mode": "cover"
                           },
                           "width": 30.78,
                           "height": 30.78,
@@ -5682,6 +4335,7 @@
                           "x": 6.771599999999999,
                           "y": 6.771599999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 17.236800000000002,
                           "height": 17.236800000000002,
@@ -5719,40 +4373,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tgr.webp",
+                            "mode": "cover"
                           },
                           "width": 34.39,
                           "height": 34.39,
@@ -5765,6 +4389,7 @@
                           "x": 7.565799999999999,
                           "y": 7.565799999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 19.2584,
                           "height": 19.2584,
@@ -5802,40 +4427,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/studentchanges.webp",
+                            "mode": "cover"
                           },
                           "width": 34.39,
                           "height": 34.39,
@@ -5848,6 +4443,7 @@
                           "x": 7.565799999999999,
                           "y": 7.565799999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 19.2584,
                           "height": 19.2584,
@@ -5885,40 +4481,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/raja-roti.webp",
+                            "mode": "cover"
                           },
                           "width": 37.032703415323645,
                           "height": 37.032703415323645,
@@ -5931,6 +4497,7 @@
                           "x": 8.1471947513712,
                           "y": 8.1471947513712,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 20.738313912581244,
                           "height": 20.738313912581244,
@@ -5968,40 +4535,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/success-career.webp",
+                            "mode": "cover"
                           },
                           "width": 37.032703415323645,
                           "height": 37.032703415323645,
@@ -6014,6 +4551,7 @@
                           "x": 8.1471947513712,
                           "y": 8.1471947513712,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 20.738313912581244,
                           "height": 20.738313912581244,
@@ -6051,40 +4589,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/saychick.webp",
+                            "mode": "cover"
                           },
                           "width": 38,
                           "height": 38,
@@ -6097,6 +4605,7 @@
                           "x": 8.36,
                           "y": 8.36,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 21.28,
                           "height": 21.28,
@@ -6376,6 +4885,31 @@
                                   "fontWeight": "normal"
                                 }
                               ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "asPsB",
+                              "name": "Tab Personal",
+                              "fill": "#00000000",
+                              "cornerRadius": 4,
+                              "stroke": "#4f4a43",
+                              "strokeWidth": 1,
+                              "padding": [
+                                2.4000000000000004,
+                                5.6000000000000005
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "i8U8Ef",
+                                  "name": "Label",
+                                  "fill": "#1d1b19",
+                                  "content": "Personal",
+                                  "fontFamily": "IBM Plex Mono",
+                                  "fontSize": 7.2,
+                                  "fontWeight": "normal"
+                                }
+                              ]
                             }
                           ]
                         },
@@ -6396,40 +4930,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/tumtim.webp",
+                                "mode": "cover"
                               },
                               "width": 50,
                               "height": 50,
@@ -6442,6 +4946,7 @@
                               "x": 10.999999999999998,
                               "y": 10.999999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 28.000000000000004,
                               "height": 28.000000000000004,
@@ -6486,40 +4991,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/uruzin.webp",
+                                "mode": "cover"
                               },
                               "width": 80,
                               "height": 80,
@@ -6532,6 +5007,7 @@
                               "x": 17.599999999999998,
                               "y": 17.599999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 44.800000000000004,
                               "height": 44.800000000000004,
@@ -6569,40 +5045,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/tgr.webp",
+                                "mode": "cover"
                               },
                               "width": 50,
                               "height": 50,
@@ -6615,6 +5061,7 @@
                               "x": 10.999999999999998,
                               "y": 10.999999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 28.000000000000004,
                               "height": 28.000000000000004,
@@ -6871,6 +5318,31 @@
                                   "fontWeight": "normal"
                                 }
                               ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "Gmd7U",
+                              "name": "Tab Personal",
+                              "fill": "#00000000",
+                              "cornerRadius": 4,
+                              "stroke": "#4f4a43",
+                              "strokeWidth": 1,
+                              "padding": [
+                                2.4000000000000004,
+                                5.6000000000000005
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "mEbS6",
+                                  "name": "Label",
+                                  "fill": "#1d1b19",
+                                  "content": "Personal",
+                                  "fontFamily": "IBM Plex Mono",
+                                  "fontSize": 7.2,
+                                  "fontWeight": "normal"
+                                }
+                              ]
                             }
                           ]
                         },
@@ -6891,40 +5363,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/uruzin.webp",
+                                "mode": "cover"
                               },
                               "width": 50,
                               "height": 50,
@@ -6937,6 +5379,7 @@
                               "x": 10.999999999999998,
                               "y": 10.999999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 28.000000000000004,
                               "height": 28.000000000000004,
@@ -6974,40 +5417,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/tgr.webp",
+                                "mode": "cover"
                               },
                               "width": 80,
                               "height": 80,
@@ -7020,6 +5433,7 @@
                               "x": 17.599999999999998,
                               "y": 17.599999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 44.800000000000004,
                               "height": 44.800000000000004,
@@ -7057,40 +5471,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/raja-roti.webp",
+                                "mode": "cover"
                               },
                               "width": 50,
                               "height": 50,
@@ -7103,6 +5487,7 @@
                               "x": 10.999999999999998,
                               "y": 10.999999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 28.000000000000004,
                               "height": 28.000000000000004,
@@ -7335,6 +5720,31 @@
                                   "fontWeight": "normal"
                                 }
                               ]
+                            },
+                            {
+                              "type": "frame",
+                              "id": "vtpT0",
+                              "name": "Tab Personal",
+                              "fill": "#00000000",
+                              "cornerRadius": 4,
+                              "stroke": "#4f4a43",
+                              "strokeWidth": 1,
+                              "padding": [
+                                2.4000000000000004,
+                                5.6000000000000005
+                              ],
+                              "children": [
+                                {
+                                  "type": "text",
+                                  "id": "pFT2O",
+                                  "name": "Label",
+                                  "fill": "#1d1b19",
+                                  "content": "Personal",
+                                  "fontFamily": "IBM Plex Mono",
+                                  "fontSize": 7.2,
+                                  "fontWeight": "normal"
+                                }
+                              ]
                             }
                           ]
                         },
@@ -7355,40 +5765,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/tumtim.webp",
+                                "mode": "cover"
                               },
                               "width": 50,
                               "height": 50,
@@ -7401,6 +5781,7 @@
                               "x": 10.999999999999998,
                               "y": 10.999999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 28.000000000000004,
                               "height": 28.000000000000004,
@@ -7445,40 +5826,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/uruzin.webp",
+                                "mode": "cover"
                               },
                               "width": 80,
                               "height": 80,
@@ -7491,6 +5842,7 @@
                               "x": 17.599999999999998,
                               "y": 17.599999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 44.800000000000004,
                               "height": 44.800000000000004,
@@ -7528,40 +5880,10 @@
                               "y": 0,
                               "name": "Data",
                               "fill": {
-                                "type": "gradient",
-                                "gradientType": "angular",
+                                "type": "image",
                                 "enabled": true,
-                                "rotation": 0,
-                                "size": {
-                                  "width": 1,
-                                  "height": 1
-                                },
-                                "colors": [
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 0
-                                  },
-                                  {
-                                    "color": "#e8d9f0",
-                                    "position": 0.2
-                                  },
-                                  {
-                                    "color": "#d6efe6",
-                                    "position": 0.4
-                                  },
-                                  {
-                                    "color": "#f3ead2",
-                                    "position": 0.6
-                                  },
-                                  {
-                                    "color": "#d4dbe8",
-                                    "position": 0.8
-                                  },
-                                  {
-                                    "color": "#cfd3d6",
-                                    "position": 1
-                                  }
-                                ]
+                                "url": "../../public/assets/klien/cakram/tgr.webp",
+                                "mode": "cover"
                               },
                               "width": 50,
                               "height": 50,
@@ -7574,6 +5896,7 @@
                               "x": 10.999999999999998,
                               "y": 10.999999999999998,
                               "name": "Label",
+                              "enabled": false,
                               "clip": true,
                               "width": 28.000000000000004,
                               "height": 28.000000000000004,
@@ -7850,6 +6173,31 @@
                               "fontWeight": "normal"
                             }
                           ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "lEL3C",
+                          "name": "Tab Personal",
+                          "fill": "#00000000",
+                          "cornerRadius": 4,
+                          "stroke": "#4f4a43",
+                          "strokeWidth": 1,
+                          "padding": [
+                            3,
+                            7
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "DoShR",
+                              "name": "Label",
+                              "fill": "#1d1b19",
+                              "content": "Personal",
+                              "fontFamily": "IBM Plex Mono",
+                              "fontSize": 9,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     },
@@ -7870,40 +6218,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/uruzin.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -7916,6 +6234,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -7965,40 +6284,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tgr.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8011,6 +6300,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8060,40 +6350,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/raja-roti.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8106,6 +6366,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8155,40 +6416,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/saychick.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8201,6 +6432,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8250,40 +6482,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/success-career.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8296,6 +6498,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8345,40 +6548,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/studentchanges.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8391,6 +6564,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8440,40 +6614,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/terasol.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8486,6 +6630,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8535,40 +6680,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/viralytics.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8581,6 +6696,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8738,6 +6854,31 @@
                               "fontWeight": "normal"
                             }
                           ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "ie00p",
+                          "name": "Tab Personal",
+                          "fill": "#00000000",
+                          "cornerRadius": 4,
+                          "stroke": "#4f4a43",
+                          "strokeWidth": 1,
+                          "padding": [
+                            3,
+                            7
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "X8R6y1",
+                              "name": "Label",
+                              "fill": "#1d1b19",
+                              "content": "Personal",
+                              "fontFamily": "IBM Plex Mono",
+                              "fontSize": 9,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     },
@@ -8758,40 +6899,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/jasindo.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8804,6 +6915,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8853,40 +6965,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/pbt.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8899,6 +6981,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -8948,40 +7031,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/sanden.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -8994,6 +7047,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -9043,40 +7097,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/saksama.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -9089,6 +7113,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -9145,40 +7170,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/acms.webp",
+                            "mode": "cover"
                           },
                           "width": 70,
                           "height": 70,
@@ -9191,6 +7186,7 @@
                           "x": 15.399999999999999,
                           "y": 15.399999999999999,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 39.2,
                           "height": 39.2,
@@ -9355,6 +7351,31 @@
                               "fontWeight": "normal"
                             }
                           ]
+                        },
+                        {
+                          "type": "frame",
+                          "id": "rXlOT",
+                          "name": "Tab Personal",
+                          "fill": "#00000000",
+                          "cornerRadius": 4,
+                          "stroke": "#4f4a43",
+                          "strokeWidth": 1,
+                          "padding": [
+                            3,
+                            7
+                          ],
+                          "children": [
+                            {
+                              "type": "text",
+                              "id": "e3XF1",
+                              "name": "Label",
+                              "fill": "#1d1b19",
+                              "content": "Personal",
+                              "fontFamily": "IBM Plex Mono",
+                              "fontSize": 9,
+                              "fontWeight": "normal"
+                            }
+                          ]
                         }
                       ]
                     },
@@ -9375,40 +7396,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/uruzin.webp",
+                            "mode": "cover"
                           },
                           "width": 72,
                           "height": 72,
@@ -9421,6 +7412,7 @@
                           "x": 15.839999999999996,
                           "y": 15.839999999999996,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 40.32000000000001,
                           "height": 40.32000000000001,
@@ -9458,40 +7450,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/tgr.webp",
+                            "mode": "cover"
                           },
                           "width": 72,
                           "height": 72,
@@ -9504,6 +7466,7 @@
                           "x": 15.839999999999996,
                           "y": 15.839999999999996,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 40.32000000000001,
                           "height": 40.32000000000001,
@@ -9541,40 +7504,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/raja-roti.webp",
+                            "mode": "cover"
                           },
                           "width": 110,
                           "height": 110,
@@ -9587,6 +7520,7 @@
                           "x": 24.199999999999996,
                           "y": 24.199999999999996,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 61.60000000000001,
                           "height": 61.60000000000001,
@@ -9624,40 +7558,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/saychick.webp",
+                            "mode": "cover"
                           },
                           "width": 72,
                           "height": 72,
@@ -9670,6 +7574,7 @@
                           "x": 15.839999999999996,
                           "y": 15.839999999999996,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 40.32000000000001,
                           "height": 40.32000000000001,
@@ -9707,40 +7612,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/success-career.webp",
+                            "mode": "cover"
                           },
                           "width": 72,
                           "height": 72,
@@ -9753,6 +7628,7 @@
                           "x": 15.839999999999996,
                           "y": 15.839999999999996,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 40.32000000000001,
                           "height": 40.32000000000001,
@@ -9790,40 +7666,10 @@
                           "y": 0,
                           "name": "Data",
                           "fill": {
-                            "type": "gradient",
-                            "gradientType": "angular",
+                            "type": "image",
                             "enabled": true,
-                            "rotation": 0,
-                            "size": {
-                              "width": 1,
-                              "height": 1
-                            },
-                            "colors": [
-                              {
-                                "color": "#cfd3d6",
-                                "position": 0
-                              },
-                              {
-                                "color": "#e8d9f0",
-                                "position": 0.2
-                              },
-                              {
-                                "color": "#d6efe6",
-                                "position": 0.4
-                              },
-                              {
-                                "color": "#f3ead2",
-                                "position": 0.6
-                              },
-                              {
-                                "color": "#d4dbe8",
-                                "position": 0.8
-                              },
-                              {
-                                "color": "#cfd3d6",
-                                "position": 1
-                              }
-                            ]
+                            "url": "../../public/assets/klien/cakram/studentchanges.webp",
+                            "mode": "cover"
                           },
                           "width": 72,
                           "height": 72,
@@ -9836,6 +7682,7 @@
                           "x": 15.839999999999996,
                           "y": 15.839999999999996,
                           "name": "Label",
+                          "enabled": false,
                           "clip": true,
                           "width": 40.32000000000001,
                           "height": 40.32000000000001,
