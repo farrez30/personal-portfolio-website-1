@@ -22,7 +22,7 @@ Unduhan mentah: `D:\downloads\claude\2026-11-12-flow-cakram-klien\`.
 
 ## Revisi 12 Nov 2026: semua cakram berlogo asli
 
-Atas revisi Farrez ("harus jelas ada logonya"). Unduhan mentah di `v2enar\`.
+Atas revisi Farrez ("harus jelas ada logonya"). Unduhan mentah di `D:/downloads/claude/2026-11-12-flow-cakram-klien/v2/benar/`.
 
 | Berkas | Varian | Logo | Catatan |
 |---|---|---|---|
