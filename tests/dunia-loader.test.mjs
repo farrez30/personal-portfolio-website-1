@@ -63,6 +63,22 @@ test("kilau pelangi mengisi mengikuti progres, lalu penuh begitu 100%", () => {
   assert.equal(cakramPada(5, 4, 1).isi, 1);
 });
 
+test("lubang tengah tertutup selama memuat dan menegak, baru tembus saat membuka", () => {
+  // Hero tidak boleh mengintip lewat lubang sebelum 100%.
+  for (const p of [0, 0.5, 0.99]) assert.equal(cakramPada(3, null, p).tembus, 0, `bocor di ${p}`);
+  assert.equal(cakramPada(10 + LIUK * 0.9, 10, 1).tembus, 0, "bocor saat menegak");
+  const akhir = cakramPada(10 + LIUK + TERKAM, 10, 1).tembus;
+  assert.equal(akhir, 1, "lubang tidak tembus penuh di akhir");
+  // Tembusnya naik halus, tidak meloncat dari 0 ke 1 dalam satu bingkai.
+  const e = 1 / 60;
+  let lalu = 0;
+  for (let t = 10 + LIUK; t <= 10 + LIUK + TERKAM; t += e) {
+    const v = cakramPada(t, 10, 1).tembus;
+    assert.ok(v >= lalu && v - lalu < 0.4, `tembus meloncat di ${t.toFixed(3)}`);
+    lalu = v;
+  }
+});
+
 test("cakram berputar makin kencang saat progres naik", () => {
   const laju = (p) => (cakramPada(1.01, null, p).putar - cakramPada(1, null, p).putar) / 0.01;
   assert.ok(laju(0.8) > laju(0.2));
