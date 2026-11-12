@@ -236,6 +236,14 @@ Kompilasi async, loader tetap bergerak. Tanpa tugas panjang saat props dimuat di
   rak dilatih tiga mesh per bingkai. Jeda terbesar dekat rak 912 ke 546 ms (desktop), bingkai
   terburuk HP saat masuk babak andal 685 ke 170 ms. Sisa: PMREM dan geometri saat rak dibuat.
 - Gambar mode Ringan dibuat ulang dengan AO baru.
+- Sesudah merge, masukan lanjutan Farrez: pemutar kaset di bilik dan meja kasir didudukkan menurut
+  kotak batasnya (dulu separuh badan tenggelam ke papan); tutup vitrin babak aman terbuka ke atas
+  (tanda sudut engselnya terbalik); padam babak andal mengikuti gulir, bukan kedip 5 Hz berbasis
+  waktu; halo, kerucut, dan terang lampu memudar, tidak berganti seketika; kabut terang 18 sampai
+  48 m dan selubung teks tema terang maksimal 68%.
+- PMREM rak dipanggang ke `public/assets/rak/lingkungan.webp` (126 KB): tiga shader PMREM tidak
+  lagi dikompilasi saat rak dibuat. Tahap pembuatan rak 480 sampai 580 ke 186 ms, tugas panjang
+  pertama rak 546 ke 367 ms (desktop) dan 767 ke 363 ms (HP).
 
 ## Riwayat keputusan
 

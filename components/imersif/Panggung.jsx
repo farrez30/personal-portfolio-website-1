@@ -17,6 +17,7 @@ import { suara } from "./suara";
 // Rak imersif: semua proyek, lalu satu CD musik di ujung.
 const proyek = [...daftarProyek, albumMusik];
 import { buatAdegan } from "./adegan";
+import { muatLingkungan } from "./lingkungan";
 import { indeksMendarat } from "./mendarat";
 import "./panggung.css";
 
@@ -146,6 +147,9 @@ export default function Panggung({ gulir }) {
       // Tunggu peramban senggang: pembuatan rak sinkron, jangan berebut bingkai dengan gulir.
       await new Promise((ok) => ("requestIdleCallback" in window ? requestIdleCallback(ok, { timeout: 1500 }) : setTimeout(ok, 300)));
       if (batal) return;
+      // Peta pantul dipanggang (lingkungan.js), diurai di luar bingkai sebelum rak dibuat.
+      const lingkungan = await muatLingkungan().catch(() => null);
+      if (batal) return lingkungan?.dispose();
       const sfx = suara();
       // Tanda waktu tahap rak, dibaca scripts/ukur-dunia.mjs bersama tanda dunia:*.
       performance.mark("rak:mulai");
@@ -157,6 +161,7 @@ export default function Panggung({ gulir }) {
         gulirHalaman: true,
         latensiSuara: () => sfx?.latensi ?? 0,
         kabut: warnaKabut(),
+        lingkungan,
       });
       a.on("klikKotak", (slug) => a.buka(slug));
       a.on("klikCakram", () => (a.keadaan === "putar" ? a.keluarkan() : a.dengarkan()));

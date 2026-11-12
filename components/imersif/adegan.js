@@ -12,7 +12,8 @@ import { HALAMAN } from "@/content/proyek";
 import { albumUntuk } from "@/content/album";
 import { bukletUntuk } from "@/content/buklet";
 import { GULUNG_GLSL, UKURAN, aturGulung, letakTengah, gulungDari, mulaiBelok, tarikBelok, tekuk } from "./gulung";
-import { KOTAK, BUKLET, CAKRAM, buatKotak, buatPemutar, buatLingkungan, sinkronCakram, setRedup, setBlurPutar } from "./benda";
+import { KOTAK, BUKLET, CAKRAM, buatKotak, buatPemutar, sinkronCakram, setRedup, setBlurPutar } from "./benda";
+import { buatLingkungan } from "./lingkungan";
 import { gambarSampul, gambarHalaman, gambarHalamanAlbum, gambarBelakang, gambarDaftarLagu, muatGambar } from "./gambar";
 import { buatHalamanUV } from "./halamanUV";
 import { buatSorot, ujungSorot, kedip } from "./sorot";
@@ -196,7 +197,7 @@ const mulaiGeserBaca = (sisi) => Math.max(0.4, MULAI[sisi]);
 
 const tween = () => ({ aktif: false, dari: 0, ke: 0, mulai: 0, durasi: 1, kurva: luncur });
 
-export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirHalaman = false, latensiSuara, kabut = 0xebe3d4 }) {
+export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirHalaman = false, latensiSuara, kabut = 0xebe3d4, lingkungan = null }) {
   // Ambang pemicu bunyi kontak, dimajukan sejauh gerak yang terjadi selama latensi audio
   // (`laju` per detik). Tween geraknya linear dalam waktu, jadi majunya juga tepat dalam waktu.
   const ambangKontak = (dasar, laju) => dasar + Math.max(0, laju) * Math.min(0.15, latensiSuara?.() ?? 0);
@@ -221,7 +222,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   const kanvas = renderer.domElement;
 
   const scene = new THREE.Scene();
-  scene.environment = buatLingkungan(renderer);
+  // PMREM yang sudah dipanggang (lingkungan.js); PMREMGenerator hanya cadangan bila berkasnya gagal.
+  scene.environment = lingkungan ?? buatLingkungan(renderer);
   // Kabut krem ruang rak; di dunia toko kaset warnanya mengikuti latar ruangan.
   scene.fog = new THREE.Fog(kabut, 7 * U, 14 * U);
   const camera = new THREE.PerspectiveCamera(C.fovRak, 1, 0.6, 100);

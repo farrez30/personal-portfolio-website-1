@@ -35,8 +35,9 @@ export const SUASANA = {
   },
   terang: {
     latar: 0xe6dccd,
-    // Kabut pagi tipis: kabut 6 sampai 18 m menutup toko dengan putih tebal (masukan Farrez 13 Nov).
-    kabut: [12, 32],
+    // Kabut pagi tipis: 6 sampai 18 m, lalu 12 sampai 32 m, masih dinilai terlalu pekat (masukan
+    // Farrez 13 Nov). Ruangan terdalam sekitar 10 m dari kamera, jadi 18 sampai 48 m hampir bening.
+    kabut: [18, 48],
     dinding: 0xd8cbb6,
     plafon: 0xe9e1d3,
     ambien: 1.4,
@@ -680,17 +681,22 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       props.perbarui(a.id, u, { waktu: now / 1000, nyala: lampuStatus });
       // Listrik toko padam di tengah babak andal, didahului kedip singkat. Pemutar kaset, ponsel,
       // dan lampu darurat tetap menyala.
+      // Diatur oleh posisi gulir, bukan waktu: kedip berbasis waktu (sin(now/30), sekitar 5 Hz)
+      // berkedip terus selama pembaca berhenti di rentang itu. Sekarang satu kedip pendek saat
+      // digulir melewati u 0,43, lalu padam memudar.
       const padam = a.id === "andal" && u > 0.42 && u < 0.72;
-      redup(padam ? (u < 0.45 ? 0.3 + 0.3 * Math.sin(now / 30) : 0.05) : 1);
+      redup(padam ? (u < 0.435 ? 0.45 : u < 0.445 ? 0.8 : 0.05) : 1);
       if (props.berputar(a.id) && !kurangiGerak) bergerak = true;
       // Kerucut berkas lampu gantung hanya untuk gambar lebar; dari dekat ia jadi segitiga putih.
-      if (nyala.kerucut(a.id === "dinding")) kotor = true;
+      nyala.kerucut(a.id === "dinding");
       // Bayangan kunci digambar ulang hanya saat benda babak bergerak mengikuti gulir.
       if (Math.abs(geserTujuan - geser) > 1e-4 || kotor) kunciLampu.shadow.needsUpdate = true;
     } else {
       redup(1);
-      if (nyala.kerucut(true)) kotor = true;
+      nyala.kerucut(true);
     }
+    if (langkahRedup(dt)) bergerak = true;
+    if (nyala.langkah(dt)) bergerak = true;
     // Fokus ke benda babak hanya saat kamera sudah mendarat; selama terbang yang bekerja motion blur.
     const dofTujuan = a.cerita && !blend && !kurangiGerak ? 1 : 0;
     const dof = blur.uniforms.uDof;
@@ -711,13 +717,19 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     kotor = false;
   };
 
+  // redup() menyetel tujuan; terang lampu memudar ke sana di langkahRedup(), tidak melompat.
+  let tujuanRedup = 1;
   const redup = (f) => {
-    if (f === faktorRedup) return;
+    tujuanRedup = f;
+    nyala.redup(f);
+  };
+  const langkahRedup = (dt) => {
+    if (faktorRedup === tujuanRedup) return false;
+    const f = Math.abs(tujuanRedup - faktorRedup) < 0.002 ? tujuanRedup : faktorRedup + (tujuanRedup - faktorRedup) * (1 - Math.exp(-dt / 0.12));
     faktorRedup = f;
     for (const l of [...lampu, lampuMeja]) l.intensity = (l.userData.dasar ?? l.intensity) * f;
     kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * f;
-    nyala.grup.visible = f > 0.5;
-    kotor = true;
+    return true;
   };
 
   // ---- Muat dan pemanasan ------------------------------------------------------------------
@@ -760,11 +772,19 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       scene.add(o);
       return o;
     };
+    // Didudukkan di permukaan menurut kotak batasnya, bukan titik asal model: titik asal pemutar
+    // kaset ada di tengah badannya, jadi separuh badannya dulu tenggelam ke papan (13 Nov 2026).
+    const dudukkan = (o, atas) => {
+      o.updateMatrixWorld(true);
+      o.position.y += atas - new THREE.Box3().setFromObject(o).min.y;
+      return o;
+    };
     taruh(kursi, -3.55, 0, -2.75, 0.6);
     taruh(kursi, 1.4, 0, 2.15, -0.3);
     taruh(kursi, 2.5, 0, 2.2, 0.4);
     for (const l of lampu) taruh(lampuGantung, l.position.x, 3.2, l.position.z, 0, SKALA_LAMPU);
-    taruh(kaset, -4.05, 1.045, -3.74, 0.35, 1.5);
+    dudukkan(taruh(kaset, -4.05, 0, -3.74, 0.35, 1.5), 1.045); // papan rak dengar bilik
+
     // Headphone Hunyuan3D hanya berisi bentuk (tanpa normal dan tekstur): normal dihitung di sini,
     // ukurannya disetel ke tinggi 22 cm, lalu digantung di puncak dudukan.
     hp.traverse((o) => {
@@ -778,7 +798,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     hp.scale.setScalar(skala);
     hp.position.set(-pusat.x, 0.2 - pusat.y, -pusat.z);
     headphone.add(hp);
-    taruh(kaset, 1.35, 1.01, 3.0, -0.6, 1.4);
+    dudukkan(taruh(kaset, 1.35, 0, 3.0, -0.6, 1.4), 1.01); // permukaan meja kasir
     modelHeadphone = hp;
     modelKaset = kaset;
     // Ruangan menerima bayangan lampu kunci; yang membuatnya hanya props cerita.
@@ -1272,6 +1292,20 @@ function buatNyala(lampu) {
   const kolam = new THREE.MeshBasicMaterial(tambah({ map: radial, opacity: 0.22 }));
   const geoBola = new THREE.SphereGeometry(0.035, 16, 10);
   let kuatBerkas = 1;
+  let warna = 0xffffff;
+  let [tujuanKerucut, kerucutKini, tujuanRedup, redupKini] = [1, 1, 1, 1];
+  const terapkan = () => {
+    bola.color.setHex(warna).multiplyScalar(6 * Math.max(0.15, redupKini));
+    for (const [m, dasar] of [
+      [halo, 0.55],
+      [kerucut, 0.07 * kerucutKini],
+      [kolam, 0.22],
+    ]) {
+      m.color.setHex(warna);
+      m.opacity = dasar * kuatBerkas * redupKini;
+    }
+    kerucut.visible = kerucut.opacity > 0.0005;
+  };
   for (const l of lampu) {
     const { x, y, z } = l.position;
     const b = new THREE.Mesh(geoBola, bola);
@@ -1299,25 +1333,35 @@ function buatNyala(lampu) {
       h.scale.setScalar(0.35);
       grup.add(b, h);
     },
-    // Mengembalikan true bila tampilannya berubah, supaya pemanggil menggambar ulang.
+    // Kerucut dan redup listrik tidak pernah dinyalakan atau dimatikan seketika: dulu
+    // `visible` berganti dalam satu bingkai dan terbaca sebagai kedip (masukan Farrez 13 Nov).
+    // kerucut() dan redup() hanya menyetel tujuan; langkah(dt) memudarkan ke sana dan
+    // mengembalikan true selama masih berubah, supaya pemanggil menggambar ulang.
     kerucut(v) {
-      const tampak = v && kuatBerkas > 0.3;
-      if (kerucut.visible === tampak) return false;
-      kerucut.visible = tampak;
+      tujuanKerucut = v && kuatBerkas > 0.3 ? 1 : 0;
+    },
+    redup(f) {
+      tujuanRedup = f;
+    },
+    langkah(dt) {
+      const dekat = (a, b) => Math.abs(a - b) < 0.002;
+      if (dekat(kerucutKini, tujuanKerucut) && dekat(redupKini, tujuanRedup)) {
+        if (kerucutKini === tujuanKerucut && redupKini === tujuanRedup) return false;
+        kerucutKini = tujuanKerucut;
+        redupKini = tujuanRedup;
+      } else {
+        const k = 1 - Math.exp(-dt / 0.35);
+        kerucutKini += (tujuanKerucut - kerucutKini) * k;
+        redupKini += (tujuanRedup - redupKini) * (1 - Math.exp(-dt / 0.12));
+      }
+      terapkan();
       return true;
     },
-    setel(warna, kuat) {
+    setel(w, kuat) {
+      warna = w;
       kuatBerkas = kuat;
-      bola.color.setHex(warna).multiplyScalar(6);
-      for (const [m, dasar] of [
-        [halo, 0.55],
-        [kerucut, 0.07],
-        [kolam, 0.22],
-      ]) {
-        m.color.setHex(warna);
-        m.opacity = dasar * kuat;
-      }
-      kerucut.visible = kuat > 0.3;
+      if (kuat <= 0.3) tujuanKerucut = kerucutKini = 0;
+      terapkan();
     },
   };
 }

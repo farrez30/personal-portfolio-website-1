@@ -626,7 +626,9 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     grup.add(pk);
     momen.aman = (u) => {
       // Tutup kaca yang terangkat sedikit turun menutup, lalu lengkung gembok turun dan mengunci.
-      tutup.rotation.x = -0.35 * (1 - halus((u - 0.16) / 0.18));
+      // Engsel di tepi belakang (z +D/2), tepi depan di -z: sudut positif mengangkat tepi depan.
+      // Dulu negatif, jadi tutup yang "terbuka" malah menembus ke dalam kaca.
+      tutup.rotation.x = 0.35 * (1 - halus((u - 0.16) / 0.18));
       lengkung.position.y = 0.019 + 0.018 * (1 - halus((u - 0.4) / 0.08));
     };
     momen.aman(0);

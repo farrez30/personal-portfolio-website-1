@@ -38,37 +38,6 @@ function ikutiMusik(p, peta, gambar) {
   peta.addEventListener("dispose", () => window.removeEventListener("musik:album", ulang));
 }
 
-// --- lingkungan ------------------------------------------------------------
-// Studio gelap dengan empat pita putih lembut: plastik dan logam baru terlihat
-// "nyata" karena memantulkan pita-pita ini, bukan karena warnanya sendiri.
-export function buatLingkungan(renderer) {
-  const c = document.createElement("canvas");
-  c.width = 1024;
-  c.height = 512;
-  const g = c.getContext("2d");
-  const latar = g.createLinearGradient(0, 0, 0, 512);
-  latar.addColorStop(0, "#25282f");
-  latar.addColorStop(0.5, "#0e0f13");
-  latar.addColorStop(1, "#020203");
-  g.fillStyle = latar;
-  g.fillRect(0, 0, 1024, 512);
-  for (const [y, t, kuat] of [[0.14, 0.07, 1], [0.4, 0.049, 0.6], [0.26, 0.077, 0.85], [0.62, 0.035, 0.35]]) {
-    const pita = g.createLinearGradient(0, (y - t) * 512, 0, (y + t) * 512);
-    pita.addColorStop(0, "rgba(255,255,255,0)");
-    pita.addColorStop(0.5, `rgba(255,255,255,${kuat})`);
-    pita.addColorStop(1, "rgba(255,255,255,0)");
-    g.fillStyle = pita;
-    g.fillRect(0, (y - t) * 512, 1024, 2 * t * 512);
-  }
-  const t = new THREE.CanvasTexture(c);
-  t.mapping = THREE.EquirectangularReflectionMapping;
-  t.colorSpace = THREE.SRGBColorSpace;
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  const env = pmrem.fromEquirectangular(t).texture;
-  t.dispose();
-  pmrem.dispose();
-  return env;
-}
 
 // --- pita softbox ----------------------------------------------------------
 // Satu pantulan panjang tanpa ujung, sama untuk semua bagian mengilap.
