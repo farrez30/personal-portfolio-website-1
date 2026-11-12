@@ -13,7 +13,8 @@ Coderoach OS (ADR 0009 repo coderoach). Salinan PNG dari SVG hanya untuk storybo
 | coderoach.svg | Coderoach | coderoach/public/assets/coderoach_logo.svg |
 | uruzin.png | Uruzin | Coderoach Studio/klien/uruzin/uruzin-app/public/brand/logo-full-green.png |
 | tgr.svg | The Global Review (Global Future Institute) | the-global-review-website/public/tgr-logo.svg |
-| royal-breadcrumb.png | PT Raja Roti Cemerlang Tbk | Coderoach Studio/klien/rajarotigroup-landingpage/public/images/img_logoroyalbreadcumb03.png |
+| raja-roti.png | PT Raja Roti Cemerlang | Coderoach Studio/klien/rajarotigroup-landingpage/public/images/img_image1.png (logo di header situs) |
+| royal-breadcrumb.png | Royal Breadcrumb, merek PT Raja Roti Cemerlang | Coderoach Studio/klien/rajarotigroup-landingpage/public/images/img_logoroyalbreadcumb03.png |
 | saychick.svg | PT Jantan Jadi Juara (SayChick) | Coderoach Studio/klien/saychick-os/public/logo-saychick.svg |
 | success-career.png | PT Sukses Cipta Inspirasi | Coderoach Studio/klien/success-career-app/src/assets/logo-sc.png |
 | studentchanges.png | PT Sukses Cipta Inspirasi | Coderoach Studio/klien/student-changes-app/public/logo-red.png |
