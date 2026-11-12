@@ -11,21 +11,28 @@ const ASET = "/assets/dunia/";
 const MODEL = ["bar_chair_round_01", "hanging_industrial_lamp", "portable_cassette_player", "headphone"];
 
 // Dua suasana mengikuti tema situs, supaya teks di atas kanvas tetap terbaca:
-// gelap = toko setelah tutup, terang = toko pagi hari.
-const SUASANA = {
+// gelap = toko setelah tutup, terang = toko pagi hari. Nilai gelap mengikuti lembar look-dev
+// (docs/look-dev.md): bayangan cokelat #1a1410, lampu hangat, biru hanya dari pintu.
+// `berkas` = kuat kerucut cahaya dan kolam di lantai, `layar` = angkat bayangan, vignette, butir.
+export const SUASANA = {
   gelap: {
-    latar: 0x0f0d0b,
+    latar: 0x1a1410,
+    kabut: [5, 15],
     dinding: 0x2b2520,
-    plafon: 0x141210,
-    ambien: 0.4,
+    plafon: 0x1a1410,
+    ambien: 0.7,
     lampu: 0xffb46a,
     kuatLampu: 7,
     jalan: 0x6f8fd6,
-    kuatJalan: 5,
-    paparan: 1.05,
+    kuatJalan: 9,
+    terangJalan: 1.8,
+    paparan: 1.3,
+    berkas: 1,
+    layar: { angkat: 0.02, vignette: 0.42, butir: 0.045 },
   },
   terang: {
     latar: 0xe6dccd,
+    kabut: [6, 18],
     dinding: 0xd8cbb6,
     plafon: 0xe9e1d3,
     ambien: 1.4,
@@ -33,7 +40,10 @@ const SUASANA = {
     kuatLampu: 3,
     jalan: 0xfff1d6,
     kuatJalan: 9,
+    terangJalan: 1,
     paparan: 0.95,
+    berkas: 0.25,
+    layar: { angkat: 0, vignette: 0.18, butir: 0.025 },
   },
 };
 
@@ -46,7 +56,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   const hp = matchMedia("(pointer: coarse)").matches || innerWidth < 768;
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  // AgX, bukan ACES: ACES menggeser hue warna jenuh (stiker, seni album) dan cerita v3 sudah AgX.
+  renderer.toneMapping = THREE.AgXToneMapping;
   let rasio = Math.min(devicePixelRatio || 1, hp ? 1.25 : 1.5);
   renderer.setPixelRatio(rasio);
   const kanvas = renderer.domElement;
@@ -55,7 +66,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   const scene = new THREE.Scene();
   // Tanpa peta lingkungan: PMREM mengompilasi shader secara sinkron (terukur 462 ms di RX 6700 XT,
   // ular di loader membeku). Ruangan malam diterangi lampu titik dan cahaya langit saja.
-  scene.fog = new THREE.Fog(0x000000, 6, 13);
+  scene.fog = new THREE.Fog(SUASANA.gelap.latar, ...SUASANA.gelap.kabut);
 
   const camera = new THREE.PerspectiveCamera(ANCHOR[0].fov, 1, 0.05, 40);
 
@@ -116,12 +127,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   const bahan = {
     dinding: new THREE.MeshStandardMaterial({ roughness: 0.92 }),
     plafon: new THREE.MeshStandardMaterial({ roughness: 1 }),
-    lantai: new THREE.MeshStandardMaterial({ color: 0x8a7a6a, roughness: 0.62 }),
+    // Beton tergores (lembar look-dev): peta dari scripts/beton.py, dipasang di muat().
+    lantai: new THREE.MeshStandardMaterial({ color: 0x6e655c, roughness: 0.8 }),
     kayu: new THREE.MeshStandardMaterial({ color: 0xb8a088, roughness: 0.7 }),
     busa: new THREE.MeshStandardMaterial({ color: 0x9a948c, roughness: 1 }),
     gelapMatte: new THREE.MeshStandardMaterial({ color: 0x1c1b1d, roughness: 0.55, metalness: 0.1 }),
+    // Permukaan meja kasir: kayu tua berminyak, cukup terang untuk memantulkan kolam lampu.
+    mejaAtas: new THREE.MeshStandardMaterial({ color: 0x4a3426, roughness: 0.45 }),
     logam: new THREE.MeshStandardMaterial({ color: 0xb9b2a6, roughness: 0.32, metalness: 0.9 }),
-    kuningan: new THREE.MeshStandardMaterial({ color: 0xc9a25a, roughness: 0.3, metalness: 1 }),
+    kuningan: new THREE.MeshStandardMaterial({ color: 0xc9a25a, roughness: 0.45, metalness: 1 }),
     jalan: new THREE.MeshBasicMaterial({ toneMapped: true }),
     kaca: new THREE.MeshStandardMaterial({ color: 0x9fb4c8, roughness: 0.05, metalness: 0.2, transparent: true, opacity: 0.18 }),
     bayang: new THREE.MeshBasicMaterial({ map: teksturBayang(), transparent: true, depthWrite: false, color: 0x000000 }),
@@ -146,9 +160,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   };
 
   // ---- Ruangan -----------------------------------------------------------------------------
-  const lantai = bidang(10, 8, bahan.lantai, 0, 0, 0, 0, -Math.PI / 2);
-  // Lantai papan: tekstur bilah kayu diputar supaya papan memanjang ke arah pintu.
-  lantai.geometry.rotateZ(Math.PI / 2);
+  bidang(10, 8, bahan.lantai, 0, 0, 0, 0, -Math.PI / 2);
   bidang(10, 8, bahan.plafon, 0, 3.2, 0, 0, Math.PI / 2);
   bidang(10, 3.2, bahan.dinding, 0, 1.6, -4); // belakang
   bidang(8, 3.2, bahan.dinding, -5, 1.6, 0, Math.PI / 2); // kiri
@@ -191,7 +203,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
 
   // ---- Meja kasir (klien) ------------------------------------------------------------------
   kotak(2.6, 0.96, 0.62, bahan.kayu, 2, 0.48, 3.0);
-  kotak(2.7, 0.05, 0.72, bahan.gelapMatte, 2, 0.985, 3.0);
+  kotak(2.7, 0.05, 0.72, bahan.mejaAtas, 2, 0.985, 3.0);
   kotak(0.42, 0.14, 0.36, bahan.gelapMatte, 2.8, 1.08, 3.05); // mesin kasir
   const layarKasir = kotak(0.32, 0.18, 0.02, bahan.gelapMatte, 2.8, 1.26, 3.18);
   layarKasir.rotation.x = -0.35;
@@ -205,6 +217,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   // Jalan di luar: bidang bercahaya di balik kaca pintu.
   bidang(1.2, 2.15, bahan.jalan, -1.6, 1.08, 4.06, Math.PI);
   bidang(1.12, 2.1, bahan.kaca, -1.6, 1.08, 3.99, Math.PI);
+  // Cahaya jalan yang jatuh ke lantai di depan pintu: sumber "lampu" tempat kontak.
+  const tumpahJalan = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.8, 2.6),
+    new THREE.MeshBasicMaterial({ map: teksturRadial(), transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending }),
+  );
+  tumpahJalan.rotation.x = -Math.PI / 2;
+  tumpahJalan.position.set(-1.6, 0.005, 3.0);
+  tumpahJalan.renderOrder = 2;
+  scene.add(tumpahJalan);
   const lonceng = new THREE.Group();
   const mangkok = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.11, 24, 1, true), bahan.kuningan);
   mangkok.material.side = THREE.DoubleSide;
@@ -227,22 +248,39 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     [-3.55, yLampu, -2.9],
     [1.7, yLampu, -3.25],
     [3.9, yLampu, 0.2],
-    [2.0, yLampu, 2.5],
+    [2.1, yLampu, 2.95], // tepat di atas meja kasir, supaya stiker berada di kolam cahaya
   ].map((p) => {
-    const l = new THREE.PointLight(0xffffff, 1, 7, 2);
+    // Jangkauan tak terbatas (decay fisik): dengan distance 7 meja kasir hampir tak tersentuh.
+    const l = new THREE.PointLight(0xffffff, 1, 0, 2);
     l.position.set(...p);
     scene.add(l);
     return l;
   });
+  // Tiap lampu terlihat menyala: bola lampu, halo, kerucut berkas di udara berkabut, dan kolam
+  // cahaya di lantai. Semuanya additive tanpa pass tambahan (halo menggantikan bloom post).
+  const nyala = buatNyala(lampu);
+  scene.add(nyala.grup);
   const cahayaJalan = new THREE.SpotLight(0xffffff, 1, 9, 0.9, 0.7, 1.6);
   cahayaJalan.position.set(-1.6, 1.6, 4.6);
   cahayaJalan.target.position.set(-1, 0, 0.5);
   scene.add(cahayaJalan, cahayaJalan.target);
+  // Lampu kecil di atas pintu (dalam toko): tanpa ini kusen dan dinding pintu tenggelam, dan
+  // tempat kontak tidak punya sumber cahaya yang terlihat.
+  const lampuPintu = new THREE.PointLight(0xffffff, 1, 0, 2);
+  lampuPintu.position.set(-1.6, 2.5, 3.75);
+  scene.add(lampuPintu);
+  nyala.tambahBola(lampuPintu);
 
   const terapkanTema = (nama) => {
     const s = SUASANA[nama] ?? SUASANA.gelap;
     scene.background = new THREE.Color(s.latar);
     scene.fog.color.setHex(s.latar);
+    [scene.fog.near, scene.fog.far] = s.kabut;
+    nyala.setel(s.lampu, s.berkas);
+    // Angkat dihitung di ruang sRGB keluaran: hex dibaca apa adanya, tanpa konversi ke linear.
+    blur.uniforms.uAngkat.value.setHex(s.latar, THREE.LinearSRGBColorSpace).multiplyScalar(s.layar.angkat * 10);
+    blur.uniforms.uVignette.value = s.layar.vignette;
+    blur.uniforms.uButir.value = s.layar.butir;
     bahan.dinding.color.setHex(s.dinding);
     bahan.plafon.color.setHex(s.plafon);
     ambien.intensity = s.ambien;
@@ -250,11 +288,16 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       l.color.setHex(s.lampu);
       l.intensity = s.kuatLampu;
     }
+    lampuPintu.color.setHex(s.lampu);
+    lampuPintu.intensity = s.kuatLampu * 0.35;
     cahayaJalan.color.setHex(s.jalan);
     cahayaJalan.intensity = s.kuatJalan;
     bahan.jalan.map?.dispose();
     bahan.jalan.map = teksturJalan(nama === "terang");
+    bahan.jalan.color.setScalar(s.terangJalan);
     bahan.jalan.needsUpdate = true;
+    tumpahJalan.material.color.setHex(s.jalan);
+    tumpahJalan.material.opacity = 0.5 * s.berkas;
     renderer.toneMappingExposure = s.paparan;
     kotor = true;
   };
@@ -270,6 +313,12 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       uBalik: { value: new THREE.Matrix4() },
       uLalu: { value: new THREE.Matrix4() },
       uKuat: { value: 0 },
+      // Grade layar (lembar look-dev): bayangan diangkat ke cokelat, vignette lembut, butir film.
+      uAngkat: { value: new THREE.Color() },
+      uVignette: { value: 0 },
+      uButir: { value: 0 },
+      uBenih: { value: 0 },
+      uAspek: { value: 1 },
     },
     vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }",
     // Blur kamera lewat proyeksi ulang kedalaman (GPU Gems 3 bab 27): tiap piksel diproyeksikan
@@ -281,6 +330,12 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       uniform mat4 uBalik;
       uniform mat4 uLalu;
       uniform float uKuat;
+      uniform vec3 uAngkat;
+      uniform float uVignette;
+      uniform float uButir;
+      uniform float uBenih;
+      uniform float uAspek;
+      float acak(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
       void main() {
         vec4 c = texture2D(tWarna, vUv);
         if (uKuat > 0.001) {
@@ -298,6 +353,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
         gl_FragColor = vec4(c.rgb, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
+        vec3 g = gl_FragColor.rgb;
+        g = g + uAngkat * (1.0 - g);
+        vec2 d = (vUv - 0.5) * vec2(uAspek, 1.0);
+        g *= 1.0 - uVignette * smoothstep(0.35, 1.05, length(d) * 1.25);
+        // Butir lebih kuat di nada tengah, seperti film; tidak mengotori hitam dan putih.
+        float n = acak(gl_FragCoord.xy + uBenih) - 0.5;
+        float l = dot(g, vec3(0.299, 0.587, 0.114));
+        g += n * uButir * (0.35 + 2.6 * l * (1.0 - l));
+        gl_FragColor = vec4(g, 1.0);
       }`,
     depthTest: false,
     depthWrite: false,
@@ -319,6 +383,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     blur.uniforms.uBalik.value.copy(vpKini).invert();
     blur.uniforms.uLalu.value.copy(vpLalu);
     blur.uniforms.uKuat.value = kuat;
+    // Butir berganti hanya saat adegan digambar ulang; diam berarti butir ikut diam.
+    if (!kurangiGerak) blur.uniforms.uBenih.value = (blur.uniforms.uBenih.value + 37.13) % 1000;
     renderer.setRenderTarget(target);
     renderer.render(scene, camera);
     renderer.setRenderTarget(null);
@@ -379,6 +445,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const ph = Math.max(1, Math.floor(h * rasio));
     target.setSize(pw, ph);
     camera.aspect = w / h;
+    blur.uniforms.uAspek.value = w / h;
     // Layar tegak: bidang pandang dilebarkan supaya benda kunci tetap masuk bingkai.
     camera.zoom = w / h < 0.8 ? 0.62 : 1;
     camera.updateProjectionMatrix();
@@ -446,19 +513,24 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
 
   // ---- Muat dan pemanasan ------------------------------------------------------------------
   const muat = async () => {
-    const [kayu, busa, kursi, lampuGantung, kaset, hp] = await Promise.all([
+    const [kayu, busa, beton, betonKasar, kursi, lampuGantung, kaset, hp] = await Promise.all([
       tekstur("kayu.webp", [1, 1]),
       tekstur("busa.webp", [3, 3]),
+      tekstur("beton.webp", [3, 2.4]),
+      tekstur("beton-kasar.webp", [3, 2.4]),
       ...MODEL.map(model),
     ]);
+    // Peta roughness adalah data, bukan warna: dibaca tanpa konversi sRGB.
+    betonKasar.colorSpace = THREE.NoColorSpace;
+    bahan.lantai.map = beton;
+    bahan.lantai.roughnessMap = betonKasar;
+    bahan.lantai.color.setHex(0xffffff);
+    bahan.lantai.roughness = 1;
+    bahan.lantai.needsUpdate = true;
     bahan.kayu.map = kayu;
-    const kayuLantai = kayu.clone();
-    kayuLantai.repeat.set(5, 4);
-    kayuLantai.needsUpdate = true;
-    bahan.lantai.map = kayuLantai;
     bahan.busa.map = busa;
     bahan.busa.color.setHex(0xffffff);
-    for (const m of [bahan.kayu, bahan.lantai, bahan.busa]) m.needsUpdate = true;
+    for (const m of [bahan.kayu, bahan.busa]) m.needsUpdate = true;
 
     const taruh = (asal, x, y, z, ry = 0, s = 1) => {
       const o = asal.clone();
@@ -742,6 +814,89 @@ function buatStiker() {
     s.setColorAt(i, warna[i % warna.length]);
   }
   return s;
+}
+
+// Nyala lampu gantung: bola lampu, halo, kerucut berkas, dan kolam cahaya di lantai. Satu
+// tekstur radial dan satu tekstur gradasi dipakai bersama; semua bahan additive, tanpa kabut,
+// tanpa menulis kedalaman. `setel` mengikuti warna lampu dan kuat berkas per suasana.
+function buatNyala(lampu) {
+  const grup = new THREE.Group();
+  const radial = teksturRadial();
+  const tegak = teksturTegak();
+  const tambah = (o) => ({ transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, ...o });
+  const bola = new THREE.MeshBasicMaterial({ fog: false });
+  const halo = new THREE.SpriteMaterial(tambah({ map: radial, opacity: 0.55 }));
+  const kerucut = new THREE.MeshBasicMaterial(tambah({ map: tegak, opacity: 0.07, side: THREE.DoubleSide }));
+  const kolam = new THREE.MeshBasicMaterial(tambah({ map: radial, opacity: 0.22 }));
+  const geoBola = new THREE.SphereGeometry(0.035, 16, 10);
+  for (const l of lampu) {
+    const { x, y, z } = l.position;
+    const b = new THREE.Mesh(geoBola, bola);
+    b.position.set(x, y - 0.02, z);
+    const h = new THREE.Sprite(halo);
+    h.position.copy(b.position);
+    h.scale.setScalar(0.5);
+    // Kerucut dari kap lampu sampai lantai, terbuka di kedua ujung.
+    const k = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.95, y, 32, 1, true), kerucut);
+    k.position.set(x, y / 2, z);
+    const p = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2), kolam);
+    p.rotation.x = -Math.PI / 2;
+    p.position.set(x, 0.004, z);
+    p.renderOrder = 2;
+    grup.add(b, h, k, p);
+  }
+  return {
+    grup,
+    // Bola dan halo saja, tanpa kerucut dan kolam: untuk lampu dinding kecil.
+    tambahBola(l) {
+      const b = new THREE.Mesh(geoBola, bola);
+      b.position.copy(l.position);
+      const h = new THREE.Sprite(halo);
+      h.position.copy(l.position);
+      h.scale.setScalar(0.35);
+      grup.add(b, h);
+    },
+    setel(warna, kuat) {
+      bola.color.setHex(warna).multiplyScalar(6);
+      for (const [m, dasar] of [
+        [halo, 0.55],
+        [kerucut, 0.07],
+        [kolam, 0.22],
+      ]) {
+        m.color.setHex(warna);
+        m.opacity = dasar * kuat;
+      }
+      kerucut.visible = kuat > 0.3;
+    },
+  };
+}
+
+function teksturRadial() {
+  const kv = document.createElement("canvas");
+  kv.width = kv.height = 128;
+  const c = kv.getContext("2d");
+  const gr = c.createRadialGradient(64, 64, 0, 64, 64, 64);
+  gr.addColorStop(0, "rgba(255,255,255,1)");
+  gr.addColorStop(0.25, "rgba(255,255,255,0.45)");
+  gr.addColorStop(1, "rgba(255,255,255,0)");
+  c.fillStyle = gr;
+  c.fillRect(0, 0, 128, 128);
+  return new THREE.CanvasTexture(kv);
+}
+
+// Gradasi tegak untuk kerucut berkas: terang di dekat kap, memudar ke lantai.
+function teksturTegak() {
+  const kv = document.createElement("canvas");
+  kv.width = 4;
+  kv.height = 128;
+  const c = kv.getContext("2d");
+  const gr = c.createLinearGradient(0, 0, 0, 128);
+  gr.addColorStop(0, "rgba(255,255,255,1)");
+  gr.addColorStop(0.6, "rgba(255,255,255,0.35)");
+  gr.addColorStop(1, "rgba(255,255,255,0)");
+  c.fillStyle = gr;
+  c.fillRect(0, 0, 4, 128);
+  return new THREE.CanvasTexture(kv);
 }
 
 // Bayangan kontak lembut: gradasi radial, bukan peta bayangan, supaya murah di HP.

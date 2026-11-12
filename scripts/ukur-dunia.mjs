@@ -1,7 +1,7 @@
 // Ukur dunia toko kaset lewat Chrome headless (pola skrip ukur rak PR #54): waktu loader, progres
 // yang tercatat, tugas panjang, bingkai saat kamera pindah, bingkai saat diam, dan tangkapan
 // layar tiap anchor.
-//   node scripts/ukur-dunia.mjs <url beranda> [lebarxtinggi] [--gpu] [--keluar <folder>] [--terang] [--kurangi]
+//   node scripts/ukur-dunia.mjs <url beranda> [lebarxtinggi] [--gpu] [--keluar <folder>] [--terang] [--kurangi] [--tanpa-teks]
 import { spawn } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -49,10 +49,19 @@ const kirim = (method, params = {}) =>
     ws.send(JSON.stringify({ id: i, method, params }));
   });
 const js = async (expression) => (await kirim("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true })).result?.result?.value;
+// --tanpa-teks: tiap tangkapan ditambah versi kanvas dunia saja (<nama>-dunia.png), untuk cek
+// nilai di lembar look-dev (docs/look-dev.md), karena teks dan panel seksi ikut menggelapkan.
+const tanpaTeks = arg.includes("--tanpa-teks");
+const SEMBUNYI = `body * { visibility: hidden !important; } .dunia, .dunia * { visibility: visible !important; }`;
 const foto = async (nama) => {
   if (!keluar) return;
   const r = await kirim("Page.captureScreenshot", { format: "png" });
   writeFileSync(join(keluar, `${nama}.png`), Buffer.from(r.result.data, "base64"));
+  if (!tanpaTeks) return;
+  await js(`(() => { const s = document.createElement("style"); s.id = "ukur-sembunyi"; s.textContent = ${JSON.stringify(SEMBUNYI)}; document.head.append(s); return true; })()`);
+  const d = await kirim("Page.captureScreenshot", { format: "png" });
+  writeFileSync(join(keluar, `${nama}-dunia.png`), Buffer.from(d.result.data, "base64"));
+  await js(`document.getElementById("ukur-sembunyi")?.remove(); true`);
 };
 
 await kirim("Page.enable");
