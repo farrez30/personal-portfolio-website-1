@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gerbang digital</title>
+<style>
+  :root { --bg:#161514; --ink:#ede8e0; --ink2:#9a948b; --line:#3a3734; }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui, sans-serif; padding:20px 16px 48px; }
+  h1 { font-size:26px; margin:0 0 4px; }
+  .sub { color:var(--ink2); margin:0 0 14px; font:13px ui-monospace, monospace; }
+  .kendali { display:flex; gap:12px; align-items:center; flex-wrap:wrap; position:sticky; top:0; z-index:5; background:var(--bg); padding:10px 0 14px; }
+  .kendali input { width:min(520px, 60vw); }
+  button { background:var(--ink); color:var(--bg); border:0; border-radius:6px; padding:8px 14px; font:inherit; cursor:pointer; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(380px, 1fr)); gap:22px; }
+  .kartu h2 { font-size:16px; margin:0; }
+  .kartu p { margin:4px 0 10px; color:var(--ink2); font-size:13px; }
+  .vp { position:relative; aspect-ratio:16/10; border:1px solid var(--line); border-radius:8px; overflow:hidden; background:#000 url(hero-bilik.webp) center/cover; }
+  .vp canvas { position:absolute; inset:0; width:100%; height:100%; }
+  .persen { position:absolute; left:0; right:0; bottom:8%; text-align:center; font:12px ui-monospace, monospace; letter-spacing:.12em; color:#9a948b; pointer-events:none; }
+  @media (max-width: 420px) { .grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<h1>Gerbang digital: tiga sapuan robekan piksel</h1>
+<p class="sub">Cincin ular digital yang sama di ketiganya. Di 100% kepalanya melesat ke pojok kiri atas dan menjadi garis sapuan; di belakang garis itu layar robek jadi piksel dan hero terbuka.</p>
+<div class="kendali">
+  <button id="putar">Jeda</button>
+  <button id="lambat">Lambat 0,25x</button>
+  <input id="waktu" type="range" min="0" max="1000" value="0">
+  <span id="angka" class="sub" style="margin:0">0.00 s</span>
+</div>
+<div class="grid">
+  <div class="kartu"><h2>A. Blok diagonal</h2><p>Blok terbuka dari tengahnya mengikuti sapuan diagonal, tepinya sedikit acak, garis biru di muka sapuan.</p><div class="vp"><canvas data-varian="A"></canvas><div class="persen"></div></div></div>
+  <div class="kartu"><h2>B. Robekan pita menyamping</h2><p>Baris-baris layar robek dan bergeser ke samping seperti data rusak, warna terbelah di tepi, lalu tersapu ke kanan.</p><div class="vp"><canvas data-varian="B"></canvas><div class="persen"></div></div></div>
+  <div class="kartu"><h2>C. Dither diagonal</h2><p>Piksel kecil menghilang dengan pola dither layar lama di sepanjang sapuan, dengan garis scan tipis di tepinya.</p><div class="vp"><canvas data-varian="C"></canvas><div class="persen"></div></div></div>
+</div>
+<script>
+// Garis waktu: memuat 0..MUAT, melesat ke pojok (MELESAT), lalu sapuan (SAPU), lalu hero.
+const MUAT = 3.0, MELESAT = 0.34, SAPU = { A: 0.75, B: 0.7, C: 0.75 };
+const DUR = MUAT + MELESAT + 0.9 + 1.4;
+const jepit = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const halus = (x) => x * x * (3 - 2 * x);
+// power3.inOut: pelan di awal dan akhir, cepat di tengah.
+const p3 = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const hash = (a, b = 0) => { const s = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return s - Math.floor(s); };
+const suara = (t, i) => 0.55 + 0.45 * Math.abs(Math.sin(t * 7.3 + i * 0.7) * Math.sin(t * 2.1 + i * 0.23));
+
+// Kepala cincin: berputar di lingkaran, lalu melesat (dipercepat) ke pojok kiri atas lewat kurva
+// yang bersinggungan dengan lingkaran, jadi tidak ada belokan patah.
+function kepala(t, W, H) {
+  const U = Math.min(W, H), cx = W / 2, cy = H / 2, R = U * 0.26, w = 3.4;
+  if (t <= MUAT) { const a = w * t; return [cx + Math.cos(a) * R, cy + Math.sin(a) * R]; }
+  const a = w * MUAT, p0 = [cx + Math.cos(a) * R, cy + Math.sin(a) * R], tg = [-Math.sin(a), Math.cos(a)];
+  // Tujuannya di luar pojok, supaya seluruh jejak ikut keluar dan cincin di tengah habis.
+  const p1 = [p0[0] + tg[0] * R * 0.9, p0[1] + tg[1] * R * 0.9], p2 = [-U * 0.9, -U * 0.7];
+  const u = jepit((t - MUAT) / MELESAT), e = u * u * (1.5 - 0.5 * u); // dipercepat, kecepatan awal tidak nol
+  const k = 1 - e;
+  return [k * k * p0[0] + 2 * k * e * p1[0] + e * e * p2[0], k * k * p0[1] + 2 * k * e * p1[1] + e * e * p2[1]];
+}
+
+// Layar loader digambar dulu ke kanvas lepas, supaya varian robekan bisa mengambil potongannya.
+function gambarLoader(g, W, H, t) {
+  g.globalCompositeOperation = "source-over"; g.globalAlpha = 1; g.shadowBlur = 0;
+  g.fillStyle = "#0b0a09"; g.fillRect(0, 0, W, H);
+  const U = Math.min(W, H), progres = jepit(t / MUAT), R = U * 0.26;
+  // Jejak diukur dengan jarak busur, bukan waktu: saat kepala melesat, tiang-tiang tetap rapat dan
+  // seluruh cincin mengalir ke pojok, tidak putus jadi titik renggang.
+  const panjang = 2 * Math.PI * R * (0.25 + 0.5 * progres);
+  const n = 44, langkah = panjang / n;
+  let sebelum = kepala(t, W, H), busur = 0, iTiang = 0;
+  const tiang = [[...sebelum, 0]];
+  for (let k = 1; k < 4000 && iTiang < n; k++) {
+    const p = kepala(t - k * 0.002, W, H);
+    busur += Math.hypot(p[0] - sebelum[0], p[1] - sebelum[1]);
+    sebelum = p;
+    if (busur >= (iTiang + 1) * langkah) { iTiang++; tiang.push([...p, iTiang]); }
+  }
+  for (const [x, y, i] of tiang.reverse()) {
+    if (x < -30 || y < -30) continue;
+    const amp = suara(t, i) * U * 0.028 * (1 - (i / (n + 1)) * 0.6), lebar = Math.max(1.5, U * 0.008);
+    g.fillStyle = i === 0 ? "#e8fbff" : `hsl(${192 - i * 1.2} 95% ${62 + (i % 3) * 6}%)`;
+    g.shadowColor = "#5ee7ff"; g.shadowBlur = 10;
+    g.beginPath(); g.roundRect(x - lebar / 2, y - amp - lebar / 2, lebar, amp * 2 + lebar, lebar / 2); g.fill();
+  }
+  g.shadowBlur = 0;
+}
+
+// Garis sapuan: tiang equalizer biru berjajar di sepanjang muka sapuan, seperti cincin tadi yang
+// direntangkan jadi garis. pos = jarak muka dari pojok (piksel, searah arah sapuan).
+function garisSapuan(g, W, H, t, arah, pos, kuat) {
+  const [dx, dy] = arah, tx = -dy, ty = dx;
+  const panjang = Math.hypot(W, H) * 1.2, n = 70, U = Math.min(W, H);
+  g.save();
+  g.globalCompositeOperation = "lighter";
+  const gr = g.createLinearGradient(dx * (pos - U * 0.06), dy * (pos - U * 0.06), dx * pos, dy * pos);
+  gr.addColorStop(0, "rgba(40,160,255,0)"); gr.addColorStop(1, `rgba(90,220,255,${0.35 * kuat})`);
+  g.fillStyle = gr;
+  g.beginPath();
+  for (const [s, o] of [[-1, -U * 0.06], [1, -U * 0.06], [1, 0], [-1, 0]]) g.lineTo(dx * (pos + o) + tx * s * panjang, dy * (pos + o) + ty * s * panjang);
+  g.fill();
+  for (let i = 0; i < n; i++) {
+    const s = (i / (n - 1) - 0.5) * panjang;
+    const x = dx * pos + tx * s, y = dy * pos + ty * s;
+    if (x < -20 || y < -20 || x > W + 20 || y > H + 20) continue;
+    const amp = suara(t, i) * U * 0.03 * kuat, lebar = Math.max(1.5, U * 0.007);
+    g.fillStyle = i % 5 ? "#5ee7ff" : "#e8fbff"; g.shadowColor = "#5ee7ff"; g.shadowBlur = 12;
+    g.save(); g.translate(x, y); g.rotate(Math.atan2(dy, dx));
+    g.beginPath(); g.roundRect(-amp - lebar / 2, -lebar / 2, amp * 2 + lebar, lebar, lebar / 2); g.fill();
+    g.restore();
+  }
+  g.restore();
+}
+
+const panel = [...document.querySelectorAll("canvas[data-varian]")].map((c) => ({ c, v: c.dataset.varian, lepas: document.createElement("canvas"), persen: c.parentElement.querySelector(".persen") }));
+
+function gambar(p, t) {
+  const { c, v, lepas } = p;
+  // Ukuran dari wadahnya: kanvas yang disembunyikan selesai transisi berukuran 0 dan tidak akan
+  // pernah tampil lagi kalau ukurannya dibaca dari dirinya sendiri.
+  const dpr = Math.min(devicePixelRatio || 1, 2), W = c.parentElement.clientWidth, H = c.parentElement.clientHeight;
+  if (!W || !H) return;
+  if (c.width !== Math.round(W * dpr)) { c.width = lepas.width = Math.round(W * dpr); c.height = lepas.height = Math.round(H * dpr); }
+  const g = c.getContext("2d"), gl = lepas.getContext("2d");
+  g.setTransform(dpr, 0, 0, dpr, 0, 0); gl.setTransform(dpr, 0, 0, dpr, 0, 0);
+  p.persen.textContent = t < MUAT ? `${Math.round(jepit(t / MUAT) * 100)}%` : "";
+  const tS = MUAT + MELESAT * 0.42, durS = SAPU[v];
+  const u = jepit((t - tS) / durS);
+  c.style.display = u >= 1 ? "none" : "";
+  if (u >= 1) return;
+  gambarLoader(gl, W, H, t);
+  g.globalCompositeOperation = "copy"; g.drawImage(lepas, 0, 0, W, H); g.globalCompositeOperation = "source-over";
+  if (t < tS) return;
+  // Langsung cepat sejak awal (meneruskan laju cincin yang melesat), melambat sedikit di ujung.
+  const pr = 0.45 * u + 0.55 * (1 - Math.pow(1 - u, 3));
+  const arah = v === "B" ? [1, 0] : [W / Math.hypot(W, H), H / Math.hypot(W, H)];
+  const jangkau = v === "B" ? W : (W * arah[0] + H * arah[1]);
+  // Pita tepi: lebar daerah yang sedang robek (dalam satuan 0..1 jangkauan sapuan).
+  const PITA = v === "B" ? 0.22 : 0.18;
+  const muka = pr * (1 + PITA) * jangkau; // posisi muka sapuan dari pojok
+  const ledak = Math.pow(Math.sin(Math.PI * u), 0.6); // kerusakan memuncak di tengah, nol di ujung
+  const bingkai = Math.floor(t * 30); // glitch dikuantisasi 30 fps supaya meloncat, bukan mengalir
+
+  if (v === "A") {
+    const ukuran = Math.max(14, H / 22), kol = Math.ceil(W / ukuran), bar = Math.ceil(H / ukuran);
+    g.save(); g.globalCompositeOperation = "destination-out"; g.fillStyle = "#000";
+    const pinggir = [];
+    for (let j = 0; j < bar; j++) for (let i = 0; i < kol; i++) {
+      const x = i * ukuran, y = j * ukuran;
+      const q = ((x + ukuran / 2) * arah[0] + (y + ukuran / 2) * arah[1]) / jangkau;
+      const ambang = (q * (1 - 0.3) + 0.3 * hash(i, j)) * jangkau;
+      const m = jepit((muka - ambang) / (PITA * jangkau * 0.6));
+      if (m <= 0) continue;
+      const s = ukuran * (m >= 1 ? 1.02 : halus(m));
+      g.fillRect(x + (ukuran - s) / 2, y + (ukuran - s) / 2, s, s);
+      if (m < 0.85) pinggir.push([x + (ukuran - s) / 2, y + (ukuran - s) / 2, s, m]);
+    }
+    g.restore();
+    // Tepi kotak yang sedang membuka menyala biru tipis.
+    g.save(); g.globalCompositeOperation = "lighter"; g.lineWidth = 1;
+    for (const [x, y, s, m] of pinggir) { g.strokeStyle = `rgba(94,231,255,${0.55 * (1 - m) * ledak})`; g.strokeRect(x + 0.5, y + 0.5, s - 1, s - 1); }
+    g.restore();
+  }
+
+  if (v === "B") {
+    const tinggi = Math.max(6, H / 40), baris = Math.ceil(H / tinggi), pitaPx = PITA * jangkau;
+    g.save();
+    for (let j = 0; j < baris; j++) {
+      const y = j * tinggi, tunda = hash(j) * 0.35 * jangkau;
+      const buka = muka - pitaPx - tunda * (1 - pr); // tepi kiri yang sudah jernih
+      const tepiRobek = muka - tunda * (1 - pr);     // sampai mana baris ini mulai robek
+      // Bagian yang sudah terbuka: kosongkan.
+      g.globalCompositeOperation = "destination-out"; g.fillStyle = "#000";
+      if (buka > 0) g.fillRect(0, y, buka, tinggi + 0.5);
+      // Pita robek: potongan layar loader digeser acak per bingkai, warna terbelah.
+      if (tepiRobek > buka) {
+        const geser = (hash(j, bingkai) - 0.5) * jangkau * 0.12 * ledak;
+        const x0 = Math.max(0, buka), lebar = Math.min(W, tepiRobek) - x0;
+        if (lebar > 0) {
+          g.fillRect(x0, y, lebar, tinggi + 0.5);
+          if (hash(j * 7, bingkai) > 0.35) {
+            g.globalCompositeOperation = "source-over";
+            g.drawImage(lepas, (x0 + geser) * dpr, y * dpr, lebar * dpr, tinggi * dpr, x0, y, lebar, tinggi);
+            g.globalCompositeOperation = "lighter";
+            g.fillStyle = `rgba(0,190,255,${0.22 * ledak})`; g.fillRect(x0 + 3 * ledak, y, lebar, tinggi * 0.5);
+            g.fillStyle = `rgba(255,40,160,${0.14 * ledak})`; g.fillRect(x0 - 3 * ledak, y + tinggi * 0.5, lebar, tinggi * 0.5);
+          }
+        }
+      }
+    }
+    g.restore();
+  }
+
+  if (v === "C") {
+    const ukuran = Math.max(4, H / 110), kol = Math.ceil(W / ukuran), bar = Math.ceil(H / ukuran);
+    const bayer = [0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36, 14, 46, 6, 38, 60, 28, 52, 20, 62, 30, 54, 22, 3, 35, 11, 43, 1, 33, 9, 41, 51, 19, 59, 27, 49, 17, 57, 25, 15, 47, 7, 39, 13, 45, 5, 37, 63, 31, 55, 23, 61, 29, 53, 21];
+    const jalur = new Path2D(), pitaPx = PITA * jangkau;
+    for (let j = 0; j < bar; j++) for (let i = 0; i < kol; i++) {
+      const x = i * ukuran, y = j * ukuran;
+      const q = (x * arah[0] + y * arah[1]);
+      const ambang = q + (bayer[(j % 8) * 8 + (i % 8)] / 64) * pitaPx;
+      if (muka > ambang) jalur.rect(x, y, ukuran + 0.5, ukuran + 0.5);
+    }
+    g.save(); g.globalCompositeOperation = "destination-out"; g.fillStyle = "#000"; g.fill(jalur); g.restore();
+    // Garis scan tipis di pita tepi.
+    g.save(); g.globalCompositeOperation = "lighter";
+    for (let y = 0; y < H; y += 3) {
+      const xMuka = (muka - y * arah[1]) / arah[0];
+      g.fillStyle = `rgba(94,231,255,${0.12 * ledak})`;
+      g.fillRect(xMuka - pitaPx / arah[0], y, pitaPx / arah[0], 1);
+    }
+    g.restore();
+  }
+  garisSapuan(g, W, H, t, arah, muka, 1 - halus(jepit((u - 0.75) / 0.25)));
+}
+
+const geser = document.getElementById("waktu"), angka = document.getElementById("angka"), tombol = document.getElementById("putar"), lambat = document.getElementById("lambat");
+let main = true, laju = 1, t = 0, lalu = performance.now();
+tombol.onclick = () => { main = !main; tombol.textContent = main ? "Jeda" : "Putar"; };
+lambat.onclick = () => { laju = laju === 1 ? 0.25 : 1; lambat.textContent = laju === 1 ? "Lambat 0,25x" : "Normal 1x"; };
+geser.oninput = () => { main = false; tombol.textContent = "Putar"; t = (geser.value / 1000) * DUR; };
+function lup(now) {
+  const dt = (now - lalu) / 1000; lalu = now;
+  if (main) { t = (t + dt * laju) % DUR; geser.value = (t / DUR) * 1000; }
+  angka.textContent = t.toFixed(2) + " s";
+  for (const p of panel) gambar(p, t);
+  requestAnimationFrame(lup);
+}
+requestAnimationFrame(lup);
+window.__CEK = () => panel.map((p) => { const d = p.c.getContext('2d').getImageData(10, 10, 1, 1).data; return [p.c.width, p.c.height, p.c.style.display, [...d].join(',')]; });
+window.__setT = (x) => { t = x; main = false; for (const p of panel) gambar(p, t); };
+</script>
+</body>
+</html>
