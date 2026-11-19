@@ -18,6 +18,10 @@ import {
   SiBun,
   SiVercel,
   SiCloudflare,
+  SiHtml5,
+  SiPython,
+  SiSvelte,
+  SiVite,
   SiWhatsapp,
   SiPwa,
   SiPrisma,
@@ -42,6 +46,9 @@ import {
   PiShieldCheckBold,
   PiWifiHighBold,
   PiGearSixBold,
+  PiLockKeyBold,
+  PiFilesBold,
+  PiListChecksBold,
   PiDatabaseBold,
 } from "react-icons/pi";
 
@@ -72,6 +79,10 @@ export const TEKNOLOGI = {
   meta: { nama: { id: "Iklan Meta", en: "Meta ads" }, Ikon: SiMeta },
   pwa: { nama: sama("PWA"), Ikon: SiPwa },
   excel: { nama: { id: "Berkas Excel", en: "Excel file" }, Ikon: SiMicrosoftexcel },
+  html: { nama: { id: "HTML statis", en: "Static HTML" }, Ikon: SiHtml5 },
+  python: { nama: sama("Python"), Ikon: SiPython },
+  svelte: { nama: sama("Svelte"), Ikon: SiSvelte },
+  vite: { nama: sama("Vite"), Ikon: SiVite },
   // Peran umum
   peramban: { nama: { id: "Peramban", en: "Browser" }, Ikon: PiBrowserBold },
   hp: { nama: { id: "HP", en: "Phone" }, Ikon: PiDeviceMobileBold },
@@ -88,6 +99,9 @@ export const TEKNOLOGI = {
   wifi: { nama: { id: "WiFi kamera", en: "Camera WiFi" }, Ikon: PiWifiHighBold },
   cekAturan: { nama: { id: "Cek aturan iklan", en: "Ad policy check" }, Ikon: PiShieldCheckBold },
   mesin: { nama: { id: "Mesin", en: "Engine" }, Ikon: PiGearSixBold },
+  izin: { nama: { id: "Cek hak akses", en: "Access check" }, Ikon: PiLockKeyBold },
+  basisPengetahuan: { nama: { id: "Basis pengetahuan", en: "Knowledge base" }, Ikon: PiFilesBold },
+  audit: { nama: { id: "Log audit", en: "Audit log" }, Ikon: PiListChecksBold },
 };
 
 export const KELOMPOK = ["fitur", "stack", "infrastruktur"];
