@@ -1,6 +1,7 @@
 "use client";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/navigation";
 import { PiPlayFill, PiPauseFill, PiXBold, PiMusicNotesBold, PiLinkBold, PiArrowCounterClockwiseBold, PiArrowSquareOutBold } from "react-icons/pi";
 import { useMode } from "@/components/mode/ModeProvider";
 import { PLAYLIST, AWAL_MUSIK, albumMusik } from "@/content/musik";
@@ -53,6 +54,7 @@ const playlistFarrez = uraiTautan(PLAYLIST);
 export default function PemutarMusik() {
   const t = useTranslations("pemutar");
   const locale = useLocale();
+  const pathname = usePathname();
   const { mode } = useMode();
   const idInput = useId();
 
@@ -66,11 +68,16 @@ export default function PemutarMusik() {
   // Dilipat sendiri selama buklet dibaca supaya panel tidak menutupi kolom teksnya;
   // musik tetap jalan. Terpisah dari pilihan pengguna, jadi kembali sendiri saat ditutup.
   const [dilipat, setDilipat] = useState(false);
-  // Selama cerita gulir di layar, panel menciut ke cakram supaya tidak menutupi judul bab
-  // (terukur di HP 390 px). Membuka cakram di dalam cerita tetap boleh, sampai cerita lewat.
+  // Selama cerita gulir di layar, dan di HP begitu hero lewat (rak, klien, kontak), panel
+  // menciut ke cakram supaya tidak menutupi judul dan isi seksi (terukur di HP 390 px). Di HP
+  // embed yang tersambung membuat panel setinggi 300 px, jadi hero pun ikut melipat.
+  // Membuka cakram tetap boleh, sampai pengunjung pindah zona.
   const [diCerita, setDiCerita] = useState(false);
-  const [dibukaDiCerita, setDibukaDiCerita] = useState(false);
-  const sembunyi = tersembunyi || dilipat || (diCerita && !dibukaDiCerita);
+  const [lewatHero, setLewatHero] = useState(false);
+  const [layarHp, setLayarHp] = useState(false);
+  const lipatOtomatis = diCerita || lewatHero || (layarHp && tersambung);
+  const [dibukaManual, setDibukaManual] = useState(false);
+  const sembunyi = tersembunyi || dilipat || (lipatOtomatis && !dibukaManual);
   const [form, setForm] = useState(false);
   const [teks, setTeks] = useState("");
   const [galat, setGalat] = useState("");
@@ -243,14 +250,32 @@ export default function PemutarMusik() {
   }, []);
 
   useEffect(() => {
-    const dengar = (e) => {
-      const tampil = !!e.detail?.tampil;
-      setDiCerita(tampil);
-      if (!tampil) setDibukaDiCerita(false);
-    };
+    const dengar = (e) => setDiCerita(!!e.detail?.tampil);
     window.addEventListener("cerita", dengar);
     return () => window.removeEventListener("cerita", dengar);
   }, []);
+
+  // Pemutar hidup di layout, jadi hero dicari ulang tiap path berganti.
+  useEffect(() => {
+    const hp = matchMedia("(max-width: 600px)");
+    let io;
+    const pasangAmatan = () => {
+      io?.disconnect();
+      setLayarHp(hp.matches);
+      const hero = document.querySelector(".gerbang");
+      if (!hero || !hp.matches) return setLewatHero(false);
+      io = new IntersectionObserver(([e]) => setLewatHero(!e.isIntersecting));
+      io.observe(hero);
+    };
+    pasangAmatan();
+    hp.addEventListener("change", pasangAmatan);
+    return () => {
+      io?.disconnect();
+      hp.removeEventListener("change", pasangAmatan);
+    };
+  }, [pathname]);
+
+  useEffect(() => setDibukaManual(false), [diCerita, lewatHero]);
 
   const pasang = (e) => {
     e.preventDefault();
@@ -265,6 +290,7 @@ export default function PemutarMusik() {
     setTeks("");
     setForm(false);
     setPilihan(baru);
+    setDibukaManual(true);
     mauPutar.current = true;
     setTersambung(true);
   };
@@ -288,7 +314,7 @@ export default function PemutarMusik() {
   return (
     <>
       <section
-        className={`vinyl-player ${mode === "imersif" ? "vinyl-player--imersif" : ""} ${sembunyi ? "is-hidden" : ""} ${tersambung ? "is-tersambung" : ""}`}
+        className={`vinyl-player ${mode === "imersif" ? "vinyl-player--imersif" : ""} ${lipatOtomatis ? "vinyl-player--lipat" : ""} ${sembunyi ? "is-hidden" : ""} ${tersambung ? "is-tersambung" : ""}`}
         aria-label={t("sedangDiputar")}
         aria-hidden={sembunyi}
         inert={sembunyi ? true : undefined}
@@ -311,7 +337,17 @@ export default function PemutarMusik() {
           </div>
 
           <div className="vinyl-controls">
-            <button type="button" className="vinyl-btn" onClick={jalan ? jeda : putar} aria-label={labelPutar} title={labelPutar}>
+            <button
+              type="button"
+              className="vinyl-btn"
+              onClick={() => {
+                setDibukaManual(true);
+                if (jalan) jeda();
+                else putar();
+              }}
+              aria-label={labelPutar}
+              title={labelPutar}
+            >
               {jalan ? <PiPauseFill aria-hidden="true" /> : <PiPlayFill aria-hidden="true" />}
             </button>
             <button
@@ -388,11 +424,11 @@ export default function PemutarMusik() {
 
       <button
         type="button"
-        className={`vinyl-reopen ${mode === "imersif" ? "vinyl-reopen--imersif" : ""} ${diCerita ? "vinyl-reopen--cerita" : ""} ${sembunyi ? "is-shown" : ""}`}
+        className={`vinyl-reopen ${mode === "imersif" ? "vinyl-reopen--imersif" : ""} ${lipatOtomatis ? "vinyl-reopen--lipat" : ""} ${sembunyi ? "is-shown" : ""}`}
         onClick={() => {
           setTersembunyi(false);
           setDilipat(false);
-          if (diCerita) setDibukaDiCerita(true);
+          if (lipatOtomatis) setDibukaManual(true);
         }}
         aria-label={t("tampil")}
         title={t("tampil")}
