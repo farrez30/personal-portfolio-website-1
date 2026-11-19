@@ -119,6 +119,8 @@ export const ARAH = {
     b("PORTO 2", "orbit", "Konstelasi satelit proyek", "Sepuluh satelit, tiap proyek berbentuk bendanya sendiri. Daftar nama selalu terlihat; gulir memindah sorotan.", "portoKonstelasi"),
     b("PORTO 3", "1 m", "Pulang ke kantor: lemari arsip", "Kamera turun dari orbit ke gedung yang sama. Map berkas berlabel di laci arsip, satu map terbuka di meja.", "portoArsip"),
     b("PORTO 4", "10 m", "Showroom dengan panggung putar", "Lantai pamer gelap, tiap proyek diorama di panggung putar dengan lampu sorot.", "portoShowroom"),
+    b("PORTO 6", "orbit", "Satelit itu modul lab", "Kamera mendekati satu satelit: modul lab dengan jendela bulat, sayap surya, bumi malam di belakangnya.", "portoLab", { v: "-luar", luar: true }),
+    b("PORTO 6", "3 m", "Di dalam modul: rak proyek", "Kamera menembus jendela. Di dalam, rak berjajar seperti modul lab stasiun luar angkasa; tiap loker satu proyek, loker yang dipilih tertarik keluar dan kartunya terbuka.", "portoLab"),
     b("PORTO 5", "orbit", "Globe sebagai latar, grid proyek", "Globe bergeser ke kiri dan mengecil, grid proyek biasa naik di sisi kanan.", "portoGrid"),
   ],
   A: [
