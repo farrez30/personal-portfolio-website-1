@@ -7,7 +7,7 @@ import { useMode } from "@/components/mode/ModeProvider";
 import { LAGU, albumMusik } from "@/content/musik";
 import "./pemutar.css";
 
-// Satu pemutar musik untuk kedua mode, dari rekaman berlisensi bebas di /musik (ADR 0021).
+// Satu pemutar musik untuk kedua mode, dari rekaman berlisensi bebas di /musik (ADR 0022).
 // Elemen audio baru dibuat saat pengunjung menekan putar, jadi sebelum itu tidak ada berkas
 // yang diunduh. Satu lagu dimuat pada satu waktu, lalu lanjut ke lagu berikutnya.
 

@@ -1,7 +1,7 @@
 # 0010. Track list from the Spotify Web API with Farrez's own login
 
 - Date: 2026-11-05
-- Status: Superseded by ADR 0021 (19 Nov 2026)
+- Status: Superseded by ADR 0022 (19 Nov 2026)
 
 ## Context
 

@@ -17,7 +17,7 @@ npm run build && npm start
 
 ### Music
 
-Background music is 23 freely licensed recordings in `public/musik/` (ADR 0021): no keys, no
+Background music is 23 freely licensed recordings in `public/musik/` (ADR 0022): no keys, no
 third-party requests. Source, licence and processing of every file are in
 `public/musik/PROVENANCE.md`; the playlist order and credits live in `content/musik.js`.
 `npm test` checks that every file is listed, credited and licensed.
@@ -28,7 +28,7 @@ third-party requests. Source, licence and processing of every file are in
 |---|---|
 | `content/proyek.js` | The ten albums: titles, summaries, architecture, booklet pages. Privacy rules at the top of the file. |
 | `content/musik.js`, `content/situs.js` | The music CD (playlist, credits) and personal links (CV, email, socials). |
-| `components/musik/` | Mini music player for both modes, an `<audio>` element over `public/musik/` (ADR 0021). |
+| `components/musik/` | Mini music player for both modes, an `<audio>` element over `public/musik/` (ADR 0022). |
 | `messages/id.json`, `messages/en.json` | All UI text. Same keys in both; `npm test` checks it. |
 | `components/imersif/` | Immersive mode: the three.js scene (`adegan.js`), the case, disc and player models (`benda.js`), canvas textures (`gambar.js`, `halamanUV.js`), and the hologram. |
 | `components/rak/` | Light mode: grid of covers and a dialog per project. |

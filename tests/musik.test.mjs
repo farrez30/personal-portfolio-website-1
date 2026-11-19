@@ -1,4 +1,4 @@
-// Musik latar dari rekaman berlisensi bebas (ADR 0021): setiap berkas ada, tercatat asalnya,
+// Musik latar dari rekaman berlisensi bebas (ADR 0022): setiap berkas ada, tercatat asalnya,
 // berlisensi yang mengizinkan disimpan dan diputar ulang di situs, dan dikredit.
 import { test } from "node:test";
 import assert from "node:assert/strict";

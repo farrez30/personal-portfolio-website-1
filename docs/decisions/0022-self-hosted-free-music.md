@@ -1,4 +1,4 @@
-# 0021. Background music from freely licensed recordings hosted on the site
+# 0022. Background music from freely licensed recordings hosted on the site
 
 - Date: 2026-11-19
 - Status: Accepted. Supersedes ADR 0009 and ADR 0010.

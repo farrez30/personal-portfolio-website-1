@@ -1,6 +1,6 @@
 # Asal musik latar
 
-Semua rekaman berlisensi bebas (ADR 0021). Lisensi dibaca dari templat lisensi rekaman di halaman
+Semua rekaman berlisensi bebas (ADR 0022). Lisensi dibaca dari templat lisensi rekaman di halaman
 berkas Wikimedia Commons (bukan lisensi komposisinya) dan dari FAQ Incompetech untuk Kevin MacLeod,
 19 Nov 2026. Rekaman domain publik di sini semuanya terbit sebelum 1926 (domain publik di AS menurut
 Music Modernization Act) atau dilepas pemiliknya (Musopen).

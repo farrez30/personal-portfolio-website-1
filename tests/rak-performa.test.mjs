@@ -80,7 +80,7 @@ test("kanvas yang dibaca pikselnya tinggal di CPU, tanpa membaca kanvas halaman 
   assert.match(gambar, /c\.getContext\("2d", baca \? \{ willReadFrequently: true \} : undefined\)/);
   // Setiap getImageData memakai kanvas yang dibuat dengan baca = true.
   const buat = [...gambar.matchAll(/const \[[^\]]*\] = kanvas\(([^)]*)\);[\s\S]{0,160}?getImageData/g)].map((m) => m[1]);
-  // Tiga sejak cetak ulang sampul Spotify dibuang (ADR 0021).
+  // Tiga sejak cetak ulang sampul Spotify dibuang (ADR 0022).
   assert.ok(buat.length >= 3, `pemakaian getImageData terhitung ${buat.length}`);
   for (const arg of buat) assert.match(arg, /, true$/, `kanvas(${arg}) dibaca tanpa willReadFrequently`);
   assert.doesNotMatch(gambar, /terangArea\(g,/);
