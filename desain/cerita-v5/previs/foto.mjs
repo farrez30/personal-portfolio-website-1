@@ -37,10 +37,10 @@ const kirim = (method, params = {}) => new Promise((r) => { const i = ++n; tungg
 
 if (process.env.DUNIA) {
   await kirim("Emulation.setDeviceMetricsOverride", { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false });
-  await kirim("Page.navigate", { url: pathToFileURL(join(DIR, "previs.html")).href + "?dunia=1" + (gaya ? "&gaya=" + gaya : "") });
+  await kirim("Page.navigate", { url: pathToFileURL(join(DIR, "previs.html")).href + "?dunia=" + (process.env.DUNIA === "penuh" ? "penuh" : "1") + (gaya ? "&gaya=" + gaya : "") });
   let siap = false; for (let i = 0; i < 160 && !siap; i++) { await tidur(250); siap = (await kirim("Runtime.evaluate", { expression: "window.SIAP === true && typeof window.aturDunia === 'function'", returnByValue: true })).result?.value; }
   const durasi = (await kirim("Runtime.evaluate", { expression: "window.durasiDunia", returnByValue: true })).result.value, N = Math.round(durasi * 24);
-  const folder = join(DIR, "anim", "G", "00-dunia"); mkdirSync(folder, { recursive: true });
+  const folder = join(DIR, "anim", "G", process.env.DUNIA === "penuh" ? "00-penuh" : "00-dunia"); mkdirSync(folder, { recursive: true });
   for (let i = 0; i < N; i++) { await kirim("Runtime.evaluate", { expression: "window.aturDunia(" + (i / 24) + ")", returnByValue: true }); const g = await kirim("Page.captureScreenshot", { format: "jpeg", quality: 88 }); writeFileSync(join(folder, "f" + String(i).padStart(3, "0") + ".jpg"), Buffer.from(g.data, "base64")); }
   console.log("DUNIA", N, "bingkai", durasi.toFixed(2), "detik");
   id.length = 0;

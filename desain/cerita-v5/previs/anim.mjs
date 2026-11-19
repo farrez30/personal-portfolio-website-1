@@ -13,7 +13,7 @@ const arah = process.argv[2] ?? "G";
 const akar = join(DIR, "anim", arah);
 const babak = readdirSync(akar).filter((n) => existsSync(join(akar, n, "f000.jpg"))).sort();
 // bila ada rekaman satu ruang kerja (00-dunia), babak meja 00-04 sudah ada di dalamnya
-const urut = babak.includes("00-dunia") ? ["00-dunia", ...babak.filter((n) => n !== "00-dunia" && Number(n.slice(0, 2)) >= 5)] : babak;
+const urut = babak.includes("00-penuh") ? ["00-penuh", ...babak.filter((n) => /^0[89]-/.test(n))] : babak.includes("00-dunia") ? ["00-dunia", ...babak.filter((n) => n !== "00-dunia" && Number(n.slice(0, 2)) >= 5)] : babak;
 const detik = urut.map((b) => readdirSync(join(akar, b)).filter((x) => x.endsWith(".jpg")).length / 24);
 const FPS = 24, DURASI = 2.4, SILANG = 0.25;
 const masuk = urut.flatMap((b) => ["-framerate", String(FPS), "-i", join(akar, b, "f%03d.jpg")]);
