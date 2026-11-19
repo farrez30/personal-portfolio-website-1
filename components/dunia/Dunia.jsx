@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMode } from "@/components/mode/ModeProvider";
 import { ANCHOR, anchorAktif, pemicuAnchor, bunyiCerita } from "./naskah";
 import { suara } from "@/components/imersif/suara";
@@ -35,14 +35,41 @@ function LepasTirai({ mode }) {
   return null;
 }
 
+const INTERAKTIF = "a, button, input, textarea, select, label, [role='button'], [tabindex]:not([tabindex='-1'])";
+const kena = (px, py) =>
+  document.elementsFromPoint(px, py).some((e) => !e.classList.contains("dunia-lonceng") && e.closest(INTERAKTIF));
+// Ukuran tombol dikecilkan sampai tidak menyentuh tautan atau kolom di dekatnya (di desktop lonceng
+// berada tepat di atas baris email); bila 44px pun masih kena, tombol tidak dipasang.
+function muatLonceng({ x, y, ukuran }) {
+  if (typeof document === "undefined") return null;
+  for (let u = ukuran; ; u = Math.max(44, u - 6)) {
+    const h = u / 2;
+    const titik = [[x, y], [x - h, y - h], [x + h, y - h], [x - h, y + h], [x + h, y + h], [x, y - h], [x, y + h], [x - h, y], [x + h, y]];
+    if (!titik.some(([px, py]) => kena(px, py))) return { x, y, ukuran: u };
+    if (u <= 44) return null;
+  }
+}
+
 function DuniaImersif({ aktif }) {
   const t = useTranslations("dunia");
+  const bahasa = useLocale();
   const kontrol = useRef(null);
   useEffect(() => kontrol.current?.(aktif), [aktif]);
   const wadah = useRef(null);
   const loader = useRef(null);
   const kanvasUlar = useRef(null);
   const persen = useRef(null);
+  // Lonceng pintu bisa diketuk (masukan Farrez 19 Nov): tombol tak terlihat di atas proyeksi
+  // layar lonceng, karena kanvas dunia tidak menerima klik.
+  const [posLonceng, setLonceng] = useState(null);
+  const duniaRef = useRef(null);
+  // Tidak dipasang bila menimpa tautan, tombol, atau kolom isian (di HP lonceng ada di belakang
+  // baris kontak WhatsApp): tombol tak terlihat tidak boleh merebut ketukan dari isi halaman.
+  const lonceng = posLonceng ? muatLonceng(posLonceng) : null;
+  const ketuk = () => {
+    duniaRef.current?.ketukLonceng();
+    suara()?.mainkan("lonceng");
+  };
 
   useEffect(() => {
     const kurangiGerak = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -195,8 +222,11 @@ function DuniaImersif({ aktif }) {
         d = buatDunia(wadah.current, {
           kurangiGerak,
           tema: temaSitus(),
+          bahasa,
           onProgres: ({ aset }) => (keadaan.aset = aset),
+          onLonceng: setLonceng,
         });
+        duniaRef.current = d;
         performance.mark("dunia:dibuat");
         await d.muat();
         performance.mark("dunia:termuat");
@@ -253,6 +283,15 @@ function DuniaImersif({ aktif }) {
   return createPortal(
     <>
       <div ref={wadah} className="dunia" aria-hidden="true" />
+      {lonceng && aktif ? (
+        <button
+          type="button"
+          className="dunia-lonceng"
+          style={{ left: lonceng.x, top: lonceng.y, width: lonceng.ukuran, height: lonceng.ukuran }}
+          onClick={ketuk}
+          aria-label={t("lonceng")}
+        />
+      ) : null}
       <div ref={loader} className="dunia-ular" style={{ "--pudar": `${PUDAR}s` }}>
         <canvas ref={kanvasUlar} className="dunia-ular__kanvas" aria-hidden="true" />
         <p ref={persen} className="dunia-ular__persen mono" role="progressbar" aria-label={t("memuat")} aria-valuemin={0} aria-valuemax={100} aria-valuenow={0}>

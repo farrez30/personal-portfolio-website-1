@@ -158,3 +158,21 @@ html[data-dunia]:not([data-dunia="gagal"]) .panggung-cerita__putih {
 html[data-dunia]:not([data-dunia="gagal"])[data-theme="dark"] .cerita-kerja--dunia :is(.bab, .cerita-rel, .cerita-pembuka) {
   --putih: 0;
 }
+
+/* Tombol ketuk lonceng pintu: tak terlihat, tepat di atas lonceng, di atas isi seksi kontak. */
+.dunia-lonceng {
+  position: fixed;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.dunia-lonceng:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
+}

@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { N8AOPass } from "n8ao";
-import { ANCHOR, anchorTegak, nyalaFondasi, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
+import { ANCHOR, anchorTegak, keadaanAndal, nyalaFondasi, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
 import { buatPropsCerita } from "./props";
 
 // Dunia toko kaset (ADR 0014): satu ruangan di belakang seluruh beranda. Ruang dari primitif plus
@@ -57,7 +57,7 @@ const bingkaiBerikut = () => new Promise((r) => requestAnimationFrame(() => r())
 // Gerak kamera di dalam satu tempat mengikuti gulir: geser ke samping dan sedikit maju.
 const GESER = { samping: 0.22, maju: 0.12 };
 
-export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgres = () => {} } = {}) {
+export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", bahasa = "id", onProgres = () => {}, onLonceng = () => {} } = {}) {
   const hp = matchMedia("(pointer: coarse)").matches || innerWidth < 768;
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -383,14 +383,16 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   scene.add(lampuPintu);
 
   // Lampu props cerita, dibuat sejak awal supaya jumlah lampu (bagian dari kunci program shader)
-  // tidak berubah saat props dimuat belakangan: lampu dinding di atas papan pre-order, dan lampu
-  // darurat babak andal yang padam sampai listrik toko mati.
+  // tidak berubah saat props dimuat belakangan: lampu dinding di atas papan pre-order, dan sorot
+  // lampu darurat twin spot di atas meja kasir (babak andal) yang mati sampai listrik toko padam.
+  // Tanpa bayangan: peta bayangan tambahan dihitung tiap kali lampu kunci bergerak.
   const lampuMeja = new THREE.PointLight(0xffffff, 1, 3.5, 2);
   lampuMeja.position.set(4.2, 2.1, -3.4);
   lampuMeja.userData.kuat = 0.35;
-  const lampuDarurat = new THREE.PointLight(0xfff1dc, 0, 3, 2);
-  lampuDarurat.position.set(3.18, 0.25, -1.75);
-  scene.add(lampuMeja, lampuDarurat);
+  const lampuDarurat = new THREE.SpotLight(0xeef4ff, 0, 4, 0.55, 0.6, 1.5);
+  lampuDarurat.position.set(1.25, 2.52, 3.86);
+  lampuDarurat.target.position.set(2.0, 1.01, 2.95);
+  scene.add(lampuMeja, lampuDarurat, lampuDarurat.target);
 
   // Lampu kunci: satu-satunya yang membuat bayangan, dipindah ke benda babak yang aktif.
   // Sudut lebar dan penumbra penuh: tanpa lingkaran sorot bertepi tajam di lantai.
@@ -405,6 +407,13 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   kunciLampu.shadow.autoUpdate = false;
   scene.add(kunciLampu, kunciLampu.target);
   let faktorRedup = 1;
+  // Bohlam di model lampu gantung bercahaya sendiri (emissive x25 dari GLB): ikut diredupkan saat
+  // listrik padam, kalau tidak lampu yang "mati" tetap terang di samping lampu darurat.
+  let bohlamModel = [];
+  const redupkanBohlam = () => {
+    // Kuadrat: pada redup 0,05 bohlam x25 masih x1,3 dan tetap terbaca menyala.
+    for (const [m, dasar] of bohlamModel) m.emissiveIntensity = dasar * faktorRedup * faktorRedup;
+  };
   // Pose lampu kunci untuk satu anchor: dari atas dan sedikit dari arah kamera, miring ke samping
   // supaya bayangan memanjang dan terlihat. Menyala hanya di babak cerita.
   // Dari samping dan sedikit di belakang benda, tidak dari arah kamera: bayangan lalu jatuh ke
@@ -856,6 +865,31 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   let hangat = false;
   let bingkaiBayang = 0;
   let ayunMulai = 0;
+  let ampAyun = 0.16;
+  // Posisi layar lonceng untuk tombol ketuk di Dunia.jsx (kanvas tidak menerima klik). Dilaporkan
+  // hanya saat berubah lebih dari 1 px, dan null saat kamera tidak sedang di pintu.
+  const vLonceng = new THREE.Vector3();
+  const vAtas = new THREE.Vector3();
+  let loncengLalu = null;
+  const laporLonceng = (tampil) => {
+    let baru = null;
+    if (tampil) {
+      gantung.getWorldPosition(vLonceng);
+      vAtas.copy(vLonceng).y += 0.13;
+      vLonceng.project(camera);
+      vAtas.project(camera);
+      const w = wadah.clientWidth || innerWidth;
+      const h = wadah.clientHeight || innerHeight;
+      const x = ((vLonceng.x + 1) / 2) * w;
+      const y = ((1 - vLonceng.y) / 2) * h;
+      const r = Math.abs(vAtas.y - vLonceng.y) * h * 0.5;
+      baru = { x: Math.round(x), y: Math.round(y + r * 0.6), ukuran: Math.round(Math.max(44, r * 1.6)) };
+    }
+    const sama = baru && loncengLalu && Math.abs(baru.x - loncengLalu.x) <= 1 && Math.abs(baru.y - loncengLalu.y) <= 1 && baru.ukuran === loncengLalu.ukuran;
+    if (sama || (!baru && !loncengLalu)) return;
+    loncengLalu = baru;
+    onLonceng(baru);
+  };
   let bayangGerak = false;
   let raf = 0;
   let lalu = performance.now();
@@ -899,12 +933,12 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       const sasaran = props.sorot(a.id);
       sorotKunci(sasaran);
       pasangGaris(sasaran);
-      // Listrik toko padam di tengah babak andal, didahului kedip singkat. Pemutar kaset, ponsel,
-      // dan lampu darurat tetap menyala.
+      // Listrik toko padam di tengah babak andal, didahului kedip singkat. Tablet kasir dan lampu
+      // darurat tetap menyala (props momen.andal memakai rentang u yang sama).
       // Diatur oleh posisi gulir, bukan waktu: kedip berbasis waktu (sin(now/30), sekitar 5 Hz)
       // berkedip terus selama pembaca berhenti di rentang itu. Sekarang satu kedip pendek saat
       // digulir melewati u 0,43, lalu padam memudar.
-      const padam = a.id === "andal" && u > 0.42 && u < 0.72;
+      const padam = a.id === "andal" && keadaanAndal(u).keadaan === "padam";
       redup(padam ? (u < 0.435 ? 0.45 : u < 0.445 ? 0.8 : 0.05) : 1);
       if (props.berputar(a.id) && !kurangiGerak) bergerak = true;
       // Bayangan kunci digambar ulang hanya saat benda babak bergerak mengikuti gulir.
@@ -928,7 +962,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       if (!ayunMulai) ayunMulai = now;
       const t = (now - ayunMulai) / 1000;
       if (t < 2.6) {
-        const amp = 0.16 * Math.exp(-1.7 * t);
+        const amp = ampAyun * Math.exp(-1.7 * t);
         lonceng.rotation.x = amp * Math.sin(2 * Math.PI * 4.1 * t);
         pemukulLonceng.rotation.x = amp * 1.6 * Math.sin(2 * Math.PI * 4.1 * t - 0.9);
         bergerak = true;
@@ -937,7 +971,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
         pemukulLonceng.rotation.x = 0;
         kotor = true;
       }
-    } else if (a.id !== "pintu") ayunMulai = 0;
+    } else if (a.id !== "pintu") {
+      ayunMulai = 0;
+      ampAyun = 0.16;
+    }
     if (langkahRedup(dt)) bergerak = true;
     if (nyala.langkah(dt)) bergerak = true;
     // Fokus ke benda babak hanya saat kamera sudah mendarat; selama terbang yang bekerja motion blur.
@@ -954,6 +991,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     posLalu.copy(camera.position);
     lihatLalu.copy(lihat);
     pasangKamera();
+    laporLonceng(a.id === "pintu" && !blend);
     const kecepatan = dt > 0 ? Math.max(camera.position.distanceTo(posLalu), lihat.distanceTo(lihatLalu) * 0.6) / dt : 0;
     const kuat = kekuatanBlur(kecepatan, kurangiGerak);
     gambar(kuat > 0 ? Math.min(1, kuat * 5) * 1.6 : 0);
@@ -974,6 +1012,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const f = Math.abs(tujuanRedup - faktorRedup) < 0.002 ? tujuanRedup : faktorRedup + (tujuanRedup - faktorRedup) * (1 - Math.exp(-dt / 0.12));
     faktorRedup = f;
     for (const l of [...lampu, lampuMeja]) l.intensity = (l.userData.dasar ?? l.intensity) * f;
+    redupkanBohlam();
     kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * kunciKini.kuat * f;
     return true;
   };
@@ -987,6 +1026,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       tekstur("beton-kasar.webp", [3, 2.4]),
       ...MODEL.map(model),
     ]);
+    // Kaset di model CC0 pemutar kaset adalah komponen mesh terpisah yang duduk di luar badan
+    // pemutar, jadi terlihat setengah keluar dan melayang (butir 17). Dimasukkan ke dalam badan,
+    // di belakang jendela kacanya, seperti walkman sungguhan.
+    masukkanKaset(kaset);
     // Dinding plester (Poly Haven CC0): warna dinding tetap dari suasana, teksturnya memberi
     // serat dan pantulan yang tidak rata.
     const [plester, plesterNormal, plesterKasar] = await Promise.all([
@@ -1029,6 +1072,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     taruh(kursi, 1.4, 0, 2.15, -0.3);
     taruh(kursi, 2.5, 0, 2.2, 0.4);
     for (const l of lampu) taruh(lampuGantung, l.position.x, 3.2, l.position.z, 0, SKALA_LAMPU);
+    lampuGantung.traverse((o) => {
+      for (const m of [].concat(o.material ?? [])) if (m.emissiveIntensity > 0 && m.emissive?.getHex()) bohlamModel.push([m, m.emissiveIntensity]);
+    });
+    redupkanBohlam();
     dudukkan(taruh(kaset, -4.05, 0, -3.74, 0.35, 1.5), 1.045); // papan rak dengar bilik
 
     // Headphone Hunyuan3D hanya berisi bentuk (tanpa normal dan tekstur): normal dihitung di sini,
@@ -1112,7 +1159,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   // lalu digambar latihan per tiga benda, baru tampil. Sama dengan siapkan(), tapi tanpa loader.
   const muatCerita = async () => {
     if (props) return;
-    const calon = buatPropsCerita({ bahan, tekstur, tambahBayang: bayang, lampuMeja, lampuDarurat });
+    const calon = buatPropsCerita({ bahan, tekstur, tambahBayang: bayang, lampuMeja, lampuDarurat, bahasa });
     const daftar = calon.modelDibutuhkan;
     const [hasil] = await Promise.all([Promise.all(daftar.map(model)), calon.tunggu()]);
     calon.pasangModel({ ...Object.fromEntries(daftar.map((n, i) => [n, hasil[i]])), headphone: modelHeadphone, kaset: modelKaset });
@@ -1201,6 +1248,16 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     siapkan,
     muatCerita,
     keAnchor,
+    // Lonceng pintu diketuk (Dunia.jsx, tombol di atas proyeksi lonceng): ayunan dimulai ulang
+    // dan ketukan beruntun menambah amplitudonya sampai batas. Gerak dikurangi: tidak berayun.
+    ketukLonceng() {
+      if (kurangiGerak) return;
+      const now = performance.now();
+      const sisa = ayunMulai ? ampAyun * Math.exp(-1.7 * ((now - ayunMulai) / 1000)) : 0;
+      ampAyun = Math.min(0.34, sisa + 0.14);
+      ayunMulai = now;
+      kotor = true;
+    },
     get indeks() {
       return indeks;
     },
@@ -1542,7 +1599,9 @@ function buatNyala(lampu) {
   let warna = 0xffffff;
   let [tujuanKerucut, kerucutKini, tujuanRedup, redupKini] = [1, 1, 1, 1];
   const terapkan = () => {
-    bola.color.setHex(warna).multiplyScalar(6 * Math.max(0.15, redupKini));
+    // Saat listrik padam (babak andal) bohlam ikut gelap: dulu disisakan 15% dan terbaca masih
+    // menyala di samping lampu darurat.
+    bola.color.setHex(warna).multiplyScalar(6 * Math.max(0.02, redupKini));
     for (const [m, dasar] of [
       [halo, 0.55],
       [kerucut, 0.16 * kerucutKini],
@@ -1556,7 +1615,10 @@ function buatNyala(lampu) {
   for (const l of lampu) {
     const { x, y, z } = l.position;
     const b = new THREE.Mesh(geoBola, bola);
-    b.position.set(x, y - 0.02, z);
+    // Di tengah kap kaca model lampu (kaca y 2,243..2,453 pada skala 0,72). Dulu 2 cm di bawah
+    // titik lampu: bola 3,5 cm menonjol 3,4 cm di bawah kaca, terbaca tempelan (masukan Farrez,
+    // gambar 13, 19 Nov 2026).
+    b.position.set(x, y + 0.085, z);
     const h = new THREE.Sprite(halo);
     h.position.copy(b.position);
     h.scale.setScalar(0.5);
@@ -1897,6 +1959,45 @@ function buatJalan(pagi) {
   // Bidang tegak menghadap ke dalam toko (-z): tulisannya terbaca tidak terbalik.
   for (const m of [l1, l2, l4, l5]) m.rotation.y = Math.PI;
   return g;
+}
+
+// Geser komponen kaset (segitiga terhubung yang batasnya di x >= 0,25 pada ruang model) ke
+// dalam badan pemutar, berpusat di jendela kaca. Simpul glTF yang dipisah per normal atau UV
+// digabung menurut posisi supaya komponennya utuh.
+function masukkanKaset(model) {
+  model.traverse((o) => {
+    if (!o.isMesh || !o.geometry.index || o.userData.kasetMasuk) return;
+    if (![].concat(o.material).some((m) => m.name === "portable_cassette_player")) return;
+    const pos = o.geometry.attributes.position;
+    const idx = o.geometry.index.array;
+    const kunci = new Map();
+    const akar = new Int32Array(pos.count);
+    for (let i = 0; i < pos.count; i++) {
+      const k = `${pos.getX(i).toFixed(5)},${pos.getY(i).toFixed(5)},${pos.getZ(i).toFixed(5)}`;
+      if (!kunci.has(k)) kunci.set(k, i);
+      akar[i] = kunci.get(k);
+    }
+    const induk = Int32Array.from({ length: pos.count }, (_, i) => i);
+    const cari = (x) => {
+      while (induk[x] !== x) x = induk[x] = induk[induk[x]];
+      return x;
+    };
+    for (let i = 0; i < idx.length; i += 3) {
+      const a = cari(akar[idx[i]]);
+      induk[cari(akar[idx[i + 1]])] = a;
+      induk[cari(akar[idx[i + 2]])] = a;
+    }
+    const minX = new Map();
+    for (let i = 0; i < pos.count; i++) {
+      const r = cari(akar[i]);
+      minX.set(r, Math.min(minX.get(r) ?? Infinity, pos.getX(i)));
+    }
+    for (let i = 0; i < pos.count; i++) if (minX.get(cari(akar[i])) >= 0.25) pos.setXYZ(i, pos.getX(i) - 0.899, pos.getY(i), pos.getZ(i) + 0.01);
+    pos.needsUpdate = true;
+    o.geometry.computeBoundingBox();
+    o.geometry.computeBoundingSphere();
+    o.userData.kasetMasuk = true;
+  });
 }
 
 function mulberry(a) {
