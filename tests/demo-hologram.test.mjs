@@ -73,7 +73,7 @@ test("explainerUntuk: bahasa selain id jatuh ke en, proyek tak dikenal null", ()
   assert.equal(explainerUntuk("tidak-ada", "id"), null);
 });
 
-test("explainer bersuara menjeda Spotify dan melanjutkannya sesudahnya", () => {
+test("explainer bersuara menjeda musik latar dan melanjutkannya sesudahnya", () => {
   const holo = baca("components/imersif/Hologram.jsx");
   // Sinyal redam dikirim selama bersuara dan dicabut di cleanup (berhenti, bisu, CD keluar).
   assert.match(holo, /const bersuara = narasi && main && !bisu;/);

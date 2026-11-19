@@ -15,26 +15,20 @@ npm test         # node:test, no browser needed
 npm run build && npm start
 ```
 
-### Spotify track list (optional)
+### Music
 
-The music CD booklet lists the tracks of the playlist in `content/musik.js` through
-`/api/musik/daftar` (ADR 0010). One-time setup:
-
-1. Create an app at developer.spotify.com/dashboard (Web API, Redirect URI
-   `http://127.0.0.1:8888/callback`). The playlist owner must be the app owner, with Premium.
-2. Put `SPOTIFY_CLIENT_ID` and `SPOTIFY_CLIENT_SECRET` in `.env.local`.
-3. `node scripts/spotify-token.mjs`, log in, and the refresh token is written to `.env.local`.
-4. Copy the three values to Vercel (Production) and redeploy.
-
-If the list goes empty, the server log says why (`daftar lagu: token-400` means log in again).
+Background music is 23 freely licensed recordings in `public/musik/` (ADR 0021): no keys, no
+third-party requests. Source, licence and processing of every file are in
+`public/musik/PROVENANCE.md`; the playlist order and credits live in `content/musik.js`.
+`npm test` checks that every file is listed, credited and licensed.
 
 ## Layout
 
 | Path | What it holds |
 |---|---|
 | `content/proyek.js` | The ten albums: titles, summaries, architecture, booklet pages. Privacy rules at the top of the file. |
-| `content/musik.js`, `content/situs.js` | The music CD (Spotify playlist link) and personal links (CV, email, socials). |
-| `components/musik/` | Spotify mini player for both modes: link parsing, oEmbed, print filter hookup (ADR 0009). |
+| `content/musik.js`, `content/situs.js` | The music CD (playlist, credits) and personal links (CV, email, socials). |
+| `components/musik/` | Mini music player for both modes, an `<audio>` element over `public/musik/` (ADR 0021). |
 | `messages/id.json`, `messages/en.json` | All UI text. Same keys in both; `npm test` checks it. |
 | `components/imersif/` | Immersive mode: the three.js scene (`adegan.js`), the case, disc and player models (`benda.js`), canvas textures (`gambar.js`, `halamanUV.js`), and the hologram. |
 | `components/rak/` | Light mode: grid of covers and a dialog per project. |

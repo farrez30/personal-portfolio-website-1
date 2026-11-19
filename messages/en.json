@@ -125,21 +125,8 @@
     "tampil": "Show player",
     "sedangDiputar": "Now playing",
     "siap": "Ready to play",
-    "playlistFarrez": "Farrez's work playlist",
-    "pilihanmu": "Your pick",
-    "viaSpotify": "via Spotify",
-    "ganti": "Change song",
-    "tempel": "Spotify link",
-    "contoh": "open.spotify.com/track/…",
-    "pasang": "Play",
-    "batal": "Cancel",
-    "salah": "That isn't a Spotify track, album, or playlist link.",
-    "kembali": "Back",
-    "kosong": "Paste a Spotify link.",
-    "disimpan": "Your link is only saved in this browser.",
-    "cuplikan": "Still a preview? <login>Log in to Spotify</login>, then allow cookies from spotify.com in your browser settings, or open it in Spotify.",
-    "cuplikanHp": "On phones, Spotify only plays previews here. The full songs are in the <buka>Spotify app</buka>.",
-    "bukaSpotify": "Spotify"
+    "berikutnya": "Next song",
+    "domainPublik": "Public domain"
   },
   "umum": {
     "bahasa": "Language",

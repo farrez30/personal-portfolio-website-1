@@ -77,11 +77,6 @@
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.12);
 }
 
-.vinyl__label img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 .vinyl__hole {
   position: absolute;
@@ -146,14 +141,6 @@
   background: #6b5a3a;
 }
 
-/* ===== Glass control panel ===== */
-.vinyl-panel {
-  display: flex;
-  align-items: center;
-  gap: 0.85rem;
-  min-width: 0;
-}
-
 .vinyl-meta {
   display: flex;
   flex-direction: column;
@@ -185,6 +172,13 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.vinyl-meta__artist a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-underline-offset: 2px;
 }
 
 .vinyl-controls {
@@ -222,112 +216,6 @@
     width: 2.75rem;
     height: 2.75rem;
   }
-}
-
-/* ===== Spotify link form and embed ===== */
-.vinyl-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.75rem;
-  color: var(--ink-2);
-}
-
-.vinyl-form label {
-  color: var(--ink);
-  font-weight: 500;
-}
-
-.vinyl-form__baris {
-  display: flex;
-  gap: 0.4rem;
-}
-
-.vinyl-form input {
-  flex: 1;
-  min-width: 0;
-  min-height: 2.5rem;
-  padding: 0 0.7rem;
-  border-radius: 0.6rem;
-  border: 1px solid var(--line);
-  background: var(--bg);
-  color: var(--ink);
-  font: inherit;
-  font-size: 0.85rem;
-}
-
-.vinyl-form input:focus-visible {
-  outline: 2px solid var(--aksen);
-  outline-offset: 1px;
-}
-
-.vinyl-form input[aria-invalid] {
-  border-color: #c2412d;
-}
-
-.vinyl-form__pasang {
-  min-height: 2.5rem;
-  padding: 0 0.9rem;
-  border-radius: 0.6rem;
-  border: 0;
-  cursor: pointer;
-  background: var(--aksen);
-  color: var(--bg);
-  font: inherit;
-  font-weight: 600;
-}
-
-.vinyl-form__catatan,
-.vinyl-form__galat {
-  margin: 0;
-}
-
-.vinyl-form__galat {
-  color: #c2412d;
-}
-
-.vinyl-form__kembali {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  min-height: 2.75rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  color: var(--aksen);
-  font: inherit;
-}
-
-.vinyl-embed {
-  width: 100%;
-  min-height: 152px;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.vinyl-embed[hidden] {
-  display: none;
-}
-
-.vinyl-embed iframe {
-  display: block;
-  border: 0;
-}
-
-.vinyl-cuplikan {
-  margin: 0;
-  max-width: 19rem;
-  font-size: 0.75rem;
-  line-height: 1.4;
-  color: var(--ink-2);
-}
-
-.vinyl-cuplikan a {
-  color: var(--aksen);
-  text-decoration: underline;
-  text-underline-offset: 2px;
 }
 
 /* Imersif: pojok kanan atas, di bawah kepala panggung, supaya tidak menutup rak dan
@@ -415,31 +303,6 @@
     width: 3.6rem;
     height: 3.6rem;
   }
-}
-
-/* Jalan keluar saat embed hanya memutar cuplikan: buka playlist di Spotify sendiri,
-   tempat login pengunjung terbaca. Target sentuh 44px. */
-.vinyl-buka {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 44px;
-  padding: 0 0.25rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--aksen);
-  text-decoration: none;
-}
-
-.vinyl-buka:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-.vinyl-buka:focus-visible {
-  outline: 2px solid var(--fokus);
-  outline-offset: 2px;
-  border-radius: 4px;
 }
 
 /* Selama cerita gulir di layar (dan di HP begitu hero lewat) panel menciut ke cakram ini, di bawah

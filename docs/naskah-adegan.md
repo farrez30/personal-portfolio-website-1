@@ -136,8 +136,9 @@ pembaca layar sebagai daftar.
 
 ## Suara
 
-- Pemutar mini yang sama di kedua mode, lewat embed resmi Spotify. Suara selalu mati di awal,
-  dan Spotify baru dimuat setelah klik. Lagu Epidemic Sound sudah dihapus. Lihat ADR 0009.
+- Pemutar mini yang sama di kedua mode, memutar 23 rekaman berlisensi bebas yang disimpan di
+  situs ini (ADR 0021, menggantikan embed Spotify di ADR 0009). Suara selalu mati di awal, dan
+  berkas baru diunduh setelah tombol putar ditekan.
 
 ## Aset yang dibuat (alur alur-desain: Gemini membuat, Claude mengatur)
 
@@ -169,5 +170,5 @@ pembaca layar sebagai daftar.
 
 1. Urutan dan daftar proyek di rak.
 2. Struktur enam halaman buklet di adegan 3 (sudah diriset, tinggal disetujui).
-3. Tautan playlist Spotify (1 sampai 10 lagu).
+3. ~~Tautan playlist Spotify~~ Selesai: 23 lagu berlisensi bebas dipilih Farrez, 19 Nov 2026 (ADR 0021).
 4. Persetujuan konsep sinar-x tiga lapis.

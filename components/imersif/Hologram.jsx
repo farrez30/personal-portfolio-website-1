@@ -64,7 +64,7 @@ export default function Hologram({ p, sumur, jalan, keluar = false, onPutar, onP
       });
     } else v.pause();
   }, [jalan, keluar, demo, narasi, bisu]);
-  // Selama explainer bersuara, lagu Spotify dijeda dan lanjut lagi sesudahnya.
+  // Selama explainer bersuara, musik latar dijeda dan lanjut lagi sesudahnya.
   const [main, setMain] = useState(false);
   const bersuara = narasi && main && !bisu;
   useEffect(() => {
