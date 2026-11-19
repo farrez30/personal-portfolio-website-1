@@ -169,3 +169,37 @@ test("bab bentuk: brosur leaflet DL bertumpuk, kotak software dengan punggung, t
   const engsel = zLaptop - D / 2 + 0.004;
   assert.ok(engsel - D * Math.sin(0.2) > -0.08, "tutup laptop menembus balok tingkat atas");
 });
+
+// Butir 6: kabel semrawut yang seiring gulir dirapikan dan menyatu ke panel MCB berlabel.
+test("fondasi: kabel dipadukan dari kusut ke rapi lewat satu uniform, juga bayangannya", () => {
+  const mentah = baca("components/dunia/props.js");
+  const blok = tanpaKomentar(mentah.slice(mentah.indexOf("// ---- 04 fondasi"), mentah.indexOf("// ---- Gondola tengah")));
+  assert.doesNotMatch(blok, /power_box_01/, "kotak listrik CC0 lama masih dipakai");
+  assert.match(blok, /geo\.setAttribute\("posRapi", geoRapi\.attributes\.position\);/);
+  assert.match(blok, /o\.customDepthMaterial = bahanKabelBayang\(THREE\.MeshDepthMaterial/);
+  assert.match(blok, /o\.customDistanceMaterial = bahanKabelBayang\(THREE\.MeshDistanceMaterial/);
+  assert.match(blok, /rapi\.value = halus\(\(u - 0\.12\) \/ 0\.45\);/);
+  // Jalur kusut dan rapi harus berjumlah titik sama: dua TubeGeometry dengan segmen sama.
+  assert.match(blok, /new THREE\.TubeGeometry\(jalurRapi, SEG, r, 6\);\s*const geo = new THREE\.TubeGeometry\(jalurKusut, SEG, r, 6\);/);
+  assert.match(blok, /teksturCatatanTangan\("DAFTAR SIRKUIT"/);
+  assert.match(tanpaKomentar(mentah), /mix\(vec3\(position\), posRapi, uRapi\)/);
+});
+
+test("mug keramik menggantikan silinder kopi; lonceng ulir, lampu kaca susu, jalan ruko berlapis", () => {
+  const p = tanpaKomentar(baca("components/dunia/props.js"));
+  const kopi = p.slice(p.indexOf("const gelasKopi = (x, y, z, induk) =>"), p.indexOf("const gelasKopi = (x, y, z, induk) =>") + 600);
+  assert.match(kopi, /new THREE\.Mesh\(geoMug, glasir\)/);
+  assert.match(kopi, /new THREE\.Mesh\(geoGagang, glasir\)/);
+  assert.doesNotMatch(p, /tabung\(0\.034, 0\.09, b\.keramik/);
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  // Pegas ulir lurus: tidak ada lengkung turun di titik pegas, panjang 19 cm ke dalam ruangan.
+  assert.match(d, /titikPegas\.push\(new THREE\.Vector3\(Math\.sin\(sudut\) \* 0\.009, Math\.cos\(sudut\) \* 0\.009, -0\.006 - t \* 0\.19\)\);/);
+  assert.doesNotMatch(d, /titikPegas\.push\(new THREE\.Vector3\(0, -0\.11/);
+  assert.doesNotMatch(d, /nyala\.tambahBola\(lampuPintu\)/);
+  assert.match(d, /new THREE\.SphereGeometry\(0\.09, 32, 24\)/);
+  assert.match(d, /const jalan = \{ gelap: buatJalan\(false\), terang: buatJalan\(true\) \};/);
+  assert.doesNotMatch(d, /teksturJalan/);
+  // Lapisan jalan tidak berkabut dan bidang tegaknya menghadap ke dalam toko.
+  assert.match(d, /new THREE\.MeshBasicMaterial\(\{ map, fog: false, transparent: true, \.\.\.o \}\)/);
+  assert.match(d, /for \(const m of \[l1, l2, l4, l5\]\) m\.rotation\.y = Math\.PI;/);
+});
