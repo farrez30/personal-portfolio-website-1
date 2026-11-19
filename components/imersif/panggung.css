@@ -6,6 +6,38 @@
   position: relative;
 }
 
+/* Rak koleksi masuk dari kanan, searah CD adegan 10 yang terbang ke kiri (pilihan Farrez 19 Nov
+   2026). Dulu panggung naik dari bawah seperti seksi biasa. Selama bagian rak masuk layar,
+   panggung ditahan di bawah bilah atas (translateY melawan gulir) dan digeser dari kanan.
+   Animasi digerakkan gulir di compositor, jadi tidak tertinggal satu bingkai di HP; inset 60px
+   sama dengan `top` sticky, supaya akhir rentang tepat saat panggung mulai menempel. Peramban
+   tanpa scroll timeline dan gerak dikurangi: tetap naik dari bawah. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .rak-gulir {
+      view-timeline: --rak-masuk block;
+      view-timeline-inset: 60px 0px;
+      /* Panggung yang masih di kanan tidak boleh melebarkan halaman: di HP peramban lalu
+         memperkecil zoom seluruh halaman (innerHeight 1355 di layar 844, terukur). clip, bukan
+         hidden, supaya sticky tetap menempel. */
+      overflow-x: clip;
+    }
+    .rak-gulir > .panggung {
+      animation: rak-masuk linear both;
+      animation-timeline: --rak-masuk;
+      animation-range: entry 0% entry 100%;
+    }
+  }
+}
+@keyframes rak-masuk {
+  from {
+    transform: translate3d(100%, calc(60px - 100dvh), 0);
+  }
+  to {
+    transform: none;
+  }
+}
+
 .panggung {
   --ruang: #e9e1d3;
   --ruang-tinta: #22201d;

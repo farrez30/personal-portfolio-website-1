@@ -14,8 +14,12 @@ test("rak baru dibuat saat dekat layar, dan cincin memuat tetap tampil sampai pe
   // Sepuluh layar di depan dan menunggu senggang: dibuat saat pengunjung membaca babak akhir cerita,
   // bukan saat kamera dunia terbang ke rak (tugas panjang 66 sampai 198 ms di penerbangan itu).
   assert.match(panggung, /new IntersectionObserver\([\s\S]*rootMargin: "1000% 0px"/);
-  assert.match(panggung, /Promise\.all\(\[dekat, document\.fonts\.ready\]\)\.then\(async \(\) => \{[\s\S]{0,140}await new Promise\(\(ok\) => \("requestIdleCallback" in window/);
-  const tunggu = panggung.indexOf("await a.siapkan()");
+  assert.match(panggung, /Promise\.all\(\[dekat, document\.fonts\.ready\]\)\.then\(async \(\) => \{[\s\S]{0,600}await new Promise\(\(ok\) => \("requestIdleCallback" in window/);
+  // Pembuatan rak menunggu gulir diam (atau rak tinggal dua layar lagi), bukan di tengah sapuan jari
+  // di babak bentuk (beku 2 s di HP dengan CPU 4x, 19 Nov 2026).
+  assert.match(panggung, /if \(!location\.hash\.startsWith\("#rak"\)\) await tungguGulirDiam\(700, wadah\.current\);/);
+  assert.match(panggung, /getBoundingClientRect\(\)\.top < 2 \* innerHeight\) return selesai\(\);/);
+  const tunggu = panggung.indexOf("await a.siapkan(");
   assert.ok(tunggu > 0, "Panggung tidak menunggu siapkan()");
   assert.ok(panggung.indexOf("setSiap(true)", tunggu) > tunggu, "setSiap(true) sebelum pemanasan selesai");
 });
@@ -27,12 +31,12 @@ test("bingkai tidak menggambar apa pun sebelum rak hangat", () => {
 });
 
 test("pemanasan: shader dikompilasi paralel, tekstur diunggah per bingkai, lalu gambar latihan dicicil", () => {
-  const siapkan = adegan.slice(adegan.indexOf("const siapkan = async () => {"));
+  const siapkan = adegan.slice(adegan.indexOf("const siapkan = async (senggang = bingkaiBerikut) => {"));
   const isi = siapkan.slice(0, siapkan.indexOf("hangat = true;"));
   assert.match(isi, /await renderer\.compileAsync\(scene, camera\)/);
-  assert.match(isi, /renderer\.initTexture\(t\);\s*await bingkaiBerikut\(\);/);
+  assert.match(isi, /renderer\.initTexture\(t\);\s*await senggang\(\);/);
   // Per tiga mesh per bingkai: ANGLE menyelesaikan program dan shader bayangan saat draw pertama.
-  assert.match(isi, /for \(let i = 0; i < benda\.length; i \+= 3\) \{\s*renderLatihan\(scene, new Set\(benda\.slice\(i, i \+ 3\)\)\);\s*await bingkaiBerikut\(\);/);
+  assert.match(isi, /for \(let i = 0; i < benda\.length; i \+= 3\) \{\s*renderLatihan\(scene, new Set\(benda\.slice\(i, i \+ 3\)\)\);\s*await senggang\(\);/);
 });
 
 test("gambar latihan ke kanvas sendiri lewat scissor, bukan ke render target", () => {
@@ -94,4 +98,21 @@ test("miring kursor dijepit ke kanvas dan mati saat halaman digulir", () => {
   assert.match(adegan, /k_\.kursor\.ada = ev\.pointerType === "mouse" && Math\.abs\(x\) <= 1 && Math\.abs\(y\) <= 1;/);
   assert.match(adegan, /window\.addEventListener\("scroll", saatGulir, \{ passive: true \}\);/);
   assert.match(adegan, /window\.removeEventListener\("scroll", saatGulir\);/);
+});
+
+test("pola butir kertas buklet dipanggang sama persis dengan pola bawaan LeafThrough yang terpasang", async () => {
+  const { polaBawaan, pngAbu, KELUAR } = await import("../scripts/panggang-kertas.mjs");
+  const { readFileSync } = await import("node:fs");
+  assert.ok(pngAbu(polaBawaan()).equals(readFileSync(KELUAR)), "jalankan ulang node scripts/panggang-kertas.mjs");
+  const adegan = readFileSync(new URL("../components/imersif/adegan.js", import.meta.url), "utf8");
+  assert.match(adegan, /butir = await muatKertas\(\);\s*await senggang\(\);\s*const awal = kotak/);
+  assert.match(adegan, /\.\.\.\(butir \? \{ grain: butir \} : \{\}\)/);
+});
+
+test("pemanasan rak dicicil di bingkai yang tidak sedang digulir", () => {
+  assert.match(panggung, /await a\.siapkan\(\(\) => bingkaiSenggang\(wadah\.current\)\);/);
+  assert.match(panggung, /performance\.now\(\) - gulirTerakhir > 250 \|\| !el \|\| el\.getBoundingClientRect\(\)\.top < 2 \* innerHeight\) return;/);
+  const siap = adegan.slice(adegan.indexOf("const siapkan = async (senggang = bingkaiBerikut) =>"), adegan.indexOf("// Jumlah program shader rak"));
+  assert.ok(siap.length > 100, "siapkan menerima jeda senggang");
+  assert.doesNotMatch(siap, /await bingkaiBerikut\(\)/, "langkah pemanasan masih menunggu bingkai biasa");
 });

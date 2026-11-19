@@ -374,7 +374,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
 
   // Lampu kunci: satu-satunya yang membuat bayangan, dipindah ke benda babak yang aktif.
   // Sudut lebar dan penumbra penuh: tanpa lingkaran sorot bertepi tajam di lantai.
-  const kunciLampu = new THREE.SpotLight(0xffffff, 1, 7, 0.85, 1, 2);
+  const SUDUT_KUNCI = 0.85;
+  const kunciLampu = new THREE.SpotLight(0xffffff, 1, 7, SUDUT_KUNCI, 1, 2);
   kunciLampu.castShadow = true;
   kunciLampu.shadow.mapSize.setScalar(hp ? 512 : 1024);
   kunciLampu.shadow.camera.near = 0.3;
@@ -394,7 +395,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const dz = a.posisi[2] - t[2];
     const k = 1 / Math.max(0.01, Math.hypot(dx, dz));
     const [ax, az] = [dx * k, dz * k];
-    return { p: [t[0] - az * 1.1 - ax * 0.35, 2.4, t[2] + ax * 1.1 - az * 0.35], t: [...t], nyala: a.cerita ? 1 : 0 };
+    return { p: [t[0] - az * 1.1 - ax * 0.35, 2.4, t[2] + ax * 1.1 - az * 0.35], t: [...t], nyala: a.cerita ? 1 : 0, sudut: SUDUT_KUNCI, kuat: 1 };
   };
   let kunciKini = poseKunci(ANCHOR[0]);
   let kunciDari = kunciKini;
@@ -403,14 +404,44 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   // tidak melompat atau menyala mendadak saat pindah babak.
   const pasangKunci = (e) => {
     const l = (a, b) => a.map((v, i) => v + (b[i] - v) * e);
-    kunciKini = { p: l(kunciDari.p, kunciKe.p), t: l(kunciDari.t, kunciKe.t), nyala: kunciDari.nyala + (kunciKe.nyala - kunciDari.nyala) * e };
+    kunciKini = { p: l(kunciDari.p, kunciKe.p), t: l(kunciDari.t, kunciKe.t), nyala: kunciDari.nyala + (kunciKe.nyala - kunciDari.nyala) * e, sudut: kunciDari.sudut + (kunciKe.sudut - kunciDari.sudut) * e, kuat: kunciDari.kuat + (kunciKe.kuat - kunciDari.kuat) * e };
+    kunciLampu.angle = kunciKini.sudut;
     kunciLampu.position.set(...kunciKini.p);
     kunciLampu.target.position.set(...kunciKini.t);
     kunciLampu.target.updateMatrixWorld();
-    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * faktorRedup;
+    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * kunciKini.kuat * faktorRedup;
+    kunciLampu.shadow.needsUpdate = true;
+  };
+  // Sorot benda yang sedang diangkat di babak (bentuk): lampu kunci yang sama pindah ke atas depan
+  // benda, kerucutnya menyempit, sebanding tinggi angkatnya. Riset 19 Nov 2026
+  // (desain/cerita-v4/riset-audit-ulang.md): sorot produk sungguhan adalah lampu sempit dengan
+  // titik panas di benda dan kolam di permukaan, bukan bidang bercahaya. Tanpa lampu tambahan,
+  // jadi tidak ada kompilasi ulang shader dan tidak ada beban per piksel baru di HP.
+  const arahSorot = new THREE.Vector3();
+  let sorotKini = 0;
+  const sorotKunci = (s) => {
+    const k = s?.kuat ?? 0;
+    if (!k && !sorotKini) return;
+    sorotKini = k;
+    const dasar = kunciKe;
+    if (!k) {
+      kunciKini = { ...dasar };
+    } else {
+      arahSorot.subVectors(camera.position, s.p).setY(0).normalize();
+      const atasDepan = [s.p.x + arahSorot.x * 0.55, s.p.y + 0.95, s.p.z + arahSorot.z * 0.55];
+      const l = (a, b) => a.map((v, i) => v + (b[i] - v) * k);
+      kunciKini = { p: l(dasar.p, atasDepan), t: l(dasar.t, s.p.toArray()), nyala: dasar.nyala, sudut: SUDUT_KUNCI + (0.3 - SUDUT_KUNCI) * k, kuat: 1 + 0.8 * k };
+    }
+    kunciLampu.angle = kunciKini.sudut;
+    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * kunciKini.kuat * faktorRedup;
+    kunciLampu.position.set(...kunciKini.p);
+    kunciLampu.target.position.set(...kunciKini.t);
+    kunciLampu.target.updateMatrixWorld();
     kunciLampu.shadow.needsUpdate = true;
   };
   const arahkanKunci = (a, langsung) => {
+    // Sorot benda dilepas; pose dan sudut terbang dari kunciKini, jadi kembali lebar perlahan.
+    sorotKini = 0;
     kunciDari = kunciKini;
     kunciKe = poseKunci(a);
     if (langsung) pasangKunci(1);
@@ -440,7 +471,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     for (const l of lampu) l.userData.dasar = l.intensity;
     kunciLampu.color.setHex(s.lampu);
     kunciLampu.userData.dasar = s.kuatLampu * 1.5;
-    kunciLampu.intensity = kunciLampu.userData.dasar * kunciKini.nyala * faktorRedup;
+    kunciLampu.intensity = kunciLampu.userData.dasar * kunciKini.nyala * kunciKini.kuat * faktorRedup;
     lampuPintu.color.setHex(s.lampu);
     lampuPintu.intensity = s.kuatLampu * 0.8;
     cahayaJalan.color.setHex(s.jalan);
@@ -790,6 +821,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     if (a.cerita && !blend && props) {
       const u = uBabak;
       props.perbarui(a.id, u, statusBabak(u));
+      sorotKunci(props.sorot(a.id));
       // Listrik toko padam di tengah babak andal, didahului kedip singkat. Pemutar kaset, ponsel,
       // dan lampu darurat tetap menyala.
       // Diatur oleh posisi gulir, bukan waktu: kedip berbasis waktu (sin(now/30), sekitar 5 Hz)
@@ -861,7 +893,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const f = Math.abs(tujuanRedup - faktorRedup) < 0.002 ? tujuanRedup : faktorRedup + (tujuanRedup - faktorRedup) * (1 - Math.exp(-dt / 0.12));
     faktorRedup = f;
     for (const l of [...lampu, lampuMeja]) l.intensity = (l.userData.dasar ?? l.intensity) * f;
-    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * f;
+    kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * kunciKini.kuat * f;
     return true;
   };
 

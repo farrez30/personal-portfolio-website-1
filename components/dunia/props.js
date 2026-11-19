@@ -44,6 +44,7 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
   };
   const grup = new THREE.Group();
   const momen = {};
+  const sorot = {};
   const tungguModel = []; // [nama, fn(scene)] dipasang di pasangModel()
 
   // ---- Bahan PBR: kayu meja, triplek, pelat logam (Poly Haven CC0, 512 px) ------------------
@@ -263,7 +264,7 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
   // Ponsel dengan dashboard, laptop dengan sistem kantor, brosur promo lalu ponsel berisi chat
   // WhatsApp, dan kotak aplikasi tersegel yang baru naik sedikit paling akhir ("hanya kalau
   // memang perlu"). Dulu satu album dalam empat format: bendanya tidak bisa ditebak.
-  // Tiap benda naik 12 cm, menghadap kamera, tepinya menyala hangat, dan ada kolam sorot.
+  // Tiap benda naik 12 cm, menghadap kamera, dan disorot lampu kunci dari atas depan.
   {
     const g = new THREE.Group();
     g.position.set(-4.4, 0, 0.3);
@@ -273,7 +274,6 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     kotak(1.2, 0.3, 0.22, b.kayu, 0, 1.01, -0.11, g, 0.01);
     const ATAS = 0.86;
     const benda = [];
-    const sorot = teksturSorot();
     // Tingkat bawah hanya setengah depannya yang bebas (z 0 sampai 0,22): di belakangnya balok
     // tingkat atas. Benda yang melewatinya menembus kayu (terlihat di lembar kontak 19 Nov).
     const pasangBenda = (o, x, z, angkat = 0.12, alas = ATAS) => {
@@ -283,22 +283,13 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
       const batas = new THREE.Box3().setFromObject(o);
       const ukuran = batas.getSize(new THREE.Vector3());
       const pusat = o.worldToLocal(batas.getCenter(new THREE.Vector3()));
-      // Cahaya lembut di belakang benda, seperti barang pajangan yang disorot dari belakang. Kulit
-      // terbalik yang dicoba lebih dulu terbaca sebagai bingkai kaca di sekeliling laptop.
-      const tepi = new THREE.Mesh(
-        new THREE.PlaneGeometry(ukuran.x * 1.9 + 0.06, ukuran.y * 1.7 + 0.06),
-        new THREE.MeshBasicMaterial({ map: sorot, color: 0xffc27a, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }),
-      );
-      tepi.position.set(pusat.x, pusat.y, pusat.z - ukuran.z / 2 - 0.012);
-      o.add(tepi);
-      const kolam = new THREE.Mesh(
-        new THREE.PlaneGeometry(0.32, 0.22),
-        new THREE.MeshBasicMaterial({ map: sorot, color: 0xffd9a0, transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false }),
-      );
-      kolam.rotation.x = -Math.PI / 2;
-      kolam.position.set(x, alas + 0.002, z);
-      g.add(kolam);
-      benda.push({ o, tepi, kolam, angkat, dasar: { y: alas, z, ry: o.rotation.y } });
+      // Benda yang terangkat disorot lampu kunci sungguhan (dunia.js, sorotKunci), bukan bidang
+      // additive: elips di belakang dan kolam di bawahnya memotong balok rak dan terbaca sebagai
+      // benda terpisah (masukan Farrez 19 Nov, gambar 2, 4, 5). Titik sorot di tengah benda.
+      const titik = new THREE.Object3D();
+      titik.position.copy(pusat);
+      o.add(titik);
+      benda.push({ o, titik, angkat, dasar: { y: alas, z, ry: o.rotation.y } });
       return o;
     };
     const kotakLayar = (w, h, d, mBadan, wajah, induk) => {
@@ -356,7 +347,7 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
       [0.56, 0.72],
       [0.74, 9],
     ];
-    momen.bentuk = (u) =>
+    momen.bentuk = (u) => {
       benda.forEach((x, i) => {
         const [a, z] = JADWAL[i];
         const t = halus((u - a) / 0.07) * (1 - halus((u - z) / 0.07));
@@ -366,9 +357,25 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
         x.o.position.y = x.dasar.y + x.angkat * t;
         x.o.position.z = x.dasar.z + 0.05 * t;
         x.o.rotation.y = x.dasar.ry + 0.16 * t;
-        x.tepi.material.opacity = 0.55 * t;
-        x.kolam.material.opacity = 0.5 * t;
+        x.t = t;
       });
+    };
+    // Sasaran sorot: rata-rata titik benda yang terangkat, berbobot tingginya, supaya sorot pindah
+    // halus dari brosur ke ponsel chat yang naik berurutan (bukan melompat).
+    const titikSorot = new THREE.Vector3();
+    const v = new THREE.Vector3();
+    sorot.bentuk = () => {
+      let w = 0;
+      let kuat = 0;
+      titikSorot.set(0, 0, 0);
+      for (const x of benda) {
+        if (!(x.t > 0.001)) continue;
+        titikSorot.addScaledVector(x.titik.getWorldPosition(v), x.t);
+        w += x.t;
+        kuat = Math.max(kuat, x.t);
+      }
+      return w ? { p: titikSorot.divideScalar(w), kuat } : null;
+    };
     momen.bentuk(0);
     grup.add(g);
     tambahBayang(-4.4, 0.3, 0.7);
@@ -861,6 +868,8 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     berputar: (id) => id === "bangun" || !!momen[id]?.sibuk?.(),
     // Benda yang bergerak dan membuat bayangan (stempel): peta bayangan kunci ikut diperbarui.
     sibuk: (id) => !!momen[id]?.sibuk?.(),
+    // Sasaran sorot lampu kunci di babak ini ({ p, kuat }) atau null.
+    sorot: (id) => sorot[id]?.() ?? null,
   };
 }
 
@@ -956,18 +965,6 @@ const kotakBulat = (c, x, y, w, h, r) => {
   c.roundRect(x, y, w, h, r);
   c.fill();
 };
-
-// Kolam sorot lembut di bawah benda yang terangkat.
-function teksturSorot() {
-  const [kv, c] = kanvasTeks(128, 128);
-  const gr = c.createRadialGradient(64, 64, 0, 64, 64, 64);
-  gr.addColorStop(0, "rgba(255,255,255,0.9)");
-  gr.addColorStop(0.5, "rgba(255,255,255,0.3)");
-  gr.addColorStop(1, "rgba(255,255,255,0)");
-  c.fillStyle = gr;
-  c.fillRect(0, 0, 128, 128);
-  return jadiTekstur(kv);
-}
 
 // Dashboard stok di ponsel: angka besar, tiga kartu status, grafik batang. Dari jarak kamera
 // yang terbaca hanya susunan khas dashboard, jadi bentuknya yang diutamakan.

@@ -20,6 +20,17 @@ import { buatSorot, ujungSorot, kedip } from "./sorot";
 import { FASE, ANGKAT, angkatBebas } from "./lintasan";
 
 // Satuan studi (1 = 60 mm) ke satuan kita (1 = 100 mm).
+// Pola butir kertas buklet dipanggang sekali (scripts/panggang-kertas.mjs, kode pola LeafThrough
+// sendiri) dan dimuat sebagai gambar. Pola bawaan dihitung per piksel saat buklet pertama dibuat:
+// 526 ms di HP dengan CPU 4x, di tengah blok beku pembuatan rak (19 Nov 2026).
+let kertasButir = null;
+const muatKertas = () =>
+  (kertasButir ??= new Promise((ok) => {
+    const im = new Image();
+    im.src = "/assets/rak/kertas-butir.png";
+    im.decode().then(() => ok(im), () => ok(null));
+  }));
+
 const U = 0.6;
 
 const C = {
@@ -1007,6 +1018,8 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   // Buklet LeafThrough yang sama dari tutup sampai dibaca: dibuat begitu kotak terbuka,
   // jadi kertasnya sudah punya serat dan lengkung di tutup dan tidak ada pertukaran benda
   // saat ditarik keluar atau dikembalikan.
+  // Gambar butir kertas yang sudah diurai (null: LeafThrough memakai pola bawaannya).
+  let butir = null;
   const buatBuklet = (p) => {
     const deform = {
       glsl: GULUNG_GLSL,
@@ -1031,7 +1044,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
         layout: k_.sempit ? "single" : "spread",
         loop: k_.sempit,
         deform,
-        paper: { wrinkles: 0.055, bulge: 0.22, sheetGap: 0.007 / 120 },
+        paper: { wrinkles: 0.055, bulge: 0.22, sheetGap: 0.007 / 120, ...(butir ? { grain: butir } : {}) },
         lighting: { sun: { position: [-3.5, 1.3, 4.1] }, shadows: true },
         motion: { reducedMotion: kurangiGerak ? true : "auto" },
       },
@@ -1162,10 +1175,15 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   // Pemanasan sebelum gambar pertama: shader semua benda (termasuk yang masih tersembunyi)
   // dikompilasi lewat KHR_parallel_shader_compile, lalu tekstur diunggah satu per bingkai.
   let hangat = false;
-  const siapkan = async () => {
+  // `senggang`: jeda antarlangkah. Panggung memberi jeda yang menunggu gulir diam, supaya unggahan
+  // tekstur dan gambar latihan (long task 90 sampai 260 ms di HP dengan CPU 4x) jatuh saat pembaca
+  // berhenti, bukan di tengah sapuan (19 Nov 2026).
+  const siapkan = async (senggang = bingkaiBerikut) => {
     // Buklet album pertama ikut dipanaskan di sini, sekali, bersama rak. Dulu shadernya baru
     // dikompilasi 1,5 s setelah rak diam (siapkanBuklet), dan pemeriksaan status shader di ANGLE
     // menunggu kompilasi selesai: trace 13 Nov 2026, GetProgramiv 524 ms saat rak sedang dilihat.
+    butir = await muatKertas();
+    await senggang();
     const awal = kotak[Math.round(k_.pos ?? 0)]?.p ?? kotak[0]?.p;
     const bAwal = awal ? buatBuklet(awal) : null;
     if (bAwal) scene.add(bAwal);
@@ -1185,20 +1203,20 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     tx.add(scene.environment);
     for (const t of tx) {
       if (t?.image) renderer.initTexture(t);
-      await bingkaiBerikut();
+      await senggang();
     }
     const benda = [];
     scene.traverse((o) => o.isMesh && benda.push(o));
     for (let i = 0; i < benda.length; i += 3) {
       renderLatihan(scene, new Set(benda.slice(i, i + 3)));
-      await bingkaiBerikut();
+      await senggang();
     }
     if (bAwal) {
       scene.remove(bAwal);
       buangCadangan();
       cadangan = { slug: awal.slug, b: bAwal };
     }
-    await bingkaiBerikut();
+    await senggang();
     // Jumlah program shader rak, untuk skrip ukur (scripts/ukur-dunia.mjs).
     wadah.dataset.program = String(renderer.info.programs?.length ?? 0);
     hangat = true;
