@@ -35,7 +35,8 @@ situs. Bukan kode produksi.
    sesudah kota; tidak kembali ke meja sesudah adegan makro; peta Nusantara tanpa tepi kotak;
    satelit bergerak lalu keluar sebagai portofolio. Urutan G kini: lima meja, ruang server, kebiasaan,
    keluar jendela ke kota, peta lebar, globe, portofolio.
-7. Babak portofolio: lima konsep di `papan-porto.webp`, menunggu pilihan Farrez.
+7. Babak portofolio: Farrez mengusulkan konsep keenam, zoom ke satelit yang ternyata modul lab lalu memilih proyek dari rak loker (`?a=P&s=portoLab`, `portoLab-luar`, animasi 4 detik). Papan enam konsep di `papan-porto.webp`.
+8. Blend antarmeja dinilai "cuma pindah ke meja sebelah kanan". Riset di `../riset-transisi-kamera.md`. Farrez minta keempat arah dibuat untuk dibandingkan: `?dunia=penuh&tx=campur|layar|crane|oner`, video `tx-<arah>.mp4`, halaman `banding-transisi.html`, perakit `banding-transisi.mjs`. Menunggu pilihan.
 
 ## Pelajaran teknis
 
@@ -77,6 +78,17 @@ ukuran benda pertama yang kena. Dipakai per 0,1 detik di sepanjang jalur kamera.
 | Peta Nusantara | tepi bidang peta terlihat di akhir babak | bidang diperlebar ke 20 sampai 220 BT, 60 LS sampai 75 LU; kamera berhenti di 1,6 kali jarak. Lembar 58 bingkai tanpa tepi |
 | Kamera porto | konsep cincin, konstelasi, grid menghadap benua Amerika | kamera mengikuti arah globe penutup (`ikut`), Asia dan Nusantara di depan |
 | Tes repo | | `npm test`: 255 lulus, 0 gagal |
+
+## Dicek 20 Nov 2026 (empat arah transisi)
+
+| Arah | Yang jalan | Kejanggalan yang tersisa |
+|---|---|---|
+| campur | nota terbang diikuti kamera 1,8-2,9 s; whip pan lewat pilar 4,6-5,1 s; masuk tablet lalu keluar di meja biaya 7,2-7,8 s; crane ke denah 14,6-16,4 s | 10,3-10,5 s layar krem kosong (ujung orbit menatap dinding); dari atas terlihat genangan cahaya oranye meja biaya |
+| layar | tiap potongan di layar penuh tidak terlihat (2,1, 4,9, 7,5 s) | tablet menimpa monitor di meja kelangsungan dan berdiri di depan rak server |
+| crane | plafon dibuka, kabel cadangan disembunyikan (sebelumnya menutup setengah layar) | denah satu baris lemah: dari atas hanya puncak dinding dan sederet meja; genangan oranye |
+| oner | kamera tidak pernah diam, merendah lewat lemari 5,0-5,4 s | 8,3 s sekilas kuning polos saat mendekati meja biaya |
+
+Keempat pemutar di `banding-transisi.html` diuji di panel: geser ke detik 5, maju saat diputar, video lain berhenti.
 
 ## Belum bisa dicek
 
