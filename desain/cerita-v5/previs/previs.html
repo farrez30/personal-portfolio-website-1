@@ -636,6 +636,8 @@ if (PENUH) {
     anchor.push({ id: id === "ruangServer" ? "data" : id, pos: cam.position.clone().applyAxisAngle(SUMBU_Y, putar).add(geser), ke: sasaran.clone().applyAxisAngle(SUMBU_Y, putar).add(geser) });
     const grup = new THREE.Group(); grup.position.copy(geser); grup.rotation.y = putar; grup.userData.id = id;
     [...scene.children].forEach((o) => { if (!o.isLight && !(o.geometry?.parameters?.width >= 8)) grup.add(o); });
+    // alas babak biaya 3 x 3 m terbaca sebagai meja raksasa melayang di dunia penuh: jadikan meja biasa berkaki
+    if (id === "biaya") { const alas = grup.children.find((o) => o.geometry?.parameters?.width === 3 && o.geometry.parameters.depth === 3); if (alas) { alas.scale.set(0.55, 1, 0.4); for (const [x, z] of [[-0.75, -0.55], [0.75, -0.55], [-0.75, 0.55], [0.75, 0.55]]) kotak(0.05, 0.73, 0.05, clay(0x4b4a5c), x, -0.38, z, grup); } }
     utama.add(grup);
   }
   scene = utama; scene.fog = new THREE.Fog(LATAR, 900, 2800);
@@ -820,7 +822,7 @@ if (PENUH) {
       if (jenis === "orbit") {
         const r = A.clone().sub(a.ke), keB = b.ke.clone().sub(a.ke), tanda = Math.sign(r.x * keB.z - r.z * keB.x) || 1, th = -tanda * 1.75 * seg(e, 0, 0.65);
         const p = r.clone().applyAxisAngle(V(0, 1, 0), th).add(a.ke).add(V(0, 0.25 * Math.sin(Math.PI * klamp(e / 0.65)), 0));
-        return [p.lerp(B, seg(e, 0.55, 1)), a.ke.clone().lerp(b.ke, seg(e, 0.5, 0.95))];
+        return [p.lerp(B, seg(e, 0.55, 1)), a.ke.clone().lerp(b.ke, seg(e, 0.3, 0.7))];
       }
       if (jenis === "pilar") {
         const m = window.__pilarLewat, k = new THREE.QuadraticBezierCurve3(A, m.clone().setY(A.y + 0.1), B);
