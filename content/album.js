@@ -108,6 +108,21 @@ export const ALBUM = {
     tata: { lagu: { x: 0.06, y: 0.3, huruf: "genre", ukuran: 15, kapital: true, warna: "#ffffff", kotak: null }, barcode: { x: 0.68, y: 0.06, gaya: "warna", latar: "#1f4fbf", warna: "#0b1a3a" }, kredit: { x: 0.06, y: 0.95, warna: "#9fb4e6" } },
     judul: { x: 0.06, y: 0.035, rata: "left", ukuran: 0.17, lebar: 0.9, warna: "#ffffff", kapital: true },
   },
+  // Pita krem di bawah gambar terpotong di panel, jadi daftar lagu menempel di langit.
+  "gdl-logistics": {
+    genre: "Art Deco travel poster",
+    huruf: huruf("Limelight", "limelight"),
+    tinta: "#3a3532",
+    tata: { lagu: { x: 0.07, y: 0.07, huruf: "sans", ukuran: 10, kolom: 2, kotak: "rgba(246, 238, 222, 0.9)" }, barcode: { x: 0.73, y: 0.07, gaya: "warna", latar: "#e8751a", warna: "#3a3532" }, kredit: { x: 0.06, y: 0.955 } },
+    judul: { x: 0.06, y: 0.05, rata: "left", ukuran: 0.09, lebar: 0.6, warna: "#f3e9d6", kapital: true },
+  },
+  securitysahabat: {
+    genre: "Saul Bass cut-paper title sequence",
+    huruf: huruf("Archivo Black", "archivoblack"),
+    tinta: "#16302f",
+    tata: { lagu: { x: 0.06, y: 0.06, huruf: "genre", ukuran: 9, kapital: true, kotak: null }, barcode: { x: 0.73, y: 0.05, gaya: "warna", latar: "#d6402b", warna: "#f2ece0" }, kredit: { x: 0.06, y: 0.955, warna: "#f2ece0" } },
+    judul: { x: 0.06, y: 0.05, rata: "left", ukuran: 0.08, lebar: 0.55, warna: "#f2ece0", kapital: true },
+  },
 };
 
 for (const [slug, a] of Object.entries(ALBUM)) Object.assign(a, dasar(slug));
