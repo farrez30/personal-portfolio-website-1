@@ -1423,7 +1423,7 @@ function buatRakCD(b) {
       }
       // Tempat sepuluh CD proyek yang diambil satu per satu di akhir cerita (props.js, babak
       // rilis): bagian ini diisi kotak lepas, bukan instance, supaya bisa ditarik keluar.
-      if (y === 1.12 && z > -0.445 && z < -0.315) {
+      if (y === 1.12 && z > -0.445 && z < -0.28) {
         z = -0.315;
         continue;
       }

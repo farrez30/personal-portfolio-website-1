@@ -45,7 +45,7 @@ test("setiap bukti dan keluhan menaut ke proyek yang ada di rak", () => {
 });
 
 test("angka di kalimat cocok dengan isi rak", () => {
-  const angka = { 10: ["Sepuluh", "Ten"] };
+  const angka = { 10: ["Sepuluh", "Ten"], 12: ["Dua belas", "Twelve"], 13: ["Tiga belas", "Thirteen"] };
   const rak = BAB.find((b) => b.id === "rilis");
   assert.ok(rak.isi.id.startsWith(angka[proyek.length][0]));
   assert.ok(rak.isi.en.startsWith(angka[proyek.length][1]));

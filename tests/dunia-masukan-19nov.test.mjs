@@ -104,19 +104,21 @@ test("bab bentuk: empat benda sesuai teks, di zona bebas depan balok tingkat ata
   assert.match(blok, /x\.o\.position\.z = x\.dasar\.z \+ 0\.05 \* t;/);
 });
 
-test("adegan 10: sepuluh CD muat di celah rak dan semuanya keluar bingkai sebelum bab habis", () => {
+test("adegan 10: satu CD per proyek muat di celah rak dan semuanya keluar bingkai sebelum bab habis", async () => {
   const celah = dunia.match(/if \(y === 1\.12 && z > (-[\d.]+) && z < (-[\d.]+)\) \{/).slice(1).map(Number);
   const [z0, langkah] = props.match(/new THREE\.Vector3\(4\.8, 1\.12 \+ 0\.071, (-[\d.]+) \+ i \* ([\d.]+)\)/).slice(1).map(Number);
   const tebal = 0.0104;
   const n = props.match(/const SLUG_RILIS = \[([^\]]+)\]/)[1].split(",").length;
-  assert.equal(n, 10);
+  // Satu CD per proyek di rak koleksi.
+  const { proyek } = await import("../content/proyek.js");
+  assert.equal(n, proyek.length);
   // CD rak di luar celah punya pusat di luar rentang celah, jadi tepinya bisa masuk setengah tebal.
   assert.ok(z0 - tebal / 2 >= celah[0] + tebal / 2, "CD pertama bertumpuk dengan tetangganya");
   assert.ok(z0 + (n - 1) * langkah + tebal / 2 <= celah[1] - tebal / 2, "CD terakhir bertumpuk dengan tetangganya");
   assert.ok(langkah > tebal, "CD bertumpuk satu sama lain");
-  // tau = (u - 0,08 - i*0,05) / 0,35 dan CD hilang saat tau = 1: yang terakhir habis di u 0,88.
-  assert.match(props, /const tau = \(u - 0\.08 - i \* 0\.05\) \/ 0\.35;/);
-  assert.ok(0.08 + (n - 1) * 0.05 + 0.35 <= 0.9);
+  // tau = (u - 0,08 - i*jeda) / 0,35 dan CD hilang saat tau = 1: yang terakhir habis sebelum u 0,9.
+  const jeda = Number(props.match(/const tau = \(u - 0\.08 - i \* ([\d.]+)\) \/ 0\.35;/)[1]);
+  assert.ok(0.08 + (n - 1) * jeda + 0.35 <= 0.9, `CD terakhir habis di u ${0.08 + (n - 1) * jeda + 0.35}`);
   // Ditarik lurus dulu (tanpa putar y) sampai bebas, baru terbang.
   assert.match(props, /if \(tau < 0\.2\) \{\s*k\.position\.copy\(keluar\);\s*k\.rotation\.set\(0, 0, 0\.05 \* Math\.sin\(Math\.PI \* tarik\)\);/);
 });

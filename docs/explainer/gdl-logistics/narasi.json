@@ -1,0 +1,67 @@
+{
+ "_catatan": "Naskah explainer gdl-logistics (disetujui Farrez 19 Nov 2026). Babak 4 menyebut email saja karena nomor WhatsApp di main.js GDL masih kosong.",
+ "gaya": {
+  "id": "Bacakan sebagai narator film dokumenter yang tenang, hangat, dan yakin, seperti video explainer sejarah. Tempo sedang, beri jeda panjang di antara paragraf.",
+  "en": "Read as a calm, warm, confident documentary narrator, like a history explainer video. Medium pace, with a long pause between paragraphs."
+ },
+ "warna": {
+  "kertas": "#f3e9d6",
+  "tinta": "#3a3532",
+  "aksen": "#e8751a"
+ },
+ "tampilan": {
+  "miring": 0,
+  "sapuan": "tirai"
+ },
+ "baris": [
+  {
+   "kode": "1-konteks",
+   "label": "Context",
+   "judul": {
+    "id": "BARANG BEKU TIDAK BISA MENUNGGU",
+    "en": "FROZEN GOODS CAN'T WAIT"
+   },
+   "teks": {
+    "id": "Barang beku dan dingin harus tetap dingin dari gudang sampai ke pelanggan. Usaha butuh truk pendingin yang bisa dipesan saat perlu.",
+    "en": "Frozen and chilled goods have to stay cold from the warehouse to the customer. A business needs a refrigerated truck it can book when it needs one."
+   }
+  },
+  {
+   "kode": "2-tantangan",
+   "label": "Challenge",
+   "judul": {
+    "id": "KONTRAK YANG FLEKSIBEL",
+    "en": "A FLEXIBLE CONTRACT"
+   },
+   "teks": {
+    "id": "Tidak semua usaha butuh truk setiap hari. Truk bisa dipesan saat perlu, dengan harga yang disepakati per trip.",
+    "en": "Not every business needs a truck every day. A truck can be booked when needed, at a price agreed per trip."
+   }
+  },
+  {
+   "kode": "3-solusi",
+   "label": "Solution",
+   "judul": {
+    "id": "MUATAN YANG MENJADI TRUK",
+    "en": "THE BOX THAT BECOMES A TRUCK"
+   },
+   "teks": {
+    "id": "Di halamannya, kardus yang digulir pelan-pelan berubah jadi truk pendingin. Pengunjung langsung paham apa yang dijual.",
+    "en": "On the page, a box you scroll slowly turns into a refrigerated truck. Visitors get what is on offer right away."
+   }
+  },
+  {
+   "kode": "4-hasil",
+   "label": "Outcome",
+   "judul": {
+    "id": "SATU PESAN, LANGSUNG MASUK",
+    "en": "ONE MESSAGE, STRAIGHT IN"
+   },
+   "teks": {
+    "id": "Permintaan penawaran langsung tersusun, tinggal kirim lewat email.",
+    "en": "A quote request writes itself, ready to send by email."
+   },
+   "klip": "sama:1-konteks"
+  }
+ ]
+}

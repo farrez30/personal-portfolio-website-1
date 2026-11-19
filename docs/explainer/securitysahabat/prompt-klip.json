@@ -1,0 +1,24 @@
+[
+ {
+  "kode": "1-konteks",
+  "prompt": "Animated 1960s Saul Bass style title sequence: flat cut-paper shapes with slightly rough hand-cut edges, bold simplified silhouettes, strong negative space, only three colours: deep teal, off-white and one signal red, subtle paper grain, stop-motion cut-out feel. An office employee silhouette at a desk looks up as one large empty cut-paper speech bubble pops up above their head, then turns and leans toward a colleague silhouette at the next desk while several small empty speech bubbles bounce between them. Single continuous shot. Smooth animation. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness.",
+  "flow": "securitysahabat-klip-1",
+  "model": "Omni 1.2 Flash, Ingredients tanpa bahan (teks saja), 16:9, 360p, 4 s, x2, 8 kredit"
+ },
+ {
+  "kode": "2-tantangan",
+  "prompt": "Animated 1960s Saul Bass style title sequence: flat cut-paper shapes with slightly rough hand-cut edges, bold simplified silhouettes, strong negative space, only three colours: deep teal, off-white and one signal red, subtle paper grain, stop-motion cut-out feel. Loose cut-paper rule pages, small empty chat bubbles and an empty thought cloud scatter in different directions across the frame, red arrows pointing every which way, until they tangle together in the middle. Single continuous shot. Smooth animation. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness.",
+  "flow": "securitysahabat-klip-2",
+  "model": "Omni 1.2 Flash, Ingredients tanpa bahan (teks saja), 16:9, 360p, 4 s, x2, 8 kredit"
+ },
+ {
+  "kode": "3-solusi",
+  "prompt": "Animated 1960s Saul Bass style title sequence: flat cut-paper shapes with slightly rough hand-cut edges, bold simplified silhouettes, strong negative space, only three colours: deep teal, off-white and one signal red, subtle paper grain, stop-motion cut-out feel. A large magnifying glass slides over an open rule book whose lines are plain grey bars; one passage lifts out cleanly and glides up into an empty speech bubble, the passage outlined in red, while a filing drawer with a small padlock beside it stays shut. Single continuous shot, locked-off camera. Smooth animation. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness.",
+  "flow": "securitysahabat-klip-3",
+  "model": "Omni 1.2 Flash, Ingredients tanpa bahan (teks saja), 16:9, 360p, 4 s, x2, 8 kredit"
+ },
+ {
+  "kode": "4-hasil",
+  "sumber": "sama:1-konteks"
+ }
+]

@@ -207,6 +207,49 @@ export const proyek = [
     arsitektur: ARSITEKTUR["d-day"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
+  {
+    // Klien Coderoach Studio (Harits, PT Garuda Distribusi Logistik). Farrez memilih tampil penuh
+    // dengan tautan, 19 Nov 2026, walau situsnya masih noindex menunggu persetujuan pemilik.
+    slug: "gdl-logistics",
+    ilustrasi: "/assets/ilustrasi/gdl-logistics.webp",
+    katalog: "FRZ-11",
+    judul: { id: "GDL Logistics", en: "GDL Logistics" },
+    jenis: "studio",
+    status: "berjalan",
+    periode: "2026",
+    warna: "#3a3532",
+    tautan: { situs: "https://gdl-logistics.vercel.app" },
+    layar: { desktop: "/assets/layar/gdl-logistics-desktop.webp", hp: "/assets/layar/gdl-logistics-hp.webp" },
+    gambar: null,
+    ringkas: {
+      id: "Landing page untuk perusahaan truk pendingin antarperusahaan: muatan yang digulir berubah jadi truk dalam 120 bingkai foto, lalu permintaan penawaran dikirim lewat WhatsApp atau email.",
+      en: "A landing page for a business-to-business refrigerated trucking company: the cargo turns into a truck over 120 photo frames as you scroll, and quote requests go out by WhatsApp or email.",
+    },
+    arsitektur: ARSITEKTUR["gdl-logistics"],
+    buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
+  },
+  {
+    // Proyek tim Tencent Cloud Hackathon Indonesia 2026 (repo privat izzatbey/tencent-hackathon).
+    // Tim dari docs/submission: Muhammad Izzat (backend, engine, skill WorkBuddy), Farrez
+    // (frontend dan pengujian UI/UX), Wafi. Tautan demo untuk juri tidak dipajang.
+    slug: "securitysahabat",
+    ilustrasi: "/assets/ilustrasi/securitysahabat.webp",
+    katalog: "FRZ-12",
+    judul: { id: "SecuritySahabat", en: "SecuritySahabat" },
+    jenis: "pribadi",
+    status: "pilot",
+    periode: "2026",
+    warna: "#16302f",
+    tautan: {},
+    layar: { desktop: "/assets/layar/securitysahabat-desktop.webp", hp: "/assets/layar/securitysahabat-hp.webp" },
+    gambar: null,
+    ringkas: {
+      id: "Agen tanya jawab keamanan dan kepatuhan untuk karyawan, karya tim bersama Muhammad Izzat dan Wafi untuk Tencent Cloud Hackathon Indonesia 2026: jawaban boleh atau tidak selalu mengutip sumber, hanya dari dokumen yang boleh dilihat penanya, dan tercatat.",
+      en: "A security and compliance Q&A agent for employees, built as a team with Muhammad Izzat and Wafi for Tencent Cloud Hackathon Indonesia 2026: every yes-or-no answer cites its source, uses only documents the asker may see, and is logged.",
+    },
+    arsitektur: ARSITEKTUR["securitysahabat"],
+    buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
+  },
 ];
 
 /** Halaman buklet yang boleh tampil: hanya yang sudah diisi. */

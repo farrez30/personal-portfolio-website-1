@@ -15,3 +15,5 @@ OFL mengizinkan huruf dipakai dan disertakan di situs ini; hurufnya tidak dijual
 | cormorantgaramond.woff2 | Cormorant Garamond 500 | Christian Thalmann |
 | kaushanscript.woff2 | Kaushan Script | Pablo Impallari |
 | bebasneue.woff2 | Bebas Neue | Ryoichi Tsunekawa (Dharma Type) |
+| limelight.woff2 | Limelight | Nicole Fally (Sorkin Type), diambil 19 Nov 2026 |
+| archivoblack.woff2 | Archivo Black | Omnibus-Type, diambil 19 Nov 2026 |

@@ -1,0 +1,24 @@
+[
+ {
+  "kode": "1-konteks",
+  "prompt": "Animated 1930s Art Deco travel poster in streamline moderne style: smooth airbrushed gradients, bold geometric perspective, speed lines, stylized simplified forms, limited palette of warm orange, charcoal grey, cream and ice blue, lithograph print texture. Inside a cold storage warehouse full of frosty insulated crates, an anonymous worker in a padded jacket pushes a hand trolley of crates toward an open loading door where a streamlined refrigerated box truck with a plain unmarked cargo box waits with its rear doors open; cold ice-blue vapour drifts along the floor. Slow steady camera push-in. Smooth animation. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness.",
+  "flow": "gdl-logistics-klip-1",
+  "model": "Omni 1.2 Flash, Ingredients tanpa bahan (teks saja), 16:9, 360p, 4 s, x2, 8 kredit"
+ },
+ {
+  "kode": "2-tantangan",
+  "prompt": "Animated 1930s Art Deco travel poster in streamline moderne style: smooth airbrushed gradients, bold geometric perspective, speed lines, stylized simplified forms, limited palette of warm orange, charcoal grey, cream and ice blue, lithograph print texture. An empty loading bay of a small company at morning; a streamlined refrigerated box truck with a plain unmarked cargo box drives in from the left, reverses into the empty bay and stops, all wheels on the ground, then its rear doors swing open. Locked-off camera. Smooth animation. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness.",
+  "flow": "gdl-logistics-klip-2",
+  "model": "Omni 1.2 Flash, Ingredients tanpa bahan (teks saja), 16:9, 360p, 4 s, x2, 8 kredit"
+ },
+ {
+  "kode": "3-solusi",
+  "prompt": "Animated 1930s Art Deco travel poster in streamline moderne style: smooth airbrushed gradients, bold geometric perspective, speed lines, stylized simplified forms, limited palette of warm orange, charcoal grey, cream and ice blue, lithograph print texture. A plain cardboard box sits in the centre of a clean cream background; it smoothly unfolds and transforms, panel by panel, into a streamlined refrigerated box truck with a plain unmarked cargo box, which then rolls forward a little on a road of speed lines. Single continuous shot, locked-off camera. Smooth animation. Absolutely no text, no letters of any alphabet, no numbers, no logos, no watermark. People are fictional and anonymous, no real person likeness.",
+  "flow": "gdl-logistics-klip-3",
+  "model": "Omni 1.2 Flash, Ingredients tanpa bahan (teks saja), 16:9, 360p, 4 s, x2, 8 kredit"
+ },
+ {
+  "kode": "4-hasil",
+  "sumber": "sama:1-konteks"
+ }
+]

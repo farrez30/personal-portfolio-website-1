@@ -1,12 +1,13 @@
 // Shot list previs cerita v5 arah G "yang ditimbang sebelum memutuskan" (ADR 0019).
 // Satu set piece per babak, satu kejadian konkret per rasa cemas (supaya tidak terbaca FAQ),
 // dan objek persisten: nota merah di atas timbangan, yang di skala kota ke atas jadi titik data.
-// Dipakai previs.html (adegan) dan papan.mjs (catatan di papan).
+// Dipakai previs.html (adegan) dan papan.mjs (catatan di papan). `keluar: "naik"` dan `masuk: "dekat"`
+// menandai perpindahan yang zoom out ke skala lebih besar (meja ke kota, kota ke peta, peta ke globe).
 
 export const SHOT = [
   {
     id: "dorongan", label: "01 DORONGAN", skala: "1 m",
-    judul: "Yang sekarang bikin capek.",
+    judul: "Rekap tiap malam, angkanya beda lagi.",
     kejadian: "Jam dinding 22.10. Map rekap menumpuk, layar spreadsheet masih terbuka, nota merah jatuh ke piring kiri timbangan dan piring itu turun.",
     benda: "Meja kerja, tumpukan map, monitor, jam dinding, timbangan dua piring dengan nota merah.",
     kamera: "Tiga perempat dari atas, dekat, sedikit miring.",
@@ -16,7 +17,7 @@ export const SHOT = [
   },
   {
     id: "harga-diam", label: "02 HARGA DIAM", skala: "40 cm",
-    judul: "Diam juga ada harganya.",
+    judul: "Dibiarkan juga ada ongkosnya.",
     kejadian: "Dua beban bertuliskan LEMBUR dan SELISIH STOK turun ke piring kiri, timbangan makin berat sebelah.",
     benda: "Timbangan dari dekat, dua beban kuningan berlabel.",
     kamera: "Dolly masuk ke timbangan, setinggi piring.",
@@ -26,7 +27,7 @@ export const SHOT = [
   },
   {
     id: "tarikan", label: "03 TARIKAN", skala: "1 m",
-    judul: "Bayangan sesudahnya.",
+    judul: "Buka HP, angka hari ini sudah ada.",
     kejadian: "HP di meja menyala. Satu layar ringkasan: penjualan, stok, dan kas hari ini. Cahayanya menerangi map yang tadi menumpuk.",
     benda: "HP berdiri di penyangga, cahaya layar sebagai lampu utama adegan.",
     kamera: "Orbit pelan 20 derajat mengelilingi HP.",
@@ -36,7 +37,7 @@ export const SHOT = [
   },
   {
     id: "biaya", label: "04 BIAYA", skala: "40 cm",
-    judul: "Harganya jelas sejak awal.",
+    judul: "Harganya jelas sebelum mulai.",
     kejadian: "Kartu 'tambahan fitur' masuk di tengah jalan. Kartu itu tidak menambah blok tahap 1, tetapi berdiri sendiri sebagai tahap 3 dengan harganya sendiri.",
     benda: "Kertas lingkup, tiga blok tahap berlabel, kartu tambahan merah.",
     kamera: "Dari atas meja, menunduk lurus.",
@@ -46,7 +47,7 @@ export const SHOT = [
   },
   {
     id: "kelangsungan", label: "05 KELANGSUNGAN", skala: "1 m",
-    judul: "Tetap jalan walau saya tidak ada.",
+    judul: "Sistemnya tetap jalan, siapa pun yang merawat.",
     kejadian: "Kursi developer kosong. Lampu status sistem tetap menyala. Di meja: map catatan cara kerja, kunci ekspor data, dan kontrak dengan dua kotak centang: milik atau lisensi.",
     benda: "Kursi kosong, map catatan, kunci, kontrak, lampu status.",
     kamera: "Setinggi kursi, mendorong pelan ke meja.",
@@ -55,19 +56,9 @@ export const SHOT = [
     bukti: "Pasal 36 UU 28/2014: hak mengikuti perjanjian (D). Bentuknya milik atau lisensi sesuai kontrak (koreksi Farrez).",
   },
   {
-    id: "ramai", label: "06 RAMAI", skala: "2 km",
-    judul: "Diuji sebelum hari ramai.",
-    kejadian: "Tanggal gajian. Kamera naik dari toko ke atas kota, ribuan titik transaksi naik dari blok-blok. Blok klien tetap menyala, antreannya mengalir.",
-    benda: "Blok kota, medan titik transaksi, satu blok klien merah.",
-    kamera: "Crane naik dari atap ke ketinggian kota, menunduk 55 derajat.",
-    pemicu: "Titik naik makin rapat seiring gulir.", pin: "1,5 layar",
-    pola: "56 instanced field, 35 zoom parallax",
-    bukti: "PPDB 2024 dan tiket Lebaran KAI 2025 tumbang saat ramai (P). Uji beban dikonfirmasi Farrez.",
-  },
-  {
-    id: "data", label: "07 DATA", skala: "200 m",
-    judul: "Aman dan bisa dipulihkan.",
-    kejadian: "Permintaan asing ditolak di gerbang. Lalu satu server padam; salinan dari gedung lain mengalir balik lewat garis merah, sistem hidup lagi.",
+    id: "data", adegan: "ruangServer", label: "06 DATA", skala: "3 m",
+    judul: "Rusak di satu tempat, utuh di tempat lain.",
+    kejadian: "Di ruang server di lantai yang sama, permintaan asing tertahan di gerbang. Satu rak padam; salinan dari gedung cadangan di seberang sungai mengalir balik lewat kabel merah, sistem hidup lagi.",
     benda: "Dua gedung dengan rak server, perisai di gerbang, garis cadangan.",
     kamera: "Menyamping, dari gedung utama ke gedung cadangan.",
     pemicu: "Server padam di tengah babak, pulih di akhir babak.", pin: "1,5 layar",
@@ -75,8 +66,8 @@ export const SHOT = [
     bukti: "PDN 2024: hanya 2% data ter-backup (P); CPA Australia: 49% usaha kecil Indonesia rugi akibat serangan siber 2025 (D). Latihan pulih dikonfirmasi Farrez.",
   },
   {
-    id: "kebiasaan", label: "08 KEBIASAAN", skala: "3 m",
-    judul: "Tim tidak perlu belajar dari nol.",
+    id: "kebiasaan", keluar: "naik", label: "07 KEBIASAAN", skala: "3 m",
+    judul: "Urutannya sama dengan yang biasa tim kerjakan.",
     kejadian: "Hari pertama karyawan baru. Dua monitor berdampingan: sistem lama dan baru, angkanya sama. Formulir baru mengikuti urutan formulir lama.",
     benda: "Meja kasir atau admin, dua monitor, dua orang.",
     kamera: "Dari belakang bahu, setinggi mata.",
@@ -85,8 +76,18 @@ export const SHOT = [
     bukti: "Coretax 2025 akhirnya jalan berdampingan dengan sistem lama (D, DJP).",
   },
   {
-    id: "langkah-kecil", label: "09 LANGKAH KECIL", skala: "1.000 km",
-    judul: "Satu cabang dulu.",
+    id: "ramai", masuk: "dekat", keluar: "naik", label: "08 RAMAI", skala: "2 km",
+    judul: "Diuji sebelum hari ramai.",
+    kejadian: "Kamera keluar lewat jendela kantor dan naik ke atas kota. Tanggal gajian: jalan makin padat, arus pesanan dari rumah-rumah mengalir ke gedung klien dan terus makin rapat, gedungnya tetap melayani.",
+    benda: "Blok kota, medan titik transaksi, satu blok klien merah.",
+    kamera: "Crane naik dari atap ke ketinggian kota, menunduk 55 derajat.",
+    pemicu: "Titik naik makin rapat seiring gulir.", pin: "1,5 layar",
+    pola: "56 instanced field, 35 zoom parallax",
+    bukti: "PPDB 2024 dan tiket Lebaran KAI 2025 tumbang saat ramai (P). Uji beban dikonfirmasi Farrez.",
+  },
+  {
+    id: "langkah-kecil", masuk: "dekat", keluar: "naik", batasNaik: 1.6, label: "09 LANGKAH KECIL", skala: "1.000 km",
+    judul: "Mulai dari satu cabang.",
     kejadian: "Peta Nusantara gelap. Satu cabang menyala lebih dulu, beberapa babak kemudian cabang lain menyusul dan tersambung.",
     benda: "Pulau-pulau datar, titik cabang, garis sambungan.",
     kamera: "Terbang naik dari kota sampai pulau, tegak lurus.",
@@ -95,8 +96,8 @@ export const SHOT = [
     bukti: "Titik cabang diisi lokasi klien nyata bila diizinkan.",
   },
   {
-    id: "penutup", label: "PENUTUP", skala: "36.000 km",
-    judul: "Mulai.",
+    id: "penutup", masuk: "dekat", label: "PENUTUP", skala: "36.000 km",
+    judul: "Ceritakan yang bikin capek.",
     kejadian: "Kamera terus naik sampai orbit. Globe dengan garis dari Indonesia, satelit lewat. Lalu turun ke rak bukti proyek.",
     benda: "Globe titik, garis sambungan, dua satelit.",
     kamera: "Zoom out penuh, globe berputar pelan.",
@@ -113,6 +114,13 @@ const b = (label, skala, judul, kejadian, adegan, opsi = {}, bidik) => ({ id: ad
 
 export const ARAH = {
   G: SHOT,
+  P: [
+    b("PORTO 1", "orbit", "Cincin proyek mengitari bumi", "Satelit melesat ke balik bumi, keluar sebagai cincin kartu proyek. Gulir memutar cincin, satu kartu berhenti di depan.", "portoCincin"),
+    b("PORTO 2", "orbit", "Konstelasi satelit proyek", "Sepuluh satelit, tiap proyek berbentuk bendanya sendiri. Daftar nama selalu terlihat; gulir memindah sorotan.", "portoKonstelasi"),
+    b("PORTO 3", "1 m", "Pulang ke kantor: lemari arsip", "Kamera turun dari orbit ke gedung yang sama. Map berkas berlabel di laci arsip, satu map terbuka di meja.", "portoArsip"),
+    b("PORTO 4", "10 m", "Showroom dengan panggung putar", "Lantai pamer gelap, tiap proyek diorama di panggung putar dengan lampu sorot.", "portoShowroom"),
+    b("PORTO 5", "orbit", "Globe sebagai latar, grid proyek", "Globe bergeser ke kiri dan mengecil, grid proyek biasa naik di sisi kanan.", "portoGrid"),
+  ],
   A: [
     b("01 IDE", "40 cm", "Berawal dari keluhan sehari-hari.", "Meja kasir dari atas. Nota berserakan, satu nota merah berisi keluhan.", "kasirMeja", { v: "-a", nota: "berserak" }),
     b("02 RENCANA", "40 cm", "Semua dimulai dari rencana yang Anda setujui.", "Nota merah jadi daftar kebutuhan di papan jepit, lalu stempel turun.", "rencana"),

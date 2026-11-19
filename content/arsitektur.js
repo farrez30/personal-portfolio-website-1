@@ -373,4 +373,77 @@ export const ARSITEKTUR = {
       infrastruktur: [],
     },
   },
+
+  "gdl-logistics": {
+    alur: [
+      l(
+        { id: "Halaman statis dimuat", en: "A static page loads" },
+        { id: "Lima berkas tanpa build dan tanpa dependensi, dengan header keamanan dari Vercel.", en: "Five files with no build step and no dependencies, served with security headers by Vercel." },
+        ["html", "vercel"],
+      ),
+      l(
+        { id: "Gulir menggerakkan adegan", en: "Scrolling drives the scene" },
+        { id: "Posisi gulir diubah jadi satu angka, lalu dipetakan ke bingkai foto di kanvas: muatan menjadi truk.", en: "The scroll position becomes one number, mapped to a photo frame on a canvas: the cargo becomes a truck." },
+        ["peramban"],
+      ),
+      l(
+        { id: "Bingkai disimpan setahun", en: "Frames are cached for a year" },
+        { id: "Bingkai berada di folder berversi yang disimpan peramban setahun; halaman dan skrip selalu dicek ulang.", en: "Frames live in a versioned folder the browser keeps for a year; the page and scripts are always revalidated." },
+        ["peramban", "vercel"],
+      ),
+      l(
+        { id: "Permintaan penawaran", en: "A quote request" },
+        { id: "Formulir menyusun pesan lalu membukanya di WhatsApp atau email, tanpa server.", en: "The form composes a message and opens it in WhatsApp or email, with no server." },
+        ["whatsapp", "email"],
+      ),
+    ],
+    teknologi: {
+      fitur: [
+        { id: "Adegan gulir truk", en: "Truck scroll scene" },
+        { id: "Formulir penawaran", en: "Quote form" },
+        { id: "Header keamanan", en: "Security headers" },
+      ],
+      stack: ["html", "peramban"],
+      infrastruktur: ["vercel"],
+    },
+  },
+
+  securitysahabat: {
+    alur: [
+      l(
+        { id: "Karyawan bertanya", en: "An employee asks" },
+        { id: "Pertanyaan boleh atau tidak masuk dari UI web atau sebagai skill WorkBuddy.", en: "A may-I question comes in from the web UI or as a WorkBuddy skill." },
+        ["peramban", "svelte"],
+      ),
+      l(
+        { id: "Hak akses dicek dulu", en: "Access is checked first" },
+        { id: "Dokumen yang tidak boleh dilihat penanya diperlakukan persis seperti tidak ada.", en: "Documents the asker may not see are treated exactly as if they did not exist." },
+        ["izin"],
+      ),
+      l(
+        { id: "Sumber dicari", en: "Sources are found" },
+        { id: "SOP, kontrol, dan catatan yang relevan diambil dari basis pengetahuan dan dikutip apa adanya.", en: "Relevant SOPs, controls and notes are pulled from the knowledge base and quoted verbatim." },
+        ["basisPengetahuan", "python"],
+      ),
+      l(
+        { id: "Jawaban dengan bukti", en: "An answer with evidence" },
+        { id: "Jawaban menyebut sumbernya, atau jujur bilang tidak tahu dan mengarahkan ke orang yang tepat.", en: "The answer names its source, or honestly says it does not know and points to the right person." },
+        ["mesin"],
+      ),
+      l(
+        { id: "Tercatat", en: "Logged" },
+        { id: "Siapa bertanya apa, sumber yang dipakai, dan jawabannya masuk log audit berantai.", en: "Who asked what, which sources were used, and the answer go into a chained audit log." },
+        ["audit"],
+      ),
+    ],
+    teknologi: {
+      fitur: [
+        { id: "Jawaban berkutipan", en: "Cited answers" },
+        { id: "Sadar hak akses", en: "Permission-aware" },
+        { id: "Log audit", en: "Audit log" },
+      ],
+      stack: ["python", "svelte", "vite"],
+      infrastruktur: [],
+    },
+  },
 };

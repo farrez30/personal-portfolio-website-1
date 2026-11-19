@@ -182,3 +182,40 @@ Logo proyek (`logo.svg`) bukan buatan AI: disalin apa adanya dari repo proyek mi
 | buklet-07.webp | v1 | decision: a chess board mid-game under a desk lamp |
 | buklet-08.webp | v1 | outcome: dawn light through blinds onto a calm desk, monitors off |
 
+## gdl-logistics: Art Deco travel poster
+
+Dibuat 19 Nov 2026 di Google Flow (Nano Banana 2.1, 0 kredit, akun Google AI Pro Farrez, project "Portofolio CD 19 Nov"). **Bukan berkas asli Flow:** Chrome di PC ini membeku di halaman Flow, jadi piksel ditangkap 1:1 dari gambar penuh di panel browser (empat ubin dijahit, selisih rata-rata di daerah tumpang tindih 0,00 sampai 0,01/255), lalu diubah ke WebP. Tangkapan mentah di `D:\Downloads D\Claude\2026-11-19 cd-baru\`; ID media Flow tiap berkas ada di log sesi untuk mengganti dengan berkas asli nanti.
+
+| Berkas | Varian | Isi |
+|---|---|---|
+| belakang.webp | v1 | a wide view of an Art Deco cold storage warehouse at dawn, a row of streamlined refrigerated box trucks with plain unmarked cargo boxes parked at its loading bays, faint cold frost vapour in the air, all wheels on the ground |
+| buklet-01.webp | v1 | cold goods: inside a cold storage warehouse, tall stacks of insulated crates of frozen and chilled goods under frosty ice-blue light, frost on the crates, a round wall gauge with a completely blank dial |
+| buklet-02.webp | v2 | the cold route: a streamlined refrigerated box truck with a plain unmarked cargo box on a highway between two warehouses of two different companies, a ribbon of ice-blue cold air trailing behind it along the road, all wheels on the road |
+| buklet-03.webp | v2 | problem, not every day: a small company's loading bay with one empty truck parking space marked by painted lines, a few insulated crates waiting beside it, a wall calendar made of plain blank squares with only three squares holding a tiny truck pictogram |
+| buklet-04.webp | v1 | feature, a truck on call: a dispatcher's desk with an old streamline telephone, its receiver lifted, and through the window a refrigerated box truck with a plain unmarked cargo box pulling out of the depot for a single trip, one dashed route line drawn from the depot to one destination pin |
+| buklet-05.webp | v1 | feature, the page: a large streamlined desktop monitor showing one plain long web page with a scroll bar and no writing, on the screen a plain cardboard box changing step by step into a refrigerated box truck, three stages from left to right |
+| buklet-06.webp | v1 | feature, one message: a hand holding a phone that shows a simple form of empty lines and one plain button, a paper envelope and one plain green chat bubble flying out of the phone toward a truck depot |
+| buklet-07.webp | v1 | how it works, loading: at a warehouse dock, anonymous workers in padded jackets seen from behind lifting insulated crates into the open, cold-lit cargo box of a refrigerated truck, frost vapour spilling from the doors |
+| buklet-08.webp | v1 | outcome, delivered cold: the refrigerated truck parked at another company's warehouse at sunrise, its rear doors open to show the crates still frosty, an anonymous receiving worker checking them, all wheels on the ground |
+| label.webp | v1 | a radiating sunburst of orange speed rays around the centre, ringed by a band of ice-blue frost crystals, with one small streamlined refrigerated truck with a plain unmarked cargo box driving along the rim of the circle |
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
+| sampul.webp | v2 | calon b, dipilih Farrez: a loading dock at night, a streamlined refrigerated box truck with a plain unmarked cargo box reversing toward stacks of insulated crates, its rear doors open with cold ice-blue light glowing inside the cargo box against warm orange dock lamps, all wheels on the ground |
+
+## securitysahabat: Saul Bass cut-paper title sequence
+
+Dibuat 19 Nov 2026 di Google Flow (Nano Banana 2.1, 0 kredit, akun Google AI Pro Farrez, project "Portofolio CD 19 Nov"). **Bukan berkas asli Flow:** Chrome di PC ini membeku di halaman Flow, jadi piksel ditangkap 1:1 dari gambar penuh di panel browser (empat ubin dijahit, selisih rata-rata di daerah tumpang tindih 0,00 sampai 0,01/255), lalu diubah ke WebP. Tangkapan mentah di `D:\Downloads D\Claude\2026-11-19 cd-baru\`; ID media Flow tiap berkas ada di log sesi untuk mengganti dengan berkas asli nanti.
+
+| Berkas | Varian | Isi |
+|---|---|---|
+| belakang.webp | v1 | three cut-paper office buildings of one company standing apart on a long horizon of sea and islands, linked by one single continuous red thread that runs from window to window across the water |
+| buklet-01.webp | v1 | may I: an office employee silhouette at a desk holding a document and looking at a closed door with a small padlock, one large empty speech bubble above the employee |
+| buklet-02.webp | v1 | asking a friend: two employee silhouettes leaning across a low cubicle wall, one whispering to the other, a loose tangle of small empty speech bubbles between them |
+| buklet-03.webp | v1 | problem, scattered answers: a big binder of rules spilling loose pages, a phone overflowing with empty chat bubbles, and a senior colleague silhouette with an empty thought cloud, each pointing in a different direction across the frame |
+| buklet-04.webp | v1 | feature, permission first: a tall filing cabinet guarded by a cut-paper gate; an employee silhouette holds up one plain blank key card and only one drawer slides open for it, every other drawer stays shut with a small padlock |
+| buklet-05.webp | v1 | feature, word for word: a large magnifying glass over an open rule book whose lines are shown only as plain grey bars, one passage cut out cleanly and lifted into a speech bubble, the same shape outlined in red in both places |
+| buklet-06.webp | v1 | feature, a human decides: a small friendly cut-paper robot assistant holding out a document to a manager silhouette, and the round red approval stamp is held only in the manager's hand, raised above the paper |
+| buklet-07.webp | v1 | feature, when it does not know: the small cut-paper robot assistant with open empty hands, one arm pointing toward an office doorway where a security expert silhouette waits, a red thread leading from the assistant to that person |
+| buklet-08.webp | v1 | outcome, every record kept: a long chain of paper record sheets linked ring by ring like chain links running across the page, one link that was swapped out caught and circled in red |
+| label.webp | v1 | a ring of cut-paper speech bubbles and small document sheets circling the empty centre, all linked by one continuous red thread, one small layered paper shield at the top of the ring |
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
+| sampul.webp | v1 | calon b, dipilih Farrez: a silhouette of an office employee sitting at a desk, looking up at a large glowing speech bubble that unfolds into a stack of stamped documents with round seals |
