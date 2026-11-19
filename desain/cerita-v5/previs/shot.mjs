@@ -86,7 +86,7 @@ export const SHOT = [
     bukti: "PPDB 2024 dan tiket Lebaran KAI 2025 tumbang saat ramai (P). Uji beban dikonfirmasi Farrez.",
   },
   {
-    id: "langkah-kecil", masuk: "dekat", keluar: "naik", label: "09 LANGKAH KECIL", skala: "1.000 km",
+    id: "langkah-kecil", masuk: "dekat", keluar: "naik", batasNaik: 1.6, label: "09 LANGKAH KECIL", skala: "1.000 km",
     judul: "Mulai dari satu cabang.",
     kejadian: "Peta Nusantara gelap. Satu cabang menyala lebih dulu, beberapa babak kemudian cabang lain menyusul dan tersambung.",
     benda: "Pulau-pulau datar, titik cabang, garis sambungan.",
@@ -114,6 +114,13 @@ const b = (label, skala, judul, kejadian, adegan, opsi = {}, bidik) => ({ id: ad
 
 export const ARAH = {
   G: SHOT,
+  P: [
+    b("PORTO 1", "orbit", "Cincin proyek mengitari bumi", "Satelit melesat ke balik bumi, keluar sebagai cincin kartu proyek. Gulir memutar cincin, satu kartu berhenti di depan.", "portoCincin"),
+    b("PORTO 2", "orbit", "Konstelasi satelit proyek", "Sepuluh satelit, tiap proyek berbentuk bendanya sendiri. Daftar nama selalu terlihat; gulir memindah sorotan.", "portoKonstelasi"),
+    b("PORTO 3", "1 m", "Pulang ke kantor: lemari arsip", "Kamera turun dari orbit ke gedung yang sama. Map berkas berlabel di laci arsip, satu map terbuka di meja.", "portoArsip"),
+    b("PORTO 4", "10 m", "Showroom dengan panggung putar", "Lantai pamer gelap, tiap proyek diorama di panggung putar dengan lampu sorot.", "portoShowroom"),
+    b("PORTO 5", "orbit", "Globe sebagai latar, grid proyek", "Globe bergeser ke kiri dan mengecil, grid proyek biasa naik di sisi kanan.", "portoGrid"),
+  ],
   A: [
     b("01 IDE", "40 cm", "Berawal dari keluhan sehari-hari.", "Meja kasir dari atas. Nota berserakan, satu nota merah berisi keluhan.", "kasirMeja", { v: "-a", nota: "berserak" }),
     b("02 RENCANA", "40 cm", "Semua dimulai dari rencana yang Anda setujui.", "Nota merah jadi daftar kebutuhan di papan jepit, lalu stempel turun.", "rencana"),
