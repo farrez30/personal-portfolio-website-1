@@ -20,7 +20,7 @@ test("tutup vitrin terbuka ke atas: engsel di belakang, tepi depan di -z, sudut 
   assert.match(props, /tutup\.position\.set\(0, 0\.045 \+ H, D \/ 2\);/);
   assert.match(props, /kotak\(W, 0\.006, D, bahan\.kaca, 0, 0\.003, -D \/ 2, tutup/);
   // Rotasi x sebesar t: y tepi depan (z = -D) menjadi D * sin(t). Positif berarti di atas kaca.
-  const m = props.match(/tutup\.rotation\.x = (-?[\d.]+) \* \(1 - halus/);
+  const m = props.match(/tutup\.rotation\.x = (-?[\d.]+) \* \(1 - (?:halus|tutupPeredam)/);
   assert.ok(m, "rumus sudut tutup ditemukan");
   const sudut = Number(m[1]);
   assert.ok(0.34 * Math.sin(sudut) > 0, `tepi depan harus terangkat, sudut ${sudut}`);

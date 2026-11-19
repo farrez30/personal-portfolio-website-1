@@ -149,8 +149,11 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     mejaAtas: new THREE.MeshStandardMaterial({ color: 0x4a3426, roughness: 0.45 }),
     logam: new THREE.MeshStandardMaterial({ color: 0xb9b2a6, roughness: 0.32, metalness: 0.9 }),
     kuningan: new THREE.MeshStandardMaterial({ color: 0xc9a25a, roughness: 0.45, metalness: 1 }),
+    kuninganMengilap: new THREE.MeshStandardMaterial({ color: 0xd8b26a, roughness: 0.28, metalness: 1, side: THREE.DoubleSide }),
+    baja: new THREE.MeshStandardMaterial({ color: 0x55585e, roughness: 0.4, metalness: 1 }),
+    kayuPintu: new THREE.MeshStandardMaterial({ color: 0x4a2f1f, roughness: 0.6 }),
     jalan: new THREE.MeshBasicMaterial({ toneMapped: true }),
-    kaca: new THREE.MeshStandardMaterial({ color: 0x9fb4c8, roughness: 0.05, metalness: 0.2, transparent: true, opacity: 0.18 }),
+    kaca: bahanKaca(),
     bayang: new THREE.MeshBasicMaterial({ map: teksturBayang(), transparent: true, depthWrite: false, color: 0x000000 }),
   };
 
@@ -246,16 +249,68 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   tumpahJalan.position.set(-1.6, 0.005, 3.0);
   tumpahJalan.renderOrder = 2;
   scene.add(tumpahJalan);
+  // Daun pintu kayu: ambang atas dan bawah, dua tiang, kaca di tengahnya, pegangan dorong kuningan.
+  for (const [w, h, x, y] of [
+    [1.12, 0.12, -1.6, 2.1],
+    [1.12, 0.24, -1.6, 0.12],
+    [0.1, 2.16, -2.11, 1.08],
+    [0.1, 2.16, -1.09, 1.08],
+    [0.92, 0.05, -1.6, 0.98],
+  ])
+    kotak(w, h, 0.05, bahan.kayuPintu, x, y, 3.975);
+  const pegangan = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.36, 16), bahan.kuningan);
+  pegangan.position.set(-1.22, 1.08, 3.92);
+  scene.add(pegangan);
+  for (const y of [0.92, 1.24]) kotak(0.02, 0.02, 0.06, bahan.kuningan, -1.22, y, 3.945);
+  // Papan OPEN gantung di balik kaca, digantung tali dari kait isap kecil (rujukan toko sungguhan:
+  // satu papan dua sisi, sekitar 30 x 18 cm). Menggantikan kesan kertas tempel di kaca.
+  const papan = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.18, 0.008), [
+    bahan.kayuPintu,
+    bahan.kayuPintu,
+    bahan.kayuPintu,
+    bahan.kayuPintu,
+    new THREE.MeshStandardMaterial({ map: teksturPapanBuka(), roughness: 0.7 }),
+    bahan.kayuPintu,
+  ]);
+  papan.rotation.y = Math.PI;
+  papan.position.set(-1.6, 1.62, 3.955);
+  papan.rotation.z = 0.03;
+  scene.add(papan);
+  const tali = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-1.72, 1.71, 3.955), new THREE.Vector3(-1.6, 1.86, 3.97), new THREE.Vector3(-1.48, 1.71, 3.955)]);
+  scene.add(new THREE.Line(tali, new THREE.LineBasicMaterial({ color: 0x2b2420 })));
+  // Lonceng toko di kusen atas (rujukan: shopkeeper's bell, pelat dudukan, pegas baja melingkar,
+  // cangkir kuningan bubutan dengan pemukul di dalam). Cangkir 10 cm lalu diskala 1,5 kali supaya
+  // terbaca dari jarak kamera 2,9 m. Berayun teredam saat kamera tiba di pintu.
   const lonceng = new THREE.Group();
-  const mangkok = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.11, 24, 1, true), bahan.kuningan);
-  mangkok.material.side = THREE.DoubleSide;
-  mangkok.position.y = -0.06;
-  const pemukul = new THREE.Mesh(new THREE.SphereGeometry(0.018, 12, 8), bahan.kuningan);
-  pemukul.position.y = -0.12;
-  const lengan = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.02, 0.2), bahan.gelapMatte);
-  lengan.position.z = 0.1;
-  lonceng.add(mangkok, pemukul, lengan);
-  lonceng.position.set(-1.6, 2.34, 3.78);
+  kotak(0.05, 0.12, 0.008, bahan.gelapMatte, -1.6, 2.2, 3.926);
+  const titikPegas = [];
+  for (let i = 0; i <= 60; i++) {
+    const t = i / 60;
+    const sudut = t * Math.PI * 2 * 2.5;
+    titikPegas.push(new THREE.Vector3(Math.sin(sudut) * 0.016, -0.02 - t * 0.05 + Math.cos(sudut) * 0.016, -t * 0.1));
+  }
+  titikPegas.push(new THREE.Vector3(0, -0.11, -0.13), new THREE.Vector3(0, -0.15, -0.14));
+  const pegas = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(titikPegas), 120, 0.0028, 6), bahan.baja);
+  const gantung = new THREE.Group();
+  gantung.position.set(0, -0.15, -0.14);
+  const profil = [
+    [0.001, 0], [0.008, -0.002], [0.014, -0.008], [0.019, -0.02], [0.024, -0.038], [0.029, -0.058],
+    [0.036, -0.076], [0.046, -0.09], [0.052, -0.097], [0.05, -0.1], [0.044, -0.096],
+  ].map(([x, y]) => new THREE.Vector2(x, y));
+  const cangkir = new THREE.Mesh(new THREE.LatheGeometry(profil, 40), bahan.kuninganMengilap);
+  const kenop = new THREE.Mesh(new THREE.SphereGeometry(0.007, 12, 8), bahan.kuninganMengilap);
+  kenop.position.y = 0.002;
+  const pemukulLonceng = new THREE.Group();
+  const batang = new THREE.Mesh(new THREE.CylinderGeometry(0.0015, 0.0015, 0.07, 6), bahan.baja);
+  batang.position.y = -0.04;
+  const bandul = new THREE.Mesh(new THREE.SphereGeometry(0.009, 12, 8), bahan.baja);
+  bandul.position.y = -0.078;
+  pemukulLonceng.add(batang, bandul);
+  pemukulLonceng.position.y = -0.004;
+  gantung.add(cangkir, kenop, pemukulLonceng);
+  lonceng.add(pegas, gantung);
+  lonceng.position.set(-1.6, 2.2, 3.922);
+  lonceng.scale.setScalar(1.5);
   scene.add(lonceng);
 
   // ---- Cahaya ------------------------------------------------------------------------------
@@ -535,6 +590,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
 
   const vpLalu = new THREE.Matrix4();
   const vpKini = new THREE.Matrix4();
+  // Pengukur waktu GPU per lintasan, hanya dengan ?uji-dunia (scripts/ukur-gpu.mjs): adegan, AO,
+  // dan lintasan layar diukur terpisah lewat EXT_disjoint_timer_query_webgl2.
+  const uji = typeof location !== "undefined" && location.search.includes("uji-dunia") ? buatUjiGpu(renderer) : null;
+  if (uji) {
+    window.__duniaUji = {
+      gpu: uji.hasil,
+      info: () => ({ rasio, w: target.width, h: target.height, aoAktif, sampelAO: ao.configuration.aoSamples }),
+    };
+  }
   const gambar = (kuat) => {
     camera.updateMatrixWorld();
     vpKini.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
@@ -544,11 +608,15 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     blur.uniforms.uFokus.value = camera.position.distanceTo(lihat);
     // Butir berganti hanya saat adegan digambar ulang; diam berarti butir ikut diam.
     if (!kurangiGerak) blur.uniforms.uBenih.value = (blur.uniforms.uBenih.value + 37.13) % 1000;
+    uji?.mulai("adegan");
     renderer.setRenderTarget(target);
     renderer.render(scene, camera);
+    uji?.mulai("ao");
     if (aoAktif) ao.render(renderer, hasilAO);
+    uji?.mulai("layar");
     renderer.setRenderTarget(null);
     renderer.render(adeganLayar, kameraLayar);
+    uji?.selesai();
     vpLalu.copy(vpKini);
   };
 
@@ -620,37 +688,64 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   ro.observe(wadah);
   ukur();
 
-  // Penjaga kualitas: bila median bingkai selama kamera terbang di atas 26 ms (di bawah ~38 fps)
-  // dua kali berturut-turut, resolusi diturunkan bertahap. Bingkai di atas 100 ms diabaikan:
-  // itu tugas panjang di luar dunia (seksi lain menyiapkan dirinya), bukan GPU yang kewalahan.
+  // Penjaga kualitas ala game mobile (skala resolusi dinamis, pola PerformanceMonitor drei dan
+  // panduan mobile Unity/Unreal, riset 19 Nov 2026): bingkai yang benar-benar digambar dikumpulkan
+  // per 30; median di atas 22 ms (di bawah ~45 fps) menurunkan resolusi 0,1, tiga jendela berturut
+  // di bawah 13 ms menaikkannya lagi sampai batas awal. Sesudah empat kali bolak-balik resolusi
+  // dikunci di nilai terendah yang stabil. Perubahan menunggu kamera berhenti terbang, karena
+  // realokasi render target di tengah gerak itu sendiri menyendat. Sampel AO tidak pernah diubah
+  // (mengubahnya mengompilasi ulang shader N8AO); di batas bawah AO dimatikan dengan melewati
+  // lintasannya. Bingkai di atas 100 ms diabaikan: itu tugas panjang di luar dunia.
+  const rasioMaks = rasio;
+  const rasioMin = hp ? 0.6 : 0.75;
   const lambat = [];
-  let buruk = 0;
+  let cepat = 0;
+  let arahLalu = 0;
+  let bolakBalik = 0;
+  let tertunda = 0;
   const jagaKualitas = (dt) => {
     if (dt > 100) return;
     lambat.push(dt);
-    if (lambat.length < 24) return;
+    if (lambat.length < 30) return;
     lambat.sort((a, b) => a - b);
     const median = lambat[lambat.length >> 1];
     lambat.length = 0;
-    buruk = median > 26 ? buruk + 1 : 0;
-    if (buruk >= 2 && rasio > 0.75) {
-      buruk = 0;
-      rasio = Math.max(0.75, rasio - 0.2);
-      // Yang pertama dikorbankan AO: sampelnya dikurangi, lalu dimatikan.
-      if (ao.configuration.aoSamples > 8) {
-        ao.configuration.aoSamples = 8;
-        ao.configuration.denoiseSamples = 4;
-      } else if (aoAktif) {
+    if (bolakBalik >= 4) return;
+    if (median > 22) {
+      cepat = 0;
+      tertunda = -1;
+    } else if (median < 13) {
+      cepat += 1;
+      if (cepat >= 3 && rasio < rasioMaks) {
+        cepat = 0;
+        tertunda = 1;
+      }
+    } else cepat = 0;
+  };
+  const terapkanKualitas = () => {
+    if (!tertunda || blend) return;
+    const arah = tertunda;
+    tertunda = 0;
+    if (arah < 0 && rasio <= rasioMin) {
+      if (aoAktif) {
         aoAktif = false;
         blur.uniforms.tWarna.value = target.texture;
+        kotor = true;
       }
-      ukur();
+      return;
     }
+    rasio = Math.min(rasioMaks, Math.max(rasioMin, +(rasio + arah * 0.1).toFixed(2)));
+    if (arahLalu && arah !== arahLalu) bolakBalik += 1;
+    arahLalu = arah;
+    ukur();
   };
 
   // ---- Lup ---------------------------------------------------------------------------------
   let terlihat = true;
   let hangat = false;
+  let bingkaiBayang = 0;
+  let ayunMulai = 0;
+  let bayangGerak = false;
   let raf = 0;
   let lalu = performance.now();
   const bingkai = (now) => {
@@ -690,11 +785,31 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       // Kerucut berkas lampu gantung hanya untuk gambar lebar; dari dekat ia jadi segitiga putih.
       nyala.kerucut(a.id === "dinding");
       // Bayangan kunci digambar ulang hanya saat benda babak bergerak mengikuti gulir.
-      if (Math.abs(geserTujuan - geser) > 1e-4 || kotor) kunciLampu.shadow.needsUpdate = true;
+      // Di HP peta bayangan itu (adegan digambar sekali lagi) diperbarui tiap bingkai kedua
+      // selama benda bergerak, dan sekali lagi saat berhenti.
+      const geraknya = Math.abs(geserTujuan - geser) > 1e-4;
+      if ((geraknya && (!hp || ++bingkaiBayang % 2 === 0)) || (!geraknya && bayangGerak) || kotor) kunciLampu.shadow.needsUpdate = true;
+      bayangGerak = geraknya;
     } else {
       redup(1);
       nyala.kerucut(true);
     }
+    // Lonceng pintu berayun teredam begitu kamera tiba (pegas sekitar 4 Hz, habis dalam 2,5 s);
+    // pemukul tertinggal sedikit di belakang cangkir.
+    if (a.id === "pintu" && !blend && !kurangiGerak) {
+      if (!ayunMulai) ayunMulai = now;
+      const t = (now - ayunMulai) / 1000;
+      if (t < 2.6) {
+        const amp = 0.16 * Math.exp(-1.7 * t);
+        lonceng.rotation.x = amp * Math.sin(2 * Math.PI * 4.1 * t);
+        pemukulLonceng.rotation.x = amp * 1.6 * Math.sin(2 * Math.PI * 4.1 * t - 0.9);
+        bergerak = true;
+      } else if (lonceng.rotation.x !== 0) {
+        lonceng.rotation.x = 0;
+        pemukulLonceng.rotation.x = 0;
+        kotor = true;
+      }
+    } else if (a.id !== "pintu") ayunMulai = 0;
     if (langkahRedup(dt)) bergerak = true;
     if (nyala.langkah(dt)) bergerak = true;
     // Fokus ke benda babak hanya saat kamera sudah mendarat; selama terbang yang bekerja motion blur.
@@ -714,6 +829,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     // Penjaga kualitas juga saat menggambar terus (piringan berputar, geser gulir), bukan hanya
     // saat terbang: di sana lag terasa paling lama.
     if (bergerak) jagaKualitas(dt * 1000);
+    terapkanKualitas();
     kotor = false;
   };
 
@@ -1284,11 +1400,10 @@ function buatStiker() {
 function buatNyala(lampu) {
   const grup = new THREE.Group();
   const radial = teksturRadial();
-  const tegak = teksturTegak();
   const tambah = (o) => ({ transparent: true, depthWrite: false, fog: false, blending: THREE.AdditiveBlending, ...o });
   const bola = new THREE.MeshBasicMaterial({ fog: false });
   const halo = new THREE.SpriteMaterial(tambah({ map: radial, opacity: 0.55 }));
-  const kerucut = new THREE.MeshBasicMaterial(tambah({ map: tegak, opacity: 0.07, side: THREE.DoubleSide }));
+  const kerucut = bahanBerkas();
   const kolam = new THREE.MeshBasicMaterial(tambah({ map: radial, opacity: 0.22 }));
   const geoBola = new THREE.SphereGeometry(0.035, 16, 10);
   let kuatBerkas = 1;
@@ -1298,7 +1413,7 @@ function buatNyala(lampu) {
     bola.color.setHex(warna).multiplyScalar(6 * Math.max(0.15, redupKini));
     for (const [m, dasar] of [
       [halo, 0.55],
-      [kerucut, 0.07 * kerucutKini],
+      [kerucut, 0.16 * kerucutKini],
       [kolam, 0.22],
     ]) {
       m.color.setHex(warna);
@@ -1379,19 +1494,79 @@ function teksturRadial() {
   return new THREE.CanvasTexture(kv);
 }
 
-// Gradasi tegak untuk kerucut berkas: terang di dekat kap, memudar ke lantai.
-function teksturTegak() {
-  const kv = document.createElement("canvas");
-  kv.width = 4;
-  kv.height = 128;
-  const c = kv.getContext("2d");
-  const gr = c.createLinearGradient(0, 0, 0, 128);
-  gr.addColorStop(0, "rgba(255,255,255,1)");
-  gr.addColorStop(0.6, "rgba(255,255,255,0.35)");
-  gr.addColorStop(1, "rgba(255,255,255,0)");
-  c.fillStyle = gr;
-  c.fillRect(0, 0, 4, 128);
-  return new THREE.CanvasTexture(kv);
+// Kaca bening tanpa transmission (riset 19 Nov 2026): putih, hampir tak terlihat dari depan,
+// pantulan menguat di sudut miring (fresnel Schlick, F0 0,04), dan kilau lampu tidak ikut redup
+// oleh opasitas rendah. Dulu biru #9fb4c8 rata 18% di seluruh bidang: terbaca seperti air.
+function bahanKaca() {
+  const m = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.06, depthWrite: false });
+  m.onBeforeCompile = (sh) => {
+    sh.fragmentShader = sh.fragmentShader.replace(
+      "#include <opaque_fragment>",
+      `float frKaca = 0.04 + 0.96 * pow(1.0 - abs(dot(normal, geometryViewDir)), 5.0);
+      diffuseColor.a = clamp(diffuseColor.a + frKaca * 0.55, 0.0, 0.85);
+      outgoingLight += reflectedLight.directSpecular * (1.0 / max(diffuseColor.a, 0.08) - 1.0) * 0.6;
+      #include <opaque_fragment>`,
+    );
+  };
+  m.customProgramCacheKey = () => "kaca-fresnel";
+  return m;
+}
+
+// Berkas cahaya volumetrik palsu (pola SpotLightMaterial drei, riset 19 Nov 2026): tepi kerucut
+// memudar menurut sudut pandang, jadi tidak ada garis siluet keras; paling terang dekat kap,
+// hilang sebelum lantai; debu halus statis supaya terbaca sebagai udara berdebu, bukan kaca
+// buram. Dulu MeshBasic bergradasi tegak dengan tepi tajam, terbaca sebagai benda terpisah.
+// `color` dan `opacity` dipetakan ke uniform supaya kode yang menyetel MeshBasic tetap berlaku.
+function bahanBerkas() {
+  const u = { uWarna: { value: new THREE.Color() }, uOpasitas: { value: 0.16 } };
+  const m = new THREE.ShaderMaterial({
+    uniforms: u,
+    vertexShader: `
+      varying vec3 vNormal;
+      varying vec3 vPos;
+      varying vec3 vDunia;
+      varying float vTinggi;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        vec4 p = modelViewMatrix * vec4(position, 1.0);
+        vPos = p.xyz;
+        vDunia = (modelMatrix * vec4(position, 1.0)).xyz;
+        vTinggi = uv.y;
+        gl_Position = projectionMatrix * p;
+      }`,
+    fragmentShader: `
+      uniform vec3 uWarna;
+      uniform float uOpasitas;
+      varying vec3 vNormal;
+      varying vec3 vPos;
+      varying vec3 vDunia;
+      varying float vTinggi;
+      float acak(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }
+      float derau(vec3 p) {
+        vec3 i = floor(p);
+        vec3 f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        float a = mix(mix(acak(i), acak(i + vec3(1, 0, 0)), f.x), mix(acak(i + vec3(0, 1, 0)), acak(i + vec3(1, 1, 0)), f.x), f.y);
+        float b = mix(mix(acak(i + vec3(0, 0, 1)), acak(i + vec3(1, 0, 1)), f.x), mix(acak(i + vec3(0, 1, 1)), acak(i + vec3(1, 1, 1)), f.x), f.y);
+        return mix(a, b, f.z);
+      }
+      void main() {
+        float tepi = pow(abs(dot(normalize(vNormal), normalize(-vPos))), 3.0);
+        float jatuh = pow(vTinggi, 1.8) * smoothstep(0.0, 0.25, vTinggi);
+        float debu = 0.78 + 0.32 * derau(vDunia * 7.0) + 0.12 * derau(vDunia * 23.0);
+        // Dari dekat (kamera di dalam atau di tepi berkas) memudar, bukan jadi bidang putih.
+        float dekat = smoothstep(0.4, 1.6, length(vPos));
+        gl_FragColor = vec4(uWarna, uOpasitas * tepi * jatuh * debu * dekat);
+      }`,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+    side: THREE.DoubleSide,
+    fog: false,
+  });
+  m.color = u.uWarna.value;
+  Object.defineProperty(m, "opacity", { get: () => u.uOpasitas.value, set: (v) => (u.uOpasitas.value = v) });
+  return m;
 }
 
 // Bayangan kontak lembut: gradasi radial, bukan peta bayangan, supaya murah di HP.
@@ -1405,6 +1580,27 @@ function teksturBayang() {
   c.fillStyle = gr;
   c.fillRect(0, 0, 128, 128);
   return new THREE.CanvasTexture(kv);
+}
+
+// Papan gantung "OPEN": huruf tebal di papan krem, bingkai tipis.
+function teksturPapanBuka() {
+  const kv = document.createElement("canvas");
+  kv.width = 300;
+  kv.height = 180;
+  const c = kv.getContext("2d");
+  c.fillStyle = "#e9dcc2";
+  c.fillRect(0, 0, 300, 180);
+  c.strokeStyle = "#7a2a22";
+  c.lineWidth = 6;
+  c.strokeRect(10, 10, 280, 160);
+  c.fillStyle = "#7a2a22";
+  c.font = "bold 84px Georgia, serif";
+  c.textAlign = "center";
+  c.textBaseline = "middle";
+  c.fillText("OPEN", 150, 96);
+  const t = new THREE.CanvasTexture(kv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
 }
 
 // Jalan di balik kaca pintu: malam dengan lampu jalan, atau pagi yang terang.
@@ -1428,12 +1624,19 @@ function teksturJalan(terang) {
   c.fillStyle = terang ? "#cbbfa8" : "#121826";
   c.fillRect(0, 40, 128, 150);
   const acak = mulberry(5);
-  for (let y = 52; y < 180; y += 22)
-    for (let x = 8; x < 120; x += 20) {
-      if (acak() < (terang ? 0.9 : 0.6)) continue;
-      c.fillStyle = terang ? "#e9dfcc" : "#e8b36a";
-      c.fillRect(x, y, 10, 12);
+  // Jendela kecil berkusen, redup, dan sedikit buram (jauh di seberang jalan). Dulu kotak oranye
+  // terang tanpa kusen: dari dalam toko terbaca seperti kertas tempel di kaca pintu.
+  c.filter = "blur(0.8px)";
+  for (let y = 56; y < 176; y += 24)
+    for (let x = 10; x < 118; x += 22) {
+      if (acak() < (terang ? 0.92 : 0.7)) continue;
+      c.fillStyle = terang ? "rgba(233,223,204,0.7)" : "rgba(214,160,92,0.55)";
+      c.fillRect(x, y, 7, 9);
+      c.fillStyle = terang ? "rgba(160,150,130,0.6)" : "rgba(18,24,38,0.9)";
+      c.fillRect(x + 3, y, 1, 9);
+      c.fillRect(x, y + 4, 7, 1);
     }
+  c.filter = "none";
   if (!terang) {
     const lampu = c.createRadialGradient(104, 196, 0, 104, 196, 26);
     lampu.addColorStop(0, "rgba(255,210,150,0.95)");
@@ -1453,5 +1656,41 @@ function mulberry(a) {
     let t = Math.imul(a ^ (a >>> 15), 1 | a);
     t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// Antrean timer query GPU per lintasan; hasil dibaca beberapa bingkai kemudian (tanpa menunggu GPU).
+function buatUjiGpu(renderer) {
+  const gl = renderer.getContext();
+  const ext = gl.getExtension("EXT_disjoint_timer_query_webgl2");
+  const hasil = { adegan: [], ao: [], layar: [] };
+  if (!ext) return { hasil, mulai() {}, selesai() {} };
+  const antre = [];
+  let aktif = null;
+  const tutup = () => {
+    if (!aktif) return;
+    gl.endQuery(ext.TIME_ELAPSED_EXT);
+    antre.push(aktif);
+    aktif = null;
+  };
+  const baca = () => {
+    while (antre.length && gl.getQueryParameter(antre[0].q, gl.QUERY_RESULT_AVAILABLE)) {
+      const { q, nama } = antre.shift();
+      if (!gl.getParameter(ext.GPU_DISJOINT_EXT)) hasil[nama].push(gl.getQueryParameter(q, gl.QUERY_RESULT) / 1e6);
+      gl.deleteQuery(q);
+    }
+  };
+  return {
+    hasil,
+    mulai(nama) {
+      tutup();
+      const q = gl.createQuery();
+      gl.beginQuery(ext.TIME_ELAPSED_EXT, q);
+      aktif = { q, nama };
+    },
+    selesai() {
+      tutup();
+      baca();
+    },
   };
 }

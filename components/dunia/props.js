@@ -185,9 +185,14 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
       const lembar = kotak(0.21, 0.002, 0.297, b.kertas, -0.34, 0.743 + i * 0.002, -0.02, g, 0.0008);
       lembar.rotation.y = 0.2 - i * 0.08;
     }
-    const cap = new THREE.Mesh(new THREE.RingGeometry(0.024, 0.034, 32), new THREE.MeshBasicMaterial({ color: 0xc9443a, transparent: true, opacity: 0, toneMapped: false }));
-    cap.rotation.x = -Math.PI / 2;
-    cap.position.set(0.06, 0.776, 0.13);
+    // Bekas cap di kertas: tinta belang dengan tepi lebih gelap, bukan cincin sempurna. Diterangi
+    // seperti kertasnya (MeshStandard), sedikit di atas permukaan supaya tidak berkedip.
+    const cap = new THREE.Mesh(
+      new THREE.PlaneGeometry(0.058, 0.058),
+      new THREE.MeshStandardMaterial({ map: teksturCap(), transparent: true, opacity: 0, roughness: 0.85, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2 }),
+    );
+    cap.rotation.set(-Math.PI / 2, 0, 0.07);
+    cap.position.set(0.06, 0.7765, 0.13);
     g.add(cap);
     const stempel = new THREE.Group();
     tabung(0.028, 0.025, b.karet, 0, 0.0125, 0, stempel);
@@ -197,12 +202,46 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     stempel.add(kepala);
     stempel.position.set(0.32, 0.74, -0.14);
     g.add(stempel);
+    // Bantalan tinta: kotak logam rendah, permukaan bantalan merah gelap.
     tabung(0.04, 0.012, new THREE.MeshStandardMaterial({ color: 0x8c2a22, roughness: 0.8 }), 0.34, 0.746, 0.05, g);
     gelasKopi(-0.42, 0.74, 0.18, g);
+    // Gerak stempel sungguhan (riset 19 Nov 2026): tepuk bantalan dua kali, bawa melengkung ke
+    // atas kertas, turun lurus dan melambat, karet tertekan sekitar 1 mm dan ditahan diam, lalu
+    // diangkat lurus dan diletakkan kembali. Tidak digoyang: goyangan membuat cap ganda.
+    const DIAM = [0.32, 0.74, -0.14];
+    const PAD = [0.34, 0.752, 0.05];
+    const KERTAS = [0.06, 0.7765, 0.13];
+    const lerp3 = (a, b, t) => a.map((x, i) => x + (b[i] - x) * t);
+    const fase = (u, a, b) => Math.min(1, Math.max(0, (u - a) / (b - a)));
+    const lengkung = (a, b, t, naik) => {
+      const p = lerp3(a, b, halus(t));
+      p[1] += naik * Math.sin(Math.PI * t);
+      return p;
+    };
     momen.rencana = (u) => {
-      cap.material.opacity = halus((u - 0.5) / 0.06) * 0.85;
-      const tekan = Math.sin(Math.PI * Math.min(1, Math.max(0, (u - 0.4) / 0.2)));
-      stempel.position.set(0.32 + (0.06 - 0.32) * tekan, 0.74 + 0.07 * tekan, -0.14 + 0.27 * tekan);
+      let p = DIAM;
+      let tekan = 0;
+      if (u < 0.3) p = DIAM;
+      else if (u < 0.35) p = lengkung(DIAM, [PAD[0], PAD[1] + 0.03, PAD[2]], fase(u, 0.3, 0.35), 0.05);
+      else if (u < 0.41) {
+        // Dua tepukan pendek ke bantalan.
+        const t = fase(u, 0.35, 0.41) * 2;
+        p = [PAD[0], PAD[1] + 0.03 * (1 - Math.sin(Math.PI * (t % 1))), PAD[2]];
+      } else if (u < 0.47) p = lengkung([PAD[0], PAD[1] + 0.03, PAD[2]], [KERTAS[0], KERTAS[1] + 0.05, KERTAS[2]], fase(u, 0.41, 0.47), 0.06);
+      else if (u < 0.5) {
+        // Turun lurus, melambat sampai menyentuh.
+        const t = fase(u, 0.47, 0.5);
+        p = [KERTAS[0], KERTAS[1] + 0.05 * (1 - t) * (1 - t), KERTAS[2]];
+      } else if (u < 0.57) {
+        p = KERTAS;
+        tekan = Math.min(1, fase(u, 0.5, 0.51) * 1);
+      } else if (u < 0.62) {
+        const t = fase(u, 0.57, 0.62);
+        p = [KERTAS[0], KERTAS[1] + 0.06 * t * t, KERTAS[2]];
+      } else if (u < 0.7) p = lengkung([KERTAS[0], KERTAS[1] + 0.06, KERTAS[2]], DIAM, fase(u, 0.62, 0.7), 0.03);
+      stempel.position.set(p[0], p[1] - 0.001 * tekan, p[2]);
+      stempel.scale.y = 1 - 0.012 * tekan;
+      cap.material.opacity = u >= 0.505 ? 1 : 0;
     };
     tambahBayang(-4.5, -1.4, 0.7);
   }
@@ -624,12 +663,22 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
       pk.add(k);
     }
     grup.add(pk);
+    const tutupPeredam = (x) => {
+      const t = Math.min(1, Math.max(0, x));
+      // 0..0,5: jatuh dipercepat sampai sisa 22%; 0,5..0,92: direm peredam; lalu pantul 1 derajat.
+      if (t < 0.5) return 0.78 * (t / 0.5) ** 2;
+      if (t < 0.92) return 0.78 + 0.22 * (1 - (1 - (t - 0.5) / 0.42) ** 2);
+      return 1 - 0.02 * Math.sin(Math.PI * ((t - 0.92) / 0.08));
+    };
     momen.aman = (u) => {
       // Tutup kaca yang terangkat sedikit turun menutup, lalu lengkung gembok turun dan mengunci.
       // Engsel di tepi belakang (z +D/2), tepi depan di -z: sudut positif mengangkat tepi depan.
       // Dulu negatif, jadi tutup yang "terbuka" malah menembus ke dalam kaca.
-      tutup.rotation.x = 0.35 * (1 - halus((u - 0.16) / 0.18));
-      lengkung.position.y = 0.019 + 0.018 * (1 - halus((u - 0.4) / 0.08));
+      // Tutup berperedam (riset 19 Nov 2026): jatuh bebas dulu, direm di 20 derajat terakhir,
+      // satu pantulan kecil saat mendarat. Dulu 20 derajat dalam rentang gulir 0,18: terlalu cepat.
+      tutup.rotation.x = 0.9 * (1 - tutupPeredam((u - 0.1) / 0.32));
+      // Gembok baru dikunci sesudah tutup rapat: lengkungnya turun masuk badan.
+      lengkung.position.y = 0.019 + 0.018 * (1 - halus((u - 0.48) / 0.1));
     };
     momen.aman(0);
   }
@@ -709,6 +758,63 @@ function teksturAlur() {
     c.arc(128, 128, r, 0, Math.PI * 2);
     c.stroke();
   }
+  const t = new THREE.CanvasTexture(kv);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+// Bekas cap tinta "disetujui": cincin ganda dan tanda centang. Tinta seperti cap karet asli
+// (riset 19 Nov 2026, efek squeegee): tepi goresan lebih gelap, tengahnya belang, ada bintik
+// kosong, satu sisi sedikit lebih pucat. Satu kali, 256 px, saat props dibuat.
+function teksturCap() {
+  const kv = document.createElement("canvas");
+  kv.width = kv.height = 256;
+  const c = kv.getContext("2d", { willReadFrequently: true });
+  const goresan = (lebar, warna) => {
+    c.strokeStyle = warna;
+    c.lineWidth = lebar;
+    c.lineCap = "round";
+    c.lineJoin = "round";
+    c.beginPath();
+    c.arc(128, 128, 112, 0, Math.PI * 2);
+    c.stroke();
+    c.beginPath();
+    c.arc(128, 128, 94, 0, Math.PI * 2);
+    c.stroke();
+    c.beginPath();
+    c.moveTo(84, 132);
+    c.lineTo(114, 162);
+    c.lineTo(172, 96);
+    c.stroke();
+  };
+  goresan(13, "rgb(66,4,12)");
+  goresan(7, "rgb(92,8,18)");
+  const im = c.getImageData(0, 0, 256, 256);
+  const d = im.data;
+  let benih = 7;
+  const acak = () => ((benih = (benih * 16807) % 2147483647) / 2147483647);
+  const derau = new Float32Array(32 * 32).map(acak);
+  const halusDerau = (x, y) => {
+    const gx = (x / 256) * 31;
+    const gy = (y / 256) * 31;
+    const i = Math.floor(gx);
+    const j = Math.floor(gy);
+    const fx = gx - i;
+    const fy = gy - j;
+    const v = (a, b) => derau[Math.min(31, b) * 32 + Math.min(31, a)];
+    return (v(i, j) * (1 - fx) + v(i + 1, j) * fx) * (1 - fy) + (v(i, j + 1) * (1 - fx) + v(i + 1, j + 1) * fx) * fy;
+  };
+  for (let y = 0; y < 256; y++) {
+    for (let x = 0; x < 256; x++) {
+      const k = (y * 256 + x) * 4;
+      if (!d[k + 3]) continue;
+      const belang = 0.72 + 0.28 * halusDerau(x, y);
+      const sisi = 0.8 + 0.2 * (x / 256);
+      const kosong = acak() < 0.035 ? 0.15 : 1;
+      d[k + 3] = Math.round(d[k + 3] * Math.min(1, belang * sisi * kosong + 0.05));
+    }
+  }
+  c.putImageData(im, 0, 0);
   const t = new THREE.CanvasTexture(kv);
   t.colorSpace = THREE.SRGBColorSpace;
   return t;

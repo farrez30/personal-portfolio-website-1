@@ -460,3 +460,14 @@
     top: 4.15rem;
   }
 }
+
+/* Di HP backdrop-filter di atas kanvas dunia yang terus berubah memaksa blur ulang tiap bingkai
+   di compositor (lihat bilah.css). */
+@media (pointer: coarse) {
+  .vinyl-player,
+  .vinyl-reopen {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: color-mix(in srgb, var(--bg-2) 96%, transparent);
+  }
+}

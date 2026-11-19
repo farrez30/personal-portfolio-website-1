@@ -80,3 +80,10 @@ test("kanvas yang dibaca pikselnya tinggal di CPU, tanpa membaca kanvas halaman 
   for (const arg of buat) assert.match(arg, /, true$/, `kanvas(${arg}) dibaca tanpa willReadFrequently`);
   assert.doesNotMatch(gambar, /terangArea\(g,/);
 });
+
+test("satu buklet disimpan sebagai penjaga program shader, tidak dibuang", () => {
+  // Tanpa penjaga, membuang buklet terakhir menghapus programnya dan album berikutnya
+  // mengompilasi ulang buklet dan bayangannya (415 ms beku saat melompat ke rak).
+  const lepas = adegan.slice(adegan.indexOf("const lepasBuklet = (b) => {"));
+  assert.match(lepas.slice(0, 300), /if \(!penjagaProgram\) \{\s*penjagaProgram = b;\s*return;\s*\}/);
+});
