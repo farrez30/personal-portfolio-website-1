@@ -87,3 +87,11 @@ test("satu buklet disimpan sebagai penjaga program shader, tidak dibuang", () =>
   const lepas = adegan.slice(adegan.indexOf("const lepasBuklet = (b) => {"));
   assert.match(lepas.slice(0, 300), /if \(!penjagaProgram\) \{\s*penjagaProgram = b;\s*return;\s*\}/);
 });
+
+test("miring kursor dijepit ke kanvas dan mati saat halaman digulir", () => {
+  // Kursor jauh di luar kanvas dulu memberi nilai belasan: kotak depan miring sampai terbalik.
+  assert.match(adegan, /k_\.kursor\.y = Math\.max\(-1, Math\.min\(1, y\)\);/);
+  assert.match(adegan, /k_\.kursor\.ada = ev\.pointerType === "mouse" && Math\.abs\(x\) <= 1 && Math\.abs\(y\) <= 1;/);
+  assert.match(adegan, /window\.addEventListener\("scroll", saatGulir, \{ passive: true \}\);/);
+  assert.match(adegan, /window\.removeEventListener\("scroll", saatGulir\);/);
+});

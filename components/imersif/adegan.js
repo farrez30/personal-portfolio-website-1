@@ -1329,9 +1329,14 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   };
   const gerak = (ev) => {
     const r = kanvas.getBoundingClientRect();
-    k_.kursor.x = ((ev.clientX - r.left) / r.width) * 2 - 1;
-    k_.kursor.y = ((ev.clientY - r.top) / r.height) * 2 - 1;
-    k_.kursor.ada = ev.pointerType === "mouse";
+    // Dijepit ke kanvas dan hanya berlaku saat kursor di atasnya. Dulu dihitung juga saat rak masih
+    // jauh di luar layar (pointermove dipasang di window): nilainya belasan, dan begitu rak masuk
+    // layar kotak depan miring sampai terbalik dari atas atau bawah (masukan Farrez 19 Nov 2026).
+    const x = ((ev.clientX - r.left) / r.width) * 2 - 1;
+    const y = ((ev.clientY - r.top) / r.height) * 2 - 1;
+    k_.kursor.x = Math.max(-1, Math.min(1, x));
+    k_.kursor.y = Math.max(-1, Math.min(1, y));
+    k_.kursor.ada = ev.pointerType === "mouse" && Math.abs(x) <= 1 && Math.abs(y) <= 1;
     if (!seret) {
       if (ev.pointerType !== "mouse" || ev.target !== kanvas) return;
       const obj = kena(ev.clientX, ev.clientY)?.object ?? null;
@@ -1473,6 +1478,10 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
   window.addEventListener("pointermove", gerak);
   window.addEventListener("pointerup", naik);
   kanvas.addEventListener("pointerleave", keluar);
+  // Gulir halaman menggeser kanvas di bawah kursor yang diam: posisi lama tidak berlaku lagi
+  // sampai kursor bergerak.
+  const saatGulir = () => (k_.kursor.ada = false);
+  window.addEventListener("scroll", saatGulir, { passive: true });
   // Di halaman utuh, roda menggulir halaman; gulir itulah yang memindah rak.
   if (!gulirHalaman) kanvas.addEventListener("wheel", putarRoda, { passive: false });
 
@@ -1687,6 +1696,7 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
       document.removeEventListener("visibilitychange", saatTersembunyi);
       kanvas.removeEventListener("pointerdown", turun);
       window.removeEventListener("pointermove", gerak);
+      window.removeEventListener("scroll", saatGulir);
       window.removeEventListener("pointerup", naik);
       kanvas.removeEventListener("pointerleave", keluar);
       kanvas.removeEventListener("wheel", putarRoda);
