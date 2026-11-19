@@ -6,7 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
-  max-width: min(22rem, calc(100vw - 2.5rem));
+  max-width: min(25rem, calc(100vw - 2.5rem));
   padding: 0.7rem 0.9rem 0.7rem 0.7rem;
   border-radius: 1.1rem;
   background: color-mix(in srgb, var(--bg-2) 85%, transparent);
@@ -146,7 +146,7 @@
   flex-direction: column;
   flex: 1 1 auto;
   min-width: 0;
-  max-width: 9.5rem;
+  max-width: 11rem;
   line-height: 1.25;
 }
 
@@ -174,8 +174,10 @@
   text-overflow: ellipsis;
 }
 
-.vinyl-meta__artist a {
-  color: inherit;
+.vinyl-meta__lisensi {
+  align-self: flex-start;
+  font-size: 0.66rem;
+  color: var(--ink-2);
   text-decoration: underline;
   text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
   text-underline-offset: 2px;

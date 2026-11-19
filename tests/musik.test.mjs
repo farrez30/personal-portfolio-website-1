@@ -80,7 +80,8 @@ test("pemutar memuat berkas hanya setelah ditekan, lalu lanjut ke lagu berikutny
   // Berkas rusak dilewati, tapi tidak berputar tanpa akhir saat semuanya gagal.
   assert.match(src, /if \(mauPutar\.current && gagalBeruntun\.current < LAGU\.length\) berikutnya\(\);/);
   // Atribusi terlihat selama lagu diputar.
-  assert.match(src, /\{lagu\.artis\}, <a href=\{lagu\.urlLisensi\}[^>]*>\{lagu\.lisensi === "Public domain" \? t\("domainPublik"\) : lagu\.lisensi\}<\/a>/);
+  assert.match(src, /<span className="vinyl-meta__artist" title=\{lagu\.artis\}>\{lagu\.artis\}<\/span>/);
+  assert.match(src, /<a className="vinyl-meta__lisensi" href=\{lagu\.urlLisensi\}[^>]*>\s*\{lagu\.lisensi === "Public domain" \? t\("domainPublik"\) : lagu\.lisensi\}\s*<\/a>/);
   assert.match(src, /"mediaSession" in navigator/);
 });
 

@@ -191,11 +191,13 @@ export default function PemutarMusik() {
 
           <div className="vinyl-meta" aria-live="polite">
             <small className="vinyl-meta__now">{jalan ? t("sedangDiputar") : t("siap")}</small>
-            <strong className="vinyl-meta__title">{lagu.judul}</strong>
-            {/* Nama pemain dan lisensinya: atribusi CC BY dan BY-SA selama lagu diputar. */}
-            <span className="vinyl-meta__artist">
-              {lagu.artis}, <a href={lagu.urlLisensi} target="_blank" rel="noopener noreferrer">{lagu.lisensi === "Public domain" ? t("domainPublik") : lagu.lisensi}</a>
-            </span>
+            <strong className="vinyl-meta__title" title={lagu.judul}>{lagu.judul}</strong>
+            {/* Nama pemain dan lisensinya: atribusi CC BY dan BY-SA selama lagu diputar. Lisensi
+                di baris sendiri supaya tidak ikut terpotong saat nama pemainnya panjang. */}
+            <span className="vinyl-meta__artist" title={lagu.artis}>{lagu.artis}</span>
+            <a className="vinyl-meta__lisensi" href={lagu.urlLisensi} target="_blank" rel="noopener noreferrer">
+              {lagu.lisensi === "Public domain" ? t("domainPublik") : lagu.lisensi}
+            </a>
           </div>
 
           <div className="vinyl-controls">
