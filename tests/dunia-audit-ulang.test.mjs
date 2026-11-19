@@ -113,9 +113,10 @@ test("sorot bab bentuk memakai lampu kunci, bukan bidang additive", () => {
   assert.doesNotMatch(p, /teksturSorot/);
   assert.match(bentuk, /sorot\.bentuk = \(\) =>/);
   const d = tanpaKomentar(baca("components/dunia/dunia.js"));
-  assert.match(d, /sorotKunci\(props\.sorot\(a\.id\)\);/);
-  // Kerucut menyempit dan lampu menguat sebanding tinggi angkat, lalu kembali saat pindah babak.
-  assert.match(d, /sudut: SUDUT_KUNCI \+ \(0\.3 - SUDUT_KUNCI\) \* k, kuat: 1 \+ 0\.8 \* k/);
+  assert.match(d, /const sasaran = props\.sorot\(a\.id\);\s*sorotKunci\(sasaran\);/);
+  // Highlight = outline, bukan cahaya (masukan Farrez 19 Nov): lampu kunci hanya pindah posisi
+  // untuk bayangan, sudut dan kekuatannya biasa.
+  assert.match(d, /sudut: SUDUT_KUNCI, kuat: 1 \};/);
   assert.match(d, /kunciLampu\.angle = kunciKini\.sudut;/);
   // Jumlah lampu tidak bertambah (lampu baru mengompilasi ulang semua shader).
   assert.equal((d.match(/new THREE\.SpotLight\(/g) ?? []).length, 2);
@@ -134,4 +135,37 @@ test("kaca: muka hampir tak terlihat, tepi panel hijau, vitrin dari panel tipis"
   assert.match(p, /const TEBAL = 0\.005;/);
   // Panel lebar mendapat muka kaca, sisi tipisnya tepi hijau.
   assert.match(p, /\[tepi, tepi, tepi, tepi, muka, muka\]/);
+});
+
+// Butir 2 (koreksi Farrez): benda terangkat ditandai outline menyala mengikuti siluetnya.
+test("outline benda terangkat: topeng siluet di lapis sendiri, tepi dilasi di lintasan layar", () => {
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  assert.match(d, /pasangGaris\(sasaran\);/);
+  // Topeng digambar sesudah adegan utama dan AO, dengan bahan putih dan hanya lapis garis.
+  assert.match(d, /if \(aoAktif\) ao\.render\(renderer, hasilAO\);\s*blur\.uniforms\.uGarisKuat\.value = garisKuat;\s*if \(garisKuat > 0\.001\) gambarTopeng\(\);/);
+  assert.match(d, /scene\.overrideMaterial = bahanTopeng;\s*camera\.layers\.set\(LAPIS_GARIS\);/);
+  assert.match(d, /camera\.layers\.mask = lapis;\s*scene\.overrideMaterial = null;/);
+  assert.match(d, /tepiGaris = \(clamp\(luar - isi, 0\.0, 1\.0\)/);
+  // Dicampur sesudah tone mapping supaya warnanya tetap jingga.
+  assert.match(d, /g = mix\(g, uGarisWarna, clamp\(tepiGaris, 0\.0, 1\.0\) \* 0\.9\);/);
+  // Dilepas selama terbang.
+  assert.match(d, /pasangGaris\(null\);/);
+  const p = tanpaKomentar(baca("components/dunia/props.js"));
+  assert.match(p, /benda: benda\.filter\(\(x\) => x\.t > 0\.001\)\.map\(\(x\) => x\.o\)/);
+});
+
+// Butir 3: benda bab bentuk berukuran nyata; brosur dan kotak software dibuat ulang.
+test("bab bentuk: brosur leaflet DL bertumpuk, kotak software dengan punggung, tingkat atas 14 cm", () => {
+  const mentah = baca("components/dunia/props.js");
+  const blok = tanpaKomentar(mentah.slice(mentah.indexOf("// ---- 03 bentuk"), mentah.indexOf("// ---- 04 fondasi")));
+  assert.match(blok, /kotak\(1\.2, 0\.3, 0\.14, b\.kayu, 0, 1\.01, -0\.15, g, 0\.01\);/);
+  assert.match(blok, /kotak\(0\.099, 0\.21, 0\.0009, b\.kertas/);
+  assert.match(blok, /const \[sampul, punggung\] = teksturKotakAplikasi\(\);/);
+  assert.match(blok, /new THREE\.BoxGeometry\(0\.178, 0\.229, 0\.051\)/);
+  assert.match(blok, /persegiBulat\(0\.0774, 0\.1611/);
+  // Laptop terbuka tidak menembus balok tingkat atas: tepi atas tutup di depan muka balok (z -0,08).
+  const zLaptop = Number(blok.match(/pasangBenda\(o, -0\.1, ([\d.]+)\);/)[1]);
+  const D = 0.214;
+  const engsel = zLaptop - D / 2 + 0.004;
+  assert.ok(engsel - D * Math.sin(0.2) > -0.08, "tutup laptop menembus balok tingkat atas");
 });

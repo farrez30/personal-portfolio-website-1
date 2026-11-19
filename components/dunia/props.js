@@ -269,74 +269,166 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     const g = new THREE.Group();
     g.position.set(-4.4, 0, 0.3);
     g.rotation.y = Math.PI / 2 - 0.2;
-    // Rak pajang bertingkat dua.
+    // Rak pajang bertingkat dua. Tingkat atas 14 cm (dulu 22): laptop 14 inci yang terbuka butuh
+    // kedalaman bebas 30 cm di depannya, tutupnya dulu menembus balok.
     kotak(1.2, 0.86, 0.44, b.kayu, 0, 0.43, 0, g, 0.01);
-    kotak(1.2, 0.3, 0.22, b.kayu, 0, 1.01, -0.11, g, 0.01);
+    kotak(1.2, 0.3, 0.14, b.kayu, 0, 1.01, -0.15, g, 0.01);
     const ATAS = 0.86;
     const benda = [];
-    // Tingkat bawah hanya setengah depannya yang bebas (z 0 sampai 0,22): di belakangnya balok
-    // tingkat atas. Benda yang melewatinya menembus kayu (terlihat di lembar kontak 19 Nov).
+    // Tingkat bawah bebas dari z -0,08 sampai 0,22: di belakangnya balok tingkat atas. Benda yang
+    // melewatinya menembus kayu (terlihat di lembar kontak 19 Nov).
     const pasangBenda = (o, x, z, angkat = 0.12, alas = ATAS) => {
       o.position.set(x, alas, z);
       g.add(o);
       o.updateMatrixWorld(true);
-      const batas = new THREE.Box3().setFromObject(o);
-      const ukuran = batas.getSize(new THREE.Vector3());
-      const pusat = o.worldToLocal(batas.getCenter(new THREE.Vector3()));
-      // Benda yang terangkat disorot lampu kunci sungguhan (dunia.js, sorotKunci), bukan bidang
-      // additive: elips di belakang dan kolam di bawahnya memotong balok rak dan terbaca sebagai
-      // benda terpisah (masukan Farrez 19 Nov, gambar 2, 4, 5). Titik sorot di tengah benda.
+      // Titik tengah benda: sasaran lampu kunci saat benda terangkat (dunia.js, sorotKunci).
       const titik = new THREE.Object3D();
-      titik.position.copy(pusat);
+      titik.position.copy(o.worldToLocal(new THREE.Box3().setFromObject(o).getCenter(new THREE.Vector3())));
       o.add(titik);
       benda.push({ o, titik, angkat, dasar: { y: alas, z, ry: o.rotation.y } });
       return o;
     };
-    const kotakLayar = (w, h, d, mBadan, wajah, induk) => {
+    // Benda nyata berukuran sebenarnya (riset audit ulang 19 Nov 2026, pratinjau disetujui Farrez
+    // dengan ubahan pada brosur dan kotak software). Dulu kotak polos dengan gambar layar.
+    const aluminium = new THREE.MeshStandardMaterial({ color: 0xb8bcc2, roughness: 0.35, metalness: 0.85 });
+    const rangka = new THREE.MeshStandardMaterial({ color: 0x2c3442, roughness: 0.3, metalness: 0.7 });
+    const kacaHitam = new THREE.MeshStandardMaterial({ color: 0x050608, roughness: 0.08 });
+    // Ponsel kelas menengah: 77 x 161 x 8,2 mm, sudut membulat, lubang kamera, tiga cincin kamera.
+    const ponsel = (peta) => {
       const o = new THREE.Group();
-      kotak(w, h, d, mBadan, 0, 0, 0, o, 0.006);
-      wajah.position.z = d / 2 + 0.0008;
-      o.add(wajah);
-      induk.add(o);
+      o.add(new THREE.Mesh(persegiBulat(0.0774, 0.1611, 0.0095, 0.0082), [kacaHitam, rangka]));
+      const l = layarKanvas(0.0718, 0.1555, peta, 0.92);
+      l.position.z = 0.0042;
+      o.add(l);
+      const lubang = new THREE.Mesh(new THREE.CircleGeometry(0.0016, 16), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+      lubang.position.set(0, 0.0735, 0.00425);
+      o.add(lubang);
+      for (let i = 0; i < 3; i++) tabung(0.0062, 0.0014, rangka, 0.024, 0.062 - i * 0.0155, -0.0048, o, 24).rotation.x = Math.PI / 2;
       return o;
     };
+    // Dudukan ponsel lipat aluminium (120 x 76 mm, pelat 2 mm): alas, lengan, sandaran yang
+    // bersandar ke belakang, bibir karet, dua engsel. Ponsel bersandar di atasnya.
     const ponselBerdiri = (peta) => {
       const o = new THREE.Group();
-      kotak(0.07, 0.012, 0.06, b.kayuTua, 0, 0.006, 0, o, 0.003);
-      const hp = kotakLayar(0.075, 0.155, 0.008, b.gelap, layarKanvas(0.068, 0.145, peta), o);
-      hp.position.set(0, 0.085, -0.005);
-      hp.rotation.x = -0.18;
+      const pelat = (w, h) => new THREE.Mesh(persegiBulat(w, h, 0.006, 0.0022, 0.0004), aluminium);
+      const alas = pelat(0.072, 0.085);
+      alas.rotation.x = -Math.PI / 2;
+      alas.position.y = 0.0011;
+      const lengan = pelat(0.06, 0.07);
+      lengan.position.set(0, 0.034, -0.03);
+      lengan.rotation.x = 0.25;
+      const sandaran = pelat(0.062, 0.075);
+      sandaran.position.set(0, 0.085, -0.028);
+      sandaran.rotation.x = -0.32;
+      o.add(alas, lengan, sandaran);
+      kotak(0.06, 0.009, 0.006, b.karet, 0, 0.052, -0.008, o, 0.002);
+      for (const [y, z] of [
+        [0.004, -0.04],
+        [0.066, -0.022],
+      ])
+        tabung(0.0035, 0.058, aluminium, 0, y, z, o, 14).rotation.z = Math.PI / 2;
+      const hp = ponsel(peta);
+      hp.rotation.x = -0.32;
+      hp.position.set(0, 0.133, -0.016);
+      o.add(hp);
       return o;
     };
-    // 1. Ponsel di dudukan kecil, layar dashboard stok.
+    // 1. Ponsel di dudukan, layar dashboard stok.
     pasangBenda(ponselBerdiri(teksturDashboard()), -0.42, 0.1);
-    // 2. Laptop terbuka, layar sistem kantor.
+    // 2. Laptop 14 inci (325 x 214 x 18 mm): alas 12 mm dengan dek tuts dan touchpad, engsel,
+    // tutup 5 mm terbuka sekitar 100 derajat, bezel tipis.
     {
       const o = new THREE.Group();
-      kotak(0.26, 0.014, 0.18, b.gelap, 0, 0.007, 0, o, 0.004);
-      kotak(0.23, 0.002, 0.09, b.gelap, 0, 0.0145, 0.02, o, 0.001);
-      const tutup = kotakLayar(0.26, 0.17, 0.008, b.gelap, layar(0.24, 0.15, "03-format-piringan.webp", 0.9), o);
-      tutup.position.set(0, 0.09, -0.09);
-      tutup.rotation.x = -0.15;
+      const abu = new THREE.MeshStandardMaterial({ color: 0x5b6068, roughness: 0.38, metalness: 0.75 });
+      const W = 0.325;
+      const D = 0.214;
+      const alas = new THREE.Mesh(persegiBulat(W, D, 0.008, 0.012, 0.0012), abu);
+      alas.rotation.x = -Math.PI / 2;
+      alas.position.y = 0.006;
+      o.add(alas);
+      const dek = new THREE.Mesh(new THREE.PlaneGeometry(W - 0.016, D - 0.012), new THREE.MeshStandardMaterial({ map: teksturDekLaptop(), roughness: 0.55, metalness: 0.5 }));
+      dek.rotation.x = -Math.PI / 2;
+      dek.position.set(0, 0.0121, 0.004);
+      o.add(dek);
+      tabung(0.005, W - 0.05, new THREE.MeshStandardMaterial({ color: 0x3a3e44, roughness: 0.4, metalness: 0.7 }), 0, 0.012, -D / 2 + 0.004, o, 16).rotation.z = Math.PI / 2;
+      const tutup = new THREE.Group();
+      tutup.position.set(0, 0.012, -D / 2 + 0.004);
+      tutup.rotation.x = -0.2;
+      const cangkang = new THREE.Mesh(persegiBulat(W, D, 0.008, 0.005, 0.0008), [new THREE.MeshStandardMaterial({ color: 0x0b0c0e, roughness: 0.2 }), abu]);
+      cangkang.position.y = D / 2;
+      tutup.add(cangkang);
+      const l = layar(W - 0.012, D - 0.022, "03-format-piringan.webp", 0.9);
+      l.position.set(0, D / 2 + 0.002, 0.0026);
+      tutup.add(l);
+      o.add(tutup);
       o.rotation.y = 0.08;
-      pasangBenda(o, -0.1, 0.13);
+      pasangBenda(o, -0.1, 0.11);
     }
-    // 3. Brosur promo dengan QR, lalu ponsel dengan chat WhatsApp: satu alur, dua benda.
+    // 3. Brosur promo, lalu ponsel dengan chat WhatsApp: satu alur, dua benda. Brosurnya tumpukan
+    // leaflet lipat tiga ukuran DL (99 x 210 mm) di kantong akrilik, tebal tumpukannya terlihat
+    // di atas, seperti rak brosur di meja kasir (masukan Farrez: dulu belum terbaca brosur).
     {
       const o = new THREE.Group();
-      const brosur = kotakLayar(0.105, 0.148, 0.003, b.kertas, layarKanvas(0.105, 0.148, teksturBrosur(), 0.92), o);
-      brosur.position.set(0, 0.074, 0);
-      brosur.rotation.x = -0.12;
+      const akrilik = new THREE.MeshStandardMaterial({ color: 0xf2f6f8, roughness: 0.05, transparent: true, opacity: 0.16, depthWrite: false });
+      const tepiAkrilik = new THREE.MeshBasicMaterial({ color: 0xd8f0ff, transparent: true, opacity: 0.5, toneMapped: false });
+      const sandar = new THREE.Group();
+      sandar.position.set(0, 0.003, -0.012);
+      sandar.rotation.x = -0.22;
+      for (let i = 0; i < 9; i++) {
+        // Lembar di belakang sedikit lebih tinggi dan tergeser, supaya tepinya bertumpuk.
+        const lembar = kotak(0.099, 0.21, 0.0009, b.kertas, 0.0006 * (i % 3), 0.107 + i * 0.0007, -0.001 * i, sandar, 0.0003);
+        lembar.rotation.z = 0.004 * (((i * 7) % 5) - 2);
+      }
+      const sampul = new THREE.Mesh(new THREE.PlaneGeometry(0.099, 0.21), new THREE.MeshStandardMaterial({ map: teksturBrosur(), roughness: 0.6 }));
+      sampul.position.set(0, 0.107, 0.0006);
+      sandar.add(sampul);
+      const kantong = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.07, 0.0018), akrilik);
+      kantong.position.set(0, 0.035, 0.006);
+      kantong.renderOrder = 4;
+      const punggung = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.17, 0.0018), akrilik);
+      punggung.position.set(0, 0.085, -0.012);
+      punggung.renderOrder = 4;
+      sandar.add(kantong, punggung);
+      for (const [w, h, x, y, z] of [
+        [0.11, 0.002, 0, 0.07, 0.006],
+        [0.002, 0.07, -0.055, 0.035, 0.006],
+        [0.002, 0.07, 0.055, 0.035, 0.006],
+        [0.11, 0.002, 0, 0.17, -0.012],
+      ]) {
+        const e = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.002), tepiAkrilik);
+        e.position.set(x, y, z);
+        sandar.add(e);
+      }
+      o.add(sandar);
+      const kaki = new THREE.Mesh(new THREE.BoxGeometry(0.11, 0.002, 0.055), akrilik);
+      kaki.position.set(0, 0.001, -0.004);
+      o.add(kaki);
       pasangBenda(o, 0.18, 0.08);
       const hp = ponselBerdiri(teksturChat());
       hp.rotation.y = -0.15;
       pasangBenda(hp, 0.33, 0.1);
     }
-    // 4. Kotak aplikasi tersegel di tingkat atas: hanya naik sedikit, paling akhir.
+    // 4. Kotak software tersegel di tingkat atas (big box 178 x 229 x 51 mm), diputar supaya
+    // punggung bertulisan dan tebalnya terlihat: kedalaman itu yang membuatnya terbaca kotak
+    // software, bukan tablet. Hanya naik sedikit, paling akhir.
     {
       const o = new THREE.Group();
-      kotakLayar(0.13, 0.17, 0.035, b.gelap, layarKanvas(0.12, 0.16, teksturKotakAplikasi(), 0.85), o).position.y = 0.085;
-      pasangBenda(o, 0.42, -0.1, 0.05, 1.16);
+      const [sampul, punggung] = teksturKotakAplikasi();
+      const muka = new THREE.MeshStandardMaterial({ map: sampul, roughness: 0.4 });
+      const sisi = new THREE.MeshStandardMaterial({ map: punggung, roughness: 0.45 });
+      const putih = new THREE.MeshStandardMaterial({ color: 0xece6da, roughness: 0.6 });
+      const atas = new THREE.MeshStandardMaterial({ color: 0x1f3550, roughness: 0.5 });
+      // Muka +z sampul, +x punggung (menghadap kanan rak, terlihat dari kamera di depan kiri).
+      const k = new THREE.Mesh(new THREE.BoxGeometry(0.178, 0.229, 0.051), [sisi, putih, atas, atas, muka, putih]);
+      k.position.y = 0.1145;
+      o.add(k);
+      // Plastik segel: kilau tipis di atas seluruh kotak.
+      const segel = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.231, 0.053), new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.02, transparent: true, opacity: 0.07, depthWrite: false }));
+      segel.position.y = 0.1145;
+      segel.renderOrder = 4;
+      o.add(segel);
+      o.rotation.y = -0.5;
+      pasangBenda(o, 0.42, -0.15, 0.05, 1.16);
     }
     // Tiap benda naik, bertahan, lalu turun saat benda berikut naik. Brosur dan ponsel chat naik
     // berurutan dan turun bersama (satu alur). Kotak aplikasi tetap terangkat sampai akhir.
@@ -374,7 +466,7 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
         w += x.t;
         kuat = Math.max(kuat, x.t);
       }
-      return w ? { p: titikSorot.divideScalar(w), kuat } : null;
+      return w ? { p: titikSorot.divideScalar(w), kuat, benda: benda.filter((x) => x.t > 0.001).map((x) => x.o) } : null;
     };
     momen.bentuk(0);
     grup.add(g);
@@ -962,6 +1054,26 @@ function teksturCap() {
   return t;
 }
 
+// Persegi bersudut membulat diekstrusi dengan bevel kecil (badan ponsel, laptop, pelat dudukan).
+// Bidang di XY, tebal sepanjang z dan berpusat di 0. Grup bahan: 0 muka, 1 sisi.
+function persegiBulat(w, h, r, tebal, bevel = 0.0006) {
+  const s = new THREE.Shape();
+  const x = -w / 2;
+  const y = -h / 2;
+  s.moveTo(x + r, y);
+  s.lineTo(x + w - r, y);
+  s.quadraticCurveTo(x + w, y, x + w, y + r);
+  s.lineTo(x + w, y + h - r);
+  s.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  s.lineTo(x + r, y + h);
+  s.quadraticCurveTo(x, y + h, x, y + h - r);
+  s.lineTo(x, y + r);
+  s.quadraticCurveTo(x, y, x + r, y);
+  const g = new THREE.ExtrudeGeometry(s, { depth: tebal - 2 * bevel, bevelEnabled: true, bevelThickness: bevel, bevelSize: bevel, bevelSegments: 3, curveSegments: 8 });
+  g.translate(0, 0, -tebal / 2 + bevel);
+  return g;
+}
+
 const kanvasTeks = (w, h) => {
   const kv = document.createElement("canvas");
   kv.width = w;
@@ -1015,43 +1127,139 @@ function teksturDashboard() {
   return jadiTekstur(kv);
 }
 
-// Brosur promo cetak: judul besar, gambar produk, ajakan chat, dan kode QR di pojok.
-function teksturBrosur() {
-  const [kv, c] = kanvasTeks(420, 592);
-  c.fillStyle = "#fff6e8";
-  c.fillRect(0, 0, 420, 592);
-  c.fillStyle = "#d9442f";
-  c.fillRect(0, 0, 420, 150);
-  c.fillStyle = "#fff6e8";
-  c.font = "800 64px sans-serif";
-  c.fillText("PROMO", 30, 90);
-  c.font = "600 30px sans-serif";
-  c.fillText("akhir pekan", 32, 130);
-  c.fillStyle = "#f2c14e";
+// Dek laptop: deret tuts gelap di pelat abu dan touchpad dengan tepi tipis. Satu tekstur, tanpa
+// geometri per tuts: dari jarak kamera yang terbaca hanya pola tuts dan kotak touchpad.
+function teksturDekLaptop() {
+  const [kv, c] = kanvasTeks(640, 420);
+  c.fillStyle = "#5d626a";
+  c.fillRect(0, 0, 640, 420);
+  c.fillStyle = "#1b1d21";
+  const lebarTuts = (640 - 80) / 15;
+  for (let r = 0; r < 6; r++)
+    for (let k = 0; k < 15; k++) {
+      // Baris bawah: spasi panjang di tengah.
+      if (r === 5 && k > 4 && k < 10) continue;
+      kotakBulat(c, 40 + k * lebarTuts + 2, 22 + r * 32, lebarTuts - 4, 26, 3);
+    }
+  kotakBulat(c, 40 + 5 * lebarTuts + 2, 22 + 5 * 32, lebarTuts * 5 - 4, 26, 3);
+  c.fillStyle = "#666b73";
+  kotakBulat(c, 200, 232, 240, 150, 8);
+  c.strokeStyle = "#4a4e55";
+  c.lineWidth = 2;
   c.beginPath();
-  c.arc(210, 300, 110, 0, Math.PI * 2);
-  c.fill();
-  c.fillStyle = "#2f3b52";
-  kotakBulat(c, 150, 240, 120, 120, 14);
-  c.font = "700 34px sans-serif";
-  c.fillText("Pesan lewat chat", 30, 455);
-  let benih = 11;
+  c.roundRect(200, 232, 240, 150, 8);
+  c.stroke();
+  return jadiTekstur(kv);
+}
+
+// QR hiasan: modul acak dengan tiga penanda sudut, seperti QR WhatsApp di brosur toko.
+function gambarQR(c, qx, qy, sel, benih = 11) {
   const acak = () => ((benih = (benih * 16807) % 2147483647) / 2147483647);
-  const qx = 300;
-  const qy = 478;
-  const sel = 9;
   c.fillStyle = "#ffffff";
   c.fillRect(qx - 6, qy - 6, sel * 11 + 12, sel * 11 + 12);
   c.fillStyle = "#111111";
   for (let i = 0; i < 11; i++) for (let j = 0; j < 11; j++) if (acak() < 0.48) c.fillRect(qx + i * sel, qy + j * sel, sel, sel);
-  for (const [a, d] of [[0, 0], [8, 0], [0, 8]]) {
+  for (const [a, d] of [
+    [0, 0],
+    [8, 0],
+    [0, 8],
+  ]) {
     c.fillStyle = "#111111";
     c.fillRect(qx + a * sel, qy + d * sel, sel * 3, sel * 3);
     c.fillStyle = "#ffffff";
-    c.fillRect(qx + a * sel + 3, qy + d * sel + 3, sel * 3 - 6, sel * 3 - 6);
+    c.fillRect(qx + a * sel + sel * 0.4, qy + d * sel + sel * 0.4, sel * 2.2, sel * 2.2);
     c.fillStyle = "#111111";
-    c.fillRect(qx + a * sel + 7, qy + d * sel + 7, sel * 3 - 14, sel * 3 - 14);
+    c.fillRect(qx + a * sel + sel * 0.9, qy + d * sel + sel * 0.9, sel * 1.2, sel * 1.2);
   }
+}
+
+// Sampul leaflet lipat tiga ukuran DL (99 x 210 mm), seperti brosur di meja kasir: foto produk di
+// atas, pita judul promo, diskon besar, harga coret, chip WhatsApp dan QR di bawah. Masukan Farrez
+// 19 Nov: brosur lama (kartu A6 dengan lingkaran) belum terbaca sebagai brosur.
+function teksturBrosur() {
+  const [kv, c] = kanvasTeks(400, 848);
+  c.fillStyle = "#fbf6ec";
+  c.fillRect(0, 0, 400, 848);
+  // Foto produk: meja kayu, tiga stoples kue dan satu tas belanja, cahaya dari kiri.
+  const foto = c.createLinearGradient(0, 0, 400, 360);
+  foto.addColorStop(0, "#f3d9b0");
+  foto.addColorStop(1, "#c98f5a");
+  c.fillStyle = foto;
+  c.fillRect(0, 0, 400, 360);
+  c.fillStyle = "#8a5a36";
+  c.fillRect(0, 280, 400, 80);
+  c.fillStyle = "rgba(0,0,0,0.18)";
+  for (const [x, w] of [
+    [40, 92],
+    [150, 92],
+    [262, 100],
+  ])
+    c.fillRect(x + 14, 286, w, 14);
+  for (const [x, w, h, tutup] of [
+    [40, 84, 150, "#d9442f"],
+    [150, 84, 120, "#2f6b57"],
+  ]) {
+    c.fillStyle = "rgba(255,255,255,0.55)";
+    kotakBulat(c, x, 286 - h, w, h, 14);
+    c.fillStyle = "#e7b36a";
+    kotakBulat(c, x + 8, 286 - h + 34, w - 16, h - 42, 10);
+    c.fillStyle = tutup;
+    kotakBulat(c, x - 4, 286 - h - 18, w + 8, 24, 6);
+  }
+  c.fillStyle = "#f4efe6";
+  c.beginPath();
+  c.moveTo(262, 286);
+  c.lineTo(276, 140);
+  c.lineTo(350, 140);
+  c.lineTo(362, 286);
+  c.fill();
+  c.strokeStyle = "#b9a98f";
+  c.lineWidth = 6;
+  c.beginPath();
+  c.arc(313, 140, 26, Math.PI, 0);
+  c.stroke();
+  c.fillStyle = "#d9442f";
+  c.font = "800 30px sans-serif";
+  c.fillText("SINAR", 272, 230);
+  // Pita judul.
+  c.fillStyle = "#d9442f";
+  c.fillRect(0, 360, 400, 118);
+  c.fillStyle = "#fff6e8";
+  c.font = "800 50px sans-serif";
+  c.fillText("PROMO", 28, 420);
+  c.font = "600 30px sans-serif";
+  c.fillText("akhir pekan", 30, 460);
+  // Diskon dan harga.
+  c.fillStyle = "#1d2633";
+  c.font = "800 92px sans-serif";
+  c.fillText("20%", 26, 584);
+  c.font = "600 26px sans-serif";
+  c.fillText("Sabtu dan Minggu", 30, 622);
+  c.fillStyle = "#8c8478";
+  c.font = "500 24px sans-serif";
+  c.fillText("Rp56.000", 30, 664);
+  c.fillRect(30, 656, 106, 3);
+  c.fillStyle = "#d9442f";
+  c.font = "800 34px sans-serif";
+  c.fillText("Rp45.000", 150, 666);
+  // Chip WhatsApp dan QR.
+  c.fillStyle = "#25a35a";
+  kotakBulat(c, 26, 708, 214, 54, 27);
+  c.fillStyle = "#ffffff";
+  c.beginPath();
+  c.arc(56, 735, 15, 0, Math.PI * 2);
+  c.fill();
+  c.fillStyle = "#25a35a";
+  c.beginPath();
+  c.arc(56, 735, 9, 0, Math.PI * 2);
+  c.fill();
+  c.fillStyle = "#ffffff";
+  c.font = "700 22px sans-serif";
+  c.fillText("Pesan lewat chat", 80, 743);
+  gambarQR(c, 268, 708, 10);
+  c.fillStyle = "#5f564c";
+  c.font = "500 20px sans-serif";
+  c.fillText("Toko Sinar, Jl. Melati 12", 26, 818);
   return jadiTekstur(kv);
 }
 
@@ -1105,25 +1313,100 @@ function teksturChat() {
   return jadiTekstur(kv);
 }
 
-// Kotak aplikasi tersegel: sampul gelap dengan ikon aplikasi bulat persegi dan kilau plastik.
+// Kotak software ritel (big box): sampul berjudul dengan tangkapan layar aplikasi di jendela,
+// lencana platform dan versi, kilau plastik segel; punggung bertulisan tegak. Masukan Farrez
+// 19 Nov: kotak lama (ikon di persegi gelap) terbaca tablet, bukan kotak software.
 function teksturKotakAplikasi() {
-  const [kv, c] = kanvasTeks(360, 480);
-  c.fillStyle = "#22252b";
-  c.fillRect(0, 0, 360, 480);
+  const [kv, c] = kanvasTeks(512, 660);
+  const latar = c.createLinearGradient(0, 0, 512, 660);
+  latar.addColorStop(0, "#1f3a5f");
+  latar.addColorStop(1, "#13243c");
+  c.fillStyle = latar;
+  c.fillRect(0, 0, 512, 660);
+  c.fillStyle = "rgba(255,255,255,0.05)";
+  c.beginPath();
+  c.arc(470, 80, 180, 0, Math.PI * 2);
+  c.fill();
+  // Logo dan judul.
   c.fillStyle = "#d85a30";
-  kotakBulat(c, 110, 130, 140, 140, 34);
+  kotakBulat(c, 36, 40, 74, 74, 18);
   c.fillStyle = "#fff4ea";
-  kotakBulat(c, 150, 170, 60, 60, 14);
-  c.fillStyle = "#c8ccd4";
-  c.fillRect(70, 330, 220, 14);
-  c.fillRect(110, 360, 140, 10);
-  const kilau = c.createLinearGradient(0, 0, 360, 480);
-  kilau.addColorStop(0.35, "rgba(255,255,255,0)");
-  kilau.addColorStop(0.45, "rgba(255,255,255,0.18)");
-  kilau.addColorStop(0.55, "rgba(255,255,255,0)");
+  kotakBulat(c, 57, 61, 32, 32, 7);
+  c.fillStyle = "#ffffff";
+  c.font = "800 54px sans-serif";
+  c.fillText("Kasir Sinar", 128, 96);
+  c.fillStyle = "#c8d6e8";
+  c.font = "500 26px sans-serif";
+  c.fillText("Kasir, stok, dan laporan toko", 38, 160);
+  // Jendela aplikasi dengan dashboard.
+  const [jx, jy, jw, jh] = [38, 194, 436, 290];
+  c.fillStyle = "rgba(0,0,0,0.3)";
+  kotakBulat(c, jx + 8, jy + 10, jw, jh, 12);
+  c.fillStyle = "#f4f2ee";
+  kotakBulat(c, jx, jy, jw, jh, 12);
+  c.fillStyle = "#d9dde3";
+  c.fillRect(jx, jy + 12, jw, 22);
+  for (const [i, w] of ["#e05a4a", "#d9a441", "#4d8a5c"].entries()) {
+    c.fillStyle = w;
+    c.beginPath();
+    c.arc(jx + 18 + i * 18, jy + 23, 5, 0, Math.PI * 2);
+    c.fill();
+  }
+  c.fillStyle = "#1f2a44";
+  c.fillRect(jx, jy + 34, 96, jh - 34);
+  for (let i = 0; i < 3; i++) {
+    c.fillStyle = "#ffffff";
+    kotakBulat(c, jx + 110 + i * 108, jy + 50, 96, 58, 8);
+    c.fillStyle = ["#d9442f", "#2f6b57", "#3f6fa8"][i];
+    c.fillRect(jx + 120 + i * 108, jy + 64, 48, 8);
+    c.fillStyle = "#1d2633";
+    c.fillRect(jx + 120 + i * 108, jy + 82, 64, 12);
+  }
+  for (let i = 0; i < 9; i++) {
+    const t = [60, 90, 70, 120, 100, 140, 110, 150, 130][i];
+    c.fillStyle = i === 7 ? "#d85a30" : "#7f9bc2";
+    c.fillRect(jx + 118 + i * 34, jy + jh - 18 - t, 22, t);
+  }
+  // Lencana platform dan versi.
+  c.fillStyle = "#ffffff";
+  kotakBulat(c, 38, 516, 300, 46, 23);
+  c.fillStyle = "#1f3a5f";
+  c.font = "700 22px sans-serif";
+  c.fillText("Untuk Windows & Android", 56, 547);
+  c.fillStyle = "#d85a30";
+  kotakBulat(c, 356, 516, 118, 46, 23);
+  c.fillStyle = "#ffffff";
+  c.fillText("Versi 1.0", 370, 547);
+  c.fillStyle = "#c8d6e8";
+  c.font = "500 20px sans-serif";
+  c.fillText("Instal sekali, pakai di semua kasir", 38, 610);
+  const kilau = c.createLinearGradient(0, 0, 512, 660);
+  kilau.addColorStop(0.32, "rgba(255,255,255,0)");
+  kilau.addColorStop(0.42, "rgba(255,255,255,0.16)");
+  kilau.addColorStop(0.5, "rgba(255,255,255,0)");
   c.fillStyle = kilau;
-  c.fillRect(0, 0, 360, 480);
-  return jadiTekstur(kv);
+  c.fillRect(0, 0, 512, 660);
+  const sampul = jadiTekstur(kv);
+
+  // Punggung: tebal 51 mm berbanding tinggi 229 mm.
+  const [kp, p] = kanvasTeks(148, 660);
+  p.fillStyle = "#1f3a5f";
+  p.fillRect(0, 0, 148, 660);
+  p.fillStyle = "#d85a30";
+  kotakBulat(p, 37, 28, 74, 74, 18);
+  p.fillStyle = "#fff4ea";
+  kotakBulat(p, 58, 49, 32, 32, 7);
+  p.save();
+  p.translate(98, 640);
+  p.rotate(-Math.PI / 2);
+  p.fillStyle = "#ffffff";
+  p.font = "800 50px sans-serif";
+  p.fillText("Kasir Sinar", 0, 0);
+  p.fillStyle = "#c8d6e8";
+  p.font = "500 22px sans-serif";
+  p.fillText("Versi 1.0", 300, -6);
+  p.restore();
+  return [sampul, jadiTekstur(kp)];
 }
 
 // Label test pressing: putih polos dengan dua coretan pulpen, tanpa tulisan.
