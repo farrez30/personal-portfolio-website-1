@@ -1,5 +1,5 @@
 {
- "_catatan": "Naskah explainer flash-sale-lab (disetujui Farrez 20 Nov 2026). Angka dari hasil/rekaman.json uji penuh 19 Nov 2026.",
+ "_catatan": "Naskah explainer flash-sale-lab (disetujui Farrez 20 Nov 2026). Angka dari hasil/rekaman.json uji penuh 20 Nov 2026.",
  "gaya": {
   "id": "Bacakan sebagai narator film dokumenter yang tenang, hangat, dan yakin, seperti video explainer sejarah. Tempo sedang, beri jeda panjang di antara paragraf.",
   "en": "Read as a calm, warm, confident documentary narrator, like a history explainer video. Medium pace, with a long pause between paragraphs."
@@ -55,12 +55,12 @@
    "kode": "4-hasil",
    "label": "Outcome",
    "judul": {
-    "id": "HABIS DI DETIK KE-43",
-    "en": "SOLD OUT AT SECOND 43"
+    "id": "HABIS DI DETIK KE‑42",
+    "en": "SOLD OUT AT SECOND 42"
    },
    "teks": {
-    "id": "Diuji dengan hampir 114 ribu pembeli di satu laptop. Enam ribu barang habis di detik ke-43, tanpa satu pun kelebihan jual.",
-    "en": "Tested with almost 114 thousand buyers on one laptop. Six thousand items sold out at second 43, without a single oversell."
+    "id": "Diuji dengan hampir 114 ribu pembeli di satu laptop. Enam ribu barang habis di detik ke-42, tanpa satu pun kelebihan jual.",
+    "en": "Tested with almost 114 thousand buyers on one laptop. Six thousand items sold out at second 42, without a single oversell."
    },
    "klip": "sama:1-konteks"
   }

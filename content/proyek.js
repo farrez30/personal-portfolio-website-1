@@ -252,7 +252,7 @@ export const proyek = [
   },
   {
     // Lab uji beban pribadi (repo privat farrez30/flash-sale-lab). Angka dari hasil/rekaman.json
-    // uji penuh 19 Nov 2026; tautan repo tidak dipajang karena privat.
+    // uji penuh 20 Nov 2026 (mesin tenang); tautan repo tidak dipajang karena privat.
     slug: "flash-sale-lab",
     ilustrasi: "/assets/ilustrasi/flash-sale-lab.webp",
     katalog: "FRZ-13",
@@ -265,8 +265,8 @@ export const proyek = [
     layar: { desktop: "/assets/layar/flash-sale-lab-desktop.webp", hp: "/assets/layar/flash-sale-lab-hp.webp" },
     gambar: null,
     ringkas: {
-      id: "Lab flash sale yang diuji beban sungguhan: hampir 114 ribu pembeli dan bot berebut 6.000 stok, habis di detik ke-43 tanpa satu pun kelebihan jual, lalu rekamannya diputar ulang per detik untuk orang awam.",
-      en: "A flash sale lab under a real load test: almost 114 thousand buyers and bots fight over 6,000 items, sold out at second 43 without a single oversell, and the recording plays back second by second for non-engineers.",
+      id: "Lab flash sale yang diuji beban sungguhan: hampir 114 ribu pembeli dan bot berebut 6.000 stok, habis di detik ke-42 tanpa satu pun kelebihan jual, lalu rekamannya diputar ulang per detik untuk orang awam.",
+      en: "A flash sale lab under a real load test: almost 114 thousand buyers and bots fight over 6,000 items, sold out at second 42 without a single oversell, and the recording plays back second by second for non-engineers.",
     },
     arsitektur: ARSITEKTUR["flash-sale-lab"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
