@@ -387,7 +387,7 @@ export const BUKLET = {
     ],
   },
 
-  // Fakta dari hasil/rekaman.json (uji penuh 19 Nov 2026) dan README flash-sale-lab. Disetujui Farrez 20 Nov 2026.
+  // Fakta dari hasil/rekaman.json (uji penuh 20 Nov 2026, mesin tenang) dan README flash-sale-lab. Disetujui Farrez 20 Nov 2026.
   "flash-sale-lab": {
     disetujui: true,
     halaman: [
@@ -412,9 +412,9 @@ export const BUKLET = {
       h("How it works", "Diuji, direkam, diputar ulang", "Tested, recorded, replayed",
         "Hampir 114 ribu pembeli dikirim ke satu laptop selama dua menit. Setiap detiknya direkam, lalu diputar ulang di halaman replay untuk orang awam.",
         "Almost 114 thousand buyers were sent at one laptop over two minutes. Every second was recorded and plays back on a replay page for non-engineers."),
-      h("Outcome", "Habis di detik ke-43", "Sold out at second 43",
-        "Enam ribu barang habis di detik ke-43. Enam ribu pesanan tersimpan, tanpa kelebihan jual dan tanpa pesanan ganda. Tokonya, Cuci Gudang Mart, toko tiruan untuk lab ini.",
-        "Six thousand items sold out at second 43. Six thousand orders saved, with no oversell and no duplicate orders. The shop, Cuci Gudang Mart, is a mock store made for this lab."),
+      h("Outcome", "Habis di detik ke-42", "Sold out at second 42",
+        "Enam ribu barang habis di detik ke-42. Enam ribu pesanan tersimpan, tanpa kelebihan jual dan tanpa pesanan ganda. Tokonya, Cuci Gudang Mart, toko tiruan untuk lab ini.",
+        "Six thousand items sold out at second 42. Six thousand orders saved, with no oversell and no duplicate orders. The shop, Cuci Gudang Mart, is a mock store made for this lab."),
     ],
   },
 };
