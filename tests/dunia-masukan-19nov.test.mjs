@@ -86,3 +86,36 @@ test("pintu: lonceng toko berpegas, papan OPEN, jendela luar berkusen dan redup"
   // Lonceng berayun teredam saat tiba di pintu, lalu diam.
   assert.match(dunia, /const amp = 0\.16 \* Math\.exp\(-1\.7 \* t\);/);
 });
+
+test("bab bentuk: empat benda sesuai teks, di zona bebas depan balok tingkat atas", () => {
+  const mentah = readFileSync(new URL("../components/dunia/props.js", import.meta.url), "utf8");
+  const blok = mentah.slice(mentah.indexOf("// ---- 03 bentuk"), mentah.indexOf("// ---- 04 fondasi")).replace(/\/\/.*$/gm, "");
+  for (const t of ["teksturDashboard()", "03-format-piringan.webp", "teksturBrosur()", "teksturChat()", "teksturKotakAplikasi()"]) assert.ok(blok.includes(t), t);
+  assert.doesNotMatch(blok, /03-format-(cd|kaset|hp)\.webp/);
+  // Tingkat bawah: hanya z 0 sampai 0,22 yang bebas; kotak aplikasi di tingkat atas (alas 1,16).
+  const panggil = [...blok.matchAll(/pasangBenda\([^,]+(?:\([^)]*\))?, ([-\d.]+), ([-\d.]+)(?:, ([-\d.]+))?(?:, ([-\d.]+))?\);/g)];
+  assert.equal(panggil.length, 5);
+  for (const [, , z, , alas] of panggil) {
+    if (alas) continue;
+    assert.ok(+z >= 0.08 && +z <= 0.15, `z ${z} di luar zona bebas`);
+  }
+  // Benda maju ke kamera saat diangkat, menjauh dari balok tingkat atas.
+  assert.match(blok, /x\.o\.position\.z = x\.dasar\.z \+ 0\.05 \* t;/);
+});
+
+test("adegan 10: sepuluh CD muat di celah rak dan semuanya keluar bingkai sebelum bab habis", () => {
+  const celah = dunia.match(/if \(y === 1\.12 && z > (-[\d.]+) && z < (-[\d.]+)\) \{/).slice(1).map(Number);
+  const [z0, langkah] = props.match(/new THREE\.Vector3\(4\.8, 1\.12 \+ 0\.071, (-[\d.]+) \+ i \* ([\d.]+)\)/).slice(1).map(Number);
+  const tebal = 0.0104;
+  const n = props.match(/const SLUG_RILIS = \[([^\]]+)\]/)[1].split(",").length;
+  assert.equal(n, 10);
+  // CD rak di luar celah punya pusat di luar rentang celah, jadi tepinya bisa masuk setengah tebal.
+  assert.ok(z0 - tebal / 2 >= celah[0] + tebal / 2, "CD pertama bertumpuk dengan tetangganya");
+  assert.ok(z0 + (n - 1) * langkah + tebal / 2 <= celah[1] - tebal / 2, "CD terakhir bertumpuk dengan tetangganya");
+  assert.ok(langkah > tebal, "CD bertumpuk satu sama lain");
+  // tau = (u - 0,08 - i*0,05) / 0,35 dan CD hilang saat tau = 1: yang terakhir habis di u 0,88.
+  assert.match(props, /const tau = \(u - 0\.08 - i \* 0\.05\) \/ 0\.35;/);
+  assert.ok(0.08 + (n - 1) * 0.05 + 0.35 <= 0.9);
+  // Ditarik lurus dulu (tanpa putar y) sampai bebas, baru terbang.
+  assert.match(props, /if \(tau < 0\.2\) \{\s*k\.position\.copy\(keluar\);\s*k\.rotation\.set\(0, 0, 0\.05 \* Math\.sin\(Math\.PI \* tarik\)\);/);
+});

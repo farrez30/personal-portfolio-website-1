@@ -57,5 +57,10 @@ graphics: "jelas gitu ada efek bayangannya dan ada depth".
   CPU canvases) and shader status checks while the rack and its first booklet compile (13
   programs, 600 to 750 ms). The rack now warms ten screens early with its first booklet, so the
   stall lands while the story is still, not in the camera's flight or on the rack itself.
+- Third revision, 19 Nov 2026 (Farrez chose from previews): the shape chapter shows a phone
+  dashboard, a laptop with the office system, a flyer then a WhatsApp chat, and a sealed app box
+  that rises last; the release chapter pulls ten CDs off the middle shelf one by one and flies
+  them out to the left ("A to the left"), so the collection rack that slides in from the right
+  continues the same direction.
 - Revisit if a mid-range phone takes more than about 5 s to the hero, or if the measured value range
   of a chapter stays outside the look-dev sheet after one more lighting pass.

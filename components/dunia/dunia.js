@@ -820,6 +820,9 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       bergerak = true;
     } else dof.value = dofTujuan;
     if (!bergerak && !kotor) return;
+    // Ubah resolusi sebelum menggambar, di bingkai yang sama: setSize mengosongkan kanvas, dan bila
+    // gambar baru menyusul di bingkai berikut, satu bingkai kosong sempat tampil.
+    terapkanKualitas();
     posLalu.copy(camera.position);
     lihatLalu.copy(lihat);
     pasangKamera();
@@ -829,7 +832,6 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     // Penjaga kualitas juga saat menggambar terus (piringan berputar, geser gulir), bukan hanya
     // saat terbang: di sana lag terasa paling lama.
     if (bergerak) jagaKualitas(dt * 1000);
-    terapkanKualitas();
     kotor = false;
   };
 
@@ -1233,9 +1235,10 @@ function buatRakCD(b) {
         z += 0.05 + acak() * 0.08;
         continue;
       }
-      // Celah untuk tiga kotak CD yang masuk di akhir cerita (props.js, babak rilis).
-      if (y === 1.52 && z > -0.37 && z < -0.29) {
-        z = -0.29;
+      // Tempat sepuluh CD proyek yang diambil satu per satu di akhir cerita (props.js, babak
+      // rilis): bagian ini diisi kotak lepas, bukan instance, supaya bisa ditarik keluar.
+      if (y === 1.12 && z > -0.445 && z < -0.315) {
+        z = -0.315;
         continue;
       }
       if (Math.abs(z - (z0 + z1) / 2) < 0.03) {
