@@ -1,12 +1,13 @@
 // Shot list previs cerita v5 arah G "yang ditimbang sebelum memutuskan" (ADR 0019).
 // Satu set piece per babak, satu kejadian konkret per rasa cemas (supaya tidak terbaca FAQ),
 // dan objek persisten: nota merah di atas timbangan, yang di skala kota ke atas jadi titik data.
-// Dipakai previs.html (adegan) dan papan.mjs (catatan di papan).
+// Dipakai previs.html (adegan) dan papan.mjs (catatan di papan). `keluar: "naik"` dan `masuk: "dekat"`
+// menandai perpindahan yang zoom out ke skala lebih besar (meja ke kota, kota ke peta, peta ke globe).
 
 export const SHOT = [
   {
     id: "dorongan", label: "01 DORONGAN", skala: "1 m",
-    judul: "Yang sekarang bikin capek.",
+    judul: "Rekap tiap malam, angkanya beda lagi.",
     kejadian: "Jam dinding 22.10. Map rekap menumpuk, layar spreadsheet masih terbuka, nota merah jatuh ke piring kiri timbangan dan piring itu turun.",
     benda: "Meja kerja, tumpukan map, monitor, jam dinding, timbangan dua piring dengan nota merah.",
     kamera: "Tiga perempat dari atas, dekat, sedikit miring.",
@@ -16,7 +17,7 @@ export const SHOT = [
   },
   {
     id: "harga-diam", label: "02 HARGA DIAM", skala: "40 cm",
-    judul: "Diam juga ada harganya.",
+    judul: "Dibiarkan juga ada ongkosnya.",
     kejadian: "Dua beban bertuliskan LEMBUR dan SELISIH STOK turun ke piring kiri, timbangan makin berat sebelah.",
     benda: "Timbangan dari dekat, dua beban kuningan berlabel.",
     kamera: "Dolly masuk ke timbangan, setinggi piring.",
@@ -26,7 +27,7 @@ export const SHOT = [
   },
   {
     id: "tarikan", label: "03 TARIKAN", skala: "1 m",
-    judul: "Bayangan sesudahnya.",
+    judul: "Buka HP, angka hari ini sudah ada.",
     kejadian: "HP di meja menyala. Satu layar ringkasan: penjualan, stok, dan kas hari ini. Cahayanya menerangi map yang tadi menumpuk.",
     benda: "HP berdiri di penyangga, cahaya layar sebagai lampu utama adegan.",
     kamera: "Orbit pelan 20 derajat mengelilingi HP.",
@@ -36,7 +37,7 @@ export const SHOT = [
   },
   {
     id: "biaya", label: "04 BIAYA", skala: "40 cm",
-    judul: "Harganya jelas sejak awal.",
+    judul: "Harganya jelas sebelum mulai.",
     kejadian: "Kartu 'tambahan fitur' masuk di tengah jalan. Kartu itu tidak menambah blok tahap 1, tetapi berdiri sendiri sebagai tahap 3 dengan harganya sendiri.",
     benda: "Kertas lingkup, tiga blok tahap berlabel, kartu tambahan merah.",
     kamera: "Dari atas meja, menunduk lurus.",
@@ -45,8 +46,8 @@ export const SHOT = [
     bukti: "Panorama: sekitar sepertiga proyek ERP lewat anggaran dan telat (P). Harga per tahap dikonfirmasi Farrez.",
   },
   {
-    id: "kelangsungan", label: "05 KELANGSUNGAN", skala: "1 m",
-    judul: "Tetap jalan walau saya tidak ada.",
+    id: "kelangsungan", keluar: "naik", label: "05 KELANGSUNGAN", skala: "1 m",
+    judul: "Sistemnya tetap jalan, siapa pun yang merawat.",
     kejadian: "Kursi developer kosong. Lampu status sistem tetap menyala. Di meja: map catatan cara kerja, kunci ekspor data, dan kontrak dengan dua kotak centang: milik atau lisensi.",
     benda: "Kursi kosong, map catatan, kunci, kontrak, lampu status.",
     kamera: "Setinggi kursi, mendorong pelan ke meja.",
@@ -55,7 +56,7 @@ export const SHOT = [
     bukti: "Pasal 36 UU 28/2014: hak mengikuti perjanjian (D). Bentuknya milik atau lisensi sesuai kontrak (koreksi Farrez).",
   },
   {
-    id: "ramai", label: "06 RAMAI", skala: "2 km",
+    id: "ramai", masuk: "dekat", label: "06 RAMAI", skala: "2 km",
     judul: "Diuji sebelum hari ramai.",
     kejadian: "Tanggal gajian. Kamera naik dari toko ke atas kota, ribuan titik transaksi naik dari blok-blok. Blok klien tetap menyala, antreannya mengalir.",
     benda: "Blok kota, medan titik transaksi, satu blok klien merah.",
@@ -66,7 +67,7 @@ export const SHOT = [
   },
   {
     id: "data", label: "07 DATA", skala: "200 m",
-    judul: "Aman dan bisa dipulihkan.",
+    judul: "Rusak di satu tempat, utuh di tempat lain.",
     kejadian: "Permintaan asing ditolak di gerbang. Lalu satu server padam; salinan dari gedung lain mengalir balik lewat garis merah, sistem hidup lagi.",
     benda: "Dua gedung dengan rak server, perisai di gerbang, garis cadangan.",
     kamera: "Menyamping, dari gedung utama ke gedung cadangan.",
@@ -75,8 +76,8 @@ export const SHOT = [
     bukti: "PDN 2024: hanya 2% data ter-backup (P); CPA Australia: 49% usaha kecil Indonesia rugi akibat serangan siber 2025 (D). Latihan pulih dikonfirmasi Farrez.",
   },
   {
-    id: "kebiasaan", label: "08 KEBIASAAN", skala: "3 m",
-    judul: "Tim tidak perlu belajar dari nol.",
+    id: "kebiasaan", keluar: "naik", label: "08 KEBIASAAN", skala: "3 m",
+    judul: "Urutannya sama dengan yang biasa tim kerjakan.",
     kejadian: "Hari pertama karyawan baru. Dua monitor berdampingan: sistem lama dan baru, angkanya sama. Formulir baru mengikuti urutan formulir lama.",
     benda: "Meja kasir atau admin, dua monitor, dua orang.",
     kamera: "Dari belakang bahu, setinggi mata.",
@@ -85,8 +86,8 @@ export const SHOT = [
     bukti: "Coretax 2025 akhirnya jalan berdampingan dengan sistem lama (D, DJP).",
   },
   {
-    id: "langkah-kecil", label: "09 LANGKAH KECIL", skala: "1.000 km",
-    judul: "Satu cabang dulu.",
+    id: "langkah-kecil", masuk: "dekat", keluar: "naik", label: "09 LANGKAH KECIL", skala: "1.000 km",
+    judul: "Mulai dari satu cabang.",
     kejadian: "Peta Nusantara gelap. Satu cabang menyala lebih dulu, beberapa babak kemudian cabang lain menyusul dan tersambung.",
     benda: "Pulau-pulau datar, titik cabang, garis sambungan.",
     kamera: "Terbang naik dari kota sampai pulau, tegak lurus.",
@@ -95,8 +96,8 @@ export const SHOT = [
     bukti: "Titik cabang diisi lokasi klien nyata bila diizinkan.",
   },
   {
-    id: "penutup", label: "PENUTUP", skala: "36.000 km",
-    judul: "Mulai.",
+    id: "penutup", masuk: "dekat", label: "PENUTUP", skala: "36.000 km",
+    judul: "Ceritakan yang bikin capek.",
     kejadian: "Kamera terus naik sampai orbit. Globe dengan garis dari Indonesia, satelit lewat. Lalu turun ke rak bukti proyek.",
     benda: "Globe titik, garis sambungan, dua satelit.",
     kamera: "Zoom out penuh, globe berputar pelan.",

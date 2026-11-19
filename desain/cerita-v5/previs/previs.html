@@ -47,14 +47,14 @@ document.querySelector(".cap").textContent = `PREVIS ${GAYA.toUpperCase()}`;
 
 const INK = 0xece8e1, RED = 0xe0574b, AMB = 0xf0b35a, BG = 0x1a1410;
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setPixelRatio(1);
+renderer.setPixelRatio(q.get("dpr") ? Number(q.get("dpr")) : 1);
 renderer.setSize(innerWidth, innerHeight);
 renderer.toneMapping = TERANG ? THREE.NoToneMapping : THREE.ACESFilmicToneMapping;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.body.prepend(renderer.domElement);
 
-const scene = new THREE.Scene();
+let scene = new THREE.Scene();
 const LATAR = TERANG ? 0xf3ece0 : BG;
 scene.background = new THREE.Color(LATAR);
 const cam = new THREE.PerspectiveCamera(HP ? 52 : 38, innerWidth / innerHeight, 0.01, 5e6);
@@ -137,7 +137,8 @@ const meja = (w = 1.6, d = 0.75) => {
   for (const [x, z] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) kotak(0.04, 0.71, 0.04, M.gelap, x * (w / 2 - 0.05), 0.355, z * (d / 2 - 0.05));
 };
 const tumpukanMap = (x, z, n = 9) => { for (let i = 0; i < n; i++) { const o = kotak(0.32, 0.028, 0.24, clay(i % 3 ? 0xa89c8c : 0x8c7f70), x + Math.sin(i * 7) * 0.012, 0.765 + i * 0.03, z + Math.cos(i * 5) * 0.012); o.rotation.y = Math.sin(i * 3) * 0.08; } };
-const nota = (x, y, z, par = scene, ry = 0) => { const o = kotak(0.08, 0.003, 0.12, M.merah, x, y, z, par); o.rotation.y = ry; return o; };
+const notaBahan = TERANG ? new THREE.MeshToonMaterial({ color: 0xb8322a, gradientMap: ramp }) : M.merah;
+const nota = (x, y, z, par = scene, ry = 0) => { const o = kotak(0.08, 0.003, 0.12, notaBahan, x, y, z, par); o.rotation.y = ry; return o; };
 const timbangan = (x, z, miring = 0.2, s = 1) => {
   const g = new THREE.Group(); g.position.set(x, 0.75, z); g.scale.setScalar(s); scene.add(g);
   silinder(0.09, 0.02, M.kuning, 0, 0.01, 0, g); silinder(0.008, 0.32, M.kuning, 0, 0.17, 0, g);
@@ -167,8 +168,8 @@ const ADEGAN = {
   dorongan() {
     meja(); lampuDasar(1.2, 0.25);
     const lampuMeja = new THREE.PointLight(AMB, 2.2, 3, 2); lampuMeja.position.set(-0.55, 1.25, 0.1); lampuMeja.castShadow = true; scene.add(lampuMeja);
-    tumpukanMap(-0.3, -0.12, 11); tumpukanMap(-0.02, -0.2, 6);
-    monitor(0.42, -0.24, lembarKerja, 0.5, 0.3, -0.25);
+    tumpukanMap(-0.42, -0.2, 11); tumpukanMap(-0.16, -0.27, 6);
+    monitor(0.58, -0.26, lembarKerja, 0.5, 0.3, -0.25);
     const jam = silinder(0.13, 0.02, clay(0xd9d2c6), -0.45, 1.42, -0.57); jam.rotation.x = Math.PI / 2;
     const jarum = (pjg, sudut) => { const o = kotak(0.008, pjg, 0.004, M.gelap, 0, 0, 0); o.geometry.translate(0, pjg / 2, 0); o.position.set(-0.45, 1.42, -0.555); o.rotation.z = -sudut; };
     jarum(0.09, (22 + 10 / 60) / 12 * Math.PI * 2); jarum(0.13, (10 / 60) * Math.PI * 2);
@@ -443,7 +444,28 @@ const ADEGAN = {
   },
 };
 
-await ADEGAN[shot.adegan ?? shot.id](shot.opsi ?? {});
+const DUNIA = q.get("dunia") ? ["dorongan", "harga-diam", "tarikan", "biaya", "kelangsungan"] : null, JARAK_STASIUN = 3.4, anchor = [];
+if (DUNIA) {
+  const utama = scene;
+  for (const [i, id] of DUNIA.entries()) {
+    scene = new THREE.Scene();
+    await ADEGAN[id]({});
+    if (id === "biaya") { cam.up.set(0, 1, 0); lihat([cam.position.x, cam.position.y, cam.position.z + 0.3], sasaran.toArray()); }
+    const geser = new THREE.Vector3(i * JARAK_STASIUN, id === "biaya" ? 0.74 : 0, 0);
+    anchor.push({ id, pos: cam.position.clone().add(geser), ke: sasaran.clone().add(geser) });
+    const grup = new THREE.Group(); grup.position.copy(geser);
+    [...scene.children].forEach((o) => { if (!o.isLight && !(o.geometry?.parameters?.width >= 8)) grup.add(o); });
+    utama.add(grup);
+  }
+  scene = utama;
+  // lantai dan dinding bersama, supaya celah di stasiun tanpa meja (biaya) tertutup
+  kotak(40, 0.02, 9, M.lantai, 7, -0.01, 0); kotak(40, 3, 0.05, clay(0x3a322b), 7, 1.5, -0.62);
+  // satu rig cahaya untuk seluruh ruang kerja
+  scene.add(new THREE.HemisphereLight(0xfff1dc, 0x201812, 0.4));
+  const d = new THREE.DirectionalLight(0xffe7c2, 1.5); d.position.set(5, 6, 4); d.target.position.set(7, 0, 0); scene.add(d.target);
+  d.castShadow = true; d.shadow.mapSize.set(4096, 2048); Object.assign(d.shadow.camera, { left: -12, right: 12, top: 6, bottom: -6, near: 0.1, far: 30 }); d.shadow.bias = -0.0004; d.shadow.normalBias = TERANG ? 0.012 : 0; scene.add(d);
+  lihat(anchor[0].pos.toArray(), anchor[0].ke.toArray());
+} else await ADEGAN[shot.adegan ?? shot.id](shot.opsi ?? {});
 if (shot.bidik) lihat(...(HP ? shot.bidik.h : shot.bidik.d));
 scene.traverse((o) => { if (o.isPoints || o.isLine || o.isInstancedMesh || (o.material && o.material.isShaderMaterial)) [].concat(o.material).forEach(tanpaGaris); });
 if (TERANG) {
@@ -451,6 +473,8 @@ if (TERANG) {
   scene.add(new THREE.HemisphereLight(0xffffff, 0xe6dccb, 1.4));
 }
 if (GAYA === "iso") scene.fog = null;
+if (DUNIA) { cam.near = 0.05; cam.far = 80; } else { const j = cam.position.distanceTo(sasaran); cam.near = Math.max(cam.near, j * 0.02); cam.far = Math.min(cam.far, j * (shot.adegan === "penutup" || shot.id === "penutup" ? 30 : 12)); }
+if (q.get("siluet")) { scene.background = new THREE.Color(0xffffff); scene.fog = null; const hitam = new THREE.MeshBasicMaterial({ color: 0x000000 }); scene.traverse((o) => { if (o.isMesh) { if (o.geometry?.parameters?.width >= 8) o.visible = false; else o.material = hitam; } if (o.isPoints || o.isSprite) o.visible = false; }); document.querySelector(".teks").style.display = document.querySelector(".bayang").style.display = "none"; }
 let kamera = cam;
 if (GAYA === "iso" && !shot.tanpaIso) {
   const jarak = cam.position.distanceTo(sasaran), tinggi = 2 * jarak * Math.tan((cam.fov * Math.PI) / 360) * 0.95;
@@ -461,9 +485,87 @@ if (GAYA === "iso" && !shot.tanpaIso) {
 }
 const w = innerWidth, h = innerHeight;
 if (HP) kamera.setViewOffset(w, h, 0, h * 0.14, w, h); else kamera.setViewOffset(w, h, -w * 0.17, 0, w, h);
-const garis = GAYA === "toon" || GAYA === "iso" ? new OutlineEffect(renderer, { defaultThickness: HP ? 0.009 : 0.006, defaultColor: [0.12, 0.11, 0.16] }) : null;
+const pakaiGaris = GAYA === "toon" || GAYA === "iso";
+const MODE_GARIS = q.get("garis") ?? "layar";
+const garis = pakaiGaris && MODE_GARIS === "hull" ? new OutlineEffect(renderer, { defaultThickness: HP ? 0.009 : 0.006, defaultColor: [0.12, 0.11, 0.16] }) : null;
 let n = 0;
-const putar = () => { (garis ?? renderer).render(scene, kamera); if (++n < 4) requestAnimationFrame(putar); else window.SIAP = true; };
+// garis tinta image-space: satu pass normal + depth, lalu shader tepi di atas warna
+let layarGaris = null;
+if (pakaiGaris && MODE_GARIS === "layar") {
+  const W = innerWidth, H = innerHeight;
+  const rtWarna = new THREE.WebGLRenderTarget(W, H, { type: THREE.HalfFloatType, samples: 4 });
+  const rtNormal = new THREE.WebGLRenderTarget(W, H, { type: THREE.HalfFloatType });
+  rtNormal.depthTexture = new THREE.DepthTexture(W, H); rtNormal.depthTexture.type = THREE.FloatType;
+  const matNormal = new THREE.MeshNormalMaterial();
+  const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
+    uniforms: { tWarna: { value: rtWarna.texture }, tNormal: { value: rtNormal.texture }, tDepth: { value: rtNormal.depthTexture }, res: { value: new THREE.Vector2(W, H) },
+      near: { value: kamera.near }, far: { value: kamera.far }, orto: { value: kamera.isOrthographicCamera ? 1 : 0 }, tebal: { value: HP ? 1.6 : 1.5 }, tinta: { value: new THREE.Color(0x2a2836) } },
+    vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }",
+    fragmentShader: `
+      uniform sampler2D tWarna, tNormal, tDepth; uniform vec2 res; uniform float near, far, orto, tebal; uniform vec3 tinta; varying vec2 vUv;
+      float jarak(vec2 uv){ float z = texture2D(tDepth, uv).x; if (orto > .5) return near + z * (far - near); float n = z * 2. - 1.; return 2. * near * far / (far + near - n * (far - near)); }
+      vec3 nor(vec2 uv){ return texture2D(tNormal, uv).xyz * 2. - 1.; }
+      void main(){
+        vec2 px = tebal / res; float d0 = jarak(vUv); vec3 n0 = nor(vUv); float tepi = 0.;
+        vec2 arah[8]; arah[0] = vec2(px.x, 0.); arah[1] = vec2(-px.x, 0.); arah[2] = vec2(0., px.y); arah[3] = vec2(0., -px.y); arah[4] = px * .7; arah[5] = -px * .7; arah[6] = vec2(px.x, -px.y) * .7; arah[7] = vec2(-px.x, px.y) * .7;
+        for (int i = 0; i < 8; i++) { float d = jarak(vUv + arah[i]); vec3 n = nor(vUv + arah[i]);
+          tepi = max(tepi, smoothstep(0.006, 0.02, abs(d - d0) / min(d, d0)));
+          tepi = max(tepi, smoothstep(0.25, 0.45, 1. - dot(n, n0))); }
+        vec4 w = texture2D(tWarna, vUv);
+        gl_FragColor = vec4(mix(w.rgb, tinta, tepi * 0.92), 1.);
+        #include <colorspace_fragment>
+      }`,
+    depthTest: false, depthWrite: false,
+  }));
+  const layarScene = new THREE.Scene(); layarScene.add(quad); const layarCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+  // benda tanpa tepi (titik, garis, sprite, layar menyala, halo) disembunyikan di pass normal
+  const tanpaTepi = []; scene.traverse((o) => { const m = o.material; if (o.isPoints || o.isLine || o.isSprite || (m && (m.isShaderMaterial || (o.isInstancedMesh && m.isMeshBasicMaterial) || (!o.isInstancedMesh && m.userData?.outlineParameters?.visible === false)))) tanpaTepi.push(o); });
+  layarGaris = () => {
+    const latar = scene.background, kabut = scene.fog;
+    scene.overrideMaterial = matNormal; scene.background = new THREE.Color(0.5, 0.5, 1); scene.fog = null; tanpaTepi.forEach((o) => (o.visible = false));
+    renderer.setRenderTarget(rtNormal); renderer.render(scene, kamera);
+    scene.overrideMaterial = null; scene.background = latar; scene.fog = kabut; tanpaTepi.forEach((o) => (o.visible = true));
+    renderer.setRenderTarget(rtWarna); renderer.render(scene, kamera);
+    renderer.setRenderTarget(null); renderer.render(layarScene, layarCam);
+  };
+}
+// ?ukur=1: waktu bingkai pertama (kompilasi + unggah), lalu 90 bingkai dengan kamera bergeser sedikit; gl.finish supaya waktu GPU ikut terhitung
+if (q.get("ukur")) {
+  const gl = renderer.getContext(), satu = () => { if (layarGaris) layarGaris(); else (garis ?? renderer).render(scene, kamera); gl.finish(); };
+  let a = performance.now(); satu(); const pertama = performance.now() - a; const ms = [], p0 = kamera.position.clone();
+  for (let i = 0; i < 90; i++) { kamera.position.copy(p0).add(new THREE.Vector3(Math.sin(i / 9), Math.cos(i / 13), 0).multiplyScalar(p0.length() * 0.004)); kamera.lookAt(sasaran); a = performance.now(); satu(); ms.push(performance.now() - a); }
+  ms.sort((x, y) => x - y); renderer.info.autoReset = false; renderer.info.reset(); satu();
+  window.UKUR = { pertama: Math.round(pertama), median: +ms[45].toFixed(1), p95: +ms[85].toFixed(1), calls: renderer.info.render.calls, segitiga: renderer.info.render.triangles, gpu: gl.getParameter(gl.getExtension("WEBGL_debug_renderer_info")?.UNMASKED_RENDERER_WEBGL ?? gl.RENDERER) };
+}
+if (q.get("anim")) {
+  const p0 = kamera.position.clone(), arah = p0.clone().sub(sasaran), halus = (x) => x * x * (3 - 2 * x);
+  const awal = shot.masuk === "dekat" ? 0.45 : 1.7, akhir = shot.keluar === "naik" ? 2.2 : 0.5;
+  const jarak = (t) => t < 0.2 ? 1.08 + (awal - 1.08) * Math.pow(1 - t / 0.2, 3) : t < 0.8 ? 1.08 - 0.08 * halus((t - 0.2) / 0.6) : 1.0 + (akhir - 1.0) * Math.pow((t - 0.8) / 0.2, 3);
+  window.atur = (t) => { kamera.position.copy(sasaran).addScaledVector(arah, jarak(t)); kamera.lookAt(sasaran); if (layarGaris) layarGaris(); else (garis ?? renderer).render(scene, kamera); return true; };
+}
+if (DUNIA) {
+  // jadwal: tiap stasiun ditahan TAHAN detik (dorong pelan 5%), lalu BLEND detik terbang ke stasiun berikutnya;
+  // sesudah stasiun terakhir kamera naik menjauh NAIK detik (serah terima ke kota)
+  const TAHAN = 1.6, BLEND = 0.7, NAIK = 0.45, halus = (x) => x * x * (3 - 2 * x), lbl = document.getElementById("lbl"), jdl = document.getElementById("judul");
+  const teks = (i) => { const sh = ARAH.G.find((x) => x.id === anchor[i].id); lbl.textContent = sh.label + "  SKALA " + sh.skala; jdl.textContent = sh.judul; };
+  const dorong = (a, k) => a.ke.clone().add(a.pos.clone().sub(a.ke).multiplyScalar(k));
+  window.durasiDunia = anchor.length * TAHAN + (anchor.length - 1) * BLEND + NAIK;
+  window.aturDunia = (t) => {
+    let sisa = t, i = 0;
+    while (i < anchor.length) {
+      if (sisa <= TAHAN || i === anchor.length - 1 && sisa <= TAHAN) { const a = anchor[i], k = 1.05 - 0.05 * halus(Math.min(1, sisa / TAHAN)); kamera.position.copy(dorong(a, k)); kamera.lookAt(a.ke); teks(i); break; }
+      sisa -= TAHAN;
+      if (i === anchor.length - 1) { const a = anchor[i], e = Math.pow(Math.min(1, sisa / NAIK), 2); kamera.position.copy(dorong(a, 1 + 1.4 * e)).add(new THREE.Vector3(0, 1.2 * e, 0)); kamera.lookAt(a.ke); teks(i); break; }
+      if (sisa <= BLEND) { const a = anchor[i], b = anchor[i + 1], e = halus(sisa / BLEND), pa = dorong(a, 1.0), pb = dorong(b, 1.05);
+        kamera.position.lerpVectors(pa, pb, e).add(new THREE.Vector3(0, Math.sin(Math.PI * e) * 0.35, Math.sin(Math.PI * e) * 0.4));
+        kamera.lookAt(new THREE.Vector3().lerpVectors(a.ke, b.ke, e)); teks(e < 0.5 ? i : i + 1); break; }
+      sisa -= BLEND; i++;
+    }
+    if (layarGaris) layarGaris(); else (garis ?? renderer).render(scene, kamera); return true;
+  };
+}
+const t0 = performance.now(); let bingkaiMs = [];
+const putar = () => { const a = performance.now(); if (layarGaris) layarGaris(); else (garis ?? renderer).render(scene, kamera); bingkaiMs.push(performance.now() - a); if (++n < 4) requestAnimationFrame(putar); else window.SIAP = true; };
 requestAnimationFrame(putar);
 </script>
 </body>

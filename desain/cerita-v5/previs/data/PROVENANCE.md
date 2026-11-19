@@ -10,3 +10,17 @@ Diunduh 19 Nov 2026 atas izin Farrez (pertanyaan terstruktur, pilihan "Natural E
 
 Data dari Suomi NPP VIIRS Day/Night Band. Previs hanya membaca berkas ini di peramban lewat
 `fetch`, tidak ada yang dikirim ke luar.
+
+## Cek pemakaian Black Marble (19 Nov 2026)
+
+Pedoman media NASA (nasa.gov/nasa-brand-center/images-and-media, dibaca 19 Nov 2026):
+- konten NASA "generally are not subject to copyright in the United States"; insignia, logotype,
+  dan identitas NASA dikecualikan;
+- NASA harus disebut sebagai sumber;
+- pemakaian komersial tidak boleh menyiratkan dukungan NASA atas produk atau jasa.
+
+Kesimpulan (dari baca dokumen, bukan nasihat hukum): boleh dipakai di situs tayang dengan baris
+kredit "Lampu kota: NASA Earth Observatory (Black Marble 2016, Suomi NPP VIIRS)" di footer atau
+halaman Tentang, tanpa logo NASA, tanpa kalimat yang mengesankan kerja sama dengan NASA. Area abu-abu:
+pedoman menyebut pemakaian editorial; halaman portofolio bersifat promosi. Risiko rendah karena
+gambar tidak memuat logo dan diolah (hanya piksel lampu yang dipakai).
