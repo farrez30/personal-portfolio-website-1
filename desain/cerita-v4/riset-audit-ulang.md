@@ -86,6 +86,32 @@ rolling door, tiang dan kabel, langit), dengan blur yang naik menurut jarak.
 | GPU tidak ikut diperlambat; angka desktop adalah batas bawah untuk WebGL | I | |
 | Remote debugging HP lewat chrome://inspect, rekam trace di perangkat | D | developer.chrome.com/docs/devtools/remote-debugging |
 
+## Babak andal pindah ke meja kasir (butir 16)
+
+Masukan Farrez: lampu darurat di lantai, bangku, dan HP di atasnya tidak bercerita apa pun
+("itu maksudnya apa?"). Pilihan Farrez dari tiga opsi (meja kasir, versi ringan, geser narasi):
+**meja kasir**, teks babak tetap. Rencana v4 (usulan-revisi-1, baris babak andal) memang
+menulis "pemutar baterai dan kasir tetap jalan"; adegan bangku melenceng dari rencana itu.
+
+Urutan: normal, lalu listrik padam (u 0,42) dengan lampu gantung dan bohlamnya ikut gelap,
+lampu darurat twin spot di atas rak menyala, LOS modem merah, dan tablet kasir berpita kuning
+"Offline" dengan transaksi tertunda 1 ke 3. Sesudah itu listrik kembali (u 0,72), "Mengirim",
+dan terakhir pita hijau "Online lagi, 3 transaksi terkirim".
+
+| Klaim | Label | Sumber |
+|---|---|---|
+| POS menampilkan status offline sebagai banner di atas layar; banner hilang saat tersambung | D | Square artikel 7777; Toast Platform Guide offline mode |
+| Transaksi tertunda ditandai per item (ikon panah melingkar, badge "Payment pending"), bukan penghitung | D | Square artikel 8551; Shopify Help offline payments |
+| Istilah Indonesia "Transaksi Tertunda" dan "Kirim Ulang Data" | D | majoo panduan pengguna detail/330 |
+| Data transaksi terkirim otomatis ke laporan saat online lagi | D | majoo.id/aplikasi-kasir-online; Qasir bantuan transaksi offline |
+| LOS merah berarti modem tidak menerima sinyal fiber; istilah awam "WiFi LOS merah" | D | telkomsel.com jelajah (9 Feb 2026); CNBC Indonesia (16 Sep 2025) |
+| Lampu darurat twin spot dijual di ritel Indonesia, menyala sendiri saat padam | D | ruparupa Powerlite twin spot |
+| Pedagang melayani pembeli dengan senter dan lampu darurat saat pemadaman bergilir | D | TIMES Indonesia (20 Jun 2026) |
+| Rata-rata pelanggan PLN padam 3,23 kali dan 320 menit pada 2024 | I | CNBC Indonesia mengutip Dirut PLN (15 Feb 2025); laporan PLN belum dibaca langsung |
+| Blackout 2019 mematikan sekitar 25% BTS; gangguan 4G sekitar 10 jam | I | Katadata (5 Agu 2019); kumparan mengutip OpenSignal (14 Agu 2019) |
+| Penghitung "3 transaksi tertunda" di pita | I | pilihan cerita: tidak ada POS yang terdokumentasi memakai angka, tapi angka membuat "datanya menyusul" terlihat |
+| Modem di mini UPS tetap hidup sementara sinyal fiber putus saat padam luas | I | Mojok (mini UPS router, 23 Sep 2026); padam luas mematikan perangkat jaringan (Katadata 2019) |
+
 ## Belum terverifikasi
 
 - Sebagian besar ukuran benda hanya dari cuplikan pencarian.

@@ -151,6 +151,57 @@
   scroll-snap-align: start;
 }
 
+/* Petunjuk geser di bawah barisan: chip singkat (HP, sekali) dan titik posisi. */
+.klien__geser {
+  margin-top: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2rem;
+}
+
+.klien__petunjuk {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 99px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--t-sedang) var(--ease), transform var(--t-sedang) var(--ease);
+}
+
+.klien__petunjuk[data-tampil="1"] {
+  opacity: 1;
+  transform: none;
+}
+
+.klien__titik {
+  display: inline-flex;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.klien__titik i {
+  width: 6px;
+  height: 6px;
+  border-radius: 3px;
+  background: currentColor;
+  opacity: 0.3;
+  transition: width var(--t-sedang) var(--ease), opacity var(--t-sedang) var(--ease);
+}
+
+.klien__titik i[data-aktif="1"] {
+  width: 16px;
+  opacity: 1;
+  background: var(--aksen);
+}
+
 .klien__kartu {
   display: grid;
   gap: 0.35rem;

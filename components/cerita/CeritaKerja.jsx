@@ -109,24 +109,64 @@ export default function CeritaKerja() {
     };
   }, [dunia]);
 
-  // Judul bab naik kata demi kata (kinetic type), digosok gulir. SplitText memberi aria-label
-  // pada judul, jadi pembaca layar tetap membaca kalimat utuh.
+  // Teks bab "sampul ditegakkan" (pilihan Farrez 19 Nov 2026, opsi C; rujukan Codrops "Creating
+  // 3D Scroll-Driven Text Animations with CSS and GSAP", 2025): tiap baris judul berputar masuk
+  // pada sumbu bawahnya seperti CD yang ditegakkan dari bak, nomor babak berputar seperti
+  // penghitung pita lalu berhenti di nomornya, isi muncul kata demi kata. Digosok gulir.
+  // SplitText memberi aria-label pada judul dan isi; angka nomor yang diacak sudah aria-hidden.
   useEffect(() => {
     const el = akar.current;
     if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     gsap.registerPlugin(ScrollTrigger, SplitText);
+    const pulih = [];
     const ctx = gsap.context(() => {
       for (const bab of el.querySelectorAll(".bab")) {
         const judul = bab.querySelector(".bab__judul");
         const teks = bab.querySelector(".bab__teks");
-        const pecah = SplitText.create(judul, { type: "words,lines", mask: "lines", aria: "auto" });
+        const pecah = SplitText.create(judul, { type: "lines", aria: "auto" });
         const awal = dunia ? "top 58%" : "top 85%";
-        gsap.from(pecah.words, {
-          yPercent: 110,
-          stagger: 0.06,
-          ease: "power3.out",
-          scrollTrigger: { trigger: dunia ? bab : teks, start: awal, end: dunia ? "top 38%" : "top 55%", scrub: 0.8 },
+        const akhir = dunia ? "top 38%" : "top 55%";
+        gsap.set(judul, { perspective: 600 });
+        gsap.from(pecah.lines, {
+          rotateX: -88,
+          opacity: 0,
+          transformOrigin: "50% 100% -20px",
+          stagger: 0.09,
+          ease: "back.out(1.4)",
+          scrollTrigger: { trigger: dunia ? bab : teks, start: awal, end: akhir, scrub: 0.8 },
         });
+        // Yang diacak hanya angka yang terlihat (span aria-hidden); kalimat untuk pembaca layar
+        // ada di span sr-only di sebelahnya dan tidak disentuh.
+        const nomor = bab.querySelector(".bab__nomor [aria-hidden='true']");
+        if (nomor) {
+          const asli = nomor.textContent;
+          pulih.push(() => (nomor.textContent = asli));
+          // Angka acak ditentukan oleh progres, jadi gulir maju dan mundur memberi urutan yang sama.
+          const pita = { t: 0 };
+          gsap.to(pita, {
+            t: 1,
+            ease: "none",
+            scrollTrigger: { trigger: dunia ? bab : teks, start: awal, end: akhir, scrub: 0.8 },
+            onUpdate() {
+              const langkah = Math.floor(pita.t * 24);
+              const isi = pita.t >= 0.75 || pita.t <= 0 ? asli : asli.replace(/\d/g, (_, i) => String((langkah * 7 + i * 3) % 10));
+              // Tulis ke DOM hanya saat angkanya berganti (24 kali sepanjang rentang), bukan tiap
+              // bingkai gulir: tiap penulisan textContent memicu tata letak ulang.
+              if (nomor.textContent !== isi) nomor.textContent = isi;
+            },
+          });
+        }
+        const isi = bab.querySelector(".bab__teks-isi");
+        if (isi) {
+          const kata = SplitText.create(isi, { type: "words", aria: "auto" });
+          gsap.from(kata.words, {
+            opacity: 0,
+            y: 6,
+            stagger: 0.012,
+            ease: "power2.out",
+            scrollTrigger: { trigger: dunia ? bab : teks, start: dunia ? "top 50%" : "top 80%", end: dunia ? "top 24%" : "top 46%", scrub: 0.8 },
+          });
+        }
         if (dunia)
           gsap.from(teks, {
             opacity: 0,
@@ -147,7 +187,7 @@ export default function CeritaKerja() {
             immediateRender: false,
             scrollTrigger: { trigger: bab, start: "bottom 92%", end: "bottom 64%", scrub: 0.8 },
           });
-        gsap.from(teks.querySelectorAll(".bab__nomor, .bab__teks-isi, .bab__bukti, .bab__keluhan li, .bab__ke-rak"), {
+        gsap.from(teks.querySelectorAll(".bab__nomor, .bab__bukti, .bab__keluhan li, .bab__ke-rak"), {
           y: 28,
           opacity: 0,
           stagger: 0.07,
@@ -171,6 +211,7 @@ export default function CeritaKerja() {
     return () => {
       cancelAnimationFrame(segar);
       ctx.revert();
+      pulih.forEach((f) => f());
     };
   }, [dunia, locale]);
 

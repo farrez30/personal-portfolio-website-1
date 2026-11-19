@@ -207,10 +207,14 @@
   transition: all var(--t-sedang) var(--ease);
 }
 
-.vinyl-btn:hover {
-  background: var(--aksen);
-  color: var(--bg);
-  border-color: transparent;
+/* Hanya perangkat yang punya hover: di layar sentuh warna ini tertinggal sesudah diketuk. */
+@media (hover: hover) {
+  .vinyl-btn:hover,
+  .vinyl-reopen:hover {
+    background: var(--aksen);
+    color: var(--bg);
+    border-color: transparent;
+  }
 }
 
 @media (pointer: coarse) {
@@ -374,12 +378,6 @@
   pointer-events: auto;
 }
 
-.vinyl-reopen:hover {
-  background: var(--aksen);
-  color: var(--bg);
-  border-color: transparent;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .vinyl-player,
   .vinyl-reopen {
@@ -444,9 +442,10 @@
   border-radius: 4px;
 }
 
-/* Selama cerita gulir di layar panel menciut ke cakram ini, di bawah header kanan: tempat yang
-   tidak dipakai teks bab (teks di kiri di desktop, di bawah di HP) maupun penanda bab. */
-.vinyl-reopen--cerita {
+/* Selama cerita gulir di layar (dan di HP begitu hero lewat) panel menciut ke cakram ini, di bawah
+   header kanan: tempat yang tidak dipakai teks bab (teks di kiri di desktop, di bawah di HP),
+   penanda bab, maupun judul seksi. */
+.vinyl-reopen--lipat {
   left: auto;
   right: 1.25rem;
   bottom: auto;
@@ -454,10 +453,24 @@
   transform-origin: top right;
 }
 
+/* HP: di bawah tautan kepala panggung rak (berakhir di 106 px), jadi satu posisi untuk cerita,
+   rak, klien, dan kontak. Panel yang dibuka dari cakram muncul di sebelahnya, juga di mode Ringan. */
 @media screen and (max-width: 600px) {
-  .vinyl-reopen--cerita {
+  .vinyl-reopen--lipat {
     right: 0.75rem;
-    top: 4.15rem;
+    top: 7.25rem;
+  }
+
+  .vinyl-player--lipat {
+    left: auto;
+    right: 0.75rem;
+    bottom: auto;
+    top: 6.5rem;
+    transform-origin: top right;
+  }
+
+  .vinyl-player--lipat.is-hidden {
+    transform: translateY(-40px) scale(0.9);
   }
 }
 

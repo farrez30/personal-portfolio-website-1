@@ -118,8 +118,10 @@ test("sorot bab bentuk memakai lampu kunci, bukan bidang additive", () => {
   // untuk bayangan, sudut dan kekuatannya biasa.
   assert.match(d, /sudut: SUDUT_KUNCI, kuat: 1 \};/);
   assert.match(d, /kunciLampu\.angle = kunciKini\.sudut;/);
-  // Jumlah lampu tidak bertambah (lampu baru mengompilasi ulang semua shader).
-  assert.equal((d.match(/new THREE\.SpotLight\(/g) ?? []).length, 2);
+  // Jumlah lampu tidak bertambah (lampu baru mengompilasi ulang semua shader). Babak andal
+  // menukar lampu darurat titik menjadi sorot, jadi yang dihitung pembuat lampu dari kedua jenis.
+  const jumlah = (jenis) => (d.match(new RegExp(`new THREE\\.${jenis}\\(`, "g")) ?? []).length;
+  assert.equal(jumlah("SpotLight") + jumlah("PointLight"), 6);
 });
 
 // Butir 4: kaca vitrin terbaca seperti jeli, dimensinya tidak terbaca; kaca pintu memudarkan jalan.
@@ -168,4 +170,115 @@ test("bab bentuk: brosur leaflet DL bertumpuk, kotak software dengan punggung, t
   const D = 0.214;
   const engsel = zLaptop - D / 2 + 0.004;
   assert.ok(engsel - D * Math.sin(0.2) > -0.08, "tutup laptop menembus balok tingkat atas");
+});
+
+// Butir 6: kabel semrawut yang seiring gulir dirapikan dan menyatu ke panel MCB berlabel.
+test("fondasi: kabel dipadukan dari kusut ke rapi lewat satu uniform, juga bayangannya", () => {
+  const mentah = baca("components/dunia/props.js");
+  const blok = tanpaKomentar(mentah.slice(mentah.indexOf("// ---- 04 fondasi"), mentah.indexOf("// ---- Gondola tengah")));
+  assert.doesNotMatch(blok, /power_box_01/, "kotak listrik CC0 lama masih dipakai");
+  assert.match(blok, /geo\.setAttribute\("posRapi", geoRapi\.attributes\.position\);/);
+  assert.match(blok, /o\.customDepthMaterial = bahanKabelBayang\(THREE\.MeshDepthMaterial/);
+  assert.match(blok, /o\.customDistanceMaterial = bahanKabelBayang\(THREE\.MeshDistanceMaterial/);
+  assert.match(blok, /rapi\.value = halus\(\(u - 0\.12\) \/ 0\.45\);/);
+  // Jalur kusut dan rapi harus berjumlah titik sama: dua TubeGeometry dengan segmen sama.
+  assert.match(blok, /new THREE\.TubeGeometry\(jalurRapi, SEG, r, 6\);\s*const geo = new THREE\.TubeGeometry\(jalurKusut, SEG, r, 6\);/);
+  assert.match(blok, /teksturCatatanTangan\("DAFTAR SIRKUIT"/);
+  assert.match(tanpaKomentar(mentah), /mix\(vec3\(position\), posRapi, uRapi\)/);
+});
+
+test("mug keramik menggantikan silinder kopi; lonceng ulir, lampu kaca susu, jalan ruko berlapis", () => {
+  const p = tanpaKomentar(baca("components/dunia/props.js"));
+  const kopi = p.slice(p.indexOf("const gelasKopi = (x, y, z, induk) =>"), p.indexOf("const gelasKopi = (x, y, z, induk) =>") + 600);
+  assert.match(kopi, /new THREE\.Mesh\(geoMug, glasir\)/);
+  assert.match(kopi, /new THREE\.Mesh\(geoGagang, glasir\)/);
+  assert.doesNotMatch(p, /tabung\(0\.034, 0\.09, b\.keramik/);
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  // Pegas ulir lurus: tidak ada lengkung turun di titik pegas, panjang 19 cm ke dalam ruangan.
+  assert.match(d, /titikPegas\.push\(new THREE\.Vector3\(Math\.sin\(sudut\) \* 0\.009, Math\.cos\(sudut\) \* 0\.009, -0\.006 - t \* 0\.19\)\);/);
+  assert.doesNotMatch(d, /titikPegas\.push\(new THREE\.Vector3\(0, -0\.11/);
+  assert.doesNotMatch(d, /nyala\.tambahBola\(lampuPintu\)/);
+  assert.match(d, /new THREE\.SphereGeometry\(0\.09, 32, 24\)/);
+  assert.match(d, /const jalan = \{ gelap: buatJalan\(false\), terang: buatJalan\(true\) \};/);
+  assert.doesNotMatch(d, /teksturJalan/);
+  // Lapisan jalan tidak berkabut dan bidang tegaknya menghadap ke dalam toko.
+  assert.match(d, /new THREE\.MeshBasicMaterial\(\{ map, fog: false, transparent: true, \.\.\.o \}\)/);
+  assert.match(d, /for \(const m of \[l1, l2, l4, l5\]\) m\.rotation\.y = Math\.PI;/);
+});
+
+// Butir 12 (pilihan Farrez, opsi C): baris judul berputar masuk, nomor seperti penghitung pita.
+test("teks bab: baris judul berputar dari sumbu bawah, nomor teracak tetap terbaca pembaca layar", () => {
+  const c = tanpaKomentar(baca("components/cerita/CeritaKerja.jsx"));
+  assert.match(c, /SplitText\.create\(judul, \{ type: "lines", aria: "auto" \}\)/);
+  assert.match(c, /rotateX: -88,\s*opacity: 0,\s*transformOrigin: "50% 100% -20px"/);
+  // Hanya angka aria-hidden yang diacak; kalimat sr-only untuk pembaca layar tidak disentuh.
+  assert.match(c, /bab\.querySelector\("\.bab__nomor \[aria-hidden='true'\]"\)/);
+  assert.doesNotMatch(c, /salinan/);
+  // Gerak dikurangi: tanpa animasi sama sekali.
+  assert.match(c, /if \(!el \|\| matchMedia\("\(prefers-reduced-motion: reduce\)"\)\.matches\) return;\s*gsap\.registerPlugin\(ScrollTrigger, SplitText\);\s*const pulih = \[\];/);
+  // Angka acak hanya dari progres (gulir mundur memberi urutan sama), bukan Math.random.
+  const pita = c.slice(c.indexOf("const pita = { t: 0 };"), c.indexOf("const isi = bab.querySelector"));
+  assert.doesNotMatch(pita, /Math\.random/);
+});
+
+// Butir 11 (pilihan Farrez, opsi A): petunjuk geser di HP.
+test("HP: rak koleksi tanpa panah teks, petunjuk gulir; klien menyenggol sekali dengan chip dan titik", () => {
+  const p = tanpaKomentar(baca("components/imersif/Panggung.jsx"));
+  assert.doesNotMatch(p, />\s*[←→]\s*</, "panah sebagai teks");
+  assert.match(p, /tr\("petunjukGulir"\)/);
+  const css = baca("components/imersif/panggung.css");
+  assert.match(css, /@media \(max-width: 650px\) \{[\s\S]*?\.panggung__panah \{\s*display: none;/);
+  const k = tanpaKomentar(baca("components/klien/Klien.jsx"));
+  assert.match(k, /t\("petunjukGeser"\)/);
+  assert.match(k, /if \(!sentuh\) return;/);
+  assert.match(k, /if \(!tenang\) el\.animate\(/);
+  assert.doesNotMatch(k, /scrollBy\(/, "senggolan scrollBy melawan scroll-snap");
+  for (const lang of ["id", "en"]) {
+    const m = JSON.parse(baca(`messages/${lang}.json`));
+    assert.ok(m.rak.petunjukGulir && m.klien.petunjukGeser, lang);
+  }
+});
+
+// Pangkas kerja tiap bingkai gulir (pengukuran HP 19 Nov): DOM nomor hanya saat berganti, kabel
+// fondasi tetap disaring frustum dengan batas gabungan kedua jalurnya.
+test("gulir: nomor babak ditulis saat berganti saja, kabel punya batas gabungan", () => {
+  const c = tanpaKomentar(baca("components/cerita/CeritaKerja.jsx"));
+  assert.match(c, /if \(nomor\.textContent !== isi\) nomor\.textContent = isi;/);
+  const p = tanpaKomentar(baca("components/dunia/props.js"));
+  assert.doesNotMatch(p, /o\.frustumCulled = false;\s*g\.add\(o\);/);
+  assert.match(p, /\.union\(new THREE\.Box3\(\)\.setFromBufferAttribute\(geoRapi\.attributes\.position\)\)/);
+});
+
+// Butir 13: bola nyala lampu gantung menonjol 3,4 cm di bawah kap kaca model (terbukti dari
+// batas mesh kaca y 2,243..2,453 lawan bola di 2,244 berjari-jari 3,5 cm).
+test("bola nyala lampu gantung ada di dalam kap kaca", () => {
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  const [, naik] = d.match(/b\.position\.set\(x, y \+ ([\d.]+), z\);/);
+  const SKALA = 0.72;
+  const bawahKaca = 3.2 - 1.3 * SKALA - 0.021; // tepi bawah kaca model, terukur 2,243
+  const pusat = 3.2 - 1.3 * SKALA + Number(naik);
+  assert.ok(pusat - 0.035 >= bawahKaca, `bola menonjol ${(bawahKaca - (pusat - 0.035)).toFixed(3)} m di bawah kaca`);
+});
+
+// Butir 17: kaset model CC0 duduk di luar badan pemutar; dimasukkan ke dalam badannya.
+test("kaset dimasukkan ke dalam badan pemutar saat model dimuat", () => {
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  assert.match(d, /masukkanKaset\(kaset\);/);
+  assert.match(d, /if \(minX\.get\(cari\(akar\[i\]\)\) >= 0\.25\) pos\.setXYZ\(i, pos\.getX\(i\) - 0\.899/);
+});
+
+// Butir 14: lonceng pintu bisa diketuk, berbunyi, berayun; gerak dikurangi hanya bunyi.
+test("lonceng pintu bisa diketuk: tombol berlabel minimal 44 px, bunyi, ayunan dari ketukan", () => {
+  const j = baca("components/dunia/Dunia.jsx");
+  assert.match(j, /aria-label=\{t\("lonceng"\)\}/);
+  assert.match(j, /duniaRef\.current\?\.ketukLonceng\(\);\s*suara\(\)\?\.mainkan\("lonceng"\);/);
+  // Tidak merebut ketukan dari tautan atau kolom isian di bawahnya (HP: baris WhatsApp).
+  assert.match(j, /const lonceng = posLonceng \? muatLonceng\(posLonceng\) : null;/);
+  assert.match(j, /u = Math.max\(44, u - 6\)/);
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  assert.match(d, /ukuran: Math\.round\(Math\.max\(44, r \* 1\.6\)\)/);
+  assert.match(d, /ketukLonceng\(\) \{\s*if \(kurangiGerak\) return;/);
+  assert.match(d, /ampAyun = Math\.min\(0\.34, sisa \+ 0\.14\);/);
+  assert.match(d, /laporLonceng\(a\.id === "pintu" && !blend\);/);
+  for (const lang of ["id", "en"]) assert.ok(JSON.parse(baca(`messages/${lang}.json`)).dunia.lonceng, lang);
 });

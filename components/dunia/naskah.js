@@ -59,11 +59,13 @@ export const ANCHOR = [
   },
   {
     id: "fondasi",
-    // Rak hi-fi dilihat dari belakang: kabel rapi, lampu menyala satu per satu.
-    posisi: [-2.75, 1.05, 1.55],
-    lihat: [-3.92, 0.62, 2.38],
-    benda: [-4.05, 0.5, 1.95],
-    fov: 40,
+    // Rak sound dilihat dari belakang: kabel kusut dirapikan dan menyatu ke talang menuju panel
+    // MCB di dinding. Kamera mundur dan naik supaya rak, berkas kabel di lantai, talang, dan
+    // panel masuk satu bingkai (dulu panel terpotong di tepi atas).
+    posisi: [-2.2, 1.6, 1.05],
+    lihat: [-4.2, 0.52, 2.4],
+    benda: [-4.15, 0.45, 2.2],
+    fov: 46,
     cerita: true,
     seksi: [{ sel: ".bab--fondasi", di: 0 }],
   },
@@ -99,11 +101,17 @@ export const ANCHOR = [
   },
   {
     id: "andal",
-    // Listrik toko padam: pemutar kaset baterai, ponsel, dan lampu darurat tetap menyala.
-    posisi: [2.75, 1.0, -0.7],
-    lihat: [3.27, 0.5, -1.85],
-    benda: [3.55, 0.55, -1.6],
-    fov: 36,
+    // Meja kasir saat listrik padam: lampu darurat twin spot menyala, tablet tetap mencatat
+    // offline, lalu transaksi tertunda terkirim begitu listrik kembali.
+    // Meja kasir hanya 90 cm di depan rak, jadi kamera mundur jauh supaya lampu gantung yang
+    // padam, lampu darurat di atas rak, dan meja masuk satu bingkai. Di layar tegak rumus umum
+    // (mundur dari benda) memotong lampu darurat, jadi posenya ditulis sendiri.
+    posisi: [3.1, 1.6, 0.75],
+    lihat: [2.65, 1.7, 3.9],
+    benda: [2.0, 1.3, 3.0],
+    tegak: { posisi: [2.3, 1.45, 1.25], lihat: [1.8, 1.45, 3.6], fov: 50 },
+    fov: 44,
+    paparan: 1.4,
     cerita: true,
     seksi: [{ sel: ".bab--andal", di: 0 }],
   },
@@ -165,6 +173,7 @@ export const ANCHOR = [
 // di kanan bingkai. Di HP teks ada di separuh bawah: kamera membidik benda di tengah, mundur
 // sedikit, dan menunduk supaya benda naik ke separuh atas.
 export function anchorTegak(a) {
+  if (a.tegak) return { ...a, ...a.tegak };
   if (!a.benda) return a;
   const mundur = 1.15;
   return {
@@ -265,6 +274,16 @@ const BUNYI_TITIK = {
     [0.56, "rapat"],
   ],
 };
+// Babak andal di meja kasir, menurut progres u (0..1): listrik padam di u 0,42..0,72 dan selama
+// itu transaksi tertunda bertambah 1, 2, lalu 3. Begitu listrik kembali ada jeda singkat
+// "mengirim" sebelum semuanya terkirim. Dipakai props.js untuk layar kasir, lampu darurat, dan
+// modem, dan dunia.js untuk meredupkan lampu toko, supaya rentangnya satu.
+export function keadaanAndal(u) {
+  if (!(u > 0.42)) return { keadaan: "normal", tertunda: 0 };
+  const tertunda = Math.min(3, 1 + Math.floor(Math.max(0, u - 0.46) / 0.08));
+  if (u < 0.72) return { keadaan: "padam", tertunda };
+  return { keadaan: u < 0.77 ? "kirim" : "pulih", tertunda };
+}
 // Jumlah lampu status rak hi-fi yang menyala di babak fondasi (0..3). Dipakai dunia.js untuk
 // lampunya dan bunyiCerita untuk relay-nya, supaya bunyi jatuh tepat saat lampu menyala.
 export function nyalaFondasi(u) {

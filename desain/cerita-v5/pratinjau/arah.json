@@ -1,0 +1,576 @@
+[
+  {
+    "kode": "A",
+    "nama": "Satu nota, dari laci kasir sampai Nusantara",
+    "inti": "Usaha pembaca sendiri, apa adanya. Kamera selalu berada di toko klien, bukan di meja developer.",
+    "objek": "Satu nota merah: keluhan yang ditulis di nota, lalu jadi daftar kebutuhan, layar, dan akhirnya satu titik data yang menyala di peta.",
+    "babak": [
+      {
+        "babak": "01 IDE",
+        "judul": "Berawal dari keluhan sehari-hari.",
+        "skala": "40 cm",
+        "momen": "Meja kasir dari atas. Nota berserakan, satu nota merah berisi keluhan.",
+        "kamera": "Dekat, menunduk ke meja"
+      },
+      {
+        "babak": "02 RENCANA",
+        "judul": "Semua dimulai dari rencana yang Anda setujui.",
+        "skala": "40 cm",
+        "momen": "Nota merah membuka dan berubah jadi daftar kebutuhan di papan jepit. Tangan pemilik memberi paraf.",
+        "kamera": "Turun mendekat ke papan"
+      },
+      {
+        "babak": "03 BENTUK",
+        "judul": "Bentuknya dipilih sesuai masalahnya.",
+        "skala": "1 m",
+        "momen": "Dari papan, tiga garis merah memancar ke HP sales, laptop admin, dan chat pesanan.",
+        "kamera": "Mundur sedikit, tiga benda masuk bingkai"
+      },
+      {
+        "babak": "04 FONDASI",
+        "judul": "Rapi sampai ke bagian yang tidak kelihatan.",
+        "skala": "1 m",
+        "momen": "Kamera turun ke bawah meja kasir: kabel rapi berlabel, router, dan buku catatan cara kerja.",
+        "kamera": "Rendah, dari kolong meja"
+      },
+      {
+        "babak": "05 BANGUN",
+        "judul": "Sudah kelihatan sebelum dibangun.",
+        "skala": "1 m",
+        "momen": "Pemilik memegang HP berisi rancangan layar. Sketsa kertas di belakang, bagian yang kurang pas dicoret.",
+        "kamera": "Dari balik bahu pemilik"
+      },
+      {
+        "babak": "06 PROGRES",
+        "judul": "Progresnya jelas, kabarnya tidak putus.",
+        "skala": "3 m",
+        "momen": "Dinding toko: papan kabar dengan kolom sudah jadi dan belum. Di HP masuk kabar mingguan.",
+        "kamera": "Mundur, dinding toko terlihat"
+      },
+      {
+        "babak": "07 RAPI",
+        "judul": "Enak dipakai, bukan cuma bisa dipakai.",
+        "skala": "5 m",
+        "momen": "Kasir sungguhan mencoba. Pembeli antre, transaksi lancar, satu langkah yang membingungkan dipangkas.",
+        "kamera": "Lebar, dari sisi meja kasir"
+      },
+      {
+        "babak": "08 ANDAL",
+        "judul": "Tetap bisa diandalkan saat paling dibutuhkan.",
+        "skala": "10 m",
+        "momen": "Toko dari depan, malam. Listrik padam, jendela gelap, layar kasir tetap menyala. Lampu kembali, data menyusul.",
+        "kamera": "Dari seberang jalan"
+      },
+      {
+        "babak": "09 AMAN",
+        "judul": "Data penting tetap di tangan yang berhak.",
+        "skala": "100 m",
+        "momen": "Toko, gudang, dan kantor pemilik tersambung. Tiap pintu punya kunci sesuai peran. Cabang kedua muncul putus-putus.",
+        "kamera": "Naik ke atas atap"
+      },
+      {
+        "babak": "10 RILIS",
+        "judul": "Dan akhirnya, dipakai tiap hari.",
+        "skala": "1.000 km",
+        "momen": "Zoom out bertahap: blok kota, lalu peta Nusantara. Titik cabang dan distributor menyala, tersambung garis merah.",
+        "kamera": "Terbang naik, kamera tegak lurus"
+      },
+      {
+        "babak": "PENUTUP",
+        "judul": "Rak koleksi proyek",
+        "skala": "36.000 km",
+        "momen": "Penutup: globe. Garis dari Indonesia menjangkau banyak tempat, satelit mengorbit dan memantulkan sinyal ke titik-titik itu. Paling akhir, kamera masuk ke rak koleksi proyek.",
+        "kamera": "Zoom out penuh sampai orbit satelit, globe berputar pelan"
+      }
+    ]
+  },
+  {
+    "kode": "B",
+    "nama": "Ruko yang tumbuh jadi kota",
+    "inti": "Membangun tempat usaha: denah, fondasi, maket, serah kunci. Setelah jadi, kamera naik dan ruko itu tersambung ke listrik, air, jalan, dan sinyal kota.",
+    "objek": "Satu kabel merah dari meteran ruko: tersembunyi di dinding saat fondasi, lalu menyambung ke gardu, kota, dan kabel bawah laut.",
+    "babak": [
+      {
+        "babak": "01 IDE",
+        "judul": "Berawal dari keluhan sehari-hari.",
+        "skala": "6 m",
+        "momen": "Ruko lama yang sesak: dus menumpuk sampai ke pintu, pemilik sulit lewat.",
+        "kamera": "Dari trotoar depan"
+      },
+      {
+        "babak": "02 RENCANA",
+        "judul": "Semua dimulai dari rencana yang Anda setujui.",
+        "skala": "50 cm",
+        "momen": "Denah di atas meja. Pemilik membaca, lalu stempel turun: setuju.",
+        "kamera": "Dari atas meja, menunduk"
+      },
+      {
+        "babak": "03 BENTUK",
+        "judul": "Bentuknya dipilih sesuai masalahnya.",
+        "skala": "30 m",
+        "momen": "Tiga pilihan bangunan berjajar: kios, ruko, gudang. Yang cocok dengan usahanya disorot.",
+        "kamera": "Lebar, menyamping"
+      },
+      {
+        "babak": "04 FONDASI",
+        "judul": "Rapi sampai ke bagian yang tidak kelihatan.",
+        "skala": "2 m",
+        "momen": "Potongan dinding: fondasi, pipa, dan kabel merah berlabel. Bagian yang nanti tertutup tetap rapi.",
+        "kamera": "Tembus dinding, dari samping"
+      },
+      {
+        "babak": "05 BANGUN",
+        "judul": "Sudah kelihatan sebelum dibangun.",
+        "skala": "50 cm",
+        "momen": "Maket ruko di meja. Tangan pemilik membuka pintu maket dan mencoba alurnya sebelum bata pertama dipasang.",
+        "kamera": "Dekat, setinggi maket"
+      },
+      {
+        "babak": "06 PROGRES",
+        "judul": "Progresnya jelas, kabarnya tidak putus.",
+        "skala": "10 m",
+        "momen": "Papan proyek di depan bangunan dan foto mingguan dari mandor di HP: mana yang sudah, mana yang belum.",
+        "kamera": "Dari depan pagar proyek"
+      },
+      {
+        "babak": "07 RAPI",
+        "judul": "Enak dipakai, bukan cuma bisa dipakai.",
+        "skala": "3 m",
+        "momen": "Serah kunci. Penghuni mencoba saklar dan keran. Yang masih janggal dicatat dan dibetulkan.",
+        "kamera": "Setinggi mata, di ambang pintu"
+      },
+      {
+        "babak": "08 ANDAL",
+        "judul": "Tetap bisa diandalkan saat paling dibutuhkan.",
+        "skala": "20 m",
+        "momen": "Kompleks padam. Ruko ini punya toren dan genset, lampunya tetap menyala.",
+        "kamera": "Malam, dari ujung jalan"
+      },
+      {
+        "babak": "09 AMAN",
+        "judul": "Data penting tetap di tangan yang berhak.",
+        "skala": "6 m",
+        "momen": "Potongan ruko: kunci berbeda per ruang (kasir, gudang, pemilik). Lantai tambahan sudah disiapkan, garis putus-putus.",
+        "kamera": "Potongan depan"
+      },
+      {
+        "babak": "10 RILIS",
+        "judul": "Dan akhirnya, dipakai tiap hari.",
+        "skala": "2 km",
+        "momen": "Kamera naik: ruko di blok kota. Kabel merah menyambung ke gardu, jalan, dan menara sinyal, lalu blok demi blok menyala.",
+        "kamera": "Terbang naik, miring 45 derajat"
+      },
+      {
+        "babak": "PENUTUP",
+        "judul": "Rak koleksi proyek",
+        "skala": "10.000 km",
+        "momen": "Penutup: pulau, lalu globe. Kabel bawah laut dan garis sinyal menyambung kota itu ke banyak tempat.",
+        "kamera": "Zoom out penuh"
+      }
+    ]
+  },
+  {
+    "kode": "C",
+    "nama": "Dari stopkontak sampai satelit",
+    "inti": "Listrik dan sinyal di toko. Masalah dimulai dari colokan yang ruwet, berakhir dengan peta lampu malam Nusantara dan satelit di atasnya. Paling dekat dengan ide awal Farrez.",
+    "objek": "Satu pulsa cahaya merah yang mengalir di kabel: dari stopkontak, panel, gardu, pembangkit, sampai lintasan satelit.",
+    "babak": [
+      {
+        "babak": "01 IDE",
+        "judul": "Berawal dari keluhan sehari-hari.",
+        "skala": "40 cm",
+        "momen": "Stopkontak penuh colokan bertumpuk, kabel ruwet, lampu toko berkedip.",
+        "kamera": "Dekat, setinggi stopkontak"
+      },
+      {
+        "babak": "02 RENCANA",
+        "judul": "Semua dimulai dari rencana yang Anda setujui.",
+        "skala": "50 cm",
+        "momen": "Gambar instalasi di meja: titik lampu, colokan, dan jalur kabel tiap ruang. Pemilik menyetujui.",
+        "kamera": "Dari atas meja"
+      },
+      {
+        "babak": "03 BENTUK",
+        "judul": "Bentuknya dipilih sesuai masalahnya.",
+        "skala": "1 m",
+        "momen": "Tiga alat dicolok: HP, laptop, dan mesin kasir. Dayanya disesuaikan dengan kebutuhan masing-masing alat.",
+        "kamera": "Setinggi meja"
+      },
+      {
+        "babak": "04 FONDASI",
+        "judul": "Rapi sampai ke bagian yang tidak kelihatan.",
+        "skala": "1 m",
+        "momen": "Dinding dibuka: kabel rapi di dalam pipa, panel MCB berlabel per ruang.",
+        "kamera": "Tembus dinding"
+      },
+      {
+        "babak": "05 BANGUN",
+        "judul": "Sudah kelihatan sebelum dibangun.",
+        "skala": "50 cm",
+        "momen": "Sebelum dipasang permanen, rangkaian diuji di papan uji. Lampu uji menyala, baru dipasang.",
+        "kamera": "Dekat, di meja kerja"
+      },
+      {
+        "babak": "06 PROGRES",
+        "judul": "Progresnya jelas, kabarnya tidak putus.",
+        "skala": "2 m",
+        "momen": "Meteran dan layar pantau: aliran tiap ruang terlihat, termasuk yang belum tersambung.",
+        "kamera": "Dari depan panel"
+      },
+      {
+        "babak": "07 RAPI",
+        "judul": "Enak dipakai, bukan cuma bisa dipakai.",
+        "skala": "3 m",
+        "momen": "Saklar di tempat yang pas: satu tekan di pintu, semua yang perlu langsung menyala.",
+        "kamera": "Di ambang pintu toko"
+      },
+      {
+        "babak": "08 ANDAL",
+        "judul": "Tetap bisa diandalkan saat paling dibutuhkan.",
+        "skala": "10 m",
+        "momen": "Listrik padam satu blok. UPS dan genset mengambil alih, layar kasir tetap menyala.",
+        "kamera": "Malam, dari seberang jalan"
+      },
+      {
+        "babak": "09 AMAN",
+        "judul": "Data penting tetap di tangan yang berhak.",
+        "skala": "2 m",
+        "momen": "Panel MCB terkunci per ruang. Daya bisa dinaikkan tanpa membongkar instalasi.",
+        "kamera": "Dari depan panel"
+      },
+      {
+        "babak": "10 RILIS",
+        "judul": "Dan akhirnya, dipakai tiap hari.",
+        "skala": "50 km",
+        "momen": "Zoom out: tiang listrik, gardu, pembangkit, lalu peta lampu malam Nusantara.",
+        "kamera": "Terbang naik dari tiang ke langit"
+      },
+      {
+        "babak": "PENUTUP",
+        "judul": "Rak koleksi proyek",
+        "skala": "36.000 km",
+        "momen": "Penutup: globe dengan kabel bawah laut, menara sinyal, dan satelit. Pulsa merah berlari di lintasannya.",
+        "kamera": "Zoom out penuh"
+      }
+    ]
+  },
+  {
+    "kode": "D",
+    "nama": "Satu paket, satu resi",
+    "inti": "Perjalanan satu pesanan dari chat sampai diterima. Terkuat untuk babak progres, andal, dan rilis; paling lemah di babak membangun.",
+    "objek": "Satu paket merah dengan resinya: dibungkus, dipindai, berpindah kendaraan, dan sampai di tangan penerima.",
+    "babak": [
+      {
+        "babak": "01 IDE",
+        "judul": "Berawal dari keluhan sehari-hari.",
+        "skala": "40 cm",
+        "momen": "Chat pesanan bertumpuk di HP, alamat tertulis tangan dan salah. Satu paket merah belum jelas tujuannya.",
+        "kamera": "Dekat, dari atas meja"
+      },
+      {
+        "babak": "02 RENCANA",
+        "judul": "Semua dimulai dari rencana yang Anda setujui.",
+        "skala": "40 cm",
+        "momen": "Label resi dicetak: isi, tujuan, penerima. Pemilik memeriksa dan menyetujui.",
+        "kamera": "Dekat ke label"
+      },
+      {
+        "babak": "03 BENTUK",
+        "judul": "Bentuknya dipilih sesuai masalahnya.",
+        "skala": "10 m",
+        "momen": "Motor, pikap, truk berjajar. Kendaraan dipilih sesuai muatan, bukan yang paling besar.",
+        "kamera": "Lebar, menyamping"
+      },
+      {
+        "babak": "04 FONDASI",
+        "judul": "Rapi sampai ke bagian yang tidak kelihatan.",
+        "skala": "20 m",
+        "momen": "Gudang sortir: rak berlabel, jalur ban berjalan rapi. Tidak ada paket yang tercecer.",
+        "kamera": "Dari atas rak"
+      },
+      {
+        "babak": "05 BANGUN",
+        "judul": "Sudah kelihatan sebelum dibangun.",
+        "skala": "1 m",
+        "momen": "Paket contoh dikirim lebih dulu: isinya dibuka dan dicoba sebelum pengiriman besar.",
+        "kamera": "Dekat, setinggi meja"
+      },
+      {
+        "babak": "06 PROGRES",
+        "judul": "Progresnya jelas, kabarnya tidak putus.",
+        "skala": "peta",
+        "momen": "Layar lacak resi: titik demi titik terlewati, kabarnya tidak putus.",
+        "kamera": "Layar HP penuh"
+      },
+      {
+        "babak": "07 RAPI",
+        "judul": "Enak dipakai, bukan cuma bisa dipakai.",
+        "skala": "1 m",
+        "momen": "Penerima membuka paket. Isinya pas dengan yang dipesan.",
+        "kamera": "Dekat, dari depan"
+      },
+      {
+        "babak": "08 ANDAL",
+        "judul": "Tetap bisa diandalkan saat paling dibutuhkan.",
+        "skala": "50 km",
+        "momen": "Jalan utama terputus banjir. Rute cadangan dipakai, paket tetap jalan.",
+        "kamera": "Dari udara, peta"
+      },
+      {
+        "babak": "09 AMAN",
+        "judul": "Data penting tetap di tangan yang berhak.",
+        "skala": "1 m",
+        "momen": "Serah terima: tiap petugas memindai. Hanya penerima yang membubuhkan tanda tangan.",
+        "kamera": "Setinggi tangan"
+      },
+      {
+        "babak": "10 RILIS",
+        "judul": "Dan akhirnya, dipakai tiap hari.",
+        "skala": "3.000 km",
+        "momen": "Zoom out: rute Nusantara, truk, kapal, dan pesawat membawa paket ke banyak kota.",
+        "kamera": "Terbang naik"
+      },
+      {
+        "babak": "PENUTUP",
+        "judul": "Rak koleksi proyek",
+        "skala": "10.000 km",
+        "momen": "Penutup: globe dengan rute ke seluruh dunia, lalu rak proyek.",
+        "kamera": "Zoom out penuh"
+      }
+    ]
+  },
+  {
+    "kode": "E",
+    "nama": "Uji tekan: satu nota melewati hari terburuk",
+    "inti": "Pre-mortem yang dipentaskan. Hal yang paling sering membuat sistem usaha gagal di lapangan datang satu per satu, dan di adegan yang sama penonton melihat nota itu selamat. Urutan kerja lama (rencana, fondasi, uji) masuk sebagai jawaban tiap ujian.",
+    "objek": "Satu nota merah dan penghitung kecil 'nota selamat' yang terus bertambah. Zoom makro hanya di adegan yang memang terjadi sekota atau senusantara.",
+    "babak": [
+      {
+        "babak": "01 HARI BIASA",
+        "judul": "Satu nota, satu transaksi.",
+        "skala": "40 cm",
+        "momen": "Meja kasir, nota merah tercetak. Taruhannya disebut sekali: uang hari ini dan nama baik toko.",
+        "kamera": "Dekat, menunduk ke meja"
+      },
+      {
+        "babak": "02 RAMAI",
+        "judul": "Semua datang di jam yang sama.",
+        "skala": "2 km",
+        "momen": "Tanggal gajian dan promo. Kamera naik ke kota, ribuan titik transaksi datang bersamaan dan antre. Nota kita tetap lolos.",
+        "kamera": "Naik dari meja ke atas kota"
+      },
+      {
+        "babak": "03 PADAM",
+        "judul": "Lampu mati, catatan jalan terus.",
+        "skala": "2 km",
+        "momen": "Listrik padam satu blok. Kota meredup, toko ini tetap mencatat. Lampu kembali, jumlahnya cocok.",
+        "kamera": "Tetap di atas kota, malam"
+      },
+      {
+        "babak": "04 SERANGAN",
+        "judul": "Yang tidak berhak tidak masuk.",
+        "skala": "10 m",
+        "momen": "Permintaan palsu datang dari luar dan ditolak di gerbang. Di dalam, kasir hanya melihat bagian kasir.",
+        "kamera": "Dari depan toko"
+      },
+      {
+        "babak": "05 DATA HILANG",
+        "judul": "Rusak di satu tempat, utuh di tempat lain.",
+        "skala": "1 m",
+        "momen": "Server rusak. Cadangan di tempat lain dipulihkan, dan latihan pulihnya pernah dicoba. Nota kembali utuh.",
+        "kamera": "Dekat ke rak server"
+      },
+      {
+        "babak": "06 PINDAHAN",
+        "judul": "Data lama ikut pindah, angkanya sama.",
+        "skala": "1 m",
+        "momen": "Tumpukan buku dan Excel lama pindah ke sistem baru. Hitungan sebelum dan sesudah sama, sistem lama tetap jalan berdampingan sampai yakin.",
+        "kamera": "Dari samping meja"
+      },
+      {
+        "babak": "07 GANTI ORANG",
+        "judul": "Orang datang dan pergi, sistemnya tetap.",
+        "skala": "5 m",
+        "momen": "Karyawan baru langsung bisa di hari pertama. Karyawan yang keluar, aksesnya dicabut hari itu juga.",
+        "kamera": "Setinggi mata, dari meja kasir"
+      },
+      {
+        "babak": "08 CABANG",
+        "judul": "Usaha tumbuh, laporannya tetap satu.",
+        "skala": "1.000 km",
+        "momen": "Cabang bertambah. Kamera naik ke Nusantara, nota dari cabang di zona waktu lain masuk ke laporan pusat.",
+        "kamera": "Terbang naik"
+      },
+      {
+        "babak": "09 KELANGSUNGAN",
+        "judul": "Tetap jalan walau saya tidak ada.",
+        "skala": "1 m",
+        "momen": "Developernya pergi. Yang Anda dapat sudah tertulis sejak awal: kode milik Anda atau lisensi, sesuai kesepakatan. Di skema mana pun data tetap milik Anda dan bisa diekspor, dan catatan cara kerjanya ada.",
+        "kamera": "Dekat, kotak di atas meja"
+      },
+      {
+        "babak": "PENUTUP",
+        "judul": "Mulai dari yang kecil.",
+        "skala": "36.000 km",
+        "momen": "Penutup: globe dan satelit. Kebun atau cabang terpencil tetap tersambung. Lalu langkah kecil: mulai dari prototipe, dan rak bukti proyek.",
+        "kamera": "Zoom out sampai orbit"
+      }
+    ]
+  },
+  {
+    "kode": "F",
+    "nama": "Sehari, diputar dua kali",
+    "inti": "Satu hari kerja pemilik usaha, sekali dengan cara lama dan sekali sesudah punya sistem. Di tengahnya pemandu (Farrez) dengan tiga langkah. Klien jadi tokoh utama.",
+    "objek": "Nota merah dan arah matahari sebagai jam. Peta cabang yang sama muncul dua kali: gelap dan terputus, lalu menyala.",
+    "babak": [
+      {
+        "babak": "01 PAGI",
+        "judul": "Hari dimulai dari tumpukan kemarin.",
+        "skala": "40 cm",
+        "momen": "Pagi, sebelum. Toko buka, nota tulis tangan sudah menumpuk dari kemarin.",
+        "kamera": "Dekat, menunduk"
+      },
+      {
+        "babak": "02 SIANG",
+        "judul": "Ramai itu bagus, kalau tidak salah hitung.",
+        "skala": "5 m",
+        "momen": "Siang, sebelum. Ramai, salah hitung, antrean memanjang.",
+        "kamera": "Lebar, dari sisi kasir"
+      },
+      {
+        "babak": "03 SORE",
+        "judul": "Cabang terasa jauh sekali.",
+        "skala": "1.000 km",
+        "momen": "Sore, sebelum. Laporan cabang belum datang, ditelepon satu per satu. Peta cabang gelap dan terputus.",
+        "kamera": "Terbang naik"
+      },
+      {
+        "babak": "04 MALAM",
+        "judul": "Pertanyaan yang sama tiap malam.",
+        "skala": "1 m",
+        "momen": "Malam, sebelum. Rekap manual sampai larut. Pertanyaannya: berapa sebenarnya untung hari ini?",
+        "kamera": "Dekat, lampu meja"
+      },
+      {
+        "babak": "05 PEMANDU",
+        "judul": "Tiga langkah, bukan satu lompatan.",
+        "skala": "1 m",
+        "momen": "Jembatan. Bertemu pemandu, tiga langkah: ngobrol dulu, prototipe yang bisa dicoba, rilis bertahap dengan harga per tahap.",
+        "kamera": "Dua orang di meja"
+      },
+      {
+        "babak": "06 PAGI",
+        "judul": "Hari dimulai dari nol.",
+        "skala": "40 cm",
+        "momen": "Pagi, sesudah. Nota yang sama tercatat sekali, tidak ada tumpukan.",
+        "kamera": "Dekat, menunduk"
+      },
+      {
+        "babak": "07 SIANG",
+        "judul": "Antrean pendek, angkanya benar.",
+        "skala": "5 m",
+        "momen": "Siang, sesudah. Antrean jalan. Listrik sempat padam, kasir tetap mencatat.",
+        "kamera": "Lebar, dari sisi kasir"
+      },
+      {
+        "babak": "08 SORE",
+        "judul": "Semua cabang, satu layar.",
+        "skala": "1.000 km",
+        "momen": "Sore, sesudah. Peta yang sama menyala: semua cabang terlihat dari satu HP.",
+        "kamera": "Terbang naik"
+      },
+      {
+        "babak": "09 MALAM",
+        "judul": "Pulang tepat waktu.",
+        "skala": "10 m",
+        "momen": "Malam, sesudah. Lampu toko mati lebih cepat, pemilik pulang.",
+        "kamera": "Dari seberang jalan"
+      },
+      {
+        "babak": "PENUTUP",
+        "judul": "Besok pagi, hari yang sama, cara yang baru.",
+        "skala": "36.000 km",
+        "momen": "Penutup: kamera naik dari atap ke langit malam, satelit lewat di atas Nusantara. Lalu rak bukti proyek.",
+        "kamera": "Zoom out ke langit"
+      }
+    ]
+  },
+  {
+    "kode": "G",
+    "nama": "Yang ditimbang sebelum memutuskan",
+    "inti": "Mengikuti isi kepala pembeli: apa yang mendorong, apa yang menarik, lalu tiap rasa cemas dijawab satu per satu (Jobs To Be Done, empat gaya kemajuan). Paling mudah diteruskan ke orang keuangan atau TI di perusahaan klien.",
+    "objek": "Nota di atas timbangan. Tiap babak mengangkat satu beban sampai timbangan condong ke 'mulai'.",
+    "babak": [
+      {
+        "babak": "01 DORONGAN",
+        "judul": "Yang sekarang bikin capek.",
+        "skala": "1 m",
+        "momen": "Dorongan: rekap manual yang bikin capek, data beda antar cabang.",
+        "kamera": "Dekat"
+      },
+      {
+        "babak": "02 HARGA DIAM",
+        "judul": "Diam juga ada harganya.",
+        "skala": "40 cm",
+        "momen": "Harga diam: yang hilang tiap bulan kalau tidak berubah. Jam lembur, selisih stok.",
+        "kamera": "Dekat ke timbangan"
+      },
+      {
+        "babak": "03 TARIKAN",
+        "judul": "Bayangan sesudahnya.",
+        "skala": "1 m",
+        "momen": "Tarikan: gambaran sesudahnya dalam satu layar.",
+        "kamera": "Dekat ke HP"
+      },
+      {
+        "babak": "04 BIAYA",
+        "judul": "Harganya jelas sejak awal.",
+        "skala": "40 cm",
+        "momen": "Cemas biaya molor: lingkup tertulis, harga per tahap. Angka di nota tidak berubah.",
+        "kamera": "Dari atas meja"
+      },
+      {
+        "babak": "05 VENDOR",
+        "judul": "Tidak bergantung pada satu orang.",
+        "skala": "1 m",
+        "momen": "Cemas vendor menghilang: hak atas kode (milik atau lisensi) tertulis sejak awal, data tetap milik Anda dan bisa diekspor, catatan cara kerjanya ada.",
+        "kamera": "Dekat, kotak di meja"
+      },
+      {
+        "babak": "06 RAMAI",
+        "judul": "Diuji sebelum hari ramai.",
+        "skala": "2 km",
+        "momen": "Cemas tumbang saat ramai: uji beban dipentaskan. Kamera naik ke kota.",
+        "kamera": "Naik ke atas kota"
+      },
+      {
+        "babak": "07 DATA",
+        "judul": "Aman dan bisa dipulihkan.",
+        "skala": "10 m",
+        "momen": "Cemas data bocor atau hilang: akses per peran, cadangan yang pernah dicoba dipulihkan.",
+        "kamera": "Dari depan toko"
+      },
+      {
+        "babak": "08 KEBIASAAN",
+        "judul": "Tim tidak perlu belajar dari nol.",
+        "skala": "5 m",
+        "momen": "Kebiasaan: tim tidak mau pindah. Layar mengikuti alur lama, data lama ikut, berjalan berdampingan dulu.",
+        "kamera": "Dari sisi meja"
+      },
+      {
+        "babak": "09 LANGKAH KECIL",
+        "judul": "Satu cabang dulu.",
+        "skala": "1.000 km",
+        "momen": "Langkah kecil: mulai dari satu cabang atau prototipe, lalu melebar.",
+        "kamera": "Terbang naik"
+      },
+      {
+        "babak": "PENUTUP",
+        "judul": "Mulai.",
+        "skala": "36.000 km",
+        "momen": "Penutup: timbangan condong ke 'mulai'. Globe dan satelit, lalu rak bukti proyek.",
+        "kamera": "Zoom out sampai orbit"
+      }
+    ]
+  }
+]
