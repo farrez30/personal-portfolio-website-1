@@ -47,7 +47,7 @@ export const ANCHOR = [
   },
   {
     id: "bentuk",
-    // Satu album dalam empat format (piringan, CD, kaset, ponsel): bentuk dipilih sesuai pendengarnya.
+    // Rak pajang: ponsel dashboard, laptop sistem kantor, brosur lalu chat, kotak aplikasi (19 Nov 2026).
     posisi: [-2.95, 1.4, 0.45],
     lihat: [-4.4, 1.0, 0.52],
     benda: [-4.4, 1.05, 0.28],
@@ -119,10 +119,10 @@ export const ANCHOR = [
   },
   {
     id: "rilis",
-    // Tiga kotak CD masuk ke celah rak, lalu kamera mundur ke rak.
+    // CD proyek diambil satu per satu dari rak dan terbang ke kiri, lalu rak koleksi masuk.
     posisi: [3.5, 1.3, 0.6],
     lihat: [4.58, 1.15, -0.59],
-    benda: [4.8, 1.55, -0.33],
+    benda: [4.8, 1.2, -0.38],
     fov: 40,
     cerita: true,
     seksi: [{ sel: ".bab--rilis", di: 0 }],

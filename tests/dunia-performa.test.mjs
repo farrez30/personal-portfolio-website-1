@@ -48,7 +48,7 @@ test("penjaga kualitas: resolusi dinamis dua arah, tanpa kompilasi ulang, tidak 
   // Menunggu kamera berhenti terbang; sampel AO tidak pernah diubah saat jalan.
   assert.match(jaga, /if \(!tertunda \|\| blend\) return;/);
   assert.doesNotMatch(jaga, /aoSamples/);
-  assert.match(dunia, /if \(bergerak\) jagaKualitas\(dt \* 1000\);\s*terapkanKualitas\(\);/);
+  assert.match(dunia, /if \(!bergerak && !kotor\) return;[\s\S]{0,300}terapkanKualitas\(\);\s*posLalu\.copy/);
 });
 
 test("HP tanpa backdrop-filter di atas kanvas dunia", () => {

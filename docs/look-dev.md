@@ -261,6 +261,18 @@ Kompilasi async, loader tetap bergerak. Tanpa tugas panjang saat props dimuat di
   bayangan lampu kunci tiap bingkai kedua di HP; backdrop-filter dilepas di HP; buklet penjaga
   menghapus jeda 415 ms saat melompat ke rak.
 
+### Bab bentuk dan adegan 10 (pilihan Farrez 19 Nov 2026)
+
+- Bab "bentuknya dipilih sesuai masalahnya": empat format album diganti benda yang sesuai kalimat
+  teks: ponsel dengan dashboard, laptop dengan sistem kantor, brosur promo lalu ponsel chat
+  WhatsApp, dan kotak aplikasi tersegel di tingkat atas yang naik sedikit paling akhir. Benda
+  naik 12 cm, maju 5 cm, sedikit menghadap kamera, dengan cahaya lembut di belakang dan kolam
+  sorot. Semua di zona bebas depan balok tingkat atas (kulit terbalik untuk tepi menyala dicoba
+  lalu dibuang: terbaca seperti bingkai kaca).
+- Adegan 10, pilihan "A ke kiri" dari tiga pratinjau: sepuluh CD proyek di tingkat tengah rak
+  ditarik lurus keluar satu per satu, lalu terbang melengkung ke kiri dan keluar bingkai; rak
+  koleksi masuk dari kanan seperti sebelumnya, jadi seluruh gerak mengalir ke satu arah.
+
 ## Riwayat keputusan
 
 - 2026-11-12: gaya realistis sinematik malam dipilih Farrez; styleframe Flow 6 gambar (0 kredit,
