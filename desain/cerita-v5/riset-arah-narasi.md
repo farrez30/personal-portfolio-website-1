@@ -163,7 +163,7 @@ di situ C lebih kuat secara visual.
 
 ## 8. Keputusan Farrez, 19 Nov 2026
 
-- **Arah A, satu nota**, dipilih lewat pertanyaan terstruktur. Alasannya, dalam kata Farrez:
+- **Arah A, satu nota**, dipilih (kemudian digantikan arah G, lihat `tantangan-narasi.md` dan ADR 0019) lewat pertanyaan terstruktur. Alasannya, dalam kata Farrez:
   "Ceritanya sama dengan yang memang saya kerjakan: kasir, gudang, cabang, dan distributor yang
   tersambung."
 - **Satelit tetap ada di akhir** (permintaan Farrez sesudah memilih). Penutup A sekarang zoom out

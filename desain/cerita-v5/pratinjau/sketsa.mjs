@@ -74,6 +74,13 @@ const globe = (cx, cy, rad, o = {}) => {
   return s;
 };
 const tujuanGlobe = (cx, cy, rad) => [[cx - rad * 0.5, cy - rad * 0.3, 40], [cx - rad * 0.1, cy - rad * 0.6, 30], [cx + rad * 0.7, cy - rad * 0.5, 26], [cx - rad * 0.7, cy + rad * 0.2, 36], [cx + rad * 0.15, cy + rad * 0.62, 20]];
+const perisai = (x, y, s = 1, col = AMB) => g(x, y, s, p("M0 -22 L18 -14 V2 Q18 16 0 24 Q-18 16 -18 2 V-14 Z", { c: col }) + p("M-7 1 l5 5 l9 -11", { c: col }));
+const server = (x, y, s = 1, col = INK) => g(x, y, s, [0, 1, 2].map((i) => r(-22, -36 + i * 16, 44, 14, { rx: 1, c: col, w: 1.5 }) + c(-14, -29 + i * 16, 2, { c: AMB, fill: AMB, w: 1 })).join(""));
+const timbangan = (x, y, s = 1, miring = 0) => g(x, y, s, p("M0 -40 V20 M-20 20 H20") + g(0, -40, 1, p("M-44 0 H44") + p("M-44 0 L-54 18 H-34 Z M44 0 L34 18 H54 Z", { c: DIM }), miring));
+const kotakSerah = (x, y, s = 1) => g(x, y, s, r(-34, -20, 68, 40, { rx: 2, c: RED }) + p("M-34 -8 H34", { c: RED, w: 1.5 }) + t(0, 3, "MILIK ATAU LISENSI", { size: 5.5, c: INK }) + t(0, 13, "DATA TETAP ANDA", { size: 5.5, c: AMB }));
+const antreanTitik = (x0, y0, n, col = DIM) => Array.from({ length: n }, (_, i) => c(x0 + (i % 12) * 12, y0 + Math.floor(i / 12) * 12, 3, { c: col, fill: col, w: 1 })).join("");
+const matahari = (x, y, rad = 12, col = AMB) => c(x, y, rad, { c: col }) + Array.from({ length: 8 }, (_, i) => { const a = (i * Math.PI) / 4; return p(`M${x + Math.cos(a) * (rad + 4)} ${y + Math.sin(a) * (rad + 4)} L${x + Math.cos(a) * (rad + 9)} ${y + Math.sin(a) * (rad + 9)}`, { c: col, w: 1.5 }); }).join("");
+const bulan = (x, y) => p(`M${x} ${y - 12} A12 12 0 1 0 ${x + 9} ${y + 8} A9 9 0 1 1 ${x} ${y - 12} Z`, { c: AMB });
 const zoomBingkai = (x, y, w, h) => r(x, y, w, h, { c: RED, w: 1.5, dash: "4 4", rx: 0 });
 
 // ---------- empat arah ----------
@@ -158,10 +165,70 @@ const ARAH = [
   },
 ];
 
+// ---------- putaran 2: alternatif dari riset keluhan pembeli dan kasus lapangan ----------
+const orbitSatelit = () => `<ellipse cx="200" cy="118" rx="140" ry="36" fill="none" stroke="${DIM}" stroke-width="1" stroke-dasharray="3 5" transform="rotate(-12 200 118)"/>` + satelit(328, 92, 0.9, RED) + satelit(78, 146, 0.8) + p("M328 92 L230 132", { c: RED, w: 1, dash: "2 4" });
+
+const ARAH2 = [
+  {
+    kode: "E",
+    nama: "Uji tekan: satu nota melewati hari terburuk",
+    inti: "Pre-mortem yang dipentaskan. Hal yang paling sering membuat sistem usaha gagal di lapangan datang satu per satu, dan di adegan yang sama penonton melihat nota itu selamat. Urutan kerja lama (rencana, fondasi, uji) masuk sebagai jawaban tiap ujian.",
+    objek: "Satu nota merah dan penghitung kecil 'nota selamat' yang terus bertambah. Zoom makro hanya di adegan yang memang terjadi sekota atau senusantara.",
+    panel: [
+      ["40 cm", "Meja kasir, nota merah tercetak. Taruhannya disebut sekali: uang hari ini dan nama baik toko.", "Dekat, menunduk ke meja", meja(60, 170, 280) + nota(200, 132, 0, true, 1.6) + t(320, 80, "SELAMAT 1", { size: 10, c: RED }), "01 HARI BIASA", "Satu nota, satu transaksi."],
+      ["2 km", "Tanggal gajian dan promo. Kamera naik ke kota, ribuan titik transaksi datang bersamaan dan antre. Nota kita tetap lolos.", "Naik dari meja ke atas kota", kota(50, 40, 10, 5, 20, 10, [[4, 2]]) + antreanTitik(70, 196, 24, AMB) + garisMerah("M150 112 V200", { dash: "4 3" }), "02 RAMAI", "Semua datang di jam yang sama."],
+      ["2 km", "Listrik padam satu blok. Kota meredup, toko ini tetap mencatat. Lampu kembali, jumlahnya cocok.", "Tetap di atas kota, malam", kota(50, 40, 10, 5, 20, 10, [[4, 2]]) + r(40, 30, 160, 160, { rx: 0, fill: "rgba(0,0,0,.6)", c: "none" }) + r(170, 100, 20, 20, { rx: 1, c: AMB, fill: "rgba(240,179,90,.75)", w: 1.5 }) + p("M246 218 a8 8 0 1 1 -2 -6 m2 -3 v4 h-4", { c: RED, w: 1.8 }) + t(256, 222, "LAMPU KEMBALI, JUMLAH COCOK", { size: 8, c: RED, a: "start" }), "03 PADAM", "Lampu mati, catatan jalan terus."],
+      ["10 m", "Permintaan palsu datang dari luar dan ditolak di gerbang. Di dalam, kasir hanya melihat bagian kasir.", "Dari depan toko", tanah() + toko(170, 205, 150, 110) + perisai(130, 130, 1.6) + [[40, 90], [60, 140], [30, 180]].map(([x, y]) => p(`M${x} ${y} L${x + 40} ${130 + (y - 130) * 0.2}`, { c: DIM, w: 1.5, dash: "3 3" }) + p(`M${x + 44} ${126 + (y - 130) * 0.2} l8 8 m0 -8 l-8 8`, { c: DIM, w: 1.5 })).join("") + gembok(245, 165, 1.2, AMB), "04 SERANGAN", "Yang tidak berhak tidak masuk."],
+      ["1 m", "Server rusak. Cadangan di tempat lain dipulihkan, dan latihan pulihnya pernah dicoba. Nota kembali utuh.", "Dekat ke rak server", server(120, 150, 1.6, DIM) + p("M92 96 l56 56 M148 96 l-56 56", { c: DIM, w: 2 }) + server(290, 150, 1.6) + garisMerah("M170 120 Q220 80 260 120") + nota(290, 70, 0, true, 0.9), "05 DATA HILANG", "Rusak di satu tempat, utuh di tempat lain."],
+      ["1 m", "Tumpukan buku dan Excel lama pindah ke sistem baru. Hitungan sebelum dan sesudah sama, sistem lama tetap jalan berdampingan sampai yakin.", "Dari samping meja", [0, 1, 2, 3].map((i) => r(70, 150 - i * 14, 70, 12, { rx: 1, c: DIM, w: 1.5 })).join("") + garisMerah("M150 120 H230") + laptop(280, 150, 1.2) + t(105, 180, "1.284", { size: 10, c: INK }) + t(280, 180, "1.284", { size: 10, c: RED }), "06 PINDAHAN", "Data lama ikut pindah, angkanya sama."],
+      ["5 m", "Karyawan baru langsung bisa di hari pertama. Karyawan yang keluar, aksesnya dicabut hari itu juga.", "Setinggi mata, dari meja kasir", tanah() + meja(60, 150, 120) + orang(110, 150, 1.4) + laptop(150, 148, 0.7) + orang(300, 205, 1.4, DIM) + kunci(330, 120, 1.6, DIM) + p("M318 108 l24 24", { c: RED, w: 2 }), "07 GANTI ORANG", "Orang datang dan pergi, sistemnya tetap."],
+      ["1.000 km", "Cabang bertambah. Kamera naik ke Nusantara, nota dari cabang di zona waktu lain masuk ke laporan pusat.", "Terbang naik", nusantara(210, 110, 1.1) + jaringKota(210, 110, 1.1, "jakarta", ["medan", "surabaya", "makassar", "balikpapan", "jayapura"]), "08 CABANG", "Usaha tumbuh, laporannya tetap satu."],
+      ["1 m", "Developernya pergi. Yang Anda dapat sudah tertulis sejak awal: kode milik Anda atau lisensi, sesuai kesepakatan. Di skema mana pun data tetap milik Anda dan bisa diekspor, dan catatan cara kerjanya ada.", "Dekat, kotak di atas meja", meja(60, 180, 280) + kotakSerah(200, 150, 1.8), "09 KELANGSUNGAN", "Tetap jalan walau saya tidak ada."],
+      ["36.000 km", "Penutup: globe dan satelit. Kebun atau cabang terpencil tetap tersambung. Lalu langkah kecil: mulai dari prototipe, dan rak bukti proyek.", "Zoom out sampai orbit", G() + orbitSatelit(), "PENUTUP", "Mulai dari yang kecil."],
+    ],
+  },
+  {
+    kode: "F",
+    nama: "Sehari, diputar dua kali",
+    inti: "Satu hari kerja pemilik usaha, sekali dengan cara lama dan sekali sesudah punya sistem. Di tengahnya pemandu (Farrez) dengan tiga langkah. Klien jadi tokoh utama.",
+    objek: "Nota merah dan arah matahari sebagai jam. Peta cabang yang sama muncul dua kali: gelap dan terputus, lalu menyala.",
+    panel: [
+      ["40 cm", "Pagi, sebelum. Toko buka, nota tulis tangan sudah menumpuk dari kemarin.", "Dekat, menunduk", meja(60, 170, 280) + [[120, 140, -12], [150, 146, 8], [180, 138, -4], [230, 148, 14], [260, 140, -8]].map(([x, y, a]) => nota(x, y, a)).join("") + nota(205, 128, 4, true, 1.3) + matahari(340, 60, 10), "01 PAGI", "Hari dimulai dari tumpukan kemarin."],
+      ["5 m", "Siang, sebelum. Ramai, salah hitung, antrean memanjang.", "Lebar, dari sisi kasir", tanah() + meja(60, 150, 120) + orang(100, 150, 1.4) + [200, 240, 280, 320, 360].map((x) => orang(x, 205, 1.2, DIM)).join("") + matahari(200, 40, 12), "02 SIANG", "Ramai itu bagus, kalau tidak salah hitung."],
+      ["1.000 km", "Sore, sebelum. Laporan cabang belum datang, ditelepon satu per satu. Peta cabang gelap dan terputus.", "Terbang naik", nusantara(210, 110, 1.1) + titik(["medan", "surabaya", "makassar", "balikpapan"].map((n) => kotaXY(210, 110, 1.1, n)), DIM, 3) + titik([kotaXY(210, 110, 1.1, "jakarta")], RED, 4), "03 SORE", "Cabang terasa jauh sekali."],
+      ["1 m", "Malam, sebelum. Rekap manual sampai larut. Pertanyaannya: berapa sebenarnya untung hari ini?", "Dekat, lampu meja", meja(60, 170, 280) + lampu(120, 140, true) + papanJepit(220, 120, 1.4) + bulan(340, 50) + t(220, 70, "UNTUNG?", { size: 11, c: AMB }), "04 MALAM", "Pertanyaan yang sama tiap malam."],
+      ["1 m", "Jembatan. Bertemu pemandu, tiga langkah: ngobrol dulu, prototipe yang bisa dicoba, rilis bertahap dengan harga per tahap.", "Dua orang di meja", meja(60, 170, 280) + orang(120, 170, 1.4) + orang(280, 170, 1.4, RED) + t(200, 60, "NGOBROL  PROTOTIPE  BERTAHAP", { size: 9, c: INK }), "05 PEMANDU", "Tiga langkah, bukan satu lompatan."],
+      ["40 cm", "Pagi, sesudah. Nota yang sama tercatat sekali, tidak ada tumpukan.", "Dekat, menunduk", meja(60, 170, 280) + nota(200, 132, 0, true, 1.6) + hp(290, 140, 1.1) + matahari(340, 60, 10), "06 PAGI", "Hari dimulai dari nol."],
+      ["5 m", "Siang, sesudah. Antrean jalan. Listrik sempat padam, kasir tetap mencatat.", "Lebar, dari sisi kasir", tanah() + meja(60, 150, 120) + laptop(130, 148, 0.8) + orang(100, 150, 1.4) + [240, 290].map((x) => orang(x, 205, 1.2, DIM)).join("") + matahari(200, 40, 12), "07 SIANG", "Antrean pendek, angkanya benar."],
+      ["1.000 km", "Sore, sesudah. Peta yang sama menyala: semua cabang terlihat dari satu HP.", "Terbang naik", nusantara(210, 110, 1.1) + jaringKota(210, 110, 1.1, "jakarta", ["medan", "surabaya", "makassar", "balikpapan"]), "08 SORE", "Semua cabang, satu layar."],
+      ["10 m", "Malam, sesudah. Lampu toko mati lebih cepat, pemilik pulang.", "Dari seberang jalan", tanah() + toko(100, 205, 160, 110, true) + orang(320, 205, 1.3) + bulan(340, 50), "09 MALAM", "Pulang tepat waktu."],
+      ["36.000 km", "Penutup: kamera naik dari atap ke langit malam, satelit lewat di atas Nusantara. Lalu rak bukti proyek.", "Zoom out ke langit", G() + orbitSatelit(), "PENUTUP", "Besok pagi, hari yang sama, cara yang baru."],
+    ],
+  },
+  {
+    kode: "G",
+    nama: "Yang ditimbang sebelum memutuskan",
+    inti: "Mengikuti isi kepala pembeli: apa yang mendorong, apa yang menarik, lalu tiap rasa cemas dijawab satu per satu (Jobs To Be Done, empat gaya kemajuan). Paling mudah diteruskan ke orang keuangan atau TI di perusahaan klien.",
+    objek: "Nota di atas timbangan. Tiap babak mengangkat satu beban sampai timbangan condong ke 'mulai'.",
+    panel: [
+      ["1 m", "Dorongan: rekap manual yang bikin capek, data beda antar cabang.", "Dekat", meja(60, 170, 280) + [0, 1, 2, 3, 4].map((i) => r(150, 150 - i * 12, 90, 10, { rx: 1, c: DIM, w: 1.5 })).join("") + nota(270, 140, 10, true), "01 DORONGAN", "Yang sekarang bikin capek."],
+      ["40 cm", "Harga diam: yang hilang tiap bulan kalau tidak berubah. Jam lembur, selisih stok.", "Dekat ke timbangan", timbangan(200, 150, 1.6, 0) + t(112, 122, "LEMBUR", { size: 8 }) + t(288, 122, "SELISIH", { size: 8 }), "02 HARGA DIAM", "Diam juga ada harganya."],
+      ["1 m", "Tarikan: gambaran sesudahnya dalam satu layar.", "Dekat ke HP", hp(200, 120, 3) + p("M178 100 L190 88 L202 94 L216 80", { c: RED, w: 2 }), "03 TARIKAN", "Bayangan sesudahnya."],
+      ["40 cm", "Cemas biaya molor: lingkup tertulis, harga per tahap. Angka di nota tidak berubah.", "Dari atas meja", papanJepit(140, 120, 1.5) + [0, 1, 2].map((i) => r(220 + i * 40, 100, 32, 40, { rx: 1, c: i === 0 ? RED : DIM })).join("") + t(276, 160, "TAHAP 1  2  3", { size: 8 }), "04 BIAYA", "Harganya jelas sejak awal."],
+      ["1 m", "Cemas vendor menghilang: hak atas kode (milik atau lisensi) tertulis sejak awal, data tetap milik Anda dan bisa diekspor, catatan cara kerjanya ada.", "Dekat, kotak di meja", meja(60, 180, 280) + kotakSerah(200, 150, 1.8), "05 VENDOR", "Tidak bergantung pada satu orang."],
+      ["2 km", "Cemas tumbang saat ramai: uji beban dipentaskan. Kamera naik ke kota.", "Naik ke atas kota", kota(50, 40, 10, 5, 20, 10, [[4, 2]]) + antreanTitik(70, 196, 24, AMB), "06 RAMAI", "Diuji sebelum hari ramai."],
+      ["10 m", "Cemas data bocor atau hilang: akses per peran, cadangan yang pernah dicoba dipulihkan.", "Dari depan toko", tanah() + toko(60, 205, 150, 110) + perisai(280, 120, 1.6) + server(300, 200, 0.9), "07 DATA", "Aman dan bisa dipulihkan."],
+      ["5 m", "Kebiasaan: tim tidak mau pindah. Layar mengikuti alur lama, data lama ikut, berjalan berdampingan dulu.", "Dari sisi meja", tanah() + meja(60, 150, 260) + orang(110, 150, 1.3) + orang(270, 150, 1.3) + laptop(190, 148, 0.8), "08 KEBIASAAN", "Tim tidak perlu belajar dari nol."],
+      ["1.000 km", "Langkah kecil: mulai dari satu cabang atau prototipe, lalu melebar.", "Terbang naik", nusantara(210, 110, 1.1) + jaringKota(210, 110, 1.1, "jakarta", ["surabaya"]) + titik(["medan", "makassar", "balikpapan"].map((n) => kotaXY(210, 110, 1.1, n)), DIM, 3), "09 LANGKAH KECIL", "Satu cabang dulu."],
+      ["36.000 km", "Penutup: timbangan condong ke 'mulai'. Globe dan satelit, lalu rak bukti proyek.", "Zoom out sampai orbit", G() + orbitSatelit(), "PENUTUP", "Mulai."],
+    ],
+  },
+];
+
 const BABAK = ["01 IDE", "02 RENCANA", "03 BENTUK", "04 FONDASI", "05 BANGUN", "06 PROGRES", "07 RAPI", "08 ANDAL", "09 AMAN", "10 RILIS", "PENUTUP"];
 const JUDUL = ["Berawal dari keluhan sehari-hari.", "Semua dimulai dari rencana yang Anda setujui.", "Bentuknya dipilih sesuai masalahnya.", "Rapi sampai ke bagian yang tidak kelihatan.", "Sudah kelihatan sebelum dibangun.", "Progresnya jelas, kabarnya tidak putus.", "Enak dipakai, bukan cuma bisa dipakai.", "Tetap bisa diandalkan saat paling dibutuhkan.", "Data penting tetap di tangan yang berhak.", "Dan akhirnya, dipakai tiap hari.", "Rak koleksi proyek"];
 
-const panelSvg = (skala, isi, i) => `<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="250" fill="#211a15"/>${isi}${t(14, 22, `SKALA ${skala}`, { a: "start", size: 10, c: AMB })}${t(386, 22, BABAK[i], { a: "end", size: 10 })}</svg>`;
+const panelSvg = (skala, isi, label) => `<svg viewBox="0 0 400 250" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="250" fill="#211a15"/>${isi}${t(14, 22, `SKALA ${skala}`, { a: "start", size: 10, c: AMB })}${t(386, 22, label, { a: "end", size: 10 })}</svg>`;
 
 const CSS = `*{box-sizing:border-box}body{margin:0;background:#1a1410;color:#ece8e1;font-family:'Schibsted Grotesk',system-ui,sans-serif;padding:48px}
 h1{font-size:34px;margin:0 0 6px;letter-spacing:-.01em}.sub{color:#b3ada4;font-size:16px;margin:0 0 4px;max-width:1200px;line-height:1.5}
@@ -169,10 +236,12 @@ h1{font-size:34px;margin:0 0 6px;letter-spacing:-.01em}.sub{color:#b3ada4;font-s
 .p svg{width:100%;display:block;border:1px solid #3a322b}.p h3{font-size:14px;margin:10px 0 4px;font-weight:600}.p p{margin:0;color:#b3ada4;font-size:12.5px;line-height:1.45}
 .p .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:#847e75;margin-top:6px}.p.akhir svg{border-color:#e0574b}.mono{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#847e75;letter-spacing:.04em}`;
 
-for (const a of ARAH) {
-  const isi = a.panel.map(([skala, momen, kamera, svg], i) => `<div class="p${i === 10 ? " akhir" : ""}">${panelSvg(skala, svg, i)}<h3>${JUDUL[i]}</h3><p>${momen}</p><div class="k">KAMERA: ${kamera}</div></div>`).join("");
+const SEMUA = [...ARAH, ...ARAH2];
+for (const a of SEMUA) {
+  const akhir = a.panel.length - 1;
+  const isi = a.panel.map(([skala, momen, kamera, svg, label, judul], i) => `<div class="p${i === akhir ? " akhir" : ""}">${panelSvg(skala, svg, label ?? BABAK[i])}<h3>${judul ?? JUDUL[i]}</h3><p>${momen}</p><div class="k">KAMERA: ${kamera}</div></div>`).join("");
   const html = `<!doctype html><html lang="id"><head><meta charset="utf-8"><title>Arah ${a.kode}</title><style>${CSS}</style></head><body><div class="mono">CERITA V5, ARAH ${a.kode}, SKETSA STORYBOARD</div><h1>${a.nama}</h1><p class="sub">${a.inti}</p><p class="objek">Objek persisten: ${a.objek}</p><div class="grid">${isi}</div></body></html>`;
   writeFileSync(join(DIR, `papan-${a.kode.toLowerCase()}.html`), html);
 }
-writeFileSync(join(DIR, "arah.json"), JSON.stringify(ARAH.map(({ kode, nama, inti, objek, panel }) => ({ kode, nama, inti, objek, babak: panel.map(([skala, momen, kamera], i) => ({ babak: BABAK[i], skala, momen, kamera })) })), null, 2));
-console.log("papan ditulis:", ARAH.map((a) => a.kode).join(", "));
+writeFileSync(join(DIR, "arah.json"), JSON.stringify(SEMUA.map(({ kode, nama, inti, objek, panel }) => ({ kode, nama, inti, objek, babak: panel.map(([skala, momen, kamera, , label, judul], i) => ({ babak: label ?? BABAK[i], judul: judul ?? JUDUL[i], skala, momen, kamera })) })), null, 2));
+console.log("papan ditulis:", SEMUA.map((a) => a.kode).join(", "));
