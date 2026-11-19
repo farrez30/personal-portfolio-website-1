@@ -20,7 +20,8 @@ export const demoUntuk = (slug) => DEMO[slug] ?? null;
 // bersuara saat Play ditekan; mentah dan naskahnya di PROVENANCE.md.
 export const EXPLAINER = [
   "erp-software-house", "viralytics", "coderoach-os", "fifofun", "nds-etl",
-  "akarkita", "pilot-iklan", "jeda", "yiheecam", "d-day",
+  "akarkita", "pilot-iklan", "jeda", "yiheecam", "d-day", "gdl-logistics",
+  "securitysahabat",
 ];
 
 export const explainerUntuk = (slug, lang) =>
