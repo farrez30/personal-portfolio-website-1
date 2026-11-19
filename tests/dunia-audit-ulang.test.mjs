@@ -203,3 +203,36 @@ test("mug keramik menggantikan silinder kopi; lonceng ulir, lampu kaca susu, jal
   assert.match(d, /new THREE\.MeshBasicMaterial\(\{ map, fog: false, transparent: true, \.\.\.o \}\)/);
   assert.match(d, /for \(const m of \[l1, l2, l4, l5\]\) m\.rotation\.y = Math\.PI;/);
 });
+
+// Butir 12 (pilihan Farrez, opsi C): baris judul berputar masuk, nomor seperti penghitung pita.
+test("teks bab: baris judul berputar dari sumbu bawah, nomor teracak tetap terbaca pembaca layar", () => {
+  const c = tanpaKomentar(baca("components/cerita/CeritaKerja.jsx"));
+  assert.match(c, /SplitText\.create\(judul, \{ type: "lines", aria: "auto" \}\)/);
+  assert.match(c, /rotateX: -88,\s*opacity: 0,\s*transformOrigin: "50% 100% -20px"/);
+  // Hanya angka aria-hidden yang diacak; kalimat sr-only untuk pembaca layar tidak disentuh.
+  assert.match(c, /bab\.querySelector\("\.bab__nomor \[aria-hidden='true'\]"\)/);
+  assert.doesNotMatch(c, /salinan/);
+  // Gerak dikurangi: tanpa animasi sama sekali.
+  assert.match(c, /if \(!el \|\| matchMedia\("\(prefers-reduced-motion: reduce\)"\)\.matches\) return;\s*gsap\.registerPlugin\(ScrollTrigger, SplitText\);\s*const pulih = \[\];/);
+  // Angka acak hanya dari progres (gulir mundur memberi urutan sama), bukan Math.random.
+  const pita = c.slice(c.indexOf("const pita = { t: 0 };"), c.indexOf("const isi = bab.querySelector"));
+  assert.doesNotMatch(pita, /Math\.random/);
+});
+
+// Butir 11 (pilihan Farrez, opsi A): petunjuk geser di HP.
+test("HP: rak koleksi tanpa panah teks, petunjuk gulir; klien menyenggol sekali dengan chip dan titik", () => {
+  const p = tanpaKomentar(baca("components/imersif/Panggung.jsx"));
+  assert.doesNotMatch(p, />\s*[←→]\s*</, "panah sebagai teks");
+  assert.match(p, /tr\("petunjukGulir"\)/);
+  const css = baca("components/imersif/panggung.css");
+  assert.match(css, /@media \(max-width: 650px\) \{[\s\S]*?\.panggung__panah \{\s*display: none;/);
+  const k = tanpaKomentar(baca("components/klien/Klien.jsx"));
+  assert.match(k, /t\("petunjukGeser"\)/);
+  assert.match(k, /if \(!sentuh\) return;/);
+  assert.match(k, /if \(!tenang\) el\.animate\(/);
+  assert.doesNotMatch(k, /scrollBy\(/, "senggolan scrollBy melawan scroll-snap");
+  for (const lang of ["id", "en"]) {
+    const m = JSON.parse(baca(`messages/${lang}.json`));
+    assert.ok(m.rak.petunjukGulir && m.klien.petunjukGeser, lang);
+  }
+});

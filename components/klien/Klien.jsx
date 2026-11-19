@@ -1,7 +1,7 @@
 "use client";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import { PiCaretLeftBold, PiCaretRightBold, PiXBold, PiArrowUpRightBold } from "react-icons/pi";
+import { PiCaretLeftBold, PiCaretRightBold, PiXBold, PiArrowUpRightBold, PiHandSwipeLeftBold } from "react-icons/pi";
 import { useMode } from "@/components/mode/ModeProvider";
 import { KELOMPOK, klienKelompok, cakramDepan } from "@/content/klien";
 import { bentukCincin, kemajuanSeksi } from "./cincin";
@@ -142,11 +142,60 @@ function Muka({ item, besar = false }) {
   );
 }
 
+// Petunjuk geser di HP (pilihan Farrez 19 Nov, opsi A; riset NN/g: kartu berikut yang terlihat
+// sebagian isyarat terkuat, titik isyarat lemah): saat barisan pertama kali terlihat, barisan
+// menyenggol ke kiri sekali dan chip singkat muncul, lalu hilang saat digeser atau sesudah 3 s.
+// Titik di bawahnya mengikuti posisi geser. Senggolan memakai transform, bukan scrollBy, supaya
+// tidak melawan scroll-snap.
+function usePetunjukGeser(baris, n) {
+  const [lebih, setLebih] = useState(false);
+  const [chip, setChip] = useState(false);
+  const [posisi, setPosisi] = useState(0);
+  useEffect(() => {
+    const el = baris.current;
+    if (!el) return;
+    const ukur = () => setLebih(el.scrollWidth > el.clientWidth + 4);
+    ukur();
+    const ro = new ResizeObserver(ukur);
+    ro.observe(el);
+    const gulir = () => {
+      const jarak = el.scrollWidth - el.clientWidth;
+      setPosisi(jarak > 0 ? Math.round((el.scrollLeft / jarak) * (n - 1)) : 0);
+      if (el.scrollLeft > 8) setChip(false);
+    };
+    el.addEventListener("scroll", gulir, { passive: true });
+    let waktu = 0;
+    const tenang = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const sentuh = matchMedia("(pointer: coarse)").matches;
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting || el.scrollWidth <= el.clientWidth + 4) return;
+        io.disconnect();
+        if (!sentuh) return;
+        setChip(true);
+        waktu = setTimeout(() => setChip(false), 3000);
+        if (!tenang) el.animate([{ transform: "translateX(0)" }, { transform: "translateX(-56px)" }, { transform: "translateX(0)" }], { duration: 1100, easing: "ease-in-out", delay: 250 });
+      },
+      { threshold: 0.6 },
+    );
+    io.observe(el);
+    return () => {
+      ro.disconnect();
+      io.disconnect();
+      clearTimeout(waktu);
+      el.removeEventListener("scroll", gulir);
+    };
+  }, [baris, n]);
+  return { lebih, chip, posisi };
+}
+
 function Daftar({ t, bahasa, daftar, kelompok, setKelompok, buka }) {
+  const baris = useRef(null);
+  const { lebih, chip, posisi } = usePetunjukGeser(baris, daftar.length);
   return (
     <div className="wadah klien__isi">
       <Kepala t={t} kelompok={kelompok} setKelompok={setKelompok} />
-      <ul id="klien-panel" className="klien__baris" role="tabpanel" aria-labelledby={`klien-tab-${kelompok}`}>
+      <ul ref={baris} id="klien-panel" className="klien__baris" role="tabpanel" aria-labelledby={`klien-tab-${kelompok}`}>
         {daftar.map((item) => (
           <li key={item.slug}>
             <button
@@ -166,6 +215,19 @@ function Daftar({ t, bahasa, daftar, kelompok, setKelompok, buka }) {
           </li>
         ))}
       </ul>
+      {lebih ? (
+        <div className="klien__geser">
+          <span className="mono klien__petunjuk" data-tampil={chip ? "1" : ""} aria-hidden={!chip}>
+            <PiHandSwipeLeftBold aria-hidden="true" />
+            {t("petunjukGeser")}
+          </span>
+          <span className="klien__titik" aria-hidden="true">
+            {daftar.map((x, i) => (
+              <i key={x.slug} data-aktif={i === posisi ? "1" : ""} />
+            ))}
+          </span>
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -142,6 +142,16 @@
   text-decoration-color: var(--aksen);
 }
 
+.panggung__petunjuk {
+  display: none;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 44px;
+  color: var(--ruang-tinta-2);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+}
+
 .panggung__sudut:disabled {
   opacity: 0.3;
   cursor: default;
@@ -727,6 +737,15 @@
 
   .panggung__kaki > :nth-child(3) {
     grid-area: kanan;
+  }
+
+  /* HP: gulir vertikal menggeser album, jadi panah disembunyikan dan diganti petunjuk. */
+  .panggung__panah {
+    display: none;
+  }
+
+  .panggung__petunjuk {
+    display: inline-flex;
   }
 
   .holo__panel,
