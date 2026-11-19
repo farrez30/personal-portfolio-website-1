@@ -90,6 +90,12 @@ ukuran benda pertama yang kena. Dipakai per 0,1 detik di sepanjang jalur kamera.
 
 Keempat pemutar di `banding-transisi.html` diuji di panel: geser ke detik 5, maju saat diputar, video lain berhenti.
 
+## Animatic G 20 Nov 2026 (campur, modul lab)
+
+`animatic-G.mp4` 33,2 detik: kantor dengan pola campur (`?dunia=penuh&tx=campur&lengkap=1`), keluar jendela, kota, peta, globe, lalu zoom ke modul lab (`?a=P&s=portoLab-globe`, mulai dari bingkai terakhir klip globe). Modul lab dipilih Farrez, ADR 0024. Rujukan isi modul: `../riset-modul-lab.md`.
+
+Galat yang sempat lolos: fase keluar gedung tampil diam tiga detik karena fungsi `ekor` memakai variabel `padat` dari fungsi lain. Render melempar galat dan screenshot menahan bingkai lama. Sejak itu `foto.mjs` berhenti bila `aturDunia` atau `atur` melempar galat.
+
 ## Belum bisa dicek
 
 - Performa di HP sungguhan: GPU HP jauh lebih lemah dari GPU desktop yang dipakai; angka GPU di atas hanya pembanding antaradegan.
