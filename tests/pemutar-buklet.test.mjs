@@ -23,8 +23,9 @@ test("pemutar melipat panel hanya selama buklet, terpisah dari pilihan pengguna"
   assert.match(src, /inert=\{sembunyi \? true : undefined\}/);
   // Membuka manual selama buklet menang atas lipatan otomatis.
   assert.match(src, /setTersembunyi\(false\);\s*setDilipat\(false\);/);
-  // Embed tidak bergantung pada lipatan, jadi musik tidak berhenti.
-  assert.match(src, /className="vinyl-embed" hidden=\{!tersambung\}/);
+  // Elemen audio hidup di luar panel, jadi melipat panel tidak menghentikan musik.
+  assert.match(src, /const a = new Audio\(\);/);
+  assert.doesNotMatch(src, /<audio/);
 });
 
 test("pemutar menciut ke cakram selama cerita gulir tampil, dan bisa dibuka lagi di dalamnya", () => {
@@ -47,12 +48,8 @@ test("pemutar menciut ke cakram selama cerita gulir tampil, dan bisa dibuka lagi
 test("di HP pemutar menciut ke cakram begitu hero lewat, cakramnya di kanan atas", () => {
   const src = baca("components/musik/PemutarMusik.jsx");
   assert.match(src, /const sembunyi = tersembunyi \|\| dilipat \|\| \(lipatOtomatis && !dibukaManual\);/);
-  // Di HP embed Spotify yang tersambung membuat panel setinggi 300 px dan menutupi judul hero,
-  // jadi hero ikut melipat; panel yang baru saja dipakai (putar, pasang tautan) tetap terbuka.
-  assert.match(src, /const lipatOtomatis = diCerita \|\| lewatHero \|\| \(layarHp && tersambung\);/);
-  assert.match(src, /setDibukaManual\(true\);\s*if \(jalan\) jeda\(\);\s*else putar\(\);/);
-  assert.match(src, /setDibukaManual\(true\);\s*mauPutar\.current = true;\s*setTersambung\(true\);/);
-  assert.match(src, /setLayarHp\(hp\.matches\);/);
+  // Panel pemutar sendiri tetap pendek (tanpa embed 152 px), jadi hero tidak perlu ikut melipat.
+  assert.match(src, /const lipatOtomatis = diCerita \|\| lewatHero;/);
   // Hanya layar HP, dan diamati ulang tiap path berganti karena pemutar hidup di layout.
   assert.match(src, /matchMedia\("\(max-width: 600px\)"\)/);
   assert.match(src, /document\.querySelector\("\.gerbang"\)/);
@@ -61,8 +58,6 @@ test("di HP pemutar menciut ke cakram begitu hero lewat, cakramnya di kanan atas
   assert.match(src, /if \(!hero \|\| !hp\.matches\) return setLewatHero\(false\);/);
   assert.match(src, /vinyl-reopen--lipat/);
   assert.match(src, /vinyl-player--lipat/);
-  // Embed tetap di dokumen, jadi musik tidak berhenti saat melipat.
-  assert.match(src, /className="vinyl-embed" hidden=\{!tersambung\}/);
 
   const css = baca("components/musik/pemutar.css");
   const hp = css.slice(css.lastIndexOf("@media screen and (max-width: 600px)"));
@@ -72,18 +67,4 @@ test("di HP pemutar menciut ke cakram begitu hero lewat, cakramnya di kanan atas
   // Di layar sentuh warna hover tertinggal di cakram sesudah diketuk.
   assert.match(css, /@media \(hover: hover\) \{\s*\.vinyl-btn:hover,\s*\.vinyl-reopen:hover \{/);
   assert.doesNotMatch(css.replace(/@media \(hover: hover\) \{[\s\S]*?\n\}/, ""), /\.vinyl-(btn|reopen):hover/);
-});
-
-// Di HP embed Spotify hanya memutar cuplikan walau pengunjung sudah login (laporan Farrez dan
-// forum developer Spotify, 19 Nov 2026), jadi petunjuk login dan cookie tidak menolong di sana.
-test("di layar sentuh petunjuk cuplikan mengajak ke aplikasi Spotify, bukan login", () => {
-  const src = baca("components/musik/PemutarMusik.jsx");
-  assert.match(src, /matchMedia\("\(pointer: coarse\)"\)/);
-  assert.match(src, /t\.rich\(sentuh \? "cuplikanHp" : "cuplikan", \{/);
-  assert.match(src, /buka: \(isi\) => \(\s*<a href=\{url\} target="_blank" rel="noopener noreferrer">/);
-  for (const bahasa of ["id", "en"]) {
-    const m = JSON.parse(baca(`messages/${bahasa}.json`)).pemutar;
-    assert.match(m.cuplikanHp, /<buka>[^<]+<\/buka>/, bahasa);
-    assert.doesNotMatch(m.cuplikanHp, /<login>|cookie/i, bahasa);
-  }
 });

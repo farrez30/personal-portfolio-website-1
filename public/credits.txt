@@ -24,5 +24,53 @@ Images
   People in them are fictional.
 
 Music
-  Played through the official Spotify embed. Covers, titles and audio belong to their
-  owners and are loaded from Spotify only after you press play.
+  Freely licensed recordings, stored on this site and played from it. Loudness
+  levelled and re-encoded to MP3; nothing cut or mixed. BY-SA files stay BY-SA.
+  Details per file: /musik/PROVENANCE.md
+
+  "Gymnopédie No. 1 (Satie)", Robin Alciatore, Musopen, 2008. Public domain (https://musopen.org/).
+    Source: https://commons.wikimedia.org/wiki/File:Erik_Satie_-_gymnopedies_-_la_1_ere._lent_et_douloureux.ogg
+  "Bossa Antigua", Kevin MacLeod (incompetech.com). CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+    Source: https://incompetech.com/music/royalty-free/
+  "Hesitating Blues", Art Hickman Orchestra, 1919. Public domain (https://www.copyright.gov/music-modernization/pre1972-soundrecordings/).
+    Source: https://commons.wikimedia.org/wiki/File:Hesitating_blues_-_Art_Hickman_Orchestra.ogg
+  "Goldberg Variations: Aria (Bach)", Kimiko Ishizaka, 2012. CC0 (https://creativecommons.org/publicdomain/zero/1.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Goldberg_Variations_01_Aria.ogg
+  "Smooth Jazz Ballad No. 1", Claude Reid, 2016. CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Smooth_Jazz_Ballad_no1_(exploration).wav
+  "Prelude No. 1 in C major, BWV 846 (Bach)", Kimiko Ishizaka, 2015. CC0 (https://creativecommons.org/publicdomain/zero/1.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Kimiko_Ishizaka_-_Bach_-_Well-Tempered_Clavier,_Book_1_-_01_Prelude_No._1_in_C_major,_BWV_846.ogg
+  "Backbay Lounge", Kevin MacLeod (incompetech.com). CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+    Source: https://incompetech.com/music/royalty-free/
+  "The Japanese Sandman", Paul Whiteman Orchestra, 1920. Public domain (https://www.copyright.gov/music-modernization/pre1972-soundrecordings/).
+    Source: https://commons.wikimedia.org/wiki/File:%22The_Japanese_Sandman%22,_by_Paul_Whiteman,_Acoustic_1920_78_rpm.mp3
+  "Gnossienne No. 1 (Satie)", La Pianista, 2010. CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Satie_-_Gnossienne_1.ogg
+  "Speakeasy", Peeeeet, 2014. CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Speakeasy.flac
+  "Goldberg Variations: Variation 13 (Bach)", Kimiko Ishizaka, 2012. CC0 (https://creativecommons.org/publicdomain/zero/1.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Kimiko_Ishizaka_-_14_-_Variatio_13_a_2_Clav.ogg
+  "Lobby Time", Kevin MacLeod (incompetech.com). CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+    Source: https://incompetech.com/music/royalty-free/
+  "Hesitation Blues", Victor Military Band, 1916. Public domain (https://www.copyright.gov/music-modernization/pre1972-soundrecordings/).
+    Source: https://commons.wikimedia.org/wiki/File:Hesitation_blues_-_Victor_Military_Band.ogg
+  "Nocturne Op. 9 No. 2 (Chopin)", Martha Goldstein. CC BY-SA 2.0 (https://creativecommons.org/licenses/by-sa/2.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Frederic_Chopin_-_Nocturne_Eb_major_Opus_9,_number_2.ogg
+  "Acoustic Jazz Quartet No. 1", Claude Reid, 2017. CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Acoustic_Jazz_Quartet_no1_(exploration)-en_wav.wav
+  "Nocturne Op. 62 No. 2 (Chopin)", Donald Betts, Musopen. Public domain (https://musopen.org/).
+    Source: https://commons.wikimedia.org/wiki/File:Frederic_Chopin_-_nocturne_no._2_in_e_flat_major,_op._62.ogg
+  "Jazz Brunch", Kevin MacLeod (incompetech.com). CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+    Source: https://incompetech.com/music/royalty-free/
+  "Jazz Me Blues", Original Dixieland Jass Band, 1921. Public domain (https://www.copyright.gov/music-modernization/pre1972-soundrecordings/).
+    Source: https://commons.wikimedia.org/wiki/File:OriginalDixielandJassBand-JazzMeBlues.ogg
+  "Arabeske Op. 18 (Schumann)", Mario Andrea Valori, 2014. CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Schumann-arabeske-andrea-valori.ogg
+  "Dig Monkey", Magnetic Myths, 2014. CC0 (https://creativecommons.org/publicdomain/zero/1.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Magnetic_Myths_-_Dig_monkey.wav
+  "Goldberg Variations: Variation 25 (Bach)", Kimiko Ishizaka, 2012. CC0 (https://creativecommons.org/publicdomain/zero/1.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Kimiko_Ishizaka_-_26_-_Variatio_25_a_2_Clav.ogg
+  "Smooth Lovin", Kevin MacLeod (incompetech.com). CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
+    Source: https://incompetech.com/music/royalty-free/
+  "Pushing the Pianist Down the Stairs", Andri from Pagefire, 2019. CC BY-SA 3.0 (https://creativecommons.org/licenses/by-sa/3.0/).
+    Source: https://commons.wikimedia.org/wiki/File:Andri_from_Pagefire_-_Pushing_The_Pianist_Down_The_Stairs.wav

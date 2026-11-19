@@ -1,216 +1,105 @@
 "use client";
-import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "@/i18n/navigation";
-import { PiPlayFill, PiPauseFill, PiXBold, PiMusicNotesBold, PiLinkBold, PiArrowCounterClockwiseBold, PiArrowSquareOutBold } from "react-icons/pi";
+import { PiPlayFill, PiPauseFill, PiXBold, PiMusicNotesBold, PiSkipForwardFill } from "react-icons/pi";
 import { useMode } from "@/components/mode/ModeProvider";
-import { PLAYLIST, AWAL_MUSIK, albumMusik } from "@/content/musik";
-import { uraiTautan, ambilInfo, cuplikan } from "./spotify";
-import { cetakSampul, terapkanKeAlbum } from "./album";
+import { LAGU, albumMusik } from "@/content/musik";
 import "./pemutar.css";
 
-// Satu pemutar musik untuk kedua mode, lewat embed resmi Spotify (ADR 0009).
-// Sebelum pengunjung menekan putar atau memasang tautan, tidak ada satu pun permintaan
-// ke Spotify: skrip embed, oEmbed, dan sampul baru dimuat sesudah klik itu.
-
-const KUNCI = "musik:pilihan";
-const SKRIP = "https://open.spotify.com/embed/iframe-api/v1";
-
-let apiSpotify = null;
-function muatApi() {
-  apiSpotify ??= new Promise((selesai, gagal) => {
-    window.onSpotifyIframeApiReady = selesai;
-    const s = document.createElement("script");
-    s.src = SKRIP;
-    s.async = true;
-    s.onerror = () => {
-      apiSpotify = null;
-      gagal(new Error("Spotify embed gagal dimuat"));
-    };
-    document.body.appendChild(s);
-  });
-  return apiSpotify;
-}
-
-function bacaSimpanan() {
-  try {
-    const d = JSON.parse(localStorage.getItem(KUNCI) ?? "null");
-    const tautan = uraiTautan(d?.url);
-    return tautan ? { tautan, judul: typeof d.judul === "string" ? d.judul.slice(0, 120) : null } : null;
-  } catch {
-    return null;
-  }
-}
-
-function simpan(pilihan) {
-  try {
-    if (pilihan) localStorage.setItem(KUNCI, JSON.stringify({ url: pilihan.tautan.url, judul: pilihan.judul }));
-    else localStorage.removeItem(KUNCI);
-  } catch {}
-}
-
-const playlistFarrez = uraiTautan(PLAYLIST);
+// Satu pemutar musik untuk kedua mode, dari rekaman berlisensi bebas di /musik (ADR 0022).
+// Elemen audio baru dibuat saat pengunjung menekan putar, jadi sebelum itu tidak ada berkas
+// yang diunduh. Satu lagu dimuat pada satu waktu, lalu lanjut ke lagu berikutnya.
 
 export default function PemutarMusik() {
   const t = useTranslations("pemutar");
   const locale = useLocale();
   const pathname = usePathname();
   const { mode } = useMode();
-  const idInput = useId();
 
-  // pilihan: { tautan, judul, milikFarrez }; null bila belum ada lagu sama sekali.
-  const [pilihan, setPilihan] = useState(playlistFarrez ? { tautan: playlistFarrez, judul: null, milikFarrez: true } : null);
-  const [tersambung, setTersambung] = useState(false);
+  const [indeks, setIndeks] = useState(0);
   const [jalan, setJalan] = useState(false);
-  const [pratinjau, setPratinjau] = useState(false);
-  const [meta, setMeta] = useState({ url: null, judul: null, sampul: null });
   const [tersembunyi, setTersembunyi] = useState(false);
   // Dilipat sendiri selama buklet dibaca supaya panel tidak menutupi kolom teksnya;
   // musik tetap jalan. Terpisah dari pilihan pengguna, jadi kembali sendiri saat ditutup.
   const [dilipat, setDilipat] = useState(false);
   // Selama cerita gulir di layar, dan di HP begitu hero lewat (rak, klien, kontak), panel
-  // menciut ke cakram supaya tidak menutupi judul dan isi seksi (terukur di HP 390 px). Di HP
-  // embed yang tersambung membuat panel setinggi 300 px, jadi hero pun ikut melipat.
+  // menciut ke cakram supaya tidak menutupi judul dan isi seksi (terukur di HP 390 px).
   // Membuka cakram tetap boleh, sampai pengunjung pindah zona.
   const [diCerita, setDiCerita] = useState(false);
   const [lewatHero, setLewatHero] = useState(false);
-  const [layarHp, setLayarHp] = useState(false);
-  const lipatOtomatis = diCerita || lewatHero || (layarHp && tersambung);
+  const lipatOtomatis = diCerita || lewatHero;
   const [dibukaManual, setDibukaManual] = useState(false);
   const sembunyi = tersembunyi || dilipat || (lipatOtomatis && !dibukaManual);
-  // Embed di browser HP dan tablet tetap cuplikan walau sudah login, jadi petunjuknya lain.
-  const [sentuh, setSentuh] = useState(false);
-  useEffect(() => setSentuh(matchMedia("(pointer: coarse)").matches), []);
-  const [form, setForm] = useState(false);
-  const [teks, setTeks] = useState("");
-  const [galat, setGalat] = useState("");
 
-  const wadahEmbed = useRef(null);
-  const kontrol = useRef(null);
+  const audio = useRef(null);
   const mauPutar = useRef(false);
-  const uriDimuat = useRef(null);
+  const gagalBeruntun = useRef(0);
   const dariCd = useRef(false);
+  const lagu = LAGU[indeks];
 
-  // Daftar lagu playlist Farrez untuk buklet, dari server situs sendiri (bukan Spotify
-  // langsung), jadi boleh dimuat sebelum klik. Pilihan pengunjung tidak punya daftar lagu.
-  const [daftar, setDaftar] = useState(null);
-  useEffect(() => {
-    if (!playlistFarrez) return;
-    let batal = false;
-    fetch("/api/musik/daftar")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((d) => !batal && Array.isArray(d?.lagu) && setDaftar(d.lagu))
-      .catch(() => {});
-    return () => {
-      batal = true;
-    };
+  const berikutnya = useCallback(() => setIndeks((i) => (i + 1) % LAGU.length), []);
+  const sebelumnya = useCallback(() => setIndeks((i) => (i - 1 + LAGU.length) % LAGU.length), []);
+
+  const elemen = useCallback(() => {
+    if (audio.current) return audio.current;
+    const a = new Audio();
+    a.preload = "none";
+    a.addEventListener("play", () => setJalan(true));
+    a.addEventListener("pause", () => setJalan(false));
+    a.addEventListener("playing", () => (gagalBeruntun.current = 0));
+    a.addEventListener("ended", berikutnya);
+    // Berkas yang gagal dimuat dilewati, tapi berhenti bila semuanya gagal (misalnya luring).
+    a.addEventListener("error", () => {
+      gagalBeruntun.current += 1;
+      if (mauPutar.current && gagalBeruntun.current < LAGU.length) berikutnya();
+      else mauPutar.current = false;
+    });
+    audio.current = a;
+    return a;
+  }, [berikutnya]);
+
+  const putar = useCallback(() => {
+    mauPutar.current = true;
+    const a = elemen();
+    if (!a.getAttribute("src")) a.src = LAGU[indeks].berkas;
+    a.play().catch(() => {
+      mauPutar.current = false;
+    });
+  }, [elemen, indeks]);
+
+  const jeda = useCallback(() => {
+    mauPutar.current = false;
+    audio.current?.pause();
   }, []);
-  useEffect(() => {
-    albumMusik.daftarLagu = pilihan?.milikFarrez && daftar?.length ? daftar : null;
-  }, [pilihan, daftar]);
 
-  // Pilihan pengunjung dari kunjungan sebelumnya (hanya tautan dan judul, tanpa sampul).
+  // Ganti lagu: hanya bila elemen audio sudah ada; sebelum itu cukup judulnya yang berganti.
   useEffect(() => {
-    const lama = bacaSimpanan();
-    if (lama) setPilihan({ ...lama, milikFarrez: false });
-  }, []);
-
-  const url = pilihan?.tautan.url ?? null;
-
-  // Judul CD langsung mengikuti pilihan; sampulnya menunggu Spotify tersambung.
-  useEffect(() => {
-    if (!pilihan) terapkanKeAlbum(null);
-    else terapkanKeAlbum(pilihan.tautan, { judul: pilihan.judul }, null, { milikFarrez: pilihan.milikFarrez });
-  }, [url]);
-
-  // Setelah tersambung: judul dan sampul lewat oEmbed, sampulnya dicetak ulang, lalu
-  // kotak, cakram, dan buklet CD musik digambar ulang.
-  useEffect(() => {
-    if (!tersambung || !pilihan) return;
-    let batal = false;
-    (async () => {
-      const info = await ambilInfo(pilihan.tautan);
-      let cetak = null;
-      if (!batal && info.sampul) {
-        try {
-          cetak = await cetakSampul(info.sampul);
-        } catch {}
-      }
-      if (batal) {
-        if (cetak) URL.revokeObjectURL(cetak.url);
-        return;
-      }
-      const judul = info.judul ?? pilihan.judul;
-      terapkanKeAlbum(pilihan.tautan, { judul }, cetak, { milikFarrez: pilihan.milikFarrez });
-      setMeta({ url: pilihan.tautan.url, judul, sampul: cetak?.url ?? null });
-      if (!pilihan.milikFarrez && judul) simpan({ ...pilihan, judul });
-    })();
-    return () => {
-      batal = true;
-    };
-  }, [tersambung, url]);
-
-  // Embed dibuat sekali setelah tersambung, lalu hanya berganti URI.
-  useEffect(() => {
-    if (!tersambung || !pilihan) return;
-    const uri = pilihan.tautan.uri;
-    if (kontrol.current) {
-      if (uriDimuat.current !== uri) {
-        uriDimuat.current = uri;
-        kontrol.current.loadUri(uri);
-        if (mauPutar.current) kontrol.current.play();
-      }
-      return;
-    }
-    let batal = false;
-    muatApi()
-      .then((api) => {
-        if (batal || !wadahEmbed.current) return;
-        // Spotify mengganti elemen ini dengan iframe, jadi elemennya bukan milik React.
-        const tempat = document.createElement("div");
-        wadahEmbed.current.replaceChildren(tempat);
-        uriDimuat.current = uri;
-        api.createController(tempat, { uri, width: "100%", height: 152 }, (k) => {
-          kontrol.current = k;
-          k.addListener("ready", () => mauPutar.current && k.play());
-          k.addListener("playback_update", (e) => {
-            setJalan(!e?.data?.isPaused);
-            setPratinjau(cuplikan(e?.data?.duration));
-          });
-        });
-      })
-      .catch(() => setTersambung(false));
-    return () => {
-      batal = true;
-    };
-  }, [tersambung, url]);
+    const a = audio.current;
+    if (!a) return;
+    a.src = LAGU[indeks].berkas;
+    if (mauPutar.current) a.play().catch(() => (mauPutar.current = false));
+  }, [indeks]);
 
   useEffect(
     () => () => {
-      kontrol.current?.destroy?.();
-      kontrol.current = null;
+      audio.current?.pause();
+      audio.current?.removeAttribute("src");
+      audio.current = null;
     },
     [],
   );
 
-  const putar = useCallback(() => {
-    if (!pilihan) {
-      setForm(true);
-      setTersembunyi(false);
-      return;
-    }
-    mauPutar.current = true;
-    setTersambung(true);
-    kontrol.current?.play();
-  }, [pilihan]);
-
-  const jeda = useCallback(() => {
-    mauPutar.current = false;
-    const k = kontrol.current;
-    if (!k) return;
-    if (typeof k.pause === "function") k.pause();
-    else k.togglePlay();
-  }, []);
+  // Kontrol di layar kunci dan notifikasi HP.
+  useEffect(() => {
+    if (!jalan || typeof navigator === "undefined" || !("mediaSession" in navigator)) return;
+    const ms = navigator.mediaSession;
+    ms.metadata = new MediaMetadata({ title: lagu.judul, artist: lagu.artis, album: albumMusik.judul[locale] });
+    ms.setActionHandler("play", putar);
+    ms.setActionHandler("pause", jeda);
+    ms.setActionHandler("nexttrack", berikutnya);
+    ms.setActionHandler("previoustrack", sebelumnya);
+  }, [jalan, lagu, locale, putar, jeda, berikutnya, sebelumnya]);
 
   // Play dan Pause di pemutar CD (mode Imersif) saat CD musik ada di dalamnya. Hanya jeda
   // bila putarnya juga datang dari CD, supaya CD proyek tidak mematikan musik latar.
@@ -264,7 +153,6 @@ export default function PemutarMusik() {
     let io;
     const pasangAmatan = () => {
       io?.disconnect();
-      setLayarHp(hp.matches);
       const hero = document.querySelector(".gerbang");
       if (!hero || !hp.matches) return setLewatHero(false);
       io = new IntersectionObserver(([e]) => setLewatHero(!e.isIntersecting));
@@ -280,44 +168,12 @@ export default function PemutarMusik() {
 
   useEffect(() => setDibukaManual(false), [diCerita, lewatHero]);
 
-  const pasang = (e) => {
-    e.preventDefault();
-    const tautan = uraiTautan(teks);
-    if (!tautan) {
-      setGalat(t("salah"));
-      return;
-    }
-    const baru = { tautan, judul: null, milikFarrez: false };
-    simpan(baru);
-    setGalat("");
-    setTeks("");
-    setForm(false);
-    setPilihan(baru);
-    setDibukaManual(true);
-    mauPutar.current = true;
-    setTersambung(true);
-  };
-
-  const keFarrez = () => {
-    simpan(null);
-    setForm(false);
-    setPilihan({ tautan: playlistFarrez, judul: null, milikFarrez: true });
-  };
-
-  const segar = meta.url === url;
-  const sampul = segar ? meta.sampul : null;
-  const judul = !pilihan
-    ? t("kosong")
-    : pilihan.milikFarrez
-      ? AWAL_MUSIK.judul[locale]
-      : (segar && meta.judul) || pilihan.judul || t("pilihanmu");
-  const keterangan = !pilihan ? "" : pilihan.milikFarrez ? `${t("playlistFarrez")}, ${t("viaSpotify")}` : `${t("pilihanmu")}, ${t("viaSpotify")}`;
   const labelPutar = jalan ? t("jeda") : t("putar");
 
   return (
     <>
       <section
-        className={`vinyl-player ${mode === "imersif" ? "vinyl-player--imersif" : ""} ${lipatOtomatis ? "vinyl-player--lipat" : ""} ${sembunyi ? "is-hidden" : ""} ${tersambung ? "is-tersambung" : ""}`}
+        className={`vinyl-player ${mode === "imersif" ? "vinyl-player--imersif" : ""} ${lipatOtomatis ? "vinyl-player--lipat" : ""} ${sembunyi ? "is-hidden" : ""}`}
         aria-label={t("sedangDiputar")}
         aria-hidden={sembunyi}
         inert={sembunyi ? true : undefined}
@@ -327,107 +183,35 @@ export default function PemutarMusik() {
             <span className={`tonearm ${jalan ? "tonearm--on" : ""}`} aria-hidden="true" />
             <div className={`vinyl ${jalan ? "playing" : ""}`}>
               <span className="vinyl__label">
-                {sampul ? <img src={sampul} alt="" /> : <span className="vinyl__polos" />}
+                <span className="vinyl__polos" />
                 <span className="vinyl__hole" />
               </span>
             </div>
           </div>
 
-          <div className="vinyl-meta">
+          <div className="vinyl-meta" aria-live="polite">
             <small className="vinyl-meta__now">{jalan ? t("sedangDiputar") : t("siap")}</small>
-            <strong className="vinyl-meta__title">{judul}</strong>
-            {keterangan && <span className="vinyl-meta__artist">{keterangan}</span>}
+            <strong className="vinyl-meta__title" title={lagu.judul}>{lagu.judul}</strong>
+            {/* Nama pemain dan lisensinya: atribusi CC BY dan BY-SA selama lagu diputar. Lisensi
+                di baris sendiri supaya tidak ikut terpotong saat nama pemainnya panjang. */}
+            <span className="vinyl-meta__artist" title={lagu.artis}>{lagu.artis}</span>
+            <a className="vinyl-meta__lisensi" href={lagu.urlLisensi} target="_blank" rel="noopener noreferrer">
+              {lagu.lisensi === "Public domain" ? t("domainPublik") : lagu.lisensi}
+            </a>
           </div>
 
           <div className="vinyl-controls">
-            <button
-              type="button"
-              className="vinyl-btn"
-              onClick={() => {
-                setDibukaManual(true);
-                if (jalan) jeda();
-                else putar();
-              }}
-              aria-label={labelPutar}
-              title={labelPutar}
-            >
+            <button type="button" className="vinyl-btn" onClick={jalan ? jeda : putar} aria-label={labelPutar} title={labelPutar}>
               {jalan ? <PiPauseFill aria-hidden="true" /> : <PiPlayFill aria-hidden="true" />}
             </button>
-            <button
-              type="button"
-              className="vinyl-btn"
-              onClick={() => setForm((f) => !f)}
-              aria-label={t("ganti")}
-              title={t("ganti")}
-              aria-expanded={form}
-            >
-              <PiLinkBold aria-hidden="true" />
+            <button type="button" className="vinyl-btn" onClick={berikutnya} aria-label={t("berikutnya")} title={t("berikutnya")}>
+              <PiSkipForwardFill aria-hidden="true" />
             </button>
             <button type="button" className="vinyl-btn" onClick={() => setTersembunyi(true)} aria-label={t("sembunyi")} title={t("sembunyi")}>
               <PiXBold aria-hidden="true" />
             </button>
           </div>
         </div>
-
-        {form && (
-          <form className="vinyl-form" onSubmit={pasang} noValidate>
-            <label htmlFor={idInput}>{t("tempel")}</label>
-            <div className="vinyl-form__baris">
-              <input
-                id={idInput}
-                type="url"
-                inputMode="url"
-                autoComplete="off"
-                spellCheck={false}
-                placeholder={t("contoh")}
-                value={teks}
-                onChange={(e) => {
-                  setTeks(e.target.value);
-                  if (galat) setGalat("");
-                }}
-                aria-invalid={galat ? true : undefined}
-                aria-describedby={`${idInput}-catatan`}
-                autoFocus
-              />
-              <button type="submit" className="vinyl-form__pasang">
-                {t("pasang")}
-              </button>
-            </div>
-            <p id={`${idInput}-catatan`} className={galat ? "vinyl-form__galat" : "vinyl-form__catatan"} role={galat ? "alert" : undefined}>
-              {galat || t("disimpan")}
-            </p>
-            {playlistFarrez && pilihan && !pilihan.milikFarrez && (
-              <button type="button" className="vinyl-form__kembali" onClick={keFarrez}>
-                <PiArrowCounterClockwiseBold aria-hidden="true" /> {t("kembali")}
-              </button>
-            )}
-          </form>
-        )}
-
-        <div ref={wadahEmbed} className="vinyl-embed" hidden={!tersambung} />
-        {/* Embed tertanam tidak bisa membaca login Spotify bila browser memblokir cookie
-            pihak ketiga, jadi lagu penuh selalu tersedia lewat Spotify sendiri. */}
-        {tersambung && url && (
-          <a className="vinyl-buka" href={url} target="_blank" rel="noopener noreferrer">
-            <PiArrowSquareOutBold aria-hidden="true" /> {t("bukaSpotify")}
-          </a>
-        )}
-        {tersambung && pratinjau && (
-          <p className="vinyl-cuplikan">
-            {t.rich(sentuh ? "cuplikanHp" : "cuplikan", {
-              buka: (isi) => (
-                <a href={url} target="_blank" rel="noopener noreferrer">
-                  {isi}
-                </a>
-              ),
-              login: (isi) => (
-                <a href="https://accounts.spotify.com/login" target="_blank" rel="noopener noreferrer">
-                  {isi}
-                </a>
-              ),
-            })}
-          </p>
-        )}
       </section>
 
       <button

@@ -1,7 +1,7 @@
 # 0009. Background music through the Spotify embed, loaded on click
 
 - Date: 2026-11-05
-- Status: Accepted
+- Status: Superseded by ADR 0022 (19 Nov 2026)
 
 ## Context
 

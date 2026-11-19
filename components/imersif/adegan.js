@@ -175,7 +175,7 @@ function halamanBuklet(p, locale, uv) {
 
 ${h.isi[locale]}` });
   });
-  // CD musik: daftar lagu playlist Farrez (content/musik.js, diisi dari /api/musik/daftar).
+  // CD musik: daftar lagu dan kreditnya (content/musik.js).
   const lagu = p.daftarLagu ?? [];
   for (let i = 0; i < lagu.length; i += 10) {
     const isi = lagu.slice(i, i + 10);

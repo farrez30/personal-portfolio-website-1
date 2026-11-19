@@ -125,21 +125,8 @@
     "tampil": "Tampilkan pemutar",
     "sedangDiputar": "Sedang diputar",
     "siap": "Siap diputar",
-    "playlistFarrez": "Playlist kerja Farrez",
-    "pilihanmu": "Pilihanmu",
-    "viaSpotify": "lewat Spotify",
-    "ganti": "Ganti lagu",
-    "tempel": "Tautan Spotify",
-    "contoh": "open.spotify.com/track/…",
-    "pasang": "Putar",
-    "batal": "Batal",
-    "salah": "Itu bukan tautan lagu, album, atau playlist Spotify.",
-    "kembali": "Kembali",
-    "kosong": "Tempel tautan Spotify.",
-    "disimpan": "Tautanmu hanya disimpan di browser ini.",
-    "cuplikan": "Masih cuplikan? <login>Login Spotify</login>, lalu izinkan cookie spotify.com di setelan browser, atau buka di Spotify.",
-    "cuplikanHp": "Di HP, Spotify di sini hanya memutar cuplikan. Lagu penuhnya ada di <buka>aplikasi Spotify</buka>.",
-    "bukaSpotify": "Spotify"
+    "berikutnya": "Lagu berikutnya",
+    "domainPublik": "Domain publik"
   },
   "umum": {
     "bahasa": "Bahasa",
