@@ -631,8 +631,10 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
       const o = new THREE.Mesh(geo, m);
       o.customDepthMaterial = bahanKabelBayang(THREE.MeshDepthMaterial, rapi, { depthPacking: THREE.RGBADepthPacking });
       o.customDistanceMaterial = bahanKabelBayang(THREE.MeshDistanceMaterial, rapi);
-      // Batas tidak dihitung ulang saat kabel bergerak: jangan dibuang frustum culling.
-      o.frustumCulled = false;
+      // Bola batas mencakup jalur kusut dan jalur rapi, jadi frustum culling tetap benar selama
+      // kabel bergerak dan kabel tidak digambar dari babak lain.
+      geo.boundingBox = new THREE.Box3().setFromBufferAttribute(geo.attributes.position).union(new THREE.Box3().setFromBufferAttribute(geoRapi.attributes.position));
+      geo.boundingSphere = geo.boundingBox.getBoundingSphere(new THREE.Sphere());
       g.add(o);
     });
     // Pengikat kabel hitam di berkas lantai: muncul satu per satu sesudah kabel rapi.
