@@ -20,7 +20,7 @@ Prompt keempat klip sinematik ada di `docs/seni-cd/prompt-video.json`. Biaya 72 
 
 ## Explainer bernarasi
 
-Satu video per proyek per bahasa, 37 sampai 53 detik, diputar bersuara saat Play ditekan.
+Satu video per proyek per bahasa, 29 sampai 53 detik, diputar bersuara saat Play ditekan.
 Naskahnya diturunkan dari teks buklet proyek (`content/buklet.js`) yang sudah disetujui
 Farrez, tanpa klaim baru, tanpa nama klien, teman, atau merek. Naskah, prompt klip, dan
 template Remotion tersalin di `docs/explainer/`; bahan mentah dan proyek Remotion lengkapnya di
@@ -30,13 +30,19 @@ template Remotion tersalin di `docs/explainer/`; bahan mentah dan proyek Remotio
   antarparagraf, diseragamkan kerasnya (loudnorm -16 LUFS) dan dipercepat paling banyak 1,2x.
   Model `gemini-3.1-flash-tts-preview`, kecuali akarkita, jeda, dan yiheecam
   (`gemini-2.5-flash-preview-tts`) dan d-day (`gemini-3.8-flash-lite-tts`) karena jatah harian habis.
+  gdl-logistics memakai `gemini-3.8-flash-tts` dan securitysahabat `gemini-3.1-flash-tts-preview`
+  (19 Nov 2026), teks narasi saja: model 3.x membacakan arahan gaya bila ikut di teks.
 - Gambar: klip Flow baru per adegan (prompt gaya album, tanpa tulisan, orang fiktif), klip
   sinematik atau rekaman lama di folder ini untuk adegan pembuka, dan klip pembuka diulang
   sebagai penutup di fifofun, akarkita, jeda, dan yiheecam. Tiga klip dipotong tepinya karena
   memuat tulisan karangan AI: logo di jeda adegan 2, papan toko di pilot-iklan adegan 2,
   poster di d-day adegan 3.
+  gdl-logistics adegan 2 memuat simbol kecil karangan model di pojok kanan bawah; ditutup
+  dengan ffmpeg delogo (36x36 px). Klip lain di folder unduhan yang sama tidak memuatnya, jadi
+  bukan tanda air Flow.
   Mentah unduhan Flow disimpan di `D:\Downloads D\Claude\2026-11-10 explainer-hologram\flow`.
 - Efek sapuan: `public/assets/suara/kertas-1.mp3` (CC0, sudah dipakai situs), dipotong 0,7 s.
+- Biaya GDL Logistics dan SecuritySahabat (19 Nov 2026): 6 klip x 8 kredit = 48 kredit Flow, dicatat di `docs/seni-cd/` bersama seni CD-nya. Klip 720p diunduh dari Flow lewat Upscaled 720p.
 - Biaya: 37 klip x 18 kredit = 666 kredit Flow (satu klip ERP adegan 2 dibuat ulang karena kartu asuransinya bertulisan) (nds-etl sebelumnya 90 kredit), tercatat di log kuota konten.
 
 | Berkas | Jenis | Sumber | Dibuat | Catatan |
@@ -61,3 +67,7 @@ template Remotion tersalin di `docs/explainer/`; bahan mentah dan proyek Remotio
 | explainer/yiheecam-en.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 10 Nov 2026 | Gaya city-pop Jepang 80-an, Kaushan Script. English. |
 | explainer/d-day-id.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 10 Nov 2026 | Gaya sampul jazz Blue Note, Bebas Neue. Bahasa Indonesia. |
 | explainer/d-day-en.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 10 Nov 2026 | Gaya sampul jazz Blue Note, Bebas Neue. English. |
+| explainer/gdl-logistics-id.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya poster perjalanan Art Deco, Limelight. Bahasa Indonesia. |
+| explainer/gdl-logistics-en.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya poster perjalanan Art Deco, Limelight. English. |
+| explainer/securitysahabat-id.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya title sequence potongan kertas Saul Bass, Archivo Black. Bahasa Indonesia. |
+| explainer/securitysahabat-en.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya title sequence potongan kertas Saul Bass, Archivo Black. English. |

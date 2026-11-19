@@ -2,7 +2,7 @@
 // babak, tunggu kamera mendarat, lalu tangkap kanvas saja dan halaman lengkap.
 //   node scripts/foto-babak.mjs <url beranda> <lebarxtinggi> --keluar <folder> [--u 0.6] [--gpu] [--terang]
 import { spawn } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
@@ -17,7 +17,23 @@ const hp = W < 768;
 mkdirSync(keluar, { recursive: true });
 
 const port = 9300 + Math.floor(Math.random() * 500);
-const bendera = ["--headless=new", "--hide-scrollbars", "--no-first-run", `--remote-debugging-port=${port}`, `--user-data-dir=${mkdtempSync(join(tmpdir(), "foto-babak-"))}`];
+const profil = mkdtempSync(join(tmpdir(), "foto-babak-"));
+// Profil Chrome sementara dihapus saat skrip selesai; dulu menumpuk sampai 9 GB di folder temp.
+process.on("exit", () => {
+  try {
+    proc.kill();
+  } catch {}
+  for (let i = 0; i < 20; i++) {
+    try {
+      rmSync(profil, { recursive: true, force: true });
+      return;
+    } catch {
+      const t = Date.now() + 250;
+      while (Date.now() < t);
+    }
+  }
+});
+const bendera = ["--headless=new", "--hide-scrollbars", "--no-first-run", `--remote-debugging-port=${port}`, `--user-data-dir=${profil}`];
 bendera.push(...(gpu ? ["--enable-gpu", "--use-angle=d3d11", "--ignore-gpu-blocklist"] : ["--enable-unsafe-swiftshader", "--use-angle=swiftshader"]));
 const proc = spawn(process.env.CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe", [...bendera, "about:blank"], { stdio: "ignore" });
 const tidur = (ms) => new Promise((r) => setTimeout(r, ms));

@@ -1,0 +1,67 @@
+{
+ "_catatan": "Naskah explainer securitysahabat (disetujui Farrez 19 Nov 2026), fakta dari README dan docs/submission tencent-hackathon.",
+ "gaya": {
+  "id": "Bacakan sebagai narator film dokumenter yang tenang, hangat, dan yakin, seperti video explainer sejarah. Tempo sedang, beri jeda panjang di antara paragraf.",
+  "en": "Read as a calm, warm, confident documentary narrator, like a history explainer video. Medium pace, with a long pause between paragraphs."
+ },
+ "warna": {
+  "kertas": "#f2ece0",
+  "tinta": "#16302f",
+  "aksen": "#d6402b"
+ },
+ "tampilan": {
+  "miring": 0,
+  "sapuan": "lingkaran"
+ },
+ "baris": [
+  {
+   "kode": "1-konteks",
+   "label": "Context",
+   "judul": {
+    "id": "BOLEH ATAU TIDAK?",
+    "en": "MAY I OR NOT?"
+   },
+   "teks": {
+    "id": "Boleh buka port ini? Boleh kirim file ini ke vendor? Siapa yang harus menyetujui? Karyawan sering tanya teman dulu, bukan tanya sistem.",
+    "en": "May I open this port? May I send this file to a vendor? Who has to approve it? Employees often ask a friend first, not the system."
+   }
+  },
+  {
+   "kode": "2-tantangan",
+   "label": "Challenge",
+   "judul": {
+    "id": "JAWABAN YANG TERSEBAR",
+    "en": "SCATTERED ANSWERS"
+   },
+   "teks": {
+    "id": "Jawabannya tersebar di SOP, grup chat, dan ingatan senior, kadang saling bertentangan. Hasilnya bergantung pada siapa yang ditanya.",
+    "en": "The answers are scattered across SOPs, group chats and senior staff's memory, sometimes contradicting each other. What you get depends on who you ask."
+   }
+  },
+  {
+   "kode": "3-solusi",
+   "label": "Solution",
+   "judul": {
+    "id": "JAWABAN DENGAN BUKTI",
+    "en": "ANSWERS WITH PROOF"
+   },
+   "teks": {
+    "id": "Tingkat risikonya diambil dari aturan perusahaan sendiri, dikutip apa adanya, hanya dari dokumen yang boleh dilihat penanya. Keputusannya tidak diserahkan ke AI. Kalau tidak tahu, ia bilang tidak tahu dan menunjuk orang yang tepat.",
+    "en": "The risk level comes from the company's own rules, quoted word for word, only from documents the asker may see. The decision is never left to AI. When it does not know, it says so and points to the right person."
+   }
+  },
+  {
+   "kode": "4-hasil",
+   "label": "Outcome",
+   "judul": {
+    "id": "SEMUA TERCATAT",
+    "en": "EVERYTHING ON RECORD"
+   },
+   "teks": {
+    "id": "Setiap pertanyaan dan jawabannya tercatat, dan catatan yang diubah diam-diam langsung ketahuan. Dibangun bertiga untuk Tencent Cloud Hackathon Indonesia 2026.",
+    "en": "Every question and answer is recorded, and a record changed quietly is caught at once. Built by a team of three for Tencent Cloud Hackathon Indonesia 2026."
+   },
+   "klip": "sama:1-konteks"
+  }
+ ]
+}

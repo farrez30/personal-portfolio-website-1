@@ -3,7 +3,7 @@
 // dikorbankan di HP berdasarkan angka, bukan tebakan.
 //   node scripts/ukur-gpu.mjs <url beranda> [lebarxtinggi]
 import { spawn } from "node:child_process";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 
@@ -11,7 +11,23 @@ const [url, ukuran = "1440x900"] = process.argv.slice(2);
 const [W, H] = ukuran.split("x").map(Number);
 const hp = W < 768;
 const port = 9400 + Math.floor(Math.random() * 300);
-const proc = spawn(process.env.CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe", ["--headless=new", "--hide-scrollbars", "--no-first-run", `--remote-debugging-port=${port}`, `--user-data-dir=${mkdtempSync(join(tmpdir(), "ukur-gpu-"))}`, "--enable-gpu", "--use-angle=d3d11", "--ignore-gpu-blocklist", "about:blank"], { stdio: "ignore" });
+const profil = mkdtempSync(join(tmpdir(), "ukur-gpu-"));
+// Profil Chrome sementara dihapus saat skrip selesai; dulu menumpuk sampai 9 GB di folder temp.
+process.on("exit", () => {
+  try {
+    proc.kill();
+  } catch {}
+  for (let i = 0; i < 20; i++) {
+    try {
+      rmSync(profil, { recursive: true, force: true });
+      return;
+    } catch {
+      const t = Date.now() + 250;
+      while (Date.now() < t);
+    }
+  }
+});
+const proc = spawn(process.env.CHROME || "C:/Program Files/Google/Chrome/Application/chrome.exe", ["--headless=new", "--hide-scrollbars", "--no-first-run", `--remote-debugging-port=${port}`, `--user-data-dir=${profil}`, "--enable-gpu", "--use-angle=d3d11", "--ignore-gpu-blocklist", "about:blank"], { stdio: "ignore" });
 const tidur = (ms) => new Promise((r) => setTimeout(r, ms));
 let ws;
 for (let i = 0; i < 40 && !ws; i++) {

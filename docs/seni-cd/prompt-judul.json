@@ -58,5 +58,17 @@
     "berkas": "sampul-judul.webp",
     "dari": "sampul.webp",
     "prompt": "Add the album title \"d-day\" as bold condensed white sans-serif capital lettering inside the big blue rectangle at the top, left aligned, like a 1960s Blue Note record cover. Spell it exactly \"D-DAY\" and write nothing else anywhere. Keep everything else in the image unchanged."
+  },
+  {
+    "slug": "gdl-logistics",
+    "berkas": "sampul-judul.webp",
+    "dari": "sampul.webp",
+    "prompt": "Add the album title \"GDL Logistics\" as 1930s Art Deco streamline lettering in cream with a thin ice-blue inline, in the dark night sky at the top right. Spell it exactly \"GDL Logistics\" and write nothing else anywhere. Keep everything else in the image unchanged."
+  },
+  {
+    "slug": "securitysahabat",
+    "berkas": "sampul-judul.webp",
+    "dari": "sampul.webp",
+    "prompt": "Add the album title \"SecuritySahabat\" as bold hand-cut Saul Bass style paper lettering in off-white, in the empty deep teal area at the bottom right. Spell it exactly \"SecuritySahabat\" and write nothing else anywhere. Keep everything else in the image unchanged."
   }
 ]

@@ -1093,8 +1093,8 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
   // sampai bebas dari tetangganya, baru berputar dan naik; jalur melengkung, miring mengikuti
   // belokan, goyang kecil dengan fase berbeda, jeda antarbenda. Dulu tiga kotak meluncur masuk
   // celah dan sempat menembus rak.
-  const SLUG_RILIS = ["coderoach-os", "jeda", "akarkita", "d-day", "viralytics", "yiheecam", "fifofun", "nds-etl", "pilot-iklan", "erp-software-house"];
-  const WARNA_PUNGGUNG = [0xe05a4a, 0x2b2a2e, 0xd9a441, 0x3f6fa8, 0x4d8a5c, 0xe9e1d3, 0x8a5a9e, 0x6b645a, 0xc9443a, 0x3f6fa8];
+  const SLUG_RILIS = ["coderoach-os", "jeda", "akarkita", "d-day", "viralytics", "yiheecam", "fifofun", "nds-etl", "pilot-iklan", "erp-software-house", "gdl-logistics", "securitysahabat"];
+  const WARNA_PUNGGUNG = [0xe05a4a, 0x2b2a2e, 0xd9a441, 0x3f6fa8, 0x4d8a5c, 0xe9e1d3, 0x8a5a9e, 0x6b645a, 0xc9443a, 0x3f6fa8, 0xe8751a, 0x16302f];
   const kotakRilis = SLUG_RILIS.map((slug, i) => {
     const sampul = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.45 });
     tekstur(`/assets/ilustrasi/${slug}.webp`, [1, 1]).then((t) => {
@@ -1116,7 +1116,7 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
   const masukKeluar = (x) => (x < 0.5 ? 2 * x * x : 1 - (-2 * x + 2) ** 2 / 2);
   momen.rilis = (u) =>
     kotakRilis.forEach((k, i) => {
-      const tau = (u - 0.08 - i * 0.05) / 0.35;
+      const tau = (u - 0.08 - i * 0.04) / 0.35;
       const a = k.userData.awal;
       if (tau <= 0) {
         k.position.copy(a);

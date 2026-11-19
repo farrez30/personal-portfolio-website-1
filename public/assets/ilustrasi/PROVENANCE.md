@@ -17,6 +17,10 @@ Asli JPEG 1200x896 ada di D:\downloads\claude\2026-11-05-flow-ilustrasi-portofol
 | jeda.webp | Menulis catatan di HP pada malam hari, dengan vinyet psikolog |
 | yiheecam.webp | Pengendara motor dengan kamera aksi di helm |
 | d-day.webp | Dua teman di meja dengan grafik |
+| gdl-logistics.webp | Pemilik usaha memesan truk pendingin dari laptop di kantor gudang |
+| securitysahabat.webp | Karyawan bertanya ke chat di laptop, jawabannya menunjuk dokumen |
 
 Prompt pertama pilot iklan (rak berisi botol) ditolak filter kebijakan Flow; diulang dengan adegan
 mengemas paket.
+
+Dua ilustrasi terakhir (gdl-logistics, securitysahabat) dibuat 19 Nov 2026 dengan gaya yang sama. Bukan berkas asli Flow: Chrome di PC ini membeku di halaman Flow, jadi piksel ditangkap 1:1 dari panel browser lalu dipotong ke 1024x765. Ilustrasi GDL ditambal di satu titik (coretan mirip tulisan sekitar 5x37 px di tiang dermaga); tangkapan mentah sebelum tambalan ada di `D:\Downloads D\Claude\2026-11-19 cd-baru\`.
