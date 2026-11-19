@@ -386,6 +386,37 @@ export const BUKLET = {
         "Every question, source and answer is logged in a chain, so a record changed quietly is caught at once. Submitted by a team of three to Tencent Cloud Hackathon Indonesia 2026 on 1 November 2026."),
     ],
   },
+
+  // Fakta dari hasil/rekaman.json (uji penuh 19 Nov 2026) dan README flash-sale-lab. Disetujui Farrez 20 Nov 2026.
+  "flash-sale-lab": {
+    disetujui: true,
+    halaman: [
+      h("Context", "Semua datang sekaligus", "Everyone at once",
+        "Saat flash sale dibuka, ribuan orang datang di detik yang sama untuk stok yang terbatas. Siapa cepat, dia dapat.",
+        "When a flash sale opens, thousands of people arrive in the same second for limited stock. First come, first served."),
+      h("Context", "Bot ikut antre", "Bots join the line",
+        "Di antara pembeli ada bot yang menyerbu tanpa henti, berharap bisa menyerobot sebelum orang sungguhan.",
+        "Among the buyers are bots that never stop, hoping to cut in ahead of real people."),
+      h("Challenge", "Jangan jual yang tidak ada", "Never sell what isn't there",
+        "Sistemnya harus tetap jujur di bawah tekanan: tidak menjual lebih dari stok, tidak menggandakan pesanan, dan tetap menjawab cepat.",
+        "Under pressure the system has to stay honest: never sell more than the stock, never duplicate an order, and keep answering fast."),
+      h("Solution", "Satpam di pintu", "A guard at the door",
+        "Batas laju per pengunjung dan karcis bertanda tangan menahan bot di pintu. Tidak ada satu pun bot yang lolos sampai kasir.",
+        "A per-visitor rate limit and signed tickets stop bots at the door. Not a single bot made it to the till."),
+      h("Solution", "Ruang tunggu", "The waiting room",
+        "Pembeli menunggu di ruang tunggu dan dipanggil 200 orang per detik, jadi kasir tidak kebanjiran.",
+        "Buyers wait in a waiting room and are called 200 a second, so the till never floods."),
+      h("Solution", "Satu klik, satu pesanan", "One click, one order",
+        "Cek stok, kurangi stok, dan catat pesanan terjadi dalam satu langkah. Klik dua kali tetap jadi satu pesanan.",
+        "Checking stock, reducing it and recording the order happen in one step. A double click is still one order."),
+      h("How it works", "Diuji, direkam, diputar ulang", "Tested, recorded, replayed",
+        "Hampir 114 ribu pembeli dikirim ke satu laptop selama dua menit. Setiap detiknya direkam, lalu diputar ulang di halaman replay untuk orang awam.",
+        "Almost 114 thousand buyers were sent at one laptop over two minutes. Every second was recorded and plays back on a replay page for non-engineers."),
+      h("Outcome", "Habis di detik ke-43", "Sold out at second 43",
+        "Enam ribu barang habis di detik ke-43. Enam ribu pesanan tersimpan, tanpa kelebihan jual dan tanpa pesanan ganda. Tokonya, Cuci Gudang Mart, toko tiruan untuk lab ini.",
+        "Six thousand items sold out at second 43. Six thousand orders saved, with no oversell and no duplicate orders. The shop, Cuci Gudang Mart, is a mock store made for this lab."),
+    ],
+  },
 };
 
 export function bukletUntuk(slug) {

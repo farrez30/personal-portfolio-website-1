@@ -451,7 +451,7 @@ export const ARSITEKTUR = {
     alur: [
       l(
         { id: "Ribuan orang datang", en: "Thousands arrive" },
-        { id: "k6 mengirim pembeli dan bot sekaligus, sampai 1.500 orang per detik, ke API Go yang dibatasi satu CPU.", en: "k6 sends buyers and bots at once, up to 1,500 people a second, at a Go API limited to one CPU." },
+        { id: "k6 mengirim pembeli dan bot sekaligus, lebih dari seribu orang per detik, ke API Go yang dibatasi satu CPU.", en: "k6 sends buyers and bots at once, more than a thousand people a second, at a Go API limited to one CPU." },
         ["k6", "go"],
       ),
       l(

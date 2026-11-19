@@ -673,9 +673,17 @@ function tataBelakang(g, p, a, panel, locale) {
   const K = { ...TATA_BAWAAN.kredit, ...t.kredit };
   const tahun = (String(p.periode).match(/\d{4}(?!.*\d{4})/) ?? [""])[0];
   g.font = `400 ${6 * s}px ${fontMono()}`;
+  const kredit = `© ${tahun} Farrez Al Hakim. farrez.vercel.app`;
+  // Latar polos opsional untuk sampul belakang yang ramai sampai tepi bawah.
+  if (K.kotak) {
+    const lebar = g.measureText(kredit).width;
+    const kiri = K.rata === "right" ? px(K.x) - lebar : K.rata === "center" ? px(K.x) - lebar / 2 : px(K.x);
+    g.fillStyle = K.kotak;
+    g.fillRect(kiri - 3 * s, py(K.y) - 7 * s, lebar + 6 * s, 10 * s);
+  }
   g.fillStyle = K.warna ?? a.tinta;
   g.textAlign = K.rata;
-  g.fillText(`© ${tahun} Farrez Al Hakim. farrez.vercel.app`, px(K.x), py(K.y));
+  g.fillText(kredit, px(K.x), py(K.y));
   g.restore();
 }
 

@@ -25,7 +25,7 @@ export type Proyek = {
   huruf: { keluarga: string; berkas: string | null; berat: number };
   // Gaya per genre album: kemiringan blok judul, jenis sapuan antarbabak, sudutnya,
   // huruf kapital atau tidak, dan bingkai panel komik.
-  tampilan?: { miring?: number; sapuan?: string; sudut?: number; kapital?: boolean; bingkai?: boolean };
+  tampilan?: { miring?: number; sapuan?: string; sudut?: number; kapital?: boolean; bingkai?: boolean; spasiKata?: string };
   babak: Babak[];
 };
 export type Props = { lang: "id" | "en"; proyek: Proyek };
@@ -52,6 +52,8 @@ const gaya = (p: Proyek) => ({
   sudut: p.tampilan?.sudut ?? 18,
   kapital: p.tampilan?.kapital ?? true,
   bingkai: p.tampilan?.bingkai ?? false,
+  // Huruf genre bergaris seperti Monoton punya spasi kata sangat sempit, jadi judulnya terbaca satu kata.
+  spasiKata: p.tampilan?.spasiKata ?? "normal",
 });
 const kapital = (p: Proyek) => (gaya(p).kapital ? "uppercase" : "none") as "uppercase" | "none";
 
@@ -74,7 +76,7 @@ const Pembuka = ({ proyek: p, lang }: Props) => {
       {/* Judul di blok tinta miring; boleh dua baris supaya judul panjang tidak keluar layar. */}
       <div style={{ position: "absolute", left: 80, top: 230, maxWidth: 1000, padding: "16px 30px 20px", background: p.warna.tinta,
         transform: `rotate(${gaya(p).miring}deg) translateX(${(1 - b) * -1200}px)`, transformOrigin: "left center",
-        fontFamily: `'${p.huruf.keluarga}'`, fontWeight: p.huruf.berat, fontSize: 70, lineHeight: 1.02, color: p.warna.kertas,
+        fontFamily: `'${p.huruf.keluarga}'`, fontWeight: p.huruf.berat, wordSpacing: gaya(p).spasiKata, fontSize: 70, lineHeight: 1.02, color: p.warna.kertas,
         textTransform: kapital(p), letterSpacing: 1 }}>
         {p.judul[lang]}
       </div>
@@ -118,7 +120,7 @@ const Babakan = ({ p, b, lang, nomor }: { p: Proyek; b: Babak; lang: "id" | "en"
         {String(nomor).padStart(2, "0")}  {b.label}
       </div>
       <div style={{ position: "absolute", left: 40, top: 104, maxWidth: 860, padding: "10px 26px 14px", background: p.warna.tinta,
-        color: p.warna.kertas, fontFamily: `'${p.huruf.keluarga}'`, fontWeight: p.huruf.berat, fontSize: 64, lineHeight: 1.02,
+        color: p.warna.kertas, fontFamily: `'${p.huruf.keluarga}'`, fontWeight: p.huruf.berat, wordSpacing: gaya(p).spasiKata, fontSize: 64, lineHeight: 1.02,
         textTransform: kapital(p), transform: `skewX(${gaya(p).miring}deg) translateX(${(1 - judulMasuk) * -1100}px)` }}>
         {b.judul[lang]}
       </div>
@@ -181,7 +183,7 @@ const Penutup = ({ proyek: p, lang }: Props) => {
   return (
     <AbsoluteFill style={{ background: p.warna.tinta, justifyContent: "center", alignItems: "center" }}>
       <div style={{ width: 220, height: 220, borderRadius: "50%", background: p.warna.aksen, transform: `scale(${a})`, position: "absolute", left: 160, top: 120 }} />
-      <div style={{ fontFamily: `'${p.huruf.keluarga}'`, fontWeight: p.huruf.berat, fontSize: 70, color: p.warna.kertas,
+      <div style={{ fontFamily: `'${p.huruf.keluarga}'`, fontWeight: p.huruf.berat, wordSpacing: gaya(p).spasiKata, fontSize: 70, color: p.warna.kertas,
         textTransform: kapital(p), transform: `skewX(${gaya(p).miring}deg) translateY(${(1 - a) * 60}px)`, opacity: a, textAlign: "center", maxWidth: 1000 }}>
         {p.judul[lang]}
       </div>

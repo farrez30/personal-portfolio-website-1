@@ -21,7 +21,7 @@ export const demoUntuk = (slug) => DEMO[slug] ?? null;
 export const EXPLAINER = [
   "erp-software-house", "viralytics", "coderoach-os", "fifofun", "nds-etl",
   "akarkita", "pilot-iklan", "jeda", "yiheecam", "d-day", "gdl-logistics",
-  "securitysahabat",
+  "securitysahabat", "flash-sale-lab",
 ];
 
 export const explainerUntuk = (slug, lang) =>

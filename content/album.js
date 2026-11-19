@@ -123,6 +123,13 @@ export const ALBUM = {
     tata: { lagu: { x: 0.06, y: 0.06, huruf: "genre", ukuran: 9, kapital: true, kotak: null }, barcode: { x: 0.73, y: 0.05, gaya: "warna", latar: "#d6402b", warna: "#f2ece0" }, kredit: { x: 0.06, y: 0.955, warna: "#f2ece0" } },
     judul: { x: 0.06, y: 0.05, rata: "left", ukuran: 0.08, lebar: 0.55, warna: "#f2ece0", kapital: true },
   },
+  "flash-sale-lab": {
+    genre: "Op Art",
+    huruf: huruf("Monoton", "monoton"),
+    tinta: "#141516",
+    tata: { lagu: { x: 0.06, y: 0.06, huruf: "sans", ukuran: 10, kolom: 2, kotak: "rgba(241, 236, 226, 0.92)" }, barcode: { x: 0.73, y: 0.06, gaya: "warna", latar: "#ff3b30", warna: "#141516" }, kredit: { x: 0.06, y: 0.955, kotak: "#f1ece2" } },
+    judul: { x: 0.94, y: 0.86, rata: "right", ukuran: 0.07, lebar: 0.5, warna: "#141516" },
+  },
 };
 
 for (const [slug, a] of Object.entries(ALBUM)) Object.assign(a, dasar(slug));

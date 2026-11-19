@@ -32,6 +32,8 @@ template Remotion tersalin di `docs/explainer/`; bahan mentah dan proyek Remotio
   (`gemini-2.5-flash-preview-tts`) dan d-day (`gemini-3.8-flash-lite-tts`) karena jatah harian habis.
   gdl-logistics memakai `gemini-3.8-flash-tts` dan securitysahabat `gemini-3.1-flash-tts-preview`
   (19 Nov 2026), teks narasi saja: model 3.x membacakan arahan gaya bila ikut di teks.
+  flash-sale-lab juga `gemini-3.1-flash-tts-preview` (20 Nov 2026); batas babak 1 dan 2 versi
+  Indonesia dipotong ulang manual karena pemotong otomatis memindahkan "Bot ikut menyerbu." ke babak 2.
 - Gambar: klip Flow baru per adegan (prompt gaya album, tanpa tulisan, orang fiktif), klip
   sinematik atau rekaman lama di folder ini untuk adegan pembuka, dan klip pembuka diulang
   sebagai penutup di fifofun, akarkita, jeda, dan yiheecam. Tiga klip dipotong tepinya karena
@@ -42,6 +44,7 @@ template Remotion tersalin di `docs/explainer/`; bahan mentah dan proyek Remotio
   bukan tanda air Flow.
   Mentah unduhan Flow disimpan di `D:\Downloads D\Claude\2026-11-10 explainer-hologram\flow`.
 - Efek sapuan: `public/assets/suara/kertas-1.mp3` (CC0, sudah dipakai situs), dipotong 0,7 s.
+- Biaya Flash Sale Lab (20 Nov 2026): 3 klip x 8 kredit = 24 kredit Flow, disetujui Farrez, saldo 202 jadi 178.
 - Biaya GDL Logistics dan SecuritySahabat (19 Nov 2026): 6 klip x 8 kredit = 48 kredit Flow, dicatat di `docs/seni-cd/` bersama seni CD-nya. Klip 720p diunduh dari Flow lewat Upscaled 720p.
 - Biaya: 37 klip x 18 kredit = 666 kredit Flow (satu klip ERP adegan 2 dibuat ulang karena kartu asuransinya bertulisan) (nds-etl sebelumnya 90 kredit), tercatat di log kuota konten.
 
@@ -71,3 +74,5 @@ template Remotion tersalin di `docs/explainer/`; bahan mentah dan proyek Remotio
 | explainer/gdl-logistics-en.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya poster perjalanan Art Deco, Limelight. English. |
 | explainer/securitysahabat-id.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya title sequence potongan kertas Saul Bass, Archivo Black. Bahasa Indonesia. |
 | explainer/securitysahabat-en.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya title sequence potongan kertas Saul Bass, Archivo Black. English. |
+| explainer/flash-sale-lab-id.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya Op Art 1960-an, Monoton. Bahasa Indonesia. |
+| explainer/flash-sale-lab-en.mp4 | explainer | Remotion 4.0.538, 1280x720, narasi Gemini TTS suara Charon, klip Google Flow Omni 1.2 Flash | 20 Nov 2026 | Gaya Op Art 1960-an, Monoton. English. |

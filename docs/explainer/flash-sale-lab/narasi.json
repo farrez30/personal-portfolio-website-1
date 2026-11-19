@@ -1,0 +1,68 @@
+{
+ "_catatan": "Naskah explainer flash-sale-lab (disetujui Farrez 20 Nov 2026). Angka dari hasil/rekaman.json uji penuh 19 Nov 2026.",
+ "gaya": {
+  "id": "Bacakan sebagai narator film dokumenter yang tenang, hangat, dan yakin, seperti video explainer sejarah. Tempo sedang, beri jeda panjang di antara paragraf.",
+  "en": "Read as a calm, warm, confident documentary narrator, like a history explainer video. Medium pace, with a long pause between paragraphs."
+ },
+ "warna": {
+  "kertas": "#f1ece2",
+  "tinta": "#141516",
+  "aksen": "#ff3b30"
+ },
+ "tampilan": {
+  "miring": 0,
+  "sapuan": "lingkaran",
+  "spasiKata": "0.45em"
+ },
+ "baris": [
+  {
+   "kode": "1-konteks",
+   "label": "Context",
+   "judul": {
+    "id": "SEMUA DATANG SEKALIGUS",
+    "en": "EVERYONE AT ONCE"
+   },
+   "teks": {
+    "id": "Saat flash sale dibuka, ribuan orang datang di detik yang sama untuk stok yang terbatas. Bot ikut menyerbu.",
+    "en": "When a flash sale opens, thousands of people arrive in the same second for limited stock. Bots rush in too."
+   }
+  },
+  {
+   "kode": "2-tantangan",
+   "label": "Challenge",
+   "judul": {
+    "id": "JANGAN JUAL YANG TIDAK ADA",
+    "en": "NEVER SELL WHAT ISN'T THERE"
+   },
+   "teks": {
+    "id": "Sistemnya harus tetap jujur: tidak menjual lebih dari stok, tidak menggandakan pesanan, dan tetap menjawab cepat.",
+    "en": "The system has to stay honest: never sell more than the stock, never duplicate an order, and keep answering fast."
+   }
+  },
+  {
+   "kode": "3-solusi",
+   "label": "Solution",
+   "judul": {
+    "id": "PINTU, RUANG TUNGGU, KASIR",
+    "en": "DOOR, WAITING ROOM, TILL"
+   },
+   "teks": {
+    "id": "Bot ditahan di pintu. Pembeli menunggu di ruang tunggu dan dipanggil 200 orang per detik. Stok dikurangi dalam satu langkah, jadi tidak bisa minus.",
+    "en": "Bots are stopped at the door. Buyers wait and are called 200 a second. Stock is reduced in one step, so it can never go below zero."
+   }
+  },
+  {
+   "kode": "4-hasil",
+   "label": "Outcome",
+   "judul": {
+    "id": "HABIS DI DETIK KE-43",
+    "en": "SOLD OUT AT SECOND 43"
+   },
+   "teks": {
+    "id": "Diuji dengan hampir 114 ribu pembeli di satu laptop. Enam ribu barang habis di detik ke-43, tanpa satu pun kelebihan jual.",
+    "en": "Tested with almost 114 thousand buyers on one laptop. Six thousand items sold out at second 43, without a single oversell."
+   },
+   "klip": "sama:1-konteks"
+  }
+ ]
+}

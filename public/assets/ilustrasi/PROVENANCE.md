@@ -19,6 +19,7 @@ Asli JPEG 1200x896 ada di D:\downloads\claude\2026-11-05-flow-ilustrasi-portofol
 | d-day.webp | Dua teman di meja dengan grafik |
 | gdl-logistics.webp | Pemilik usaha memesan truk pendingin dari laptop di kantor gudang |
 | securitysahabat.webp | Karyawan bertanya ke chat di laptop, jawabannya menunjuk dokumen |
+| flash-sale-lab.webp | Orang di meja menonton antrean titik flash sale di laptop dengan tenang, grafik garis mulus di dinding |
 
 Prompt pertama pilot iklan (rak berisi botol) ditolak filter kebijakan Flow; diulang dengan adegan
 mengemas paket.
