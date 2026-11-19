@@ -58,6 +58,11 @@ test("layar tegak: kamera mundur dari benda dan menunduk, anchor biasa tidak ber
   for (const id of BABAK) {
     const a = ANCHOR.find((x) => x.id === id);
     const t = anchorTegak(a);
+    // Anchor dengan pose tegak sendiri (andal: meja kasir terlalu dekat rak) memakai pose itu.
+    if (a.tegak) {
+      assert.deepEqual([t.posisi, t.lihat, t.fov], [a.tegak.posisi, a.tegak.lihat, a.tegak.fov]);
+      continue;
+    }
     const jauh = (p) => Math.hypot(...p.map((v, i) => v - a.benda[i]));
     assert.ok(jauh(t.posisi) > jauh(a.posisi), `${id} tidak mundur`);
     // Membidik di bawah benda, supaya benda naik ke separuh atas layar (teks ada di bawah).

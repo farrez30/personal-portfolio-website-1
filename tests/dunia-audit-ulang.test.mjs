@@ -118,8 +118,10 @@ test("sorot bab bentuk memakai lampu kunci, bukan bidang additive", () => {
   // untuk bayangan, sudut dan kekuatannya biasa.
   assert.match(d, /sudut: SUDUT_KUNCI, kuat: 1 \};/);
   assert.match(d, /kunciLampu\.angle = kunciKini\.sudut;/);
-  // Jumlah lampu tidak bertambah (lampu baru mengompilasi ulang semua shader).
-  assert.equal((d.match(/new THREE\.SpotLight\(/g) ?? []).length, 2);
+  // Jumlah lampu tidak bertambah (lampu baru mengompilasi ulang semua shader). Babak andal
+  // menukar lampu darurat titik menjadi sorot, jadi yang dihitung pembuat lampu dari kedua jenis.
+  const jumlah = (jenis) => (d.match(new RegExp(`new THREE\\.${jenis}\\(`, "g")) ?? []).length;
+  assert.equal(jumlah("SpotLight") + jumlah("PointLight"), 6);
 });
 
 // Butir 4: kaca vitrin terbaca seperti jeli, dimensinya tidak terbaca; kaca pintu memudarkan jalan.

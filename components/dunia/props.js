@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
-import { pemicuSekali } from "./naskah";
+import { keadaanAndal, pemicuSekali } from "./naskah";
 
 // Props tur cerita gulir (cerita v4): satu benda per babak di toko kaset, dipilih dari istilah
 // toko musik yang membawa pesan babaknya (desain/cerita-v4/usulan-revisi-1.md bagian 3).
@@ -35,7 +35,7 @@ function uvDunia(geo, perMeter = 1) {
 // Dibuat sesudah dunia siap (muatCerita di dunia.js), supaya loader tidak menunggu aset cerita.
 // Lampu yang dipakai props (`lampuMeja`, `lampuDarurat`) sudah ada di adegan sejak awal: lampu
 // baru di tengah jalan memaksa semua shader dikompilasi ulang.
-export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lampuMeja, lampuDarurat }) {
+export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lampuMeja, lampuDarurat, bahasa = "id" }) {
   const tunggu = [];
   const tekstur = (...a) => {
     const p = muatTekstur(...a);
@@ -870,46 +870,111 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     grup.add(g);
   }
 
-  // ---- 08 andal: bangku, pemutar kaset baterai, ponsel, lampu darurat ------------------------
-  let tinggiDudukan = 0.44;
+  // ---- 08 andal: meja kasir saat listrik padam ---------------------------------------------
+  // Masukan Farrez 19 Nov: bangku, HP, dan kotak putih di lantai tidak bercerita apa pun. Teks
+  // babak ("sinyal hilang atau listrik padam, pencatatan tetap jalan, datanya menyusul") kini
+  // dimainkan di meja kasir: lampu toko padam, lampu darurat twin spot di dinding menyala, lampu
+  // LOS modem merah, tablet kasir tetap mencatat dengan pita "Offline", lalu begitu listrik kembali
+  // transaksi tertunda terkirim. Pola layar mengikuti POS nyata (banner offline, "Transaksi
+  // Tertunda" majoo, sinkron otomatis); riset di desain/cerita-v4/riset-audit-ulang.md.
   {
-    tungguModel.push([
-      "wooden_stool_01",
-      (m) => {
-        m.position.set(3.55, 0, -1.6);
-        m.rotation.y = 0.4;
-        grup.add(m);
-        m.updateMatrixWorld(true);
-        // Benda di atas bangku diletakkan dari tinggi dudukan sebenarnya, bukan angka tebakan,
-        // supaya tidak tenggelam ke kayunya.
-        tinggiDudukan = new THREE.Box3().setFromObject(m).max.y;
-        hp.position.y = tinggiDudukan + 0.005;
-      },
-    ]);
-    const hp = new THREE.Group();
-    hp.position.set(3.6, 0.45, -1.52);
-    hp.rotation.set(-Math.PI / 2, 0, -0.4);
-    kotak(0.075, 0.155, 0.008, b.gelap, 0, 0, 0, hp, 0.006);
-    const l = layar(0.068, 0.145, "08-jeda.webp");
-    l.position.z = 0.0045;
-    hp.add(l);
-    grup.add(hp);
-    // Lampu darurat isi ulang di lantai: menyala saat listrik toko padam.
-    const ld = new THREE.Group();
-    ld.position.set(3.15, 0, -1.85);
-    ld.rotation.y = 0.7;
-    kotak(0.2, 0.13, 0.07, new THREE.MeshStandardMaterial({ color: 0xe9e4da, roughness: 0.5 }), 0, 0.065, 0, ld, 0.012);
-    const strip = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.05), new THREE.MeshBasicMaterial({ color: 0x3a3430, toneMapped: false }));
-    strip.position.set(0, 0.08, 0.0355);
-    ld.add(strip);
-    kotak(0.12, 0.014, 0.014, b.gelap, 0, 0.14, 0, ld, 0.006);
-    grup.add(ld);
+    const ATAS = 1.01; // permukaan meja kasir (dunia.js: papan atas y 0,985, tebal 5 cm)
+    const plastik = new THREE.MeshStandardMaterial({ color: 0xeae7e0, roughness: 0.45 });
+    const hitam = new THREE.MeshStandardMaterial({ color: 0x1c1d20, roughness: 0.5, metalness: 0.2 });
+    const lampuLed = (warna) => new THREE.MeshBasicMaterial({ color: warna, fog: false });
+    const setelLed = (m, warna, k) => m.color.setHex(warna).multiplyScalar(k);
+
+    // Tablet kasir 10 inci di dudukan aluminium, layar menghadap ke dalam toko.
+    const layarKasir = teksturKasirOffline(bahasa);
+    const tb = new THREE.Group();
+    tb.position.set(2.2, ATAS, 2.92);
+    tb.rotation.y = Math.PI + 0.45;
+    kotak(0.1, 0.008, 0.12, b.logam, 0, 0.004, 0, tb);
+    kotak(0.03, 0.14, 0.012, b.logam, 0, 0.075, 0.02, tb).rotation.x = -0.25;
+    const panel = new THREE.Group();
+    panel.position.set(0, 0.17, 0.035);
+    panel.rotation.x = -0.32;
+    kotak(0.25, 0.165, 0.008, hitam, 0, 0, 0, panel, 0.006);
+    const kaca = layarKanvas(0.232, 0.145, layarKasir.peta, 1);
+    kaca.position.z = 0.0045;
+    panel.add(kaca);
+    tb.add(panel);
+    grup.add(tb);
+
+    // Printer struk thermal 58 mm berbaterai; struk memanjang tiap transaksi selama padam.
+    const pr = new THREE.Group();
+    pr.position.set(2.5, ATAS, 2.88);
+    pr.rotation.y = Math.PI + 0.3;
+    kotak(0.11, 0.075, 0.15, hitam, 0, 0.0375, 0, pr, 0.01);
+    kotak(0.1, 0.012, 0.06, b.gelap, 0, 0.08, -0.035, pr);
+    const struk = new THREE.Mesh(new THREE.PlaneGeometry(0.058, 1), b.kertas);
+    struk.geometry.translate(0, 0.5, 0);
+    struk.position.set(0, 0.082, -0.005);
+    struk.rotation.x = 0.15;
+    pr.add(struk);
+    grup.add(pr);
+
+    // Modem fiber dua antena dengan lampu POWER, PON, dan LOS di muka depan.
+    const md = new THREE.Group();
+    md.position.set(1.65, ATAS, 3.12);
+    md.rotation.y = Math.PI + 0.25;
+    kotak(0.16, 0.03, 0.11, plastik, 0, 0.015, 0, md, 0.006);
+    for (const s of [-1, 1]) kotak(0.012, 0.13, 0.006, plastik, s * 0.07, 0.09, -0.05, md, 0.003).rotation.z = s * 0.12;
+    const led = [0, 1, 2].map((i) => {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(0.006, 8, 6), lampuLed(0x4bff6a));
+      m.position.set(-0.04 + i * 0.03, 0.02, 0.056);
+      md.add(m);
+      return m.material;
+    });
+    grup.add(md);
+
+    // Lampu darurat twin spot di dinding depan, di atas rak kaset (puncak rak y 2,53), di samping
+    // lampu gantung meja kasir (x 2,1) supaya keduanya terlihat: yang satu padam, yang lain menyala.
+    const dd = new THREE.Group();
+    dd.position.set(1.25, 2.61, 3.95);
+    kotak(0.3, 0.1, 0.08, plastik, 0, 0, 0, dd, 0.01);
+    const indikator = lampuLed(0x4bff6a);
+    const titikCas = new THREE.Mesh(new THREE.SphereGeometry(0.005, 8, 6), indikator);
+    titikCas.position.set(0.12, 0.02, -0.041);
+    dd.add(titikCas);
+    const muka = lampuLed(0xeef4ff);
+    for (const s of [-1, 1]) {
+      const k = new THREE.Group();
+      k.position.set(s * 0.1, -0.075, -0.05);
+      // Rotasi x negatif: muka kepala (-z) menunduk ke meja.
+      k.rotation.set(-0.7, 0.45 + s * 0.15, 0);
+      const kap = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.042, 0.07, 24), plastik);
+      kap.rotation.x = -Math.PI / 2;
+      const kaca = new THREE.Mesh(new THREE.CircleGeometry(0.036, 24), muka);
+      kaca.position.z = -0.036;
+      kaca.rotation.y = Math.PI;
+      k.add(kap, kaca);
+      dd.add(k);
+    }
+    grup.add(dd);
+    // Cahaya darurat: lampu sorot tanpa bayangan dari kepala twin spot ke meja.
+    lampuDarurat.position.set(1.25, 2.52, 3.86);
+    lampuDarurat.target.position.set(2.0, ATAS, 2.95);
+    lampuDarurat.target.updateMatrixWorld();
+
+    let kini = "";
     momen.andal = (u) => {
-      const padam = u > 0.42 && u < 0.72;
-      strip.material.color.setHex(padam ? 0xffffff : 0x3a3430).multiplyScalar(padam ? 2.2 : 1);
-      lampuDarurat.intensity = padam ? 2.2 : 0;
+      const { keadaan, tertunda: n } = keadaanAndal(u);
+      const padam = keadaan === "padam";
+      const kunci = keadaan + n;
+      if (kunci !== kini) {
+        kini = kunci;
+        layarKasir.gambar(keadaan, n);
+      }
+      struk.scale.y = 0.035 + 0.03 * n;
+      setelLed(muka, 0xeef4ff, padam ? 6 : 0.35);
+      setelLed(indikator, padam ? 0xff3b2f : 0x4bff6a, 2.5);
+      lampuDarurat.intensity = padam ? 9 : 0;
+      setelLed(led[0], 0x4bff6a, 2.5);
+      setelLed(led[1], padam ? 0x111111 : 0x4bff6a, padam ? 1 : 2.5);
+      setelLed(led[2], padam ? 0xff2a1a : 0x111111, padam ? 3 : 1);
     };
-    tambahBayang(3.55, -1.6, 0.35);
+    momen.andal(0);
   }
 
   // ---- 09 aman: vitrin kaca berisi buku kas dan map arsip, tutupnya dikunci gembok -----------
@@ -1093,17 +1158,6 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     pasangModel(peta) {
       for (const [n, fn] of tungguModel) if (peta[n]) fn(peta[n]);
       if (peta.headphone && hpStasiun) hpStasiun.add(peta.headphone.clone());
-      if (peta.kaset) {
-        // Pemutar kaset baterai berbaring di dudukan bangku. Model CC0-nya satu mesh dengan kaset
-        // setengah keluar dari tutup: berdiri tegak, kaset itu mencuat dan tampak melayang.
-        const k = peta.kaset.clone();
-        k.scale.setScalar(1.4);
-        k.rotation.set(-Math.PI / 2, 0, 0.5);
-        k.position.set(3.46, 0, -1.66);
-        grup.add(k);
-        k.updateMatrixWorld(true);
-        k.position.y = tinggiDudukan - new THREE.Box3().setFromObject(k).min.y + 0.002;
-      }
     },
     perbarui(id, u, s = {}) {
       if (piringan) piringan.rotation.y = s.waktu ? -s.waktu * 3.5 : 0;
@@ -1421,6 +1475,97 @@ function gambarQR(c, qx, qy, sel, benih = 11) {
     c.fillStyle = "#111111";
     c.fillRect(qx + a * sel + sel * 0.9, qy + d * sel + sel * 0.9, sel * 1.2, sel * 1.2);
   }
+}
+
+// Layar tablet kasir babak andal, 640 x 400. Empat keadaan: normal (tombol Bayar), padam (pita
+// kuning offline dan jumlah transaksi tertunda), kirim (sinkron berjalan), pulih (pita hijau).
+// Istilahnya dari aplikasi kasir Indonesia ("Transaksi Tertunda", majoo); angka lewat
+// Intl.NumberFormat supaya pemisah ribuan ikut bahasa halaman.
+const TEKS_KASIR = {
+  id: {
+    kasir: "Kasir 1",
+    item: ["Kopi susu 2x", "Roti bakar", "Teh tarik"],
+    total: "Total",
+    bayar: "Bayar",
+    offline: "Offline. Transaksi tersimpan di tablet.",
+    tertunda: (n) => `${n} transaksi tertunda`,
+    kirim: (n) => `Mengirim ${n} transaksi…`,
+    pulih: (n) => `Online lagi. ${n} transaksi terkirim.`,
+    lengkap: "Laporan hari ini sudah lengkap",
+  },
+  en: {
+    kasir: "Till 1",
+    item: ["Milk coffee x2", "Toast", "Pulled tea"],
+    total: "Total",
+    bayar: "Pay",
+    offline: "Offline. Sales saved on this tablet.",
+    tertunda: (n) => `${n} ${n === 1 ? "sale" : "sales"} pending`,
+    kirim: (n) => `Sending ${n} ${n === 1 ? "sale" : "sales"}…`,
+    pulih: (n) => `Back online. ${n} ${n === 1 ? "sale" : "sales"} sent.`,
+    lengkap: "Today's report is complete",
+  },
+};
+function teksturKasirOffline(bahasa = "id") {
+  const t = TEKS_KASIR[bahasa] ?? TEKS_KASIR.id;
+  const angka = new Intl.NumberFormat(bahasa === "en" ? "en-US" : "id-ID");
+  const kv = document.createElement("canvas");
+  kv.width = 640;
+  kv.height = 400;
+  const peta = new THREE.CanvasTexture(kv);
+  peta.colorSpace = THREE.SRGBColorSpace;
+  const c = kv.getContext("2d");
+  const gambar = (keadaan, n) => {
+    c.fillStyle = "#f4f2ee";
+    c.fillRect(0, 0, 640, 400);
+    c.fillStyle = "#1f2a2e";
+    c.fillRect(0, 0, 640, 54);
+    c.fillStyle = "#fff";
+    c.font = "600 26px sans-serif";
+    c.fillText("Kasir Sinar", 22, 36);
+    c.font = "20px sans-serif";
+    c.textAlign = "right";
+    c.fillText(t.kasir, 618, 36);
+    const harga = [36000, 18000, 15000];
+    c.fillStyle = "#222";
+    c.font = "22px sans-serif";
+    t.item.forEach((nama, i) => {
+      c.textAlign = "left";
+      c.fillText(nama, 26, 102 + i * 40);
+      c.textAlign = "right";
+      c.fillText(angka.format(harga[i]), 614, 102 + i * 40);
+    });
+    c.fillRect(26, 222, 588, 2);
+    c.font = "600 26px sans-serif";
+    c.textAlign = "left";
+    c.fillText(t.total, 26, 262);
+    c.textAlign = "right";
+    c.fillText(angka.format(harga.reduce((a, b) => a + b)), 614, 262);
+    c.textAlign = "left";
+    const pita = (warna, tinta, atas, bawah) => {
+      c.fillStyle = warna;
+      c.fillRect(0, 290, 640, 110);
+      c.fillStyle = tinta;
+      c.font = "600 28px sans-serif";
+      c.fillText(atas, 24, 334);
+      c.font = "24px sans-serif";
+      c.fillText(bawah, 24, 374);
+    };
+    if (keadaan === "padam") pita("#f2b33d", "#2a1e05", t.offline, t.tertunda(n));
+    else if (keadaan === "kirim") pita("#f2b33d", "#2a1e05", t.kirim(n), "");
+    else if (keadaan === "pulih") pita("#3f9a5b", "#fff", t.pulih(n), t.lengkap);
+    else {
+      c.fillStyle = "#2f6f8f";
+      c.fillRect(26, 300, 588, 76);
+      c.fillStyle = "#fff";
+      c.font = "600 28px sans-serif";
+      c.textAlign = "center";
+      c.fillText(t.bayar, 320, 348);
+      c.textAlign = "left";
+    }
+    peta.needsUpdate = true;
+  };
+  gambar("normal", 0);
+  return { peta, gambar };
 }
 
 // Sampul leaflet lipat tiga ukuran DL (99 x 210 mm), seperti brosur di meja kasir: foto produk di

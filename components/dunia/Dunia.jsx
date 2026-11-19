@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useMode } from "@/components/mode/ModeProvider";
 import { ANCHOR, anchorAktif, pemicuAnchor, bunyiCerita } from "./naskah";
 import { suara } from "@/components/imersif/suara";
@@ -52,6 +52,7 @@ function muatLonceng({ x, y, ukuran }) {
 
 function DuniaImersif({ aktif }) {
   const t = useTranslations("dunia");
+  const bahasa = useLocale();
   const kontrol = useRef(null);
   useEffect(() => kontrol.current?.(aktif), [aktif]);
   const wadah = useRef(null);
@@ -221,6 +222,7 @@ function DuniaImersif({ aktif }) {
         d = buatDunia(wadah.current, {
           kurangiGerak,
           tema: temaSitus(),
+          bahasa,
           onProgres: ({ aset }) => (keadaan.aset = aset),
           onLonceng: setLonceng,
         });

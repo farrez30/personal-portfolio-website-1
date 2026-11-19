@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { MeshoptDecoder } from "three/addons/libs/meshopt_decoder.module.js";
 import { N8AOPass } from "n8ao";
-import { ANCHOR, anchorTegak, nyalaFondasi, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
+import { ANCHOR, anchorTegak, keadaanAndal, nyalaFondasi, easeInOut, poseAntara, durasiBlend, kekuatanBlur } from "./naskah";
 import { buatPropsCerita } from "./props";
 
 // Dunia toko kaset (ADR 0014): satu ruangan di belakang seluruh beranda. Ruang dari primitif plus
@@ -57,7 +57,7 @@ const bingkaiBerikut = () => new Promise((r) => requestAnimationFrame(() => r())
 // Gerak kamera di dalam satu tempat mengikuti gulir: geser ke samping dan sedikit maju.
 const GESER = { samping: 0.22, maju: 0.12 };
 
-export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgres = () => {}, onLonceng = () => {} } = {}) {
+export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", bahasa = "id", onProgres = () => {}, onLonceng = () => {} } = {}) {
   const hp = matchMedia("(pointer: coarse)").matches || innerWidth < 768;
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -383,14 +383,16 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   scene.add(lampuPintu);
 
   // Lampu props cerita, dibuat sejak awal supaya jumlah lampu (bagian dari kunci program shader)
-  // tidak berubah saat props dimuat belakangan: lampu dinding di atas papan pre-order, dan lampu
-  // darurat babak andal yang padam sampai listrik toko mati.
+  // tidak berubah saat props dimuat belakangan: lampu dinding di atas papan pre-order, dan sorot
+  // lampu darurat twin spot di atas meja kasir (babak andal) yang mati sampai listrik toko padam.
+  // Tanpa bayangan: peta bayangan tambahan dihitung tiap kali lampu kunci bergerak.
   const lampuMeja = new THREE.PointLight(0xffffff, 1, 3.5, 2);
   lampuMeja.position.set(4.2, 2.1, -3.4);
   lampuMeja.userData.kuat = 0.35;
-  const lampuDarurat = new THREE.PointLight(0xfff1dc, 0, 3, 2);
-  lampuDarurat.position.set(3.18, 0.25, -1.75);
-  scene.add(lampuMeja, lampuDarurat);
+  const lampuDarurat = new THREE.SpotLight(0xeef4ff, 0, 4, 0.55, 0.6, 1.5);
+  lampuDarurat.position.set(1.25, 2.52, 3.86);
+  lampuDarurat.target.position.set(2.0, 1.01, 2.95);
+  scene.add(lampuMeja, lampuDarurat, lampuDarurat.target);
 
   // Lampu kunci: satu-satunya yang membuat bayangan, dipindah ke benda babak yang aktif.
   // Sudut lebar dan penumbra penuh: tanpa lingkaran sorot bertepi tajam di lantai.
@@ -405,6 +407,13 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   kunciLampu.shadow.autoUpdate = false;
   scene.add(kunciLampu, kunciLampu.target);
   let faktorRedup = 1;
+  // Bohlam di model lampu gantung bercahaya sendiri (emissive x25 dari GLB): ikut diredupkan saat
+  // listrik padam, kalau tidak lampu yang "mati" tetap terang di samping lampu darurat.
+  let bohlamModel = [];
+  const redupkanBohlam = () => {
+    // Kuadrat: pada redup 0,05 bohlam x25 masih x1,3 dan tetap terbaca menyala.
+    for (const [m, dasar] of bohlamModel) m.emissiveIntensity = dasar * faktorRedup * faktorRedup;
+  };
   // Pose lampu kunci untuk satu anchor: dari atas dan sedikit dari arah kamera, miring ke samping
   // supaya bayangan memanjang dan terlihat. Menyala hanya di babak cerita.
   // Dari samping dan sedikit di belakang benda, tidak dari arah kamera: bayangan lalu jatuh ke
@@ -924,12 +933,12 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       const sasaran = props.sorot(a.id);
       sorotKunci(sasaran);
       pasangGaris(sasaran);
-      // Listrik toko padam di tengah babak andal, didahului kedip singkat. Pemutar kaset, ponsel,
-      // dan lampu darurat tetap menyala.
+      // Listrik toko padam di tengah babak andal, didahului kedip singkat. Tablet kasir dan lampu
+      // darurat tetap menyala (props momen.andal memakai rentang u yang sama).
       // Diatur oleh posisi gulir, bukan waktu: kedip berbasis waktu (sin(now/30), sekitar 5 Hz)
       // berkedip terus selama pembaca berhenti di rentang itu. Sekarang satu kedip pendek saat
       // digulir melewati u 0,43, lalu padam memudar.
-      const padam = a.id === "andal" && u > 0.42 && u < 0.72;
+      const padam = a.id === "andal" && keadaanAndal(u).keadaan === "padam";
       redup(padam ? (u < 0.435 ? 0.45 : u < 0.445 ? 0.8 : 0.05) : 1);
       if (props.berputar(a.id) && !kurangiGerak) bergerak = true;
       // Bayangan kunci digambar ulang hanya saat benda babak bergerak mengikuti gulir.
@@ -1003,6 +1012,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const f = Math.abs(tujuanRedup - faktorRedup) < 0.002 ? tujuanRedup : faktorRedup + (tujuanRedup - faktorRedup) * (1 - Math.exp(-dt / 0.12));
     faktorRedup = f;
     for (const l of [...lampu, lampuMeja]) l.intensity = (l.userData.dasar ?? l.intensity) * f;
+    redupkanBohlam();
     kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * kunciKini.kuat * f;
     return true;
   };
@@ -1062,6 +1072,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     taruh(kursi, 1.4, 0, 2.15, -0.3);
     taruh(kursi, 2.5, 0, 2.2, 0.4);
     for (const l of lampu) taruh(lampuGantung, l.position.x, 3.2, l.position.z, 0, SKALA_LAMPU);
+    lampuGantung.traverse((o) => {
+      for (const m of [].concat(o.material ?? [])) if (m.emissiveIntensity > 0 && m.emissive?.getHex()) bohlamModel.push([m, m.emissiveIntensity]);
+    });
+    redupkanBohlam();
     dudukkan(taruh(kaset, -4.05, 0, -3.74, 0.35, 1.5), 1.045); // papan rak dengar bilik
 
     // Headphone Hunyuan3D hanya berisi bentuk (tanpa normal dan tekstur): normal dihitung di sini,
@@ -1145,7 +1159,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   // lalu digambar latihan per tiga benda, baru tampil. Sama dengan siapkan(), tapi tanpa loader.
   const muatCerita = async () => {
     if (props) return;
-    const calon = buatPropsCerita({ bahan, tekstur, tambahBayang: bayang, lampuMeja, lampuDarurat });
+    const calon = buatPropsCerita({ bahan, tekstur, tambahBayang: bayang, lampuMeja, lampuDarurat, bahasa });
     const daftar = calon.modelDibutuhkan;
     const [hasil] = await Promise.all([Promise.all(daftar.map(model)), calon.tunggu()]);
     calon.pasangModel({ ...Object.fromEntries(daftar.map((n, i) => [n, hasil[i]])), headphone: modelHeadphone, kaset: modelKaset });
@@ -1585,7 +1599,9 @@ function buatNyala(lampu) {
   let warna = 0xffffff;
   let [tujuanKerucut, kerucutKini, tujuanRedup, redupKini] = [1, 1, 1, 1];
   const terapkan = () => {
-    bola.color.setHex(warna).multiplyScalar(6 * Math.max(0.15, redupKini));
+    // Saat listrik padam (babak andal) bohlam ikut gelap: dulu disisakan 15% dan terbaca masih
+    // menyala di samping lampu darurat.
+    bola.color.setHex(warna).multiplyScalar(6 * Math.max(0.02, redupKini));
     for (const [m, dasar] of [
       [halo, 0.55],
       [kerucut, 0.16 * kerucutKini],
