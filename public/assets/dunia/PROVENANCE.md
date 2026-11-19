@@ -35,6 +35,6 @@ Sumber: https://raw.githubusercontent.com/Tencent/Hunyuan3D-2/main/LICENSE.
 | `classic_laptop.glb`, `clipboard.glb` | Poly Haven, glTF 1k (karya Arrangemonk; ProgrammerOnCoffee) | CC0 | Tekstur diperkecil ke 512 px (JPEG q4, ffmpeg), lalu `@gltf-transform/cli@4.1.0 optimize --compress meshopt --texture-compress false --simplify-ratio 0.5 --simplify-error 0.002`. Layar laptop diganti tekstur saat dimuat |
 | `bahan/plester-*.webp` | Poly Haven `plastered_wall_04`, tekstur 1k | CC0 | 512 px WebP |
 | `bahan/wood_table_001-*.webp`, `bahan/plywood-*.webp`, `bahan/metal_plate-*.webp` | Poly Haven, tekstur 1k (warna, normal GL, roughness) | CC0 | 512 px WebP; normal dan roughness dibaca tanpa konversi warna |
-| `layar/01-meet.webp`, `layar/05-rancangan.webp`, `layar/06-*.webp` | Tangkapan produk asli (lihat `public/assets/cerita/PROVENANCE.md`); `05-rancangan` dari `demo/erp-software-house.mp4` detik 4 | Milik project | WebP |
-| `layar/03-format-*.webp` | Bingkai `demo/nds-etl.mp4` detik 5, `demo/pilot-iklan.mp4` detik 5, `layar/yiheecam-hp.webp`, `cerita/layar-05.webp` | Milik project | Dipotong ke rasio sampul tiap format |
+| `layar/01-meet.webp`, `layar/05-rancangan.webp`, `layar/06-coderoach-os.webp` | Tangkapan produk asli (lihat `public/assets/cerita/PROVENANCE.md`); `05-rancangan` dari `demo/erp-software-house.mp4` detik 4 | Milik project | WebP |
+| `layar/03-format-piringan.webp` | Tangkapan beranda Coderoach OS | Milik project | Dipotong persegi untuk sampul piringan |
 | `layar/02-kebutuhan.webp`, `layar/07-kasir-sebelum.webp`, `layar/07-kasir-sesudah.webp` | Rancangan sendiri, HTML di `desain/cerita-v4/layar-kasir/`, dirender Chrome headless. Toko dan angka contoh. Bukan buatan AI | Milik project | WebP q82 sampai q85 |
