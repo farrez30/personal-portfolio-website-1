@@ -287,3 +287,29 @@ export function bunyiCerita(a, b) {
   if (b.id === "fondasi") for (let i = nyalaFondasi(a.u); i < nyalaFondasi(b.u); i++) bunyi.push("relay");
   return bunyi;
 }
+
+// Kejadian sekali jalan yang dipicu gulir, bukan digulung (stempel babak rencana). Lewat `ambang`
+// gerak dimainkan menurut waktu selama `durasi` detik dan keadaan akhirnya bertahan; gulir mundur
+// tidak membatalkannya. Disetel ulang di bawah `ulang` hanya saat `terbang` (kamera sedang masuk
+// dari babak sebelumnya, bendanya belum terlihat): dulu cap hilang di depan mata saat digulir
+// mundur sampai awal babak. Masuk dari belakang (u >= `akhir`) atau dengan gerak dikurangi:
+// langsung ke keadaan akhir. `langkah(u, waktu, diam, terbang)` mengembalikan progres 0..1.
+export function pemicuSekali({ ambang = 0.3, ulang = 0.12, akhir = 0.75, durasi = 2.2 } = {}) {
+  let mulai = null;
+  let selesai = false;
+  return {
+    langkah(u, waktu, diam = false, terbang = false) {
+      if (mulai === null && !selesai) {
+        if (u >= akhir || (u >= ambang && diam)) selesai = true;
+        else if (u >= ambang) mulai = waktu;
+      } else if (mulai === null && terbang && u < ulang) selesai = false;
+      if (mulai === null) return selesai ? 1 : 0;
+      const t = (waktu - mulai) / durasi;
+      if (t < 1) return Math.max(0, t);
+      mulai = null;
+      selesai = true;
+      return 1;
+    },
+    sibuk: () => mulai !== null,
+  };
+}

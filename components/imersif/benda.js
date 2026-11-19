@@ -63,7 +63,7 @@ const GLSL_PITA = `
 // diukur dari posisi xz geometri (bubutan).
 function pasangSheen(material, { kuat = 0.12, alfa = 0, fresnel = 0, kilau = false, redup = null, cincin = [] } = {}) {
   const f = (x) => x.toFixed(4);
-  const alfaCincin = cincin.map(([r, w, a]) => `alfaPlastik += ${f(a)} * exp(-pow((jariPlastik - ${f(r)}) / ${f(w)}, 2.0));`).join("\n");
+  const alfaCincin = cincin.map(([r, w, a]) => `{ float d = (jariPlastik - ${f(r)}) / ${f(w)}; alfaPlastik += ${f(a)} * exp(-d * d); }`).join("\n");
   material.onBeforeCompile = (sh) => {
     sh.uniforms.uRedup = redup ?? { value: 1 };
     material.userData.shader = sh;
@@ -77,7 +77,7 @@ function pasangSheen(material, { kuat = 0.12, alfa = 0, fresnel = 0, kilau = fal
       .replace(
         "#include <opaque_fragment>",
         `${GLSL_PITA}
-        float fr = pow(1.0 - abs(dot(normal, geometryViewDir)), 3.0);
+        float fr = pow(max(0.0, 1.0 - abs(dot(normal, geometryViewDir))), 3.0);
         // Logam memantulkan dengan warnanya sendiri.
         float sheen = pita * ${f(kuat)};
         outgoingLight += mix(vec3(1.0), diffuseColor.rgb, metalnessFactor) * sheen;
@@ -276,7 +276,7 @@ function plastikKotak(petaAus, seed) {
         float kilap = pita * 0.12 * (1.0 + (aus.g - 0.5) * 0.8);
         float gores = aus.r * 0.32 * (0.01 + pita) * (1.0 - vTepi);
         outgoingLight += vec3(kilap + gores);
-        float fr = pow(1.0 - abs(dot(normal, geometryViewDir)), 3.0);
+        float fr = pow(max(0.0, 1.0 - abs(dot(normal, geometryViewDir))), 3.0);
         float kilau = dot(reflectedLight.indirectSpecular, vec3(0.3333));
         diffuseColor.a = clamp(diffuseColor.a + fr * 0.45 + kilau + kilap + gores + vTepi * 0.15, 0.0, 1.0);
         #include <opaque_fragment>`,

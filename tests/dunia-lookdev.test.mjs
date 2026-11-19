@@ -150,5 +150,5 @@ test("tidak ada variabel bingkai yang menutupi objek nyala lampu", () => {
   // nyala lampu, dan nyala.kerucut() melempar galat di setiap bingkai babak cerita.
   const bingkai = kode.slice(kode.indexOf("const bingkai = (now) =>"), kode.indexOf("// ---- Muat dan pemanasan"));
   assert.doesNotMatch(bingkai, /\b(const|let) nyala\b/);
-  assert.match(bingkai, /nyala\.kerucut\(a\.id === "dinding"\)/);
+  assert.match(bingkai, /nyala\.kerucut\(!a\.cerita\)/);
 });

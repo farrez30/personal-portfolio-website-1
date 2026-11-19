@@ -597,6 +597,9 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     window.__duniaUji = {
       gpu: uji.hasil,
       info: () => ({ rasio, w: target.width, h: target.height, aoAktif, sampelAO: ao.configuration.aoSamples }),
+      // Pegangan untuk skrip uji (bukti sumber bayangan, pose lampu kunci): hanya di mode uji.
+      // `tahan` membekukan lup di bingkai yang sedang tampil supaya bisa dibedah per benda.
+      adegan: { scene, camera, renderer, THREE, tahan: false, gambar: () => gambar(0) },
     };
   }
   const gambar = (kuat) => {
@@ -627,6 +630,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   let indeks = 0;
   let geser = 0;
   let geserTujuan = 0;
+  let uBabak = null;
   const posLalu = new THREE.Vector3();
   const lihatLalu = new THREE.Vector3();
   const lihat = new THREE.Vector3();
@@ -653,6 +657,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   const keAnchor = (i) => {
     if (i === indeks && !blend) return;
     const ke = camera.aspect < 0.8 ? anchorTegak(ANCHOR[i]) : ANCHOR[i];
+    if (i !== indeks) uBabak = null;
     indeks = i;
     arahkanKunci(ANCHOR[i], kurangiGerak);
     if (kurangiGerak) {
@@ -753,6 +758,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     const dt = Math.min(0.1, (now - lalu) / 1000);
     lalu = now;
     if (!hangat || !terlihat) return;
+    if (uji && window.__duniaUji.adegan.tahan) return;
     let bergerak = false;
     if (blend) {
       const u = (now - blend.t0) / blend.dur;
@@ -770,10 +776,20 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       bergerak = true;
     }
     const a = ANCHOR[indeks];
+    // Progres gulir di dalam babak tujuan, dihaluskan seperti geser kamera, tapi dimulai ulang di
+    // nilai babak baru saat pindah anchor. Dulu props membaca geser kamera, yang meluncur dari
+    // ujung babak sebelumnya: gulir mundur ke babak rencana memutar seluruh gerak stempel dalam
+    // sekejap saat kamera mendarat.
+    const uTujuan = geserTujuan + 0.5;
+    uBabak = uBabak === null ? uTujuan : uBabak + (uTujuan - uBabak) * (1 - Math.exp(-dt / 0.18));
+    if (Math.abs(uTujuan - uBabak) > 1e-4) bergerak = true;
+    const statusBabak = (u) => ({ waktu: now / 1000, nyala: a.id === "fondasi" ? nyalaFondasi(u) : 0, diam: kurangiGerak, terbang: !!blend });
+    // Selama terbang benda babak tujuan sudah dipasang di pose awalnya, jadi tidak melompat saat
+    // kamera mendarat.
+    if (a.cerita && blend && props) props.perbarui(a.id, uBabak, statusBabak(uBabak));
     if (a.cerita && !blend && props) {
-      const u = geser + 0.5;
-      const lampuStatus = a.id === "fondasi" ? nyalaFondasi(u) : 0;
-      props.perbarui(a.id, u, { waktu: now / 1000, nyala: lampuStatus });
+      const u = uBabak;
+      props.perbarui(a.id, u, statusBabak(u));
       // Listrik toko padam di tengah babak andal, didahului kedip singkat. Pemutar kaset, ponsel,
       // dan lampu darurat tetap menyala.
       // Diatur oleh posisi gulir, bukan waktu: kedip berbasis waktu (sin(now/30), sekitar 5 Hz)
@@ -782,18 +798,17 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       const padam = a.id === "andal" && u > 0.42 && u < 0.72;
       redup(padam ? (u < 0.435 ? 0.45 : u < 0.445 ? 0.8 : 0.05) : 1);
       if (props.berputar(a.id) && !kurangiGerak) bergerak = true;
-      // Kerucut berkas lampu gantung hanya untuk gambar lebar; dari dekat ia jadi segitiga putih.
-      nyala.kerucut(a.id === "dinding");
       // Bayangan kunci digambar ulang hanya saat benda babak bergerak mengikuti gulir.
       // Di HP peta bayangan itu (adegan digambar sekali lagi) diperbarui tiap bingkai kedua
       // selama benda bergerak, dan sekali lagi saat berhenti.
-      const geraknya = Math.abs(geserTujuan - geser) > 1e-4;
+      const geraknya = Math.abs(uTujuan - uBabak) > 1e-4 || props.sibuk(a.id);
       if ((geraknya && (!hp || ++bingkaiBayang % 2 === 0)) || (!geraknya && bayangGerak) || kotor) kunciLampu.shadow.needsUpdate = true;
       bayangGerak = geraknya;
-    } else {
-      redup(1);
-      nyala.kerucut(true);
-    }
+    } else redup(1);
+    // Kerucut berkas lampu gantung hanya untuk gambar lebar (bukan babak cerita); dari dekat ia jadi
+    // segitiga putih. Mengikuti anchor tujuan, juga selama terbang: dulu kerucut menyala di setiap
+    // perpindahan antarbabak lalu padam lagi saat mendarat, dan tepinya sempat jadi cincin hitam.
+    nyala.kerucut(!a.cerita);
     // Lonceng pintu berayun teredam begitu kamera tiba (pegas sekitar 4 Hz, habis dalam 2,5 s);
     // pemukul tertinggal sedikit di belakang cangkir.
     if (a.id === "pintu" && !blend && !kurangiGerak) {
@@ -1505,7 +1520,7 @@ function bahanKaca() {
   m.onBeforeCompile = (sh) => {
     sh.fragmentShader = sh.fragmentShader.replace(
       "#include <opaque_fragment>",
-      `float frKaca = 0.04 + 0.96 * pow(1.0 - abs(dot(normal, geometryViewDir)), 5.0);
+      `float frKaca = 0.04 + 0.96 * pow(max(0.0, 1.0 - abs(dot(normal, geometryViewDir))), 5.0);
       diffuseColor.a = clamp(diffuseColor.a + frKaca * 0.55, 0.0, 0.85);
       outgoingLight += reflectedLight.directSpecular * (1.0 / max(diffuseColor.a, 0.08) - 1.0) * 0.6;
       #include <opaque_fragment>`,
@@ -1555,7 +1570,10 @@ function bahanBerkas() {
       }
       void main() {
         float tepi = pow(abs(dot(normalize(vNormal), normalize(-vPos))), 3.0);
-        float jatuh = pow(vTinggi, 1.8) * smoothstep(0.0, 0.25, vTinggi);
+        // Dijepit: di tepi bawah interpolasi bisa memberi -0,0000x, pow() negatif = NaN, dan NaN
+        // yang dijumlahkan additive tampil sebagai cincin hitam putus-putus di lantai (19 Nov 2026).
+        float tinggi = clamp(vTinggi, 0.0, 1.0);
+        float jatuh = pow(tinggi, 1.8) * smoothstep(0.0, 0.25, tinggi);
         float debu = 0.78 + 0.32 * derau(vDunia * 7.0) + 0.12 * derau(vDunia * 23.0);
         // Dari dekat (kamera di dalam atau di tepi berkas) memudar, bukan jadi bidang putih.
         float dekat = smoothstep(0.4, 1.6, length(vPos));
