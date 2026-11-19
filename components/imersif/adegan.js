@@ -1083,7 +1083,16 @@ export function buatAdegan(wadah, { proyek, locale, kurangiGerak, onUbah, gulirH
     }
     renderer.shadowMap.needsUpdate = true;
   };
+  // Buklet pertama yang dilepas tidak dibuang, hanya disimpan. three.js menghapus program shader
+  // begitu bahan terakhir yang memakainya dibuang, jadi tiap album berikutnya dulu mengompilasi
+  // ulang buklet dan bayangannya dari nol: 415 ms beku saat melompat ke rak (trace 19 Nov 2026).
+  // Semua buklet memakai kunci program yang sama, jadi satu penjaga cukup.
+  let penjagaProgram = null;
   const lepasBuklet = (b) => {
+    if (!penjagaProgram) {
+      penjagaProgram = b;
+      return;
+    }
     b.userData.lantai.geometry.dispose();
     b.userData.lantai.material.dispose();
     b.dispose();

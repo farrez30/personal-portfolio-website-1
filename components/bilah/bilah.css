@@ -72,3 +72,12 @@
     padding: 0 0.6rem;
   }
 }
+
+/* Di HP backdrop-filter di atas kanvas dunia yang terus berubah memaksa blur ulang tiap bingkai
+   di compositor. Latarnya sudah 86% buram, jadi cukup dibuat hampir penuh. */
+@media (pointer: coarse) {
+  .bilah {
+    backdrop-filter: none;
+    background: color-mix(in srgb, var(--bg) 95%, transparent);
+  }
+}

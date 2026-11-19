@@ -106,10 +106,11 @@ test("ambient occlusion N8AO memakai gambar adegan yang sama, depth of field di 
   assert.match(kode, /import \{ N8AOPass \} from "n8ao";/);
   assert.match(kode, /ao\.beautyRenderTarget = target;/);
   assert.match(kode, /autoRenderBeauty: false,\s*gammaCorrection: false,/);
-  assert.match(kode, /renderer\.render\(scene, camera\);\s*if \(aoAktif\) ao\.render\(renderer, hasilAO\);/);
+  assert.match(kode, /renderer\.render\(scene, camera\);\s*uji\?\.mulai\("ao"\);\s*if \(aoAktif\) ao\.render\(renderer, hasilAO\);/);
   assert.match(kode, /tWarna: \{ value: hasilAO\.texture \}/);
   // HP: sampel lebih sedikit. Jalur halfRes N8AO melempar galat dengan target pinjaman, jadi
-  // tidak pernah dinyalakan; penjaga kualitas menurunkan sampel lalu mematikan AO.
+  // tidak pernah dinyalakan. Sampel tidak diubah saat jalan (kompilasi ulang); di batas bawah
+  // resolusi penjaga kualitas mematikan AO dengan melewati lintasannya.
   assert.match(kode, /aoSamples: hp \? 8 : 16,/);
   assert.doesNotMatch(kode, /halfRes/);
   assert.match(kode, /aoAktif = false;\s*blur\.uniforms\.tWarna\.value = target\.texture;/);
@@ -132,7 +133,8 @@ test("lampu kunci terbang bersama kamera, tidak melompat atau menyala mendadak",
   // Nyala ikut diinterpolasi, bukan saklar.
   assert.match(kode, /nyala: kunciDari\.nyala \+ \(kunciKe\.nyala - kunciDari\.nyala\) \* e/);
   // Bayangannya digambar ulang hanya saat benda bergerak, bukan tiap bingkai.
-  assert.match(kode, /if \(Math\.abs\(geserTujuan - geser\) > 1e-4 \|\| kotor\) kunciLampu\.shadow\.needsUpdate = true;/);
+  // HP: diperbarui tiap bingkai kedua selama bergerak, lalu sekali saat berhenti.
+  assert.match(kode, /if \(\(geraknya && \(!hp \|\| \+\+bingkaiBayang % 2 === 0\)\) \|\| \(!geraknya && bayangGerak\) \|\| kotor\) kunciLampu\.shadow\.needsUpdate = true;/);
 });
 
 test("mode terang: kabut tipis, dan selubung teks dilepas di babak cerita", () => {

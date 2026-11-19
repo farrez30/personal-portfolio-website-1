@@ -39,9 +39,23 @@ test("dunia digambar hanya saat ada yang berubah", () => {
   assert.match(dunia, /if \(!hangat \|\| !terlihat\) return;/);
 });
 
-test("penjaga kualitas mengabaikan tugas panjang di luar dunia", () => {
-  assert.match(dunia, /if \(dt > 100\) return;/);
-  assert.match(dunia, /buruk >= 2/);
+test("penjaga kualitas: resolusi dinamis dua arah, tanpa kompilasi ulang, tidak saat terbang", () => {
+  const jaga = dunia.slice(dunia.indexOf("const jagaKualitas = (dt) => {"), dunia.indexOf("// ---- Lup"));
+  assert.match(jaga, /if \(dt > 100\) return;/);
+  assert.match(jaga, /if \(median > 22\)/);
+  assert.match(jaga, /median < 13/);
+  assert.match(jaga, /if \(bolakBalik >= 4\) return;/);
+  // Menunggu kamera berhenti terbang; sampel AO tidak pernah diubah saat jalan.
+  assert.match(jaga, /if \(!tertunda \|\| blend\) return;/);
+  assert.doesNotMatch(jaga, /aoSamples/);
+  assert.match(dunia, /if \(bergerak\) jagaKualitas\(dt \* 1000\);\s*terapkanKualitas\(\);/);
+});
+
+test("HP tanpa backdrop-filter di atas kanvas dunia", () => {
+  for (const p of ["components/bilah/bilah.css", "components/musik/pemutar.css"]) {
+    const css = readFileSync(new URL(`../${p}`, import.meta.url), "utf8");
+    assert.match(css, /@media \(pointer: coarse\) \{[\s\S]*?backdrop-filter: none;/, p);
+  }
 });
 
 test("props cerita dimuat sesudah hero, dipanaskan dicicil, tanpa lampu baru", () => {

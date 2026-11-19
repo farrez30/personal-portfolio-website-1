@@ -245,6 +245,22 @@ Kompilasi async, loader tetap bergerak. Tanpa tugas panjang saat props dimuat di
   lagi dikompilasi saat rak dibuat. Tahap pembuatan rak 480 sampai 580 ke 186 ms, tugas panjang
   pertama rak 546 ke 367 ms (desktop) dan 767 ke 363 ms (HP).
 
+### Masukan 19 Nov 2026 (riset: desain/cerita-v4/riset-masukan-19nov.md)
+
+- Loader CD: cermin perak dengan dua baji difraksi sempit yang diam terhadap lampu; bagian berdata
+  melebar dari hub sesuai progres; hanya noda yang berputar. Dulu pelangi penuh yang ikut berputar.
+- Corong cahaya: shader volumetrik palsu (tepi memudar menurut sudut pandang, debu statis),
+  pengganti MeshBasic bergradasi yang terbaca sebagai benda terpisah.
+- Kaca: putih 6% dengan fresnel, pengganti biru 18% yang terbaca seperti air.
+- Stempel: tepuk bantalan, turun lurus, tekan, angkat; bekas tinta belang dengan tepi gelap.
+- Tutup vitrin: terbuka 52 derajat, jatuh lalu direm di akhir, gembok mengunci sesudahnya.
+- Pintu: lonceng toko berpegas (cangkir bubutan kuningan), daun pintu kayu berpegangan, papan
+  OPEN gantung; jendela gedung di luar berkusen dan redup (dulu terbaca seperti kertas tempel).
+- Performa HP (diukur dengan `scripts/ukur-gpu.mjs`): AO sekitar 40% waktu GPU, lintasan layar
+  sekitar 10%. Penjaga kualitas sekarang skala resolusi dinamis dua arah tanpa kompilasi ulang;
+  bayangan lampu kunci tiap bingkai kedua di HP; backdrop-filter dilepas di HP; buklet penjaga
+  menghapus jeda 415 ms saat melompat ke rak.
+
 ## Riwayat keputusan
 
 - 2026-11-12: gaya realistis sinematik malam dipilih Farrez; styleframe Flow 6 gambar (0 kredit,
