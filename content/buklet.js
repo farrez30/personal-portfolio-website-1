@@ -12,6 +12,8 @@
 //   diverifikasi. Hitungan tes ditulis bersama tanggalnya.
 // - `disetujui` dinyalakan per proyek setelah Farrez membaca naskahnya. Kesepuluhnya
 //   disetujui Farrez 9 Nov 2026 ("Approve as is").
+//   GDL Logistics dan SecuritySahabat disetujui Farrez 20 Nov 2026 ("tuntaskan"),
+//   setelah tiap klaim dicek ulang ke README, index.html, dan docs repo masing-masing.
 
 /** @typedef {{ id: string, en: string }} Teks */
 /** @typedef {{ label: string, judul: Teks, isi: Teks }} Halaman */
@@ -325,7 +327,7 @@ export const BUKLET = {
 
   // Fakta dari README gdl-logistics (sumber keputusan, storyboard adegan, daftar cek pemilik), 19 Nov 2026.
   "gdl-logistics": {
-    disetujui: false,
+    disetujui: true,
     halaman: [
       h("Context", "Barang yang harus tetap dingin", "Goods that must stay cold",
         "Barang beku dan dingin harus tetap dingin dari gudang sampai tujuan. GDL Logistics menyediakan truk pendingin untuk pengiriman antarperusahaan.",
@@ -356,7 +358,7 @@ export const BUKLET = {
 
   // Fakta dari README dan docs/testing.md tencent-hackathon, 19 Nov 2026. Nama tim ada di content/proyek.js.
   securitysahabat: {
-    disetujui: false,
+    disetujui: true,
     halaman: [
       h("Context", "BOLEH ATAU TIDAK?", "ALLOWED OR NOT?",
         "Boleh buka port ini? Boleh kirim file ini ke vendor? Siapa yang harus menyetujui? Karyawan sering tidak tahu jawabannya.",
