@@ -96,6 +96,16 @@ Keempat pemutar di `banding-transisi.html` diuji di panel: geser ke detik 5, maj
 
 Galat yang sempat lolos: fase keluar gedung tampil diam tiga detik karena fungsi `ekor` memakai variabel `padat` dari fungsi lain. Render melempar galat dan screenshot menahan bingkai lama. Sejak itu `foto.mjs` berhenti bila `aturDunia` atau `atur` melempar galat.
 
+## Isi modul lab, 20 Nov 2026
+
+Farrez memilih gerak latar "ramai dengan karakter" dan suara mati dengan tombol. Cara menyusuri rak masih dibandingkan: `banding-lorong.html` (perakit `banding-lorong.mjs`), tiga video 6 detik `lorong-gulir|geser|lebar.mp4` dari `?a=P&s=portoLab-<varian>`.
+
+Isi modul: robot berwajah layar di rel plafon, astronot melayang di depan pintu palka, tas kargo tertambat, lampu plafon bernapas, lampu loker menyala untuk loker yang disorot, loker ERP meluncur keluar dan kartunya naik.
+
+Diperbaiki setelah dicek per 0,1 detik:
+- varian lebar mula-mula berdiri di dalam rak peralatan dekat jendela, lalu terbang menembus rak; kamera dipindah ke tengah lorong;
+- di varian gulir, karakter tidak masuk bingkai karena kamera menatap lurus ke dinding; arah pandang dibuat menyerong ke ujung lorong.
+
 ## Belum bisa dicek
 
 - Performa di HP sungguhan: GPU HP jauh lebih lemah dari GPU desktop yang dipakai; angka GPU di atas hanya pembanding antaradegan.

@@ -568,11 +568,40 @@ const ADEGAN = {
     for (const x of [-3, -1.8, 1.8, 3]) { k(1.05, 2.0, 0.4, 0xbdb5a8, x, 0, 1.0); k(0.6, 0.35, 0.02, 0x2a2836, x, 0.45, 0.79); k(0.2, 0.06, 0.02, [0xb9dcb0, 0xf2d27a][Math.abs(x) > 2 ? 0 : 1], x - 0.25, -0.2, 0.79); }
     // rak proyek: lima rak, dua loker per rak, ERP di tengah atas dan lokernya ditarik keluar
     const urut = [0, -1.2, 1.2, -2.4, 2.4], warna = [RED, 0xa9c4ec, 0xb9dcb0, 0xcdb8e8, 0xf2d27a, 0xf2b8a0, 0xa9c4ec, 0xb9dcb0, 0xcdb8e8, 0xf2d27a];
-    urut.forEach((x) => k(1.05, 2.0, 0.45, 0xe9e4da, x, 0, -1.0));
-    PROYEK.forEach((p, i) => { const x = urut[i % 5], y = i < 5 ? 0.5 : -0.5, tarik = i === 0 ? 0.42 : 0;
-      k(0.92, 0.82, 0.05, 0xf6efe3, x, y, -0.75 + tarik); k(0.92, 0.12, 0.06, warna[i], x, y + 0.33, -0.74 + tarik);
-      plat(p.nama, 0.8, 0.16, i === 0 ? "#e0574b" : "#f6efe3", i === 0 ? "#ffffff" : "#2a2836", x, y + 0.05, -0.715 + tarik);
-      if (i === 0) { k(0.9, 0.04, 0.42, 0xd9d2c6, x, y - 0.4, -0.75 + 0.21); const kartu = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.4), tanpaGaris(new THREE.MeshBasicMaterial({ map: kartuProyek(p, true) }))); kartu.position.set(x, y + 0.08, -0.5 + tarik); kartu.rotation.x = -0.25; grup.add(kartu); } });
+    // rak proyek dalam satu grup (varian "geser" menggeser grup ini); loker ERP punya grup sendiri supaya bisa meluncur
+    const rakGrup = new THREE.Group(), lokerERP = new THREE.Group(); grup.add(rakGrup); rakGrup.add(lokerERP);
+    const kr = (w, h, d, c, x, y, z, par = rakGrup) => kotak(w, h, d, typeof c === "number" ? clay(c) : c, x, y, z, par);
+    const lampuLoker = [];
+    urut.forEach((x) => kr(1.05, 2.0, 0.45, 0xe9e4da, x, 0, -1.0));
+    PROYEK.forEach((p, i) => { const x = urut[i % 5], y = i < 5 ? 0.5 : -0.5, par = i === 0 ? lokerERP : rakGrup;
+      kr(0.92, 0.82, 0.05, 0xf6efe3, x, y, -0.75, par); kr(0.92, 0.12, 0.06, warna[i], x, y + 0.33, -0.74, par);
+      const pl = plat(p.nama, 0.8, 0.16, i === 0 ? "#e0574b" : "#f6efe3", i === 0 ? "#ffffff" : "#2a2836", x, y + 0.05, -0.715); par.add(pl);
+      const lp = new THREE.Mesh(new THREE.BoxGeometry(0.05, 0.05, 0.02), new THREE.MeshBasicMaterial({ color: 0x3a3a48 })); lp.position.set(x + 0.36, y - 0.3, -0.72); par.add(lp); lampuLoker.push(lp);
+      if (i === 0) { kr(0.9, 0.04, 0.42, 0xd9d2c6, x, y - 0.4, -0.75 - 0.21, par); const kartu = new THREE.Mesh(new THREE.PlaneGeometry(0.62, 0.4), tanpaGaris(new THREE.MeshBasicMaterial({ map: kartuProyek(p, true) }))); kartu.position.set(x, y + 0.08, -0.5); kartu.rotation.x = -0.25; lokerERP.add(kartu); lokerERP.userData.kartu = kartu; } });
+    const tarikLoker = (u) => { lokerERP.position.z = 0.42 * u; lokerERP.userData.kartu.position.y = 0.58 + 0.12 * u; };
+    tarikLoker(o.lorong ? 0 : 1);
+    const sorot = (aktif) => { lampuLoker.forEach((l, i) => l.material.color.set(i === aktif ? 0x9fe0a8 : 0x3a3a48)); document.querySelectorAll("ol li").forEach((li, i) => { li.style.background = i === aktif ? "#e0574b" : "#f6efe3"; li.style.color = i === aktif ? "#fff" : "#2a2836"; }); };
+    // karakter dan gerak latar
+    const putih = clay(0xf6efe3), gelap = clay(0x2a2836);
+    { const rel = silinder(0.025, 7.6, clay(0x847e75), 0, 1.12, 0.35, grup, 8); rel.rotation.z = Math.PI / 2; }
+    const robot = new THREE.Group(); grup.add(robot);
+    kotak(0.34, 0.26, 0.24, putih, 0, 0, 0, robot); kotak(0.04, 0.16, 0.04, clay(0x847e75), 0, 0.2, 0, robot);
+    const wajah = new THREE.Mesh(new THREE.PlaneGeometry(0.24, 0.16), tanpaGaris(new THREE.MeshBasicMaterial({ map: tekstur(240, 160, (g, w, h) => { g.fillStyle = "#2a2836"; g.fillRect(0, 0, w, h); g.strokeStyle = "#f2d27a"; g.lineWidth = 10; g.lineCap = "round"; g.beginPath(); g.arc(78, 64, 9, 0, 7); g.moveTo(171, 64); g.arc(162, 64, 9, 0, 7); g.stroke(); g.beginPath(); g.arc(120, 82, 38, 0.25, Math.PI - 0.25); g.stroke(); }) })));
+    wajah.position.z = 0.121; robot.add(wajah);
+    const astro = new THREE.Group(); grup.add(astro);
+    { const badan = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 0.42, 6, 12), putih); astro.add(badan); const helm = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 12), putih); helm.position.y = 0.42; astro.add(helm);
+      const visor = new THREE.Mesh(new THREE.SphereGeometry(0.11, 16, 12), clay(0xf2b8a0)); visor.position.set(0, 0.43, 0.07); visor.scale.z = 0.7; astro.add(visor); kotak(0.26, 0.32, 0.12, clay(0xd9d2c6), 0, 0.12, -0.17, astro);
+      for (const sx of [-1, 1]) { const t = new THREE.Mesh(new THREE.CapsuleGeometry(0.05, 0.3, 4, 8), putih); t.position.set(sx * 0.22, 0.08, 0.02); t.rotation.z = sx * 0.6; astro.add(t); } }
+    const tas = kotak(0.44, 0.26, 0.34, clay(0xece4d2), 1.3, 0.72, -0.35, grup); kotak(0.46, 0.05, 0.05, clay(0x9fb3e0), 1.3, 0.72, -0.17, grup).userData.ikut = tas;
+    const tali = new THREE.Line(new THREE.BufferGeometry().setFromPoints([V(1.3, 1.2, -0.35), V(1.3, 0.85, -0.35)]), new THREE.LineBasicMaterial({ color: 0x847e75 })); grup.add(tali);
+    const strip = [-3, -1, 1, 3].map((x) => kotak(1.2, 0.02, 0.3, clay(0xfffaf0, { emissive: 0xfff1dc, emissiveIntensity: 0.5 }), x, 1.19, 0, grup));
+    const hidup = (detik) => {
+      robot.position.set(-3.4 + ((1.6 + detik * 0.55) % 6.8), 0.86, 0.35); robot.rotation.z = Math.sin(detik * 2.2) * 0.05;
+      astro.position.set(3.35, 0.05 + Math.sin(detik * 0.7) * 0.05, 0.25); astro.rotation.set(0.15, -0.9 + detik * 0.12, Math.sin(detik * 0.5) * 0.12);
+      tas.position.y = 0.72 + Math.sin(detik * 0.9) * 0.04; tas.rotation.z = Math.sin(detik * 0.6) * 0.08;
+      strip.forEach((m, i) => (m.material.emissiveIntensity = 0.45 + 0.12 * Math.sin(detik * 0.8 + i)));
+    };
+    hidup(0); sorot(0);
     const lampu = new THREE.PointLight(0xfff1dc, 1.4, 9, 1.2); lampu.position.set(-1.5, 0.9, 0.3); grup.add(lampu);
     const keDunia = (x, y, z) => grup.localToWorld(V(x, y, z));
     const akhir = [keDunia(-0.55, 0.35, 1.1), keDunia(1.1, 0.2, -0.8)], fovLuar = cam.fov, fovDalam = HP ? 88 : 74;
@@ -581,7 +610,23 @@ const ADEGAN = {
     // animasi: dari luar mendekat ke jendela, menembus kaca, lalu menoleh ke loker ERP
     const jalur = new THREE.CatmullRomCurve3([...(o.dariGlobe ? [globePos, globePos.clone().lerp(luar[0], 0.6)] : []), luar[0], keDunia(0.8, 0.8, 7), keDunia(0, 0.22, 3.2), keDunia(0, 0.22, 1.9), keDunia(-0.1, 0.26, 1.16), akhir[0]], false, "centripetal");
     const halus = (x) => x * x * (3 - 2 * x), klamp = (x) => Math.min(1, Math.max(0, x)), kaca = keDunia(0, 0.2, -1.2); // titik di dinding rak, segaris dengan jendela: kamera tidak menoleh balik setelah lewat kaca
-    window.__aturKhusus = (t) => { const e = halus(t); cam.position.copy(jalur.getPoint(e)); const ke = (o.dariGlobe ? globeKe.clone().lerp(luar[1], halus(klamp(e / 0.3))) : luar[1].clone()).lerp(kaca, halus(klamp((o.dariGlobe ? (e - 0.3) / 0.25 : e / 0.35)))).lerp(akhir[1], halus(klamp((e - 0.62) / 0.3))); cam.lookAt(ke); cam.fov = fovLuar + (fovDalam - fovLuar) * halus(klamp((e - 0.55) / 0.3));
+    if (o.lorong) {
+      cam.fov = fovDalam; cam.updateProjectionMatrix();
+      const DET = 6, P = (x, y, z) => keDunia(x, y, z);
+      const henti = (u, titik) => { const n = titik.length - 1, f = Math.min(n - 1e-6, u * n), i = Math.floor(f), w = f - i, g = w < 0.45 ? 0 : halus((w - 0.45) / 0.55); return titik[i] + (titik[i + 1] - titik[i]) * g; };
+      const akhirKam = [P(0.05, 0.42, 0.3), P(0, 0.62, -0.45)];
+      window.__aturKhusus = (t) => {
+        const detik = t * DET; hidup(detik);
+        let pos, ke, aktif = 0;
+        if (o.lorong === "gulir") { const x = henti(klamp(t / 0.6), [-3.0, -2.4, -1.2, 0]); pos = P(x - 0.5, 0.32, 0.55); ke = P(x + 1.1, 0.12, -0.75); aktif = [3, 3, 1, 0][Math.round(klamp(t / 0.6) * 3)]; }
+        else if (o.lorong === "geser") { const x = henti(klamp(t / 0.6), [2.4, 1.2, 0]); rakGrup.position.x = x; pos = P(-0.25, 0.32, 0.95); ke = P(0.25, 0.1, -0.8); aktif = [4, 2, 0][Math.round(klamp(t / 0.6) * 2)]; }
+        else { const u = halus(klamp((t - 0.35) / 0.3)); pos = P(-3.7, 0.55, 0.3).lerp(P(-0.5, 0.32, 0.55), u); ke = P(3.5, 0.05, -0.1).lerp(P(1.1, 0.12, -0.75), u); aktif = 0; }
+        const tarik = halus(klamp((t - 0.62) / 0.14)), dekat = halus(klamp((t - 0.72) / 0.26));
+        tarikLoker(tarik); pos.lerp(akhirKam[0], dekat); ke.lerp(akhirKam[1], dekat); sorot(aktif);
+        cam.position.copy(pos); cam.lookAt(ke); cam.near = 0.01; cam.far = 2000; cam.updateProjectionMatrix();
+      };
+      window.__aturKhusus(0);
+    } else window.__aturKhusus = (t) => { hidup(t * 4); const e = halus(t); cam.position.copy(jalur.getPoint(e)); const ke = (o.dariGlobe ? globeKe.clone().lerp(luar[1], halus(klamp(e / 0.3))) : luar[1].clone()).lerp(kaca, halus(klamp((o.dariGlobe ? (e - 0.3) / 0.25 : e / 0.35)))).lerp(akhir[1], halus(klamp((e - 0.62) / 0.3))); cam.lookAt(ke); cam.fov = fovLuar + (fovDalam - fovLuar) * halus(klamp((e - 0.55) / 0.3));
       const j = cam.position.distanceTo(ke); cam.near = Math.min(1, Math.max(0.01, j * 0.01)); cam.far = 2000; cam.updateProjectionMatrix(); };
     daftarDom(0, HP);
   },
