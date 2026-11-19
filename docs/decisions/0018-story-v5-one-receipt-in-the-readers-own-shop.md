@@ -1,7 +1,7 @@
 # 0018. Story v5: one receipt, in the reader's own shop
 
 - Date: 2026-11-19
-- Status: Accepted (direction only). Will supersede ADR 0016 once v5 ships; the rack and CD loader are decided later.
+- Status: Superseded by ADR 0019 (19 Nov 2026). Was: accepted (direction only).
 
 ## Context
 Farrez felt the record-shop metaphor (ADR 0014, 0016) does not match his work, building systems
