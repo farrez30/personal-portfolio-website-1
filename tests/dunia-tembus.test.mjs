@@ -18,7 +18,7 @@ test("pemutar kaset didudukkan di permukaan menurut kotak batasnya", () => {
 
 test("tutup vitrin terbuka ke atas: engsel di belakang, tepi depan di -z, sudut positif", () => {
   assert.match(props, /tutup\.position\.set\(0, 0\.045 \+ H, D \/ 2\);/);
-  assert.match(props, /kotak\(W, 0\.006, D, bahan\.kaca, 0, 0\.003, -D \/ 2, tutup/);
+  assert.match(props, /panel\(W, 0\.006, D, 0, 0\.003, -D \/ 2, tutup\);/);
   // Rotasi x sebesar t: y tepi depan (z = -D) menjadi D * sin(t). Positif berarti di atas kaca.
   const m = props.match(/tutup\.rotation\.x = (-?[\d.]+) \* \(1 - (?:halus|tutupPeredam)/);
   assert.ok(m, "rumus sudut tutup ditemukan");

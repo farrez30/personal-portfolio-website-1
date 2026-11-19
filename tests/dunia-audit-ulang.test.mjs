@@ -120,3 +120,18 @@ test("sorot bab bentuk memakai lampu kunci, bukan bidang additive", () => {
   // Jumlah lampu tidak bertambah (lampu baru mengompilasi ulang semua shader).
   assert.equal((d.match(/new THREE\.SpotLight\(/g) ?? []).length, 2);
 });
+
+// Butir 4: kaca vitrin terbaca seperti jeli, dimensinya tidak terbaca; kaca pintu memudarkan jalan.
+test("kaca: muka hampir tak terlihat, tepi panel hijau, vitrin dari panel tipis", () => {
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  const kaca = d.slice(d.indexOf("function bahanKaca()"), d.indexOf("function bahanTepiKaca()"));
+  const [, batas] = kaca.match(/diffuseColor\.a = clamp\(diffuseColor\.a \+ frKaca \* [^;]*, 0\.0, ([\d.]+)\);/);
+  assert.ok(Number(batas) <= 0.25, `penutupan kaca maksimum ${batas}, kotak terbaca terisi`);
+  assert.match(kaca, /opacity: 0\.04/);
+  assert.match(d, /tepiKaca: bahanTepiKaca\(\),/);
+  const p = tanpaKomentar(baca("components/dunia/props.js"));
+  assert.doesNotMatch(p, /kotak\(W, H, D, bahan\.kaca/, "vitrin masih satu kotak kaca pejal");
+  assert.match(p, /const TEBAL = 0\.005;/);
+  // Panel lebar mendapat muka kaca, sisi tipisnya tepi hijau.
+  assert.match(p, /\[tepi, tepi, tepi, tepi, muka, muka\]/);
+});

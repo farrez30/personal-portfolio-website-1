@@ -692,8 +692,23 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     const D = 0.34;
     const H = 0.24;
     kotak(W + 0.04, 0.045, D + 0.04, b.kayuTua, 0, 0.0225, 0, g, 0.008);
-    const kaca = kotak(W, H, D, bahan.kaca, 0, 0.045 + H / 2, 0, g, 0.003);
-    kaca.renderOrder = 3;
+    // Empat panel kaca 5 mm, bukan satu kotak pejal: tepi tiap panel hijau botol, mukanya hampir
+    // tak terlihat (riset audit ulang 19 Nov 2026). Kotak pejal terbaca seperti jeli.
+    const TEBAL = 0.005;
+    const panel = (w, h, d, x, y, z, induk = g) => {
+      const tepi = bahan.tepiKaca;
+      const muka = bahan.kaca;
+      // Urutan muka BoxGeometry: +x, -x, +y, -y, +z, -z. Muka lebar dapat kaca, sisi tipis dapat tepi.
+      const urut = w <= d && w <= h ? [muka, muka, tepi, tepi, tepi, tepi] : h <= d && h <= w ? [tepi, tepi, muka, muka, tepi, tepi] : [tepi, tepi, tepi, tepi, muka, muka];
+      const o = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), urut);
+      o.position.set(x, y, z);
+      o.renderOrder = 3;
+      induk.add(o);
+      return o;
+    };
+    const yKaca = 0.045 + H / 2;
+    for (const sz of [-1, 1]) panel(W - 0.012, H, TEBAL, 0, yKaca, (sz * (D - TEBAL)) / 2);
+    for (const sx of [-1, 1]) panel(TEBAL, H, D - 0.012, (sx * (W - TEBAL)) / 2, yKaca, 0);
     for (const sx of [-W / 2, W / 2]) for (const sz of [-D / 2, D / 2]) kotak(0.012, H, 0.012, b.kuningan, sx, 0.045 + H / 2, sz, g, 0.003);
     // Buku kas bersampul kulit merah tua, label kertas di sampulnya.
     const kulit = new THREE.MeshStandardMaterial({ color: 0x5a1f1a, roughness: 0.6 });
@@ -714,8 +729,7 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     // Tutup kaca berengsel di tepi belakang (jauh dari kamera), berbingkai kuningan.
     const tutup = new THREE.Group();
     tutup.position.set(0, 0.045 + H, D / 2);
-    const kacaTutup = kotak(W, 0.006, D, bahan.kaca, 0, 0.003, -D / 2, tutup, 0.002);
-    kacaTutup.renderOrder = 3;
+    panel(W, 0.006, D, 0, 0.003, -D / 2, tutup);
     for (const [w, d, x, z] of [
       [W + 0.01, 0.012, 0, -D],
       [W + 0.01, 0.012, 0, 0],
