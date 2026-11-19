@@ -36,4 +36,5 @@ into the satellite; inside is a lab module with a rack to browse the projects an
   screen readers.
 - One new interior set; the corridor needs a wide lens (74° desktop, 88° phone). Locker labels must be
   tested for legibility on a phone.
+- Inside the module, Farrez chose (20 Nov 2026, after comparing three videos in `banding-lorong.html`): scroll moves the camera forward along the corridor with soft stops at each group of lockers; background life with characters (a small screen-faced robot on a ceiling rail, a floating astronaut, a tethered cargo bag, breathing ceiling lights); sound off by default with a toggle.
 - Revisit if the corridor hides product screens that visitors need, or if the zoom feels long on scroll.
