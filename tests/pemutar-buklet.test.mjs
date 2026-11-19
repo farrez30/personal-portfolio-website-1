@@ -73,3 +73,17 @@ test("di HP pemutar menciut ke cakram begitu hero lewat, cakramnya di kanan atas
   assert.match(css, /@media \(hover: hover\) \{\s*\.vinyl-btn:hover,\s*\.vinyl-reopen:hover \{/);
   assert.doesNotMatch(css.replace(/@media \(hover: hover\) \{[\s\S]*?\n\}/, ""), /\.vinyl-(btn|reopen):hover/);
 });
+
+// Di HP embed Spotify hanya memutar cuplikan walau pengunjung sudah login (laporan Farrez dan
+// forum developer Spotify, 19 Nov 2026), jadi petunjuk login dan cookie tidak menolong di sana.
+test("di layar sentuh petunjuk cuplikan mengajak ke aplikasi Spotify, bukan login", () => {
+  const src = baca("components/musik/PemutarMusik.jsx");
+  assert.match(src, /matchMedia\("\(pointer: coarse\)"\)/);
+  assert.match(src, /t\.rich\(sentuh \? "cuplikanHp" : "cuplikan", \{/);
+  assert.match(src, /buka: \(isi\) => \(\s*<a href=\{url\} target="_blank" rel="noopener noreferrer">/);
+  for (const bahasa of ["id", "en"]) {
+    const m = JSON.parse(baca(`messages/${bahasa}.json`)).pemutar;
+    assert.match(m.cuplikanHp, /<buka>[^<]+<\/buka>/, bahasa);
+    assert.doesNotMatch(m.cuplikanHp, /<login>|cookie/i, bahasa);
+  }
+});
