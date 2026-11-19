@@ -4,6 +4,7 @@
 import { writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { PULAU, KOTA } from "../peta.mjs";
 
 const DIR = dirname(fileURLToPath(import.meta.url));
 const INK = "#ece8e1", DIM = "#847e75", RED = "#e0574b", AMB = "#f0b35a";
@@ -49,18 +50,6 @@ const satelit = (x, y, s = 1, col = INK) => g(x, y, s, r(-5, -5, 10, 10, { rx: 1
 const bts = (x, y, h = 70) => p(`M${x - 12} ${y} L${x} ${y - h} L${x + 12} ${y} M${x - 8} ${y - h * 0.3} H${x + 8} M${x - 4} ${y - h * 0.65} H${x + 4}`) + p(`M${x + 8} ${y - h - 4} q8 4 0 12 M${x + 14} ${y - h - 10} q14 10 0 24`, { c: DIM, w: 1.5 });
 // Peta Nusantara dari titik bujur/lintang kasar (Natural Earth dipakai nanti saat build).
 const LL = (lon, lat) => [(lon - 118) * 6, -(lat + 2) * 6];
-const PULAU = [
-  [[95.3, 5.6], [97.5, 5.2], [100.5, 2.2], [103.5, -1], [106, -3], [105.8, -5.9], [104.5, -5.9], [102.3, -4], [100.3, -1], [98.7, 1.7], [96, 4]],
-  [[105.2, -6.8], [106.5, -6], [108.3, -6.3], [110.5, -6.9], [112.6, -6.9], [114.4, -7.7], [114.4, -8.6], [112, -8.3], [108.5, -7.8], [106, -7.4]],
-  [[109, 1.8], [109.6, -1], [111, -3], [114.5, -4], [116.2, -3.5], [116.8, -1], [118, 1], [117.5, 4.2], [119, 5.2], [116.5, 6.9], [115.4, 4.8], [113, 3.1], [111, 1.4]],
-  [[118.8, -3], [119.5, -5.6], [120.4, -5.4], [120.6, -3], [121.5, -4.5], [122.3, -4.7], [121.4, -2.8], [123.2, -1], [121.5, -1], [120.6, 0.6], [122, 1], [125, 1.5], [124.5, 0.5], [120.2, 0.3], [119.8, -1]],
-  [[131, -1.2], [133, -0.7], [135, -3.3], [137.8, -1.5], [141, -2.6], [141, -9.1], [139, -8.1], [137.6, -5.2], [134, -3.9], [132.5, -2.8]],
-  [[114.5, -8.2], [116, -8.4], [119, -8.4], [122.8, -8.3], [123, -8.6], [119, -8.8], [116, -8.9], [114.5, -8.7]],
-  [[123.5, -10.3], [125, -9], [127.3, -8.4], [125, -9.6]],
-  [[128, -3.2], [130.8, -3.3], [130, -3.6], [128.2, -3.6]],
-  [[127.5, 1.8], [128.6, 1.2], [127.9, -0.6], [128.4, 0.4], [127.6, 0.8]],
-];
-const KOTA = { jakarta: [106.8, -6.2], surabaya: [112.7, -7.3], medan: [98.7, 3.6], makassar: [119.4, -5.1], balikpapan: [116.8, -1.2], denpasar: [115.2, -8.6], jayapura: [140.7, -2.5], pontianak: [109.3, 0] };
 const nusantara = (cx, cy, s = 1, col = DIM) => g(cx, cy, s, PULAU.map((pts) => p("M" + pts.map((q) => LL(...q).join(" ")).join(" L") + " Z", { c: col, w: 1.5 / s, fill: "rgba(236,232,225,.05)" })).join(""));
 const kotaXY = (cx, cy, s, nama) => { const [x, y] = LL(...KOTA[nama]); return [cx + x * s, cy + y * s]; };
 const jaringKota = (cx, cy, s, pusat, ke, col = RED, o = {}) => { const [x0, y0] = kotaXY(cx, cy, s, pusat); return ke.map((n) => { const [x, y] = kotaXY(cx, cy, s, n); return garisMerah(`M${x0} ${y0} Q${(x0 + x) / 2} ${Math.min(y0, y) - 18} ${x} ${y}`, { w: 1.5, dash: o.dash }); }).join("") + titik([[x0, y0], ...ke.map((n) => kotaXY(cx, cy, s, n))], col, o.rad ?? 3); };
