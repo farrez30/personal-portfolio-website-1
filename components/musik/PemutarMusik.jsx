@@ -78,6 +78,9 @@ export default function PemutarMusik() {
   const lipatOtomatis = diCerita || lewatHero || (layarHp && tersambung);
   const [dibukaManual, setDibukaManual] = useState(false);
   const sembunyi = tersembunyi || dilipat || (lipatOtomatis && !dibukaManual);
+  // Embed di browser HP dan tablet tetap cuplikan walau sudah login, jadi petunjuknya lain.
+  const [sentuh, setSentuh] = useState(false);
+  useEffect(() => setSentuh(matchMedia("(pointer: coarse)").matches), []);
   const [form, setForm] = useState(false);
   const [teks, setTeks] = useState("");
   const [galat, setGalat] = useState("");
@@ -411,7 +414,12 @@ export default function PemutarMusik() {
         )}
         {tersambung && pratinjau && (
           <p className="vinyl-cuplikan">
-            {t.rich("cuplikan", {
+            {t.rich(sentuh ? "cuplikanHp" : "cuplikan", {
+              buka: (isi) => (
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {isi}
+                </a>
+              ),
               login: (isi) => (
                 <a href="https://accounts.spotify.com/login" target="_blank" rel="noopener noreferrer">
                   {isi}
