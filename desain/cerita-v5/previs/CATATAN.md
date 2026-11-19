@@ -34,7 +34,7 @@ situs. Bukan kode produksi.
   (terlihat hitam). Adegan makro memakai `near = 1`.
 - Kabut yang menyatu dengan latar menelan seluruh adegan bila kamera ortografis dijauhkan.
 - Outline inverted hull belang di silinder bersudut tajam; uji outline image-space di look-dev.
-- Menghapus nilai di Black Marble: ambang luminans saja ikut mengangkat medan gurun; dipakai ambang
+- Memilah lampu di Black Marble: ambang luminans saja ikut mengangkat medan gurun; dipakai ambang
   plus syarat warna hangat (merah lebih besar dari biru).
 
 ## Belum dicek
