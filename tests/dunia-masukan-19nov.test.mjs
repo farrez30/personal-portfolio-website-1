@@ -84,7 +84,8 @@ test("pintu: lonceng toko berpegas, papan OPEN, jendela luar berkusen dan redup"
   assert.match(dunia, /c\.fillText\("OPEN", 150, 96\);/);
   assert.doesNotMatch(dunia, /c\.fillStyle = terang \? "#e9dfcc" : "#e8b36a";/);
   // Lonceng berayun teredam saat tiba di pintu, lalu diam.
-  assert.match(dunia, /const amp = 0\.16 \* Math\.exp\(-1\.7 \* t\);/);
+  assert.match(dunia, /let ampAyun = 0\.16;/);
+  assert.match(dunia, /const amp = ampAyun \* Math\.exp\(-1\.7 \* t\);/);
 });
 
 test("bab bentuk: empat benda sesuai teks, di zona bebas depan balok tingkat atas", () => {

@@ -246,3 +246,37 @@ test("gulir: nomor babak ditulis saat berganti saja, kabel punya batas gabungan"
   assert.doesNotMatch(p, /o\.frustumCulled = false;\s*g\.add\(o\);/);
   assert.match(p, /\.union\(new THREE\.Box3\(\)\.setFromBufferAttribute\(geoRapi\.attributes\.position\)\)/);
 });
+
+// Butir 13: bola nyala lampu gantung menonjol 3,4 cm di bawah kap kaca model (terbukti dari
+// batas mesh kaca y 2,243..2,453 lawan bola di 2,244 berjari-jari 3,5 cm).
+test("bola nyala lampu gantung ada di dalam kap kaca", () => {
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  const [, naik] = d.match(/b\.position\.set\(x, y \+ ([\d.]+), z\);/);
+  const SKALA = 0.72;
+  const bawahKaca = 3.2 - 1.3 * SKALA - 0.021; // tepi bawah kaca model, terukur 2,243
+  const pusat = 3.2 - 1.3 * SKALA + Number(naik);
+  assert.ok(pusat - 0.035 >= bawahKaca, `bola menonjol ${(bawahKaca - (pusat - 0.035)).toFixed(3)} m di bawah kaca`);
+});
+
+// Butir 17: kaset model CC0 duduk di luar badan pemutar; dimasukkan ke dalam badannya.
+test("kaset dimasukkan ke dalam badan pemutar saat model dimuat", () => {
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  assert.match(d, /masukkanKaset\(kaset\);/);
+  assert.match(d, /if \(minX\.get\(cari\(akar\[i\]\)\) >= 0\.25\) pos\.setXYZ\(i, pos\.getX\(i\) - 0\.899/);
+});
+
+// Butir 14: lonceng pintu bisa diketuk, berbunyi, berayun; gerak dikurangi hanya bunyi.
+test("lonceng pintu bisa diketuk: tombol berlabel minimal 44 px, bunyi, ayunan dari ketukan", () => {
+  const j = baca("components/dunia/Dunia.jsx");
+  assert.match(j, /aria-label=\{t\("lonceng"\)\}/);
+  assert.match(j, /duniaRef\.current\?\.ketukLonceng\(\);\s*suara\(\)\?\.mainkan\("lonceng"\);/);
+  // Tidak merebut ketukan dari tautan atau kolom isian di bawahnya (HP: baris WhatsApp).
+  assert.match(j, /const lonceng = posLonceng \? muatLonceng\(posLonceng\) : null;/);
+  assert.match(j, /u = Math.max\(44, u - 6\)/);
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  assert.match(d, /ukuran: Math\.round\(Math\.max\(44, r \* 1\.6\)\)/);
+  assert.match(d, /ketukLonceng\(\) \{\s*if \(kurangiGerak\) return;/);
+  assert.match(d, /ampAyun = Math\.min\(0\.34, sisa \+ 0\.14\);/);
+  assert.match(d, /laporLonceng\(a\.id === "pintu" && !blend\);/);
+  for (const lang of ["id", "en"]) assert.ok(JSON.parse(baca(`messages/${lang}.json`)).dunia.lonceng, lang);
+});

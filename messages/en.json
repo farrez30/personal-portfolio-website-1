@@ -212,7 +212,8 @@
     "keBab": "Go to chapter {n}: {judul}"
   },
   "dunia": {
-    "memuat": "Opening the shop"
+    "memuat": "Opening the shop",
+    "lonceng": "Ring the bell"
   },
   "klien": {
     "label": "Clients and partners",

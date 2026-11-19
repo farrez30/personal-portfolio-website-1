@@ -212,7 +212,8 @@
     "keBab": "Ke bab {n}: {judul}"
   },
   "dunia": {
-    "memuat": "Menyiapkan toko"
+    "memuat": "Menyiapkan toko",
+    "lonceng": "Bunyikan lonceng"
   },
   "klien": {
     "label": "Klien dan partner",

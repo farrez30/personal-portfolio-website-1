@@ -57,7 +57,7 @@ const bingkaiBerikut = () => new Promise((r) => requestAnimationFrame(() => r())
 // Gerak kamera di dalam satu tempat mengikuti gulir: geser ke samping dan sedikit maju.
 const GESER = { samping: 0.22, maju: 0.12 };
 
-export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgres = () => {} } = {}) {
+export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgres = () => {}, onLonceng = () => {} } = {}) {
   const hp = matchMedia("(pointer: coarse)").matches || innerWidth < 768;
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -856,6 +856,31 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
   let hangat = false;
   let bingkaiBayang = 0;
   let ayunMulai = 0;
+  let ampAyun = 0.16;
+  // Posisi layar lonceng untuk tombol ketuk di Dunia.jsx (kanvas tidak menerima klik). Dilaporkan
+  // hanya saat berubah lebih dari 1 px, dan null saat kamera tidak sedang di pintu.
+  const vLonceng = new THREE.Vector3();
+  const vAtas = new THREE.Vector3();
+  let loncengLalu = null;
+  const laporLonceng = (tampil) => {
+    let baru = null;
+    if (tampil) {
+      gantung.getWorldPosition(vLonceng);
+      vAtas.copy(vLonceng).y += 0.13;
+      vLonceng.project(camera);
+      vAtas.project(camera);
+      const w = wadah.clientWidth || innerWidth;
+      const h = wadah.clientHeight || innerHeight;
+      const x = ((vLonceng.x + 1) / 2) * w;
+      const y = ((1 - vLonceng.y) / 2) * h;
+      const r = Math.abs(vAtas.y - vLonceng.y) * h * 0.5;
+      baru = { x: Math.round(x), y: Math.round(y + r * 0.6), ukuran: Math.round(Math.max(44, r * 1.6)) };
+    }
+    const sama = baru && loncengLalu && Math.abs(baru.x - loncengLalu.x) <= 1 && Math.abs(baru.y - loncengLalu.y) <= 1 && baru.ukuran === loncengLalu.ukuran;
+    if (sama || (!baru && !loncengLalu)) return;
+    loncengLalu = baru;
+    onLonceng(baru);
+  };
   let bayangGerak = false;
   let raf = 0;
   let lalu = performance.now();
@@ -928,7 +953,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       if (!ayunMulai) ayunMulai = now;
       const t = (now - ayunMulai) / 1000;
       if (t < 2.6) {
-        const amp = 0.16 * Math.exp(-1.7 * t);
+        const amp = ampAyun * Math.exp(-1.7 * t);
         lonceng.rotation.x = amp * Math.sin(2 * Math.PI * 4.1 * t);
         pemukulLonceng.rotation.x = amp * 1.6 * Math.sin(2 * Math.PI * 4.1 * t - 0.9);
         bergerak = true;
@@ -937,7 +962,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
         pemukulLonceng.rotation.x = 0;
         kotor = true;
       }
-    } else if (a.id !== "pintu") ayunMulai = 0;
+    } else if (a.id !== "pintu") {
+      ayunMulai = 0;
+      ampAyun = 0.16;
+    }
     if (langkahRedup(dt)) bergerak = true;
     if (nyala.langkah(dt)) bergerak = true;
     // Fokus ke benda babak hanya saat kamera sudah mendarat; selama terbang yang bekerja motion blur.
@@ -954,6 +982,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     posLalu.copy(camera.position);
     lihatLalu.copy(lihat);
     pasangKamera();
+    laporLonceng(a.id === "pintu" && !blend);
     const kecepatan = dt > 0 ? Math.max(camera.position.distanceTo(posLalu), lihat.distanceTo(lihatLalu) * 0.6) / dt : 0;
     const kuat = kekuatanBlur(kecepatan, kurangiGerak);
     gambar(kuat > 0 ? Math.min(1, kuat * 5) * 1.6 : 0);
@@ -987,6 +1016,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       tekstur("beton-kasar.webp", [3, 2.4]),
       ...MODEL.map(model),
     ]);
+    // Kaset di model CC0 pemutar kaset adalah komponen mesh terpisah yang duduk di luar badan
+    // pemutar, jadi terlihat setengah keluar dan melayang (butir 17). Dimasukkan ke dalam badan,
+    // di belakang jendela kacanya, seperti walkman sungguhan.
+    masukkanKaset(kaset);
     // Dinding plester (Poly Haven CC0): warna dinding tetap dari suasana, teksturnya memberi
     // serat dan pantulan yang tidak rata.
     const [plester, plesterNormal, plesterKasar] = await Promise.all([
@@ -1201,6 +1234,16 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     siapkan,
     muatCerita,
     keAnchor,
+    // Lonceng pintu diketuk (Dunia.jsx, tombol di atas proyeksi lonceng): ayunan dimulai ulang
+    // dan ketukan beruntun menambah amplitudonya sampai batas. Gerak dikurangi: tidak berayun.
+    ketukLonceng() {
+      if (kurangiGerak) return;
+      const now = performance.now();
+      const sisa = ayunMulai ? ampAyun * Math.exp(-1.7 * ((now - ayunMulai) / 1000)) : 0;
+      ampAyun = Math.min(0.34, sisa + 0.14);
+      ayunMulai = now;
+      kotor = true;
+    },
     get indeks() {
       return indeks;
     },
@@ -1556,7 +1599,10 @@ function buatNyala(lampu) {
   for (const l of lampu) {
     const { x, y, z } = l.position;
     const b = new THREE.Mesh(geoBola, bola);
-    b.position.set(x, y - 0.02, z);
+    // Di tengah kap kaca model lampu (kaca y 2,243..2,453 pada skala 0,72). Dulu 2 cm di bawah
+    // titik lampu: bola 3,5 cm menonjol 3,4 cm di bawah kaca, terbaca tempelan (masukan Farrez,
+    // gambar 13, 19 Nov 2026).
+    b.position.set(x, y + 0.085, z);
     const h = new THREE.Sprite(halo);
     h.position.copy(b.position);
     h.scale.setScalar(0.5);
@@ -1897,6 +1943,45 @@ function buatJalan(pagi) {
   // Bidang tegak menghadap ke dalam toko (-z): tulisannya terbaca tidak terbalik.
   for (const m of [l1, l2, l4, l5]) m.rotation.y = Math.PI;
   return g;
+}
+
+// Geser komponen kaset (segitiga terhubung yang batasnya di x >= 0,25 pada ruang model) ke
+// dalam badan pemutar, berpusat di jendela kaca. Simpul glTF yang dipisah per normal atau UV
+// digabung menurut posisi supaya komponennya utuh.
+function masukkanKaset(model) {
+  model.traverse((o) => {
+    if (!o.isMesh || !o.geometry.index || o.userData.kasetMasuk) return;
+    if (![].concat(o.material).some((m) => m.name === "portable_cassette_player")) return;
+    const pos = o.geometry.attributes.position;
+    const idx = o.geometry.index.array;
+    const kunci = new Map();
+    const akar = new Int32Array(pos.count);
+    for (let i = 0; i < pos.count; i++) {
+      const k = `${pos.getX(i).toFixed(5)},${pos.getY(i).toFixed(5)},${pos.getZ(i).toFixed(5)}`;
+      if (!kunci.has(k)) kunci.set(k, i);
+      akar[i] = kunci.get(k);
+    }
+    const induk = Int32Array.from({ length: pos.count }, (_, i) => i);
+    const cari = (x) => {
+      while (induk[x] !== x) x = induk[x] = induk[induk[x]];
+      return x;
+    };
+    for (let i = 0; i < idx.length; i += 3) {
+      const a = cari(akar[idx[i]]);
+      induk[cari(akar[idx[i + 1]])] = a;
+      induk[cari(akar[idx[i + 2]])] = a;
+    }
+    const minX = new Map();
+    for (let i = 0; i < pos.count; i++) {
+      const r = cari(akar[i]);
+      minX.set(r, Math.min(minX.get(r) ?? Infinity, pos.getX(i)));
+    }
+    for (let i = 0; i < pos.count; i++) if (minX.get(cari(akar[i])) >= 0.25) pos.setXYZ(i, pos.getX(i) - 0.899, pos.getY(i), pos.getZ(i) + 0.01);
+    pos.needsUpdate = true;
+    o.geometry.computeBoundingBox();
+    o.geometry.computeBoundingSphere();
+    o.userData.kasetMasuk = true;
+  });
 }
 
 function mulberry(a) {
