@@ -59,11 +59,13 @@ export const ANCHOR = [
   },
   {
     id: "fondasi",
-    // Rak hi-fi dilihat dari belakang: kabel rapi, lampu menyala satu per satu.
-    posisi: [-2.75, 1.05, 1.55],
-    lihat: [-3.92, 0.62, 2.38],
-    benda: [-4.05, 0.5, 1.95],
-    fov: 40,
+    // Rak sound dilihat dari belakang: kabel kusut dirapikan dan menyatu ke talang menuju panel
+    // MCB di dinding. Kamera mundur dan naik supaya rak, berkas kabel di lantai, talang, dan
+    // panel masuk satu bingkai (dulu panel terpotong di tepi atas).
+    posisi: [-2.2, 1.6, 1.05],
+    lihat: [-4.2, 0.52, 2.4],
+    benda: [-4.15, 0.45, 2.2],
+    fov: 46,
     cerita: true,
     seksi: [{ sel: ".bab--fondasi", di: 0 }],
   },
