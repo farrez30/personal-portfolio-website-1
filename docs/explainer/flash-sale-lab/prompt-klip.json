@@ -1,0 +1,24 @@
+[
+ {
+  "kode": "1-konteks",
+  "prompt": "Animated 1960s Op Art in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white dots and stripes that warp and ripple to create optical motion, flat graphic shapes, crisp screen-print texture, accents of bright LED red and warm amber yellow. A vast field of identical small round dots rushes in from the left and squeezes through one narrow striped gate, the dot field bulging and compressing like a wave, a few red square dots bounce away from the gate. Locked-off camera, single continuous shot. Smooth animation. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness.",
+  "flow": "flash-sale-lab-klip-1",
+  "model": "Omni 1.2 Flash, teks saja, 16:9, 360p, 4 s, x2, 8 kredit, lalu Upscaled 720p"
+ },
+ {
+  "kode": "2-tantangan",
+  "prompt": "Animated 1960s Op Art in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white dots and stripes that warp and ripple to create optical motion, flat graphic shapes, crisp screen-print texture, accents of bright LED red and warm amber yellow. A neat stack of plain cardboard boxes stands in the middle while a crowd of round dots presses in from every side, the stripes around the stack bending and trembling under the pressure. Locked-off camera, single continuous shot. Smooth animation. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness.",
+  "flow": "flash-sale-lab-klip-2",
+  "model": "Omni 1.2 Flash, teks saja, 16:9, 360p, 4 s, x2, 8 kredit, lalu Upscaled 720p"
+ },
+ {
+  "kode": "3-solusi",
+  "prompt": "Animated 1960s Op Art in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white dots and stripes that warp and ripple to create optical motion, flat graphic shapes, crisp screen-print texture, accents of bright LED red and warm amber yellow. A long winding queue of round dots folded like a calm ribbon moves forward at a steady rhythm, the front dots step one at a time through a gap to a small counter where one box leaves per dot, the stack of boxes slowly getting smaller. Locked-off camera, single continuous shot. Smooth animation. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness.",
+  "flow": "flash-sale-lab-klip-3",
+  "model": "Omni 1.2 Flash, teks saja, 16:9, 360p, 4 s, x2, 8 kredit, lalu Upscaled 720p"
+ },
+ {
+  "kode": "4-hasil",
+  "sumber": "sama:1-konteks"
+ }
+]

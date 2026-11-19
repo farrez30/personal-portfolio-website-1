@@ -70,5 +70,11 @@
     "berkas": "sampul-judul.webp",
     "dari": "sampul.webp",
     "prompt": "Add the album title \"SecuritySahabat\" as bold hand-cut Saul Bass style paper lettering in off-white, in the empty deep teal area at the bottom right. Spell it exactly \"SecuritySahabat\" and write nothing else anywhere. Keep everything else in the image unchanged."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "berkas": "sampul-judul.webp",
+    "dari": "sampul.webp",
+    "prompt": "Add the album title \"Flash Sale Lab\" as bold 1960s Op Art lettering made of parallel black and off-white stripes, in the plain off-white area at the bottom right. Spell it exactly \"Flash Sale Lab\" and write nothing else anywhere. Keep everything else in the image unchanged."
   }
 ]

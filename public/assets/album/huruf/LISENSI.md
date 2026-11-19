@@ -17,3 +17,4 @@ OFL mengizinkan huruf dipakai dan disertakan di situs ini; hurufnya tidak dijual
 | bebasneue.woff2 | Bebas Neue | Ryoichi Tsunekawa (Dharma Type) |
 | limelight.woff2 | Limelight | Nicole Fally (Sorkin Type), diambil 19 Nov 2026 |
 | archivoblack.woff2 | Archivo Black | Omnibus-Type, diambil 19 Nov 2026 |
+| monoton.woff2 | Monoton | Vernon Adams, diambil 20 Nov 2026 |

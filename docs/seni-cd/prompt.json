@@ -922,5 +922,82 @@
     "rasio": "4:3",
     "berkas": "belakang.webp",
     "prompt": "Back insert artwork for a CD case, landscape. 1960s Saul Bass style title sequence poster: flat cut-paper shapes with slightly rough hand-cut edges, bold simplified silhouettes, strong negative space, only three colours: deep teal, off-white and one signal red, subtle paper grain. Scene: three cut-paper office buildings of one company standing apart on a long horizon of sea and islands, linked by one single continuous red thread that runs from window to window across the water. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "sampul",
+    "rasio": "1:1",
+    "berkas": "sampul.webp",
+    "prompt": "Square album cover. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene: a vast crowd drawn only as thousands of identical small round dots flows in from the left through a narrow gate into a long winding queue; the dot field bulges and compresses like a wave as it squeezes through, and a few small square dots are bounced away at the gate. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "label",
+    "rasio": "1:1",
+    "berkas": "label.webp",
+    "prompt": "Square artwork for a circular picture disc, composition is a perfect circle centred in the frame with an empty plain centre hole area. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Motif: concentric rings of black and off-white dots that shrink toward the centre like a tunnel, one thin LED red ring and one amber ring among them. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "belakang",
+    "rasio": "4:3",
+    "berkas": "belakang.webp",
+    "prompt": "Back insert artwork for a CD case, landscape. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene: a very wide field of thousands of small round dots flowing from left to right, squeezed through three narrow gates in a row so the stripes bulge between them, a few square dots bounced off at the first gate. Leave a clean plain band along the bottom for a track list added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "buklet",
+    "rasio": "1:1",
+    "berkas": "buklet-01.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene, context, everyone at once: a huge field of identical small round dots rushing toward one point from every direction, the stripes around them bending under the pressure. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "buklet",
+    "rasio": "1:1",
+    "berkas": "buklet-02.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene, context, bots in the line: a stream of round dots with several hard square dots in LED red mixed in, the squares pushing sideways to cut ahead. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "buklet",
+    "rasio": "1:1",
+    "berkas": "buklet-03.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene, challenge, never oversell: a neat stack of plain cardboard boxes standing on a striped floor that warps, a crowd of round dots pressing in on it from the left. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "buklet",
+    "rasio": "1:1",
+    "berkas": "buklet-04.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene, solution, a guard at the door: a narrow doorway made of vertical black stripes, round dots passing through one by one while red square dots bounce back off it. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "buklet",
+    "rasio": "1:1",
+    "berkas": "buklet-05.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene, solution, the waiting room: a long winding queue of round dots folded back and forth like a ribbon in calm even stripes, the front of the queue stepping through a gap at a steady rhythm. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "buklet",
+    "rasio": "1:1",
+    "berkas": "buklet-06.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene, solution, one click one order: one round dot meeting one plain cardboard box at a small counter, a single amber line joining them, the surrounding stripes perfectly still. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "buklet",
+    "rasio": "1:1",
+    "berkas": "buklet-07.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene, how it works, tested and replayed: an old reel-to-reel tape recorder drawn in flat black and off-white shapes, its tape unspooling into a stripe pattern of dots, no dials with numbers. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
+  },
+  {
+    "slug": "flash-sale-lab",
+    "jenis": "buklet",
+    "rasio": "1:1",
+    "berkas": "buklet-08.webp",
+    "prompt": "Square CD booklet page illustration. 1960s Op Art record cover in the manner of Bridget Riley and Victor Vasarely: hard-edged black and off-white geometric patterns of dots and stripes that warp and bulge to create an illusion of motion and depth, flat graphic shapes, crisp screen-print texture, one accent colour of bright LED red and a little warm amber yellow. Scene, outcome, sold out: an empty striped shelf where the boxes stood, beside it a tidy grid of identical amber rectangles like filed orders, the dot field around it finally calm. Keep the right third of the image as clean empty paper with only faint texture, reserved for text added later. Absolutely no text, no letters, no numbers, no logos, no signatures, no watermark. People are fictional and anonymous, no celebrity or real person likeness."
   }
 ]

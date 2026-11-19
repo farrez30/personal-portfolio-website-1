@@ -222,8 +222,8 @@ export const proyek = [
     layar: { desktop: "/assets/layar/gdl-logistics-desktop.webp", hp: "/assets/layar/gdl-logistics-hp.webp" },
     gambar: null,
     ringkas: {
-      id: "Landing page untuk perusahaan truk pendingin antarperusahaan: muatan yang digulir berubah jadi truk dalam 120 bingkai foto, lalu permintaan penawaran dikirim lewat WhatsApp atau email.",
-      en: "A landing page for a business-to-business refrigerated trucking company: the cargo turns into a truck over 120 photo frames as you scroll, and quote requests go out by WhatsApp or email.",
+      id: "Landing page untuk perusahaan truk pendingin antarperusahaan: muatan yang digulir berubah jadi truk dalam 120 bingkai foto, lalu permintaan penawaran dikirim lewat email.",
+      en: "A landing page for a business-to-business refrigerated trucking company: the cargo turns into a truck over 120 photo frames as you scroll, and quote requests go out by email.",
     },
     arsitektur: ARSITEKTUR["gdl-logistics"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
@@ -248,6 +248,27 @@ export const proyek = [
       en: "A security and compliance Q&A agent for employees, built as a team with Muhammad Izzat and Wafi for Tencent Cloud Hackathon Indonesia 2026: every yes-or-no answer cites its source, uses only documents the asker may see, and is logged.",
     },
     arsitektur: ARSITEKTUR["securitysahabat"],
+    buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
+  },
+  {
+    // Lab uji beban pribadi (repo privat farrez30/flash-sale-lab). Angka dari hasil/rekaman.json
+    // uji penuh 19 Nov 2026; tautan repo tidak dipajang karena privat.
+    slug: "flash-sale-lab",
+    ilustrasi: "/assets/ilustrasi/flash-sale-lab.webp",
+    katalog: "FRZ-13",
+    judul: { id: "Flash Sale Lab", en: "Flash Sale Lab" },
+    jenis: "pribadi",
+    status: "pilot",
+    periode: "2026",
+    warna: "#1b1e21",
+    tautan: {},
+    layar: { desktop: "/assets/layar/flash-sale-lab-desktop.webp", hp: "/assets/layar/flash-sale-lab-hp.webp" },
+    gambar: null,
+    ringkas: {
+      id: "Lab flash sale yang diuji beban sungguhan: hampir 114 ribu pembeli dan bot berebut 6.000 stok, habis di detik ke-43 tanpa satu pun kelebihan jual, lalu rekamannya diputar ulang per detik untuk orang awam.",
+      en: "A flash sale lab under a real load test: almost 114 thousand buyers and bots fight over 6,000 items, sold out at second 43 without a single oversell, and the recording plays back second by second for non-engineers.",
+    },
+    arsitektur: ARSITEKTUR["flash-sale-lab"],
     buklet: { challenge: null, decisions: null, solution: null, delivery: null, outcome: null },
   },
 ];

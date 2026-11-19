@@ -219,3 +219,22 @@ Dibuat 19 Nov 2026 di Google Flow (Nano Banana 2.1, 0 kredit, akun Google AI Pro
 | label.webp | v1 | a ring of cut-paper speech bubbles and small document sheets circling the empty centre, all linked by one continuous red thread, one small layered paper shield at the top of the ring |
 | sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
 | sampul.webp | v1 | calon b, dipilih Farrez: a silhouette of an office employee sitting at a desk, looking up at a large glowing speech bubble that unfolds into a stack of stamped documents with round seals |
+
+## flash-sale-lab: Op Art
+
+Dibuat 20 Nov 2026 di Google Flow (Nano Banana 2.1, 0 kredit, akun Google AI Pro Farrez, project "Portofolio CD 19 Nov"). Berkas asli Flow 1K diunduh lewat Chrome, lalu diubah ke WebP; mentahnya di `D:\Downloads D\Claude\2026-11-20 cd-13\`. Judul sampul ditambah lewat edit Flow dan ejaannya dicek dari berkas aslinya.
+
+| Berkas | Varian | Isi |
+|---|---|---|
+| belakang.webp | v1 | a very wide field of thousands of small round dots flowing from left to right, squeezed through three narrow gates in a row so the stripes bulge between them, a few square dots bounced off at the first gate |
+| buklet-01.webp | v1 | context, everyone at once: a huge field of identical small round dots rushing toward one point from every direction, the stripes around them bending under the pressure |
+| buklet-02.webp | v1 | context, bots in the line: a stream of round dots with several hard square dots in LED red mixed in, the squares pushing sideways to cut ahead |
+| buklet-03.webp | v1 | challenge, never oversell: a neat stack of plain cardboard boxes standing on a striped floor that warps, a crowd of round dots pressing in on it from the left |
+| buklet-04.webp | v2 | solution, a guard at the door: a narrow doorway made of vertical black stripes, round dots passing through one by one while red square dots bounce back off it |
+| buklet-05.webp | v2 | solution, the waiting room: a long winding queue of round dots folded back and forth like a ribbon in calm even stripes, the front of the queue stepping through a gap at a steady rhythm |
+| buklet-06.webp | v1 | solution, one click one order: one round dot meeting one plain cardboard box at a small counter, a single amber line joining them, the surrounding stripes perfectly still |
+| buklet-07.webp | v1 | how it works, tested and replayed: an old reel-to-reel tape recorder drawn in flat black and off-white shapes, its tape unspooling into a stripe pattern of dots, no dials with numbers |
+| buklet-08.webp | v1 | outcome, sold out: an empty striped shelf where the boxes stood, beside it a tidy grid of identical amber rectangles like filed orders, the dot field around it finally calm. Seni diperkecil 90% di atas kertas yang sama karena menyentuh kolom teks |
+| label.webp | v1 | concentric rings of black and off-white dots that shrink toward the centre like a tunnel, one thin LED red ring and one amber ring among them |
+| sampul-judul.webp | edit | sampul.webp ditambah judul tulisan model |
+| sampul.webp | v2 | calon a, dipilih Farrez: a vast crowd drawn only as thousands of identical small round dots flows in from the left through a narrow gate into a long winding queue; the dot field bulges and compresses like a wave as it squeezes through, and a few small square dots are bounced away at the gate |
