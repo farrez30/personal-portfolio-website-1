@@ -393,7 +393,7 @@ export const ARSITEKTUR = {
       ),
       l(
         { id: "Permintaan penawaran", en: "A quote request" },
-        { id: "Formulir menyusun pesan lalu membukanya di WhatsApp atau email, tanpa server.", en: "The form composes a message and opens it in WhatsApp or email, with no server." },
+        { id: "Formulir menyusun pesan lalu membukanya di email, tanpa server. Tombol WhatsApp muncul begitu nomornya dipasang.", en: "The form composes a message and opens it in email, with no server. A WhatsApp button appears once the number is added." },
         ["whatsapp", "email"],
       ),
     ],
