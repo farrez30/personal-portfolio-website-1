@@ -22,6 +22,9 @@ import {
   SiPython,
   SiSvelte,
   SiVite,
+  SiGo,
+  SiRedis,
+  SiK6,
   SiWhatsapp,
   SiPwa,
   SiPrisma,
@@ -49,6 +52,8 @@ import {
   PiLockKeyBold,
   PiFilesBold,
   PiListChecksBold,
+  PiQueueBold,
+  PiTicketBold,
   PiDatabaseBold,
 } from "react-icons/pi";
 
@@ -83,6 +88,9 @@ export const TEKNOLOGI = {
   python: { nama: sama("Python"), Ikon: SiPython },
   svelte: { nama: sama("Svelte"), Ikon: SiSvelte },
   vite: { nama: sama("Vite"), Ikon: SiVite },
+  go: { nama: sama("Go"), Ikon: SiGo },
+  redis: { nama: sama("Redis"), Ikon: SiRedis },
+  k6: { nama: { id: "k6 (uji beban)", en: "k6 (load test)" }, Ikon: SiK6 },
   // Peran umum
   peramban: { nama: { id: "Peramban", en: "Browser" }, Ikon: PiBrowserBold },
   hp: { nama: { id: "HP", en: "Phone" }, Ikon: PiDeviceMobileBold },
@@ -102,6 +110,8 @@ export const TEKNOLOGI = {
   izin: { nama: { id: "Cek hak akses", en: "Access check" }, Ikon: PiLockKeyBold },
   basisPengetahuan: { nama: { id: "Basis pengetahuan", en: "Knowledge base" }, Ikon: PiFilesBold },
   audit: { nama: { id: "Log audit", en: "Audit log" }, Ikon: PiListChecksBold },
+  antrean: { nama: { id: "Ruang tunggu", en: "Waiting room" }, Ikon: PiQueueBold },
+  karcis: { nama: { id: "Karcis bertanda tangan", en: "Signed ticket" }, Ikon: PiTicketBold },
 };
 
 export const KELOMPOK = ["fitur", "stack", "infrastruktur"];

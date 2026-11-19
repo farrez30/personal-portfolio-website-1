@@ -148,8 +148,8 @@ export const BAB = [
       en: "And in the end, used every day.",
     },
     isi: {
-      id: "Dua belas di antaranya ada di rak ini. Ambil satu, lihat ceritanya.",
-      en: "Twelve of them are on this shelf. Pick one and see its story.",
+      id: "Tiga belas di antaranya ada di rak ini. Ambil satu, lihat ceritanya.",
+      en: "Thirteen of them are on this shelf. Pick one and see its story.",
     },
   },
 ];

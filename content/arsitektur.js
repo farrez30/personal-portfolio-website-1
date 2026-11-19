@@ -446,4 +446,43 @@ export const ARSITEKTUR = {
       infrastruktur: [],
     },
   },
+
+  "flash-sale-lab": {
+    alur: [
+      l(
+        { id: "Ribuan orang datang", en: "Thousands arrive" },
+        { id: "k6 mengirim pembeli dan bot sekaligus, sampai 1.500 orang per detik, ke API Go yang dibatasi satu CPU.", en: "k6 sends buyers and bots at once, up to 1,500 people a second, at a Go API limited to one CPU." },
+        ["k6", "go"],
+      ),
+      l(
+        { id: "Bot ditahan di pintu", en: "Bots stop at the door" },
+        { id: "Batas laju per klien dan karcis bertanda tangan menolak bot sebelum mereka menyentuh stok.", en: "A per-client rate limit and signed tickets turn bots away before they touch the stock." },
+        ["karcis", "redis"],
+      ),
+      l(
+        { id: "Ruang tunggu", en: "The waiting room" },
+        { id: "Antrean di Redis memanggil 200 orang per detik ke kasir, jadi checkout tidak kebanjiran.", en: "A Redis queue calls 200 people a second to the till, so checkout never floods." },
+        ["antrean", "redis"],
+      ),
+      l(
+        { id: "Stok tidak bisa minus", en: "Stock can't go negative" },
+        { id: "Cek stok, kurangi stok, dan simpan pesanan terjadi dalam satu langkah, dan klik dua kali tetap satu pesanan.", en: "Checking stock, reducing it and saving the order happen in one step, and a double click is still one order." },
+        ["redis"],
+      ),
+      l(
+        { id: "Tersimpan permanen", en: "Saved for good" },
+        { id: "Worker memindahkan pesanan ke PostgreSQL, dan tiap detik uji direkam untuk halaman replay.", en: "A worker moves orders into PostgreSQL, and every second of the test is recorded for the replay page." },
+        ["go", "postgresql", "nextjs"],
+      ),
+    ],
+    teknologi: {
+      fitur: [
+        { id: "Ruang tunggu", en: "Waiting room" },
+        { id: "Tanpa kelebihan jual", en: "No oversell" },
+        { id: "Replay per detik", en: "Second-by-second replay" },
+      ],
+      stack: ["go", "redis", "postgresql", "nextjs"],
+      infrastruktur: ["docker", "k6"],
+    },
+  },
 };
