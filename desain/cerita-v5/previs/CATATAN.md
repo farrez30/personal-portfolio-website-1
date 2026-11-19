@@ -36,7 +36,7 @@ situs. Bukan kode produksi.
    satelit bergerak lalu keluar sebagai portofolio. Urutan G kini: lima meja, ruang server, kebiasaan,
    keluar jendela ke kota, peta lebar, globe, portofolio.
 7. Babak portofolio: Farrez mengusulkan konsep keenam, zoom ke satelit yang ternyata modul lab lalu memilih proyek dari rak loker (`?a=P&s=portoLab`, `portoLab-luar`, animasi 4 detik). Papan enam konsep di `papan-porto.webp`.
-8. Blend antarmeja dinilai "cuma pindah ke meja sebelah kanan". Riset di `../riset-transisi-kamera.md`. Farrez minta keempat arah dibuat untuk dibandingkan: `?dunia=penuh&tx=campur|layar|crane|oner`, video `tx-<arah>.mp4`, halaman `banding-transisi.html`, perakit `banding-transisi.mjs`. Menunggu pilihan.
+8. Blend antarmeja dinilai "cuma pindah ke meja sebelah kanan". Riset di `../riset-transisi-kamera.md`. Farrez minta keempat arah dibuat untuk dibandingkan: `?dunia=penuh&tx=campur|layar|crane|oner`, video `tx-<arah>.mp4`, halaman `banding-transisi.html`, perakit `banding-transisi.mjs`. Farrez memilih campur ("Paling hidup dan bervariasi"), ADR 0023. Contoh modul lab untuk dinilai di `porto-lab.html`.
 
 ## Pelajaran teknis
 
@@ -83,7 +83,7 @@ ukuran benda pertama yang kena. Dipakai per 0,1 detik di sepanjang jalur kamera.
 
 | Arah | Yang jalan | Kejanggalan yang tersisa |
 |---|---|---|
-| campur | nota terbang diikuti kamera 1,8-2,9 s; whip pan lewat pilar 4,6-5,1 s; masuk tablet lalu keluar di meja biaya 7,2-7,8 s; crane ke denah 14,6-16,4 s | 10,3-10,5 s layar krem kosong (ujung orbit menatap dinding); dari atas terlihat genangan cahaya oranye meja biaya |
+| campur (dipilih, ADR 0023) | nota terbang diikuti kamera 1,8-2,9 s; whip pan lewat pilar 4,6-5,1 s; masuk tablet lalu keluar di meja biaya 7,2-7,8 s; crane ke denah 14,6-16,4 s | diperbaiki: ujung orbit kini menoleh ke meja kelangsungan; alas biaya 3 x 3 m jadi meja 1,65 x 1,2 m berkaki. Tersisa: dari atas, perisai segi enam ruang server tampak sebagai bidang oranye besar (15,3-15,6 s) |
 | layar | tiap potongan di layar penuh tidak terlihat (2,1, 4,9, 7,5 s) | tablet menimpa monitor di meja kelangsungan dan berdiri di depan rak server |
 | crane | plafon dibuka, kabel cadangan disembunyikan (sebelumnya menutup setengah layar) | denah satu baris lemah: dari atas hanya puncak dinding dan sederet meja; genangan oranye |
 | oner | kamera tidak pernah diam, merendah lewat lemari 5,0-5,4 s | 8,3 s sekilas kuning polos saat mendekati meja biaya |
