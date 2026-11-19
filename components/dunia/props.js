@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
+import { pemicuSekali } from "./naskah";
 
 // Props tur cerita gulir (cerita v4): satu benda per babak di toko kaset, dipilih dari istilah
 // toko musik yang membawa pesan babaknya (desain/cerita-v4/usulan-revisi-1.md bagian 3).
@@ -220,7 +221,9 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
       p[1] += naik * Math.sin(Math.PI * t);
       return p;
     };
-    momen.rencana = (u) => {
+    // Pose stempel sepanjang satu kali mengecap, t 0..1 (dulu dipetakan ke gulir 0,3..0,7).
+    const poseStempel = (t) => {
+      const u = 0.3 + 0.4 * Math.min(1, Math.max(0, t));
       let p = DIAM;
       let tekan = 0;
       if (u < 0.3) p = DIAM;
@@ -245,6 +248,14 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
       stempel.scale.y = 1 - 0.012 * tekan;
       cap.material.opacity = u >= 0.505 ? 1 : 0;
     };
+    // Mengecap itu kejadian sekali, bukan gerak yang bisa digulung balik (masukan Farrez 19 Nov:
+    // glitch saat gulir mundur). Dulu pose dipetakan langsung ke gulir: mundur menghapus cap
+    // saat stempel menempel lagi, dan langkah gulir HP yang besar melompati fase. Sekarang gulir
+    // hanya memicu: lewat 0,3 stempel dimainkan menurut waktu, capnya tetap; disetel ulang saat
+    // kamera masuk lagi dari babak ide (pemicuSekali di naskah.js).
+    const cap0 = pemicuSekali({ ambang: 0.3, ulang: 0.12, akhir: 0.75, durasi: 2.2 });
+    momen.rencana = (u, s = {}) => poseStempel(cap0.langkah(u, s.waktu ?? 0, s.diam, s.terbang));
+    momen.rencana.sibuk = cap0.sibuk;
     tambahBayang(-4.5, -1.4, 0.7);
   }
 
@@ -413,7 +424,7 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     ]);
     const nyalaLed = new THREE.Color(0x7fe08a).multiplyScalar(3);
     const matiLed = new THREE.Color(0x2a221c);
-    momen.fondasi = (u, nyala) => led.forEach((l, i) => l.material.color.copy(i < nyala ? nyalaLed : matiLed));
+    momen.fondasi = (u, s) => led.forEach((l, i) => l.material.color.copy(i < (s.nyala ?? 0) ? nyalaLed : matiLed));
     grup.add(g);
     tambahBayang(-4.05, 1.95, 0.5);
   }
@@ -844,9 +855,12 @@ export function buatPropsCerita({ bahan, tekstur: muatTekstur, tambahBayang, lam
     },
     perbarui(id, u, s = {}) {
       if (piringan) piringan.rotation.y = s.waktu ? -s.waktu * 3.5 : 0;
-      momen[id]?.(u, s.nyala ?? 0);
+      momen[id]?.(u, s);
     },
-    berputar: (id) => id === "bangun",
+    // Dunia terus menggambar selama benda babak bergerak sendiri (piringan, stempel yang sedang mengecap).
+    berputar: (id) => id === "bangun" || !!momen[id]?.sibuk?.(),
+    // Benda yang bergerak dan membuat bayangan (stempel): peta bayangan kunci ikut diperbarui.
+    sibuk: (id) => !!momen[id]?.sibuk?.(),
   };
 }
 

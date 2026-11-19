@@ -66,7 +66,7 @@ test("corong cahaya: tepi memudar menurut sudut pandang, additive, tanpa tekstur
 test("kaca bening: putih, opasitas rendah, fresnel; bukan biru rata", () => {
   assert.match(dunia, /kaca: bahanKaca\(\),/);
   assert.doesNotMatch(dunia, /0x9fb4c8/);
-  assert.match(dunia, /float frKaca = 0\.04 \+ 0\.96 \* pow\(1\.0 - abs\(dot\(normal, geometryViewDir\)\), 5\.0\);/);
+  assert.match(dunia, /float frKaca = 0\.04 \+ 0\.96 \* pow\(max\(0\.0, 1\.0 - abs\(dot\(normal, geometryViewDir\)\)\), 5\.0\);/);
 });
 
 test("stempel menyentuh kertas tepat di tempat bekas capnya", () => {
