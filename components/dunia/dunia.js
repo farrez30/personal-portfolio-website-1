@@ -413,11 +413,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * kunciKini.kuat * faktorRedup;
     kunciLampu.shadow.needsUpdate = true;
   };
-  // Sorot benda yang sedang diangkat di babak (bentuk): lampu kunci yang sama pindah ke atas depan
-  // benda, kerucutnya menyempit, sebanding tinggi angkatnya. Riset 19 Nov 2026
-  // (desain/cerita-v4/riset-audit-ulang.md): sorot produk sungguhan adalah lampu sempit dengan
-  // titik panas di benda dan kolam di permukaan, bukan bidang bercahaya. Tanpa lampu tambahan,
-  // jadi tidak ada kompilasi ulang shader dan tidak ada beban per piksel baru di HP.
+  // Benda yang sedang diangkat di babak (bentuk): lampu kunci yang sama pindah ke atas depan benda
+  // supaya bayangannya jatuh ke rak, dengan sudut dan kekuatan biasa. Penandanya outline menyala
+  // (garisBenda di bawah), bukan cahaya: masukan Farrez 19 Nov, "seperti benda yang ter-highlight
+  // di game, hanya outline-nya". Tanpa lampu tambahan, jadi tanpa kompilasi ulang shader.
   const arahSorot = new THREE.Vector3();
   let sorotKini = 0;
   const sorotKunci = (s) => {
@@ -431,7 +430,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       arahSorot.subVectors(camera.position, s.p).setY(0).normalize();
       const atasDepan = [s.p.x + arahSorot.x * 0.55, s.p.y + 0.95, s.p.z + arahSorot.z * 0.55];
       const l = (a, b) => a.map((v, i) => v + (b[i] - v) * k);
-      kunciKini = { p: l(dasar.p, atasDepan), t: l(dasar.t, s.p.toArray()), nyala: dasar.nyala, sudut: SUDUT_KUNCI + (0.3 - SUDUT_KUNCI) * k, kuat: 1 + 0.8 * k };
+      kunciKini = { p: l(dasar.p, atasDepan), t: l(dasar.t, s.p.toArray()), nyala: dasar.nyala, sudut: SUDUT_KUNCI, kuat: 1 };
     }
     kunciLampu.angle = kunciKini.sudut;
     kunciLampu.intensity = (kunciLampu.userData.dasar ?? 0) * kunciKini.nyala * kunciKini.kuat * faktorRedup;
@@ -532,6 +531,11 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       uPiksel: { value: new THREE.Vector2(1, 1) },
       uFokus: { value: 2 },
       uDof: { value: 0 },
+      // Outline benda terangkat: topeng siluet, tepinya = dilasi dikurangi isi.
+      tGaris: { value: null },
+      uGarisKuat: { value: 0 },
+      uGarisPiksel: { value: new THREE.Vector2(1, 1) },
+      uGarisWarna: { value: new THREE.Color(1.0, 0.64, 0.26) },
     },
     vertexShader: "varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }",
     // Blur kamera lewat proyeksi ulang kedalaman (GPU Gems 3 bab 27): tiap piksel diproyeksikan
@@ -553,6 +557,10 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       uniform vec2 uPiksel;
       uniform float uFokus;
       uniform float uDof;
+      uniform sampler2D tGaris;
+      uniform float uGarisKuat;
+      uniform vec2 uGarisPiksel;
+      uniform vec3 uGarisWarna;
       float acak(vec2 p) { return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
       float linear(float d) {
         float z = d * 2.0 - 1.0;
@@ -595,10 +603,26 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
           for (int i = 1; i < 10; i++) jumlah += texture2D(tWarna, vUv + v * (float(i) / 9.0 - 0.5)).rgb;
           c.rgb = jumlah / 10.0;
         }
+        float tepiGaris = 0.0;
+        if (uGarisKuat > 0.001) {
+          float isi = texture2D(tGaris, vUv).r;
+          float luar = 0.0;
+          float pendar = 0.0;
+          for (int i = 0; i < 12; i++) {
+            float a = float(i) * 0.5236;
+            vec2 arah = vec2(cos(a), sin(a)) * uGarisPiksel;
+            luar = max(luar, texture2D(tGaris, vUv + arah * 1.5).r);
+            pendar += texture2D(tGaris, vUv + arah * 4.5).r;
+          }
+          // Garis tegas tepat di luar siluet, plus pendar tipis yang memudar ke luar.
+          tepiGaris = (clamp(luar - isi, 0.0, 1.0) + 0.3 * clamp(pendar / 12.0 - isi, 0.0, 1.0)) * uGarisKuat;
+        }
         gl_FragColor = vec4(c.rgb, 1.0);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
         vec3 g = gl_FragColor.rgb;
+        // Dicampur sesudah tone mapping: warna jingga garis tidak dipudarkan AgX jadi krem.
+        g = mix(g, uGarisWarna, clamp(tepiGaris, 0.0, 1.0) * 0.9);
         g = g + uAngkat * (1.0 - g);
         vec2 d = (vUv - 0.5) * vec2(uAspek, 1.0);
         g *= 1.0 - uVignette * smoothstep(0.35, 1.05, length(d) * 1.25);
@@ -634,6 +658,35 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       adegan: { scene, camera, renderer, THREE, tahan: false, gambar: () => gambar(0) },
     };
   }
+  const LAPIS_GARIS = 5;
+  // Resolusi penuh, MSAA di desktop: setengah resolusi tanpa antialias membuat garis bergerigi.
+  const topeng = new THREE.WebGLRenderTarget(1, 1, { samples: hp ? 0 : 4 });
+  const bahanTopeng = new THREE.MeshBasicMaterial({ color: 0xffffff, fog: false });
+  blur.uniforms.tGaris.value = topeng.texture;
+  let garisBenda = [];
+  let garisKuat = 0;
+  const latarHitam = new THREE.Color(0, 0, 0);
+  // Siluet benda yang terangkat digambar sesudah adegan utama (peta bayangan sudah diperbarui
+  // di sana; di lintasan ini kamera hanya melihat lapis garis).
+  const gambarTopeng = () => {
+    const latar = scene.background;
+    const lapis = camera.layers.mask;
+    scene.background = latarHitam;
+    scene.overrideMaterial = bahanTopeng;
+    camera.layers.set(LAPIS_GARIS);
+    renderer.setRenderTarget(topeng);
+    renderer.render(scene, camera);
+    camera.layers.mask = lapis;
+    scene.overrideMaterial = null;
+    scene.background = latar;
+  };
+  const pasangGaris = (s) => {
+    const baru = s?.benda ?? [];
+    for (const o of garisBenda) if (!baru.includes(o)) o.traverse((m) => m.layers.disable(LAPIS_GARIS));
+    for (const o of baru) if (!garisBenda.includes(o)) o.traverse((m) => m.layers.enable(LAPIS_GARIS));
+    garisBenda = baru;
+    garisKuat = baru.length ? (s.kuat ?? 0) : 0;
+  };
   const gambar = (kuat) => {
     camera.updateMatrixWorld();
     vpKini.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
@@ -648,6 +701,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     renderer.render(scene, camera);
     uji?.mulai("ao");
     if (aoAktif) ao.render(renderer, hasilAO);
+    blur.uniforms.uGarisKuat.value = garisKuat;
+    if (garisKuat > 0.001) gambarTopeng();
     uji?.mulai("layar");
     renderer.setRenderTarget(null);
     renderer.render(adeganLayar, kameraLayar);
@@ -713,6 +768,8 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     target.setSize(pw, ph);
     ao.setSize(pw, ph);
     hasilAO.setSize(pw, ph);
+    topeng.setSize(pw, ph);
+    blur.uniforms.uGarisPiksel.value.set(1 / pw, 1 / ph);
     camera.aspect = w / h;
     blur.uniforms.uAspek.value = w / h;
     blur.uniforms.uPiksel.value.set(1 / pw, 1 / ph);
@@ -822,7 +879,9 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     if (a.cerita && !blend && props) {
       const u = uBabak;
       props.perbarui(a.id, u, statusBabak(u));
-      sorotKunci(props.sorot(a.id));
+      const sasaran = props.sorot(a.id);
+      sorotKunci(sasaran);
+      pasangGaris(sasaran);
       // Listrik toko padam di tengah babak andal, didahului kedip singkat. Pemutar kaset, ponsel,
       // dan lampu darurat tetap menyala.
       // Diatur oleh posisi gulir, bukan waktu: kedip berbasis waktu (sin(now/30), sekitar 5 Hz)
@@ -837,7 +896,11 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       const geraknya = Math.abs(uTujuan - uBabak) > 1e-4 || props.sibuk(a.id);
       if ((geraknya && (!hp || ++bingkaiBayang % 2 === 0)) || (!geraknya && bayangGerak) || kotor) kunciLampu.shadow.needsUpdate = true;
       bayangGerak = geraknya;
-    } else redup(1);
+    } else {
+      redup(1);
+      // Outline hanya di babak yang sudah mendarat; selama terbang dilepas.
+      pasangGaris(null);
+    }
     // Kerucut berkas lampu gantung hanya untuk gambar lebar (bukan babak cerita); dari dekat ia jadi
     // segitiga putih. Mengikuti anchor tujuan, juga selama terbang: dulu kerucut menyala di setiap
     // perpindahan antarbabak lalu padam lagi saat mendarat, dan tepinya sempat jadi cincin hitam.
@@ -1148,6 +1211,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
       target.dispose();
       ao.dispose?.();
       hasilAO.dispose();
+      topeng.dispose();
       kedalaman.dispose();
       blur.dispose();
       segitiga.dispose();
