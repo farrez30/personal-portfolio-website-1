@@ -154,6 +154,7 @@ export function buatDunia(wadah, { kurangiGerak = false, tema = "gelap", onProgr
     kayuPintu: new THREE.MeshStandardMaterial({ color: 0x4a2f1f, roughness: 0.6 }),
     jalan: new THREE.MeshBasicMaterial({ toneMapped: true }),
     kaca: bahanKaca(),
+    tepiKaca: bahanTepiKaca(),
     bayang: new THREE.MeshBasicMaterial({ map: teksturBayang(), transparent: true, depthWrite: false, color: 0x000000 }),
   };
 
@@ -1544,22 +1545,39 @@ function teksturRadial() {
   return new THREE.CanvasTexture(kv);
 }
 
-// Kaca bening tanpa transmission (riset 19 Nov 2026): putih, hampir tak terlihat dari depan,
-// pantulan menguat di sudut miring (fresnel Schlick, F0 0,04), dan kilau lampu tidak ikut redup
-// oleh opasitas rendah. Dulu biru #9fb4c8 rata 18% di seluruh bidang: terbaca seperti air.
+// Kaca bening tanpa transmission dan tanpa peta lingkungan (riset audit ulang 19 Nov 2026,
+// desain/cerita-v4/riset-audit-ulang.md). Dulu alpha dinaikkan fresnel sampai 0,85 dan warnanya
+// putih: tanpa lingkungan yang dipantulkan, sisi kotak yang selalu miring hanya mengecat warna
+// difus kaca, jadi vitrin terbaca seperti jeli dan jalan di balik pintu jadi pudar. Sekarang:
+// tanpa warna badan (hampir hitam kehijauan, jadi hanya meredupkan sedikit), penutupan 0,04 dari
+// depan dan paling banyak 0,2 di sudut miring, dan kilau lampu dipertahankan walau alpha rendah.
+// Isyarat "ini kaca" yang utama ada di tepi panel (bahanTepiKaca).
 function bahanKaca() {
-  const m = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.04, metalness: 0, transparent: true, opacity: 0.06, depthWrite: false });
+  const m = new THREE.MeshStandardMaterial({ color: 0x0a1210, roughness: 0.03, metalness: 0, transparent: true, opacity: 0.04, depthWrite: false });
   m.onBeforeCompile = (sh) => {
     sh.fragmentShader = sh.fragmentShader.replace(
       "#include <opaque_fragment>",
       `float frKaca = 0.04 + 0.96 * pow(max(0.0, 1.0 - abs(dot(normal, geometryViewDir))), 5.0);
-      diffuseColor.a = clamp(diffuseColor.a + frKaca * 0.55, 0.0, 0.85);
-      outgoingLight += reflectedLight.directSpecular * (1.0 / max(diffuseColor.a, 0.08) - 1.0) * 0.6;
+      // Garis pantulan lampu langit-langit: dua pita lembut miring di ruang pandang, jadi ikut
+      // bergeser saat kamera bergerak seperti pantulan sungguhan, lebih kuat di sudut miring.
+      float pitaKaca = fract(dot(vViewPosition.xy, vec2(0.9, 0.55)) * 0.75) - 0.5;
+      float garisKaca = exp(-pitaKaca * pitaKaca * 90.0) + 0.5 * exp(-(pitaKaca - 0.18) * (pitaKaca - 0.18) * 260.0);
+      garisKaca *= 0.35 + 0.65 * frKaca;
+      diffuseColor.a = clamp(diffuseColor.a + frKaca * 0.16 + garisKaca * 0.07, 0.0, 0.2);
+      outgoingLight += reflectedLight.directSpecular * (1.0 / max(diffuseColor.a, 0.04) - 1.0) * 0.5;
+      // Dibagi alpha seperti kilau di atas: blending mengalikan warna dengan alpha yang kecil.
+      outgoingLight += vec3(1.0, 0.95, 0.88) * garisKaca * 0.22 / max(diffuseColor.a, 0.04);
       #include <opaque_fragment>`,
     );
   };
-  m.customProgramCacheKey = () => "kaca-fresnel";
+  m.customProgramCacheKey = () => "kaca-fresnel-4";
   return m;
+}
+
+// Tepi panel kaca float: hijau botol karena besi, terlihat di sisi tebal panel (Wikipedia Float
+// glass; Gaylord, kaca etalase). Hampir buram dan sedikit bercahaya, supaya tetap terbaca gelap.
+function bahanTepiKaca() {
+  return new THREE.MeshStandardMaterial({ color: 0x67b89a, emissive: 0x16463a, roughness: 0.1, metalness: 0 });
 }
 
 // Berkas cahaya volumetrik palsu (pola SpotLightMaterial drei, riset 19 Nov 2026): tepi kerucut
