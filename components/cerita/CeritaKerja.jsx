@@ -149,7 +149,10 @@ export default function CeritaKerja() {
             scrollTrigger: { trigger: dunia ? bab : teks, start: awal, end: akhir, scrub: 0.8 },
             onUpdate() {
               const langkah = Math.floor(pita.t * 24);
-              nomor.textContent = pita.t >= 0.75 || pita.t <= 0 ? asli : asli.replace(/\d/g, (_, i) => String((langkah * 7 + i * 3) % 10));
+              const isi = pita.t >= 0.75 || pita.t <= 0 ? asli : asli.replace(/\d/g, (_, i) => String((langkah * 7 + i * 3) % 10));
+              // Tulis ke DOM hanya saat angkanya berganti (24 kali sepanjang rentang), bukan tiap
+              // bingkai gulir: tiap penulisan textContent memicu tata letak ulang.
+              if (nomor.textContent !== isi) nomor.textContent = isi;
             },
           });
         }

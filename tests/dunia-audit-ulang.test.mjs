@@ -236,3 +236,13 @@ test("HP: rak koleksi tanpa panah teks, petunjuk gulir; klien menyenggol sekali 
     assert.ok(m.rak.petunjukGulir && m.klien.petunjukGeser, lang);
   }
 });
+
+// Pangkas kerja tiap bingkai gulir (pengukuran HP 19 Nov): DOM nomor hanya saat berganti, kabel
+// fondasi tetap disaring frustum dengan batas gabungan kedua jalurnya.
+test("gulir: nomor babak ditulis saat berganti saja, kabel punya batas gabungan", () => {
+  const c = tanpaKomentar(baca("components/cerita/CeritaKerja.jsx"));
+  assert.match(c, /if \(nomor\.textContent !== isi\) nomor\.textContent = isi;/);
+  const p = tanpaKomentar(baca("components/dunia/props.js"));
+  assert.doesNotMatch(p, /o\.frustumCulled = false;\s*g\.add\(o\);/);
+  assert.match(p, /\.union\(new THREE\.Box3\(\)\.setFromBufferAttribute\(geoRapi\.attributes\.position\)\)/);
+});
