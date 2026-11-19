@@ -115,7 +115,9 @@ function jalankanBertahap(gen, selesai) {
 
 function petaData(ukuran, isiAwal, anisotropi) {
   const data = new Uint8Array(ukuran * ukuran * 4);
-  for (let i = 0; i < data.length; i += 4) data.set(isiAwal, i);
+  // Satu fill 32 bit, bukan set() per piksel: peta 1024 px dulu 407 ms di HP (CPU 4x, 19 Nov 2026),
+  // bagian terbesar beku saat rak dibuat.
+  new Uint32Array(data.buffer).fill(new Uint32Array(new Uint8Array(isiAwal).buffer)[0]);
   const t = new THREE.DataTexture(data, ukuran, ukuran);
   t.generateMipmaps = true;
   t.minFilter = THREE.LinearMipmapLinearFilter;

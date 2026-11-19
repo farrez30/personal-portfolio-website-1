@@ -88,3 +88,35 @@ test("props babak tujuan dipasang selama kamera terbang, dengan progres babak ya
   const p = tanpaKomentar(baca("components/dunia/props.js"));
   assert.match(p, /momen\.rencana = \(u, s = \{\}\) => poseStempel\(cap0\.langkah\(u, s\.waktu \?\? 0, s\.diam, s\.terbang\)\);/);
 });
+
+// Butir 10: di HP rak koleksi naik dari bawah, padahal adegan 10 menerbangkan CD ke kiri.
+test("rak koleksi masuk dari kanan, ditahan di bawah bilah atas, tanpa melebarkan halaman", () => {
+  const css = baca("components/imersif/panggung.css");
+  const blok = css.slice(css.indexOf("@supports (animation-timeline: view())"), css.indexOf("@keyframes rak-masuk"));
+  assert.match(blok, /prefers-reduced-motion: no-preference/);
+  assert.match(blok, /view-timeline: --rak-masuk block;/);
+  // Inset sama dengan top sticky panggung.
+  const top = css.match(/\.panggung \{[^}]*?top: (\d+)px;/)[1];
+  assert.match(blok, new RegExp(`view-timeline-inset: ${top}px 0px;`));
+  assert.match(blok, /overflow-x: clip;/, "tanpa clip, HP memperkecil zoom halaman");
+  assert.match(blok, /animation-range: entry 0% entry 100%;/);
+  assert.match(css, new RegExp(String.raw`@keyframes rak-masuk \{\s*from \{\s*transform: translate3d\(100%, calc\(${top}px - 100dvh\), 0\);`));
+});
+
+// Butir 2: elips dan kolam sorot additive di bab bentuk terbaca sebagai benda terpisah dan
+// terpotong balok rak. Diganti lampu kunci sungguhan yang pindah ke atas depan benda terangkat.
+test("sorot bab bentuk memakai lampu kunci, bukan bidang additive", () => {
+  const mentah = baca("components/dunia/props.js");
+  const p = tanpaKomentar(mentah);
+  const bentuk = tanpaKomentar(mentah.slice(mentah.indexOf("// ---- 03 bentuk"), mentah.indexOf("// ---- 04 fondasi")));
+  assert.doesNotMatch(bentuk, /AdditiveBlending/);
+  assert.doesNotMatch(p, /teksturSorot/);
+  assert.match(bentuk, /sorot\.bentuk = \(\) =>/);
+  const d = tanpaKomentar(baca("components/dunia/dunia.js"));
+  assert.match(d, /sorotKunci\(props\.sorot\(a\.id\)\);/);
+  // Kerucut menyempit dan lampu menguat sebanding tinggi angkat, lalu kembali saat pindah babak.
+  assert.match(d, /sudut: SUDUT_KUNCI \+ \(0\.3 - SUDUT_KUNCI\) \* k, kuat: 1 \+ 0\.8 \* k/);
+  assert.match(d, /kunciLampu\.angle = kunciKini\.sudut;/);
+  // Jumlah lampu tidak bertambah (lampu baru mengompilasi ulang semua shader).
+  assert.equal((d.match(/new THREE\.SpotLight\(/g) ?? []).length, 2);
+});

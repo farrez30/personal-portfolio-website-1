@@ -144,7 +144,10 @@ export default function Panggung({ gulir }) {
       hentiDekat = () => io.disconnect();
     });
     Promise.all([dekat, document.fonts.ready]).then(async () => {
-      // Tunggu peramban senggang: pembuatan rak sinkron, jangan berebut bingkai dengan gulir.
+      // Tunggu pembaca berhenti menggulir, lalu peramban senggang: pembuatan rak sinkron (sekitar
+      // 1 s di HP dengan CPU 4x). Dulu dimulai begitu rak dekat, sering di tengah sapuan jari di
+      // babak bentuk, dan gulir tertahan 2 s (terukur 19 Nov 2026).
+      if (!location.hash.startsWith("#rak")) await tungguGulirDiam(700, wadah.current);
       await new Promise((ok) => ("requestIdleCallback" in window ? requestIdleCallback(ok, { timeout: 1500 }) : setTimeout(ok, 300)));
       if (batal) return;
       // Peta pantul dipanggang (lingkungan.js), diurai di luar bingkai sebelum rak dibuat.
@@ -185,7 +188,7 @@ export default function Panggung({ gulir }) {
       adegan.current = a;
       performance.mark("rak:dibuat");
       // Cincin memuat tetap tampil sampai shader dan tekstur rak dipanaskan.
-      await a.siapkan();
+      await a.siapkan(() => bingkaiSenggang(wadah.current));
       performance.mark("rak:hangat");
       if (batal) return;
       bacaHash(a, false, keIndeksGulir);
@@ -444,6 +447,37 @@ export default function Panggung({ gulir }) {
       <div ref={gelembung} className="gelembung" data-ada="0" aria-hidden="true" />
     </div>
   );
+}
+
+// Selesai saat gulir sudah diam `ms` milidetik, atau saat rak tinggal dua layar lagi (pembaca yang
+// terus menggulir tetap mendapati raknya siap).
+function tungguGulirDiam(ms, el) {
+  return new Promise((ok) => {
+    let t = 0;
+    const selesai = () => {
+      clearTimeout(t);
+      removeEventListener("scroll", cek);
+      ok();
+    };
+    const cek = () => {
+      if (el && el.getBoundingClientRect().top < 2 * innerHeight) return selesai();
+      clearTimeout(t);
+      t = setTimeout(selesai, ms);
+    };
+    addEventListener("scroll", cek, { passive: true });
+    cek();
+  });
+}
+
+// Bingkai berikut yang tidak sedang digulir (gulir terakhir lebih dari 250 ms lalu), atau langsung
+// saat rak tinggal dua layar lagi.
+let gulirTerakhir = 0;
+if (typeof window !== "undefined") addEventListener("scroll", () => (gulirTerakhir = performance.now()), { passive: true });
+async function bingkaiSenggang(el) {
+  for (;;) {
+    await new Promise((ok) => requestAnimationFrame(() => ok()));
+    if (performance.now() - gulirTerakhir > 250 || !el || el.getBoundingClientRect().top < 2 * innerHeight) return;
+  }
 }
 
 function bacaHash(a, dariLuar, keIndeksGulir) {
