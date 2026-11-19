@@ -539,7 +539,7 @@ const ADEGAN = {
     // ukuran mengikuti modul Destiny ISS kira-kira: panjang 8,5 m, rak ISPR 1,05 x 2 m berjajar di dinding
     await ADEGAN.penutup();
     (window.__orbit ?? []).forEach((st) => (st.visible = false));
-    const V = (x, y, z) => new THREE.Vector3(x, y, z);
+    const V = (x, y, z) => new THREE.Vector3(x, y, z), globeKe = sasaran.clone(), globePos = sasaran.clone().add(cam.position.clone().sub(sasaran).multiplyScalar(0.5)); // = bingkai terakhir klip globe (anim: akhir 0,5 kali jarak)
     const zA = cam.position.clone().normalize(), xA = new THREE.Vector3().crossVectors(V(0, 1, 0), zA).normalize(), yA = new THREE.Vector3().crossVectors(zA, xA);
     const M0 = zA.clone().multiplyScalar(300), grup = new THREE.Group(); grup.position.copy(M0);
     grup.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(xA, yA, zA)); scene.add(grup);
@@ -579,9 +579,9 @@ const ADEGAN = {
     const luar = [keDunia(HP ? 6 : 5, 3, HP ? 26 : 19), keDunia(1.2, 0, 0)];
     if (o.luar) lihat(luar[0].toArray(), luar[1].toArray()); else { cam.fov = fovDalam; cam.updateProjectionMatrix(); lihat(akhir[0].toArray(), akhir[1].toArray()); }
     // animasi: dari luar mendekat ke jendela, menembus kaca, lalu menoleh ke loker ERP
-    const jalur = new THREE.CatmullRomCurve3([luar[0], keDunia(0.8, 0.8, 7), keDunia(0, 0.22, 3.2), keDunia(0, 0.22, 1.9), keDunia(-0.1, 0.26, 1.16), akhir[0]], false, "centripetal");
+    const jalur = new THREE.CatmullRomCurve3([...(o.dariGlobe ? [globePos, globePos.clone().lerp(luar[0], 0.6)] : []), luar[0], keDunia(0.8, 0.8, 7), keDunia(0, 0.22, 3.2), keDunia(0, 0.22, 1.9), keDunia(-0.1, 0.26, 1.16), akhir[0]], false, "centripetal");
     const halus = (x) => x * x * (3 - 2 * x), klamp = (x) => Math.min(1, Math.max(0, x)), kaca = keDunia(0, 0.2, -1.2); // titik di dinding rak, segaris dengan jendela: kamera tidak menoleh balik setelah lewat kaca
-    window.__aturKhusus = (t) => { const e = halus(t); cam.position.copy(jalur.getPoint(e)); const ke = luar[1].clone().lerp(kaca, halus(klamp(e / 0.35))).lerp(akhir[1], halus(klamp((e - 0.62) / 0.3))); cam.lookAt(ke); cam.fov = fovLuar + (fovDalam - fovLuar) * halus(klamp((e - 0.55) / 0.3));
+    window.__aturKhusus = (t) => { const e = halus(t); cam.position.copy(jalur.getPoint(e)); const ke = (o.dariGlobe ? globeKe.clone().lerp(luar[1], halus(klamp(e / 0.3))) : luar[1].clone()).lerp(kaca, halus(klamp((o.dariGlobe ? (e - 0.3) / 0.25 : e / 0.35)))).lerp(akhir[1], halus(klamp((e - 0.62) / 0.3))); cam.lookAt(ke); cam.fov = fovLuar + (fovDalam - fovLuar) * halus(klamp((e - 0.55) / 0.3));
       const j = cam.position.distanceTo(ke); cam.near = Math.min(1, Math.max(0.01, j * 0.01)); cam.far = 2000; cam.updateProjectionMatrix(); };
     daftarDom(0, HP);
   },
@@ -793,7 +793,7 @@ if (PENUH) {
   const terakhir = anchor[anchor.length - 1];
   // lewat celah jendela di x = GX + 8 (tanpa tiang, ambang 0,9 m sampai 3,05 m dari lantai), datar dulu sampai
   // benar-benar di luar fasad, naik tegak di atas jalan depan gedung (menara seberang 40-an m), baru menjauh; centripetal supaya kurva tidak melambung menembus pita merah lantai 3
-  const jalanKeluar = new THREE.CatmullRomCurve3([dorong(terakhir, 1.0), V(K.GX + 8, K.LANTAI + 1.7, K.GZ + 1.2), V(K.GX + 8, K.LANTAI + 1.9, K.GZ + K.GD / 2 + 1.5), V(K.GX + 8, K.LANTAI + 2.3, K.GZ + K.GD / 2 + 6), V(K.GX + 9, 28, K.GZ + K.GD / 2 + 8), V(K.GX + 12, 90, K.GZ + K.GD / 2 + 12), V(K.GX + 40, 210, K.GZ + 90), V(K.GX + 180, 300, K.GZ + 300), kotaPos.clone()], false, "centripetal");
+  const jalanKeluar = new THREE.CatmullRomCurve3([dorong(terakhir, 1.0), ...(TX === "campur" ? [V(K.GX + 8.6, K.LANTAI + 2.4, K.GZ + 0.6), V(K.GX + 8, K.LANTAI + 2.4, K.GZ + 2.6)] : [V(K.GX + 8, K.LANTAI + 1.7, K.GZ + 1.2)]), V(K.GX + 8, K.LANTAI + 1.9, K.GZ + K.GD / 2 + 1.5), V(K.GX + 8, K.LANTAI + 2.3, K.GZ + K.GD / 2 + 6), V(K.GX + 9, 28, K.GZ + K.GD / 2 + 8), V(K.GX + 12, 90, K.GZ + K.GD / 2 + 12), V(K.GX + 40, 210, K.GZ + 90), V(K.GX + 180, 300, K.GZ + 300), kotaPos.clone()], false, "centripetal");
   const atur = (pos, ke) => { kamera.position.copy(pos); kamera.lookAt(ke); const j = pos.distanceTo(ke); kamera.near = Math.min(4, Math.max(0.03, j * 0.015)); kamera.far = Math.max(200, j * 12); kamera.updateProjectionMatrix(); };
   window.durasiDunia = anchor.length * TAHAN + (anchor.length - 1) * BLEND + KELUAR + KOTA + NAIK;
   if (TX) {
@@ -839,10 +839,12 @@ if (PENUH) {
       const c = A.clone().lerp(B, 0.5).add(i % 2 ? V(0, 1.1, 0.4) : V(0, -0.55, 1.1));
       return [new THREE.QuadraticBezierCurve3(A, c, B).getPoint(e), a.ke.clone().lerp(b.ke, seg(e, 0.2, 0.9))];
     };
-    window.durasiDunia = anchor.length * TAHAN + JENIS.reduce((x, j) => x + j[1], 0);
+    const LENGKAP = q.get("lengkap") === "1";
+    window.durasiDunia = anchor.length * TAHAN + JENIS.reduce((x, j) => x + j[1], 0) + (LENGKAP ? KELUAR + KOTA + NAIK : 0);
     window.aturDunia = (t) => {
       let sisa = t;
       for (let i = 0; i < anchor.length; i++) {
+        if (LENGKAP && i === anchor.length - 1 && sisa > TAHAN) return ekor(sisa - TAHAN, t);
         if (sisa <= TAHAN || i === anchor.length - 1) { const a = anchor[i], u = klamp(sisa / TAHAN);
           if (TX === "oner") { const r = dorong(a, 1.02).sub(a.ke).applyAxisAngle(V(0, 1, 0), (u - 0.5) * 0.18); atur(r.add(a.ke), a.ke); } else atur(dorong(a, 1.05 - 0.05 * halus(u)), a.ke);
           window.__notaTerbang.visible = false; teks(a.id); return gambar(0.35, t); }
@@ -860,6 +862,10 @@ if (PENUH) {
       sisa -= TAHAN;
       if (i < anchor.length - 1) { if (sisa <= BLEND) { const a = anchor[i], b = anchor[i + 1], e = halus(sisa / BLEND); atur(dorong(a, 1.0).lerp(dorong(b, 1.05), e).add(V(0, Math.sin(Math.PI * e) * 0.35, Math.sin(Math.PI * e) * 0.4)), a.ke.clone().lerp(b.ke, halus(Math.min(1, (sisa / BLEND) * 1.6)))); teks(e < 0.5 ? a.id : b.id); return gambar(padat, t); } sisa -= BLEND; }
     }
+    return ekor(sisa, t);
+  };
+  const ekor = (sisa, t) => {
+    const padat = 0.35;
     if (sisa <= KELUAR) { const e = halus(sisa / KELUAR); const depan = jalanKeluar.getPoint(Math.min(1, e + 0.05)), klamp = (x) => Math.min(1, Math.max(0, x)); atur(jalanKeluar.getPoint(e), terakhir.ke.clone().lerp(depan, halus(klamp(e / 0.12))).lerp(kotaKe, halus(klamp((e - 0.3) / 0.45)))); teks(e < 0.55 ? terakhir.id : "ramai"); return gambar(padat, t); }
     sisa -= KELUAR;
     if (sisa <= KOTA) { const e = halus(sisa / KOTA); atur(kotaKe.clone().add(kotaPos.clone().sub(kotaKe).multiplyScalar(1.04 - 0.04 * e)), kotaKe); teks("ramai"); return gambar(0.35 + 0.65 * e, t); }
