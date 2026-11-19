@@ -125,7 +125,7 @@ test("sorot bab bentuk memakai lampu kunci, bukan bidang additive", () => {
 test("kaca: muka hampir tak terlihat, tepi panel hijau, vitrin dari panel tipis", () => {
   const d = tanpaKomentar(baca("components/dunia/dunia.js"));
   const kaca = d.slice(d.indexOf("function bahanKaca()"), d.indexOf("function bahanTepiKaca()"));
-  const [, batas] = kaca.match(/diffuseColor\.a = clamp\(diffuseColor\.a \+ frKaca \* [\d.]+, 0\.0, ([\d.]+)\);/);
+  const [, batas] = kaca.match(/diffuseColor\.a = clamp\(diffuseColor\.a \+ frKaca \* [^;]*, 0\.0, ([\d.]+)\);/);
   assert.ok(Number(batas) <= 0.25, `penutupan kaca maksimum ${batas}, kotak terbaca terisi`);
   assert.match(kaca, /opacity: 0\.04/);
   assert.match(d, /tepiKaca: bahanTepiKaca\(\),/);
