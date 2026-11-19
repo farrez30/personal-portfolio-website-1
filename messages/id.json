@@ -37,7 +37,8 @@
       "dipakai": "Dipakai",
       "berjalan": "Sedang berjalan",
       "pilot": "Pilot"
-    }
+    },
+    "petunjukGulir": "Gulir untuk album berikutnya"
   },
   "album": {
     "tutup": "Tutup album",
@@ -245,6 +246,7 @@
       "tools": "Tools"
     },
     "detail": "Buka",
-    "bukaAlbum": "Buka"
+    "bukaAlbum": "Buka",
+    "petunjukGeser": "Geser untuk klien lain"
   }
 }

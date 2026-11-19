@@ -7,6 +7,9 @@ import {
   PiSkipBackFill,
   PiSkipForwardFill,
   PiArrowUpRightBold,
+  PiArrowsDownUpBold,
+  PiCaretLeftBold,
+  PiCaretRightBold,
   PiXBold,
 } from "react-icons/pi";
 import { proyek as daftarProyek } from "@/content/proyek";
@@ -350,9 +353,17 @@ export default function Panggung({ gulir }) {
       <footer className="panggung__kaki">
         <div className="panggung__pasangan">
           {s.keadaan === "rak" && (
-            <button type="button" className="panggung__sudut" onClick={() => keIndeksGulir(s.fokus - 1)} disabled={s.fokus === 0} aria-label={tr("sebelumnya")}>
-              ←
+            <button type="button" className="panggung__sudut panggung__panah" onClick={() => keIndeksGulir(s.fokus - 1)} disabled={s.fokus === 0} aria-label={tr("sebelumnya")}>
+              <PiCaretLeftBold aria-hidden="true" />
             </button>
+          )}
+          {/* Di HP gulir ke bawah yang menggeser album; panah kiri kanan dulu membuat pengunjung
+              mengira harus menggeser ke samping (masukan Farrez 19 Nov). */}
+          {s.keadaan === "rak" && (
+            <span className="mono panggung__petunjuk">
+              <PiArrowsDownUpBold aria-hidden="true" />
+              {tr("petunjukGulir")}
+            </span>
           )}
           {s.keadaan === "buka" && (
             <button type="button" className="panggung__sudut" onClick={() => a?.bukaBuklet()}>
@@ -361,7 +372,7 @@ export default function Panggung({ gulir }) {
           )}
           {s.keadaan === "buklet" && (
             <button type="button" className="panggung__sudut" onClick={() => a?.halaman(-1)} aria-label={t("halamanSebelumnya")}>
-              ←
+              <PiCaretLeftBold aria-hidden="true" />
             </button>
           )}
           {s.keadaan === "putar" && aktif.tautan?.repo && (
@@ -416,8 +427,8 @@ export default function Panggung({ gulir }) {
 
         <div className="panggung__pasangan panggung__pasangan--kanan">
           {s.keadaan === "rak" && (
-            <button type="button" className="panggung__sudut" onClick={() => keIndeksGulir(s.fokus + 1)} disabled={s.fokus === proyek.length - 1} aria-label={tr("berikutnya")}>
-              →
+            <button type="button" className="panggung__sudut panggung__panah" onClick={() => keIndeksGulir(s.fokus + 1)} disabled={s.fokus === proyek.length - 1} aria-label={tr("berikutnya")}>
+              <PiCaretRightBold aria-hidden="true" />
             </button>
           )}
           {s.keadaan === "buka" && (
@@ -427,7 +438,7 @@ export default function Panggung({ gulir }) {
           )}
           {s.keadaan === "buklet" && (
             <button type="button" className="panggung__sudut" onClick={() => a?.halaman(1)} aria-label={t("halamanBerikutnya")}>
-              →
+              <PiCaretRightBold aria-hidden="true" />
             </button>
           )}
           {s.keadaan === "putar" && (aktif.tautan?.situs || aktif.tautan?.kasus) && (
