@@ -96,7 +96,7 @@ export const SHOT = [
     bukti: "Titik cabang diisi lokasi klien nyata bila diizinkan.",
   },
   {
-    id: "penutup", masuk: "dekat", label: "PENUTUP", skala: "36.000 km",
+    id: "penutup", akhir: 1, masuk: "dekat", label: "PENUTUP", skala: "36.000 km",
     judul: "Ceritakan yang bikin capek.",
     kejadian: "Kamera terus naik sampai orbit. Globe dengan garis dari Indonesia, satelit lewat. Lalu turun ke rak bukti proyek.",
     benda: "Globe titik, garis sambungan, dua satelit.",
@@ -122,6 +122,7 @@ export const ARAH = {
     b("PORTO 6", "orbit", "Satelit itu modul lab", "Kamera mendekati satu satelit: modul lab dengan jendela bulat, sayap surya, bumi malam di belakangnya.", "portoLab", { v: "-luar", luar: true }),
     b("PORTO 6", "3 m", "Di dalam modul: rak proyek", "Dari globe, kamera mendekati satu satelit, menembus jendela modul lab, lalu menoleh ke rak loker proyek.", "portoLab", { v: "-globe", dariGlobe: true }),
     b("PORTO 6", "3 m", "Di dalam modul: rak proyek", "Kamera menembus jendela. Di dalam, rak berjajar seperti modul lab stasiun luar angkasa; tiap loker satu proyek, loker yang dipilih tertarik keluar dan kartunya terbuka.", "portoLab"),
+    b("PORTO 6", "3 m", "Rak proyek di modul lab", "Dari globe, kamera menembus jendela modul lab, menyusuri rak loker mengikuti gulir, lalu loker yang dipilih meluncur keluar dan kartunya terbuka.", "portoLab", { v: "-alur", lorong: "alur", dariGlobe: true, pilih: 4 }),
     b("LORONG", "3 m", "Gulir maju di lorong", "Gulir menggerakkan kamera maju di lorong, berhenti lembut di depan tiap kelompok loker.", "portoLab", { v: "-gulir", lorong: "gulir" }),
     b("LORONG", "3 m", "Kamera diam, rak bergeser", "Kamera tetap di tengah lorong, rak loker bergeser seperti rak arsip berjalan.", "portoLab", { v: "-geser", lorong: "geser" }),
     b("LORONG", "3 m", "Satu bidikan lebar", "Semua loker terlihat dari ujung lorong, lalu kamera mendekat ke loker terpilih.", "portoLab", { v: "-lebar", lorong: "lebar" }),

@@ -106,6 +106,12 @@ Diperbaiki setelah dicek per 0,1 detik:
 - varian lebar mula-mula berdiri di dalam rak peralatan dekat jendela, lalu terbang menembus rak; kamera dipindah ke tengah lorong;
 - di varian gulir, karakter tidak masuk bingkai karena kamera menatap lurus ke dinding; arah pandang dibuat menyerong ke ujung lorong.
 
+## Alur modul lab di animatic G, 20 Nov 2026
+
+Farrez memilih gulir maju (ADR 0024). `?a=P&s=portoLab-alur`, 11 detik: dari bingkai terakhir globe, kamera mendekati satelit, menembus jendela, menyusuri rak dengan gulir, lalu loker pilihan (`pilih`, contoh NDS ETL) meluncur keluar. Loker mana pun bisa dipilih. Klip globe kini berakhir di jarak penuh (`akhir: 1`) supaya sambungannya tanpa putus. `animatic-G.mp4` jadi 39,2 detik.
+
+Kesalahan yang terulang: komentar `//` yang disisipkan sed menelan `grup.position.copy(M0)`, jadi modul berada di pusat bumi dan kamera menukik menembus garis rute. Ketahuan lewat pengukuran posisi kamera, bukan dari gambar.
+
 ## Belum bisa dicek
 
 - Performa di HP sungguhan: GPU HP jauh lebih lemah dari GPU desktop yang dipakai; angka GPU di atas hanya pembanding antaradegan.
