@@ -10,7 +10,8 @@
     "cms:migrasi": "node --env-file-if-exists=.env.local scripts/cms/migrasi.mjs",
     "cms:isi": "node --env-file-if-exists=.env.local scripts/cms/isi.mjs",
     "cms:importmap": "node scripts/cms/importmap.mjs",
-    "cms:akun": "powershell -ExecutionPolicy Bypass -File scripts/cms/akun.ps1"
+    "cms:akun": "powershell -ExecutionPolicy Bypass -File scripts/cms/akun.ps1",
+    "cms:setel": "powershell -ExecutionPolicy Bypass -File scripts/cms/setel-vercel.ps1"
   },
   "dependencies": {
     "@emailjs/browser": "^3.11.0",
