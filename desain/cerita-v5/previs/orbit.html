@@ -103,10 +103,10 @@ const kendali = { az: Math.PI * 0.75, el: 0.12, jarak: 6, aktif: true };
 // tekstur siang (darat dan laut pastel) dan malam (lampu kota Black Marble) dari data/
 const kanvas = (w, h) => { const c = document.createElement("canvas"); c.width = w; c.height = h; return c; };
 const darat = await (await fetch("data/ne_50m_land.geojson")).json();
-const siang = kanvas(4096, 2048); { const g = siang.getContext("2d"); g.fillStyle = "#a9c4ec"; g.fillRect(0, 0, 4096, 2048); g.fillStyle = "#b9dcb0"; g.strokeStyle = "#2a2836"; g.lineWidth = 2.5;
-  for (const f of darat.features) { const poli = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates; for (const pl of poli) { g.beginPath(); for (const ring of pl) ring.forEach(([lon, lat], k) => { const x = ((lon + 180) / 360) * 4096, y = ((90 - lat) / 180) * 2048; k ? g.lineTo(x, y) : g.moveTo(x, y); }); g.fill("evenodd"); g.stroke(); } } }
-const malam = kanvas(2048, 1024); { const g = malam.getContext("2d"), img = new Image(); img.src = "data/BlackMarble_2016_01deg.jpg"; await img.decode(); g.drawImage(img, 0, 0, 2048, 1024);
-  const d = g.getImageData(0, 0, 2048, 1024); for (let i = 0; i < d.data.length; i += 4) { const r = d.data[i], b = d.data[i + 2], lum = 0.3 * r + 0.59 * d.data[i + 1] + 0.11 * b, nyala = lum > 70 && r > b; d.data[i] = nyala ? 255 : 0; d.data[i + 1] = nyala ? 217 : 0; d.data[i + 2] = nyala ? 138 : 0; d.data[i + 3] = 255; } g.putImageData(d, 0, 0); }
+const siang = kanvas(4096, 2048); { const g = siang.getContext("2d"); g.fillStyle = "#a9c4ec"; g.fillRect(0, 0, 4096, 2048); g.fillStyle = "#b9dcb0";
+  for (const f of darat.features) { const poli = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates; for (const pl of poli) { g.beginPath(); for (const ring of pl) ring.forEach(([lon, lat], k) => { const x = ((lon + 180) / 360) * 4096, y = ((90 - lat) / 180) * 2048; k ? g.lineTo(x, y) : g.moveTo(x, y); }); g.fill("evenodd"); } } }
+const malam = kanvas(2048, 1024); { const g = malam.getContext("2d"), img = new Image(); img.src = "data/BlackMarble_2016_01deg.jpg"; await img.decode(); g.filter = "blur(1.5px)"; g.drawImage(img, 0, 0, 2048, 1024); g.filter = "none";
+  const d = g.getImageData(0, 0, 2048, 1024); for (let i = 0; i < d.data.length; i += 4) { const r = d.data[i], b = d.data[i + 2], lum = 0.3 * r + 0.59 * d.data[i + 1] + 0.11 * b, u = Math.min(1, Math.max(0, (lum - 35) / 140)), v = u * u * (3 - 2 * u) * (r > b ? 1 : 0.35); d.data[i] = 255 * v; d.data[i + 1] = 210 * v; d.data[i + 2] = 130 * v; d.data[i + 3] = 255; } g.putImageData(d, 0, 0); }
 const tSiang = new THREE.CanvasTexture(siang), tMalam = new THREE.CanvasTexture(malam); tSiang.colorSpace = tMalam.colorSpace = THREE.SRGBColorSpace; tSiang.anisotropy = 8;
 
 // bumi toon: anak tangga terang dari cos(zenit) = dot(normal, matahari); batas USNO (terbit, senja sipil, nautikal, astronomis)
@@ -124,6 +124,10 @@ const bahanBumi = new THREE.ShaderMaterial({
     }`,
 });
 const bumi = new THREE.Mesh(new THREE.SphereGeometry(R, 160, 120), bahanBumi); scene.add(bumi);
+// garis pantai sebagai garis vektor di permukaan, tetap tajam di jarak berapa pun (tekstur hanya mengisi warna darat)
+{ const p = [], titik = (lon, lat) => { const fi = ((lon + 180) / 360) * Math.PI * 2, th = ((90 - lat) * Math.PI) / 180, r = R * 1.0008; return [-Math.cos(fi) * Math.sin(th) * r, Math.cos(th) * r, Math.sin(fi) * Math.sin(th) * r]; };
+  for (const f of darat.features) { const poli = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates; for (const pl of poli) for (const ring of pl) for (let k = 1; k < ring.length; k++) { if (Math.abs(ring[k][0] - ring[k - 1][0]) > 180) continue; p.push(...titik(...ring[k - 1]), ...titik(...ring[k])); } }
+  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(p, 3)); bumi.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x2a2836, transparent: true, opacity: 0.8 }))); }
 const atmosfer = new THREE.Mesh(new THREE.SphereGeometry(R * 1.025, 64, 48), new THREE.ShaderMaterial({ side: THREE.BackSide, transparent: true, depthWrite: false, uniforms: { matahari: bahanBumi.uniforms.matahari },
   vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 p = modelMatrix * vec4(position,1.); vV = normalize(cameraPosition - p.xyz); gl_Position = projectionMatrix * viewMatrix * p; }",
   fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - abs(dot(vV, -vN)), 2.); float terang = step(-0.1, dot(-vN, normalize(matahari))); float a = f > 0.55 ? 0.55 : f > 0.3 ? 0.25 : 0.; gl_FragColor = vec4(mix(vec3(0.35,0.4,0.7), vec3(0.66,0.8,1.), terang), a * (0.35 + 0.65 * terang)); }" }));
@@ -133,7 +137,7 @@ const awanKanvas = kanvas(2048, 1024); { const g = awanKanvas.getContext("2d"); 
 const tAwan = new THREE.CanvasTexture(awanKanvas); tAwan.colorSpace = THREE.SRGBColorSpace;
 const awan = new THREE.Mesh(new THREE.SphereGeometry(R * 1.004, 128, 96), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { tAwan: { value: tAwan }, matahari: bahanBumi.uniforms.matahari },
   vertexShader: "varying vec2 vUv; varying vec3 vN; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.); }",
-  fragmentShader: "uniform sampler2D tAwan; uniform vec3 matahari; varying vec2 vUv; varying vec3 vN; void main(){ float a = texture2D(tAwan, vUv).a; float mu = dot(normalize(vN), normalize(matahari)); float t = mu > -0.015 ? 1.0 : mu > -0.1 ? 0.55 : 0.12; gl_FragColor = vec4(vec3(0.97, 0.95, 0.92) * t, step(0.5, a) * (0.45 + 0.3 * t)); }" }));
+  fragmentShader: "uniform sampler2D tAwan; uniform vec3 matahari; varying vec2 vUv; varying vec3 vN; void main(){ float a = texture2D(tAwan, vUv).a; float mu = dot(normalize(vN), normalize(matahari)); float t = mu > -0.015 ? 1.0 : mu > -0.1 ? 0.55 : 0.12; gl_FragColor = vec4(vec3(0.97, 0.95, 0.92) * t, step(0.5, a) * (mu > -0.015 ? 0.6 : mu > -0.1 ? 0.25 : 0.03)); }" }));
 scene.add(awan);
 // kabut tepi: lapisan tipis di atas permukaan yang makin pekat di sudut pandang landai, memberi kedalaman di cakrawala
 const kabut = new THREE.Mesh(new THREE.SphereGeometry(R * 1.012, 96, 72), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { matahari: bahanBumi.uniforms.matahari },
