@@ -72,6 +72,8 @@ export const BABAK_V5 = [
       id: "Sebelum dipakai, sistemnya dicoba dengan lonjakan transaksi seperti tanggal gajian atau promo.",
       en: "Before launch, the system is put through a rush of transactions like payday or a promo.",
     },
+    // bukti uji beban dipilih bebas oleh Farrez (21 Nov): lab flash sale, ~114 ribu pembeli dan bot, nol kelebihan jual
+    bukti: "flash-sale-lab",
   },
   {
     id: "langkah-kecil",
