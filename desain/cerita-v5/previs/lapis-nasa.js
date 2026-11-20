@@ -14,8 +14,8 @@ const piksel = (img, w, h) => { const c = document.createElement("canvas"); c.wi
 // citra VIIRS satu hari penuh baru lengkap sehari kemudian
 export const tanggalAwan = (ms = Date.now()) => new Date(ms - 86400000).toISOString().slice(0, 10);
 
-// Awan nyata: piksel VIIRS yang terang dan hampir abu (awan), kecuali tempat yang di Blue Marble
-// tanpa awan juga sudah putih (es dan salju). Hasilnya kanvas dengan alfa 0 atau 255.
+// Awan nyata: makin terang dan makin abu piksel VIIRS, makin pekat awannya; tempat yang di Blue
+// Marble tanpa awan juga sudah putih (es dan salju) dilewati. Alfa bergradasi, jadi tepinya lembut.
 export function petaAwan(viirs, blueMarble, w, h) {
   const v = piksel(viirs, w, h), b = piksel(blueMarble, w, h);
   const c = document.createElement("canvas"); c.width = w; c.height = h;
@@ -23,14 +23,29 @@ export function petaAwan(viirs, blueMarble, w, h) {
   for (let i = 0; i < v.length; i += 4) {
     const mn = Math.min(v[i], v[i + 1], v[i + 2]), mx = Math.max(v[i], v[i + 1], v[i + 2]);
     const esBM = Math.min(b[i], b[i + 1], b[i + 2]) > 165;
-    const awan = mn > 200 && mx - mn < 36 && !esBM;
-    out.data[i] = out.data[i + 1] = out.data[i + 2] = 255; out.data[i + 3] = awan ? 255 : 0;
+    const pekat = Math.min(1, Math.max(0, (mn - 140) / 90)) * Math.min(1, Math.max(0, 1 - (mx - mn - 18) / 40));
+    out.data[i] = out.data[i + 1] = out.data[i + 2] = 255; out.data[i + 3] = esBM ? 0 : Math.round(255 * pekat);
   }
   g.putImageData(out, 0, 0);
-  // haluskan tepi, ambang di shader membuatnya kembali bertepi tegas tanpa tangga piksel
+  // sedikit dihaluskan supaya tangga piksel 10 km tidak terlihat dari dekat
   const h2 = document.createElement("canvas"); h2.width = w; h2.height = h;
-  const g2 = h2.getContext("2d"); g2.filter = "blur(2px)"; g2.drawImage(c, 0, 0);
+  const g2 = h2.getContext("2d"); g2.filter = "blur(1.5px)"; g2.drawImage(c, 0, 0);
   return h2;
+}
+
+// Lampu kota dari Black Marble: kurva lembut tanpa ambang keras, kuning hangat di pinggir kota dan
+// hampir putih di pusatnya. Permukaan gelap kebiruan di citra aslinya dibuang.
+export function lampuMalam(img, w, h) {
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const g = c.getContext("2d"); g.drawImage(img, 0, 0, w, h);
+  const d = g.getImageData(0, 0, w, h);
+  for (let i = 0; i < d.data.length; i += 4) {
+    const r = d.data[i], gg = d.data[i + 1], b = d.data[i + 2], lum = 0.3 * r + 0.59 * gg + 0.11 * b;
+    const v = Math.pow(Math.min(1, Math.max(0, (lum - 28) / 190)), 1.25) * (r >= b ? 1 : 0.4), pusat = v * v;
+    d.data[i] = 255 * v; d.data[i + 1] = (178 + 60 * pusat) * v; d.data[i + 2] = (95 + 120 * pusat) * v; d.data[i + 3] = 255;
+  }
+  g.putImageData(d, 0, 0);
+  return c;
 }
 
 // Darat bergaya toon: warna Blue Marble dicerahkan ke arah pastel lalu dipadatkan ke anak tangga.

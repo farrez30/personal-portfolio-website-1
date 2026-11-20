@@ -78,7 +78,7 @@ import * as THREE from "three";
 import { keadaanMatahari, arahMatahari, orbit, diBayangan, BATAS, BUMI } from "./matahari.js";
 import { KLIEN } from "../../../content/klien.js";
 import { proyek } from "../../../content/proyek.js";
-import { gibs, muatGambar, petaAwan, daratToon, tanggalAwan } from "./lapis-nasa.js";
+import { gibs, muatGambar, petaAwan, daratToon, lampuMalam, tanggalAwan } from "./lapis-nasa.js";
 
 const R = 100, SKALA = R / BUMI.R; // 1 unit = 63,78 km
 const kurangiGerak = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -110,26 +110,29 @@ const siang = kanvas(4096, 2048); { const g = siang.getContext("2d"); g.fillStyl
   for (const f of darat.features) { const poli = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates; for (const pl of poli) { g.beginPath(); for (const ring of pl) ring.forEach(([lon, lat], k) => { const x = ((lon + 180) / 360) * 4096, y = ((90 - lat) / 180) * 2048; k ? g.lineTo(x, y) : g.moveTo(x, y); }); g.fill("evenodd"); } } }
 const malam = kanvas(2048, 1024); { const g = malam.getContext("2d"), img = new Image(); img.src = "data/BlackMarble_2016_01deg.jpg"; await img.decode(); g.filter = "blur(1.5px)"; g.drawImage(img, 0, 0, 2048, 1024); g.filter = "none";
   const d = g.getImageData(0, 0, 2048, 1024); for (let i = 0; i < d.data.length; i += 4) { const r = d.data[i], b = d.data[i + 2], lum = 0.3 * r + 0.59 * d.data[i + 1] + 0.11 * b, u = Math.min(1, Math.max(0, (lum - 35) / 140)), v = u * u * (3 - 2 * u) * (r > b ? 1 : 0.35); d.data[i] = 255 * v; d.data[i + 1] = 210 * v; d.data[i + 2] = 130 * v; d.data[i + 3] = 255; } g.putImageData(d, 0, 0); }
-// ?lapis=nasa: warna darat dari Blue Marble, awan dari citra VIIRS kemarin (NASA GIBS)
-const LAPIS = new URLSearchParams(location.search).get("lapis") === "nasa";
-let awanNyata = null, infoLapis = "datar";
+// lapisan NASA GIBS (bawaan; ?lapis=datar untuk versi tanpa jaringan): darat Blue Marble, awan VIIRS kemarin, lampu Black Marble
+const LAPIS = new URLSearchParams(location.search).get("lapis") !== "datar";
+let awanNyata = null, malamNyata = null, infoLapis = "datar";
 if (LAPIS) { try { const tgl = tanggalAwan();
-    const [bm, viirs] = await Promise.all([muatGambar(gibs("BlueMarble_NextGeneration", 4096, 2048)), muatGambar(gibs("VIIRS_NOAA20_CorrectedReflectance_TrueColor", 4096, 2048, tgl))]);
-    daratToon(siang, bm); awanNyata = petaAwan(viirs, bm, 4096, 2048); infoLapis = "nasa " + tgl;
+    const [bm, viirs, bmMalam] = await Promise.all([muatGambar(gibs("BlueMarble_NextGeneration", 4096, 2048)), muatGambar(gibs("VIIRS_NOAA20_CorrectedReflectance_TrueColor", 4096, 2048, tgl)), muatGambar(gibs("VIIRS_Black_Marble", 4096, 2048))]);
+    daratToon(siang, bm); awanNyata = petaAwan(viirs, bm, 4096, 2048); malamNyata = lampuMalam(bmMalam, 4096, 2048); infoLapis = "nasa " + tgl;
     document.getElementById("kredit").textContent = "Citra: NASA GIBS, Blue Marble dan VIIRS " + tgl;
   } catch (e) { infoLapis = "gagal: " + e.message; } }
-const tSiang = new THREE.CanvasTexture(siang), tMalam = new THREE.CanvasTexture(malam); tSiang.colorSpace = tMalam.colorSpace = THREE.SRGBColorSpace; tSiang.anisotropy = 8;
+const tSiang = new THREE.CanvasTexture(siang), tMalam = new THREE.CanvasTexture(malamNyata ?? malam); tSiang.colorSpace = tMalam.colorSpace = THREE.SRGBColorSpace; tSiang.anisotropy = 8;
 
-// bumi toon: anak tangga terang dari cos(zenit) = dot(normal, matahari); batas USNO (terbit, senja sipil, nautikal, astronomis)
+// bumi: darat dan laut tetap datar ala kartun, tapi peralihan siang-malam halus seperti foto orbit.
+// mu = cos(zenit) = dot(normal, matahari). Terang mulai turun sebelum matahari terbenam (mu 0,6 ke 0),
+// rona jingga di sekitar garis terbit, gelap penuh lewat senja nautikal (mu sekitar -0,2), lampu kota menyala bertahap.
 const bahanBumi = new THREE.ShaderMaterial({
   uniforms: { tSiang: { value: tSiang }, tMalam: { value: tMalam }, matahari: { value: new THREE.Vector3(1, 0, 0) }, B: { value: new THREE.Vector4(BATAS.terbit, BATAS.sipil, BATAS.nautikal, BATAS.astronomis) } },
   vertexShader: "varying vec2 vUv; varying vec3 vN; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.); }",
   fragmentShader: `uniform sampler2D tSiang; uniform sampler2D tMalam; uniform vec3 matahari; uniform vec4 B; varying vec2 vUv; varying vec3 vN;
     void main(){ vec3 c = texture2D(tSiang, vUv).rgb; float mu = dot(normalize(vN), normalize(matahari));
-      vec3 malamWarna = c * vec3(0.26, 0.28, 0.42);
-      vec3 w = mu > B.x ? c : mu > B.y ? mix(c, vec3(0.95, 0.66, 0.55), 0.55) * 0.82 : mu > B.z ? mix(malamWarna, vec3(0.55, 0.38, 0.5), 0.35) : mu > B.w ? malamWarna * 1.08 : malamWarna;
-      if (mu < B.y) w += texture2D(tMalam, vUv).rgb * 0.9;
-      float garis = abs(mu - B.x) / fwidth(mu); if (garis < 1.2) w = vec3(0.16, 0.16, 0.21);
+      float hari = smoothstep(-0.16, 0.06, mu);
+      vec3 siangW = c * (0.58 + 0.42 * smoothstep(-0.02, 0.6, mu));
+      siangW = mix(siangW, siangW * vec3(1.08, 0.72, 0.52), 0.55 * exp(-pow((mu - 0.01) / 0.075, 2.)));
+      vec3 w = mix(c * vec3(0.012, 0.016, 0.035), siangW, hari);
+      w += texture2D(tMalam, vUv).rgb * (1. - smoothstep(-0.2, 0.03, mu)) * 1.6;
       gl_FragColor = vec4(w, 1.);
 #include <colorspace_fragment>
     }`,
@@ -141,19 +144,19 @@ const bumi = new THREE.Mesh(new THREE.SphereGeometry(R, 160, 120), bahanBumi); s
   const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(p, 3)); bumi.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x2a2836, transparent: true, opacity: 0.8 }))); }
 const atmosfer = new THREE.Mesh(new THREE.SphereGeometry(R * 1.025, 64, 48), new THREE.ShaderMaterial({ side: THREE.BackSide, transparent: true, depthWrite: false, uniforms: { matahari: bahanBumi.uniforms.matahari },
   vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 p = modelMatrix * vec4(position,1.); vV = normalize(cameraPosition - p.xyz); gl_Position = projectionMatrix * viewMatrix * p; }",
-  fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - abs(dot(vV, -vN)), 2.); float terang = step(-0.1, dot(-vN, normalize(matahari))); float a = f > 0.55 ? 0.55 : f > 0.3 ? 0.25 : 0.; gl_FragColor = vec4(mix(vec3(0.35,0.4,0.7), vec3(0.66,0.8,1.), terang), a * (0.35 + 0.65 * terang)); }" }));
+  fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - abs(dot(vV, -vN)), 2.); float terang = smoothstep(-0.25, 0.1, dot(-vN, normalize(matahari))); float a = 0.6 * smoothstep(0.2, 0.75, f); gl_FragColor = vec4(mix(vec3(0.35,0.4,0.7), vec3(0.66,0.8,1.), terang), a * (0.35 + 0.65 * terang)); }" }));
 scene.add(atmosfer);
 const awanKanvas = awanNyata ?? kanvas(2048, 1024); if (!awanNyata) { const g = awanKanvas.getContext("2d"); let benih = 7; const acak = () => ((benih = (benih * 16807) % 2147483647) / 2147483647);
   for (let i = 0; i < 260; i++) { const x = acak() * 2048, y = 160 + acak() * 704, r = 3 + acak() * 11, n = 2 + Math.floor(acak() * 4); g.fillStyle = "rgba(255,255,255,0.85)"; for (let k = 0; k < n; k++) { g.beginPath(); g.arc(x + (acak() - 0.5) * r * 3, y + (acak() - 0.5) * r, r * (0.6 + acak() * 0.6), 0, 7); g.fill(); } } }
 const tAwan = new THREE.CanvasTexture(awanKanvas); tAwan.colorSpace = THREE.SRGBColorSpace;
 const awan = new THREE.Mesh(new THREE.SphereGeometry(R * 1.004, 128, 96), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { tAwan: { value: tAwan }, matahari: bahanBumi.uniforms.matahari },
   vertexShader: "varying vec2 vUv; varying vec3 vN; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.); }",
-  fragmentShader: "uniform sampler2D tAwan; uniform vec3 matahari; varying vec2 vUv; varying vec3 vN; void main(){ float a = texture2D(tAwan, vUv).a; float mu = dot(normalize(vN), normalize(matahari)); float t = mu > -0.015 ? 1.0 : mu > -0.1 ? 0.55 : 0.12; gl_FragColor = vec4(vec3(0.97, 0.95, 0.92) * t, step(0.5, a) * (mu > -0.015 ? 0.6 : mu > -0.1 ? 0.25 : 0.03)); }" }));
+  fragmentShader: "uniform sampler2D tAwan; uniform vec3 matahari; varying vec2 vUv; varying vec3 vN; void main(){ float a = texture2D(tAwan, vUv).a; float mu = dot(normalize(vN), normalize(matahari)); float hari = smoothstep(-0.16, 0.06, mu); vec3 w = vec3(0.97, 0.96, 0.94) * (0.6 + 0.4 * smoothstep(-0.02, 0.6, mu)); w = mix(w, w * vec3(1.05, 0.75, 0.6), 0.5 * exp(-pow((mu - 0.01) / 0.075, 2.))); gl_FragColor = vec4(mix(vec3(0.12, 0.14, 0.22), w, hari), a * mix(0.06, 0.92, hari)); }" }));
 scene.add(awan);
 // kabut tepi: lapisan tipis di atas permukaan yang makin pekat di sudut pandang landai, memberi kedalaman di cakrawala
 const kabut = new THREE.Mesh(new THREE.SphereGeometry(R * 1.012, 96, 72), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { matahari: bahanBumi.uniforms.matahari },
   vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 p = modelMatrix * vec4(position,1.); vV = normalize(cameraPosition - p.xyz); gl_Position = projectionMatrix * viewMatrix * p; }",
-  fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float landai = 1. - abs(dot(vV, vN)); float terang = step(-0.05, dot(vN, normalize(matahari))); float a = landai > 0.85 ? 0.55 : landai > 0.6 ? 0.28 : landai > 0.3 ? 0.1 : 0.; gl_FragColor = vec4(mix(vec3(0.32,0.36,0.62), vec3(0.72,0.84,1.), terang), a); }" }));
+  fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float landai = 1. - abs(dot(vV, vN)); float terang = smoothstep(-0.2, 0.08, dot(vN, normalize(matahari))); float a = 0.55 * smoothstep(0.3, 0.95, landai) * (0.06 + 0.94 * terang); gl_FragColor = vec4(mix(vec3(0.32,0.36,0.62), vec3(0.72,0.84,1.), terang), a); }" }));
 scene.add(kabut);
 // ketinggian tampilan: 1 = nyata, 3 = jarak ke permukaan dibesarkan tiga kali
 let KALI_TINGGI = 1;
