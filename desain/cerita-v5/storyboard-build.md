@@ -77,8 +77,7 @@ Mengikuti `riset-modul-lab.md` §4 dan ADR 0024.
 | Gerak latar | robot di rel plafon, astronot di depan palka, tas kargo tertambat, lampu plafon bernapas; sudah berjalan sejak tampil, berhenti saat panel terbuka | WCAG 2.2.2: tombol jeda gerak |
 | Suara | mati bawaan; tombol suara: dengung kipas pelan, bunyi kait loker | `components/imersif/suara.js` sudah ada |
 
-Jumlah loker: 13 proyek di `content/proyek.js`, previs baru 10 loker. Lorong diperpanjang ke 7 rak
-x 2 loker (7,35 m, muat di modul 8,5 m). Satu loker sisa untuk "proyek berikutnya" atau kosong.
+Jumlah loker (**diputuskan Farrez 20 Nov**): satu modul 8 loker (4 rak x 2). 13 proyek = modul A penuh, node, modul B berisi 5 proyek dan loker cetak biru kontak. Modul baru di-berth ke port node saat loker penuh; jumlah modul, loker, dan satelit dihitung dari data dan dikunci tes, tanpa pengisi (`riset-stasiun-tumbuh.md`). Semua 22 klien jadi satelit di tiga bidang orbit menurut kelompok. Isi proyek: tablet prosedur dengan tab studi kasus, cue card di pintu loker (`riset-album-patch.md`).
 Urutan loker = urutan daftar HTML = urutan `proyek.js`.
 
 ## 5. Aksesibilitas
@@ -132,5 +131,9 @@ Satu fase satu PR, previs dan lembar kontak per 0,1 detik sebelum merge.
 
 1. Seksi Klien: tetap sesudah modul lab sebagai HTML biasa, atau logo klien muncul di babak kota atau globe.
 2. Membuka proyek: panel di atas modul lab dengan tautan ke halaman lengkap, atau langsung pindah ke `/proyek/<slug>`.
-3. Loker ke-14: kosong, atau "proyek berikutnya" yang mengajak ke kontak.
-4. Teks EN untuk sepuluh judul baru: ditulis tersendiri seperti v4, belum ada.
+3. Loker ke-14: **diputuskan Farrez 20 Nov**, "proyek berikutnya": loker berlabel ajakan, membukanya mengarah ke kontak.
+4. Teks EN untuk judul baru: **diputuskan Farrez 20 Nov**, ditulis di fase 1 sebelum kode, tersendiri seperti v4, lewat 2 sampai 3 pilihan per judul.
+
+Keputusan 1 dan 2 dibuka lagi oleh usul Farrez 20 Nov: klien jadi album patch misi di dalam modul, dan isi proyek butuh pengganti buklet yang berupa benda luar angkasa sungguhan. Riset dan konsepnya di `riset-album-patch.md`.
+
+Syarat keamanan layar situs (dari `components/imersif/Hologram.jsx`): iframe hanya untuk situs beda origin, karena `sandbox` berisi `allow-scripts` dan `allow-same-origin` sekaligus; tautan keluar tetap `rel="noopener noreferrer"`.
