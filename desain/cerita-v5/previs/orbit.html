@@ -75,7 +75,7 @@
 </div>
 <div class="kamera" id="kamera" aria-hidden="true"><span class="sudut a"></span><span class="sudut b"></span><span class="sudut c"></span><span class="sudut d"></span>
   <div class="rec"><i></i>REC</div><div class="kiri" id="kamNama"></div><div class="kanan" id="kamData"></div><div class="silang"></div></div>
-<svg class="garis" aria-hidden="true"><polyline id="garis" fill="none" stroke="#f6efe3" stroke-width="2" points=""/></svg>
+<svg class="garis" aria-hidden="true"><circle id="cincin" fill="none" stroke="#f6efe3" stroke-width="2" stroke-dasharray="4 4" r="0" cx="-99" cy="-99"/><polyline id="garis" fill="none" stroke="#f6efe3" stroke-width="2" points=""/><circle id="ujung" fill="#f6efe3" r="0" cx="-99" cy="-99"/></svg>
 <aside class="panel hud" id="hud" hidden></aside>
 <small class="kredit" id="kredit"></small>
 <!-- jendela Cupola ISS: satu jendela bulat di tengah dan enam trapesium sama besar yang melingkarinya -->
@@ -243,8 +243,8 @@ const sayapRosa = (panjang, lebar) => { const g = new THREE.Group();
 const bendaSatelit = (warna) => { const g = new THREE.Group();
   // badan lempeng: memanjang searah gerak (+z), tipis ke arah bumi
   const badan = berkulit(new THREE.Mesh(new RoundedBoxGeometry(0.2, 0.035, 0.34, 2, 0.012), toon(0xd9d2c6)), 1.05); g.add(badan);
-  const pita = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.004, 0.06), toon(warna)); pita.position.set(0, 0.019, 0.1); g.add(pita);
-  const antena = new THREE.Mesh(new THREE.PlaneGeometry(0.18, 0.32), bahanAntena); antena.rotation.x = Math.PI / 2; antena.position.y = -0.0185; g.add(antena);
+  const pita = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.004, 0.06), toon(warna)); pita.position.set(0, 0.0215, 0.1); g.add(pita);
+  const antena = new THREE.Mesh(new THREE.PlaneGeometry(0.18, 0.32), bahanAntena); antena.rotation.x = Math.PI / 2; antena.position.y = -0.0198; g.add(antena);
   // dua sayap ROSA ke kiri dan kanan, sedikit miring menghadap matahari
   for (const s of [-1, 1]) { const w = sayapRosa(0.62, 0.14); w.position.x = s * 0.1; w.rotation.y = s > 0 ? 0 : Math.PI; w.rotation.x = 0.35; g.add(w); }
   // pendorong ion di belakang dan sepasang star tracker di atas
@@ -258,7 +258,13 @@ const bangunStasiun = () => { const luar = new THREE.Group(), g = new THREE.Grou
   // luar.lookAt mengarahkan +z ke arah gerak; modul memanjang di x lokal g, jadi g diputar
   g.rotation.y = Math.PI / 2;
   const krem = 0xeae6dc, abu = 0x847e75, rusuk = 0xc9c2b4;
-  const modul = (x, panjang, cincin) => { const m = berkulit(new THREE.Mesh(new THREE.CapsuleGeometry(0.19, panjang, 6, 24), toon(krem)), 1.04); m.rotation.z = Math.PI / 2; m.position.x = x; g.add(m);
+  const modul = (x, panjang, cincin) => { const arah = Math.sign(x), m = berkulit(new THREE.Mesh(new THREE.CylinderGeometry(0.19, 0.19, panjang, 28), toon(krem)), 1.04); m.rotation.z = Math.PI / 2; m.position.x = x; g.add(m);
+    const kerucut = berkulit(new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.19, 0.09, 28), toon(krem)), 1.04); kerucut.rotation.z = -arah * Math.PI / 2; kerucut.position.x = x + arah * (panjang / 2 + 0.045); g.add(kerucut);
+    const ujungX = x + arah * (panjang / 2 + 0.09);
+    const port = berkulit(new THREE.Mesh(new THREE.CylinderGeometry(0.105, 0.105, 0.06, 24), toon(0xd9d2c6)), 1.05); port.rotation.z = Math.PI / 2; port.position.x = ujungX + arah * 0.03; g.add(port);
+    const bibir = new THREE.Mesh(new THREE.TorusGeometry(0.105, 0.014, 6, 28), toon(0xf2d27a)); bibir.rotation.y = Math.PI / 2; bibir.position.x = ujungX + arah * 0.062; g.add(bibir);
+    const pintu = new THREE.Mesh(new THREE.CircleGeometry(0.075, 24), toon(0x5b5560)); pintu.rotation.y = arah * Math.PI / 2; pintu.position.x = ujungX + arah * 0.0605; g.add(pintu);
+    for (let k = 0; k < 3; k++) { const sirip = new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.012, 0.05), toon(0xf2d27a)), sd = (k * Math.PI * 2) / 3; sirip.position.set(ujungX + arah * 0.085, Math.cos(sd) * 0.095, Math.sin(sd) * 0.095); sirip.rotation.x = -sd; g.add(sirip); }
     for (let i = -2; i <= 2; i++) { const r = new THREE.Mesh(new THREE.TorusGeometry(0.193, 0.009, 6, 28), toon(i === 0 ? cincin : rusuk)); r.rotation.y = Math.PI / 2; r.position.x = x + (i * panjang) / 5; g.add(r); }
     for (const s of [-1, 1]) { const pegangan = new THREE.Mesh(new THREE.BoxGeometry(panjang * 0.8, 0.012, 0.012), toon(0xd9a84a)); pegangan.position.set(x, s * 0.2, 0.05); g.add(pegangan); } };
   modul(-0.62, 0.62, 0xe0574b); modul(0.62, 0.62, 0xa9c4ec);
@@ -339,11 +345,29 @@ tNyata.onclick = () => setTinggi(1); tBesar.onclick = () => setTinggi(3);
 
 const fmt = (ms, zona) => new Date(ms).toLocaleString("id-ID", { timeZone: zona, hour: "2-digit", minute: "2-digit", second: "2-digit", day: "numeric", month: "short", year: "numeric" });
 let terakhirPos = null;
+const cincin = document.getElementById("cincin"), ujung = document.getElementById("ujung");
+function tempelHud(pf) {
+  const v = pf.clone().project(cam), x = ((v.x + 1) / 2) * innerWidth, y = ((1 - v.y) / 2) * innerHeight;
+  const tampak = v.z < 1 && x > -40 && x < innerWidth + 40 && y > -40 && y < innerHeight + 40;
+  if (!tampak) { garis.setAttribute("points", ""); cincin.setAttribute("r", 0); ujung.setAttribute("r", 0); return; }
+  // jari-jari benda di layar dari ukuran nyatanya
+  const jari = fokus === stasiun ? 1.7 : 0.7, d = cam.position.distanceTo(pf), rPx = Math.min(160, Math.max(14, (jari / d) * (innerHeight / 2) / Math.tan((cam.fov * Math.PI) / 360)));
+  const lebar = hud.offsetWidth || 260, tinggi = hud.offsetHeight || 140, daftarL = (document.querySelector(".daftar")?.offsetWidth ?? 0) + 32, batasKanan = innerWidth - daftarL - lebar - 16;
+  // sisi yang muat dulu; bila kiri dan kanan sama-sama sempit, panel naik ke atas benda supaya tidak menutupinya
+  const muatKanan = x + rPx + 48 <= batasKanan, muatKiri = x - rPx - 48 - lebar >= 16, keKanan = muatKanan || (!muatKiri && x < innerWidth / 2);
+  const hx = Math.min(batasKanan, Math.max(16, keKanan ? x + rPx + 48 : x - rPx - 48 - lebar));
+  const hy = muatKanan || muatKiri ? Math.min(innerHeight - tinggi - 90, Math.max(16, y - rPx - tinggi * 0.6)) : Math.max(16, y - rPx - tinggi - 24);
+  hud.style.left = hx + "px"; hud.style.top = hy + "px";
+  const ax = keKanan ? hx : hx + lebar, ay = Math.min(hy + tinggi - 12, Math.max(hy + 12, y)), sud = Math.atan2(ay - y, ax - x), sx = x + Math.cos(sud) * rPx, sy = y + Math.sin(sud) * rPx;
+  cincin.setAttribute("cx", x); cincin.setAttribute("cy", y); cincin.setAttribute("r", rPx);
+  ujung.setAttribute("cx", sx); ujung.setAttribute("cy", sy); ujung.setAttribute("r", 3);
+  garis.setAttribute("points", `${sx},${sy} ${ax - (keKanan ? 18 : -18)},${ay} ${ax},${ay}`);
+}
 function langkah() {
   const ms = waktu(), m = keadaanMatahari(ms), s = new THREE.Vector3(...arahMatahari(ms));
   bumi.rotation.y = (m.gmst * Math.PI) / 180; atmosfer.rotation.y = bumi.rotation.y; awan.rotation.y = bumi.rotation.y + (awanNyata ? 0 : ms / 86400000 * 0.3);
   bahanBumi.uniforms.matahari.value.copy(s); sinarMatahari.position.copy(s).multiplyScalar(1000); piringan.position.copy(s).multiplyScalar(2200); piringan.lookAt(0, 0, 0);
-  for (const b of benda) { const p = b.orbit.posisi(ms), q = b.orbit.posisi(ms + 1000); const kp = (v) => { const r = Math.hypot(...v), kk = (BUMI.R + (r - BUMI.R) * KALI_TINGGI) / r * SKALA; return v.map((x) => x * kk); }; b.obj.position.set(...kp(p)); b.obj.lookAt(...kp(q)); b.gelap = diBayangan(p, [s.x, s.y, s.z]); }
+  for (const b of benda) { const p = b.orbit.posisi(ms), q = b.orbit.posisi(ms + 1000); const kp = (v) => { const r = Math.hypot(...v), kk = (BUMI.R + (r - BUMI.R) * KALI_TINGGI) / r * SKALA; return v.map((x) => x * kk); }; b.obj.position.set(...kp(p)); b.obj.lookAt(...kp(q)); b.gelap = diBayangan(p, [s.x, s.y, s.z]); b.titik.visible = cam.position.distanceTo(b.obj.position) > (b === stasiun ? 14 : 7); }
   const pf = posDunia(fokus);
   if (pandang === "luar") {
     const atas = pf.clone().normalize(), q2 = fokus.obj.getWorldDirection(new THREE.Vector3()), maju = q2.sub(atas.clone().multiplyScalar(q2.dot(atas))).normalize(), kanan = new THREE.Vector3().crossVectors(maju, atas);
@@ -367,9 +391,9 @@ function langkah() {
     document.getElementById("dinding").setAttribute("fill", stasiun.gelap ? "#2a2534" : "#6f6476");
   }
   terakhirPos = pf.clone();
-  // HUD: garis dari benda ke panel
-  if (!hud.hidden && pandang === "luar") { const v = pf.clone().project(cam), x = ((v.x + 1) / 2) * innerWidth, y = ((1 - v.y) / 2) * innerHeight, hx = Math.min(innerWidth - 520, x + 90), hy = Math.max(16, y - 160);
-    hud.style.left = hx + "px"; hud.style.top = hy + "px"; garis.setAttribute("points", v.z < 1 ? `${x},${y} ${x + 40},${hy + 30} ${hx},${hy + 30}` : ""); }
+  // HUD: cincin putus-putus di sekeliling benda, garis dari tepi cincin ke sudut panel; panel di sisi yang lega
+  if (!hud.hidden && pandang === "luar") tempelHud(pf);
+  else { cincin.setAttribute("r", 0); ujung.setAttribute("r", 0); }
   jamSim.innerHTML = (mode === "cepat" ? "Simulasi " : "Sekarang ") + fmt(ms, "UTC") + " UTC" + (mode === "cepat" ? "<b>60x</b>" : "");
   jamNyata.textContent = "Jam Anda " + fmt(Date.now(), undefined);
   cekPetak();
