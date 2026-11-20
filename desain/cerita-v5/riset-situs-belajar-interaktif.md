@@ -4,6 +4,11 @@
 untuk cloud (AWS dan lainnya) dan keamanan siber. Dipakai juga sebagai rujukan isi layar kokpit dan
 tablet prosedur, supaya pengunjung merasa sedang berada di dalam simulasi (game di dalam game).
 
+Versi berskor (76 situs, termasuk desain sistem tambahan serta elektronika dan robotika, dengan bobot
+per jenis dan tingkat Wajib/Berguna/Pelengkap): [situs-belajar/situs-belajar-skor.pdf](situs-belajar/situs-belajar-skor.pdf).
+Data dan rumusnya di `situs-belajar/data.py` dan `hitung.py`; PDF dibuat ulang dengan `python -I hitung.py`, lalu
+`judul.py --tulis` dan `render.sh` dari skill data-storytelling.
+
 **V** = dibuka hari ini, **I** = hanya dari cuplikan atau listing, **U** = gagal dibuka.
 Jenis: **visual** (penjelasan visual interaktif), **lab** (lab praktik), **kursus**.
 
