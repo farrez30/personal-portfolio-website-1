@@ -49,6 +49,8 @@
 <div class="panel bawah">
   <button id="vLuar" aria-pressed="true">Dari luar</button>
   <button id="vJendela" aria-pressed="false">Jendela kokpit</button>
+  <button id="tNyata" aria-pressed="true">Tinggi nyata</button>
+  <button id="tBesar" aria-pressed="false">Tinggi 3x</button>
 </div>
 <svg class="garis" aria-hidden="true"><polyline id="garis" fill="none" stroke="#f6efe3" stroke-width="2" points=""/></svg>
 <aside class="panel hud" id="hud" hidden></aside>
@@ -68,7 +70,6 @@
 </svg>
 <script type="module">
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { keadaanMatahari, arahMatahari, orbit, diBayangan, BATAS, BUMI } from "./matahari.js";
 import { KLIEN } from "../../../content/klien.js";
 import { proyek } from "../../../content/proyek.js";
@@ -80,7 +81,18 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5)); renderer.setSize(innerW
 document.body.prepend(renderer.domElement);
 const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0e1424);
 const cam = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.01, 5000);
-const kendali = new OrbitControls(cam, renderer.domElement); kendali.enableDamping = true; kendali.minDistance = 0.6; kendali.maxDistance = 900;
+// kendali sendiri: geser kiri-kanan memutari benda di sekitar arah atas lokalnya, geser atas-bawah naik-turun, roda atau cubit untuk jarak
+const kendali = { az: Math.PI * 0.75, el: 0.12, jarak: 6, aktif: true };
+{ const titik = new Map(); let jarakCubit = 0;
+  renderer.domElement.addEventListener("pointerdown", (e) => { titik.set(e.pointerId, [e.clientX, e.clientY]); renderer.domElement.setPointerCapture(e.pointerId); kendali.geser = 0; });
+  renderer.domElement.addEventListener("pointermove", (e) => { if (!titik.has(e.pointerId) || !kendali.aktif) return; const [x0, y0] = titik.get(e.pointerId); titik.set(e.pointerId, [e.clientX, e.clientY]);
+    if (titik.size === 2) { const [a, b] = [...titik.values()], d = Math.hypot(a[0] - b[0], a[1] - b[1]); if (jarakCubit) kendali.jarak = Math.min(400, Math.max(0.6, kendali.jarak * (jarakCubit / d))); jarakCubit = d; return; }
+    const dx = e.clientX - x0, dy = e.clientY - y0; kendali.geser += Math.abs(dx) + Math.abs(dy);
+    kendali.az -= dx * 0.006; kendali.el = Math.min(1.45, Math.max(-1.45, kendali.el + dy * 0.006)); });
+  const lepas = (e) => { titik.delete(e.pointerId); if (titik.size < 2) jarakCubit = 0; };
+  renderer.domElement.addEventListener("pointerup", lepas); renderer.domElement.addEventListener("pointercancel", lepas);
+  renderer.domElement.addEventListener("wheel", (e) => { e.preventDefault(); kendali.jarak = Math.min(400, Math.max(0.6, kendali.jarak * Math.exp(e.deltaY * 0.0012))); }, { passive: false });
+  renderer.domElement.style.touchAction = "none"; }
 
 // bintang
 { const g = new THREE.BufferGeometry(), p = []; for (let i = 0; i < 1500; i++) { const v = new THREE.Vector3().randomDirection().multiplyScalar(2000 + Math.random() * 500); p.push(v.x, v.y, v.z); } g.setAttribute("position", new THREE.Float32BufferAttribute(p, 3)); scene.add(new THREE.Points(g, new THREE.PointsMaterial({ color: 0xf6efe3, size: 1.4, sizeAttenuation: false }))); }
@@ -113,16 +125,32 @@ const atmosfer = new THREE.Mesh(new THREE.SphereGeometry(R * 1.025, 64, 48), new
   vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 p = modelMatrix * vec4(position,1.); vV = normalize(cameraPosition - p.xyz); gl_Position = projectionMatrix * viewMatrix * p; }",
   fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - abs(dot(vV, -vN)), 2.); float terang = step(-0.1, dot(-vN, normalize(matahari))); float a = f > 0.55 ? 0.55 : f > 0.3 ? 0.25 : 0.; gl_FragColor = vec4(mix(vec3(0.35,0.4,0.7), vec3(0.66,0.8,1.), terang), a * (0.35 + 0.65 * terang)); }" }));
 scene.add(atmosfer);
+const awanKanvas = kanvas(2048, 1024); { const g = awanKanvas.getContext("2d"); let benih = 7; const acak = () => ((benih = (benih * 16807) % 2147483647) / 2147483647);
+  for (let i = 0; i < 260; i++) { const x = acak() * 2048, y = 160 + acak() * 704, r = 3 + acak() * 11, n = 2 + Math.floor(acak() * 4); g.fillStyle = "rgba(255,255,255,0.85)"; for (let k = 0; k < n; k++) { g.beginPath(); g.arc(x + (acak() - 0.5) * r * 3, y + (acak() - 0.5) * r, r * (0.6 + acak() * 0.6), 0, 7); g.fill(); } } }
+const tAwan = new THREE.CanvasTexture(awanKanvas); tAwan.colorSpace = THREE.SRGBColorSpace;
+const awan = new THREE.Mesh(new THREE.SphereGeometry(R * 1.004, 128, 96), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { tAwan: { value: tAwan }, matahari: bahanBumi.uniforms.matahari },
+  vertexShader: "varying vec2 vUv; varying vec3 vN; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.); }",
+  fragmentShader: "uniform sampler2D tAwan; uniform vec3 matahari; varying vec2 vUv; varying vec3 vN; void main(){ float a = texture2D(tAwan, vUv).a; float mu = dot(normalize(vN), normalize(matahari)); float t = mu > -0.015 ? 1.0 : mu > -0.1 ? 0.55 : 0.12; gl_FragColor = vec4(vec3(0.97, 0.95, 0.92) * t, step(0.5, a) * (0.45 + 0.3 * t)); }" }));
+scene.add(awan);
+// kabut tepi: lapisan tipis di atas permukaan yang makin pekat di sudut pandang landai, memberi kedalaman di cakrawala
+const kabut = new THREE.Mesh(new THREE.SphereGeometry(R * 1.012, 96, 72), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { matahari: bahanBumi.uniforms.matahari },
+  vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 p = modelMatrix * vec4(position,1.); vV = normalize(cameraPosition - p.xyz); gl_Position = projectionMatrix * viewMatrix * p; }",
+  fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float landai = 1. - abs(dot(vV, vN)); float terang = step(-0.05, dot(vN, normalize(matahari))); float a = landai > 0.85 ? 0.55 : landai > 0.6 ? 0.28 : landai > 0.3 ? 0.1 : 0.; gl_FragColor = vec4(mix(vec3(0.32,0.36,0.62), vec3(0.72,0.84,1.), terang), a); }" }));
+scene.add(kabut);
+// ketinggian tampilan: 1 = nyata, 3 = jarak ke permukaan dibesarkan tiga kali
+let KALI_TINGGI = 1;
 const sinarMatahari = new THREE.DirectionalLight(0xfff1dc, 2.2); scene.add(sinarMatahari); scene.add(new THREE.AmbientLight(0x8899cc, 0.35));
 const piringan = new THREE.Mesh(new THREE.CircleGeometry(18, 32), new THREE.MeshBasicMaterial({ color: 0xfff6d8 })); scene.add(piringan);
 
 // benda: stasiun kita (2 modul + node) dan satelit klien
 const toon = (c) => new THREE.MeshToonMaterial({ color: c });
-const bendaStasiun = () => { const g = new THREE.Group();
+const bendaStasiun = () => { const luar = new THREE.Group(), g = new THREE.Group(); luar.add(g);
+  // modul memanjang searah gerak, seperti modul ISS
+  g.rotation.y = Math.PI / 2;
   for (const [x, c] of [[-0.55, 0xe0574b], [0.55, 0xa9c4ec]]) { const m = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.75, 20), toon(0xeae6dc)); m.rotation.z = Math.PI / 2; m.position.x = x; g.add(m); const r = new THREE.Mesh(new THREE.TorusGeometry(0.205, 0.02, 6, 24), toon(c)); r.rotation.y = Math.PI / 2; r.position.x = x; g.add(r); }
   g.add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 12), toon(0xd9d2c6)));
   for (const s of [-1, 1]) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.01, 0.9), toon(0x4b5f9e)); p.position.set(s * 1.25, 0, 0); g.add(p); }
-  const t = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 2.6, 6), toon(0x847e75)); t.rotation.z = Math.PI / 2; g.add(t); return g; };
+  const t = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 2.6, 6), toon(0x847e75)); t.rotation.z = Math.PI / 2; g.add(t); return luar; };
 const bendaSatelit = (warna) => { const g = new THREE.Group(); g.add(new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.16, 0.16), toon(warna)));
   for (const s of [-1, 1]) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.008, 0.12), toon(0x4b5f9e)); p.position.x = s * 0.24; g.add(p); } const a = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.08, 10), toon(0xd9d2c6)); a.position.y = 0.11; g.add(a); return g; };
 const WARNA = { coderoach: 0xb9dcb0, mitraplus: 0xa9c4ec, pribadi: 0xf2d27a };
@@ -149,7 +177,8 @@ setMode(mode);
 // fokus: kamera mengikuti satu benda sebagai pusat putaran 360
 let fokus = stasiun, terbang = null, pandang = "luar";
 const posDunia = (b) => b.obj.getWorldPosition(new THREE.Vector3());
-const pilih = (b) => { const awal = cam.position.clone(), awalKe = kendali.target.clone(), arah = cam.position.clone().sub(kendali.target).normalize(), jarak = b === stasiun ? 5 : 2.2; terbang = { b, awal, awalKe, arah, jarak, t0: performance.now() }; fokus = b; tampilHud(b); tandaiDaftar(b); };
+const pilih = (b) => { terbang = { awal: cam.position.clone(), awalKe: cam.getWorldDirection(new THREE.Vector3()).multiplyScalar(5).add(cam.position), t0: performance.now() }; kendali.jarak = b === stasiun ? 6 : 3.2; kendali.el = 0.12; fokus = b; tampilHud(b); tandaiDaftar(b); };
+const KE = new THREE.Vector3();
 const daftar = document.getElementById("daftar");
 for (const b of benda) { const li = document.createElement("li"), t = document.createElement("button"); t.innerHTML = `<span class="titik" style="background:#${b.warna.toString(16).padStart(6, "0")}"></span>${b.nama}`; t.onclick = () => pilih(b); b.tombol = t; li.append(t); daftar.append(li); }
 const tandaiDaftar = (b) => benda.forEach((x) => x.tombol.setAttribute("aria-current", x === b));
@@ -161,26 +190,34 @@ function tampilHud(b) {
     hud.innerHTML = `<div class="kode">${KEL[k.kelompok].nama.toUpperCase()}${tahun ? ", SEJAK " + tahun : ""}</div><h3>${k.nama}</h3><p>${k.industri.id}. ${k.kerja.id}</p>${tautan ? `<a href="${tautan}" target="_blank" rel="noopener noreferrer" aria-label="Buka situs ${k.nama} di tab baru">Buka situs ${ikonKeluar}</a>` : ""}`; }
   hud.hidden = false;
 }
-renderer.domElement.addEventListener("click", (e) => { const r = new THREE.Raycaster(); r.setFromCamera(new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), cam);
+renderer.domElement.addEventListener("click", (e) => { if ((kendali.geser ?? 0) > 6) return; const r = new THREE.Raycaster(); r.setFromCamera(new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), cam);
   const h = r.intersectObjects(benda.map((b) => b.kena), false)[0]; if (h) pilih(h.object.userData.b); });
 
-// tampilan: dari luar (OrbitControls di sekitar fokus) atau jendela kokpit (kamera di stasiun menghadap cakrawala)
-const setPandang = (p) => { pandang = p; vLuar.setAttribute("aria-pressed", p === "luar"); vJendela.setAttribute("aria-pressed", p === "jendela"); document.getElementById("jendela").classList.toggle("nyala", p === "jendela"); kendali.enabled = p === "luar"; stasiun.obj.visible = p === "luar"; // dari dalam kokpit, badan stasiun sendiri tidak terlihat if (p === "jendela") { fokus = stasiun; hud.hidden = true; garis.setAttribute("points", ""); } else pilih(stasiun); };
+// tampilan: dari luar (kendali berporos benda fokus) atau jendela kokpit (kamera di stasiun menghadap cakrawala)
+const setPandang = (p) => { pandang = p; vLuar.setAttribute("aria-pressed", p === "luar"); vJendela.setAttribute("aria-pressed", p === "jendela"); document.getElementById("jendela").classList.toggle("nyala", p === "jendela"); kendali.aktif = p === "luar";
+  // dari dalam kokpit, badan stasiun sendiri tidak terlihat
+  stasiun.obj.visible = p === "luar";
+  if (p === "jendela") { fokus = stasiun; hud.hidden = true; garis.setAttribute("points", ""); } else pilih(stasiun); };
 vLuar.onclick = () => setPandang("luar"); vJendela.onclick = () => setPandang("jendela");
+const setTinggi = (k) => { KALI_TINGGI = k; tNyata.setAttribute("aria-pressed", k === 1); tBesar.setAttribute("aria-pressed", k === 3); };
+tNyata.onclick = () => setTinggi(1); tBesar.onclick = () => setTinggi(3);
 
 const fmt = (ms, zona) => new Date(ms).toLocaleString("id-ID", { timeZone: zona, hour: "2-digit", minute: "2-digit", second: "2-digit", day: "numeric", month: "short", year: "numeric" });
 let terakhirPos = null;
 function langkah() {
   const ms = waktu(), m = keadaanMatahari(ms), s = new THREE.Vector3(...arahMatahari(ms));
-  bumi.rotation.y = (m.gmst * Math.PI) / 180; atmosfer.rotation.y = bumi.rotation.y;
+  bumi.rotation.y = (m.gmst * Math.PI) / 180; atmosfer.rotation.y = bumi.rotation.y; awan.rotation.y = bumi.rotation.y + ms / 86400000 * 0.3;
   bahanBumi.uniforms.matahari.value.copy(s); sinarMatahari.position.copy(s).multiplyScalar(1000); piringan.position.copy(s).multiplyScalar(2200); piringan.lookAt(0, 0, 0);
-  for (const b of benda) { const p = b.orbit.posisi(ms), q = b.orbit.posisi(ms + 1000); b.obj.position.set(p[0], p[1], p[2]).multiplyScalar(SKALA); b.obj.lookAt(q[0] * SKALA, q[1] * SKALA, q[2] * SKALA); b.gelap = diBayangan(p, [s.x, s.y, s.z]); }
+  for (const b of benda) { const p = b.orbit.posisi(ms), q = b.orbit.posisi(ms + 1000); const kp = (v) => { const r = Math.hypot(...v), kk = (BUMI.R + (r - BUMI.R) * KALI_TINGGI) / r * SKALA; return v.map((x) => x * kk); }; b.obj.position.set(...kp(p)); b.obj.lookAt(...kp(q)); b.gelap = diBayangan(p, [s.x, s.y, s.z]); }
   const pf = posDunia(fokus);
   if (pandang === "luar") {
-    if (terbang) { const u = Math.min(1, (performance.now() - terbang.t0) / (kurangiGerak ? 1 : 1300)), e = u * u * (3 - 2 * u), tuju = pf.clone().addScaledVector(terbang.arah, terbang.jarak);
-      cam.position.copy(terbang.awal).lerp(tuju, e); kendali.target.copy(terbang.awalKe).lerp(pf, e); if (u >= 1) terbang = null; }
-    else if (terakhirPos) { const d = pf.clone().sub(terakhirPos); cam.position.add(d); kendali.target.add(d); }
-    kendali.update();
+    const atas = pf.clone().normalize(), q2 = fokus.obj.getWorldDirection(new THREE.Vector3()), maju = q2.sub(atas.clone().multiplyScalar(q2.dot(atas))).normalize(), kanan = new THREE.Vector3().crossVectors(maju, atas);
+    const arah = maju.clone().multiplyScalar(Math.cos(kendali.el) * Math.cos(kendali.az)).addScaledVector(kanan, Math.cos(kendali.el) * Math.sin(kendali.az)).addScaledVector(atas, Math.sin(kendali.el));
+    const tuju = pf.clone().addScaledVector(arah, kendali.jarak);
+    cam.up.copy(atas);
+    if (terbang) { const u = Math.min(1, (performance.now() - terbang.t0) / (kurangiGerak ? 1 : 1300)), e = u * u * (3 - 2 * u); cam.position.copy(terbang.awal).lerp(tuju, e); KE.copy(terbang.awalKe).lerp(pf, e); cam.lookAt(KE); if (u >= 1) terbang = null; }
+    else { cam.position.copy(tuju); cam.lookAt(pf); }
+    cam.near = Math.max(0.01, kendali.jarak * 0.02); cam.far = 6000; cam.updateProjectionMatrix();
   } else {
     // dari kokpit: kamera di stasiun, menghadap ke depan orbit dan sedikit ke bawah cakrawala
     const q = stasiun.orbit.posisi(ms + 20000), maju = new THREE.Vector3(q[0], q[1], q[2]).multiplyScalar(SKALA).sub(pf).normalize(), atas = pf.clone().normalize();
@@ -197,9 +234,9 @@ function langkah() {
   renderer.render(scene, cam);
   window.__keadaan = { ms, subsolar: [m.lintangSubsolar, m.bujurSubsolar], stasiunGelap: stasiun.gelap, fokus: fokus.id, mode, pandang };
 }
-cam.position.set(260, 120, 260); kendali.target.set(0, 0, 0);
+cam.position.set(260, 120, 260); cam.lookAt(0, 0, 0);
 pilih(stasiun);
-window.__langkah = langkah; window.__pilih = (id) => pilih(benda.find((b) => b.id === id)); window.__setPandang = setPandang; window.__setMode = setMode;
+window.__langkah = langkah; window.__pilih = (id) => pilih(benda.find((b) => b.id === id)); window.__setPandang = setPandang; window.__setMode = setMode; window.__kendali = kendali; window.__setTinggi = setTinggi;
 renderer.setAnimationLoop(langkah);
 addEventListener("resize", () => { cam.aspect = innerWidth / innerHeight; cam.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
 window.SIAP = true;
