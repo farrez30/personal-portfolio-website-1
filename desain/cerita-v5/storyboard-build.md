@@ -118,7 +118,7 @@ Satu fase satu PR, previs dan lembar kontak per 0,1 detik sebelum merge.
 |---|---|---|
 | F1 | naskah kamera v5 di `naskah.js`: anchor, jenis perpindahan, durasi, aturan variasi | tes Node lulus, termasuk aturan "tidak dua jenis sama berturut-turut" |
 | F2 | lantai kantor toon: dua baris meja, pilar, ruang server, props tiap babak | draw call di bawah 100 di HP emulasi (selesai 21 Nov: 15, `build/f2/`) |
-| F3 | enam jenis perpindahan campur | lembar kontak tanpa benda tembus dan tanpa layar kosong |
+| F3 | enam jenis perpindahan campur | lembar kontak tanpa benda tembus dan tanpa layar kosong (selesai 21 Nov: maks 16 draw call, `build/f3/`) |
 | F4 | keluar jendela, kota, lalu lintas | jalur lewat celah jendela, terukur raycast |
 | F5 | peta Nusantara dan globe malam, satelit | bingkai pertama di bawah 150 ms |
 | F6 | modul lab, daftar proyek sebagai pengendali, panel proyek | keyboard dan pembaca layar bisa memakai semua fungsi |

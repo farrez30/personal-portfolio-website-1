@@ -4,9 +4,9 @@
 // Pose kamera lantai kantor datang dari components/stasiun/lantai.js (F2). Dipisah dari three.js
 // supaya aturan urutan dan variasi bisa dites di Node. Peta babak: desain/cerita-v5/storyboard-build.md §2.
 
-import { pemicuAnchor as pemicuDasar } from "../dunia/naskah.js";
+import { pemicuAnchor as pemicuDasar, easeInOut } from "../dunia/naskah.js";
 import { BABAK_V5 } from "../../content/cerita-v5.js";
-import { POSE } from "./lantai.js";
+import { POSE, TABLET, PILAR_LEWAT, notaTerbang } from "./lantai.js";
 
 // Jenis perpindahan. `makro` = serah terima antarskala (gedung ke kota ke peta ke globe ke modul),
 // boleh lebih lama dari batas perpindahan di dalam gedung.
@@ -92,18 +92,24 @@ const arahPandang = (p) => {
   const j = Math.hypot(...d);
   return { yaw: Math.atan2(d[0], d[2]), pitch: Math.asin(d[1] / j), jarak: j };
 };
-export function poseBlend(a, b, u) {
-  const A = arahPandang(a);
-  const B = arahPandang(b);
-  let dy = B.yaw - A.yaw;
-  dy = Math.atan2(Math.sin(dy), Math.cos(dy));
+const arahDari = (yaw, pitch) => [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch)];
+// Selisih yaw dari yA ke yB untuk kamera yang berjalan dari a ke b. Putaran hampir 180 derajat
+// dipilih ke sisi arah perjalanan, bukan sisi terpendek, supaya di tengah putaran kamera memandang
+// ke tempat yang dituju, bukan ke dinding samping.
+function selisihYaw(yA, yB, a, b) {
+  let dy = Math.atan2(Math.sin(yB - yA), Math.cos(yB - yA));
   if (Math.abs(dy) > (150 * Math.PI) / 180) {
     const jalan = [b.posisi[0] - a.posisi[0], b.posisi[2] - a.posisi[2]];
-    const tengah = (d) => Math.sin(A.yaw + d / 2) * jalan[0] + Math.cos(A.yaw + d / 2) * jalan[1];
+    const tengah = (d) => Math.sin(yA + d / 2) * jalan[0] + Math.cos(yA + d / 2) * jalan[1];
     const lain = dy - Math.sign(dy) * 2 * Math.PI;
     if (tengah(lain) > tengah(dy)) dy = lain;
   }
-  const yaw = A.yaw + dy * u;
+  return dy;
+}
+export function poseBlend(a, b, u) {
+  const A = arahPandang(a);
+  const B = arahPandang(b);
+  const yaw = A.yaw + selisihYaw(A.yaw, B.yaw, a, b) * u;
   // Pitch di tengah perpindahan setinggi ujung yang lebih datar: ke dan dari meja biaya (tampak
   // atas) kamera baru menunduk di akhir, tidak menatap lantai sepanjang jalan.
   const lurus = A.pitch + (B.pitch - A.pitch) * u;
@@ -112,8 +118,129 @@ export function poseBlend(a, b, u) {
   const pindah = Math.hypot(...a.posisi.map((v, i) => v - b.posisi[i]));
   const naik = Math.sin(Math.PI * u) * Math.min(0.45, 0.08 + pindah * 0.06);
   const posisi = a.posisi.map((v, i) => v + (b.posisi[i] - v) * u + (i === 1 ? naik : 0));
-  const arah = [Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch)];
+  const arah = arahDari(yaw, pitch);
   return { posisi, lihat: posisi.map((v, i) => v + arah[i] * jarak), fov: a.fov + (b.fov - a.fov) * u };
+}
+
+// ---- Perpindahan bertipe (F3, ADR 0023) --------------------------------------------------------
+// Rumus dari previs (desain/cerita-v5/previs/previs.html, pindah()), diubah ke data lantai.js.
+// Satu jalur didefinisikan dari anchor ke-i ke ke-(i+1); gulir mundur memutar jalur yang sama
+// dengan e dibalik, jadi bingkainya persis sama dalam urutan terbalik.
+
+// Bingkai digeser dari kolom teks: ke kanan 17% lebar di layar lebar, ke atas 14% tinggi di layar
+// tegak (adegan.js memakai angka yang sama untuk setViewOffset).
+export const GESER = { lebar: 0.17, tegak: 0.14 };
+// Tinggi crane di atas lantai: denah utuh masuk bingkai, plafon tidak ada (rumah boneka).
+export const TINGGI_CRANE = 15;
+
+const klamp = (x) => Math.min(1, Math.max(0, x));
+const halus = (x) => x * x * (3 - 2 * x);
+const seg = (e, a, b) => halus(klamp((e - a) / (b - a)));
+const lerp = (p, q, u) => p.map((v, i) => v + (q[i] - v) * u);
+const bezier = (p, c, q, t) => p.map((v, i) => (1 - t) * (1 - t) * v + 2 * (1 - t) * t * c[i] + t * t * q[i]);
+const satuan = (v) => {
+  const j = Math.hypot(...v) || 1;
+  return v.map((x) => x / j);
+};
+
+// Posisi kamera di depan layar tablet sehingga layarnya memenuhi seluruh bingkai, termasuk bagian
+// yang digeser dari kolom teks; sedikit ke arah bawah gambar supaya arah atas kamera sama dengan
+// arah atas gambar di kedua tablet (potongan di tengah tersembunyi).
+const LAYAR = [0.24, 0.16];
+function depanLayar(T, fov, { aspek = 16 / 9, tegak = false } = {}) {
+  const n = satuan(T.m.slice(8, 11));
+  const atas = satuan(T.m.slice(4, 7));
+  const tanH = Math.tan((fov * Math.PI) / 360);
+  const [gx, gy] = tegak ? [0, GESER.tegak] : [GESER.lebar, 0];
+  const d = 0.9 * Math.min(LAYAR[0] / 2 / (tanH * aspek * (1 + 2 * gx)), LAYAR[1] / 2 / (tanH * (1 + 2 * gy)));
+  return T.c.map((v, i) => v + n[i] * d - atas[i] * 0.02 * d);
+}
+
+const JALUR = {
+  // Nota merah lepas dari timbangan meja 1, terbang melengkung ke timbangan meja 2; kamera mundur
+  // ke belakangnya dan mengikuti, lalu turun ke pose meja 2.
+  ikut(a, b, e) {
+    const N = notaTerbang();
+    const p = lerp(N.dari.posisi, N.ke.posisi, halus(e));
+    // melengkung naik lalu menyelip hampir mendatar ke piring meja 2, di bawah lengan timbangan
+    // yang menggantung piringnya (jatuh tegak dari atas menyerempet ujung lengan)
+    p[1] += 0.6 * Math.sin(Math.PI * e) * Math.sqrt(1 - e);
+    const d = satuan([b.lihat[0] - a.lihat[0], 0, b.lihat[2] - a.lihat[2]]);
+    const ikut = [p[0] - d[0] * 0.9, p[1] + 0.3, p[2] - d[2] * 0.9];
+    const dy = Math.atan2(Math.sin(N.ke.ry - N.dari.ry), Math.cos(N.ke.ry - N.dari.ry)) + 2 * Math.PI;
+    return {
+      posisi: lerp(lerp(a.posisi, ikut, seg(e, 0, 0.25)), b.posisi, seg(e, 0.7, 1)),
+      lihat: lerp(lerp(a.lihat, p, seg(e, 0, 0.2)), b.lihat, seg(e, 0.75, 1)),
+      nota: { posisi: p, rot: [-0.6 * Math.sin(Math.PI * e), N.dari.ry + dy * halus(e), 0], s: N.dari.s + (N.ke.s - N.dari.s) * e },
+    };
+  },
+  // Diam, menoleh cepat ke meja berikutnya dengan sedikit lewat lalu balik, baru maju ke sana.
+  whip(a, b, e) {
+    const A = arahPandang(a);
+    const B = arahPandang({ posisi: a.posisi, lihat: b.lihat });
+    // ease-out-back dari awal yang pelan: lewat sekitar 5% dari sasaran lalu balik. Rumus previs
+    // (pangkat halus kali benjolan sinus) hanya lewat 0,1%, tidak terlihat sebagai whip.
+    const x = Math.pow(klamp(e / 0.4), 1.4) - 1;
+    const s = 1 + 2.2 * x * x * x + 1.2 * x * x;
+    const arah = arahDari(A.yaw + selisihYaw(A.yaw, B.yaw, a, b) * s, A.pitch + (B.pitch - A.pitch) * s);
+    const jarak = A.jarak + (B.jarak - A.jarak) * s;
+    const posisi = lerp(a.posisi, b.posisi, seg(e, 0.4, 1));
+    // sesudah menoleh (s = 1) titik lihatnya tepat b.lihat
+    return { posisi, lihat: e < 0.4 ? a.posisi.map((v, i) => v + arah[i] * jarak) : b.lihat };
+  },
+  // Masuk ke layar tablet meja ini sampai layarnya memenuhi bingkai, potong di tengah ke tablet
+  // berlayar sama di meja berikutnya, lalu keluar darinya.
+  layar(a, b, e, bingkai, ida, idb) {
+    const P = TABLET[ida];
+    const Q = TABLET[idb];
+    if (e < 0.5) {
+      const u = e / 0.5;
+      return { posisi: lerp(a.posisi, depanLayar(P, a.fov, bingkai), Math.pow(u, 1.8)), lihat: lerp(a.lihat, P.c, seg(u, 0, 0.45)) };
+    }
+    const u = (e - 0.5) / 0.5;
+    return { posisi: lerp(depanLayar(Q, b.fov, bingkai), b.posisi, 1 - Math.pow(1 - u, 1.8)), lihat: lerp(Q.c, b.lihat, seg(u, 0.5, 1)) };
+  },
+  // Memutari meja ini sekitar 100 derajat ke sisi meja berikutnya sambil sedikit naik, lalu pindah.
+  orbit(a, b, e) {
+    const r = a.posisi.map((v, i) => v - a.lihat[i]);
+    const keB = b.lihat.map((v, i) => v - a.lihat[i]);
+    const tanda = Math.sign(r[0] * keB[2] - r[2] * keB[0]) || 1;
+    const th = -tanda * 1.75 * seg(e, 0, 0.65);
+    const [c, s] = [Math.cos(th), Math.sin(th)];
+    const p = [r[0] * c + r[2] * s + a.lihat[0], r[1] + a.lihat[1] + 0.25 * Math.sin(Math.PI * klamp(e / 0.65)), -r[0] * s + r[2] * c + a.lihat[2]];
+    return { posisi: lerp(p, b.posisi, seg(e, 0.55, 1)), lihat: lerp(a.lihat, b.lihat, seg(e, 0.3, 0.7)) };
+  },
+  // Lewat di depan pilar struktur: pilarnya menyapu bingkai seperti tirai, meja berikutnya muncul.
+  pilar(a, b, e) {
+    const c = [PILAR_LEWAT[0], a.posisi[1] + 0.1, PILAR_LEWAT[1] + 0.55];
+    return { posisi: bezier(a.posisi, c, b.posisi, halus(e)), lihat: lerp(a.lihat, b.lihat, seg(e, 0.15, 0.85)) };
+  },
+  // Naik tegak sampai denah lantai terlihat utuh (tanpa plafon, seperti rumah boneka), bergeser dan
+  // berputar di atas ke meja berikutnya, lalu turun. Di atas kamera menunduk hampir tegak lurus;
+  // arah atas gambarnya diputar dari arah pandang meja asal ke arah pandang meja tujuan, jadi gambar
+  // tidak terbalik mendadak saat turun.
+  crane(a, b, e) {
+    const yA = arahPandang(a).yaw;
+    const yaw = yA + selisihYaw(yA, arahPandang(b).yaw, a, b) * seg(e, 0.35, 0.65);
+    const mundur = [-Math.sin(yaw) * 0.05, 0, -Math.cos(yaw) * 0.05];
+    const atas = (p) => [p[0] + mundur[0], TINGGI_CRANE, p[2] + mundur[2]];
+    const lantai = (p) => [p[0], 0, p[2]];
+    return {
+      posisi: lerp(lerp(lerp(a.posisi, atas(a.lihat), seg(e, 0, 0.38)), atas(b.lihat), seg(e, 0.35, 0.65)), b.posisi, seg(e, 0.62, 1)),
+      lihat: lerp(lerp(lerp(a.lihat, lantai(a.lihat), seg(e, 0, 0.3)), lantai(b.lihat), seg(e, 0.35, 0.65)), b.lihat, seg(e, 0.68, 1)),
+    };
+  },
+};
+
+// Pose kamera di e (0..1, waktu linear) pada perpindahan dari anchor ke-i ke ke-(i+1), dengan pose
+// ujung a dan b. Jenis tanpa rumus khusus (blend dari hero) memakai poseBlend dengan ease. `nota`
+// diisi selama nota merah terbang. `bingkai` = { aspek, tegak } untuk jenis yang mengisi layar.
+export function poseJalur(i, a, b, e, bingkai) {
+  const f = JALUR[ANCHOR_V5[i]?.keluar];
+  const x = klamp(e);
+  if (!f) return { ...poseBlend(a, b, easeInOut(x)), nota: null };
+  const q = f(a, b, x, bingkai, ANCHOR_V5[i].id, ANCHOR_V5[i + 1].id);
+  return { posisi: q.posisi, lihat: q.lihat, fov: a.fov + (b.fov - a.fov) * x, nota: q.nota ?? null };
 }
 
 export const pemicuAnchorV5 = (ukur) => pemicuDasar(ukur, ANCHOR_V5);
@@ -137,4 +264,14 @@ export function periksaNaskah(daftar = ANCHOR_V5) {
   const id = daftar.map((a) => a.id);
   if (new Set(id).size !== id.length) salah.push("id anchor ganda");
   return salah;
+}
+
+// Pose kamera selama perpindahan dari anchor `dari` ke `ke`. Satu langkah maju memakai jalur
+// bertipe anchor asalnya; satu langkah mundur memutar jalur yang sama dengan waktu dibalik.
+// Lompatan jauh, atau perpindahan yang dimulai di tengah perpindahan lain (dari = -1), memakai
+// blend arah pandang.
+export function poseAntara(dari, ke, a, b, e, bingkai) {
+  if (dari >= 0 && ke === dari + 1) return poseJalur(dari, a, b, e, bingkai);
+  if (ke >= 0 && ke === dari - 1) return poseJalur(ke, b, a, 1 - e, bingkai);
+  return { ...poseBlend(a, b, easeInOut(Math.min(1, Math.max(0, e)))), nota: null };
 }
