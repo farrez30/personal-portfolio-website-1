@@ -1,0 +1,78 @@
+/* Gaya laporan data storytelling: A4 landscape, satu pesan per halaman.
+   Asal: laporan Modest Workwear v2 (12 Nov 2026). Ganti token di :root dengan
+   warna dan huruf brand bila project punya DESIGN.md; jangan ubah strukturnya.
+   Palet kategori di bawah lolos validate_palette.js skill dataviz (light). */
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --huruf-judul: 'Newsreader', Georgia, serif;
+  --huruf-isi: 'Public Sans', system-ui, sans-serif;
+  --tinta: #1d2433; --tinta-2: #4a5263; --tinta-3: #7a8191; --garis: #dfe1e6;
+  --latar: #f6f5f2; --aksen: #a4502c; --aksen-muda: #f6e8e0;
+  /* kategori, urutan tetap: biru, aksen, ungu, hijau */
+  --k1: #2f62b0; --k1-muda: #e6edf8; --k3: #8a5cc2; --k4: #2f8a5b;
+  /* status, hanya untuk status, selalu dengan ikon dan label */
+  --ok: #2f6b4f; --ok-muda: #e3efe8; --awas: #8a6a12; --awas-muda: #f7efd6; --bahaya: #a33a3a; --bahaya-muda: #f6e1e1;
+}
+@page { size: A4 landscape; margin: 0; }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; color: var(--tinta); font-family: var(--huruf-isi); font-size: 10.5pt; line-height: 1.45; font-variant-numeric: tabular-nums; background: #fff; }
+h1, h2, h3 { font-family: var(--huruf-judul); font-weight: 600; margin: 0; line-height: 1.12; }
+p { margin: 0 0 2mm; }
+ul { margin: 0; padding-left: 4.5mm; }
+li { margin-bottom: 1.2mm; }
+
+/* Halaman */
+.slide { width: 297mm; height: 210mm; padding: 12mm 16mm 0; position: relative; overflow: hidden; break-after: page; page-break-after: always; display: flex; flex-direction: column; }
+.slide:last-child { break-after: auto; page-break-after: auto; }
+.kicker { font-size: 8.5pt; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--aksen); }
+.judul { font-size: 22pt; margin: 1.5mm 0; max-width: 250mm; }   /* action title, maks 2 baris */
+.sub { font-size: 10.5pt; color: var(--tinta-2); max-width: 240mm; margin-bottom: 4mm; }
+.isi { flex: 1; min-height: 0; padding-bottom: 24mm; }          /* 24mm = ruang kaki */
+.kaki { position: absolute; left: 16mm; right: 16mm; bottom: 7mm; display: flex; justify-content: space-between; gap: 8mm; font-size: 7.4pt; color: var(--tinta-3); border-top: 1px solid var(--garis); padding-top: 2mm; }
+.kaki .no { font-weight: 700; color: var(--tinta-2); white-space: nowrap; }
+
+/* Tata letak */
+svg { display: block; width: 100%; height: auto; }
+.kolom { display: grid; gap: 6mm; align-items: start; }
+.k2 { grid-template-columns: 1fr 1fr; } .k3 { grid-template-columns: repeat(3, 1fr); } .k4 { grid-template-columns: repeat(4, 1fr); }
+.k-lebar { grid-template-columns: 1.6fr 1fr; }
+
+/* Angka besar */
+.angka-besar { background: var(--latar); border-radius: 3mm; padding: 5mm; }
+.angka-besar .n { font-size: 26pt; font-weight: 800; line-height: 1; letter-spacing: -.01em; white-space: nowrap; }
+.angka-besar .n.aksen { color: var(--aksen); }
+.angka-besar .l { font-size: 9.5pt; color: var(--tinta-2); margin-top: 2mm; }
+
+/* Alur cerita di ringkasan (aturan #3): diisi scripts/judul.py --tulis di antara
+   penanda <!-- alur --> dan <!-- /alur -->. .isi yang flex: 1 harus berhenti tumbuh
+   kalau ada blok sesudahnya; tanpa baris :has, alur terdorong ke kaki halaman. */
+.alur { margin-top: 5mm; border-top: 1px solid var(--garis); padding-top: 3mm; }
+.alur-judul { font-size: 8.5pt; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--tinta-3); margin-bottom: 2mm; }
+.alur .kolom { gap: 6mm; }
+.alur ol { list-style: none; padding: 0; margin: 0; font-size: 8.8pt; line-height: 1.35; }
+.alur li { display: flex; gap: 2.5mm; margin-bottom: 1.2mm; }
+.alur .nomor { flex: none; width: 5mm; text-align: right; font-weight: 700; color: var(--aksen); }
+.slide .isi:has(+ .alur) { flex: none; }
+
+/* Kartu dan catatan */
+.kartu { border: 1px solid var(--garis); border-radius: 3mm; padding: 4mm; }
+.kartu.pilih { border: 2px solid var(--aksen); background: #fffaf7; }
+.kartu h3 { font-size: 13pt; margin-bottom: 1.5mm; }
+.catatan { border-left: 3px solid var(--aksen); background: var(--aksen-muda); padding: 3mm 4mm; border-radius: 0 2mm 2mm 0; font-size: 9.5pt; }
+.catatan.ok { border-color: var(--ok); background: var(--ok-muda); }
+.catatan.biru { border-color: var(--k1); background: var(--k1-muda); }
+.kecil { font-size: 8.5pt; color: var(--tinta-2); }
+
+/* Label bukti: t = terbukti, d = dari dokumen, p = perkiraan */
+.lb { display: inline-block; font-size: 7pt; font-weight: 700; padding: .2mm 1.4mm; border-radius: 1mm; vertical-align: 1px; white-space: nowrap; }
+.lb.t { background: var(--ok-muda); color: var(--ok); }
+.lb.d { background: var(--k1-muda); color: var(--k1); }
+.lb.p { background: var(--awas-muda); color: var(--awas); }
+
+/* Tabel (lampiran, bukan pengganti grafik) */
+table { width: 100%; border-collapse: collapse; font-size: 9pt; }
+th, td { text-align: left; vertical-align: top; padding: 1.6mm 2mm; border-bottom: 1px solid var(--garis); }
+th { font-size: 8pt; color: var(--tinta-2); background: var(--latar); font-weight: 700; }
+td.angka, th.angka { text-align: right; }
