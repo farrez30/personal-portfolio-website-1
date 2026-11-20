@@ -3,8 +3,9 @@
 21 Nov 2026. Decision of 20 Nov: the EN titles are written on their own (not translated) and Farrez
 picks from 2 to 3 options per title before they are final. Same rules as the ID set: the subject is
 the result or the problem, short and calm, at most one "X, not Y" in the whole run, no technical
-terms, each title answers the reader's worry in the left column. **(R)** = recommended, currently
-in `content/cerita-v5.js` until Farrez chooses.
+terms, each title answers the reader's worry in the left column. **(R)** = recommended.
+
+**Decided by Farrez, 21 Nov 2026: the recommended set is used for all titles** ("Pakai rekomendasi").
 
 | # | Worry | A | B | C | Why the recommendation |
 |---|---|---|---|---|---|
