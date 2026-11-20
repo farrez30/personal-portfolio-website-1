@@ -129,6 +129,15 @@ Diperbaiki setelah dicek: tekstur kanvas di bahan `clay()` tampil putih, jadi pa
 
 Diperbaiki setelah dicek: kartu loker sudah terlihat sebelum loker ditarik; layar konsol tidak di tengah saat penuh karena previs menggeser bidang pandang 17% untuk panel teks (kini dikurangi selama kamera mendekat); label langkah diagram terbaca 7/6.
 
+## Album dibalik sekilas, logo asli, tahun klien, 20 Nov 2026
+
+Masukan Farrez: adegan album bukan menoleh ke jendela lalu satelit lewat, tapi melihat-lihat buku sekilas dengan jendela luar angkasa atau monitor kokpit di latar. Rujukan: foto kru membaca di Cupola (NASA iss065e235640, ESA "Reading with a view") dan perpindahan perhatian ke benda di latar dalam satu bidikan (rack focus, StudioBinder).
+
+- Jendela bundar dan monitor kokpit kini di dinding belakang, di balik astronot. Tiga lembar dibalik sekilas (YiheeCam, NDS RO, AkarKita) sampai Jeda; tombol Sambungkan berdenyut, monitor berganti dari siaga ke situs, kamera naik melewati bahu kanan astronot ke monitor.
+- Logo asli (`logo-klien.js`, dari `desain/klien/logo`) di sertifikat, patch album, dinding patch, dan HUD orbit. Saksama belum punya logo.
+- `content/klien.js` punya `tahun`: commit pertama Farrez di repo klien, teks "sejak", coderoach.id/work, atau `periode` proyek. Tumtim tanpa tahun (belum ada bukti).
+- Isi sertifikat dan punggung patch diambil dari data klien, bukan teks karangan. Sebelumnya NDS RO tertulis "pipa data armada truk", padahal datanya jaringan distributor.
+
 ## Belum bisa dicek
 
 - Performa di HP sungguhan: GPU HP jauh lebih lemah dari GPU desktop yang dipakai; angka GPU di atas hanya pembanding antaradegan.

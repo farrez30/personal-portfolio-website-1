@@ -12,6 +12,10 @@ import { cariProyek } from "./proyek.js";
 
 /** @typedef {{ id: string, en: string }} Teks */
 
+// `tahun` = tahun mulai dikerjakan. Buktinya commit pertama Farrez di repo klien (Coderoach Studio/klien,
+// D:/Projects/mitraPlus), tahun "sejak" di teks kerjanya, atau coderoach.id/work. Diperiksa 20 Nov 2026.
+// Tumtim belum ada buktinya, jadi tanpa tahun.
+
 const C = (slug) => `/assets/klien/cakram/${slug}.webp`;
 const KASUS = (slug) => `https://coderoach.id/work/${slug}`;
 
@@ -25,6 +29,7 @@ export const KLIEN = [
   // Coderoach Studio
   {
     slug: "uruzin",
+    tahun: 2023,
     kelompok: "coderoach",
     nama: "Uruzin",
     cakram: C("uruzin"),
@@ -38,6 +43,7 @@ export const KLIEN = [
   },
   {
     slug: "masaya-food",
+    tahun: 2026,
     kelompok: "coderoach",
     nama: "Masaya Food",
     cakram: C("masaya-food"),
@@ -76,6 +82,7 @@ export const KLIEN = [
   },
   {
     slug: "rpn-agro",
+    tahun: 2026,
     kelompok: "coderoach",
     nama: "RPN Agro",
     cakram: C("rpn-agro"),
@@ -89,6 +96,7 @@ export const KLIEN = [
   },
   {
     slug: "tgr",
+    tahun: 2026,
     kelompok: "coderoach",
     nama: "The Global Review",
     cakram: C("tgr"),
@@ -102,6 +110,7 @@ export const KLIEN = [
   },
   {
     slug: "raja-roti",
+    tahun: 2024,
     kelompok: "coderoach",
     nama: "Raja Roti Cemerlang",
     cakram: C("raja-roti"),
@@ -114,6 +123,7 @@ export const KLIEN = [
   },
   {
     slug: "saychick",
+    tahun: 2026,
     kelompok: "coderoach",
     nama: "SayChick",
     cakram: C("saychick"),
@@ -126,6 +136,7 @@ export const KLIEN = [
   },
   {
     slug: "success-career",
+    tahun: 2026,
     kelompok: "coderoach",
     nama: "Success Career",
     cakram: C("success-career"),
@@ -138,6 +149,7 @@ export const KLIEN = [
   },
   {
     slug: "studentchanges",
+    tahun: 2026,
     kelompok: "coderoach",
     nama: "StudentChanges!",
     cakram: C("studentchanges"),
@@ -150,6 +162,7 @@ export const KLIEN = [
   },
   {
     slug: "terasol",
+    tahun: 2026,
     kelompok: "coderoach",
     nama: "Rumah Sehat Terasol",
     cakram: C("terasol"),
@@ -162,6 +175,7 @@ export const KLIEN = [
   },
   {
     slug: "viralytics",
+    tahun: 2026,
     kelompok: "coderoach",
     nama: "Viralytics",
     cakram: C("viralytics"),
@@ -189,6 +203,7 @@ export const KLIEN = [
   // Mitraplus (tempat kerja Farrez sejak 2023)
   {
     slug: "sanden",
+    tahun: 2024,
     kelompok: "mitraplus",
     nama: "Sanden Intercool Indonesia",
     cakram: C("sanden"),
@@ -201,6 +216,7 @@ export const KLIEN = [
   },
   {
     slug: "jasindo",
+    tahun: 2025,
     kelompok: "mitraplus",
     nama: "Asuransi Jasindo",
     cakram: C("jasindo"),
@@ -213,6 +229,7 @@ export const KLIEN = [
   },
   {
     slug: "bni",
+    tahun: 2025,
     kelompok: "mitraplus",
     nama: "BNI",
     cakram: C("bni"),
@@ -225,6 +242,7 @@ export const KLIEN = [
   },
   {
     slug: "pbt",
+    tahun: 2023,
     kelompok: "mitraplus",
     nama: "Putera Bangka Tani",
     cakram: C("pbt"),
@@ -237,6 +255,7 @@ export const KLIEN = [
   },
   {
     slug: "saksama",
+    tahun: 2025,
     kelompok: "mitraplus",
     nama: "Saksama",
     cakram: C("saksama"),
@@ -259,6 +278,8 @@ export const KLIEN = [
   ].map(([slug, nama, industri, jenis]) => ({
     slug,
     kelompok: "pribadi",
+    // tahun pertama di `periode` proyeknya ("2023 – 2026" jadi 2023)
+    tahun: Number(String(cariProyek(slug)?.periode ?? "").match(/\d{4}/)?.[0]) || undefined,
     nama,
     cakram: C(`pribadi-${slug}`),
     industri,
