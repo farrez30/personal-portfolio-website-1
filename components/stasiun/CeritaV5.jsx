@@ -1,8 +1,14 @@
 // Seksi HTML cerita v5: satu babak satu <li class="bab bab--<id>">, jadi naskah kamera
 // (components/stasiun/naskah.js) bisa menautkan anchornya. Markup dan kelas mengikuti CeritaKerja
-// supaya gaya teks sama; dunia 3D dipasang di atasnya di fase berikutnya.
+// supaya gaya teks sama. Di mode Imersif DuniaV5 menambah kelas cerita-kerja--dunia: tiap babak
+// setinggi --bobot layar dan teksnya menempel di atas lantai kantor 3D.
 import { Link } from "@/i18n/navigation";
 import { BABAK_V5 } from "@/content/cerita-v5";
+import "@/components/cerita/cerita.css";
+
+// Tinggi babak dalam layar saat dunia tampil; ruang server dan kebiasaan sedikit lebih panjang
+// karena bingkainya lebih lebar.
+const BOBOT = { data: 1.5, kebiasaan: 1.5 };
 
 export default function CeritaV5({ locale }) {
   const n = String(BABAK_V5.length).padStart(2, "0");
@@ -11,7 +17,7 @@ export default function CeritaV5({ locale }) {
       <h2 id="cerita-v5-judul" className="sr-only">{locale === "en" ? "Before you decide" : "Sebelum Anda memutuskan"}</h2>
       <ol className="cerita-kerja__daftar" style={{ listStyle: "none", padding: 0 }}>
         {BABAK_V5.map((b, i) => (
-          <li key={b.id} className={`bab bab--${b.id}`} aria-labelledby={`bab-${b.id}`} data-babak={b.id}>
+          <li key={b.id} className={`bab bab--${b.id}`} aria-labelledby={`bab-${b.id}`} data-babak={b.id} style={{ "--bobot": BOBOT[b.id] ?? 1.3 }}>
             <div className="wadah bab__isi">
               <div className="bab__teks">
                 <p className="mono bab__nomor" aria-hidden="true">
