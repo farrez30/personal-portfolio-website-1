@@ -50,7 +50,7 @@
   .kamera .kanan { position: absolute; right: calc(6% + 60px); bottom: calc(12% + 8px); text-align: right; }
   .kamera .silang { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px; opacity: 0.6;
     background: linear-gradient(#f6efe3, #f6efe3) center / 2px 100% no-repeat, linear-gradient(#f6efe3, #f6efe3) center / 100% 2px no-repeat; }
-  @media (max-width: 720px) { .daftar { top: auto; bottom: 70px; left: 16px; right: 16px; width: auto; height: 120px; } .hud { width: calc(100% - 64px); } }
+  @media (max-width: 720px) { .daftar { top: auto; bottom: 70px; left: 16px; right: 16px; width: auto; height: 120px; } .hud { width: calc(100% - 32px); box-sizing: border-box; } }
 </style>
 <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.187.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.187.0/examples/jsm/" } }</script>
 </head>
@@ -357,6 +357,11 @@ function tempelHud(pf) {
   const muatKanan = x + rPx + 48 <= batasKanan, muatKiri = x - rPx - 48 - lebar >= 16, keKanan = muatKanan || (!muatKiri && x < innerWidth / 2);
   const hx = Math.min(batasKanan, Math.max(16, keKanan ? x + rPx + 48 : x - rPx - 48 - lebar));
   const hy = muatKanan || muatKiri ? Math.min(innerHeight - tinggi - 90, Math.max(16, y - rPx - tinggi * 0.6)) : Math.max(16, y - rPx - tinggi - 24);
+  // layar sempit: daftar satelit memenuhi lebar bawah, jadi panel menempel di atas (di bawah panel jam) dan garis turun ke benda
+  if (innerWidth < 720) { const atasHud = (document.querySelector(".jam")?.getBoundingClientRect().bottom ?? 120) + 12; hud.style.left = "16px"; hud.style.top = atasHud + "px";
+    const bx = Math.min(innerWidth - 40, Math.max(40, x)), by = atasHud + tinggi, sud = Math.atan2(by - y, bx - x), sx = x + Math.cos(sud) * rPx, sy = y + Math.sin(sud) * rPx;
+    cincin.setAttribute("cx", x); cincin.setAttribute("cy", y); cincin.setAttribute("r", rPx); ujung.setAttribute("cx", sx); ujung.setAttribute("cy", sy); ujung.setAttribute("r", 3);
+    garis.setAttribute("points", `${sx},${sy} ${bx},${by}`); return; }
   hud.style.left = hx + "px"; hud.style.top = hy + "px";
   const ax = keKanan ? hx : hx + lebar, ay = Math.min(hy + tinggi - 12, Math.max(hy + 12, y)), sud = Math.atan2(ay - y, ax - x), sx = x + Math.cos(sud) * rPx, sy = y + Math.sin(sud) * rPx;
   cincin.setAttribute("cx", x); cincin.setAttribute("cy", y); cincin.setAttribute("r", rPx);
