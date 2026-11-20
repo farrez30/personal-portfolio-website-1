@@ -5,15 +5,17 @@ import CeritaKerja from "@/components/cerita/CeritaKerja";
 import Contact from "@/components/contact/Contact";
 import Klien from "@/components/klien/Klien";
 import Dunia from "@/components/dunia/Dunia";
+import { ambilIsi } from "@/lib/isi/ambil";
 
 export default async function Beranda({ params }) {
   const { locale } = await params;
   setRequestLocale(locale);
+  const { situs } = await ambilIsi();
 
   return (
     <>
       <Dunia />
-      <Gerbang />
+      <Gerbang cv={situs.cv} />
       <CeritaKerja />
       <RakSesuaiMode />
       <Klien />

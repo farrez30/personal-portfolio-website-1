@@ -8,7 +8,7 @@ import { SplitText } from "gsap/SplitText";
 import { PiArrowDownBold } from "react-icons/pi";
 import { Link } from "@/i18n/navigation";
 import { BAB } from "@/content/cerita";
-import { cariProyek } from "@/content/proyek";
+import { useIsi } from "@/components/isi/IsiProvider";
 import { useMode } from "@/components/mode/ModeProvider";
 import "./cerita.css";
 
@@ -26,6 +26,7 @@ export default function CeritaKerja() {
   const t = useTranslations("cerita");
   const locale = useLocale();
   const { mode } = useMode();
+  const { cariProyek } = useIsi();
   const akar = useRef(null);
   const [dunia, setDunia] = useState(false);
   const [tampil, setTampil] = useState(false);
@@ -282,7 +283,7 @@ export default function CeritaKerja() {
                     <ul className="bab__keluhan">
                       {b.keluhan.map((k, j) => (
                         <li key={k.slug} style={{ "--j": j }}>
-                          <Link href={`/proyek/${k.slug}`}>{k[locale]}</Link>
+                          {cariProyek(k.slug) ? <Link href={`/proyek/${k.slug}`}>{k[locale]}</Link> : k[locale]}
                         </li>
                       ))}
                     </ul>
@@ -291,10 +292,10 @@ export default function CeritaKerja() {
                   {(b.bukti || b.luar) && (
                     <p className="bab__bukti">
                       <span className="mono">{t("bukti")}:</span>{" "}
-                      {(b.bukti ?? []).map((slug, j) => (
+                      {(b.bukti ?? []).filter((slug) => cariProyek(slug)).map((slug, j) => (
                         <span key={slug}>
                           {j > 0 && ", "}
-                          <Link href={`/proyek/${slug}`}>{cariProyek(slug)?.judul[locale] ?? slug}</Link>
+                          <Link href={`/proyek/${slug}`}>{cariProyek(slug).judul[locale]}</Link>
                         </span>
                       ))}
                       {(b.luar ?? []).map((l, j) => (

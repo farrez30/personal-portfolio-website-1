@@ -289,7 +289,7 @@ export const KLIEN = [
   })),
 ];
 
-export const klienKelompok = (k) => KLIEN.filter((x) => x.kelompok === k);
+export const klienKelompok = (k, daftar = KLIEN) => daftar.filter((x) => x.kelompok === k);
 
 /** Sudut cakram ke-i dari n di cincin, dalam derajat. */
 export const sudutCakram = (i, n) => (360 / n) * i;

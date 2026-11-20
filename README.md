@@ -26,6 +26,8 @@ third-party requests. Source, licence and processing of every file are in
 
 | Path | What it holds |
 |---|---|
+| `payload.config.js`, `cms/` | The CMS at `/admin` (ADR 0026). How to use it: `docs/cms.md`. |
+| `lib/isi/` | Merges CMS values over `content/*.js` and `messages/*.json` for every page. |
 | `content/proyek.js` | The ten albums: titles, summaries, architecture, booklet pages. Privacy rules at the top of the file. |
 | `content/musik.js`, `content/situs.js` | The music CD (playlist, credits) and personal links (CV, email, socials). |
 | `components/musik/` | Mini music player for both modes, an `<audio>` element over `public/musik/` (ADR 0022). |

@@ -2,8 +2,12 @@ import { notFound } from "next/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { routing } from "@/i18n/routing";
 import { Link } from "@/i18n/navigation";
-import { proyek, cariProyek } from "@/content/proyek";
+import { proyek } from "@/content/proyek";
+import { ambilIsi } from "@/lib/isi/ambil";
 import AlbumIsi from "@/components/album/AlbumIsi";
+
+// Proyek yang disembunyikan di CMS jadi 404 (ADR 0026).
+const cariProyek = async (slug) => (await ambilIsi()).proyek.find((p) => p.slug === slug) ?? null;
 
 export const dynamicParams = false;
 
@@ -13,7 +17,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { locale, slug } = await params;
-  const p = cariProyek(slug);
+  const p = await cariProyek(slug);
   if (!p) return {};
   const languages = Object.fromEntries(routing.locales.map((l) => [l, `/${l}/proyek/${slug}`]));
   return {
@@ -28,7 +32,7 @@ export async function generateMetadata({ params }) {
 export default async function HalamanProyek({ params }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const p = cariProyek(slug);
+  const p = await cariProyek(slug);
   if (!p) notFound();
   const t = await getTranslations("album");
 

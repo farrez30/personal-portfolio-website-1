@@ -10,6 +10,8 @@ import ModeProvider from "@/components/mode/ModeProvider";
 import Bilah from "@/components/bilah/Bilah";
 import PemutarMusik from "@/components/musik/PemutarMusik";
 import GulirHalus from "@/components/gulir/GulirHalus";
+import IsiProvider from "@/components/isi/IsiProvider";
+import { ambilIsi } from "@/lib/isi/ambil";
 
 export const dynamicParams = false;
 
@@ -73,6 +75,7 @@ export default async function LocaleLayout({ children, params }) {
   setRequestLocale(locale);
   const messages = await getMessages();
   const t = await getTranslations("umum");
+  const { proyek, klien, situs } = await ambilIsi();
 
   return (
     <html lang={locale} className={`${sans.variable} ${mono.variable}`} suppressHydrationWarning>
@@ -80,17 +83,19 @@ export default async function LocaleLayout({ children, params }) {
         <ThemeScript />
         <TiraiDunia />
         <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>
-            <ModeProvider>
-              <GulirHalus />
-              <a className="lewati" href="#isi">
-                {t("lewati")}
-              </a>
-              <Bilah />
-              <main id="isi">{children}</main>
-              <PemutarMusik />
-            </ModeProvider>
-          </ThemeProvider>
+          <IsiProvider isi={{ proyek, klien, situs }}>
+            <ThemeProvider>
+              <ModeProvider>
+                <GulirHalus />
+                <a className="lewati" href="#isi">
+                  {t("lewati")}
+                </a>
+                <Bilah />
+                <main id="isi">{children}</main>
+                <PemutarMusik />
+              </ModeProvider>
+            </ThemeProvider>
+          </IsiProvider>
         </NextIntlClientProvider>
       </body>
     </html>

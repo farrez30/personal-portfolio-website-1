@@ -1,7 +1,7 @@
 "use client";
 import dynamic from "next/dynamic";
 import { useRef } from "react";
-import { proyek } from "@/content/proyek";
+import { useIsi } from "@/components/isi/IsiProvider";
 
 const Panggung = dynamic(() => import("./Panggung"), { ssr: false });
 
@@ -9,6 +9,7 @@ const Panggung = dynamic(() => import("./Panggung"), { ssr: false });
 // dan gulir di dalam bagian ini memindah album satu per satu.
 export default function RakGulir() {
   const ref = useRef(null);
+  const { proyek } = useIsi();
   const n = proyek.length + 1; // ditambah CD musik
   return (
     <section id="rak" ref={ref} className="rak-gulir" style={{ height: `calc(${n - 1} * 42vh + 100vh)` }}>

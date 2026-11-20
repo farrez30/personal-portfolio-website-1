@@ -1,5 +1,5 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import {
   PiPlayFill,
@@ -12,13 +12,11 @@ import {
   PiCaretRightBold,
   PiXBold,
 } from "react-icons/pi";
-import { proyek as daftarProyek } from "@/content/proyek";
+import { useIsi } from "@/components/isi/IsiProvider";
 import { albumMusik } from "@/content/musik";
 import Hologram from "./Hologram";
 import { suara } from "./suara";
 
-// Rak imersif: semua proyek, lalu satu CD musik di ujung.
-const proyek = [...daftarProyek, albumMusik];
 import { buatAdegan } from "./adegan";
 import { muatLingkungan } from "./lingkungan";
 import { indeksMendarat } from "./mendarat";
@@ -31,6 +29,9 @@ export default function Panggung({ gulir }) {
   const tr = useTranslations("rak");
   const tg = useTranslations("gerbang");
   const locale = useLocale();
+  const { proyek: daftarProyek } = useIsi();
+  // Rak imersif: proyek yang tampil (CMS), lalu satu CD musik di ujung.
+  const proyek = useMemo(() => [...daftarProyek, albumMusik], [daftarProyek]);
   const wadah = useRef(null);
   const adegan = useRef(null);
   const gelembung = useRef(null);
@@ -194,7 +195,7 @@ export default function Panggung({ gulir }) {
       await a.siapkan(() => bingkaiSenggang(wadah.current));
       performance.mark("rak:hangat");
       if (batal) return;
-      bacaHash(a, false, keIndeksGulir);
+      bacaHash(proyek, a, false, keIndeksGulir);
       setSiap(true);
     });
     return () => {
@@ -224,7 +225,7 @@ export default function Panggung({ gulir }) {
 
   // Hash yang berubah dari luar (tombol Back, tautan) ikut diterapkan.
   useEffect(() => {
-    const ubah = () => adegan.current && bacaHash(adegan.current, true, keIndeksGulir);
+    const ubah = () => adegan.current && bacaHash(proyek, adegan.current, true, keIndeksGulir);
     window.addEventListener("hashchange", ubah);
     return () => window.removeEventListener("hashchange", ubah);
   }, []);
@@ -491,7 +492,7 @@ async function bingkaiSenggang(el) {
   }
 }
 
-function bacaHash(a, dariLuar, keIndeksGulir) {
+function bacaHash(proyek, a, dariLuar, keIndeksGulir) {
   const [, slug, aksi] = location.hash.split("/");
   const i = proyek.findIndex((p) => p.slug === slug);
   if (i < 0) return;
