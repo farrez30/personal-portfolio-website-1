@@ -80,6 +80,15 @@ Mengikuti `riset-modul-lab.md` §4 dan ADR 0024.
 Jumlah loker (**diputuskan Farrez 20 Nov**): satu modul 8 loker (4 rak x 2). 13 proyek = modul A penuh, node, modul B berisi 5 proyek dan loker cetak biru kontak. Modul baru di-berth ke port node saat loker penuh; jumlah modul, loker, dan satelit dihitung dari data dan dikunci tes, tanpa pengisi (`riset-stasiun-tumbuh.md`). Semua 22 klien jadi satelit di tiga bidang orbit menurut kelompok. Isi proyek: tablet prosedur dengan tab studi kasus, cue card di pintu loker (`riset-album-patch.md`).
 Urutan loker = urutan daftar HTML = urutan `proyek.js`.
 
+## 4a. Keputusan Farrez 20 Nov (orbit, klien, kontak, isi layar)
+
+- **Klien:** album sertifikat misi. Tiap halaman satu sertifikat seperti sertifikat patch NASA (patch, nama misi, tahun diluncurkan, yang dibangun, status beroperasi). Tombol "sambungkan" memutar kamera ke jendela kokpit, satelit klien lewat, lalu layar menampilkan siarannya (situs klien). Padanan nyata terverifikasi: plakat misi di Mission Control dan sertifikat patch NASM (`riset-album-patch.md`).
+- **Orbit:** halaman interaktif `previs/orbit.html`. Bumi siang-malam dari rumus USNO (`previs/matahari.js`, 9 tes), stasiun dan 22 satelit klien mengorbit (orbit tipe ISS), klik satelit atau pilih di monitor untuk terbang ke sana, HUD dengan garis penunjuk dan tombol buka situs di tab baru, kamera 360 dengan benda terpilih sebagai pusat, tampilan jendela kokpit ala Cupola. Skala waktu masih dibandingkan Farrez: waktu nyata atau mulai dari detik ini lalu 60 kali.
+- **Loker kontak:** judul **"Modul berikutnya, punya Anda."** (pilihan Farrez). Lembar cetak biru menyembul tiga perempat, berisi prosedur enam langkah dari klaim yang sudah dikonfirmasi (`naskah-teks.md`).
+- **Isi layar kokpit dan tablet:** bergaya penjelasan visual interaktif seperti designed-to-scale (diagram yang dijalankan langkah demi langkah), supaya pengunjung merasa berada di dalam simulasi. Rujukan: `riset-situs-belajar-interaktif.md`.
+- **Bentuk benda:** aturan bentuk baru (bevel, shape language, kepadatan detail) di `riset-bentuk-prop.md`, menggantikan "kotak dan silinder tanpa bevel" di lembar look-dev.
+- **Data yang perlu dilengkapi:** klien belum punya kolom tahun (HUD menampilkan tahun hanya bila ada di teks `kerja`); logo klien mentah untuk patch.
+
 ## 5. Aksesibilitas
 
 - Kanvas `aria-hidden`; semua aksi bisa lewat HTML.
