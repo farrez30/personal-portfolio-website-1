@@ -23,5 +23,7 @@ terms, each title answers the reader's worry in the left column. **(R)** = recom
 Body text (`isi`) in EN follows the ID meaning sentence by sentence and keeps every claim at the same
 strength; it is in `content/cerita-v5.js`.
 
-Still open for Farrez: the story title ("Dari ide sampai dipakai" or "Sebelum Anda memutuskan", EN
-"From idea to daily use" or "Before you decide"); the project to link as proof of load testing in 08.
+Decided by Farrez, 21 Nov 2026:
+- Story title: "Sebelum Anda memutuskan" (EN "Before you decide"), the one already in place ("ya lanjut").
+- Proof of load testing for 08: free choice; Flash Sale Lab (`flash-sale-lab`) is linked.
+- Saksama logo and Tumtim start year: used as they are; without them the item is skipped.
