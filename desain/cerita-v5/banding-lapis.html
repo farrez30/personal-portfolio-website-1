@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Banding lapisan bumi</title>
+<style>
+  :root { color-scheme: dark; --kertas: #f6efe3; --merah: #e0574b; }
+  body { margin: 0; background: #0e1424; color: var(--kertas); font: 15px/1.5 system-ui, sans-serif; }
+  main { max-width: 1400px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .dua { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
+  @media (max-width: 860px) { .dua { grid-template-columns: 1fr; } }
+  section { background: rgba(246, 239, 227, 0.05); border: 1px solid rgba(246, 239, 227, 0.15); border-radius: 12px; padding: 16px; }
+  h2 { font-size: 18px; margin: 0 0 6px; }
+  a.buka { display: inline-block; margin: 6px 0 12px; padding: 8px 12px; border-radius: 6px; background: var(--merah); color: #fff; text-decoration: none; font-weight: 600; }
+  figure { margin: 0 0 12px; }
+  img { width: 100%; border-radius: 8px; display: block; }
+  figcaption { font-size: 13px; opacity: .75; margin-top: 4px; }
+  ul { padding-left: 18px; margin: 8px 0; }
+</style>
+</head>
+<body>
+<main>
+<h1>Lapisan bumi: A three.js toon, B CesiumJS</h1>
+<p>Keduanya memakai lapisan yang sama dari NASA GIBS: Blue Marble untuk darat, lampu kota Black Marble, dan awan dari citra VIIRS kemarin. Posisi matahari dan orbit satelit juga sama.</p>
+<div class="dua">
+<section>
+  <h2>A. three.js, gaya toon</h2>
+  <a class="buka" href="previs/orbit.html?lapis=nasa" target="_blank" rel="noopener noreferrer">Buka versi interaktif</a>
+  <ul><li>Warna darat dari Blue Marble, dipadatkan ke anak tangga pastel</li><li>Awan nyata bertepi tegas, garis pantai vektor, pita senja USNO</li><li>Satelit dan stasiun berbentuk 3D toon</li></ul>
+  <figure><img src="lapis-a-dekat.jpg" alt="Versi A dari dekat stasiun"><figcaption>Dekat stasiun, tinggi nyata</figcaption></figure>
+  <figure><img src="lapis-a-tinggi.jpg" alt="Versi A dengan tinggi 3x"><figcaption>Tinggi 3x</figcaption></figure>
+  <figure><img src="lapis-a-jauh.jpg" alt="Versi A dari jauh"><figcaption>Dari jauh, garis senja dan awan</figcaption></figure>
+  <figure><img src="lapis-a-malam.jpg" alt="Versi A di atas Asia"><figcaption>Diputar ke Asia</figcaption></figure>
+</section>
+<section>
+  <h2>B. CesiumJS, fotorealistis</h2>
+  <a class="buka" href="previs/orbit-cesium.html" target="_blank" rel="noopener noreferrer">Buka versi interaktif</a>
+  <ul><li>Citra NASA apa adanya, cahaya dan atmosfer bawaan Cesium</li><li>Ubin peta dimuat bertahap, buram sampai ubinnya datang</li><li>Satelit hanya titik, model 3D perlu dibuat GLB</li></ul>
+  <figure><img src="lapis-b-dekat.jpg" alt="Versi B dari dekat stasiun"><figcaption>Dekat stasiun, ubin belum lengkap</figcaption></figure>
+  <figure><img src="lapis-b-jauh2.jpg" alt="Versi B dari jauh di atas Asia dan Australia"><figcaption>Dari jauh, Asia dan Australia siang</figcaption></figure>
+  <figure><img src="lapis-b-malam.jpg" alt="Versi B sisi malam Amerika"><figcaption>Sisi malam, lampu kota Amerika</figcaption></figure>
+</section>
+</div>
+</main>
+</body>
+</html>

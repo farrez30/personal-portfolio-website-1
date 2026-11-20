@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Orbit stasiun, versi CesiumJS</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.124.0/Build/Cesium/Widgets/widgets.css">
+<script src="https://cdn.jsdelivr.net/npm/cesium@1.124.0/Build/Cesium/Cesium.js"></script>
+<style>
+  :root { color-scheme: dark; --tinta: #2a2836; --kertas: #f6efe3; --merah: #e0574b; }
+  html, body, #peta { margin: 0; height: 100%; background: #0e1424; color: var(--kertas); font-family: system-ui, sans-serif; overflow: hidden; }
+  .cesium-viewer-bottom { display: none; }
+  .panel { position: fixed; z-index: 5; background: rgba(14, 20, 36, 0.38); border: 1px solid rgba(246, 239, 227, 0.22); border-radius: 10px; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .jam { left: 16px; top: 16px; padding: 10px 14px; font: 600 14px/1.5 ui-monospace, monospace; }
+  .jam b { padding: 1px 6px; border-radius: 4px; background: var(--merah); color: #fff; margin-left: 4px; }
+  button, .hud a { font: 600 13px system-ui; border: 1px solid rgba(246, 239, 227, 0.3); border-radius: 6px; background: rgba(246, 239, 227, 0.08); color: var(--kertas); padding: 6px 10px; cursor: pointer; min-height: 36px; }
+  button:hover, .hud a:hover { background: rgba(246, 239, 227, 0.2); }
+  button[aria-pressed="true"] { background: rgba(246, 239, 227, 0.85); color: var(--tinta); }
+  .jam .tombol { display: flex; gap: 6px; margin-top: 8px; }
+  .daftar { right: 16px; top: 16px; max-height: calc(100% - 32px); width: 210px; padding: 8px; overflow-y: auto; }
+  .daftar h2 { font: 700 13px ui-monospace, monospace; letter-spacing: .06em; margin: 4px 0 8px; }
+  .daftar ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+  .daftar button { width: 100%; text-align: left; display: flex; gap: 8px; align-items: center; border-color: transparent; background: transparent; }
+  .daftar button[aria-current="true"] { background: var(--merah); color: #fff; }
+  .titik { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--tinta); flex: none; }
+  .hud { left: 16px; bottom: 40px; width: 280px; padding: 12px 14px; }
+  .hud h3 { margin: 0 0 2px; font-size: 18px; }
+  .hud .kode { font: 600 12px ui-monospace, monospace; letter-spacing: .05em; color: rgba(246, 239, 227, 0.7); }
+  .hud p { margin: 8px 0; font-size: 14px; line-height: 1.45; }
+  .hud a { display: inline-flex; gap: 6px; align-items: center; text-decoration: none; }
+  .kredit { position: fixed; right: 16px; bottom: 8px; z-index: 5; font: 11px system-ui; color: rgba(246, 239, 227, 0.6); }
+  @media (max-width: 720px) { .daftar { top: auto; bottom: 70px; left: 16px; right: 16px; width: auto; height: 120px; } .hud { width: calc(100% - 64px); bottom: 200px; } }
+</style>
+</head>
+<body>
+<div id="peta"></div>
+<div class="panel jam" aria-live="polite">
+  <div id="jamSim">-</div>
+  <div class="tombol">
+    <button id="mNyata" aria-pressed="false">Waktu nyata</button>
+    <button id="mCepat" aria-pressed="true">Detik ini, 60x</button>
+  </div>
+</div>
+<nav class="panel daftar" aria-label="Satelit"><h2>MONITOR SATELIT</h2><ol id="daftar"></ol></nav>
+<aside class="panel hud" id="hud" hidden></aside>
+<small class="kredit" id="kredit">Citra: NASA GIBS</small>
+<script type="module">
+import { keadaanMatahari, orbit } from "./matahari.js";
+import { gibs, muatGambar, petaAwan, tanggalAwan, WMS } from "./lapis-nasa.js";
+import { KLIEN } from "../../../content/klien.js";
+import { proyek } from "../../../content/proyek.js";
+
+// tanpa token ion: semua citra dari NASA GIBS lewat WMS, tidak ada Bing, Esri, atau Google
+const viewer = new Cesium.Viewer("peta", { baseLayer: false, baseLayerPicker: false, geocoder: false, homeButton: false, sceneModePicker: false, navigationHelpButton: false,
+  animation: false, timeline: false, fullscreenButton: false, infoBox: false, selectionIndicator: false });
+const lapisWms = (layers, opsi = {}) => new Cesium.ImageryLayer(new Cesium.WebMapServiceImageryProvider({ url: WMS, layers, parameters: { format: "image/jpeg", transparent: false, ...(opsi.tanggal ? { time: opsi.tanggal } : {}) }, maximumLevel: 8 }), opsi.lapis);
+const L = viewer.imageryLayers;
+L.add(lapisWms("BlueMarble_NextGeneration", { lapis: { nightAlpha: 1 } }));
+L.add(lapisWms("VIIRS_Black_Marble", { lapis: { dayAlpha: 0, nightAlpha: 1, brightness: 1.4 } }));
+const tgl = tanggalAwan();
+const [bm, viirs] = await Promise.all([muatGambar(gibs("BlueMarble_NextGeneration", 4096, 2048)), muatGambar(gibs("VIIRS_NOAA20_CorrectedReflectance_TrueColor", 4096, 2048, tgl))]);
+const awan = petaAwan(viirs, bm, 4096, 2048);
+L.add(new Cesium.ImageryLayer(await Cesium.SingleTileImageryProvider.fromUrl(awan.toDataURL("image/png"), { rectangle: Cesium.Rectangle.MAX_VALUE }), { alpha: 0.85, nightAlpha: 0.08 }));
+document.getElementById("kredit").textContent = "Citra: NASA GIBS, Blue Marble dan VIIRS " + tgl;
+
+const scene = viewer.scene, globe = scene.globe;
+globe.enableLighting = true; globe.dynamicAtmosphereLighting = true; globe.dynamicAtmosphereLightingFromSun = true; globe.showGroundAtmosphere = true;
+scene.skyAtmosphere.show = true;
+
+// waktu: sama seperti versi three.js
+const kurangiGerak = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const clock = viewer.clock; clock.currentTime = Cesium.JulianDate.fromDate(new Date()); clock.shouldAnimate = true;
+const setMode = (m) => { clock.multiplier = m === "nyata" ? 1 : 60; if (m === "nyata") clock.currentTime = Cesium.JulianDate.fromDate(new Date()); mNyata.setAttribute("aria-pressed", m === "nyata"); mCepat.setAttribute("aria-pressed", m === "cepat"); };
+mNyata.onclick = () => setMode("nyata"); mCepat.onclick = () => { clock.currentTime = Cesium.JulianDate.fromDate(new Date()); setMode("cepat"); };
+setMode(kurangiGerak ? "nyata" : "cepat");
+
+// orbit dari matahari.js (kerangka inersia three.js, km) ke ECEF Cesium (meter): putar -GMST di sumbu kutub
+const keEcef = (ms, o) => { const [X, Y, Z] = o.posisi(ms), x = X, y = -Z, z = Y, t = (keadaanMatahari(ms).gmst * Math.PI) / 180;
+  return new Cesium.Cartesian3((x * Math.cos(t) + y * Math.sin(t)) * 1000, (-x * Math.sin(t) + y * Math.cos(t)) * 1000, z * 1000); };
+const WARNA = { coderoach: "#b9dcb0", mitraplus: "#a9c4ec", pribadi: "#f2d27a" };
+const KEL = { coderoach: { raan: 30, i: 45, nama: "Coderoach" }, mitraplus: { raan: 150, i: 97.6, nama: "Mitraplus" }, pribadi: { raan: 270, i: 28, nama: "Personal" } };
+const benda = [{ id: "stasiun", nama: "Stasiun kita", warna: "#e0574b", orbit: orbit({ tinggi: 420 }) }];
+const perKel = {}, ke = {}; KLIEN.forEach((k) => (perKel[k.kelompok] = (perKel[k.kelompok] ?? 0) + 1));
+KLIEN.forEach((k) => { const j = (ke[k.kelompok] = (ke[k.kelompok] ?? -1) + 1), n = perKel[k.kelompok], g = KEL[k.kelompok];
+  benda.push({ id: k.slug, data: k, nama: k.nama, warna: WARNA[k.kelompok], orbit: orbit({ tinggi: 520 + (j % 4) * 60, inklinasi: g.i + (j % 3) * 2, raan0: g.raan + (j * 360) / n / 3, u0: (j * 360) / n }) }); });
+for (const b of benda) {
+  b.entitas = viewer.entities.add({ id: b.id, name: b.nama, position: new (Cesium.CallbackPositionProperty ?? Cesium.CallbackProperty)((t) => keEcef(Cesium.JulianDate.toDate(t).getTime(), b.orbit), false),
+    point: { pixelSize: b.id === "stasiun" ? 12 : 9, color: Cesium.Color.fromCssColorString(b.warna), outlineColor: Cesium.Color.fromCssColorString("#2a2836"), outlineWidth: 2 },
+    viewFrom: new Cesium.Cartesian3(-60000, -60000, 40000) });
+}
+
+const hud = document.getElementById("hud"), daftar = document.getElementById("daftar");
+const ikonKeluar = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M5 2H2v10h10V9M8 2h4v4M12 2 6 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
+const pilih = (b) => { viewer.trackedEntity = b.entitas; benda.forEach((x) => x.tombol.setAttribute("aria-current", x === b));
+  if (!b.data) hud.innerHTML = `<div class="kode">STASIUN HUB</div><h3>Stasiun kita</h3><p>2 modul lab, 1 node, 2 port kosong. Orbit tipe ISS, 420 km.</p>`;
+  else { const k = b.data, p = proyek.find((x) => x.slug === k.slug), tautan = p?.tautan?.situs ?? k.tautan ?? p?.tautan?.kasus;
+    hud.innerHTML = `<div class="kode">${KEL[k.kelompok].nama.toUpperCase()}</div><h3>${k.nama}</h3><p>${k.industri.id}. ${k.kerja.id}</p>${tautan ? `<a href="${tautan}" target="_blank" rel="noopener noreferrer" aria-label="Buka situs ${k.nama} di tab baru">Buka situs ${ikonKeluar}</a>` : ""}`; }
+  hud.hidden = false; };
+for (const b of benda) { const li = document.createElement("li"), t = document.createElement("button"); t.innerHTML = `<span class="titik" style="background:${b.warna}"></span>${b.nama}`; t.onclick = () => pilih(b); b.tombol = t; li.append(t); daftar.append(li); }
+viewer.screenSpaceEventHandler.setInputAction((e) => { const h = scene.pick(e.position); const b = h && benda.find((x) => x.entitas === h.id); if (b) pilih(b); }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+const fmt = (d) => d.toLocaleString("id-ID", { timeZone: "UTC", hour: "2-digit", minute: "2-digit", second: "2-digit", day: "numeric", month: "short", year: "numeric" });
+viewer.clock.onTick.addEventListener(() => { const d = Cesium.JulianDate.toDate(clock.currentTime); jamSim.innerHTML = (clock.multiplier > 1 ? "Simulasi " : "Sekarang ") + fmt(d) + " UTC" + (clock.multiplier > 1 ? "<b>60x</b>" : ""); });
+pilih(benda[0]);
+window.__viewer = viewer; window.__pilih = (id) => pilih(benda.find((b) => b.id === id)); window.__setMode = setMode;
+window.__keadaan = () => ({ ubin: globe.tilesLoaded, lapis: L.length, waktu: Cesium.JulianDate.toDate(clock.currentTime).toISOString() });
+window.SIAP = true;
+</script>
+</body>
+</html>
