@@ -132,6 +132,7 @@ export const ARAH = {
     b("PROYEK", "50 cm", "Tablet prosedur dan cue card", "Cue card berperekat di pintu loker memberi ringkasan dari lorong. Tablet prosedur yang ditarik keluar memuat tab studi kasus.", "portoTablet"),
     b("KONTAK", "50 cm", "Loker cetak biru", "Loker terakhir berisi cetak biru urutan perakitan: modul yang ada bergaris penuh, rencana putus-putus, satu port kosong untuk proyek berikutnya.", "portoCetakBiru"),
     b("KLIEN", "1 m", "Album sertifikat misi", "Astronot membuka album sertifikat misi. Halaman Jeda, tombol sambungkan, satelit Jeda melintas di jendela, lalu layar konsol menampilkan situsnya.", "portoAlbum"),
+    b("KLIEN", "1 m", "Konsol: diagram alur", "Untuk klien tanpa situs tayang, layar konsol menjalankan diagram alur langkah demi langkah: pengguna, CDN, server, antrean, database, cadangan.", "portoAlbum", { v: "-diagram", diagram: "Jeda: satu catatan tersimpan" }),
     b("PORTO 5", "orbit", "Globe sebagai latar, grid proyek", "Globe bergeser ke kiri dan mengecil, grid proyek biasa naik di sisi kanan.", "portoGrid"),
   ],
   A: [

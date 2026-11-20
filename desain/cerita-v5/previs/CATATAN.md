@@ -120,6 +120,15 @@ Yang masih isian: isi belakang patch ("Aplikasi web, 2025"), tahun modul di ceta
 
 Diperbaiki setelah dicek: tekstur kanvas di bahan `clay()` tampil putih, jadi patch, cue card, dan cetak biru memakai MeshBasicMaterial; halaman bawah album tembus sebelum halaman atas dibalik.
 
+## Orbit, rak bentuk baru, album di animatic, konsol diagram, 20 Nov 2026
+
+- `orbit.html` (ADR 0025): lapisan NASA GIBS jadi bawaan, senja dan lampu malam halus, cakrawala satu cangkang atmosfer, garis pantai memudar di sudut landai, petak Blue Marble sekitar 1 km per piksel di bawah kamera, Cupola simetris menghadap bumi, kamera satelit untuk klien, model satelit bergaya konstelasi datar dan stasiun dengan rangka, radiator, sayap gulung, dan port sandar. HUD menempel lewat cincin putus-putus; di layar sempit panel naik ke bawah panel jam.
+- Lorong lab memakai `BENDA.rakLoker`. Pintu loker pilihan dipindah ke grup sendiri; kartu proyek tersimpan di baki dan baru naik saat loker meluncur keluar.
+- Animatic G kini memuat album sertifikat (`11-porto-album`) sesudah lorong lab.
+- `portoAlbum-diagram`: untuk klien tanpa situs tayang, konsol menjalankan diagram alur enam langkah (`BENDA.gambarDiagram`).
+
+Diperbaiki setelah dicek: kartu loker sudah terlihat sebelum loker ditarik; layar konsol tidak di tengah saat penuh karena previs menggeser bidang pandang 17% untuk panel teks (kini dikurangi selama kamera mendekat); label langkah diagram terbaca 7/6.
+
 ## Belum bisa dicek
 
 - Performa di HP sungguhan: GPU HP jauh lebih lemah dari GPU desktop yang dipakai; angka GPU di atas hanya pembanding antaradegan.
