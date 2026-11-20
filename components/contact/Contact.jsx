@@ -10,7 +10,7 @@ import {
 } from "react-icons/pi";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
-import { situs } from "@/content/situs";
+import { useIsi } from "@/components/isi/IsiProvider";
 import { useMode } from "@/components/mode/ModeProvider";
 import { PERTANYAAN, labelAnggaran, sapaanUntuk, susunBrief } from "./brief";
 import "./contact.css";
@@ -22,10 +22,14 @@ const EMAILJS_SERVICE = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || "service_n
 const EMAILJS_TEMPLATE = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || "template_s50v8c4";
 const EMAILJS_PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || "sHLzgGlimFe2gylV8";
 
+// Alamat yang ditampilkan dari tautan di CMS, tanpa https:// dan www.
+const tanpaSkema = (u) => String(u).replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+
 export default function Contact() {
   const t = useTranslations("kontak");
   const locale = useLocale();
   const { mode } = useMode();
+  const { situs } = useIsi();
   const formRef = useRef(null);
   const [dipilih, setDipilih] = useState({});
   // Sapaan dihitung di browser (jam lokal pengunjung), jadi server merender tanpa sapaan.
@@ -83,8 +87,8 @@ export default function Contact() {
   const jalur = [
     { href: `mailto:${situs.email}`, label: t("email"), nilai: situs.email, Ikon: PiEnvelopeSimpleBold },
     { href: `https://wa.me/${situs.whatsapp}`, label: t("whatsapp"), nilai: `+${situs.whatsapp}`, Ikon: PiWhatsappLogoBold },
-    { href: situs.linkedin, label: t("linkedin"), nilai: "linkedin.com/in/farrez", Ikon: PiLinkedinLogoBold },
-    { href: situs.github, label: t("github"), nilai: "github.com/farrez30", Ikon: PiGithubLogoBold },
+    { href: situs.linkedin, label: t("linkedin"), nilai: tanpaSkema(situs.linkedin), Ikon: PiLinkedinLogoBold },
+    { href: situs.github, label: t("github"), nilai: tanpaSkema(situs.github), Ikon: PiGithubLogoBold },
   ];
 
   return (

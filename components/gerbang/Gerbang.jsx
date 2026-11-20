@@ -1,9 +1,8 @@
 import { useTranslations } from "next-intl";
-import { situs } from "@/content/situs";
 import HeadlineGulir from "./HeadlineGulir";
 import "./gerbang.css";
 
-export default function Gerbang() {
+export default function Gerbang({ cv }) {
   const t = useTranslations("gerbang");
 
   return (
@@ -19,7 +18,7 @@ export default function Gerbang() {
             <a href="#kontak" className="tombol">
               {t("hubungi")}
             </a>
-            <a href={situs.cv} className="tombol" download>
+            <a href={cv} className="tombol" download>
               {t("unduhCV")}
             </a>
           </div>

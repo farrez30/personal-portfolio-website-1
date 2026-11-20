@@ -1,5 +1,6 @@
 import { getRequestConfig } from "next-intl/server";
 import { routing } from "./routing";
+import { ambilIsi } from "@/lib/isi/ambil";
 
 export default getRequestConfig(async ({ requestLocale }) => {
   let locale = await requestLocale;
@@ -8,8 +9,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
     locale = routing.defaultLocale;
   }
 
-  return {
-    locale,
-    messages: (await import(`../messages/${locale}.json`)).default,
-  };
+  // Teks berkas yang ditimpa suntingan di CMS (ADR 0026).
+  const { pesan } = await ambilIsi();
+  return { locale, messages: pesan[locale] };
 });

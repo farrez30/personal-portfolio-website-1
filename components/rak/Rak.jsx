@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { PiXBold } from "react-icons/pi";
-import { proyek } from "@/content/proyek";
+import { useIsi } from "@/components/isi/IsiProvider";
 import AlbumIsi from "@/components/album/AlbumIsi";
 import Sampul from "./Sampul";
 import "./rak.css";
@@ -11,6 +11,7 @@ export default function Rak() {
   const t = useTranslations("rak");
   const ta = useTranslations("album");
   const locale = useLocale();
+  const { proyek } = useIsi();
   const [aktif, setAktif] = useState(null);
   const dialog = useRef(null);
   const p = proyek.find((x) => x.slug === aktif) ?? null;

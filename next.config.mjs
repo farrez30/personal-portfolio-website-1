@@ -1,4 +1,5 @@
-const createNextIntlPlugin = require("next-intl/plugin");
+import createNextIntlPlugin from "next-intl/plugin";
+import { withPayload } from "@payloadcms/next/withPayload";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.js");
 
@@ -16,4 +17,5 @@ const nextConfig = {
   },
 };
 
-module.exports = withNextIntl(nextConfig);
+// CMS di /admin (ADR 0026).
+export default withPayload(withNextIntl(nextConfig));

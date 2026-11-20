@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { PiCaretLeftBold, PiCaretRightBold, PiXBold, PiArrowUpRightBold, PiHandSwipeLeftBold } from "react-icons/pi";
 import { useMode } from "@/components/mode/ModeProvider";
 import { KELOMPOK, klienKelompok, cakramDepan } from "@/content/klien";
+import { useIsi } from "@/components/isi/IsiProvider";
 import { bentukCincin, kemajuanSeksi } from "./cincin";
 import "./klien.css";
 
@@ -17,7 +18,8 @@ export default function Klien() {
   const [kelompok, setKelompok] = useState("coderoach");
   const [dibuka, setDibuka] = useState(null);
   const [cincin, setCincin] = useState(false);
-  const daftar = useMemo(() => klienKelompok(kelompok), [kelompok]);
+  const { klien } = useIsi();
+  const daftar = useMemo(() => klienKelompok(kelompok, klien), [kelompok, klien]);
   const induk = KELOMPOK.find((k) => k.slug === kelompok);
   const bahasa = (x) => x[locale] ?? x.id;
 
