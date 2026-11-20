@@ -641,6 +641,130 @@ const ADEGAN = {
       const j = cam.position.distanceTo(ke); cam.near = Math.min(1, Math.max(0.01, j * 0.01)); cam.far = 2000; cam.updateProjectionMatrix(); };
     daftarDom(0, HP);
   },
+  async portoStasiun() {
+    // stasiun hari ini: modul lab A (8 loker), node penghubung, modul lab B (5 proyek + loker kontak), dua port node kosong
+    await ADEGAN.penutup();
+    (window.__orbit ?? []).forEach((st) => (st.visible = false));
+    const V = (x, y, z) => new THREE.Vector3(x, y, z), zA = cam.position.clone().normalize(), xA = new THREE.Vector3().crossVectors(V(0, 1, 0), zA).normalize(), yA = new THREE.Vector3().crossVectors(zA, xA);
+    // stasiun di antara kamera globe dan bumi, diangkat menjauhi garis rute merah dari Jakarta
+    const M0 = zA.clone().multiplyScalar(300).addScaledVector(yA, 60), st = new THREE.Group(); st.position.copy(M0); st.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(xA, yA, zA)); scene.add(st);
+    const lambung = (x, panjang, warnaCincin) => { const k = new THREE.Mesh(new THREE.CylinderGeometry(2.15, 2.15, panjang, 40), clay(0xeae6dc)); k.rotation.z = Math.PI / 2; k.position.x = x; st.add(k);
+      for (const dx of [-panjang / 2 + 0.6, panjang / 2 - 0.6]) { const c = new THREE.Mesh(new THREE.TorusGeometry(2.18, 0.05, 6, 48), clay(0x847e75)); c.rotation.y = Math.PI / 2; c.position.x = x + dx; st.add(c); }
+      const m = new THREE.Mesh(new THREE.TorusGeometry(2.17, 0.12, 6, 48), warnaCincin); m.rotation.y = Math.PI / 2; m.position.x = x; st.add(m);
+      const kc = new THREE.Mesh(new THREE.CircleGeometry(0.35, 24), tanpaGaris(new THREE.MeshBasicMaterial({ color: 0x2a3656 }))); kc.position.set(x + 1, 0.2, 2.18); st.add(kc); };
+    lambung(-5.2, 7, M.merah); lambung(5.2, 7, clay(0xa9c4ec));
+    const node = new THREE.Mesh(new THREE.SphereGeometry(2.4, 28, 20), clay(0xd9d2c6)); st.add(node);
+    // port node: kiri dan kanan terisi modul, atas dan bawah kosong (rencana)
+    for (const [ax, ay] of [[0, 1], [0, -1]]) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.6, 24), clay(0x847e75)); p.position.set(0, ay * 2.5, 0); st.add(p);
+      const cin = new THREE.Mesh(new THREE.TorusGeometry(0.95, 0.06, 6, 32), tanpaGaris(new THREE.MeshBasicMaterial({ color: 0xf2d27a }))); cin.rotation.x = Math.PI / 2; cin.position.set(0, ay * 2.82, 0); st.add(cin); }
+    silinder(0.14, 26, clay(0x847e75), 0, 0, -2.6, st, 8).rotation.z = Math.PI / 2;
+    for (const sx of [-1, 1]) for (const sy of [-1, 1]) kotak(4.2, 0.05, 2.4, clay(0x4b5f9e), sx * 10.5, 0, -2.6 + sy * 1.4, st);
+    // 22 satelit klien, satu bidang orbit tipis per kelompok; ukuran tetap kecil, tanpa puing pengisi
+    const KEL = [["coderoach", 0xb9dcb0, 150, 0.35], ["mitraplus", 0xa9c4ec, 168, -0.25], ["personal", 0xf2d27a, 186, 0.8]];
+    const JUMLAH = { coderoach: 9, mitraplus: 7, personal: 6 };
+    window.__satKlien = [];
+    for (const [k, warna, r, miring] of KEL) { const o = new THREE.Group(); o.rotation.set(miring, 0, 0.25); scene.add(o);
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(r, 0.15, 6, 220), tanpaGaris(new THREE.MeshBasicMaterial({ color: warna, transparent: true, opacity: 0.55 }))); ring.rotation.x = Math.PI / 2; o.add(ring);
+      for (let i = 0; i < JUMLAH[k]; i++) { const g = new THREE.Group(), a = (i / JUMLAH[k]) * Math.PI * 2 + r; g.position.set(Math.cos(a) * r, 0, Math.sin(a) * r); o.add(g);
+        kotak(4, 4, 4, clay(warna, { emissive: warna, emissiveIntensity: 0.5 }), 0, 0, 0, g); kotak(12, 0.3, 3.2, clay(0x9fb3e0), 0, 0, 0, g); window.__satKlien.push({ g, r, a, o }); } }
+    const keDunia = (x, y, z) => st.localToWorld(V(x, y, z));
+    st.updateMatrixWorld(true);
+    lihat(keDunia(HP ? 8 : 10, 7, HP ? 60 : 44).toArray(), keDunia(0, -3, 0).toArray());
+    window.__aturKhusus = (t) => { window.__satKlien.forEach((x) => { const a = x.a + t * 0.6; x.g.position.set(Math.cos(a) * x.r, 0, Math.sin(a) * x.r); }); };
+  },
+  async portoPatch(o) {
+    // ruang node: dinding patch klien (Velcro) atau album patch di tangan astronot; keduanya berakhir di layar kokpit
+    scene.background = new THREE.Color(0xd9d2c6);
+    lampuDasar(1.2, 0.6);
+    const V = (x, y, z) => new THREE.Vector3(x, y, z), halus = (x) => x * x * (3 - 2 * x), klamp = (x) => Math.min(1, Math.max(0, x));
+    // ruangan node: lantai, plafon, dinding belakang (patch), dinding kanan (kokpit)
+    kotak(7, 0.08, 6, clay(0xd9d2c6), 0, -1.25, 0); kotak(7, 0.08, 6, clay(0xe9e4da), 0, 1.25, 0); kotak(7, 2.5, 0.08, clay(0xcfc7b8), 0, 0, -2.0); kotak(0.08, 2.5, 6, clay(0xcfc7b8), 2.6, 0, 0); kotak(0.08, 2.5, 6, clay(0xcfc7b8), -2.6, 0, 0);
+    for (const [y, z] of [[1.05, -1.8], [-1.05, -1.8]]) { const p = silinder(0.03, 5, clay(0xf2d27a), 0, y, z, scene, 10); p.rotation.z = Math.PI / 2; }
+    const KL = ["Uruzin", "Masaya Food", "RPN Agro", "The Global Review", "Raja Roti", "SayChick", "Success Career", "StudentChanges!", "Terasol", "Viralytics", "Tumtim", "Sanden", "Jasindo", "BNI", "Putera Bangka Tani", "Saksama", "FiFoFun", "NDS RO", "AkarKita", "Jeda", "YiheeCam", "d-day"];
+    const WARNA = ["#b9dcb0", "#a9c4ec", "#f2d27a", "#cdb8e8", "#f2b8a0"], PILIH = KL.indexOf("Jeda");
+    const tPatch = (nama, i) => tekstur(256, 256, (g, w) => { const c = WARNA[i % 5]; g.fillStyle = "#2a2836"; g.beginPath(); g.arc(128, 128, 124, 0, 7); g.fill(); g.fillStyle = c; g.beginPath(); g.arc(128, 128, 112, 0, 7); g.fill(); g.strokeStyle = "#fff8ec"; g.lineWidth = 5; g.setLineDash([9, 7]); g.beginPath(); g.arc(128, 128, 100, 0, 7); g.stroke(); g.setLineDash([]);
+      g.fillStyle = "#2a2836"; g.font = "700 " + (nama.length > 10 ? 26 : 34) + "px system-ui"; g.textAlign = "center"; g.textBaseline = "middle"; const kata = nama.split(" "); kata.length > 1 && nama.length > 10 ? (g.fillText(kata.slice(0, Math.ceil(kata.length / 2)).join(" "), 128, 112), g.fillText(kata.slice(Math.ceil(kata.length / 2)).join(" "), 128, 146)) : g.fillText(nama, 128, 128); g.font = "600 16px ui-monospace, monospace"; g.fillText("MISI " + String(i + 1).padStart(2, "0"), 128, 200); });
+    const tBelakang = (nama) => tekstur(256, 256, (g) => { g.fillStyle = "#f6efe3"; g.beginPath(); g.arc(128, 128, 124, 0, 7); g.fill(); g.fillStyle = "#2a2836"; g.font = "700 26px system-ui"; g.textAlign = "center"; g.fillText(nama, 128, 78); g.font = "18px system-ui"; g.fillText("Aplikasi web, 2025", 128, 110); g.fillText("Dipakai tiap hari", 128, 136); g.fillStyle = "#e0574b"; g.fillRect(58, 160, 140, 40); g.fillStyle = "#fff"; g.font = "600 18px system-ui"; g.fillText("Lihat di layar", 128, 186); });
+    const patch = (i, par, x, y, z, r = 0.16) => { const g = new THREE.Group(); g.position.set(x, y, z); par.add(g);
+      const depan = new THREE.Mesh(new THREE.CircleGeometry(r, 40), tanpaGaris(new THREE.MeshBasicMaterial({ map: tPatch(KL[i], i) }))); depan.position.z = 0.006; g.add(depan);
+      const bel = new THREE.Mesh(new THREE.CircleGeometry(r, 40), tanpaGaris(new THREE.MeshBasicMaterial({ map: tBelakang(KL[i]) }))); bel.rotation.y = Math.PI; bel.position.z = -0.006; g.add(bel); return g; };
+    // layar kokpit di dinding kanan: bingkai tebal, isi opak (bukan hologram, riset-album-patch.md)
+    const layarTex = new THREE.TextureLoader().load("../../../public/assets/layar/jeda-desktop.webp"); layarTex.colorSpace = THREE.SRGBColorSpace;
+    const LW = 1.6, LH = 1.0, layar = new THREE.Group(); layar.position.set(2.5, 0.15, -0.4); layar.rotation.y = -Math.PI / 2; scene.add(layar);
+    kotak(LW + 0.16, LH + 0.16, 0.08, clay(0x2a2836), 0, 0, -0.04, layar); const isi = new THREE.Mesh(new THREE.PlaneGeometry(LW, LH), tanpaGaris(new THREE.MeshBasicMaterial({ map: layarTex }))); isi.position.z = 0.002; layar.add(isi);
+    kotak(1.2, 0.25, 0.35, clay(0x4b4a5c), 0, -0.75, 0.15, layar); [-0.4, -0.15, 0.1, 0.35].forEach((x, k) => kotak(0.12, 0.05, 0.12, clay([0xe0574b, 0xf2d27a, 0xb9dcb0, 0xa9c4ec][k]), x, -0.6, 0.15, layar));
+    const pusatLayar = layar.localToWorld(V(0, 0, 0)), normal = V(-1, 0, 0);
+    const fov = HP ? 70 : 58; cam.fov = fov; cam.updateProjectionMatrix();
+    const tanH = Math.tan((fov * Math.PI) / 360), jarakPenuh = 0.97 * Math.min(LH / 2 / tanH, LW / 2 / (tanH * cam.aspect));
+    const layarPenuh = pusatLayar.clone().addScaledVector(normal, jarakPenuh);
+    let pilihan, mulaiPos, mulaiKe, aturTambahan = () => {};
+    if (o.bentuk === "album") {
+      // astronot memegang album terbuka di depan kamera; halaman kanan dibalik, lalu patch Jeda di-flip
+      const astro = new THREE.Group(); astro.position.set(0.15, -0.55, -0.9); scene.add(astro);
+      { const b = new THREE.Mesh(new THREE.CapsuleGeometry(0.2, 0.5, 6, 12), clay(0xf6efe3)); b.position.y = -0.2; astro.add(b); const h = new THREE.Mesh(new THREE.SphereGeometry(0.18, 16, 12), clay(0xf6efe3)); h.position.y = 0.38; astro.add(h); const vz = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 12), clay(0xf2b8a0)); vz.position.set(0, 0.39, 0.08); vz.scale.z = 0.7; astro.add(vz); }
+      const buku = new THREE.Group(); buku.position.set(0, 0.0, -0.45); buku.rotation.x = -0.35; scene.add(buku);
+      kotak(1.3, 0.85, 0.03, clay(0x9c8a74), 0, 0, -0.02, buku);
+      const kiri = new THREE.Group(); kiri.position.x = -0.32; buku.add(kiri); kotak(0.6, 0.78, 0.01, clay(0xfffaf0), 0, 0, 0, kiri);
+      const engsel = new THREE.Group(); buku.add(engsel); const kanan = new THREE.Group(); kanan.position.x = 0.32; engsel.add(kanan); kotak(0.6, 0.78, 0.01, clay(0xfffaf0), 0, 0, 0.004, kanan);
+      const bawah = new THREE.Group(); bawah.position.x = 0.32; buku.add(bawah); kotak(0.6, 0.78, 0.01, clay(0xfffaf0), 0, 0, -0.004, bawah);
+      [0, 1, 2, 3].forEach((k) => patch(k, kiri, -0.14 + (k % 2) * 0.28, 0.18 - Math.floor(k / 2) * 0.34, 0.012, 0.11));
+      [4, 5, 6, 7].forEach((k) => patch(k, kanan, -0.14 + (k % 2) * 0.28, 0.18 - Math.floor((k - 4) / 2) * 0.34, 0.012, 0.11));
+      pilihan = patch(PILIH, bawah, 0.0, 0.0, 0.012, 0.16); [18, 20].forEach((k, j) => patch(k, bawah, -0.15 + j * 0.3, -0.27, 0.012, 0.08));
+      mulaiPos = V(0.05, 0.55, 0.55); mulaiKe = buku.localToWorld(V(0, 0, 0));
+      aturTambahan = (t) => { engsel.rotation.y = -Math.PI * 0.98 * halus(klamp((t - 0.1) / 0.2)); bawah.visible = engsel.rotation.y < -Math.PI / 2; }; // halaman bawah baru tampak setelah halaman atas lewat separuh putaran
+    } else {
+      // dinding patch Velcro: 22 patch dalam kisi 6 x 4 di dinding belakang node
+      const dinding = new THREE.Group(); dinding.position.set(-0.2, 0.05, -1.95); scene.add(dinding);
+      kotak(3.3, 2.0, 0.03, clay(0xe9e4da), 0, 0, 0, dinding);
+      KL.forEach((n, i) => { const x = -1.3 + (i % 6) * 0.52, y = 0.72 - Math.floor(i / 6) * 0.5; kotak(0.26, 0.26, 0.01, clay(0xd4c7ae), x, y, 0.02, dinding); const p = patch(i, dinding, x, y, 0.035); if (i === PILIH) pilihan = p; });
+      mulaiPos = V(-0.2, 0.15, 1.9); mulaiKe = V(-0.2, 0.05, -1.95);
+    }
+    const tKe = o.bentuk === "album" ? 0.45 : 0.25, asalPatch = pilihan.position.clone(), asalSkala = pilihan.scale.clone();
+    const patchDunia = () => pilihan.getWorldPosition(V(0, 0, 0));
+    window.__aturKhusus = (t) => {
+      aturTambahan(t);
+      // patch maju sedikit lalu dibalik
+      const flip = halus(klamp((t - tKe) / 0.12)); pilihan.position.copy(asalPatch).add(V(0, 0, 0.12 * Math.sin(Math.PI * flip))); pilihan.rotation.y = Math.PI * flip; pilihan.scale.copy(asalSkala).multiplyScalar(1 + 0.5 * Math.sin(Math.PI * Math.min(flip, 0.5)) + (flip > 0.5 ? 0.5 : 0));
+      // kamera: lihat patch, lalu menoleh dan maju ke layar kokpit sampai penuh
+      const dekat = halus(klamp((t - (tKe - 0.12)) / 0.12)), keLayar = halus(klamp((t - (tKe + 0.2)) / 0.3));
+      const pPatch = patchDunia(), posDekat = pPatch.clone().add(V(0, 0.05, o.bentuk === "album" ? 0.75 : 0.9));
+      const pos = mulaiPos.clone().lerp(posDekat, dekat).lerp(layarPenuh, keLayar), ke = mulaiKe.clone().lerp(pPatch, dekat).lerp(pusatLayar, halus(klamp((t - (tKe + 0.18)) / 0.18)));
+      cam.position.copy(pos); cam.lookAt(ke); cam.near = 0.01; cam.far = 50; cam.updateProjectionMatrix();
+    };
+    window.__aturKhusus(0); cam.fov = fov; cam.updateProjectionMatrix();
+    if (!q.get("anim")) window.__aturKhusus(o.diam ?? 0);
+  },
+  portoTablet() {
+    // pintu loker dengan cue card berperekat; tablet prosedur ditarik keluar, isinya tab studi kasus (DOM di build)
+    scene.background = new THREE.Color(0xd9d2c6); lampuDasar(1.3, 0.6);
+    kotak(2.4, 2.0, 0.45, clay(0xe9e4da), 0, 0, -0.3); kotak(0.92, 0.82, 0.05, clay(0xf6efe3), -0.5, 0.5, -0.05); kotak(0.92, 0.12, 0.06, clay(0xa9c4ec), -0.5, 0.83, -0.04);
+    kotak(0.92, 0.82, 0.05, clay(0xf6efe3), 0.5, 0.5, 0.25); kotak(0.9, 0.04, 0.42, clay(0xd9d2c6), 0.5, 0.1, 0.05); kotak(0.92, 0.12, 0.06, clay(0xe0574b), 0.5, 0.83, 0.26);
+    const kartu = new THREE.Mesh(new THREE.PlaneGeometry(0.46, 0.6), tanpaGaris(new THREE.MeshBasicMaterial({ map: tekstur(368, 480, (g, w, h) => { g.fillStyle = "#fffaf0"; g.fillRect(0, 0, w, h); g.fillStyle = "#c9b994"; [[8, 8], [w - 40, 8], [8, h - 40], [w - 40, h - 40]].forEach(([x, y]) => g.fillRect(x, y, 32, 32)); g.fillStyle = "#2a2836"; g.font = "700 30px system-ui"; g.fillText("Jeda", 28, 84); g.font = "18px ui-monospace, monospace"; g.fillText("L-07  KARTU RINGKAS", 28, 116);
+      g.font = "19px system-ui"; ["Masalah: ...", "Solusi: ...", "Dipakai oleh: ...", "Stack: Next.js, Postgres"].forEach((x, i) => g.fillText("• " + x, 28, 170 + i * 44)); g.fillStyle = "#e0574b"; g.fillRect(28, 380, 160, 6); }) })));
+    kartu.position.set(-0.5, 0.48, -0.02); scene.add(kartu);
+    const tab = new THREE.Group(); tab.position.set(0.15, -0.25, 0.85); tab.rotation.set(-0.35, -0.25, 0.04); scene.add(tab);
+    kotak(0.86, 0.6, 0.05, clay(0x4b4a5c), 0, 0, 0, tab); for (const [x, y] of [[-0.43, 0.3], [0.43, 0.3], [-0.43, -0.3], [0.43, -0.3]]) kotak(0.09, 0.09, 0.07, clay(0xf2d27a), x, y, 0, tab);
+    const layar = new THREE.Mesh(new THREE.PlaneGeometry(0.76, 0.5), tanpaGaris(new THREE.MeshBasicMaterial({ map: tekstur(760, 500, (g, w, h) => { g.fillStyle = "#f6efe3"; g.fillRect(0, 0, w, h); g.fillStyle = "#2a2836"; g.fillRect(0, 0, w, 52); g.fillStyle = "#fff"; g.font = "600 22px system-ui"; g.fillText("Jeda", 18, 34); g.font = "15px ui-monospace, monospace"; g.fillText("PROSEDUR PROYEK  L-07", 520, 32);
+      const TAB = ["Ringkasan", "Masalah", "Alur", "Arsitektur", "Keputusan", "Stack", "Hasil", "Demo"]; TAB.forEach((x, i) => { g.fillStyle = i === 3 ? "#e0574b" : "#e9e4da"; g.fillRect(12, 66 + i * 52, 150, 44); g.fillStyle = i === 3 ? "#fff" : "#2a2836"; g.font = "600 17px system-ui"; g.fillText(x, 24, 94 + i * 52); });
+      g.strokeStyle = "#2a2836"; g.lineWidth = 3; [[200, 90, "Browser"], [400, 90, "Server"], [600, 90, "Database"], [400, 260, "Penyimpanan"]].forEach(([x, y, n]) => { g.fillStyle = "#a9c4ec"; g.fillRect(x - 70, y, 140, 60); g.strokeRect(x - 70, y, 140, 60); g.fillStyle = "#2a2836"; g.font = "16px system-ui"; g.fillText(n, x - 50, y + 36); });
+      g.beginPath(); g.moveTo(270, 120); g.lineTo(330, 120); g.moveTo(470, 120); g.lineTo(530, 120); g.moveTo(400, 150); g.lineTo(400, 260); g.stroke(); g.fillStyle = "#e0574b"; g.fillRect(200, 400, 210, 44); g.fillStyle = "#fff"; g.font = "600 17px system-ui"; g.fillText("Buka situs", 222, 428); g.strokeStyle = "#fff"; g.lineWidth = 3; g.strokeRect(372, 414, 20, 20); g.beginPath(); g.moveTo(384, 408); g.lineTo(398, 408); g.lineTo(398, 422); g.moveTo(398, 408); g.lineTo(382, 424); g.stroke(); }) })));
+    layar.position.z = 0.027; tab.add(layar);
+    const stiker = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.06), tanpaGaris(new THREE.MeshBasicMaterial({ map: tekstur(160, 60, (g) => { g.fillStyle = "#fffaf0"; g.fillRect(0, 0, 160, 60); g.fillStyle = "#2a2836"; for (let x = 8; x < 150; x += 4 + (x % 3)) g.fillRect(x, 8, 2, 30); g.font = "11px monospace"; g.fillText("SN 0007", 50, 54); }) })));
+    stiker.position.set(0.3, -0.33, -0.03); stiker.rotation.y = Math.PI; tab.add(stiker);
+    lihat(HP ? [0.2, 0.4, 2.9] : [0.35, 0.35, 2.3], [0.05, 0.1, 0.2]); cam.fov = HP ? 62 : 50; cam.updateProjectionMatrix();
+  },
+  portoCetakBiru() {
+    // loker kontak: lembar cetak biru urutan perakitan; modul yang ada bergaris penuh, rencana putus-putus
+    scene.background = new THREE.Color(0xd9d2c6); lampuDasar(1.3, 0.6);
+    kotak(1.2, 2.0, 0.45, clay(0xe9e4da), 0, 0, -0.3); kotak(0.92, 1.7, 0.05, clay(0xf6efe3), -0.48, 0, 0.18).rotation.y = -1.2;
+    const lembar = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.64), tanpaGaris(new THREE.MeshBasicMaterial({ map: tekstur(900, 640, (g, w, h) => { g.fillStyle = "#3f5d8c"; g.fillRect(0, 0, w, h); g.strokeStyle = "rgba(255,255,255,.18)"; g.lineWidth = 1; for (let x = 0; x < w; x += 30) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, h); g.stroke(); } for (let y = 0; y < h; y += 30) { g.beginPath(); g.moveTo(0, y); g.lineTo(w, y); g.stroke(); }
+      g.strokeStyle = "#f4f1ea"; g.fillStyle = "#f4f1ea"; g.lineWidth = 4; g.strokeRect(150, 270, 200, 90); g.strokeRect(470, 270, 200, 90); g.beginPath(); g.arc(410, 315, 60, 0, 7); g.stroke();
+      g.setLineDash([14, 10]); g.strokeRect(355, 90, 110, 120); g.strokeRect(355, 420, 110, 120); g.strokeRect(690, 280, 160, 70); g.setLineDash([]);
+      g.font = "600 20px ui-monospace, monospace"; g.fillText("MODUL A  2024", 160, 260); g.fillText("NODE 1", 375, 395); g.fillText("MODUL B  2026", 480, 260); g.fillText("RENCANA", 362, 80); g.fillText("RENCANA", 362, 570); g.fillText("RENCANA", 700, 272);
+      g.font = "700 30px system-ui"; g.fillText("PORT BERIKUTNYA", 40, 610); g.font = "18px ui-monospace, monospace"; g.fillText("URUTAN PERAKITAN, LEMBAR 1/1", 560, 40); g.fillStyle = "#f2d27a"; g.beginPath(); g.arc(410, 150, 16, 0, 7); g.fill(); }) })));
+    lembar.position.set(0, 0.15, 0.0); lembar.rotation.y = 0; scene.add(lembar);
+    lihat(HP ? [0.1, 0.25, 1.9] : [0.15, 0.25, 1.4], [0, 0.12, 0]); cam.fov = HP ? 62 : 50; cam.updateProjectionMatrix();
+  },
   async portoGrid() {
     await ADEGAN.penutup();
     { const p = cam.position.clone(), arah = p.clone().normalize(), kanan = new THREE.Vector3().crossVectors(arah, new THREE.Vector3(0, 1, 0)).normalize(); lihat(p.multiplyScalar(HP ? 1.6 : 1.25).toArray(), kanan.multiplyScalar(HP ? 0 : -170).add(new THREE.Vector3(0, -10, 0)).toArray()); }

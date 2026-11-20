@@ -112,6 +112,14 @@ Farrez memilih gulir maju (ADR 0024). `?a=P&s=portoLab-alur`, 11 detik: dari bin
 
 Kesalahan yang terulang: komentar `//` yang disisipkan sed menelan `grup.position.copy(M0)`, jadi modul berada di pusat bumi dan kamera menukik menembus garis rute. Ketahuan lewat pengukuran posisi kamera, bukan dari gambar.
 
+## Stasiun tumbuh, patch klien, isi proyek, 20 Nov 2026
+
+Keputusan Farrez: satu modul 8 loker (13 proyek = modul A, node, modul B), semua 22 klien jadi satelit (tiga bidang orbit per kelompok), isi proyek berupa tablet prosedur dan cue card, loker ke-14 jadi loker cetak biru kontak. Patch klien dibandingkan dalam dua bentuk: `banding-klien.html` (perakit `banding-klien.mjs`), video `patch-dinding.mp4` dan `patch-album.mp4`. Riset: `../riset-album-patch.md`, `../riset-stasiun-tumbuh.md`.
+
+Yang masih isian: isi belakang patch ("Aplikasi web, 2025"), tahun modul di cetak biru, isi cue card. Di build semuanya diturunkan dari `content/proyek.js` dan `content/klien.js`. Patch di previs digambar dari nama klien; build butuh berkas logo asli (aset cakram berbentuk CD berlubang, tidak bisa dipakai langsung).
+
+Diperbaiki setelah dicek: tekstur kanvas di bahan `clay()` tampil putih, jadi patch, cue card, dan cetak biru memakai MeshBasicMaterial; halaman bawah album tembus sebelum halaman atas dibalik.
+
 ## Belum bisa dicek
 
 - Performa di HP sungguhan: GPU HP jauh lebih lemah dari GPU desktop yang dipakai; angka GPU di atas hanya pembanding antaradegan.

@@ -126,6 +126,11 @@ export const ARAH = {
     b("LORONG", "3 m", "Gulir maju di lorong", "Gulir menggerakkan kamera maju di lorong, berhenti lembut di depan tiap kelompok loker.", "portoLab", { v: "-gulir", lorong: "gulir" }),
     b("LORONG", "3 m", "Kamera diam, rak bergeser", "Kamera tetap di tengah lorong, rak loker bergeser seperti rak arsip berjalan.", "portoLab", { v: "-geser", lorong: "geser" }),
     b("LORONG", "3 m", "Satu bidikan lebar", "Semua loker terlihat dari ujung lorong, lalu kamera mendekat ke loker terpilih.", "portoLab", { v: "-lebar", lorong: "lebar" }),
+    b("STASIUN", "orbit", "Stasiun hari ini: 2 modul, 1 node", "Modul lab A dan B tersambung lewat node; dua port node kosong untuk modul berikutnya. 22 satelit klien beredar di tiga bidang orbit menurut kelompok.", "portoStasiun"),
+    b("KLIEN", "1 m", "Dinding patch klien", "Patch klien menempel di dinding Velcro node. Satu patch dibalik, lalu kamera menoleh ke layar kokpit yang menampilkan situsnya.", "portoPatch", { v: "-dinding", bentuk: "dinding" }),
+    b("KLIEN", "1 m", "Album patch klien", "Astronot memegang album patch. Halaman dibalik, satu patch dibalik, lalu kamera menoleh ke layar kokpit yang menampilkan situsnya.", "portoPatch", { v: "-album", bentuk: "album" }),
+    b("PROYEK", "50 cm", "Tablet prosedur dan cue card", "Cue card berperekat di pintu loker memberi ringkasan dari lorong. Tablet prosedur yang ditarik keluar memuat tab studi kasus.", "portoTablet"),
+    b("KONTAK", "50 cm", "Loker cetak biru", "Loker terakhir berisi cetak biru urutan perakitan: modul yang ada bergaris penuh, rencana putus-putus, satu port kosong untuk proyek berikutnya.", "portoCetakBiru"),
     b("PORTO 5", "orbit", "Globe sebagai latar, grid proyek", "Globe bergeser ke kiri dan mengecil, grid proyek biasa naik di sisi kanan.", "portoGrid"),
   ],
   A: [
