@@ -55,6 +55,7 @@ Status: draf, menunggu Farrez membaca (19 Nov 2026).
 ## Bentuk dan detail
 
 - Shape language: kotak dan silinder dengan proporsi besar, tanpa bevel; orang berupa kapsul dan bola. Tidak ada tekstur noise.
+- **Diperbarui 20 Nov 2026** (masukan Farrez: benda terlalu basic): tekstur dan palet tetap, bentuk ikut `desain/cerita-v5/riset-bentuk-prop.md`. Benda keras berbevel 8 sampai 15% sisi terpendek, benda ramah 25 sampai 50%; 1 bentuk primer, 2 sampai 4 sekunder, 3 sampai 8 tersier, sekitar 70% permukaan polos; detail terkecil paling sedikit 1/20 dimensi terbesar dan 8 px di HP; bagian yang disentuh tangan 1,5 sampai 2 kali ukuran nyata; kepala robot dan astronot 40 sampai 55% tinggi.
 - Anggaran segitiga: adegan meja di bawah 15 ribu, kota di bawah 250 ribu (terukur 221 ribu), globe di bawah 80 ribu (terukur 75 ribu).
 - Texel density: tidak ada tekstur albedo; layar produk 1 px per 0,5 mm.
 - Tekstur maksimum: layar produk 1024 px (HP 512), peta globe 4096 x 2048 desktop, 2048 x 1024 HP; peta Nusantara 4096.
