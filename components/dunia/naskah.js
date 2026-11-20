@@ -221,9 +221,10 @@ export function durasiBlend(a, b) {
 // Posisi gulir (y halaman) tiap anchor dari seksinya. `ukur(sel)` mengembalikan
 // { atas, tinggi } seksi itu atau null bila belum ada di halaman. Dua anchor yang jatuh di
 // titik sama (kasir dan pintu di awal kontak) dipisah setengah tinggi seksinya.
-export function pemicuAnchor(ukur) {
+// `daftar` bawaan ANCHOR toko kaset; naskah v5 (components/stasiun/naskah.js) memberi daftarnya sendiri.
+export function pemicuAnchor(ukur, daftar = ANCHOR) {
   const hasil = [];
-  for (const a of ANCHOR) {
+  for (const a of daftar) {
     let y = null;
     let tinggi = 0;
     for (const s of a.seksi) {
