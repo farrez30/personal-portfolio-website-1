@@ -2,15 +2,15 @@
 // lantai dari lantai.js; di sini diubah jadi segelintir mesh gabungan (satu per jenis bahan), jadi
 // draw call tidak ikut naik dengan jumlah benda. Garis tinta image-space seperti previs: pass
 // normal + depth, pass warna ke target MSAA, lalu quad tepi (docs/look-dev/cerita-v5.md).
-// Kamera berpindah antaranchor dengan blend arah pandang berwaktu (poseBlend; perpindahan bertipe
-// menyusul di F3) dan mendorong pelan selama babak dibaca. Gambar hanya saat ada yang berubah.
+// Kamera berpindah antaranchor lewat jalur bertipe berwaktu (F3: ikut nota, whip, layar, orbit,
+// pilar, crane; poseAntara di naskah.js) dan mendorong pelan selama babak dibaca. Gambar hanya
+// saat ada yang berubah.
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
-import { susunLantai, LANTAI } from "./lantai.js";
+import { susunLantai, susun, notaTerbang, LANTAI } from "./lantai.js";
 import { gambarAtlas, uvWilayah } from "./layar.js";
-import { poseAnchor, durasiAntara, poseDalam, poseBlend } from "./naskah.js";
-import { easeInOut } from "../dunia/naskah.js";
+import { ANCHOR_V5, poseAnchor, durasiAntara, poseDalam, poseAntara, GESER } from "./naskah.js";
 
 const LATAR = 0xf3ece0;
 const TINTA = 0x2a2836;
@@ -124,6 +124,8 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       garis.push(o);
       continue;
     }
+    // nota merah yang terbang digambar sebagai mesh tersendiri (di bawah)
+    if (o.terbang) continue;
     const kunci = `${o.bahan}|${o.bayang ? 1 : 0}`;
     if (!kelompok.has(kunci)) kelompok.set(kunci, []);
     kelompok.get(kunci).push(siapkan(o));
@@ -152,6 +154,22 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     tanpaTepi.push(l);
     scene.add(l);
   }
+
+  // Nota merah: satu kertas, diam di timbangan meja 1 sampai babak harga-diam, lalu di timbangan
+  // meja 2; selama perpindahan "ikut" terbang di antaranya. Bayangan lantai dihitung sekali, jadi
+  // kertas setipis 3 mm ini tidak ikut melempar bayangan.
+  const NOTA = notaTerbang();
+  const nota = new THREE.Mesh(siapkan({ bentuk: "kotak", ukuran: NOTA.ukuran, bevel: 0, warna: NOTA.warna, m: susun() }), bahan.toon);
+  nota.name = "nota";
+  nota.matrixAutoUpdate = false;
+  nota.receiveShadow = true;
+  scene.add(nota);
+  const iHarga = ANCHOR_V5.findIndex((a) => a.id === "harga-diam");
+  const letakNota = (q) => {
+    const d = q ?? (indeks >= iHarga ? NOTA.ke : NOTA.dari);
+    nota.matrix.fromArray(susun(d.posisi, d.rot ?? [0, d.ry, 0], [d.s, d.s, d.s]));
+    nota.matrixWorldNeedsUpdate = true;
+  };
 
   // ---- Cahaya (previs dunia penuh, gaya terang) ------------------------------------------------
   scene.add(new THREE.HemisphereLight(0xffffff, 0xe6dccb, 1.4));
@@ -261,7 +279,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   let indeks = -1;
   let tujuan = null; // pose anchor kini (tanpa dorongan)
   let pose = null; // pose yang sedang dipakai kamera
-  let blend = null; // { dari, t0, dur }
+  let blend = null; // { dari, lalu, ke, t0, dur }
   let geser = 0;
   let geserTujuan = 0;
   let kotor = true;
@@ -293,7 +311,8 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       return;
     }
     const dur = pose && tujuan ? durasiAntara(lalu, i, kurangiGerak) : 0;
-    blend = dur > 0 ? { dari: { ...pose }, t0: sekarang(), dur: dur * 1000 } : null;
+    // Disela di tengah perpindahan: kamera tidak di pose anchor mana pun, jadi blend biasa (lalu -1).
+    blend = dur > 0 ? { dari: { ...pose }, lalu: blend ? -1 : lalu, ke: i, t0: sekarang(), dur: dur * 1000 } : null;
     tujuan = ke;
     if (!blend) pose = poseDalam(ke, geser);
     kotor = true;
@@ -312,8 +331,8 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     camera.aspect = w / h;
     const tegakBaru = w / h < 0.8;
     // Benda digeser dari kolom teks: ke kanan di layar lebar, ke atas di layar tegak (teks di bawah).
-    if (tegakBaru) camera.setViewOffset(w, h, 0, h * 0.14, w, h);
-    else camera.setViewOffset(w, h, -w * 0.17, 0, w, h);
+    if (tegakBaru) camera.setViewOffset(w, h, 0, h * GESER.tegak, w, h);
+    else camera.setViewOffset(w, h, -w * GESER.lebar, 0, w, h);
     if (tegakBaru !== tegak) {
       tegak = tegakBaru;
       const ke = poseAnchor(indeks, tegak);
@@ -347,11 +366,12 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     const sasaran = poseDalam(tujuan, geser);
     if (blend) {
       const u = (t - blend.t0) / blend.dur;
-      pose = poseBlend(blend.dari, sasaran, easeInOut(Math.min(1, u)));
+      pose = poseAntara(blend.lalu, blend.ke, blend.dari, sasaran, Math.min(1, u), { aspek: camera.aspect, tegak });
       if (u >= 1) blend = null;
       kotor = true;
     } else if (kotor) pose = sasaran;
     if (!kotor) return false;
+    letakNota(blend ? pose.nota : null);
     pasang(pose);
     gambar();
     kotor = false;

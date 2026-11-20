@@ -219,6 +219,9 @@ POSE.gerbang = {
   tegak: { posisi: [-19.3, 2.6, 3.4], lihat: [-16.4, 0.9, -2.6], fov: 58 },
 };
 
+// Dua pilar struktur di tengah lorong [x, z].
+export const PILAR_LORONG = [[-11.9, -0.6], [-2.0, -0.6]];
+
 // Pilar yang dilewati kamera dari kelangsungan ke ruang server (pemicu perpindahan "pilar").
 export const PILAR_LEWAT = (() => {
   const m = lerp3(POSE.kelangsungan.posisi, POSE.data.posisi, 0.5);
@@ -275,7 +278,7 @@ export function susunLantai() {
   // Lorong: dua pilar struktur, pilar yang dilewati kamera, tanaman di kedua ujung, dua rekan kerja.
   // Kedua pilar digeser dari previs (x -12,3 dan -0,4): di sana blend harga-diam ke tarikan dan
   // kelangsungan ke ruang server menembusnya (tes blend tidak menembus benda).
-  for (const x of [-11.9, -2.0]) b.kotak(0.45, LANTAI.tinggi, 0.45, W.putih, x, LANTAI.tinggi / 2, -0.6, b.akar, undefined, { bevel: 0.03 });
+  for (const [x, z] of PILAR_LORONG) b.kotak(0.45, LANTAI.tinggi, 0.45, W.putih, x, LANTAI.tinggi / 2, z, b.akar, undefined, { bevel: 0.03 });
   b.kotak(0.45, LANTAI.tinggi, 0.45, W.pilar, PILAR_LEWAT[0], LANTAI.tinggi / 2, PILAR_LEWAT[1], b.akar, undefined, { bevel: 0.03 });
   for (const x of [-18.6, 6.4]) p.tanaman(b.akar, x, -0.6);
   p.orang(b.akar, -8.6, -0.2, false, W.biru);
@@ -294,15 +297,16 @@ export function susunLantai() {
       b.kotak(0.008, pjg, 0.004, W.gelap, 0, pjg / 2, 0, j);
     }
     const [kiri] = p.timbangan(t, 0.12, 0.16, 0.22, 1.25);
-    p.nota(kiri, 0, 0.007, 0, 0.3);
+    p.nota(kiri, 0, 0.007, 0, 0.3).terbang = "dari";
   }
-  // 2. Harga diam: nota dan koin lembur di satu piring, timbangan miring.
+  // 2. Harga diam: nota dan koin lembur di satu piring, timbangan miring. Nota yang terbang dari
+  // meja 1 mendarat di atas koin, bukan di bawahnya (lembar kontak F3: dari atas ia menembus koin).
   {
     const t = tempat["harga-diam"];
     p.meja(t);
     p.tumpukanMap(t, -0.45, -0.1, 8);
     const [kiri] = p.timbangan(t, 0.15, 0.05, 0.34, 1.1);
-    p.nota(kiri, 0, 0.007, 0.02);
+    p.nota(kiri, 0.01, 0.058, 0.02).terbang = "ke";
     b.silinder(0.028, 0.05, W.kuning, -0.03, 0.03, -0.02, kiri);
     b.silinder(0.022, 0.04, W.kuning, 0.035, 0.025, 0.02, kiri);
     label(kiri, "lembur", -0.06, 0.22, -0.02, 0.022, "harga-diam");
@@ -392,6 +396,20 @@ export function susunLantai() {
     b.tempel({ bentuk: "bidang", ukuran: [0.24, 0.16], isi: "tablet", bahan: "layar", bayang: false, warna: 0xffffff }, kali(m, susun([0, 0, 0.0002])));
   }
   return b.benda;
+}
+
+// Nota merah yang terbang dari timbangan meja dorongan ke timbangan meja harga-diam (perpindahan
+// "ikut", F3). Satu kertas yang sama: di meja 1 sebelum terbang, di meja 2 sesudahnya, jadi adegan
+// menggambarnya sebagai mesh tersendiri, bukan bagian mesh gabungan. Piring timbangan selalu datar,
+// jadi pose diamnya cukup posisi, putaran y, dan skala timbangan.
+let nota = null;
+export function notaTerbang() {
+  if (nota) return nota;
+  const diam = (o) => ({ posisi: o.m.slice(12, 15), ry: Math.atan2(o.m[8], o.m[10]), s: Math.hypot(o.m[0], o.m[1], o.m[2]) });
+  const benda = susunLantai();
+  const cari = (k) => benda.find((o) => o.terbang === k);
+  nota = { dari: diam(cari("dari")), ke: diam(cari("ke")), ukuran: cari("dari").ukuran, warna: W.nota };
+  return nota;
 }
 
 // Kotak batas dunia sebuah benda (untuk tes: kamera tidak di dalam benda, meja tidak bertabrakan).
