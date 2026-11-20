@@ -134,3 +134,8 @@ Perbandingan: outline image-space memakai draw call 1,6 sampai 2 kali clay, seta
 - 2026-11-19: skin toon dengan outline, kamera perspektif (ADR 0020). Outline image-space menggantikan
   inverted hull karena hull belang di silinder bersudut tajam. Nota digelapkan ke `#b8322a` setelah cek
   nilai. Map dan monitor di babak dorongan digeser setelah cek siluet.
+- 2026-11-20: bumi orbit (ADR 0025). Pengecualian disengaja dari aturan anak tangga toon, khusus
+  cahaya: peralihan siang-malam halus `smoothstep(-0.16, 0.06, mu)` dengan rona jingga di garis
+  terbit, sisi malam hampir hitam, awan beralfa bergradasi, lampu kota Black Marble tanpa ambang
+  keras. Darat (Blue Marble dipadatkan ke tangga pastel), laut, garis pantai vektor, dan benda tetap
+  toon. Alasannya permintaan Farrez: garis senja dan lampu malam harus serealistis versi Cesium.
