@@ -25,6 +25,7 @@
   .titik { width: 10px; height: 10px; border-radius: 50%; border: 2px solid var(--tinta); flex: none; }
   .hud { position: fixed; z-index: 4; width: 260px; padding: 12px 14px; pointer-events: auto; }
   .hud h3 { margin: 0 0 2px; font-size: 18px; }
+  .hud .logo { display: block; max-width: 150px; max-height: 44px; margin-bottom: 8px; padding: 6px 8px; background: #fffaf0; border-radius: 6px; }
   .hud .kode { font: 600 12px ui-monospace, monospace; letter-spacing: .05em; color: rgba(246, 239, 227, 0.7); }
   .hud p { margin: 8px 0; font-size: 14px; line-height: 1.45; }
   .hud a { display: inline-flex; gap: 6px; align-items: center; text-decoration: none; }
@@ -91,6 +92,7 @@ import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.j
 import { keadaanMatahari, arahMatahari, orbit, diBayangan, BATAS, BUMI } from "./matahari.js";
 import { KLIEN } from "../../../content/klien.js";
 import { proyek } from "../../../content/proyek.js";
+import { LOGO } from "./logo-klien.js";
 import { gibs, gibsKotak, muatGambar, petaAwan, daratToon, lampuMalam, tanggalAwan } from "./lapis-nasa.js";
 
 const R = 100, SKALA = R / BUMI.R; // 1 unit = 63,78 km
@@ -323,8 +325,9 @@ const hud = document.getElementById("hud"), garis = document.getElementById("gar
 const ikonKeluar = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M5 2H2v10h10V9M8 2h4v4M12 2 6 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
 function tampilHud(b) {
   if (b === stasiun) { hud.innerHTML = `<div class="kode">STASIUN HUB</div><h3>Stasiun kita</h3><p>2 modul lab, 1 node, 2 port kosong. Orbit tipe ISS, 420 km.</p>`; }
-  else { const k = b.data, tahun = (k.kerja.id.match(/(19|20)\d\d/) ?? [null])[0], p = proyek.find((x) => x.slug === k.slug), tautan = p?.tautan?.situs ?? k.tautan ?? p?.tautan?.kasus; // situs asli dulu, lalu halaman kasus
-    hud.innerHTML = `<div class="kode">${KEL[k.kelompok].nama.toUpperCase()}${tahun ? ", SEJAK " + tahun : ""}</div><h3>${k.nama}</h3><p>${k.industri.id}. ${k.kerja.id}</p>${tautan ? `<a href="${tautan}" target="_blank" rel="noopener noreferrer" aria-label="Buka situs ${k.nama} di tab baru">Buka situs ${ikonKeluar}</a>` : ""}`; }
+  // situs asli dulu, lalu halaman kasus; tahun dan logo dari content/klien.js dan logo-klien.js
+  else { const k = b.data, tahun = k.tahun, logo = LOGO[k.slug]?.lockup, p = proyek.find((x) => x.slug === k.slug), tautan = p?.tautan?.situs ?? k.tautan ?? p?.tautan?.kasus;
+    hud.innerHTML = `${logo ? `<img class="logo" src="${logo}" alt="">` : ""}<div class="kode">${KEL[k.kelompok].nama.toUpperCase()}${tahun ? ", SEJAK " + tahun : ""}</div><h3>${k.nama}</h3><p>${k.industri.id}. ${k.kerja.id}</p>${tautan ? `<a href="${tautan}" target="_blank" rel="noopener noreferrer" aria-label="Buka situs ${k.nama} di tab baru">Buka situs ${ikonKeluar}</a>` : ""}`; }
   hud.hidden = false;
 }
 renderer.domElement.addEventListener("click", (e) => { if ((kendali.geser ?? 0) > 6) return; const r = new THREE.Raycaster(); r.setFromCamera(new THREE.Vector2((e.clientX / innerWidth) * 2 - 1, -(e.clientY / innerHeight) * 2 + 1), cam);
