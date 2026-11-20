@@ -4,6 +4,9 @@ import { routing } from "./i18n/routing";
 export default createMiddleware(routing);
 
 export const config = {
-  // Semua path kecuali API, admin CMS, internal Next, dan berkas berekstensi (/assets/* dsb.).
-  matcher: ["/((?!api|admin|_next|_vercel|assets|.*\..*).*)"],
+  // Semua path kecuali API, admin CMS, internal Next, halaman eksperimen lab (diteruskan ke zona
+  // Vercel lain, ADR 0027), dan berkas berekstensi (/assets/* dsb.). Hub /lab tetap lewat sini
+  // supaya diberi bahasa. Backslash ditulis dua kali: di string JS, "\." hanya jadi titik, dan pola
+  // itu dulu menolak semua path selain "/".
+  matcher: ["/((?!api|admin|_next|_vercel|assets|lab/|.*\\..*).*)"],
 };

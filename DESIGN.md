@@ -139,6 +139,16 @@ Personal projects reuse their album label style with a lockup of the project ico
 - A company with several brands is a box set (Masaya Food: Chicken Wow and Geprek Wow): child
   discs peek behind the parent, and the detail card opens both side by side.
 
+## System Design Lab hub (`/lab`, `components/lab/`, ADR 0027)
+
+The site's own tokens and type, framed as one rack of the satellite lab module (ADR 0024). Each
+experiment is a locker door: `--bg-2` panel with four screw heads drawn as radial gradients, a
+plate in Plex Mono uppercase (`SDL-01`, the lane), the problem in one sentence, then one drawer per
+page. A drawer is a `--bg` front with a handle bar and a `--bg-3` bottom lip; on hover or focus it
+lifts 3 px and the handle turns `--aksen` (no lift with reduced motion). The page opens with the
+same Back button row as `/proyek/[slug]`, which also keeps the title clear of the vinyl player.
+The experiment pages themselves keep the flash-sale-lab world (bank queue room, LED boards).
+
 ## Icons and text
 
 Phosphor icons through `react-icons/pi`. UI text follows the `bahasa-lisan` rules: plain
