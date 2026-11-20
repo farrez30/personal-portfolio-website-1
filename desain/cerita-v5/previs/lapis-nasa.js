@@ -7,6 +7,10 @@ export const WMS = "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi";
 export const gibs = (lapis, w, h, tanggal) =>
   `${WMS}?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&CRS=EPSG:4326&BBOX=-90,-180,90,180&FORMAT=image/jpeg&LAYERS=${lapis}&WIDTH=${w}&HEIGHT=${h}${tanggal ? "&TIME=" + tanggal : ""}`;
 
+// kotak = [lintang bawah, bujur kiri, lintang atas, bujur kanan] (urutan sumbu WMS 1.3.0 EPSG:4326)
+export const gibsKotak = (lapis, [la0, lo0, la1, lo1], w, h) =>
+  `${WMS}?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0&CRS=EPSG:4326&BBOX=${la0},${lo0},${la1},${lo1}&FORMAT=image/jpeg&LAYERS=${lapis}&WIDTH=${w}&HEIGHT=${h}`;
+
 export const muatGambar = async (url) => { const img = new Image(); img.crossOrigin = "anonymous"; img.src = url; await img.decode(); return img; };
 
 const piksel = (img, w, h) => { const c = document.createElement("canvas"); c.width = w; c.height = h; const g = c.getContext("2d", { willReadFrequently: true }); g.drawImage(img, 0, 0, w, h); return g.getImageData(0, 0, w, h).data; };
@@ -48,15 +52,19 @@ export function lampuMalam(img, w, h) {
   return c;
 }
 
-// Darat bergaya toon: warna Blue Marble dicerahkan ke arah pastel lalu dipadatkan ke anak tangga.
-// `kanvasSiang` sudah berisi laut dan darat datar; hanya piksel darat (r > 177) yang diganti.
+// Darat bergaya toon: bentuk daratan tetap dari kanvas Natural Earth (sama dengan garis pantai vektor),
+// Blue Marble hanya memberi warna. Piksel darat yang di Blue Marble ternyata laut (garis pantainya
+// sedikit berbeda) diberi warna darat datar, jadi isian tidak pernah keluar dari garis.
 export function daratToon(kanvasSiang, blueMarble) {
-  const w = kanvasSiang.width, h = kanvasSiang.height, b = piksel(blueMarble, w, h);
-  const g = kanvasSiang.getContext("2d"), d = g.getImageData(0, 0, w, h);
-  const tangga = (x) => Math.min(255, Math.round(x / 28) * 28 + 6);
+  const w = kanvasSiang.width, h = kanvasSiang.height;
+  const halus = document.createElement("canvas"); halus.width = w; halus.height = h;
+  const gh = halus.getContext("2d", { willReadFrequently: true }); gh.filter = "blur(1.2px)"; gh.drawImage(blueMarble, 0, 0, w, h);
+  const b = gh.getImageData(0, 0, w, h).data, g = kanvasSiang.getContext("2d"), d = g.getImageData(0, 0, w, h);
+  const tangga = (x) => Math.min(255, Math.round(x / 28) * 28 + 6), datar = [185, 220, 176];
   for (let i = 0; i < d.data.length; i += 4) {
     if (d.data[i] <= 177) continue;
-    for (let k = 0; k < 3; k++) d.data[i + k] = tangga(255 - (255 - b[i + k]) * 0.55);
+    const laut = b[i + 2] > b[i] + 12 && b[i + 2] > b[i + 1];
+    for (let k = 0; k < 3; k++) d.data[i + k] = laut ? datar[k] : tangga(255 - (255 - b[i + k]) * 0.55);
   }
   g.putImageData(d, 0, 0);
 }

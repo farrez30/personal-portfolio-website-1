@@ -33,6 +33,23 @@
   .jendela { position: fixed; inset: 0; z-index: 2; pointer-events: none; display: none; }
   .jendela.nyala { display: block; }
   .kredit { position: fixed; right: 16px; bottom: 8px; z-index: 5; font: 11px system-ui; color: rgba(246, 239, 227, 0.6); }
+  .kamera { position: fixed; inset: 0; z-index: 2; pointer-events: none; display: none; font: 600 13px/1.5 ui-monospace, monospace; color: #f6efe3; text-shadow: 0 1px 2px #000;
+    background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.12) 0 1px, transparent 1px 3px), radial-gradient(ellipse at center, transparent 55%, rgba(0, 0, 0, 0.55) 100%); }
+  .kamera.nyala { display: block; }
+  body.rekam canvas { filter: contrast(1.1) saturate(0.8) brightness(0.95); }
+  .kamera .sudut { position: absolute; width: 48px; height: 48px; border: 0 solid rgba(246, 239, 227, 0.8); }
+  .kamera .a { left: 6%; top: 10%; border-left-width: 3px; border-top-width: 3px; }
+  .kamera .b { right: 6%; top: 10%; border-right-width: 3px; border-top-width: 3px; }
+  .kamera .c { left: 6%; bottom: 12%; border-left-width: 3px; border-bottom-width: 3px; }
+  .kamera .d { right: 6%; bottom: 12%; border-right-width: 3px; border-bottom-width: 3px; }
+  .kamera .rec { position: absolute; left: calc(6% + 60px); top: calc(10% + 8px); display: flex; gap: 8px; align-items: center; }
+  .kamera .rec i { width: 12px; height: 12px; border-radius: 50%; background: #e0574b; animation: kedip 1s steps(2) infinite; }
+  @keyframes kedip { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .kamera .rec i { animation: none; } }
+  .kamera .kiri { position: absolute; left: calc(6% + 60px); bottom: calc(12% + 8px); }
+  .kamera .kanan { position: absolute; right: calc(6% + 60px); bottom: calc(12% + 8px); text-align: right; }
+  .kamera .silang { position: absolute; left: 50%; top: 50%; width: 40px; height: 40px; margin: -20px; opacity: 0.6;
+    background: linear-gradient(#f6efe3, #f6efe3) center / 2px 100% no-repeat, linear-gradient(#f6efe3, #f6efe3) center / 100% 2px no-repeat; }
   @media (max-width: 720px) { .daftar { top: auto; bottom: 70px; left: 16px; right: 16px; width: auto; height: 120px; } .hud { width: calc(100% - 64px); } }
 </style>
 <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.187.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.187.0/examples/jsm/" } }</script>
@@ -56,29 +73,25 @@
   <button id="tNyata" aria-pressed="true">Tinggi nyata</button>
   <button id="tBesar" aria-pressed="false">Tinggi 3x</button>
 </div>
+<div class="kamera" id="kamera" aria-hidden="true"><span class="sudut a"></span><span class="sudut b"></span><span class="sudut c"></span><span class="sudut d"></span>
+  <div class="rec"><i></i>REC</div><div class="kiri" id="kamNama"></div><div class="kanan" id="kamData"></div><div class="silang"></div></div>
 <svg class="garis" aria-hidden="true"><polyline id="garis" fill="none" stroke="#f6efe3" stroke-width="2" points=""/></svg>
 <aside class="panel hud" id="hud" hidden></aside>
 <small class="kredit" id="kredit"></small>
+<!-- jendela Cupola ISS: satu jendela bulat di tengah dan enam trapesium sama besar yang melingkarinya -->
 <svg class="jendela" id="jendela" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-  <defs><mask id="lubang"><rect width="1000" height="1000" fill="#fff"/>
-    <circle cx="500" cy="560" r="150" fill="#000"/>
-    <polygon points="372,442 230,300 410,190 470,390" fill="#000"/><polygon points="628,442 770,300 590,190 530,390" fill="#000"/>
-    <polygon points="350,600 150,640 170,860 360,710" fill="#000"/><polygon points="650,600 850,640 830,860 640,710" fill="#000"/>
-    <polygon points="440,720 380,920 620,920 560,720" fill="#000"/><polygon points="430,370 460,150 540,150 570,370" fill="#000"/>
-  </mask></defs>
+  <defs><mask id="lubang"><rect width="1000" height="1000" fill="#fff"/><circle cx="500" cy="500" r="170" fill="#000"/><polygon points="599,300 738,60 262,60 401,300" fill="#000"/><polygon points="723,486 1000,486 762,74 623,314" fill="#000"/><polygon points="623,686 762,926 1000,514 723,514" fill="#000"/><polygon points="401,700 262,940 738,940 599,700" fill="#000"/><polygon points="277,514 -0,514 238,926 377,686" fill="#000"/><polygon points="377,314 238,74 -0,486 277,486" fill="#000"/></mask></defs>
   <rect id="dinding" width="1000" height="1000" fill="#3a3544" mask="url(#lubang)"/>
-  <g fill="none" stroke="#2a2836" stroke-width="10">
-    <circle cx="500" cy="560" r="150"/><polygon points="372,442 230,300 410,190 470,390"/><polygon points="628,442 770,300 590,190 530,390"/>
-    <polygon points="350,600 150,640 170,860 360,710"/><polygon points="650,600 850,640 830,860 640,710"/><polygon points="440,720 380,920 620,920 560,720"/><polygon points="430,370 460,150 540,150 570,370"/>
-  </g>
+  <g fill="none" stroke="#2a2836" stroke-width="10" stroke-linejoin="round"><circle cx="500" cy="500" r="170"/><polygon points="599,300 738,60 262,60 401,300"/><polygon points="723,486 1000,486 762,74 623,314"/><polygon points="623,686 762,926 1000,514 723,514"/><polygon points="401,700 262,940 738,940 599,700"/><polygon points="277,514 -0,514 238,926 377,686"/><polygon points="377,314 238,74 -0,486 277,486"/></g>
   <rect id="sinar" width="1000" height="1000" fill="#ffe9b8" opacity="0" mask="url(#lubang)"/>
 </svg>
 <script type="module">
 import * as THREE from "three";
+import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { keadaanMatahari, arahMatahari, orbit, diBayangan, BATAS, BUMI } from "./matahari.js";
 import { KLIEN } from "../../../content/klien.js";
 import { proyek } from "../../../content/proyek.js";
-import { gibs, muatGambar, petaAwan, daratToon, lampuMalam, tanggalAwan } from "./lapis-nasa.js";
+import { gibs, gibsKotak, muatGambar, petaAwan, daratToon, lampuMalam, tanggalAwan } from "./lapis-nasa.js";
 
 const R = 100, SKALA = R / BUMI.R; // 1 unit = 63,78 km
 const kurangiGerak = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -124,27 +137,40 @@ const tSiang = new THREE.CanvasTexture(siang), tMalam = new THREE.CanvasTexture(
 // mu = cos(zenit) = dot(normal, matahari). Terang mulai turun sebelum matahari terbenam (mu 0,6 ke 0),
 // rona jingga di sekitar garis terbit, gelap penuh lewat senja nautikal (mu sekitar -0,2), lampu kota menyala bertahap.
 const bahanBumi = new THREE.ShaderMaterial({
-  uniforms: { tSiang: { value: tSiang }, tMalam: { value: tMalam }, matahari: { value: new THREE.Vector3(1, 0, 0) }, B: { value: new THREE.Vector4(BATAS.terbit, BATAS.sipil, BATAS.nautikal, BATAS.astronomis) } },
-  vertexShader: "varying vec2 vUv; varying vec3 vN; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.); }",
-  fragmentShader: `uniform sampler2D tSiang; uniform sampler2D tMalam; uniform vec3 matahari; uniform vec4 B; varying vec2 vUv; varying vec3 vN;
+  uniforms: { tSiang: { value: tSiang }, tMalam: { value: tMalam }, matahari: { value: new THREE.Vector3(1, 0, 0) }, B: { value: new THREE.Vector4(BATAS.terbit, BATAS.sipil, BATAS.nautikal, BATAS.astronomis) }, tepi: { value: 0 } },
+  vertexShader: "varying vec2 vUv; varying vec2 vG; varying vec3 vN; void main(){ vUv = uv; vec3 q = normalize(position); vG = vec2(fract(atan(q.z, -q.x) / 6.2831853 + 1.), 1. - acos(q.y) / 3.1415927); vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.); }",
+  fragmentShader: `uniform sampler2D tSiang; uniform sampler2D tMalam; uniform vec3 matahari; uniform vec4 B; uniform float tepi; varying vec2 vUv; varying vec2 vG; varying vec3 vN;
     void main(){ vec3 c = texture2D(tSiang, vUv).rgb; float mu = dot(normalize(vN), normalize(matahari));
       float hari = smoothstep(-0.16, 0.06, mu);
       vec3 siangW = c * (0.58 + 0.42 * smoothstep(-0.02, 0.6, mu));
       siangW = mix(siangW, siangW * vec3(1.08, 0.72, 0.52), 0.55 * exp(-pow((mu - 0.01) / 0.075, 2.)));
       vec3 w = mix(c * vec3(0.012, 0.016, 0.035), siangW, hari);
-      w += texture2D(tMalam, vUv).rgb * (1. - smoothstep(-0.2, 0.03, mu)) * 1.6;
-      gl_FragColor = vec4(w, 1.);
+      w += texture2D(tMalam, vG).rgb * (1. - smoothstep(-0.2, 0.03, mu)) * 1.6;
+      float pinggir = tepi > 0. ? smoothstep(0., tepi, min(min(vUv.x, 1. - vUv.x), min(vUv.y, 1. - vUv.y))) : 1.;
+      gl_FragColor = vec4(w, pinggir);
 #include <colorspace_fragment>
     }`,
 });
 const bumi = new THREE.Mesh(new THREE.SphereGeometry(R, 160, 120), bahanBumi); scene.add(bumi);
 // garis pantai sebagai garis vektor di permukaan, tetap tajam di jarak berapa pun (tekstur hanya mengisi warna darat)
-{ const p = [], titik = (lon, lat) => { const fi = ((lon + 180) / 360) * Math.PI * 2, th = ((90 - lat) * Math.PI) / 180, r = R * 1.0008; return [-Math.cos(fi) * Math.sin(th) * r, Math.cos(th) * r, Math.sin(fi) * Math.sin(th) * r]; };
+const garisPantai = () => { const p = [], titik = (lon, lat) => { const fi = ((lon + 180) / 360) * Math.PI * 2, th = ((90 - lat) * Math.PI) / 180, r = R * 1.0008; return [-Math.cos(fi) * Math.sin(th) * r, Math.cos(th) * r, Math.sin(fi) * Math.sin(th) * r]; };
   for (const f of darat.features) { const poli = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates; for (const pl of poli) for (const ring of pl) for (let k = 1; k < ring.length; k++) { if (Math.abs(ring[k][0] - ring[k - 1][0]) > 180) continue; p.push(...titik(...ring[k - 1]), ...titik(...ring[k])); } }
-  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(p, 3)); bumi.add(new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x2a2836, transparent: true, opacity: 0.8 }))); }
-const atmosfer = new THREE.Mesh(new THREE.SphereGeometry(R * 1.025, 64, 48), new THREE.ShaderMaterial({ side: THREE.BackSide, transparent: true, depthWrite: false, uniforms: { matahari: bahanBumi.uniforms.matahari },
+  const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(p, 3));
+  // memudar saat dilihat menyamping (di cakrawala segmennya terpotong lengkung bola) dan saat tertutup awan
+  bumi.add(new THREE.LineSegments(g, new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { tAwan: { value: tAwan }, matahari: bahanBumi.uniforms.matahari },
+    vertexShader: "varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ vec3 q = normalize(position); vUv = vec2(fract(atan(q.z, -q.x) / 6.2831853 + 1.), 1. - acos(q.y) / 3.1415927); vec4 w = modelMatrix * vec4(position, 1.); vN = normalize(w.xyz); vV = normalize(cameraPosition - w.xyz); gl_Position = projectionMatrix * viewMatrix * w; }",
+    fragmentShader: "uniform sampler2D tAwan; uniform vec3 matahari; varying vec2 vUv; varying vec3 vN; varying vec3 vV; void main(){ float tegak = smoothstep(0.12, 0.4, dot(vN, vV)); float awan = texture2D(tAwan, vUv).a; float hari = smoothstep(-0.16, 0.06, dot(vN, normalize(matahari))); gl_FragColor = vec4(vec3(0.16, 0.16, 0.21), 0.75 * tegak * (1. - 0.85 * awan) * (0.35 + 0.65 * hari)); }" }))); };
+// atmosfer: satu cangkang. Untuk sinar pandang yang lewat di atas bumi, makin dekat ke permukaan makin terang;
+// untuk sinar yang mengenai bumi, makin panjang jalannya di udara makin berkabut. Keduanya bertemu mulus di tepi bumi.
+const atmosfer = new THREE.Mesh(new THREE.SphereGeometry(R * 1.025, 96, 72), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { matahari: bahanBumi.uniforms.matahari, R: { value: R }, Ra: { value: R * 1.025 } },
   vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 p = modelMatrix * vec4(position,1.); vV = normalize(cameraPosition - p.xyz); gl_Position = projectionMatrix * viewMatrix * p; }",
-  fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - abs(dot(vV, -vN)), 2.); float terang = smoothstep(-0.25, 0.1, dot(-vN, normalize(matahari))); float a = 0.6 * smoothstep(0.2, 0.75, f); gl_FragColor = vec4(mix(vec3(0.35,0.4,0.7), vec3(0.66,0.8,1.), terang), a * (0.35 + 0.65 * terang)); }" }));
+  fragmentShader: `uniform vec3 matahari; uniform float R; uniform float Ra; varying vec3 vN; varying vec3 vV;
+    void main(){ vec3 ro = cameraPosition, rd = -vV; float tc = -dot(ro, rd); vec3 pc = ro + rd * tc; float d = length(pc), a; vec3 titik;
+      if (d >= R) { a = pow(1. - clamp((d - R) / (Ra - R), 0., 1.), 2.2); titik = pc; }
+      else { float tHit = tc - sqrt(R * R - d * d), tIn = tc - sqrt(max(Ra * Ra - d * d, 0.)); a = pow(clamp((tHit - tIn) / sqrt(Ra * Ra - R * R), 0., 1.), 3.); titik = ro + rd * tHit; }
+      float mu = dot(normalize(titik), normalize(matahari)), terang = smoothstep(-0.22, 0.12, mu);
+      vec3 w = mix(vec3(0.2, 0.24, 0.45), vec3(0.6, 0.78, 1.), terang); w = mix(w, vec3(1., 0.62, 0.45), 0.5 * exp(-pow((mu - 0.02) / 0.09, 2.)));
+      gl_FragColor = vec4(w, 0.7 * a * (0.08 + 0.92 * terang)); }` }));
 scene.add(atmosfer);
 const awanKanvas = awanNyata ?? kanvas(2048, 1024); if (!awanNyata) { const g = awanKanvas.getContext("2d"); let benih = 7; const acak = () => ((benih = (benih * 16807) % 2147483647) / 2147483647);
   for (let i = 0; i < 260; i++) { const x = acak() * 2048, y = 160 + acak() * 704, r = 3 + acak() * 11, n = 2 + Math.floor(acak() * 4); g.fillStyle = "rgba(255,255,255,0.85)"; for (let k = 0; k < n; k++) { g.beginPath(); g.arc(x + (acak() - 0.5) * r * 3, y + (acak() - 0.5) * r, r * (0.6 + acak() * 0.6), 0, 7); g.fill(); } } }
@@ -153,11 +179,38 @@ const awan = new THREE.Mesh(new THREE.SphereGeometry(R * 1.004, 128, 96), new TH
   vertexShader: "varying vec2 vUv; varying vec3 vN; void main(){ vUv = uv; vN = normalize(mat3(modelMatrix) * normal); gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.); }",
   fragmentShader: "uniform sampler2D tAwan; uniform vec3 matahari; varying vec2 vUv; varying vec3 vN; void main(){ float a = texture2D(tAwan, vUv).a; float mu = dot(normalize(vN), normalize(matahari)); float hari = smoothstep(-0.16, 0.06, mu); vec3 w = vec3(0.97, 0.96, 0.94) * (0.6 + 0.4 * smoothstep(-0.02, 0.6, mu)); w = mix(w, w * vec3(1.05, 0.75, 0.6), 0.5 * exp(-pow((mu - 0.01) / 0.075, 2.))); gl_FragColor = vec4(mix(vec3(0.12, 0.14, 0.22), w, hari), a * mix(0.06, 0.92, hari)); }" }));
 scene.add(awan);
+garisPantai();
+
+// petak detail: Blue Marble sekitar 1 km per piksel di bawah kamera, dimuat ulang saat kamera pindah jauh (seperti ubin Cesium, tapi satu petak)
+const petak = { mesh: null, pusat: null, memuat: false };
+async function muatPetak(lat, lon) {
+  petak.memuat = true;
+  try {
+    const L = 9, Lo = Math.min(40, L / Math.max(0.2, Math.cos((lat * Math.PI) / 180)));
+    const la0 = Math.max(-89, lat - L), la1 = Math.min(89, lat + L), lo0 = Math.max(-180, lon - Lo), lo1 = Math.min(180, lon + Lo);
+    const W = 2048, H = Math.max(256, Math.min(2048, Math.round((W * (la1 - la0)) / (lo1 - lo0) / Math.cos((lat * Math.PI) / 180))));
+    const img = await muatGambar(gibsKotak("BlueMarble_NextGeneration", [la0, lo0, la1, lo1], W, H));
+    const c = kanvas(W, H), g = c.getContext("2d"); g.fillStyle = "#a9c4ec"; g.fillRect(0, 0, W, H); g.fillStyle = "#b9dcb0";
+    for (const f of darat.features) { const poli = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates; for (const pl of poli) { g.beginPath(); for (const ring of pl) ring.forEach(([x0, y0], k) => { const x = ((x0 - lo0) / (lo1 - lo0)) * W, y = ((la1 - y0) / (la1 - la0)) * H; k ? g.lineTo(x, y) : g.moveTo(x, y); }); g.fill("evenodd"); } }
+    daratToon(c, img);
+    const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 8;
+    const geo = new THREE.SphereGeometry(R * 1.0003, 128, 128, ((lo0 + 180) / 360) * Math.PI * 2, ((lo1 - lo0) / 360) * Math.PI * 2, ((90 - la1) * Math.PI) / 180, ((la1 - la0) * Math.PI) / 180);
+    const bahan = bahanBumi.clone(); bahan.uniforms.tSiang = { value: t }; bahan.uniforms.tMalam = bahanBumi.uniforms.tMalam; bahan.uniforms.matahari = bahanBumi.uniforms.matahari; bahan.uniforms.tepi = { value: 0.08 }; bahan.transparent = true;
+    const m = new THREE.Mesh(geo, bahan);
+    if (petak.mesh) { bumi.remove(petak.mesh); petak.mesh.geometry.dispose(); petak.mesh.material.uniforms.tSiang.value.dispose(); petak.mesh.material.dispose(); }
+    bumi.add(m); petak.mesh = m; petak.pusat = [lat, lon];
+  } catch (e) { petak.galat = e.message; }
+  petak.memuat = false;
+}
+const cekPetak = () => { if (!LAPIS || petak.memuat || cam.position.length() > R * 1.6) return;
+  const q = bumi.worldToLocal(cam.position.clone()).normalize(), lat = (Math.asin(q.y) * 180) / Math.PI, lon = ((Math.atan2(q.z, -q.x) / (Math.PI * 2)) * 360 + 360) % 360 - 180;
+  if (petak.pusat && Math.hypot(lat - petak.pusat[0], (lon - petak.pusat[1]) * Math.cos((lat * Math.PI) / 180)) < 4) return;
+  muatPetak(lat, lon); };
 // kabut tepi: lapisan tipis di atas permukaan yang makin pekat di sudut pandang landai, memberi kedalaman di cakrawala
 const kabut = new THREE.Mesh(new THREE.SphereGeometry(R * 1.012, 96, 72), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { matahari: bahanBumi.uniforms.matahari },
   vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 p = modelMatrix * vec4(position,1.); vV = normalize(cameraPosition - p.xyz); gl_Position = projectionMatrix * viewMatrix * p; }",
   fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float landai = 1. - abs(dot(vV, vN)); float terang = smoothstep(-0.2, 0.08, dot(vN, normalize(matahari))); float a = 0.55 * smoothstep(0.3, 0.95, landai) * (0.06 + 0.94 * terang); gl_FragColor = vec4(mix(vec3(0.32,0.36,0.62), vec3(0.72,0.84,1.), terang), a); }" }));
-scene.add(kabut);
+
 // ketinggian tampilan: 1 = nyata, 3 = jarak ke permukaan dibesarkan tiga kali
 let KALI_TINGGI = 1;
 const sinarMatahari = new THREE.DirectionalLight(0xfff1dc, 2.2); scene.add(sinarMatahari); scene.add(new THREE.AmbientLight(0x8899cc, 0.35));
@@ -165,15 +218,70 @@ const piringan = new THREE.Mesh(new THREE.CircleGeometry(18, 32), new THREE.Mesh
 
 // benda: stasiun kita (2 modul + node) dan satelit klien
 const toon = (c) => new THREE.MeshToonMaterial({ color: c });
-const bendaStasiun = () => { const luar = new THREE.Group(), g = new THREE.Group(); luar.add(g);
-  // modul memanjang searah gerak, seperti modul ISS
+const bendaStasiun = () => bangunStasiun();
+// satelit klien bergaya konstelasi generasi baru (seperti Starlink V2 Mini, OneWeb): badan lempeng pipih,
+// muka ke bumi penuh petak antena phased array, dua sayap surya gulung (ROSA) panjang dengan batang di tepi,
+// pendorong ion di belakang, sepasang star tracker. Warna kelompok di pita atas badan. Garis tinta dari kulit terbalik.
+const TINTA = new THREE.MeshBasicMaterial({ color: 0x2a2836, side: THREE.BackSide });
+const berkulit = (m, k = 1.06) => { const h = new THREE.Mesh(m.geometry, TINTA); h.scale.setScalar(k); m.add(h); return m; };
+const selSurya = (() => { const c = kanvas(128, 64), g = c.getContext("2d"); g.fillStyle = "#3a4a8c"; g.fillRect(0, 0, 128, 64); g.strokeStyle = "#5d71b8"; g.lineWidth = 2;
+  for (let x = 0; x <= 128; x += 16) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, 64); g.stroke(); } for (let y = 0; y <= 64; y += 16) { g.beginPath(); g.moveTo(0, y); g.lineTo(128, y); g.stroke(); }
+  g.strokeStyle = "#2a2836"; g.lineWidth = 6; g.strokeRect(0, 0, 128, 64); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; })();
+const bahanSel = new THREE.MeshToonMaterial({ map: selSurya });
+const petakAntena = (() => { const c = kanvas(128, 128), g = c.getContext("2d"); g.fillStyle = "#d9d2c6"; g.fillRect(0, 0, 128, 128);
+  for (let x = 0; x < 4; x++) for (let y = 0; y < 4; y++) { g.fillStyle = "#b8b0a2"; g.fillRect(4 + x * 31, 4 + y * 31, 27, 27); g.fillStyle = "#e9e3d6"; g.fillRect(10 + x * 31, 10 + y * 31, 15, 15); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(3, 2); return t; })();
+const bahanAntena = new THREE.MeshToonMaterial({ map: petakAntena });
+// sayap ROSA: selimut sel surya di antara dua batang tipis, gulungan di ujung
+const sayapRosa = (panjang, lebar) => { const g = new THREE.Group();
+  const tSel = selSurya.clone(); tSel.wrapS = THREE.RepeatWrapping; tSel.repeat.set(panjang / lebar / 2, 1); tSel.needsUpdate = true;
+  const selimut = new THREE.Mesh(new THREE.BoxGeometry(panjang, 0.004, lebar), [toon(0x2a2836), toon(0x2a2836), new THREE.MeshToonMaterial({ map: tSel }), new THREE.MeshToonMaterial({ map: tSel }), toon(0x2a2836), toon(0x2a2836)]);
+  selimut.position.x = panjang / 2; g.add(selimut);
+  for (const z of [-1, 1]) { const batang = new THREE.Mesh(new THREE.CylinderGeometry(0.006, 0.006, panjang, 6), toon(0xd9d2c6)); batang.rotation.z = Math.PI / 2; batang.position.set(panjang / 2, 0, z * (lebar / 2 + 0.006)); g.add(batang); }
+  const gulung = berkulit(new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, lebar + 0.02, 12), toon(0x847e75)), 1.1); gulung.rotation.x = Math.PI / 2; gulung.position.x = panjang; g.add(gulung);
+  return g; };
+const bendaSatelit = (warna) => { const g = new THREE.Group();
+  // badan lempeng: memanjang searah gerak (+z), tipis ke arah bumi
+  const badan = berkulit(new THREE.Mesh(new RoundedBoxGeometry(0.2, 0.035, 0.34, 2, 0.012), toon(0xd9d2c6)), 1.05); g.add(badan);
+  const pita = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.004, 0.06), toon(warna)); pita.position.set(0, 0.019, 0.1); g.add(pita);
+  const antena = new THREE.Mesh(new THREE.PlaneGeometry(0.18, 0.32), bahanAntena); antena.rotation.x = Math.PI / 2; antena.position.y = -0.0185; g.add(antena);
+  // dua sayap ROSA ke kiri dan kanan, sedikit miring menghadap matahari
+  for (const s of [-1, 1]) { const w = sayapRosa(0.62, 0.14); w.position.x = s * 0.1; w.rotation.y = s > 0 ? 0 : Math.PI; w.rotation.x = 0.35; g.add(w); }
+  // pendorong ion di belakang dan sepasang star tracker di atas
+  const nosel = berkulit(new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.024, 0.03, 14), toon(0x5b5560)), 1.08); nosel.rotation.x = Math.PI / 2; nosel.position.z = -0.185; g.add(nosel);
+  const cahaya = new THREE.Mesh(new THREE.CircleGeometry(0.012, 14), new THREE.MeshBasicMaterial({ color: 0x8fb4e8 })); cahaya.rotation.y = Math.PI; cahaya.position.z = -0.201; g.add(cahaya);
+  for (const x of [-0.06, 0.06]) { const st = berkulit(new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.015, 0.028, 10), toon(0x847e75))); st.position.set(x, 0.032, -0.1); st.rotation.x = -0.4; g.add(st); }
+  return g; };
+// stasiun kita: dua modul lab dan satu node di sumbu gerak, Cupola di bawah node menghadap bumi, dua port
+// sandar kosong, rangka utama melintang dengan empat sayap surya di ujungnya dan radiator putih di tengah
+const bangunStasiun = () => { const luar = new THREE.Group(), g = new THREE.Group(); luar.add(g);
+  // luar.lookAt mengarahkan +z ke arah gerak; modul memanjang di x lokal g, jadi g diputar
   g.rotation.y = Math.PI / 2;
-  for (const [x, c] of [[-0.55, 0xe0574b], [0.55, 0xa9c4ec]]) { const m = new THREE.Mesh(new THREE.CylinderGeometry(0.2, 0.2, 0.75, 20), toon(0xeae6dc)); m.rotation.z = Math.PI / 2; m.position.x = x; g.add(m); const r = new THREE.Mesh(new THREE.TorusGeometry(0.205, 0.02, 6, 24), toon(c)); r.rotation.y = Math.PI / 2; r.position.x = x; g.add(r); }
-  g.add(new THREE.Mesh(new THREE.SphereGeometry(0.25, 16, 12), toon(0xd9d2c6)));
-  for (const s of [-1, 1]) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.45, 0.01, 0.9), toon(0x4b5f9e)); p.position.set(s * 1.25, 0, 0); g.add(p); }
-  const t = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 2.6, 6), toon(0x847e75)); t.rotation.z = Math.PI / 2; g.add(t); return luar; };
-const bendaSatelit = (warna) => { const g = new THREE.Group(); g.add(new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.16, 0.16), toon(warna)));
-  for (const s of [-1, 1]) { const p = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.008, 0.12), toon(0x4b5f9e)); p.position.x = s * 0.24; g.add(p); } const a = new THREE.Mesh(new THREE.ConeGeometry(0.05, 0.08, 10), toon(0xd9d2c6)); a.position.y = 0.11; g.add(a); return g; };
+  const krem = 0xeae6dc, abu = 0x847e75, rusuk = 0xc9c2b4;
+  const modul = (x, panjang, cincin) => { const m = berkulit(new THREE.Mesh(new THREE.CapsuleGeometry(0.19, panjang, 6, 24), toon(krem)), 1.04); m.rotation.z = Math.PI / 2; m.position.x = x; g.add(m);
+    for (let i = -2; i <= 2; i++) { const r = new THREE.Mesh(new THREE.TorusGeometry(0.193, 0.009, 6, 28), toon(i === 0 ? cincin : rusuk)); r.rotation.y = Math.PI / 2; r.position.x = x + (i * panjang) / 5; g.add(r); }
+    for (const s of [-1, 1]) { const pegangan = new THREE.Mesh(new THREE.BoxGeometry(panjang * 0.8, 0.012, 0.012), toon(0xd9a84a)); pegangan.position.set(x, s * 0.2, 0.05); g.add(pegangan); } };
+  modul(-0.62, 0.62, 0xe0574b); modul(0.62, 0.62, 0xa9c4ec);
+  g.add(berkulit(new THREE.Mesh(new RoundedBoxGeometry(0.42, 0.42, 0.42, 4, 0.12), toon(0xd9d2c6)), 1.04));
+  // dua port sandar kosong di samping node
+  for (const s of [-1, 1]) { const p = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.1, 0.08, 20), toon(krem)); p.rotation.x = Math.PI / 2; p.position.z = s * 0.25; g.add(p);
+    const c = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.014, 6, 24), toon(0xf2d27a)); c.position.z = s * 0.29; g.add(c); }
+  // Cupola: kubah segi enam kecil di bawah node
+  const kubah = berkulit(new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.11, 0.08, 6), toon(krem)), 1.05); kubah.position.y = -0.25; g.add(kubah);
+  const kaca = new THREE.Mesh(new THREE.CircleGeometry(0.06, 6), new THREE.MeshBasicMaterial({ color: 0x8fb4e8, side: THREE.DoubleSide })); kaca.rotation.x = Math.PI / 2; kaca.position.y = -0.292; g.add(kaca);
+  // rangka utama melintang di atas node
+  const rangka = new THREE.Group(); rangka.position.y = 0.3; g.add(rangka);
+  const panjangRangka = 3.2;
+  for (const [y, z] of [[0.04, 0.04], [0.04, -0.04], [-0.04, 0.04], [-0.04, -0.04]]) { const bt = new THREE.Mesh(new THREE.BoxGeometry(0.012, 0.012, panjangRangka), toon(abu)); bt.position.set(z, y, 0); rangka.add(bt); }
+  for (let i = 0; i <= 24; i++) { const d = new THREE.Mesh(new THREE.BoxGeometry(0.008, 0.11, 0.008), toon(abu)); d.position.z = -panjangRangka / 2 + (i * panjangRangka) / 24; d.rotation.x = i % 2 ? 0.75 : -0.75; rangka.add(d); }
+  const tiang = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.12, 10), toon(abu)); tiang.position.y = 0.24; g.add(tiang);
+  // radiator putih di tengah rangka
+  for (const s of [-1, 1]) { const rad = berkulit(new THREE.Mesh(new THREE.BoxGeometry(0.34, 0.006, 0.22), toon(0xf6efe3)), 1.03); rad.position.set(0, -0.06, s * 0.45); rad.rotation.x = Math.PI / 2; rangka.add(rad); }
+  // empat sayap surya gulung: dua di tiap ujung rangka
+  for (const s of [-1, 1]) { const ujung = new THREE.Group(); ujung.position.z = s * (panjangRangka / 2 - 0.15); rangka.add(ujung);
+    for (const sisi of [-1, 1]) { const w = sayapRosa(1.25, 0.3); w.position.x = sisi * 0.08; w.rotation.y = sisi > 0 ? 0 : Math.PI; ujung.add(w); } }
+  return luar; };
+
 const WARNA = { coderoach: 0xb9dcb0, mitraplus: 0xa9c4ec, pribadi: 0xf2d27a };
 const KEL = { coderoach: { raan: 30, i: 45, nama: "Coderoach" }, mitraplus: { raan: 150, i: 97.6, nama: "Mitraplus" }, pribadi: { raan: 270, i: 28, nama: "Personal" } };
 const titikSprite = (warna) => { const c = kanvas(32, 32), g = c.getContext("2d"); g.fillStyle = "#" + warna.toString(16).padStart(6, "0"); g.strokeStyle = "#2a2836"; g.lineWidth = 5; g.beginPath(); g.arc(16, 16, 11, 0, 7); g.fill(); g.stroke();
@@ -198,7 +306,7 @@ setMode(mode);
 // fokus: kamera mengikuti satu benda sebagai pusat putaran 360
 let fokus = stasiun, terbang = null, pandang = "luar";
 const posDunia = (b) => b.obj.getWorldPosition(new THREE.Vector3());
-const pilih = (b) => { terbang = { awal: cam.position.clone(), awalKe: cam.getWorldDirection(new THREE.Vector3()).multiplyScalar(5).add(cam.position), t0: performance.now() }; kendali.jarak = b === stasiun ? 6 : 3.2; kendali.el = 0.12; fokus = b; tampilHud(b); tandaiDaftar(b); };
+const pilih = (b) => { terbang = { awal: cam.position.clone(), awalKe: cam.getWorldDirection(new THREE.Vector3()).multiplyScalar(5).add(cam.position), t0: performance.now() }; kendali.jarak = b === stasiun ? 6 : 3.2; kendali.el = 0.12; fokus = b; tampilHud(b); tandaiDaftar(b); aturPandang(); };
 const KE = new THREE.Vector3();
 const daftar = document.getElementById("daftar");
 lipat.onclick = () => { const n = document.querySelector(".daftar"); n.classList.toggle("tutup"); lipat.setAttribute("aria-expanded", !n.classList.contains("tutup")); };
@@ -216,10 +324,15 @@ renderer.domElement.addEventListener("click", (e) => { if ((kendali.geser ?? 0) 
   const h = r.intersectObjects(benda.map((b) => b.kena), false)[0]; if (h) pilih(h.object.userData.b); });
 
 // tampilan: dari luar (kendali berporos benda fokus) atau jendela kokpit (kamera di stasiun menghadap cakrawala)
-const setPandang = (p) => { pandang = p; vLuar.setAttribute("aria-pressed", p === "luar"); vJendela.setAttribute("aria-pressed", p === "jendela"); document.getElementById("jendela").classList.toggle("nyala", p === "jendela"); kendali.aktif = p === "luar";
-  // dari dalam kokpit, badan stasiun sendiri tidak terlihat
-  stasiun.obj.visible = p === "luar";
-  if (p === "jendela") { fokus = stasiun; hud.hidden = true; garis.setAttribute("points", ""); } else pilih(stasiun); };
+// stasiun punya Cupola; satelit klien tidak berawak, jadi yang tampil rekaman kamera satelit itu
+function aturPandang() { const dalam = pandang === "jendela", kam = dalam && fokus !== stasiun;
+  vLuar.setAttribute("aria-pressed", !dalam); vJendela.setAttribute("aria-pressed", dalam); vJendela.textContent = fokus === stasiun ? "Jendela kokpit" : "Kamera satelit";
+  document.getElementById("jendela").classList.toggle("nyala", dalam && !kam); document.getElementById("kamera").classList.toggle("nyala", kam); document.body.classList.toggle("rekam", kam);
+  kendali.aktif = !dalam;
+  // dari dalam, badan benda sendiri tidak terlihat
+  for (const x of benda) x.obj.visible = !(dalam && x === fokus);
+  if (dalam) { hud.hidden = true; garis.setAttribute("points", ""); } }
+const setPandang = (p) => { pandang = p; if (p === "luar") pilih(fokus); aturPandang(); };
 vLuar.onclick = () => setPandang("luar"); vJendela.onclick = () => setPandang("jendela");
 const setTinggi = (k) => { KALI_TINGGI = k; tNyata.setAttribute("aria-pressed", k === 1); tBesar.setAttribute("aria-pressed", k === 3); };
 tNyata.onclick = () => setTinggi(1); tBesar.onclick = () => setTinggi(3);
@@ -243,9 +356,13 @@ function langkah() {
     else { cam.position.copy(tuju); cam.lookAt(pf); }
     cam.near = Math.max(0.01, kendali.jarak * 0.02); cam.far = 6000; cam.updateProjectionMatrix();
   } else {
-    // dari kokpit: kamera di stasiun, menghadap ke depan orbit dan sedikit ke bawah cakrawala
-    const q = stasiun.orbit.posisi(ms + 20000), maju = new THREE.Vector3(q[0], q[1], q[2]).multiplyScalar(SKALA).sub(pf).normalize(), atas = pf.clone().normalize();
-    cam.position.copy(pf).addScaledVector(atas, 0.3); cam.up.copy(atas); cam.lookAt(pf.clone().addScaledVector(maju, 10).addScaledVector(atas, -3.2));
+    // Cupola dan kamera satelit sama-sama menghadap bumi, condong ke depan orbit supaya cakrawala terlihat di atas
+    const atas = pf.clone().normalize(), q2 = fokus.obj.getWorldDirection(new THREE.Vector3()), maju = q2.sub(atas.clone().multiplyScalar(q2.dot(atas))).normalize(), st = fokus === stasiun;
+    cam.position.copy(pf).addScaledVector(atas, st ? 0.3 : -0.12); cam.up.copy(atas); cam.lookAt(pf.clone().addScaledVector(maju, st ? 4 : 6).addScaledVector(atas, st ? -5 : -3.2));
+    cam.near = 0.01; cam.updateProjectionMatrix();
+    if (!st) { const q = bumi.worldToLocal(pf.clone()).normalize(), lat = (Math.asin(q.y) * 180) / Math.PI, lon = ((Math.atan2(q.z, -q.x) / (Math.PI * 2)) * 360 + 360) % 360 - 180;
+      kamNama.textContent = fokus.nama.toUpperCase() + ", KAMERA 1 NADIR";
+      kamData.innerHTML = `${Math.abs(lat).toFixed(2)}° ${lat >= 0 ? "LU" : "LS"}, ${Math.abs(lon).toFixed(2)}° ${lon >= 0 ? "BT" : "BB"}<br>${Math.round(fokus.orbit.a - BUMI.R)} KM, ${fmt(ms, "UTC")} UTC`; }
     document.getElementById("sinar").setAttribute("opacity", stasiun.gelap ? 0 : 0.18);
     document.getElementById("dinding").setAttribute("fill", stasiun.gelap ? "#2a2534" : "#6f6476");
   }
@@ -255,8 +372,9 @@ function langkah() {
     hud.style.left = hx + "px"; hud.style.top = hy + "px"; garis.setAttribute("points", v.z < 1 ? `${x},${y} ${x + 40},${hy + 30} ${hx},${hy + 30}` : ""); }
   jamSim.innerHTML = (mode === "cepat" ? "Simulasi " : "Sekarang ") + fmt(ms, "UTC") + " UTC" + (mode === "cepat" ? "<b>60x</b>" : "");
   jamNyata.textContent = "Jam Anda " + fmt(Date.now(), undefined);
+  cekPetak();
   renderer.render(scene, cam);
-  window.__keadaan = { ms, subsolar: [m.lintangSubsolar, m.bujurSubsolar], stasiunGelap: stasiun.gelap, fokus: fokus.id, mode, pandang, lapis: infoLapis };
+  window.__keadaan = { ms, subsolar: [m.lintangSubsolar, m.bujurSubsolar], stasiunGelap: stasiun.gelap, fokus: fokus.id, mode, pandang, lapis: infoLapis, petak: petak.pusat, petakGalat: petak.galat };
 }
 cam.position.set(260, 120, 260); cam.lookAt(0, 0, 0);
 pilih(stasiun);
