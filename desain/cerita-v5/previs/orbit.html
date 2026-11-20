@@ -32,6 +32,7 @@
   .bawah { left: 16px; bottom: 16px; padding: 8px; display: flex; gap: 6px; }
   .jendela { position: fixed; inset: 0; z-index: 2; pointer-events: none; display: none; }
   .jendela.nyala { display: block; }
+  .kredit { position: fixed; right: 16px; bottom: 8px; z-index: 5; font: 11px system-ui; color: rgba(246, 239, 227, 0.6); }
   @media (max-width: 720px) { .daftar { top: auto; bottom: 70px; left: 16px; right: 16px; width: auto; height: 120px; } .hud { width: calc(100% - 64px); } }
 </style>
 <script type="importmap">{ "imports": { "three": "https://unpkg.com/three@0.187.0/build/three.module.js", "three/addons/": "https://unpkg.com/three@0.187.0/examples/jsm/" } }</script>
@@ -57,6 +58,7 @@
 </div>
 <svg class="garis" aria-hidden="true"><polyline id="garis" fill="none" stroke="#f6efe3" stroke-width="2" points=""/></svg>
 <aside class="panel hud" id="hud" hidden></aside>
+<small class="kredit" id="kredit"></small>
 <svg class="jendela" id="jendela" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
   <defs><mask id="lubang"><rect width="1000" height="1000" fill="#fff"/>
     <circle cx="500" cy="560" r="150" fill="#000"/>
@@ -76,6 +78,7 @@ import * as THREE from "three";
 import { keadaanMatahari, arahMatahari, orbit, diBayangan, BATAS, BUMI } from "./matahari.js";
 import { KLIEN } from "../../../content/klien.js";
 import { proyek } from "../../../content/proyek.js";
+import { gibs, muatGambar, petaAwan, daratToon, tanggalAwan } from "./lapis-nasa.js";
 
 const R = 100, SKALA = R / BUMI.R; // 1 unit = 63,78 km
 const kurangiGerak = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -107,6 +110,14 @@ const siang = kanvas(4096, 2048); { const g = siang.getContext("2d"); g.fillStyl
   for (const f of darat.features) { const poli = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates; for (const pl of poli) { g.beginPath(); for (const ring of pl) ring.forEach(([lon, lat], k) => { const x = ((lon + 180) / 360) * 4096, y = ((90 - lat) / 180) * 2048; k ? g.lineTo(x, y) : g.moveTo(x, y); }); g.fill("evenodd"); } } }
 const malam = kanvas(2048, 1024); { const g = malam.getContext("2d"), img = new Image(); img.src = "data/BlackMarble_2016_01deg.jpg"; await img.decode(); g.filter = "blur(1.5px)"; g.drawImage(img, 0, 0, 2048, 1024); g.filter = "none";
   const d = g.getImageData(0, 0, 2048, 1024); for (let i = 0; i < d.data.length; i += 4) { const r = d.data[i], b = d.data[i + 2], lum = 0.3 * r + 0.59 * d.data[i + 1] + 0.11 * b, u = Math.min(1, Math.max(0, (lum - 35) / 140)), v = u * u * (3 - 2 * u) * (r > b ? 1 : 0.35); d.data[i] = 255 * v; d.data[i + 1] = 210 * v; d.data[i + 2] = 130 * v; d.data[i + 3] = 255; } g.putImageData(d, 0, 0); }
+// ?lapis=nasa: warna darat dari Blue Marble, awan dari citra VIIRS kemarin (NASA GIBS)
+const LAPIS = new URLSearchParams(location.search).get("lapis") === "nasa";
+let awanNyata = null, infoLapis = "datar";
+if (LAPIS) { try { const tgl = tanggalAwan();
+    const [bm, viirs] = await Promise.all([muatGambar(gibs("BlueMarble_NextGeneration", 4096, 2048)), muatGambar(gibs("VIIRS_NOAA20_CorrectedReflectance_TrueColor", 4096, 2048, tgl))]);
+    daratToon(siang, bm); awanNyata = petaAwan(viirs, bm, 4096, 2048); infoLapis = "nasa " + tgl;
+    document.getElementById("kredit").textContent = "Citra: NASA GIBS, Blue Marble dan VIIRS " + tgl;
+  } catch (e) { infoLapis = "gagal: " + e.message; } }
 const tSiang = new THREE.CanvasTexture(siang), tMalam = new THREE.CanvasTexture(malam); tSiang.colorSpace = tMalam.colorSpace = THREE.SRGBColorSpace; tSiang.anisotropy = 8;
 
 // bumi toon: anak tangga terang dari cos(zenit) = dot(normal, matahari); batas USNO (terbit, senja sipil, nautikal, astronomis)
@@ -132,7 +143,7 @@ const atmosfer = new THREE.Mesh(new THREE.SphereGeometry(R * 1.025, 64, 48), new
   vertexShader: "varying vec3 vN; varying vec3 vV; void main(){ vN = normalize(mat3(modelMatrix) * normal); vec4 p = modelMatrix * vec4(position,1.); vV = normalize(cameraPosition - p.xyz); gl_Position = projectionMatrix * viewMatrix * p; }",
   fragmentShader: "uniform vec3 matahari; varying vec3 vN; varying vec3 vV; void main(){ float f = pow(1. - abs(dot(vV, -vN)), 2.); float terang = step(-0.1, dot(-vN, normalize(matahari))); float a = f > 0.55 ? 0.55 : f > 0.3 ? 0.25 : 0.; gl_FragColor = vec4(mix(vec3(0.35,0.4,0.7), vec3(0.66,0.8,1.), terang), a * (0.35 + 0.65 * terang)); }" }));
 scene.add(atmosfer);
-const awanKanvas = kanvas(2048, 1024); { const g = awanKanvas.getContext("2d"); let benih = 7; const acak = () => ((benih = (benih * 16807) % 2147483647) / 2147483647);
+const awanKanvas = awanNyata ?? kanvas(2048, 1024); if (!awanNyata) { const g = awanKanvas.getContext("2d"); let benih = 7; const acak = () => ((benih = (benih * 16807) % 2147483647) / 2147483647);
   for (let i = 0; i < 260; i++) { const x = acak() * 2048, y = 160 + acak() * 704, r = 3 + acak() * 11, n = 2 + Math.floor(acak() * 4); g.fillStyle = "rgba(255,255,255,0.85)"; for (let k = 0; k < n; k++) { g.beginPath(); g.arc(x + (acak() - 0.5) * r * 3, y + (acak() - 0.5) * r, r * (0.6 + acak() * 0.6), 0, 7); g.fill(); } } }
 const tAwan = new THREE.CanvasTexture(awanKanvas); tAwan.colorSpace = THREE.SRGBColorSpace;
 const awan = new THREE.Mesh(new THREE.SphereGeometry(R * 1.004, 128, 96), new THREE.ShaderMaterial({ transparent: true, depthWrite: false, uniforms: { tAwan: { value: tAwan }, matahari: bahanBumi.uniforms.matahari },
@@ -214,7 +225,7 @@ const fmt = (ms, zona) => new Date(ms).toLocaleString("id-ID", { timeZone: zona,
 let terakhirPos = null;
 function langkah() {
   const ms = waktu(), m = keadaanMatahari(ms), s = new THREE.Vector3(...arahMatahari(ms));
-  bumi.rotation.y = (m.gmst * Math.PI) / 180; atmosfer.rotation.y = bumi.rotation.y; awan.rotation.y = bumi.rotation.y + ms / 86400000 * 0.3;
+  bumi.rotation.y = (m.gmst * Math.PI) / 180; atmosfer.rotation.y = bumi.rotation.y; awan.rotation.y = bumi.rotation.y + (awanNyata ? 0 : ms / 86400000 * 0.3);
   bahanBumi.uniforms.matahari.value.copy(s); sinarMatahari.position.copy(s).multiplyScalar(1000); piringan.position.copy(s).multiplyScalar(2200); piringan.lookAt(0, 0, 0);
   for (const b of benda) { const p = b.orbit.posisi(ms), q = b.orbit.posisi(ms + 1000); const kp = (v) => { const r = Math.hypot(...v), kk = (BUMI.R + (r - BUMI.R) * KALI_TINGGI) / r * SKALA; return v.map((x) => x * kk); }; b.obj.position.set(...kp(p)); b.obj.lookAt(...kp(q)); b.gelap = diBayangan(p, [s.x, s.y, s.z]); }
   const pf = posDunia(fokus);
@@ -242,7 +253,7 @@ function langkah() {
   jamSim.innerHTML = (mode === "cepat" ? "Simulasi " : "Sekarang ") + fmt(ms, "UTC") + " UTC" + (mode === "cepat" ? "<b>60x</b>" : "");
   jamNyata.textContent = "Jam Anda " + fmt(Date.now(), undefined);
   renderer.render(scene, cam);
-  window.__keadaan = { ms, subsolar: [m.lintangSubsolar, m.bujurSubsolar], stasiunGelap: stasiun.gelap, fokus: fokus.id, mode, pandang };
+  window.__keadaan = { ms, subsolar: [m.lintangSubsolar, m.bujurSubsolar], stasiunGelap: stasiun.gelap, fokus: fokus.id, mode, pandang, lapis: infoLapis };
 }
 cam.position.set(260, 120, 260); cam.lookAt(0, 0, 0);
 pilih(stasiun);
