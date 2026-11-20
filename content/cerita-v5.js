@@ -1,9 +1,8 @@
 // Cerita v5 arah G, "yang ditimbang" (ADR 0019): sepuluh babak di lantai kantor, lalu kota, peta,
 // globe, dan modul lab. Judul dan isi ID dari desain/cerita-v5/naskah-teks.md (set rekomendasi,
 // keputusan Farrez 19 Nov 2026). Klaim di isi sudah dikonfirmasi Farrez 19 Nov.
-// Teks EN ditulis tersendiri; pilihan per judul ada di desain/cerita-v5/naskah-teks-en.md dan
-// menunggu pilihan Farrez (keputusan 20 Nov: 2 sampai 3 versi per judul). Isian EN di bawah adalah
-// rekomendasi di berkas itu sampai Farrez memilih.
+// Teks EN ditulis tersendiri, bukan diterjemahkan. Judulnya set rekomendasi di
+// desain/cerita-v5/naskah-teks-en.md, dipilih Farrez 21 Nov 2026.
 
 export const BABAK_V5 = [
   {
