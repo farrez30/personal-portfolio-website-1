@@ -2,6 +2,8 @@
 import { useLocale, useTranslations } from "next-intl";
 import { PiArrowUpRightBold, PiGithubLogoBold } from "react-icons/pi";
 import { halamanTampil } from "@/content/proyek";
+import { eksperimenUntukProyek, alamatHalaman } from "@/content/lab";
+import { Link } from "@/i18n/navigation";
 import CeritaArsitektur from "@/components/arsitektur/CeritaArsitektur";
 import "./album.css";
 
@@ -12,6 +14,8 @@ export default function AlbumIsi({ p, judulSebagai: Judul = "h2", idJudul }) {
   const tr = useTranslations("rak");
   const locale = useLocale();
   const halaman = halamanTampil(p);
+  // Proyek yang punya eksperimen di System Design Lab membuka halamannya dari sini (ADR 0027).
+  const lab = eksperimenUntukProyek(p.slug);
 
   return (
     <article className="album" style={{ "--album": p.warna }}>
@@ -41,8 +45,18 @@ export default function AlbumIsi({ p, judulSebagai: Judul = "h2", idJudul }) {
           {t("halaman.overview")}
         </h3>
         <p className="album__ringkas">{p.ringkas[locale]}</p>
-        {(p.tautan.situs || p.tautan.repo || p.tautan.kasus) && (
+        {(p.tautan.situs || p.tautan.repo || p.tautan.kasus || lab) && (
           <p className="album__tautan">
+            {lab?.halaman.map((h) => (
+              <a key={h.kunci} href={alamatHalaman(lab, h, locale)} className="tombol">
+                {h.judul[locale]}
+              </a>
+            ))}
+            {lab && (
+              <Link href="/lab" className="tombol">
+                System Design Lab
+              </Link>
+            )}
             {p.tautan.situs && (
               <a href={p.tautan.situs} className="tombol" target="_blank" rel="noopener noreferrer">
                 {t("bukaSitus")} <PiArrowUpRightBold aria-hidden="true" />
