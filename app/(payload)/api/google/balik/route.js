@@ -3,7 +3,7 @@ import { getPayload } from "payload";
 import { addSessionToUser, generatePayloadCookie } from "payload/shared";
 import { getFieldsToSign, jwtSign } from "payload";
 import config from "@payload-config";
-import { bacaIdToken, COOKIE_STATE, emailSah, googleSiap, pasangSesi, stateCocok, tukarKode } from "@/cms/google";
+import { bacaIdToken, COOKIE_STATE, COOKIE_TUJUAN, emailSah, googleSiap, pasangSesi, stateCocok, tujuanAman, tukarKode } from "@/cms/google";
 
 export const dynamic = "force-dynamic";
 
@@ -11,9 +11,13 @@ export const dynamic = "force-dynamic";
 // (node_modules/payload/dist/auth/operations/login.js): sesi di akun, JWT, cookie payload-token.
 export async function GET(req) {
   const url = new URL(req.url);
+  const ke = tujuanAman(req.cookies.get(COOKIE_TUJUAN)?.value);
   const keLogin = (alasan) => {
-    const r = NextResponse.redirect(`${url.origin}/admin/login?google=${alasan}`);
+    // Tujuan ikut dibawa lagi, supaya mencoba ulang tetap berakhir di halaman yang sama.
+    const ulang = ke ? `&redirect=${encodeURIComponent(ke)}` : "";
+    const r = NextResponse.redirect(`${url.origin}/admin/login?google=${alasan}${ulang}`);
     r.cookies.delete({ name: COOKIE_STATE, path: "/api/google" });
+    r.cookies.delete({ name: COOKIE_TUJUAN, path: "/api/google" });
     return r;
   };
   if (!googleSiap()) return keLogin("belum-disetel");
@@ -50,7 +54,7 @@ export async function GET(req) {
     tokenExpiration: koleksi.auth.tokenExpiration,
   });
   return pasangSesi(
-    NextResponse.redirect(`${url.origin}/admin`),
+    NextResponse.redirect(`${url.origin}${ke ?? "/admin"}`),
     generatePayloadCookie({ collectionAuthConfig: koleksi.auth, cookiePrefix: payload.config.cookiePrefix, token, returnCookieAsObject: true }),
   );
 }

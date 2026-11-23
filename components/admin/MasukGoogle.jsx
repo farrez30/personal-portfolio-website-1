@@ -11,7 +11,11 @@ const PESAN = {
 };
 
 export default function MasukGoogle() {
-  const galat = PESAN[useSearchParams().get("google")];
+  const sp = useSearchParams();
+  const galat = PESAN[sp.get("google")];
+  // ?redirect= milik form Payload ikut dibawa, jadi "Sign in as Farrez" dari /bank kembali ke /bank.
+  const ke = sp.get("redirect");
+  const href = ke ? `/api/google/mulai?ke=${encodeURIComponent(ke)}` : "/api/google/mulai";
   return (
     <div style={{ marginTop: "1.5rem", display: "grid", gap: "0.75rem" }}>
       {galat && (
@@ -19,7 +23,7 @@ export default function MasukGoogle() {
           {galat}
         </p>
       )}
-      <a className="btn btn--style-secondary btn--size-large" href="/api/google/mulai" style={{ textAlign: "center" }}>
+      <a className="btn btn--style-secondary btn--size-large" href={href} style={{ textAlign: "center" }}>
         Masuk dengan Google
       </a>
     </div>
