@@ -2,7 +2,7 @@
 // disajikan zona Vercel milik repo eksperimennya, lewat rewrite di next.config.mjs.
 // Angka flash sale dari hasil/rekaman.json uji penuh 20 Nov 2026, sama dengan content/proyek.js.
 
-// Asal zona per eksperimen. Bisa diganti lewat env tanpa mengubah kode (mis. untuk uji pratinjau).
+// Asal zona per kunci `zona` eksperimen. Bisa diganti lewat env tanpa mengubah kode (mis. untuk uji pratinjau).
 export const ZONA = {
   "flash-sale": process.env.LAB_FLASH_SALE_ASAL || "https://flash-sale-lab.vercel.app",
 };
@@ -21,6 +21,7 @@ export const TEKS_HUB = {
 export const eksperimen = [
   {
     slug: "flash-sale",
+    zona: "flash-sale",
     nomor: "SDL-01",
     proyek: "flash-sale-lab",
     jalur: { id: "Trafik dan skala", en: "Traffic and scale" },
@@ -50,28 +51,101 @@ export const eksperimen = [
       },
     ],
   },
+  // Eksperimen 2 sampai 4 memakai toko dan zona yang sama dengan flash sale (repo flash-sale-lab).
+  // Angka dari hasil/gateway, hasil/ledger, hasil/backup, dan hasil/berkas, uji 20 Nov 2026.
+  {
+    slug: "pembayaran",
+    zona: "flash-sale",
+    nomor: "SDL-02",
+    proyek: "flash-sale-lab",
+    jalur: { id: "Integritas data", en: "Data integrity" },
+    judul: { id: "Pembayaran dan ledger", en: "Payments and ledger" },
+    masalah: {
+      id: "Pembeli membayar, menolak, atau pergi begitu saja, dan notifikasi penyedia pembayaran bisa datang dua kali atau palsu. Bagaimana kasnya tetap pas?",
+      en: "Buyers pay, decline, or simply walk away, and the payment provider's notifications can arrive twice or forged. How do the books stay right?",
+    },
+    halaman: [
+      {
+        kunci: "bayar",
+        judul: { id: "Replay pembayaran", en: "Payment replay" },
+        ket: {
+          id: "7.113 tagihan, 5.998 lunas, 1.288 notifikasi palsu ditolak. Tidak ada yang tercatat dua kali.",
+          en: "7,113 bills, 5,998 paid, 1,288 forged notifications rejected. Nothing recorded twice.",
+        },
+        meta: { id: "Rekaman 20 Nov 2026", en: "Recorded 20 Nov 2026" },
+      },
+    ],
+  },
+  {
+    slug: "backup",
+    zona: "flash-sale",
+    nomor: "SDL-03",
+    proyek: "flash-sale-lab",
+    jalur: { id: "Ketahanan", en: "Resilience" },
+    judul: { id: "Backup dan restore", en: "Backup and restore" },
+    masalah: {
+      id: "Disk database hilang di tengah sale. Berapa lama toko pulih, dan berapa pesanan yang ikut hilang?",
+      en: "The database disk is lost mid-sale. How long until the shop recovers, and how many orders go with it?",
+    },
+    halaman: [
+      {
+        kunci: "backup",
+        judul: { id: "Tiga cara backup", en: "Three backup methods" },
+        ket: {
+          id: "Pulih dalam 10 sampai 14 detik. Sesudah catatan Redis diputar ulang, tidak ada pesanan yang hilang.",
+          en: "Back in 10 to 14 seconds. Once the Redis record is replayed, no order is lost.",
+        },
+        meta: { id: "Uji 20 Nov 2026, satu putaran per cara", en: "Tested 20 Nov 2026, one run per method" },
+      },
+    ],
+  },
+  {
+    slug: "berkas",
+    zona: "flash-sale",
+    nomor: "SDL-04",
+    proyek: "flash-sale-lab",
+    jalur: { id: "Ketahanan", en: "Resilience" },
+    judul: { id: "Unggah berkas besar", en: "Large file upload" },
+    masalah: {
+      id: "Koneksi putus saat mengunggah video produk. Apakah harus mulai lagi dari nol?",
+      en: "The connection drops while a product video uploads. Does it have to start over?",
+    },
+    halaman: [
+      {
+        kunci: "berkas",
+        judul: { id: "Unggah yang bisa dilanjutkan", en: "Resumable upload" },
+        ket: {
+          id: "Tiga penyimpanan S3 diuji. Putus di tengah, lanjut dari sisa, dan yang terkirim dua kali hanya 4 MB.",
+          en: "Three S3 storage servers tested. Cut off midway, resumed from what was left, and only 4 MB sent twice.",
+        },
+        meta: { id: "Uji 20 Nov 2026", en: "Tested 20 Nov 2026" },
+      },
+    ],
+  },
 ];
 
 // Alamat halaman eksperimen di farrez.vercel.app. Halaman zona punya pilihan bahasa sendiri
 // (?bahasa=en), jadi bahasa situs ikut dibawa.
 export function alamatHalaman(e, h, locale) {
-  const dasar = `/lab/${e.slug}/${h.kunci}`;
+  const dasar = `/lab/${e.zona}/${h.kunci}`;
   return locale === "en" ? `${dasar}?bahasa=en` : dasar;
 }
 
 export const eksperimenUntukProyek = (slug) => eksperimen.find((e) => e.proyek === slug) ?? null;
 
-// Rewrite untuk next.config.mjs: hanya halaman yang memang dipajang dan aset _next-nya. Akar
-// /lab/<slug> dialihkan ke hub, karena di zona itu isinya toko yang butuh API.
+// Rewrite untuk next.config.mjs, satu kelompok per zona: hanya halaman yang memang dipajang dan
+// aset _next-nya. Akar /lab/<zona> dialihkan ke hub, karena di zona itu isinya toko yang butuh API.
 export function aturanZona() {
   const rewrites = [];
   const redirects = [];
-  for (const e of eksperimen) {
-    const asal = ZONA[e.slug];
-    const awal = `/lab/${e.slug}`;
+  const perZona = new Map();
+  for (const e of eksperimen) perZona.set(e.zona, [...(perZona.get(e.zona) ?? []), ...e.halaman]);
+  for (const [zona, halaman] of perZona) {
+    const asal = ZONA[zona];
+    const awal = `/lab/${zona}`;
     redirects.push({ source: awal, destination: "/lab", permanent: false });
     rewrites.push({ source: `${awal}/_next/:path+`, destination: `${asal}${awal}/_next/:path+` });
-    for (const h of e.halaman) {
+    for (const h of halaman) {
       rewrites.push({ source: `${awal}/${h.kunci}`, destination: `${asal}${awal}/${h.kunci}` });
       rewrites.push({ source: `${awal}/${h.kunci}/:path+`, destination: `${asal}${awal}/${h.kunci}/:path+` });
     }
