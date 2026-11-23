@@ -29,8 +29,10 @@ mencabut akses satu orang tanpa mengganti kode semua orang."
 ## Consequences
 - New collection `kode-bank` (admin only): name, fingerprint, active, valid until, last sign-in.
   The code itself is a virtual field, hashed with a key derived from `PAYLOAD_SECRET` and never
-  stored. Codes are made with `npm run bank:kode -- -Nama <name>` (Bitwarden generates and keeps
-  the code) and revoked by unticking Active in /admin.
+  stored. `npm run bank:kode -- -Nama <name>` has Bitwarden generate and keep the code and puts it
+  on the clipboard; it is pasted into the "Kode baru" field in /admin, because the production
+  `DATABASE_URI` and `PAYLOAD_SECRET` are sensitive Vercel variables that cannot be pulled to a
+  laptop (`-Lokal` writes to the local test database instead). Revoked by unticking Active.
 - `POST /api/bank/masuk` checks the code (same-origin only, 10 wrong tries per address per 15 min,
   12 characters minimum) and sets an httpOnly `bank-tamu` ticket signed with the derived key.
   `GET /api/bank/sesi` answers only the role (`pemilik`, `tamu`, or 401) and re-checks the code in
