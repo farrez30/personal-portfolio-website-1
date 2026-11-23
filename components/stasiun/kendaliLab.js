@@ -1,9 +1,10 @@
 // Satu sumber state untuk daftar proyek HTML (ModulLab.jsx) dan loker 3D (DuniaV5 ke adegan.js),
-// storyboard-build.md §4: fokus, hover, posisi gulir, loker yang dibuka, dan jeda gerak latar.
+// storyboard-build.md §4: fokus, hover, posisi gulir, loker yang dibuka, jeda gerak (global untuk
+// seluruh dunia v5, tombolnya di bilah: TombolJeda.jsx), dan apakah dunia v5 sedang terpasang.
 // Tanpa React supaya bisa dites di Node dan dipakai dua komponen yang tidak bersarang.
 import { lokerNyala } from "./lab.js";
 
-export const AWAL = { fokus: -1, hover: -1, gulir: 0, buka: -1, jeda: false };
+export const AWAL = { fokus: -1, hover: -1, gulir: 0, buka: -1, jeda: false, dunia: false };
 
 export function buatKendali(awal = AWAL) {
   let state = { ...awal };

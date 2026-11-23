@@ -5,6 +5,7 @@ import { useLocale } from "next-intl";
 import { useMode } from "@/components/mode/ModeProvider";
 import { anchorAktif } from "@/components/dunia/naskah";
 import { useIsi } from "@/components/isi/IsiProvider";
+import { suara } from "@/components/imersif/suara";
 import { ANCHOR_V5, pemicuAnchorV5 } from "./naskah";
 import { susunLab, buatRel, titikLoker, lokerGulir, kDariGulir } from "./lab";
 import { kendaliLab } from "./kendaliLab";
@@ -80,10 +81,12 @@ function DuniaImersif({ aktif }) {
           d.setGeser(k);
           kendaliLab.set({ gulir: lokerGulir(titikLoker(buatRel(jumlahRak, innerWidth / innerHeight < 0.8), daftar.length + 1), k) });
           setLewat(r.bottom < innerHeight / 2);
+          setRuang(!lewat);
           return;
         }
       }
       setLewat(false);
+      setRuang(false);
       const awal = titik[i].y;
       const akhir = titik[i + 1]?.y ?? document.documentElement.scrollHeight;
       d.setGeser((y + innerHeight / 2 - awal) / Math.max(1, akhir - awal));
@@ -94,6 +97,14 @@ function DuniaImersif({ aktif }) {
       wadah.current.toggleAttribute("data-lewat", v);
       d.setTerlihat(aktifMode && !v);
     };
+    // Dengung ruang modul (room tone pelan) selama kamera di dalam modul lab; mesin suara bersama
+    // situs (components/imersif/suara.js) mengikuti saklar speaker di bilah.
+    let ruangLalu = false;
+    const setRuang = (v) => {
+      if (v === ruangLalu) return;
+      ruangLalu = v;
+      suara()?.ruang(v ? 0.5 : 0);
+    };
     // Daftar HTML ke loker: nyala, buka atau tutup, jeda gerak.
     let bukaLalu = -1;
     const saatKendali = (s) => {
@@ -101,6 +112,8 @@ function DuniaImersif({ aktif }) {
       d.setNyala(kendaliLab.nyala());
       d.setJeda(s.jeda);
       if (s.buka !== bukaLalu) {
+        // kait loker terbuka, pintu rapat saat ditutup, klik saat pindah ke loker berikutnya
+        suara()?.mainkan(s.buka < 0 ? "rapat" : bukaLalu >= 0 ? "tombol" : "relay");
         if (s.buka >= 0) d.buka(s.buka);
         else d.tutup();
         bukaLalu = s.buka;
@@ -132,6 +145,7 @@ function DuniaImersif({ aktif }) {
         performance.mark("stasiun:modul");
         d = buatDuniaV5(wadah.current, { kurangiGerak, bahasa, uji, daftar, kontak: TEKS_LAB.kontak[bahasa] });
         saatKendali(kendaliLab.get());
+        kendaliLab.set({ dunia: true });
         hitungTitik();
         anchorKini = anchorAktif(scrollY, innerHeight, titik);
         d.keAnchor(anchorKini);
@@ -157,6 +171,8 @@ function DuniaImersif({ aktif }) {
       ro.disconnect();
       lepasKendali();
       kendaliLab.layarLoker = null;
+      kendaliLab.set({ dunia: false, jeda: false });
+      setRuang(false);
       d?.dispose();
     };
   }, [bahasa, proyek]);

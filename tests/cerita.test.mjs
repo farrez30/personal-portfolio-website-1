@@ -97,8 +97,8 @@ test("tinggi blok tersedia untuk pembuka dan setiap bab", () => {
   for (const id of ["pembuka", ...BAB.map((b) => b.id)]) assert.ok(bobot[id] >= 0.8 && bobot[id] <= 3, id);
 });
 
-test("cerita ada di antara hero dan rak", () => {
-  const src = baca("app/[locale]/page.jsx");
+test("versi CD di /arsip/cd: cerita ada di antara hero dan rak", () => {
+  const src = baca("app/[locale]/arsip/cd/page.jsx");
   const i = (s) => src.indexOf(s);
   assert.ok(i("<Gerbang") < i("<CeritaKerja") && i("<CeritaKerja") < i("<RakSesuaiMode"));
 });

@@ -155,7 +155,7 @@ function Lorong({ locale }) {
   }, [nyala, state.fokus, state.hover]);
 
   // Keluar dari seksi: hover dan fokus dilepas supaya loker kembali mengikuti gulir.
-  useEffect(() => () => kendaliLab.set({ ...AWAL, jeda: kendaliLab.get().jeda }), []);
+  useEffect(() => () => kendaliLab.set({ ...AWAL, jeda: kendaliLab.get().jeda, dunia: kendaliLab.get().dunia }), []);
 
   const saatFokus = (e, i) => {
     kendaliLab.set({ fokus: i });
@@ -190,9 +190,6 @@ function Lorong({ locale }) {
             </a>
           </li>
         </ol>
-        <button type="button" className="mono modul-lab__jeda" aria-pressed={state.jeda} onClick={() => kendaliLab.set({ jeda: !state.jeda })}>
-          {T("jeda")}
-        </button>
       </div>
 
       <dialog

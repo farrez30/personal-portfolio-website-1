@@ -54,3 +54,15 @@
 .stasiun[data-lewat] {
   opacity: 0 !important;
 }
+
+/* Tautan ke versi rak CD di ujung beranda (ADR 0026). */
+.arsip-cd {
+  padding-block: 1.5rem 3rem;
+  font-size: 0.8rem;
+  color: var(--ink-3);
+}
+
+.arsip-cd a {
+  color: inherit;
+  text-underline-offset: 0.2em;
+}

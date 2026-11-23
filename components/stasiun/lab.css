@@ -76,24 +76,6 @@
   text-underline-offset: 0.2em;
 }
 
-.modul-lab__jeda {
-  align-self: flex-start;
-  min-height: 44px;
-  margin: 0 0.5rem;
-  padding: 0 0.9rem;
-  border: 1px solid rgb(236 232 225 / 0.3);
-  border-radius: 999px;
-  background: none;
-  color: inherit;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
-.modul-lab__jeda[aria-pressed="true"] {
-  border-color: #f0b35a;
-  background: rgb(240 179 90 / 0.15);
-}
-
 /* Layar tegak: daftar menempel di bagian bawah, modul lab di atasnya (setViewOffset 14%). */
 @media (max-aspect-ratio: 4/5) {
   .modul-lab__kendali {

@@ -26,6 +26,8 @@ const gpu = arg.includes("--gpu");
 const kontak = arg.includes("--kontak");
 const sela = arg.includes("--sela");
 const lab = arg.includes("--lab");
+// --kurangi: prefers-reduced-motion: reduce, untuk memeriksa semua perpindahan jadi potongan
+const kurangi = arg.includes("--kurangi");
 const hp = W < 768;
 mkdirSync(keluar, { recursive: true });
 
@@ -94,6 +96,7 @@ await kirim("Page.enable");
 await kirim("Runtime.enable");
 await kirim("Emulation.setDeviceMetricsOverride", { width: W, height: H, deviceScaleFactor: dpr, mobile: hp });
 if (hp) await kirim("Emulation.setTouchEmulationEnabled", { enabled: true, maxTouchPoints: 5 });
+if (kurangi) await kirim("Emulation.setEmulatedMedia", { features: [{ name: "prefers-reduced-motion", value: "reduce" }] });
 await kirim("Page.addScriptToEvaluateOnNewDocument", { source: `localStorage.setItem("mode", "imersif");` });
 await kirim("Page.navigate", { url: url + (url.includes("?") ? "&" : "?") + "uji-stasiun" });
 for (let i = 0; i < 120; i++) {
@@ -261,15 +264,17 @@ if (lab) {
   const aktif = () => js(`(() => { const a = document.activeElement; const i = [...document.querySelectorAll(".modul-lab__daftar .modul-lab__item")].indexOf(a); return { i, kelas: a?.className ?? "", dialog: !!document.querySelector(".modul-lab__panel[open]"), dalamDialog: !!a?.closest(".modul-lab__panel"), nyala: window.__stasiunUji.info().lab.nyala, buka: window.__stasiunUji.info().lab.buka, y: Math.round(scrollY), alamat: location.search, live: document.querySelector("#modul-lab [aria-live]")?.textContent ?? "" }; })()`);
   await gulirK(0);
   await tidur(1200);
-  await js(`(() => { const h = document.getElementById("modul-lab-judul"); h.tabIndex = -1; h.focus(); h.removeAttribute("tabindex"); return true; })()`);
   // gaya "sembunyi" foto kanvas membuat isi halaman tidak bisa difokus: lepas dulu
   await js(`document.getElementById("sembunyi")?.remove(); true`);
   await kirim("Emulation.setFocusEmulationEnabled", { enabled: true });
   await kirim("Page.bringToFront");
   const ky = (hasil.lab.keyboard = []);
-  await tekan("Tab", "Tab", 9);
+  // titik awal Tab ditetapkan: fokus langsung di item pertama daftar (klik sebelumnya menggeser titik
+  // awal navigasi berurutan, jadi Tab dari judul mendarat di tempat yang tidak tentu)
+  await js(`document.querySelectorAll(".modul-lab__daftar .modul-lab__item")[0].focus(); true`);
+
   await tidur(1500);
-  ky.push({ langkah: "Tab ke item pertama", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
+  ky.push({ langkah: "Fokus item pertama", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
   for (let n = 0; n < 4; n++) await tekan("Tab", "Tab", 9);
   await tidur(1800);
   ky.push({ langkah: "Tab empat kali (item ke-5)", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
@@ -298,13 +303,13 @@ if (lab) {
   const jamAwal = await js(`window.__stasiunUji.info().lab.jamLab`);
   await tidur(600);
   const jeda = { jalanSebelum: +((await js(`window.__stasiunUji.info().lab.jamLab`)) - jamAwal).toFixed(2) };
-  await js(`document.querySelector(".modul-lab__jeda").click(); true`);
+  await js(`document.querySelector(".bilah [data-jeda]").click(); true`);
   await tidur(300);
-  jeda.tekan = await js(`document.querySelector(".modul-lab__jeda").getAttribute("aria-pressed")`);
+  jeda.tekan = await js(`document.querySelector(".bilah [data-jeda]").getAttribute("aria-pressed")`);
   jeda.jam = await js(`window.__stasiunUji.info().lab.jamLab`);
   await tidur(1200);
   jeda.jamSesudah = (await js(`window.__stasiunUji.info().lab.jamLab`));
-  await js(`document.querySelector(".modul-lab__jeda").click(); true`);
+  await js(`document.querySelector(".bilah [data-jeda]").click(); true`);
   ky.push({ langkah: "tombol jeda gerak", ...jeda }); console.log(JSON.stringify(ky.at(-1)));
   // sesudah seksi lewat: dunia memudar
   await js(`(() => { scrollTo(0, ${seksi.atas + seksi.tinggi}); dispatchEvent(new Event("scroll")); return true; })()`);

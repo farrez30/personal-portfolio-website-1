@@ -79,7 +79,9 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   // Bayangan lantai diam: dihitung sekali, bukan tiap bingkai.
   renderer.shadowMap.autoUpdate = false;
-  const rasio = Math.min(devicePixelRatio || 1, hp ? 1.25 : 1.5);
+  // Preset HP (F7): HP kelas bawah (CPU atau memori 4 atau kurang) digambar di DPR 1.
+  const hpLemah = hp && ((navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4);
+  const rasio = Math.min(devicePixelRatio || 1, hpLemah ? 1 : hp ? 1.25 : 1.5);
   renderer.setPixelRatio(rasio);
   const kanvas = renderer.domElement;
   wadah.appendChild(kanvas);
@@ -419,10 +421,15 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   let jamBeku = null;
   let selisihJam = 0;
   let rangkaBeku = rangkaStasiun(0);
-  const jamGlobe = (t) => (kurangiGerak ? 0 : jamBeku ?? t / 1000 - selisihJam);
+  // Jeda gerak global (F7, WCAG 2.2.2): lalu lintas kota, satelit, dan gerak latar modul berhenti
+  // di tempat dan lanjut dari titik yang sama. jamGerak = waktu dikurangi lama jeda (ms).
+  let jeda = false;
+  let jedaMulai = null;
+  let jedaTotal = 0;
+  const jamGerak = (t) => (jedaMulai ?? t) - jedaTotal;
+  const jamGlobe = (t) => (kurangiGerak ? 0 : jamBeku ?? jamGerak(t) / 1000 - selisihJam);
   // Modul lab: jam gerak latar, loker yang menyala, loker yang dibuka, jeda gerak.
   let jamLab = 0;
-  let jedaLab = false;
   let nyalaLab = 0;
   let buka = null; // { i, arah, u0, t0 }
   const uBuka = (t) => (buka ? Math.min(1, Math.max(0, buka.u0 + (buka.arah * (t - buka.t0)) / (BUKA.total * 1000))) : 0);
@@ -547,10 +554,10 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     // Jam globe beku sejak zoom ke modul lab mulai sampai kamera kembali diam di babak penutup.
     const perluBeku = indeks >= iLab || (blend && Math.max(blend.lalu, blend.ke) >= iLab);
     if (perluBeku && jamBeku == null) {
-      jamBeku = t / 1000 - selisihJam;
+      jamBeku = jamGerak(t) / 1000 - selisihJam;
       rangkaBeku = rangkaStasiun(jamGlobe(t));
     } else if (!perluBeku && jamBeku != null) {
-      selisihJam = t / 1000 - jamBeku;
+      selisihJam = jamGerak(t) / 1000 - jamBeku;
       jamBeku = null;
     }
     // Loker selesai ditutup: kembali ke rel biasa.
@@ -574,10 +581,10 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     // Gerak latar modul lab berjalan sejak tampil, berhenti saat dijeda atau panel proyek terbuka
     // (WCAG 2.2.2, storyboard §4); lampu loker memudar ke loker yang dipilih dari daftar.
     const lab = tampak.includes("lab") ? tahap.lab : null;
-    const labJalan = lab && !kurangiGerak && !jedaLab && !buka;
+    const labJalan = lab && !kurangiGerak && !jeda && !buka;
     if (labJalan) jamLab += dt;
     if (lab && lab.nyala(nyalaLab, dt, kurangiGerak)) kotor = true;
-    if (((ramai || tampak.includes("globe")) && !kurangiGerak && jamBeku == null) || labJalan) kotor = true;
+    if (((ramai || tampak.includes("globe")) && !kurangiGerak && !jeda && jamBeku == null) || labJalan) kotor = true;
     if (!kotor) return false;
     letakNota(blend ? pose.nota : null);
     pasang(pose);
@@ -605,7 +612,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     for (const m of kota.mesh) m.visible = tampak;
     kota.kulitAtas.visible = tampak && Math.max(indeks, asal) >= iRamai;
     if (!tampak) return;
-    kota.atur(kurangiGerak ? 0 : t / 1000, ramai && indeks === iRamai && !blend ? geser : 0);
+    kota.atur(kurangiGerak ? 0 : jamGerak(t) / 1000, ramai && indeks === iRamai && !blend ? geser : 0);
     // Bayangan kota hanya di desktop (lembar look-dev: dimatikan di HP), dan hanya setelah kamera
     // jauh di atas gedung: peta bayangan dipas ulang sekali ke kota, lalu sekali lagi ke lantai.
     const diKota = !hp && kota.kulitAtas.visible && camera.position.y > 40;
@@ -705,7 +712,13 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       nyalaLab = i;
     },
     setJeda(v) {
-      jedaLab = v;
+      if (v === jeda) return;
+      jeda = v;
+      if (v) jedaMulai = sekarang();
+      else if (jedaMulai != null) {
+        jedaTotal += sekarang() - jedaMulai;
+        jedaMulai = null;
+      }
       kotor = true;
     },
     // Buka loker ke-i: kamera mendekat, loker meluncur (gerak dikurangi: langsung terbuka).
@@ -784,7 +797,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       scene,
       camera,
       renderer,
-      info: () => ({ ...info, programs: renderer.info.programs?.length ?? 0, tegak, indeks, lab: { nyala: nyalaLab, buka: buka && { i: buka.i, u: +uBuka(sekarang()).toFixed(3) }, jamLab: +jamLab.toFixed(2), jamBeku } }),
+      info: () => ({ ...info, programs: renderer.info.programs?.length ?? 0, tegak, indeks, rasio, jeda, jamGerak: jamGerak(sekarang()), lab: { nyala: nyalaLab, buka: buka && { i: buka.i, u: +uBuka(sekarang()).toFixed(3) }, jamLab: +jamLab.toFixed(2), jamBeku } }),
       // Bekukan jam di t milidetik, jalankan satu langkah, gambar. null melepas jam.
       waktu(t) {
         waktuUji = t;

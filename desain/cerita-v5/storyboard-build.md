@@ -122,8 +122,8 @@ Satu fase satu PR, previs dan lembar kontak per 0,1 detik sebelum merge.
 | F4 | keluar jendela, kota, lalu lintas | jalur lewat celah jendela, terukur raycast (selesai 23 Nov: raycast 1201 ruas, maks 25 draw call, `build/f4/`) |
 | F5 | peta Nusantara dan globe malam, satelit | bingkai pertama di bawah 150 ms (selesai 23 Nov: peta 41 ms, globe 63 ms di HP emulasi, maks 34 draw call, `build/f5/`) |
 | F6 | modul lab, daftar proyek sebagai pengendali, panel proyek | keyboard dan pembaca layar bisa memakai semua fungsi (selesai 23 Nov: uji Tab, Enter, Escape, Back lewat CDP, `build/f6/`) |
-| F7 | reduced motion, tombol jeda dan suara, preset HP | uji di HP sungguhan |
-| F8 | buang dunia toko kaset dan loader CD (ADR 0021), tulis ulang DESIGN.md | tidak ada aset atau kode toko kaset yang tertinggal |
+| F7 | reduced motion, tombol jeda dan suara, preset HP | uji di HP sungguhan (24 Nov: jeda global di bilah, suara modul, DPR 1 untuk HP lemah, gerak dikurangi diukur di Chrome, `build/f7-f8/`; HP sungguhan belum) |
+| F8 | ~~buang dunia toko kaset dan loader CD~~ (diganti ADR 0026): v5 jadi beranda, versi CD pindah utuh ke `/arsip/cd`, tulis ulang DESIGN.md | beranda = v5, `/arsip/cd` utuh dan tertaut, `/v5` dialihkan (24 Nov, `build/f7-f8/`) |
 
 ## 8. Tes yang ditulis
 

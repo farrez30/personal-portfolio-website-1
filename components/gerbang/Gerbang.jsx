@@ -2,7 +2,8 @@ import { useTranslations } from "next-intl";
 import HeadlineGulir from "./HeadlineGulir";
 import "./gerbang.css";
 
-export default function Gerbang({ cv }) {
+// `proyek`: jangkar seksi proyek (rak CD di /arsip/cd, modul lab di beranda v5).
+export default function Gerbang({ cv, proyek = "#rak" }) {
   const t = useTranslations("gerbang");
 
   return (
@@ -12,7 +13,7 @@ export default function Gerbang({ cv }) {
           <p className="gerbang__peran mono">{t("peran")}</p>
           <HeadlineGulir a={t("headlineA")} b={t("headlineB")} sorot={t("sorot")} idJudul="gerbang-judul" />
           <div className="gerbang__aksi">
-            <a href="#rak" className="tombol tombol--utama">
+            <a href={proyek} className="tombol tombol--utama">
               {t("lihatProyek")}
             </a>
             <a href="#kontak" className="tombol">

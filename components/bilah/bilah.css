@@ -73,6 +73,48 @@
   }
 }
 
+/* HP sempit: tombol jeda gerak v5 menambah satu tombol, jadi saklar mode dan bahasa dipadatkan
+   supaya bilah tetap satu baris di 360 px (tinggi target sentuh tetap 44 px). */
+@media (max-width: 420px) {
+  .bilah__isi {
+    gap: 0.35rem;
+  }
+
+  .bilah .saklar__opsi {
+    padding: 0 0.4rem;
+  }
+
+  .bilah__bahasa a {
+    min-width: 36px;
+  }
+}
+
+@media (max-width: 380px) {
+  .bilah__alat {
+    gap: 0.1rem;
+  }
+
+  .bilah .saklar__opsi {
+    padding: 0 0.3rem;
+  }
+
+  .bilah__bahasa a {
+    min-width: 32px;
+  }
+}
+
+/* 320 px (WCAG 1.4.10 Reflow): enam kendali tidak muat satu baris, jadi alat turun ke baris kedua. */
+@media (max-width: 340px) {
+  .bilah__isi {
+    flex-wrap: wrap;
+  }
+
+  .bilah__alat {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
 /* Di HP backdrop-filter di atas kanvas dunia yang terus berubah memaksa blur ulang tiap bingkai
    di compositor. Latarnya sudah 86% buram, jadi cukup dibuat hampir penuh. */
 @media (pointer: coarse) {

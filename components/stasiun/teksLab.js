@@ -3,7 +3,6 @@
 export const TEKS_LAB = {
   judul: { id: "Proyek", en: "Projects" },
   kontak: { id: "Modul berikutnya, punya Anda.", en: "The next module is yours." },
-  jeda: { id: "Jeda gerak", en: "Pause motion" },
   lengkap: { id: "Lihat proyek", en: "View project" },
   dibuka: { id: "dibuka", en: "opened" },
   berikutnya: { id: "Berikutnya", en: "Next" },

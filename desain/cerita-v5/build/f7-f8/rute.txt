@@ -1,0 +1,6 @@
+/id 200 
+/en 200 
+/id/arsip/cd 200 
+/en/arsip/cd 200 
+/id/v5?proyek=jeda 308 http://127.0.0.1:3461/id?proyek=jeda
+/id/proyek/jeda 200 

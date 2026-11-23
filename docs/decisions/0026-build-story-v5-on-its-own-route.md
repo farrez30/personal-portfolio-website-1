@@ -1,7 +1,9 @@
 # 0026. Build story v5 on its own route, keep the CD version reachable
 
 - Date: 2026-11-21
-- Status: Accepted. Supersedes phase F8 of `desain/cerita-v5/storyboard-build.md` ("remove the
+- Status: Accepted. Swap done 24 Nov 2026: v5 is the home page, the CD version lives at
+  `/arsip/cd`, `/v5` redirects to the home page.
+- Earlier status: Accepted. Supersedes phase F8 of `desain/cerita-v5/storyboard-build.md` ("remove the
   cassette-shop world and CD loader").
 
 ## Context
