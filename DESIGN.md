@@ -5,9 +5,15 @@ disagree, fix one of them in the same change.
 
 ## Concept
 
-A record shop shelf for work. Each project is a jewel case on a rack: the cover says what it is,
-the booklet says what Farrez did, the disc in the player shows the product running. Everything
-should look like a real object photographed on a beige studio table, not a stylised 3D toy.
+Since 24 Nov 2026 the home page is story v5, "what gets weighed" (ADR 0019, 0026): one camera
+travels from an office floor where a business owner weighs a decision, out the window over the
+city, onto a map of Indonesia, round a night globe whose satellites are the clients, and into a
+satellite lab module where each project sits in a locker. Toon-shaded with ink lines, pastel
+blocks on cream paper by day, deep blue by night (look-dev sheet `docs/look-dev/cerita-v5.md`).
+
+The previous home page, a record-shop shelf where each project is a jewel case, still ships
+unchanged at `/arsip/cd` (noindex, linked from the foot of the home page). Its sections below are
+marked "archive".
 
 ## Colour tokens (`app/globals.css`)
 
@@ -48,9 +54,36 @@ nothing else.
 - Scene: springs and eased sub-phases that overlap (open, listen, read), never linear tweens.
   Discs spin at 120 rpm in the player.
 - `prefers-reduced-motion`: Light mode by default, headline in its final state, hologram tilt and
-  dust off.
+  dust off. In the v5 world every camera move is a cut, the corridor rail jumps rack to rack,
+  lockers open without sliding, satellites and traffic stand still.
+- A pause button in the top bar (Immersive, while the v5 world is mounted, `aria-pressed`) stops
+  everything that moves on its own: traffic, satellites, the lab's robot, astronaut and lights
+  (WCAG 2.2.2). Phones with 4 or fewer cores or 4 GB or less draw at pixel ratio 1.
 
-## The scroll story (`components/cerita/`, ADR 0011, 0012, 0016)
+## Story v5 (`components/stasiun/`, `content/cerita-v5.js`, ADR 0019 to 0026)
+
+Ten chapters as server HTML, text pinned bottom left over dark fog (bottom on phones), the canvas
+`aria-hidden` behind. Four stages, each in its own units so float32 and depth stay sharp: office
+and city in metres, the map at 6 units per degree, the globe at earth radius 100, the lab in metres.
+Every chapter leaves with its own move (blend, follow the red note, whip pan, through a tablet
+screen, orbit, behind a pillar, crane, out the window, hand-offs to map and globe, zoom into the
+satellite); scrolling back replays the same path backwards. Build notes and contact sheets per
+phase in `desain/cerita-v5/build/f2` to `f6`.
+
+- **Palette:** cream paper `#f3ece0`, night `#1f2440`, pastels under 45% HSL saturation, ink
+  `#2a2836` at 92%, red `#e0574b` only for persistent objects (the note, the client's shop, the
+  route, the lab module's ring). Toon ramp `[150, 212, 255]`, no tone mapping, no environment map.
+- **Satellite zoom (5.5 s):** the globe clock freezes, the camera circles the earth to the
+  station (LVLH attitude, window facing out), the dark window glass fills the screen for about
+  0.4 s, then the corridor.
+- **Lab module:** two modules and a node, one locker per project plus a contact locker ("The next
+  module is yours."), counts from the project list with no fillers. The project list is the
+  controller: hover, focus or scroll lights a locker, Enter opens the project panel as a dialog
+  (`?proyek=<slug>`, Next, Escape or Back to close, focus returns to the list).
+- **Budget measured on an emulated phone:** at most 34 draw calls, first frame per stage under
+  150 ms except the office hero (about 200 to 290 ms, open item).
+
+## The scroll story, archive (`/arsip/cd`, `components/cerita/`, ADR 0011, 0012, 0016)
 
 Ten chapters between the hero and the rack, from an everyday complaint to a system used every
 day. Pipeline (research, data on what business owners struggle with, previs renders, pen.dev
@@ -82,7 +115,7 @@ beside its text, pushed in slowly by `--p`. Switching from Immersive to Light ke
 memory, hidden and not drawing, so switching back shows it at once without the loader. **Reduced motion** shows the final states, and the
 world cuts between chapters behind a short crossfade.
 
-## The record-shop world (`components/dunia/`, ADR 0014)
+## The record-shop world, archive (`components/dunia/`, ADR 0014)
 
 Realistic cinematic night, set by the look-dev sheet `docs/look-dev.md` (target styleframes in
 `desain/look-dev/`). Each place has one pendant lamp you can see: bulb, halo sprite, a faint
@@ -96,7 +129,7 @@ The screen pass after motion blur lifts the shadows, adds a soft vignette and a 
 only changes when the scene redraws. Light mode is the shop in the morning: same rig with the
 cones and grain turned down.
 
-## The jewel case (`components/imersif/benda.js`)
+## The jewel case, archive (`components/imersif/benda.js`)
 
 Built in millimetres, 1 scene unit = 100 mm. Case 142 × 125 × 10.4 mm. Clear base with a printed
 back insert; black tray 136 × 121 mm with a rosette of 12 teeth through the disc hole and two
@@ -106,7 +139,7 @@ by four round tabs 16 mm in from each corner and two stop ribs; clear sheet 1.5 
 shows faint cut edges (lines at 15 to 25% white). Plastic sheen is a soft studio strip reflection,
 the disc's data side a diffraction shader.
 
-## Album art (`content/album.js`, `components/imersif/tipografi.js`)
+## Album art, archive (`content/album.js`, `components/imersif/tipografi.js`)
 
 Every project CD is its own album: one classic record-design genre each (Swiss, 70s collage,
 Bauhaus, mid-century, constructivist, linocut, pop art, ECM, city-pop, Blue Note), table and
@@ -122,8 +155,8 @@ a small credit line. The plain band Flow left at the bottom of the art is detect
 
 ## Clients and partners (`components/klien/`, `content/klien.js`)
 
-Between the rack and contact, tagged `data-dunia="kasir"` so the shop camera stops at the cashier
-counter. Every client is a fully printed CD (`public/assets/klien/cakram/`): the art is Nano Banana
+Between the projects and contact on both pages. On `/arsip/cd` it is tagged `data-dunia="kasir"`
+so the shop camera stops at the cashier counter; on the home page the v5 world fades out before it. Every client is a fully printed CD (`public/assets/klien/cakram/`): the art is Nano Banana
 in Flow with the client's real logo as an ingredient, and `scripts/logo-cakram.py` then replaces
 the logo with the original file's pixels (never redrawn, only downscaled; provenance per file).
 Personal projects reuse their album label style with a lockup of the project icon and name.

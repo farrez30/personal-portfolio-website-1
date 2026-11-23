@@ -39,7 +39,7 @@ export default async function HalamanProyek({ params }) {
   return (
     <div className="wadah" style={{ paddingBlock: "clamp(2rem, 6vh, 4rem)", maxWidth: "52rem" }}>
       <p style={{ marginBottom: "2rem" }}>
-        <Link href="/#rak" className="tombol">
+        <Link href="/#modul-lab" className="tombol">
           {t("kembali")}
         </Link>
       </p>

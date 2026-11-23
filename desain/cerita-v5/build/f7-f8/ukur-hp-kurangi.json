@@ -1,0 +1,1224 @@
+{
+  "layar": "390x844@2",
+  "cpu": 1,
+  "babak": [
+    {
+      "anchor": "gerbang",
+      "calls": 14,
+      "segitiga": 82348,
+      "programs": 37,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "dorongan",
+      "calls": 13,
+      "segitiga": 82330,
+      "programs": 37,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "harga-diam",
+      "calls": 14,
+      "segitiga": 82348,
+      "programs": 37,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "tarikan",
+      "calls": 12,
+      "segitiga": 82324,
+      "programs": 37,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "biaya",
+      "calls": 15,
+      "segitiga": 82332,
+      "programs": 37,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "kelangsungan",
+      "calls": 14,
+      "segitiga": 82332,
+      "programs": 37,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "data",
+      "calls": 14,
+      "segitiga": 87364,
+      "programs": 37,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "kebiasaan",
+      "calls": 15,
+      "segitiga": 315358,
+      "programs": 38,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "ramai",
+      "calls": 25,
+      "segitiga": 320592,
+      "programs": 38,
+      "pertama": {
+        "gedung": 226.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "langkah-kecil",
+      "calls": 13,
+      "segitiga": 4918,
+      "programs": 38,
+      "pertama": {
+        "gedung": 226.7,
+        "peta": 5.3
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "penutup",
+      "calls": 18,
+      "segitiga": 46554,
+      "programs": 41,
+      "pertama": {
+        "gedung": 226.7,
+        "peta": 5.3,
+        "globe": 39.7
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    },
+    {
+      "anchor": "modul-lab",
+      "calls": 8,
+      "segitiga": 33078,
+      "programs": 41,
+      "pertama": {
+        "gedung": 226.7,
+        "peta": 5.3,
+        "globe": 39.7,
+        "lab": 6.9
+      },
+      "panas": {
+        "peta": {
+          "bangun": 3.1,
+          "unggah": 6.3,
+          "kompilasi": 35.8
+        },
+        "globe": {
+          "bangun": 19.3,
+          "unggah": 3.8,
+          "kompilasi": 30.6
+        },
+        "lab": {
+          "bangun": 65,
+          "potong": [
+            7.2,
+            6.5,
+            9.5,
+            7.6,
+            13.2,
+            5.1,
+            2.1,
+            2.6,
+            1.6,
+            0.7,
+            1.2,
+            7.7
+          ],
+          "unggah": 0.5,
+          "kompilasi": 67.4
+        }
+      }
+    }
+  ],
+  "pindah": [],
+  "galat": [],
+  "lab": {
+    "rel": [
+      {
+        "k": 0,
+        "calls": 18,
+        "posisi": [
+          -126.43,
+          22.48,
+          -418.76
+        ],
+        "periksa": {
+          "jarak": 382.7,
+          "benda": "bumi",
+          "titik": [
+            -19.4,
+            -74.1,
+            -64.25
+          ]
+        },
+        "nyala": 1,
+        "daftar": 1,
+        "berkas": "rel-00.jpg"
+      },
+      {
+        "k": 0.1,
+        "calls": 8,
+        "posisi": [
+          -1.15,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            -0.63,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 3,
+        "daftar": 3,
+        "berkas": "rel-01.jpg"
+      },
+      {
+        "k": 0.2,
+        "calls": 8,
+        "posisi": [
+          0.05,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            0.57,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 5,
+        "daftar": 5,
+        "berkas": "rel-02.jpg"
+      },
+      {
+        "k": 0.3,
+        "calls": 8,
+        "posisi": [
+          1.25,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            1.77,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 7,
+        "daftar": 7,
+        "berkas": "rel-03.jpg"
+      },
+      {
+        "k": 0.4,
+        "calls": 8,
+        "posisi": [
+          1.25,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            1.77,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 7,
+        "daftar": 7,
+        "berkas": "rel-04.jpg"
+      },
+      {
+        "k": 0.5,
+        "calls": 8,
+        "posisi": [
+          1.25,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            1.77,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 7,
+        "daftar": 7,
+        "berkas": "rel-05.jpg"
+      },
+      {
+        "k": 0.6,
+        "calls": 8,
+        "posisi": [
+          8.65,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            9.17,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 8,
+        "daftar": 8,
+        "berkas": "rel-06.jpg"
+      },
+      {
+        "k": 0.7,
+        "calls": 8,
+        "posisi": [
+          8.65,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            9.17,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 8,
+        "daftar": 8,
+        "berkas": "rel-07.jpg"
+      },
+      {
+        "k": 0.8,
+        "calls": 8,
+        "posisi": [
+          8.65,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            9.17,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 8,
+        "daftar": 8,
+        "berkas": "rel-08.jpg"
+      },
+      {
+        "k": 0.9,
+        "calls": 9,
+        "posisi": [
+          9.85,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            10.37,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 10,
+        "daftar": 10,
+        "berkas": "rel-09.jpg"
+      },
+      {
+        "k": 1,
+        "calls": 11,
+        "posisi": [
+          11.05,
+          0.25,
+          0.7
+        ],
+        "periksa": {
+          "jarak": 1.63,
+          "benda": "pintu",
+          "titik": [
+            11.57,
+            -0.4,
+            -0.7
+          ]
+        },
+        "nyala": 13,
+        "daftar": 13,
+        "berkas": "rel-10.jpg"
+      }
+    ],
+    "buka": [
+      {
+        "t": 0,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-00.jpg"
+      },
+      {
+        "t": 0.1,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-01.jpg"
+      },
+      {
+        "t": 0.2,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-02.jpg"
+      },
+      {
+        "t": 0.3,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-03.jpg"
+      },
+      {
+        "t": 0.4,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-04.jpg"
+      },
+      {
+        "t": 0.5,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-05.jpg"
+      },
+      {
+        "t": 0.6,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-06.jpg"
+      },
+      {
+        "t": 0.7,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-07.jpg"
+      },
+      {
+        "t": 0.8,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-08.jpg"
+      },
+      {
+        "t": 0.9,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-09.jpg"
+      },
+      {
+        "t": 1,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-10.jpg"
+      },
+      {
+        "t": 1.1,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-11.jpg"
+      },
+      {
+        "t": 1.2,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-12.jpg"
+      },
+      {
+        "t": 1.3,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "buka-13.jpg"
+      }
+    ],
+    "tutup": [
+      {
+        "t": 0,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-00.jpg"
+      },
+      {
+        "t": 0.1,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-01.jpg"
+      },
+      {
+        "t": 0.2,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-02.jpg"
+      },
+      {
+        "t": 0.3,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-03.jpg"
+      },
+      {
+        "t": 0.4,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-04.jpg"
+      },
+      {
+        "t": 0.5,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-05.jpg"
+      },
+      {
+        "t": 0.6,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-06.jpg"
+      },
+      {
+        "t": 0.7,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-07.jpg"
+      },
+      {
+        "t": 0.8,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-08.jpg"
+      },
+      {
+        "t": 0.9,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-09.jpg"
+      },
+      {
+        "t": 1,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-10.jpg"
+      },
+      {
+        "t": 1.1,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-11.jpg"
+      },
+      {
+        "t": 1.2,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-12.jpg"
+      },
+      {
+        "t": 1.3,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 0,
+          "jamBeku": 50.790099999994034
+        },
+        "berkas": "tutup-13.jpg"
+      }
+    ],
+    "keyboard": [
+      {
+        "langkah": "Fokus item pertama",
+        "i": -1,
+        "kelas": "",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 4,
+        "buka": null,
+        "y": 11598,
+        "alamat": "?uji-stasiun",
+        "live": ""
+      },
+      {
+        "langkah": "Tab empat kali (item ke-5)",
+        "i": 6,
+        "kelas": "modul-lab__item",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 6,
+        "buka": null,
+        "y": 12166,
+        "alamat": "?uji-stasiun",
+        "live": ""
+      },
+      {
+        "langkah": "Enter",
+        "i": -1,
+        "kelas": "tema modul-lab__tutup",
+        "dialog": true,
+        "dalamDialog": true,
+        "nyala": 6,
+        "buka": {
+          "i": 6,
+          "u": 1
+        },
+        "y": 12166,
+        "alamat": "?uji-stasiun=&proyek=pilot-iklan",
+        "live": "L-07 dibuka: Pilot iklan usaha keluarga"
+      },
+      {
+        "langkah": "Escape",
+        "i": 6,
+        "kelas": "modul-lab__item",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 6,
+        "buka": null,
+        "y": 12166,
+        "alamat": "?uji-stasiun",
+        "live": ""
+      },
+      {
+        "langkah": "Enter lalu Back browser",
+        "i": 6,
+        "kelas": "modul-lab__item",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 6,
+        "buka": null,
+        "y": 12166,
+        "alamat": "?uji-stasiun",
+        "live": ""
+      },
+      {
+        "langkah": "Enter lalu Berikutnya",
+        "i": -1,
+        "kelas": "tema modul-lab__tutup",
+        "dialog": true,
+        "dalamDialog": true,
+        "nyala": 7,
+        "buka": {
+          "i": 7,
+          "u": 1
+        },
+        "y": 12166,
+        "alamat": "?uji-stasiun=&proyek=jeda",
+        "live": "L-08 dibuka: Jeda"
+      },
+      {
+        "langkah": "Back sesudah Berikutnya",
+        "i": 6,
+        "kelas": "modul-lab__item",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 6,
+        "buka": null,
+        "y": 12166,
+        "alamat": "?uji-stasiun",
+        "live": ""
+      },
+      {
+        "langkah": "tombol jeda gerak",
+        "jalanSebelum": 0,
+        "tekan": "true",
+        "jam": 0,
+        "jamSesudah": 0
+      }
+    ],
+    "lewat": true,
+    "pertama": {
+      "gedung": 226.7,
+      "peta": 5.3,
+      "globe": 39.7,
+      "lab": 6.9
+    },
+    "panas": {
+      "bangun": 65,
+      "potong": [
+        7.2,
+        6.5,
+        9.5,
+        7.6,
+        13.2,
+        5.1,
+        2.1,
+        2.6,
+        1.6,
+        0.7,
+        1.2,
+        7.7
+      ],
+      "unggah": 0.5,
+      "kompilasi": 67.4
+    },
+    "tautan": {
+      "slug": "jeda",
+      "i": -1,
+      "kelas": "tema modul-lab__tutup",
+      "dialog": true,
+      "dalamDialog": true,
+      "nyala": 7,
+      "buka": {
+        "i": 7,
+        "u": 1
+      },
+      "y": 12257,
+      "alamat": "?uji-stasiun&proyek=jeda",
+      "live": "L-08 dibuka: Jeda"
+    }
+  },
+  "maksCalls": 25
+}

@@ -183,7 +183,10 @@
 
 .klien__titik {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: 6px;
+  min-width: 0;
   margin-left: auto;
 }
 

@@ -1,28 +1,9 @@
-// Cerita v5 dibangun di rute sendiri sampai semua fasenya lolos (ADR 0026); beranda tetap versi CD.
-// F1: seksi HTML dan naskah kamera. F2: lantai kantor 3D (DuniaV5) di belakang seksi yang sama.
-// F4 sampai F6: kota, peta, globe, lalu modul lab dengan daftar proyek sebagai pengendalinya.
-import { setRequestLocale } from "next-intl/server";
-import Gerbang from "@/components/gerbang/Gerbang";
-import Contact from "@/components/contact/Contact";
-import Klien from "@/components/klien/Klien";
-import CeritaV5 from "@/components/stasiun/CeritaV5";
-import DuniaV5 from "@/components/stasiun/DuniaV5";
-import ModulLab from "@/components/stasiun/ModulLab";
+// Cerita v5 dibangun di rute ini sampai semua fasenya lolos (ADR 0026); sejak 24 Nov 2026 ia jadi
+// beranda, jadi alamat lama /v5 (termasuk tautan ?proyek=) dialihkan ke sana.
+import { permanentRedirect } from "next/navigation";
 
-export const metadata = { robots: { index: false, follow: false } };
-
-export default async function BerandaV5({ params }) {
+export default async function V5({ params, searchParams }) {
   const { locale } = await params;
-  setRequestLocale(locale);
-
-  return (
-    <>
-      <DuniaV5 />
-      <Gerbang />
-      <CeritaV5 locale={locale} />
-      <ModulLab locale={locale} />
-      <Klien />
-      <Contact />
-    </>
-  );
+  const q = new URLSearchParams(await searchParams).toString();
+  permanentRedirect(`/${locale}${q ? `?${q}` : ""}`);
 }

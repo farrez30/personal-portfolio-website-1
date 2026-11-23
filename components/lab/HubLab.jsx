@@ -12,7 +12,7 @@ export default function HubLab({ locale }) {
     <div className="wadah lab">
       {/* baris tombol seperti /proyek/[slug]; sekaligus memberi ruang untuk pemutar musik di kanan */}
       <p className="lab__kembali">
-        <Link href="/#rak" className="tombol">
+        <Link href="/#modul-lab" className="tombol">
           {t("kembali")}
         </Link>
       </p>
