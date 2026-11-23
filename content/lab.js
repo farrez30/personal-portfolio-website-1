@@ -148,6 +148,29 @@ export const eksperimen = [
       },
     ],
   },
+  {
+    slug: "like-view",
+    zona: "flash-sale",
+    nomor: "SDL-06",
+    proyek: "flash-sale-lab",
+    jalur: { id: "Integritas data", en: "Data integrity" },
+    judul: { id: "Like dan view", en: "Likes and views" },
+    masalah: {
+      id: "Satu foto viral, ribuan like dan view per detik. Like milikmu harus pas sampai satu, jumlah view boleh kira-kira. Berapa harga ketepatannya?",
+      en: "One viral photo, thousands of likes and views per second. Your like must be exact, the view count can be close. What does exactness cost?",
+    },
+    halaman: [
+      {
+        kunci: "like",
+        judul: { id: "Like dan view", en: "Likes and views" },
+        ket: {
+          id: "Satu baris penghitung menjawab 539 ketukan per detik dan menggagalkan 8.615 like. Dengan 16 baris, 1.639 per detik tanpa gagal. Tidak ada like yang terhitung dua kali.",
+          en: "One counter row answers 539 taps per second and fails 8,615 likes. With 16 rows, 1,639 per second and none fail. No like counts twice.",
+        },
+        meta: { id: "Rekaman 23 Nov 2026, plus simulator dan demo HyperLogLog", en: "Recorded 23 Nov 2026, plus a simulator and a HyperLogLog demo" },
+      },
+    ],
+  },
 ];
 
 // Alamat halaman eksperimen di farrez.vercel.app. Halaman zona punya pilihan bahasa sendiri
