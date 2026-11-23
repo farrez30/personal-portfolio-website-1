@@ -120,7 +120,7 @@ Satu fase satu PR, previs dan lembar kontak per 0,1 detik sebelum merge.
 | F2 | lantai kantor toon: dua baris meja, pilar, ruang server, props tiap babak | draw call di bawah 100 di HP emulasi (selesai 21 Nov: 15, `build/f2/`) |
 | F3 | enam jenis perpindahan campur | lembar kontak tanpa benda tembus dan tanpa layar kosong (selesai 21 Nov: maks 16 draw call, `build/f3/`) |
 | F4 | keluar jendela, kota, lalu lintas | jalur lewat celah jendela, terukur raycast (selesai 23 Nov: raycast 1201 ruas, maks 25 draw call, `build/f4/`) |
-| F5 | peta Nusantara dan globe malam, satelit | bingkai pertama di bawah 150 ms |
+| F5 | peta Nusantara dan globe malam, satelit | bingkai pertama di bawah 150 ms (selesai 23 Nov: peta 41 ms, globe 63 ms di HP emulasi, maks 34 draw call, `build/f5/`) |
 | F6 | modul lab, daftar proyek sebagai pengendali, panel proyek | keyboard dan pembaca layar bisa memakai semua fungsi |
 | F7 | reduced motion, tombol jeda dan suara, preset HP | uji di HP sungguhan |
 | F8 | buang dunia toko kaset dan loader CD (ADR 0021), tulis ulang DESIGN.md | tidak ada aset atau kode toko kaset yang tertinggal |

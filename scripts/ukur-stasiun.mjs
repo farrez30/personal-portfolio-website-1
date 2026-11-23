@@ -119,7 +119,7 @@ for (let i = 0; i < titik.length; i++) {
   if (kosong) continue;
   const info = await js(`(() => { const u = window.__stasiunUji; u.waktu(performance.now()); const x = u.info(); u.waktu(null); return x; })()`);
   maks = Math.max(maks, info.calls);
-  hasil.babak.push({ anchor: aktif, calls: info.calls, segitiga: info.segitiga, programs: info.programs });
+  hasil.babak.push({ anchor: aktif, calls: info.calls, segitiga: info.segitiga, programs: info.programs, pertama: info.pertama, panas: info.panas });
   await foto(join(keluar, `babak-${String(i).padStart(2, "0")}-${aktif}.jpg`));
   await foto(join(keluar, `halaman-${String(i).padStart(2, "0")}-${aktif}.jpg`), false);
   // Ujung babak (dorongan selesai, lalu lintas babak ramai paling padat), sebelum pemicu berikutnya.
@@ -151,14 +151,14 @@ if (kontak) {
       maks = Math.max(maks, s.calls);
       const nama = `t${String(k).padStart(2, "0")}.jpg`;
       await foto(join(map, nama));
-      bingkai.push({ t: +(k / 10).toFixed(1), calls: s.calls, blend: s.blend, periksa: s.periksa, berkas: nama });
+      bingkai.push({ t: +(k / 10).toFixed(1), calls: s.calls, blend: s.blend, tahap: s.tahap, silang: s.silang, periksa: s.periksa, berkas: nama });
       if (!s.blend && k > 2) break;
     }
     await js(`window.__stasiunUji.waktu(null); true`);
     hasil.pindah.push({ dari: titik[i].nama, ke, bingkai });
     // Lembar kontak: semua bingkai berlabel waktu, jarak raycast, dan draw call.
     const sel = bingkai
-      .map((b) => `<figure><img src="${b.berkas}"><figcaption>${b.t.toFixed(1)} s, ${b.periksa ? `${b.periksa.benda} ${b.periksa.jarak} m` : "kosong"}, ${b.calls} dc</figcaption></figure>`)
+      .map((b) => `<figure><img src="${b.berkas}"><figcaption>${b.t.toFixed(1)} s, ${b.periksa ? `${b.periksa.benda} ${b.periksa.jarak} m` : "kosong"}, ${b.calls} dc${b.silang ? `, silang ${b.silang}` : ""}</figcaption></figure>`)
       .join("");
     const kolom = hp ? 6 : 4;
     writeFileSync(
@@ -188,7 +188,7 @@ if (sela) {
     // maju 0,7 s (separuh perpindahan terpanjang di dalam gedung), lalu digulir balik
     for (; k <= 7; k++) {
       s = await langkah(k);
-      pos.push(s.posisi);
+      pos.push([s.posisi, s.tahap]);
       if (!s.blend) break;
     }
     const sebelum = s.rinci;
@@ -198,12 +198,13 @@ if (sela) {
     for (let n = 0; n < 40; n++, k++) {
       s = await langkah(k);
       if (n < 2) rinci.push(s.rinci);
-      pos.push(s.posisi);
+      pos.push([s.posisi, s.tahap]);
       if (!s.blend) break;
     }
     await js(`window.__stasiunUji.waktu(null); true`);
-    const loncat = pos.slice(1).map((p, j) => Math.hypot(...p.map((v, d) => v - pos[j][d])));
-    hasil.sela.push({ dari: titik[i].nama, ke, balik, bingkai: pos.length, loncatMaks: +Math.max(...loncat).toFixed(3), loncatDiSela: +loncat[7]?.toFixed(3), loncat: loncat.map((x) => +x.toFixed(3)), rinci, akhir: s.posisi, blendSelesai: !s.blend });
+    // loncatan hanya dihitung di dalam satu tahap: antartahap satuannya berbeda (silang, bukan gerak)
+    const loncat = pos.slice(1).map(([p, t], j) => (t === pos[j][1] ? Math.hypot(...p.map((v, d) => v - pos[j][0][d])) : 0));
+    hasil.sela.push({ dari: titik[i].nama, ke, balik, bingkai: pos.length, loncatMaks: +Math.max(...loncat).toFixed(3), loncatDiSela: +loncat[7]?.toFixed(3), loncat: loncat.map((x) => +x.toFixed(3)), rinci, akhir: s.posisi, tahap: pos.map((x) => x[1]).join(" "), blendSelesai: !s.blend });
   }
 }
 hasil.maksCalls = maks;
@@ -224,5 +225,5 @@ if (kontak) {
     await kirim("Emulation.setDeviceMetricsOverride", { width: 1600, height: 900, deviceScaleFactor: 1, mobile: false });
   }
 }
-console.log(JSON.stringify({ maksCalls: maks, babak: hasil.babak, sela: hasil.sela?.map((x) => `${x.dari} ke ${x.ke} balik ${x.balik}: loncat maks ${x.loncatMaks} m, di sela ${x.loncatDiSela} m, selesai ${x.blendSelesai}`), galat }, null, 1));
+console.log(JSON.stringify({ maksCalls: maks, babak: hasil.babak.map((b) => `${b.anchor} ${b.calls} dc ${JSON.stringify(b.pertama)} ${JSON.stringify(b.panas)}`), sela: hasil.sela?.map((x) => `${x.dari} ke ${x.ke} balik ${x.balik}: loncat maks ${x.loncatMaks} m, di sela ${x.loncatDiSela} m, selesai ${x.blendSelesai}`), galat }, null, 1));
 process.exit(0);

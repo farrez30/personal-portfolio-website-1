@@ -8,6 +8,12 @@ Inspiration
   Meng To, build-threejs-scroll-worlds skill (github.com/MengTo/Skills, MIT): the idea of one
   persistent 3D world with a chapter ledger driven by native scroll. Our code is our own.
 
+Map data
+  Coastlines: Natural Earth, 1:50m land (naturalearthdata.com). Public domain.
+  City lights: NASA Earth Observatory (Black Marble 2016, Suomi NPP VIIRS), images by Joshua
+  Stevens using data from Miguel Roman, NASA GSFC. Only the bright pixels are used, recoloured.
+  No endorsement by NASA is implied.
+
 Libraries
   LeafThrough 0.1.8, MIT License, Copyright (c) 2026 Dmytro Barylo (booklet page turns)
   three.js 0.187.0, MIT License, Copyright (c) 2010-2026 three.js authors

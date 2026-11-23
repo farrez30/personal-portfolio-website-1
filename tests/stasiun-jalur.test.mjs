@@ -8,8 +8,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "three";
 import { susunLantai, susun, batas, LANTAI, TABLET, notaTerbang, CELAH_JENDELA, FASAD } from "../components/stasiun/lantai.js";
-import { ANCHOR_V5, JENIS, poseAnchor, poseJalur, poseAntara, GESER, TINGGI_CRANE } from "../components/stasiun/naskah.js";
-import { kulitGedung, batasKota, JALAN_DEPAN } from "../components/stasiun/kota.js";
+import { ANCHOR_V5, JENIS, poseAnchor, poseJalur, poseAntara, poseDalam, GESER, TINGGI_CRANE } from "../components/stasiun/naskah.js";
+import { kulitGedung, batasKota, JALAN_DEPAN, ATAP_KLIEN } from "../components/stasiun/kota.js";
+import { SILANG_PETA } from "../components/stasiun/naskah.js";
+import { BIDANG_PETA, JAKARTA_PETA, TITIK_PETA, JAKARTA_BOLA, R_BUMI } from "../components/stasiun/peta.js";
 
 const BENDA = susunLantai();
 const PADAT = BENDA.filter((o) => o.bahan === "toon" || o.bahan === "layar");
@@ -40,10 +42,12 @@ const pada = (j, e) => poseJalur(j.i, j.a, j.b, e, j.bingkai);
 const pitch = (p) => Math.asin((p.lihat[1] - p.posisi[1]) / Math.hypot(...p.lihat.map((v, k) => v - p.posisi[k])));
 const sudut = (u, v) => Math.acos(Math.min(1, Math.max(-1, u.reduce((s, x, k) => s + x * v[k], 0) / (Math.hypot(...u) * Math.hypot(...v)))));
 const arah = (p) => p.lihat.map((v, k) => v - p.posisi[k]);
+// Pose utama dan lapisan silangnya (serah terima antartahap).
+const lapisan = (q) => (q.silang ? [q, q.silang] : [q]);
 
-test("delapan perpindahan: blend dari hero, enam jenis di lantai kantor, keluar jendela ke kota", () => {
-  assert.deepEqual([...new Set(JALUR.map((j) => j.jenis))], ["blend", "ikut", "whip", "layar", "orbit", "pilar", "crane", "jendela"]);
-  assert.equal(JALUR.length, 16);
+test("sepuluh perpindahan: blend dari hero, enam jenis di lantai kantor, keluar jendela, serah terima ke peta dan globe", () => {
+  assert.deepEqual([...new Set(JALUR.map((j) => j.jenis))], ["blend", "ikut", "whip", "layar", "orbit", "pilar", "crane", "jendela", "serah-peta", "serah-globe"]);
+  assert.equal(JALUR.length, 20);
   for (const j of JALUR) assert.ok(JENIS[j.jenis], j.nama);
 });
 
@@ -58,7 +62,10 @@ test("tiap jalur mulai dan berakhir tepat di pose kedua babak", () => {
 
 test("tiap jalur tidak menembus benda, juga kulit gedung dan kota di luarnya", () => {
   for (const j of JALUR) for (const e of SAMPEL) {
-    const p = pada(j, e).posisi;
+    const q = pada(j, e);
+    // peta dan globe punya satuan sendiri; tesnya di bagian F5
+    if (q.tahap !== "gedung") continue;
+    const p = q.posisi;
     const kena = PADAT.find((o) => dalam(p, batas(o), 0.05));
     assert.equal(kena, undefined, `${j.nama} di ${e} menembus ${kena?.bentuk} ${kena?.ukuran}`);
     const luar = (JENIS[j.jenis].makro ? LUAR_JENDELA : LUAR).find((b) => dalam(p, b, 0.05));
@@ -75,7 +82,7 @@ test("tiap jalur di dalam gedung tetap di atas lantai dan di dalam denah, hanya 
 });
 
 test("kamera tidak pernah menengadah ke atas dinding (tanpa plafon, di atasnya latar kosong)", () => {
-  for (const j of JALUR) for (const e of SAMPEL) assert.ok(pitch(pada(j, e)) < 0.1, `${j.nama} di ${e}`);
+  for (const j of JALUR) for (const e of SAMPEL) for (const q of lapisan(pada(j, e))) assert.ok(pitch(q) < 0.1, `${j.nama} di ${e}`);
 });
 
 test("gulir mundur memutar jalur yang sama dengan waktu dibalik", () => {
@@ -312,5 +319,150 @@ test("jendela: tidak ada jeda mati, kamera terus bergerak atau berputar sampai b
       const putar = sudut(arah(p), arah(q));
       assert.ok(pindah > 0.05 || putar > 0.02, `${j.nama} di ${e.toFixed(2)}: diam`);
     }
+  }
+});
+
+// ---- F5: serah terima kota ke peta dan peta ke globe ----------------------------------------------
+// Kamera seperti adegan.js: bingkai digeser dari kolom teks lewat setViewOffset, jadi NDC -1..1
+// adalah bagian layar yang tampak.
+const UKURAN = { lebar: [1440, 900], tegak: [390, 844] };
+function kamera(q, bingkai) {
+  const [w, h] = UKURAN[bingkai.tegak ? "tegak" : "lebar"];
+  const cam = new THREE.PerspectiveCamera(q.fov, w / h, 0.1, 1e5);
+  if (bingkai.tegak) cam.setViewOffset(w, h, 0, h * GESER.tegak, w, h);
+  else cam.setViewOffset(w, h, -w * GESER.lebar, 0, w, h);
+  cam.position.set(...q.posisi);
+  cam.lookAt(...q.lihat);
+  cam.updateMatrixWorld();
+  cam.updateProjectionMatrix();
+  return cam;
+}
+const layar = (cam, p) => new THREE.Vector3(...p).project(cam);
+const diBingkai = (v, sela = 0) => Math.abs(v.x) < 1 - sela && Math.abs(v.y) < 1 - sela && v.z < 1;
+// Lebar benda selebar `ukuran` di titik p, sebagai bagian dari tinggi bingkai.
+const besarLayar = (cam, p, ukuran) => {
+  const j = cam.position.distanceTo(new THREE.Vector3(...p));
+  return ukuran / (2 * j * Math.tan((cam.fov * Math.PI) / 360));
+};
+const RAPAT_SERAH = Array.from({ length: 601 }, (_, s) => s / 600);
+
+test("serah-peta: bagian kota tidak memotong benda apa pun, dengan jarak aman setebal bidang dekat", () => {
+  for (const j of satu("serah-peta")) for (let s = 0; s + 1 < RAPAT_SERAH.length; s++) {
+    const [p, q] = [pada(j, RAPAT_SERAH[s]), pada(j, RAPAT_SERAH[s + 1])];
+    if (p.tahap !== "gedung" || q.tahap !== "gedung") continue;
+    const r = Math.max(near(p), 0.05);
+    const kena = dekat(p.posisi, q.posisi, r).find((b) => kenaRuas(p.posisi, q.posisi, besar(b, r)));
+    assert.equal(kena, undefined, `${j.nama} ruas ${RAPAT_SERAH[s]}: kena kotak di ${kena?.min}`);
+  }
+});
+
+test("serah-peta: silang kota ke peta 0,3 detik, bobotnya hanya naik", () => {
+  for (const j of satu("serah-peta")) {
+    const dur = ANCHOR_V5[j.i].durasi;
+    let lalu = 0;
+    const silang = [];
+    for (const e of RAPAT_SERAH) {
+      const q = pada(j, e);
+      const w = q.tahap === "peta" ? 1 : (q.silang?.w ?? 0);
+      assert.ok(w >= lalu - 1e-12, `${j.nama} di ${e}: silang mundur`);
+      if (w > 0 && w < 1) silang.push(e);
+      lalu = w;
+      if (q.silang) assert.equal(q.silang.tahap, "peta");
+    }
+    const lama = (silang.at(-1) - silang[0]) * dur;
+    assert.ok(lama > 0.27 && lama < 0.33, `${j.nama}: silang ${lama} s`);
+  }
+});
+
+test("serah-peta: atap merah gedung klien tetap di bingkai dan mengecil jadi titik di tengah", () => {
+  for (const j of satu("serah-peta")) {
+    let lalu = Infinity;
+    for (const e of RAPAT_SERAH.filter((e) => e < SILANG_PETA[1])) {
+      const q = pada(j, e);
+      const cam = kamera(q, j.bingkai);
+      assert.ok(diBingkai(layar(cam, ATAP_KLIEN.pusat), 0.05), `${j.nama} di ${e}: atap keluar bingkai`);
+      const b = besarLayar(cam, ATAP_KLIEN.pusat, ATAP_KLIEN.lebar);
+      assert.ok(b <= lalu + 1e-9, `${j.nama} di ${e}: atap membesar lagi`);
+      lalu = b;
+    }
+    // di awal silang atapnya sudah kecil dan di titik bidik (tengah bagian di samping teks)
+    const q = pada(j, SILANG_PETA[0]);
+    const cam = kamera(q, j.bingkai);
+    const [v, c] = [layar(cam, ATAP_KLIEN.pusat), layar(cam, q.lihat)];
+    assert.ok(Math.hypot(v.x - c.x, v.y - c.y) < 0.05, `${j.nama}: atap di ${v.x}, ${v.y}`);
+    assert.ok(besarLayar(cam, ATAP_KLIEN.pusat, ATAP_KLIEN.lebar) < 0.06, `${j.nama}: atap masih besar`);
+  }
+});
+
+test("serah-peta: selama silang atap merah dan titik Jakarta berimpit, ukurannya setara", () => {
+  for (const j of satu("serah-peta")) for (let e = SILANG_PETA[0] + 0.02; e < SILANG_PETA[1]; e += 0.03) {
+    const q = pada(j, e);
+    assert.ok(q.silang, `${j.nama} di ${e}: tanpa silang`);
+    const [ck, cp] = [kamera(q, j.bingkai), kamera(q.silang, j.bingkai)];
+    const [a, b] = [layar(ck, ATAP_KLIEN.pusat), layar(cp, JAKARTA_PETA)];
+    assert.ok(Math.hypot(a.x - b.x, a.y - b.y) < 0.1, `${j.nama} di ${e.toFixed(2)}: atap ${a.x.toFixed(3)},${a.y.toFixed(3)} Jakarta ${b.x.toFixed(3)},${b.y.toFixed(3)}`);
+    const rasio = besarLayar(ck, ATAP_KLIEN.pusat, ATAP_KLIEN.lebar) / besarLayar(cp, JAKARTA_PETA, 2 * TITIK_PETA.cincin[1]);
+    assert.ok(rasio > 0.6 && rasio < 1.6, `${j.nama} di ${e.toFixed(2)}: atap ${rasio} kali cincin`);
+  }
+});
+
+// Sudut bingkai yang tampak harus jatuh di bidang peta: tidak ada tepi kertas kosong.
+function bingkaiDiPeta(q, bingkai) {
+  const cam = kamera(q, bingkai);
+  const r = new THREE.Raycaster();
+  const bidang = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+  for (const x of [-1, 1]) for (const y of [-1, 1]) {
+    r.setFromCamera(new THREE.Vector2(x, y), cam);
+    const t = r.ray.intersectPlane(bidang, new THREE.Vector3());
+    if (!t) return `sudut ${x},${y} menatap langit`;
+    if (Math.abs(t.x - BIDANG_PETA.pusat[0]) > BIDANG_PETA.lebar / 2 || Math.abs(t.z - BIDANG_PETA.pusat[2]) > BIDANG_PETA.dalam / 2) return `sudut ${x},${y} di luar peta (${t.x.toFixed(0)}, ${t.z.toFixed(0)})`;
+  }
+  return null;
+}
+
+test("peta: bingkai selalu penuh peta, di babak langkah-kecil (dengan dorongan) dan selama kedua serah terima", () => {
+  const iL = ANCHOR_V5.findIndex((a) => a.id === "langkah-kecil");
+  for (const [nama, bingkai] of BINGKAI) for (const k of [0, 0.5, 1]) {
+    const p = poseDalam(poseAnchor(iL, bingkai.tegak), k);
+    assert.equal(bingkaiDiPeta(p, bingkai), null, `${nama} k=${k}`);
+  }
+  for (const j of [...satu("serah-peta"), ...satu("serah-globe")]) for (const e of RAPAT_SERAH) for (const q of lapisan(pada(j, e))) {
+    if (q.tahap !== "peta") continue;
+    assert.equal(bingkaiDiPeta(q, j.bingkai), null, `${j.nama} di ${e}`);
+    assert.ok(q.posisi[1] > TITIK_PETA.y + 50, `${j.nama} di ${e}: kamera terlalu rendah`);
+  }
+});
+
+test("serah-globe: silang penuh 0,3 detik, Jakarta di depan kamera di peta dan di globe", () => {
+  for (const j of satu("serah-globe")) {
+    assert.equal(ANCHOR_V5[j.i].durasi, 0.3);
+    for (const e of RAPAT_SERAH.filter((e) => e > 0 && e < 1)) {
+      const q = pada(j, e);
+      assert.ok(q.silang && q.tahap === "peta" && q.silang.tahap === "globe", `${j.nama} di ${e}`);
+      assert.ok(diBingkai(layar(kamera(q, j.bingkai), JAKARTA_PETA), 0.02), `${j.nama} di ${e}: Jakarta peta keluar bingkai`);
+      assert.ok(diBingkai(layar(kamera(q.silang, j.bingkai), JAKARTA_BOLA), 0.02), `${j.nama} di ${e}: Jakarta globe keluar bingkai`);
+    }
+    // di tengah silang titik Jakarta peta dan Jakarta globe berimpit
+    for (const e of [0.4, 0.5, 0.6]) {
+      const q = pada(j, e);
+      const [p, g] = [layar(kamera(q, j.bingkai), JAKARTA_PETA), layar(kamera(q.silang, j.bingkai), JAKARTA_BOLA)];
+      assert.ok(Math.hypot(p.x - g.x, p.y - g.y) < 0.15, `${j.nama} di ${e}: Jakarta peta ${p.x.toFixed(2)},${p.y.toFixed(2)} globe ${g.x.toFixed(2)},${g.y.toFixed(2)}`);
+    }
+  }
+});
+
+test("globe: kamera di luar bumi, Jakarta menghadap kamera, bumi utuh di bingkai babak penutup", () => {
+  const iP = ANCHOR_V5.findIndex((a) => a.id === "penutup");
+  const pose = BINGKAI.map(([n, b]) => [n, poseDalam(poseAnchor(iP, b.tegak), 0), b]);
+  for (const j of satu("serah-globe")) for (const e of RAPAT_SERAH) for (const q of lapisan(pada(j, e))) if (q.tahap === "globe") pose.push([`${j.nama} ${e}`, q, j.bingkai]);
+  for (const [nama, q, bingkai] of pose) {
+    const c = new THREE.Vector3(...q.posisi);
+    assert.ok(c.length() > 220, `${nama}: kamera ${c.length()} dari pusat bumi`);
+    const jkt = new THREE.Vector3(...JAKARTA_BOLA);
+    assert.ok(jkt.clone().normalize().dot(c.clone().sub(jkt).normalize()) > 0.3, `${nama}: Jakarta di sisi belakang`);
+    const cam = kamera(q, bingkai);
+    assert.ok(diBingkai(layar(cam, [0, 0, 0]), 0.2), `${nama}: pusat bumi di tepi bingkai`);
+    // di babak penutup bumi utuh di bingkai; selama serah terima kamera boleh mulai dekat Jakarta
+    if (!nama.startsWith("serah")) assert.ok(Math.asin(R_BUMI / c.length()) * 2 < (cam.fov * Math.PI) / 180, `${nama}: bumi lebih besar dari bingkai`);
   }
 });
