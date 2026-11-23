@@ -18,7 +18,8 @@ import {
   ORBIT_KLIEN,
   ORBIT_STASIUN,
   posisiSatelit,
-  posisiStasiun,
+  rangkaStasiun,
+  JENDELA_STASIUN,
   SATELIT,
 } from "./peta.js";
 
@@ -214,6 +215,13 @@ export function buatGlobe({ ramp, hp, siap }) {
   warnai(new THREE.SphereGeometry(2.4, 20, 14), 0xd9d2c6);
   warnai(new THREE.CylinderGeometry(0.14, 0.14, 26, 8).rotateZ(Math.PI / 2).translate(0, 0, -2.6), ABU);
   for (const sx of [-1, 1]) for (const sy of [-1, 1]) warnai(new THREE.BoxGeometry(4.2, 0.1, 2.4).translate(sx * 10.5, 0, -2.6 + sy * 1.4), 0x4b5f9e);
+  // Jendela modul lab A di sisi yang menjauhi bumi (F6): kusen dan kaca gelap yang memenuhi
+  // layar di ujung zoom-satelit.
+  {
+    const [jx, jy, jz] = JENDELA_STASIUN.lokal;
+    warnai(new THREE.TorusGeometry(JENDELA_STASIUN.r + 0.03, 0.07, 8, 32).translate(jx, jy, jz), 0x4b4a5c);
+    warnai(new THREE.CircleGeometry(JENDELA_STASIUN.r + 0.01, 32).translate(jx, jy, jz + 0.012), 0x1c2440);
+  }
   const stasiun = new THREE.Mesh(mergeGeometries(bagian), toon({ vertexColors: true }));
   bagian.forEach((g) => g.dispose());
   stasiun.name = "stasiun";
@@ -236,8 +244,10 @@ export function buatGlobe({ ramp, hp, siap }) {
       }
     });
     badan.instanceMatrix.needsUpdate = panel.instanceMatrix.needsUpdate = true;
-    stasiun.position.set(...posisiStasiun(t));
-    stasiun.quaternion.setFromRotationMatrix(putar(ORBIT_STASIUN.miring));
+    // sikap LVLH (peta.js rangkaStasiun): sisi jendela selalu menjauhi bumi
+    const R = rangkaStasiun(t);
+    stasiun.position.set(...R.pusat);
+    stasiun.quaternion.setFromRotationMatrix(m.makeBasis(v3(R.x), v3(R.y), v3(R.z)));
   };
   atur(0);
   // Satelit bergerak tiap bingkai; batas bola instanced tidak dihitung ulang.

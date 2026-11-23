@@ -4,7 +4,11 @@ import { createPortal } from "react-dom";
 import { useLocale } from "next-intl";
 import { useMode } from "@/components/mode/ModeProvider";
 import { anchorAktif } from "@/components/dunia/naskah";
+import { useIsi } from "@/components/isi/IsiProvider";
 import { ANCHOR_V5, pemicuAnchorV5 } from "./naskah";
+import { susunLab, buatRel, titikLoker, lokerGulir, kDariGulir } from "./lab";
+import { kendaliLab } from "./kendaliLab";
+import { TEKS_LAB } from "./teksLab";
 import "./stasiun.css";
 
 // Dunia 3D cerita v5 di belakang seksi /v5 (ADR 0026), hanya di mode Imersif; mode Ringan tetap
@@ -27,6 +31,7 @@ export default function DuniaV5() {
 
 function DuniaImersif({ aktif }) {
   const bahasa = useLocale();
+  const { proyek } = useIsi();
   const wadah = useRef(null);
   const kontrol = useRef(null);
   useEffect(() => kontrol.current?.(aktif), [aktif]);
@@ -39,6 +44,10 @@ function DuniaImersif({ aktif }) {
     let aktifMode = true;
     let titik = [];
     let anchorKini = -1;
+    let lewat = false;
+    // Modul lab: loker dari daftar proyek yang sama dengan daftar HTML (ModulLab.jsx).
+    const daftar = proyek.map((p) => ({ slug: p.slug, judul: p.judul[bahasa], warna: p.warna }));
+    const jumlahRak = susunLab(daftar).rak.length;
 
     const ukurSeksi = (sel) => {
       const el = document.querySelector(sel);
@@ -61,15 +70,49 @@ function DuniaImersif({ aktif }) {
         // Babak yang dunianya belum dibangun (kota, peta, globe, modul lab): kanvas memudar.
         wadah.current.toggleAttribute("data-kosong", !ANCHOR_V5[i].pose);
       }
+      // Modul lab: progres gulir diukur di seksinya sendiri (rel lorong), loker yang menyala karena
+      // gulir dikirim ke daftar HTML, dan dunia memudar sesudah seksi lewat (Klien, Kontak).
+      if (ANCHOR_V5[i].rel) {
+        const el = document.querySelector(ANCHOR_V5[i].seksi[0].sel);
+        const r = el?.getBoundingClientRect();
+        if (r) {
+          const k = kDariGulir(y, innerHeight, r.top + y, r.height);
+          d.setGeser(k);
+          kendaliLab.set({ gulir: lokerGulir(titikLoker(buatRel(jumlahRak, innerWidth / innerHeight < 0.8), daftar.length + 1), k) });
+          setLewat(r.bottom < innerHeight / 2);
+          return;
+        }
+      }
+      setLewat(false);
       const awal = titik[i].y;
       const akhir = titik[i + 1]?.y ?? document.documentElement.scrollHeight;
       d.setGeser((y + innerHeight / 2 - awal) / Math.max(1, akhir - awal));
     };
+    const setLewat = (v) => {
+      if (v === lewat) return;
+      lewat = v;
+      wadah.current.toggleAttribute("data-lewat", v);
+      d.setTerlihat(aktifMode && !v);
+    };
+    // Daftar HTML ke loker: nyala, buka atau tutup, jeda gerak.
+    let bukaLalu = -1;
+    const saatKendali = (s) => {
+      if (!d) return;
+      d.setNyala(kendaliLab.nyala());
+      d.setJeda(s.jeda);
+      if (s.buka !== bukaLalu) {
+        if (s.buka >= 0) d.buka(s.buka);
+        else d.tutup();
+        bukaLalu = s.buka;
+      }
+    };
+    const lepasKendali = kendaliLab.dengar(saatKendali);
+    kendaliLab.layarLoker = (i) => d?.layarLoker(i) ?? null;
 
     kontrol.current = (v) => {
       aktifMode = v;
       wadah.current?.toggleAttribute("hidden", !v);
-      d?.setTerlihat(v);
+      d?.setTerlihat(v && !lewat);
       if (v && d) {
         hitungTitik();
         anchorKini = -1;
@@ -87,7 +130,8 @@ function DuniaImersif({ aktif }) {
         const { buatDuniaV5 } = await import("./adegan");
         if (batal) return;
         performance.mark("stasiun:modul");
-        d = buatDuniaV5(wadah.current, { kurangiGerak, bahasa, uji });
+        d = buatDuniaV5(wadah.current, { kurangiGerak, bahasa, uji, daftar, kontak: TEKS_LAB.kontak[bahasa] });
+        saatKendali(kendaliLab.get());
         hitungTitik();
         anchorKini = anchorAktif(scrollY, innerHeight, titik);
         d.keAnchor(anchorKini);
@@ -111,9 +155,11 @@ function DuniaImersif({ aktif }) {
       batal = true;
       removeEventListener("scroll", saatGulir);
       ro.disconnect();
+      lepasKendali();
+      kendaliLab.layarLoker = null;
       d?.dispose();
     };
-  }, [bahasa]);
+  }, [bahasa, proyek]);
 
   return createPortal(<div ref={wadah} className="stasiun" aria-hidden="true" />, document.body);
 }

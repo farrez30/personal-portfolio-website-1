@@ -4,7 +4,10 @@
 //   draw call terbanyak, lalu lembar kontak berlabel waktu.
 // - dengan --sela: tiap perpindahan disela di tengah lalu digulir balik; lompatan posisi kamera
 //   antarbingkai 0,1 s dicatat (jalur yang sama diputar mundur dari titik sela, tanpa loncat).
-//   node scripts/ukur-stasiun.mjs <url /v5> <lebarxtinggi> --keluar <folder> [--dpr 2] [--cpu 4] [--gpu] [--kontak] [--sela]
+// - dengan --lab (F6): rel lorong modul lab di sebelas titik gulir, buka dan tutup loker dengan jam
+//   beku per 0,1 detik, lalu uji keyboard: Tab ke daftar, fokus menyalakan loker dan menggulir
+//   kamera, Enter membuka panel, Escape menutupnya dan fokus kembali ke item daftar.
+//   node scripts/ukur-stasiun.mjs <url /v5> <lebarxtinggi> --keluar <folder> [--dpr 2] [--cpu 4] [--gpu] [--kontak] [--sela] [--lab]
 // Hasil angka di <folder>/ukur.json. Profil Chrome sementara dihapus di akhir.
 import { spawn } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
@@ -22,6 +25,7 @@ const cpu = Number(nilai("--cpu", 1));
 const gpu = arg.includes("--gpu");
 const kontak = arg.includes("--kontak");
 const sela = arg.includes("--sela");
+const lab = arg.includes("--lab");
 const hp = W < 768;
 mkdirSync(keluar, { recursive: true });
 
@@ -146,7 +150,7 @@ if (kontak) {
     const map = join(keluar, `pindah-${String(i).padStart(2, "0")}-${titik[i].nama}-${ke}`);
     mkdirSync(map, { recursive: true });
     const bingkai = [];
-    for (let k = 0; k <= 30; k++) {
+    for (let k = 0; k <= 70; k++) {
       const s = await js(`(() => { const u = window.__stasiunUji; const x = u.waktu(${T0 + k * 100}); return { ...x, periksa: u.periksa() }; })()`);
       maks = Math.max(maks, s.calls);
       const nama = `t${String(k).padStart(2, "0")}.jpg`;
@@ -207,6 +211,100 @@ if (sela) {
     hasil.sela.push({ dari: titik[i].nama, ke, balik, bingkai: pos.length, loncatMaks: +Math.max(...loncat).toFixed(3), loncatDiSela: +loncat[7]?.toFixed(3), loncat: loncat.map((x) => +x.toFixed(3)), rinci, akhir: s.posisi, tahap: pos.map((x) => x[1]).join(" "), blendSelesai: !s.blend });
   }
 }
+// 4. Modul lab: rel, buka loker, keyboard
+const kontakLab = [];
+if (lab) {
+  const iLab = titik.findIndex((t) => t.nama === "modul-lab");
+  await keAnchor(iLab);
+  await tidur(7000);
+  const seksi = await js(`(() => { const r = document.querySelector("#modul-lab").getBoundingClientRect(); return { atas: r.top + scrollY, tinggi: r.height }; })()`);
+  const gulirK = (k) => js(`(() => { scrollTo(0, ${seksi.atas} - innerHeight / 2 + ${k} * (${seksi.tinggi} - innerHeight)); dispatchEvent(new Event("scroll")); return true; })()`);
+  const map = join(keluar, "lab");
+  mkdirSync(map, { recursive: true });
+  hasil.lab = { rel: [], buka: [], tutup: [] };
+  for (let s = 0; s <= 10; s++) {
+    await gulirK(s / 10);
+    await tidur(1400);
+    const x = await js(`(() => { const u = window.__stasiunUji; const x = u.waktu(performance.now()); const p = u.periksa(); u.waktu(null); return { ...x, periksa: p, nyala: u.info().lab.nyala, daftar: [...document.querySelectorAll(".modul-lab__daftar > li")].findIndex((li) => li.hasAttribute("data-nyala")) }; })()`);
+    maks = Math.max(maks, x.calls);
+    const nama = `rel-${String(s).padStart(2, "0")}.jpg`;
+    await foto(join(map, nama));
+    if (s % 5 === 0) await foto(join(map, `halaman-rel-${String(s).padStart(2, "0")}.jpg`), false);
+    hasil.lab.rel.push({ k: s / 10, calls: x.calls, posisi: x.posisi.map((v) => +v.toFixed(2)), periksa: x.periksa, nyala: x.nyala, daftar: x.daftar, berkas: nama });
+    kontakLab.push({ judul: "rel", t: `k ${(s / 10).toFixed(1)}`, b: x, berkas: `lab/${nama}` });
+  }
+  // buka loker ke-2 (L-03) dari daftar dengan jam beku, per 0,1 s
+  await gulirK(0.15);
+  await tidur(1400);
+  const T0 = 5e7;
+  await js(`window.__stasiunUji.waktu(${T0}); document.querySelectorAll(".modul-lab__daftar .modul-lab__item")[2].click(); true`);
+  for (const [jenis, mulai] of [["buka", 0], ["tutup", 20]]) {
+    // jam dimajukan ke awal lembar dulu, baru Tutup diklik, supaya bingkai 0,0 s = saat klik
+    if (jenis === "tutup") await js(`window.__stasiunUji.waktu(${T0} + ${mulai * 100}); document.querySelector(".modul-lab__panel .modul-lab__tutup").click(); true`);
+    for (let k = 0; k <= 13; k++) {
+      const x = await js(`(() => { const u = window.__stasiunUji; const x = u.waktu(${T0} + ${(mulai + k) * 100}); return { ...x, lab: u.info().lab }; })()`);
+      maks = Math.max(maks, x.calls);
+      const nama = `${jenis}-${String(k).padStart(2, "0")}.jpg`;
+      await foto(join(map, nama));
+      hasil.lab[jenis].push({ t: +(k / 10).toFixed(1), calls: x.calls, lab: x.lab, berkas: nama });
+      kontakLab.push({ judul: jenis, t: `${(k / 10).toFixed(1)} s`, b: x, berkas: `lab/${nama}` });
+    }
+    if (jenis === "buka") await foto(join(map, "halaman-panel.jpg"), false);
+  }
+  await js(`window.__stasiunUji.waktu(null); true`);
+  await tidur(800);
+  // keyboard: Tab sampai item daftar pertama, Tab lagi ke item berikutnya, Enter, Escape
+  const tekan = async (key, code, kc) => {
+    await kirim("Input.dispatchKeyEvent", { type: "keyDown", key, code, windowsVirtualKeyCode: kc, ...(key === "Enter" ? { text: String.fromCharCode(13) } : {}) });
+    await kirim("Input.dispatchKeyEvent", { type: "keyUp", key, code, windowsVirtualKeyCode: kc });
+  };
+  const aktif = () => js(`(() => { const a = document.activeElement; const i = [...document.querySelectorAll(".modul-lab__daftar .modul-lab__item")].indexOf(a); return { i, kelas: a?.className ?? "", dialog: !!document.querySelector(".modul-lab__panel[open]"), dalamDialog: !!a?.closest(".modul-lab__panel"), nyala: window.__stasiunUji.info().lab.nyala, buka: window.__stasiunUji.info().lab.buka, y: Math.round(scrollY), live: document.querySelector("#modul-lab [aria-live]")?.textContent ?? "" }; })()`);
+  await gulirK(0);
+  await tidur(1200);
+  await js(`(() => { const h = document.getElementById("modul-lab-judul"); h.tabIndex = -1; h.focus(); h.removeAttribute("tabindex"); return true; })()`);
+  // gaya "sembunyi" foto kanvas membuat isi halaman tidak bisa difokus: lepas dulu
+  await js(`document.getElementById("sembunyi")?.remove(); true`);
+  await kirim("Emulation.setFocusEmulationEnabled", { enabled: true });
+  await kirim("Page.bringToFront");
+  const ky = (hasil.lab.keyboard = []);
+  await tekan("Tab", "Tab", 9);
+  await tidur(1500);
+  ky.push({ langkah: "Tab ke item pertama", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
+  for (let n = 0; n < 4; n++) await tekan("Tab", "Tab", 9);
+  await tidur(1800);
+  ky.push({ langkah: "Tab empat kali (item ke-5)", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
+  await foto(join(map, "keyboard-item5.jpg"), false);
+  await tekan("Enter", "Enter", 13);
+  await tidur(1800);
+  ky.push({ langkah: "Enter", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
+  await tekan("Escape", "Escape", 27);
+  await tidur(1500);
+  ky.push({ langkah: "Escape", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
+  await tekan("Enter", "Enter", 13);
+  await tidur(1500);
+  if ((await aktif()).dialog) await kirim("Runtime.evaluate", { expression: "history.back()" });
+  await tidur(1500);
+  ky.push({ langkah: "Enter lalu Back browser", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
+  const jamAwal = await js(`window.__stasiunUji.info().lab.jamLab`);
+  await tidur(600);
+  const jeda = { jalanSebelum: +((await js(`window.__stasiunUji.info().lab.jamLab`)) - jamAwal).toFixed(2) };
+  await js(`document.querySelector(".modul-lab__jeda").click(); true`);
+  await tidur(300);
+  jeda.tekan = await js(`document.querySelector(".modul-lab__jeda").getAttribute("aria-pressed")`);
+  jeda.jam = await js(`window.__stasiunUji.info().lab.jamLab`);
+  await tidur(1200);
+  jeda.jamSesudah = (await js(`window.__stasiunUji.info().lab.jamLab`));
+  await js(`document.querySelector(".modul-lab__jeda").click(); true`);
+  ky.push({ langkah: "tombol jeda gerak", ...jeda }); console.log(JSON.stringify(ky.at(-1)));
+  // sesudah seksi lewat: dunia memudar
+  await js(`(() => { scrollTo(0, ${seksi.atas + seksi.tinggi}); dispatchEvent(new Event("scroll")); return true; })()`);
+  await tidur(800);
+  hasil.lab.lewat = await js(`document.querySelector(".stasiun").hasAttribute("data-lewat")`);
+  hasil.lab.pertama = await js(`window.__stasiunUji.info().pertama`);
+  hasil.lab.panas = await js(`window.__stasiunUji.info().panas.lab`);
+  const sel = kontakLab.map((x) => `<figure><img src="${x.berkas}"><figcaption>${x.judul} ${x.t}, ${x.b.calls} dc${x.b.silang ? `, silang ${x.b.silang}` : ""}</figcaption></figure>`).join("");
+  writeFileSync(join(keluar, "kontak-lab.html"), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#222;font:13px system-ui;color:#eee}main{display:grid;grid-template-columns:repeat(${hp ? 6 : 4},1fr);gap:4px;padding:4px}figure{margin:0}img{width:100%;display:block}figcaption{padding:2px 4px}</style><main>${sel}</main>`);
+}
 hasil.maksCalls = maks;
 writeFileSync(join(keluar, "ukur.json"), JSON.stringify(hasil, null, 2));
 
@@ -225,5 +323,14 @@ if (kontak) {
     await kirim("Emulation.setDeviceMetricsOverride", { width: 1600, height: 900, deviceScaleFactor: 1, mobile: false });
   }
 }
-console.log(JSON.stringify({ maksCalls: maks, babak: hasil.babak.map((b) => `${b.anchor} ${b.calls} dc ${JSON.stringify(b.pertama)} ${JSON.stringify(b.panas)}`), sela: hasil.sela?.map((x) => `${x.dari} ke ${x.ke} balik ${x.balik}: loncat maks ${x.loncatMaks} m, di sela ${x.loncatDiSela} m, selesai ${x.blendSelesai}`), galat }, null, 1));
+if (lab) {
+  await kirim("Page.navigate", { url: pathToFileURL(join(keluar, "kontak-lab.html")).href });
+  await tidur(1000);
+  const tinggi = await js(`document.documentElement.scrollHeight`);
+  await kirim("Emulation.setDeviceMetricsOverride", { width: 1600, height: tinggi, deviceScaleFactor: 1, mobile: false });
+  await tidur(400);
+  const r = await kirim("Page.captureScreenshot", { format: "jpeg", quality: 85 });
+  writeFileSync(join(keluar, "kontak-lab.jpg"), Buffer.from(r.result.data, "base64"));
+}
+console.log(JSON.stringify({ lab: hasil.lab && { pertama: hasil.lab.pertama, panas: hasil.lab.panas, keyboard: hasil.lab.keyboard, lewat: hasil.lab.lewat, rel: hasil.lab.rel.map((x) => `${x.k} ${x.calls}dc nyala ${x.nyala}/${x.daftar} ${x.periksa?.benda}`) }, maksCalls: maks, babak: hasil.babak.map((b) => `${b.anchor} ${b.calls} dc ${JSON.stringify(b.pertama)} ${JSON.stringify(b.panas)}`), sela: hasil.sela?.map((x) => `${x.dari} ke ${x.ke} balik ${x.balik}: loncat maks ${x.loncatMaks} m, di sela ${x.loncatDiSela} m, selesai ${x.blendSelesai}`), galat }, null, 1));
 process.exit(0);

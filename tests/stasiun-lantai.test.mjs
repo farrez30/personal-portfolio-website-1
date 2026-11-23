@@ -85,13 +85,14 @@ test("setiap babak di lantai kantor punya pose lebar dan tegak di ANCHOR_V5", ()
       assert.ok(p && p.posisi.length === 3 && p.lihat.length === 3 && p.fov > 20, `${id} tegak=${tegak}`);
     }
   }
-  // babak ramai di atas kota (F4), peta dan globe di satuan tahapnya (F5); modul lab belum punya dunia (F6)
+  // babak ramai di atas kota (F4), peta dan globe (F5) dan modul lab (F6) di satuan tahapnya
   const id = (x) => ANCHOR_V5.findIndex((a) => a.id === x);
   assert.deepEqual(poseAnchor(id("ramai")).posisi, POSE_KOTA.posisi);
   assert.equal(poseAnchor(id("ramai")).tahap, "gedung");
   assert.equal(poseAnchor(id("langkah-kecil")).tahap, "peta");
   assert.equal(poseAnchor(id("penutup"), true).tahap, "globe");
-  assert.equal(poseAnchor(id("modul-lab")), null);
+  assert.equal(poseAnchor(id("modul-lab")).tahap, "lab");
+  assert.equal(poseAnchor(id("modul-lab"), true).tahap, "lab");
 });
 
 test("kamera selalu di dalam gedung dan tidak di dalam benda apa pun", () => {
@@ -148,7 +149,9 @@ test("durasi perpindahan: satu langkah memakai durasi keluar, lompatan dibatasi,
   const rm = ANCHOR_V5.findIndex((a) => a.id === "ramai");
   assert.equal(durasiAntara(rm, rm + 1), 0.9);
   assert.equal(durasiAntara(rm + 2, rm + 1), 0.3);
-  assert.equal(durasiAntara(rm + 2, rm + 3), 0);
+  // zoom dari globe ke modul lab: serah terima makro 5,5 s, dua arah
+  assert.equal(durasiAntara(rm + 2, rm + 3), 5.5);
+  assert.equal(durasiAntara(rm + 3, rm + 2), 5.5);
   // lompatan melewati serah terima peta atau globe: potongan
   assert.equal(durasiAntara(rm, rm + 2), 0);
   // serah terima makro (keluar jendela) memakai durasinya sendiri, melewati batas di dalam gedung
