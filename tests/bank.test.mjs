@@ -102,7 +102,11 @@ test("kode disimpan sebagai sidik, kolom kodenya tidak ikut tersimpan", () => {
   const data = kait({ data: { nama: "Zidni", kode: "abcd-efgh-jkmn" }, operation: "create", req: reqUji });
   assert.equal(data.kode, undefined);
   assert.equal(data.sidik, sidikKode("abcd-efgh-jkmn", kunci));
-  assert.equal(KodeBank.fields.find((f) => f.name === "kode").virtual, true);
+  const kolom = KodeBank.fields.find((f) => f.name === "kode");
+  assert.equal(kolom.virtual, true);
+  // Payload menjadikan field virtual read-only di form admin kecuali diminta lain
+  // (payload/dist/fields/config/sanitize.js); tanpa ini kode tidak bisa ditempel di /admin.
+  assert.equal(kolom.admin.readOnly, false);
   assert.equal(KodeBank.fields.find((f) => f.name === "sidik").admin.hidden, true);
 });
 

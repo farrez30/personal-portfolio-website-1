@@ -38,7 +38,8 @@ export const KodeBank = {
       label: "Kode baru",
       type: "text",
       virtual: true,
-      admin: { description: "Minimal 12 karakter. Kosongkan bila tidak mengganti kode. Setelah disimpan, kode tidak bisa dilihat lagi." },
+      // readOnly: false wajib: Payload mengunci field virtual di form admin secara bawaan.
+      admin: { readOnly: false, description: "Minimal 12 karakter. Kosongkan bila tidak mengganti kode. Setelah disimpan, kode tidak bisa dilihat lagi." },
     },
     { name: "sidik", type: "text", unique: true, index: true, admin: { hidden: true } },
     { name: "aktif", label: "Aktif", type: "checkbox", defaultValue: true },
