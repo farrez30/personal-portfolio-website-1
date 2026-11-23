@@ -1,6 +1,7 @@
 import createNextIntlPlugin from "next-intl/plugin";
 import { withPayload } from "@payloadcms/next/withPayload";
 import { aturanZona } from "./content/lab.js";
+import { aturanBank } from "./content/bank.js";
 
 const withNextIntl = createNextIntlPlugin("./i18n/request.js");
 
@@ -19,9 +20,10 @@ const nextConfig = {
       ...aturanZona().redirects,
     ];
   },
-  // Halaman eksperimen System Design Lab disajikan zona Vercel milik repo masing-masing (ADR 0027).
+  // Halaman eksperimen System Design Lab disajikan zona Vercel milik repo masing-masing (ADR 0027),
+  // katalog bank gerak oleh zona repo privat bank-gerak (ADR 0028).
   async rewrites() {
-    return aturanZona().rewrites;
+    return [...aturanZona().rewrites, ...aturanBank().rewrites];
   },
 };
 
