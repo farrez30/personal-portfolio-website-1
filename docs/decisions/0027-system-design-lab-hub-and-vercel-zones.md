@@ -42,7 +42,7 @@ that table: no build output in this public repo, and each experiment deploys on 
   the locale proxy from running on any path except `/`, so `/proyek/<slug>` without a locale
   used to 404.
 - Zone pages follow the visitor's OS colour scheme, not this site's theme toggle, and carry their
-  own language switch (`?bahasa=en` is passed from the English site).
+  own language switch. Since 23 Nov 2026 the zone pages default to English, so the Indonesian site passes `?bahasa=id`.
 - Hub texts live in `content/lab.js`, not `messages/`: every namespace there becomes a CMS text
   table that needs a database migration (`tests/cms.test.mjs`).
 - The zone's production URL is in `ZONA` (override with `LAB_FLASH_SALE_ASAL`). Preview

@@ -173,11 +173,11 @@ export const eksperimen = [
   },
 ];
 
-// Alamat halaman eksperimen di farrez.vercel.app. Halaman zona punya pilihan bahasa sendiri
-// (?bahasa=en), jadi bahasa situs ikut dibawa.
+// Alamat halaman eksperimen di farrez.vercel.app. Halaman zona berbahasa Inggris bila tanpa
+// parameter (keputusan Farrez 23 Nov 2026), jadi versi Indonesia situs membawa ?bahasa=id.
 export function alamatHalaman(e, h, locale) {
   const dasar = `/lab/${e.zona}/${h.kunci}`;
-  return locale === "en" ? `${dasar}?bahasa=en` : dasar;
+  return locale === "id" ? `${dasar}?bahasa=id` : dasar;
 }
 
 export const eksperimenUntukProyek = (slug) => eksperimen.find((e) => e.proyek === slug) ?? null;
