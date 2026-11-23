@@ -9,7 +9,9 @@ import { situs } from "../content/situs.js";
 import { susunKlien, susunProyek, susunSitus, ratakanKlien } from "../lib/isi/gabung.js";
 import { dataTeks, gabungPesan, kolomTeks, namaKolom } from "../cms/teks.js";
 import { jalurAset, placeholderSama, slugValid, tautanHttps, tautanKlien, teksProyekAman, warnaHex } from "../cms/aturan.js";
-import { bacaIdToken, emailSah, stateCocok, tukarKode, urlMasuk } from "../cms/google.js";
+import { bacaIdToken, COOKIE_STATE, emailSah, pasangSesi, stateCocok, tukarKode, urlMasuk } from "../cms/google.js";
+import { NextResponse } from "next/server.js";
+import { generatePayloadCookie } from "payload/shared";
 import { pasangTombolIntip, TANDA } from "../components/admin/intip-sandi.js";
 import { Users } from "../cms/koleksi/Users.js";
 import { Klien } from "../cms/koleksi/Klien.js";
@@ -261,6 +263,24 @@ test("Google: kode ditukar dengan POST form; respons gagal jadi null", async () 
   assert.match(dikirim.body, /grant_type=authorization_code/);
   const gagal = async () => ({ ok: false, json: async () => ({}) });
   assert.equal(await tukarKode({ code: "k", clientId: "c", clientSecret: "r", redirectUri: "u", fetchFn: gagal }), null);
+});
+
+test("Google: respons balikan membawa cookie sesi Payload dan menghapus cookie state", () => {
+  const cookie = generatePayloadCookie({
+    collectionAuthConfig: { cookies: { sameSite: "Lax", secure: true }, tokenExpiration: Users.auth.tokenExpiration },
+    cookiePrefix: "payload",
+    token: "token-uji",
+    returnCookieAsObject: true,
+  });
+  const header = pasangSesi(NextResponse.redirect("https://contoh.test/admin"), cookie).headers.getSetCookie();
+  const sesi = header.find((h) => h.startsWith("payload-token="));
+  assert.ok(sesi, `cookie sesi hilang: ${JSON.stringify(header)}`);
+  assert.match(sesi, /payload-token=token-uji/);
+  assert.match(sesi, /HttpOnly/i);
+  assert.match(sesi, /Secure/i);
+  assert.match(sesi, /SameSite=lax/i);
+  assert.match(sesi, /Path=\//);
+  assert.ok(header.some((h) => h.startsWith(`${COOKIE_STATE}=;`) && /Path=\/api\/google/.test(h)), "cookie state tidak dihapus");
 });
 
 // ---- tombol intip sandi -------------------------------------------------------------------

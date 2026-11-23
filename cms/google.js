@@ -61,3 +61,24 @@ export async function tukarKode({ code, clientId, clientSecret, redirectUri, fet
   const j = await r.json();
   return j.id_token ?? null;
 }
+
+/**
+ * Pasang cookie sesi Payload di respons balikan dan hapus cookie state. Keduanya lewat
+ * `res.cookies`: ResponseCookies menulis ulang seluruh header Set-Cookie setiap kali dipakai,
+ * jadi header yang di-append manual sebelumnya ikut hilang (penyebab login Google pertama gagal).
+ * `cookie` adalah hasil generatePayloadCookie({ returnCookieAsObject: true }).
+ */
+export function pasangSesi(res, cookie) {
+  res.cookies.delete({ name: COOKIE_STATE, path: "/api/google" });
+  res.cookies.set({
+    name: cookie.name,
+    value: cookie.value,
+    path: cookie.path ?? "/",
+    httpOnly: true,
+    secure: Boolean(cookie.secure),
+    ...(cookie.domain && { domain: cookie.domain }),
+    ...(cookie.expires && { expires: new Date(cookie.expires) }),
+    ...(cookie.sameSite && { sameSite: String(cookie.sameSite).toLowerCase() }),
+  });
+  return res;
+}
