@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 import * as THREE from "three";
 import { proyek } from "../content/proyek.js";
 import {
-  susunLab, buatRel, poseRel, bagianRel, titikLoker, lokerGulir, kDariGulir, gulirDariK, poseLoker, poseMasuk, tahapBuka, lokerNyala, bendaLab,
+  susunLab, buatRel, poseRel, alamatPanel, panelDariAlamat, bagianRel, titikLoker, lokerGulir, kDariGulir, gulirDariK, poseLoker, poseMasuk, tahapBuka, lokerNyala, bendaLab,
   RUANG, PALKA, MODUL, pusatModul, RAK, MUKA_RAK, PINTU, TARIK, JENDELA_LAB, BUKA,
 } from "../components/stasiun/lab.js";
 import { buatKendali } from "../components/stasiun/kendaliLab.js";
@@ -232,12 +232,49 @@ test("buka loker: pose dekat tidak menembus benda, pintu yang meluncur di bingka
     }
 });
 
-test("masuk: kamera mulai di balik kaca jendela modul A, menatap rak pertama", () => {
+test("masuk: desktop mulai di balik kaca jendela modul A; HP dekat rak L-01; keduanya menatap L-01", () => {
   for (const [nama, tegak, w, h] of BENTUK) {
     const p = poseMasuk(tegak);
-    assert.ok(p.posisi[2] < JENDELA_LAB.pusat[2] && p.posisi[2] > JENDELA_LAB.pusat[2] - 0.3, nama);
-    assert.ok(Math.hypot(p.posisi[0] - JENDELA_LAB.pusat[0], p.posisi[1] - JENDELA_LAB.pusat[1]) < JENDELA_LAB.r);
-    const v = new THREE.Vector3(...S.loker[0].pusat).project(kamera(p, tegak, w, h));
+    if (tegak) {
+      assert.ok(p.posisi[2] - MUKA_RAK > 0.5 && p.posisi[2] - MUKA_RAK < 1.3, nama);
+      assert.equal(BENDA.find((b) => dalam(p.posisi, b, 0.08)), undefined);
+    } else {
+      assert.ok(p.posisi[2] < JENDELA_LAB.pusat[2] && p.posisi[2] > JENDELA_LAB.pusat[2] - 0.3, nama);
+      assert.ok(Math.hypot(p.posisi[0] - JENDELA_LAB.pusat[0], p.posisi[1] - JENDELA_LAB.pusat[1]) < JENDELA_LAB.r);
+    }
+    const c = kamera(p, tegak, w, h);
+    const v = new THREE.Vector3(...S.loker[0].pusat).project(c);
     assert.ok(Math.abs(v.x) < 1 && Math.abs(v.y) < 1, `${nama} L-01 tidak terlihat`);
+    // label L-01 utuh sejak bingkai pertama di dalam (lembar kontak F6: di HP sempat terpotong)
+    for (const sx of [-1, 1]) {
+      const [x, y, z] = S.loker[0].pusat;
+      const t = new THREE.Vector3(x + sx * 0.36, y + 0.1, z).project(c);
+      assert.ok(Math.abs(t.x) < 1 && Math.abs(t.y) < 1, `${nama} tepi label L-01 ${sx} terpotong: ${t.x.toFixed(2)}`);
+    }
   }
+});
+
+test("masuk: dari pose masuk ke awal rel kamera sungguh bergerak, di HP mundur sambil lensanya melebar", () => {
+  const i = ANCHOR_V5.findIndex((a) => a.id === "modul-lab");
+  for (const [nama, tegak] of BENTUK) {
+    const a = poseMasuk(tegak);
+    const b = poseAnchor(i, tegak);
+    const jarak = Math.hypot(...a.posisi.map((v, k) => v - b.posisi[k]));
+    assert.ok(jarak >= 0.8, `${nama} hanya ${jarak.toFixed(2)} m`);
+    if (tegak) {
+      assert.ok(b.posisi[2] - a.posisi[2] > 0.3, "HP: kamera mundur dari rak");
+      assert.ok(b.fov - a.fov >= 15, "HP: lensa melebar");
+    }
+  }
+});
+
+test("alamat panel: ?proyek=<slug> ditulis dan dibaca, slug asing ditolak, parameter lain utuh", () => {
+  const dasar = "https://farrez.vercel.app/id/v5?uji=1#kontak";
+  const alamat = alamatPanel(dasar, proyek[2].slug);
+  assert.equal(alamat, `/id/v5?uji=1&proyek=${proyek[2].slug}#kontak`);
+  assert.equal(panelDariAlamat(new URL(alamat, dasar).href, proyek), 2);
+  assert.equal(alamatPanel(new URL(alamat, dasar).href, null), "/id/v5?uji=1#kontak");
+  assert.equal(panelDariAlamat(dasar, proyek), -1);
+  assert.equal(panelDariAlamat("https://x.test/v5?proyek=%3Cscript%3E", proyek), -1);
+  assert.equal(panelDariAlamat("https://x.test/v5?proyek=", proyek), -1);
 });

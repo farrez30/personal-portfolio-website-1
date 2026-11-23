@@ -258,7 +258,7 @@ if (lab) {
     await kirim("Input.dispatchKeyEvent", { type: "keyDown", key, code, windowsVirtualKeyCode: kc, ...(key === "Enter" ? { text: String.fromCharCode(13) } : {}) });
     await kirim("Input.dispatchKeyEvent", { type: "keyUp", key, code, windowsVirtualKeyCode: kc });
   };
-  const aktif = () => js(`(() => { const a = document.activeElement; const i = [...document.querySelectorAll(".modul-lab__daftar .modul-lab__item")].indexOf(a); return { i, kelas: a?.className ?? "", dialog: !!document.querySelector(".modul-lab__panel[open]"), dalamDialog: !!a?.closest(".modul-lab__panel"), nyala: window.__stasiunUji.info().lab.nyala, buka: window.__stasiunUji.info().lab.buka, y: Math.round(scrollY), live: document.querySelector("#modul-lab [aria-live]")?.textContent ?? "" }; })()`);
+  const aktif = () => js(`(() => { const a = document.activeElement; const i = [...document.querySelectorAll(".modul-lab__daftar .modul-lab__item")].indexOf(a); return { i, kelas: a?.className ?? "", dialog: !!document.querySelector(".modul-lab__panel[open]"), dalamDialog: !!a?.closest(".modul-lab__panel"), nyala: window.__stasiunUji.info().lab.nyala, buka: window.__stasiunUji.info().lab.buka, y: Math.round(scrollY), alamat: location.search, live: document.querySelector("#modul-lab [aria-live]")?.textContent ?? "" }; })()`);
   await gulirK(0);
   await tidur(1200);
   await js(`(() => { const h = document.getElementById("modul-lab-judul"); h.tabIndex = -1; h.focus(); h.removeAttribute("tabindex"); return true; })()`);
@@ -285,6 +285,16 @@ if (lab) {
   if ((await aktif()).dialog) await kirim("Runtime.evaluate", { expression: "history.back()" });
   await tidur(1500);
   ky.push({ langkah: "Enter lalu Back browser", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
+  // Berikutnya di panel: alamat berganti tanpa entri riwayat baru, Back langsung menutup
+  await tekan("Enter", "Enter", 13);
+  await tidur(1500);
+  await js(`document.querySelector(".modul-lab__berikutnya").click(); true`);
+  await tidur(1500);
+  ky.push({ langkah: "Enter lalu Berikutnya", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
+  const tautan = await js(`document.querySelector(".modul-lab__panel .modul-lab__lengkap")?.getAttribute("href") ?? ""`);
+  await kirim("Runtime.evaluate", { expression: "history.back()" });
+  await tidur(1500);
+  ky.push({ langkah: "Back sesudah Berikutnya", ...(await aktif()) }); console.log(JSON.stringify(ky.at(-1)));
   const jamAwal = await js(`window.__stasiunUji.info().lab.jamLab`);
   await tidur(600);
   const jeda = { jalanSebelum: +((await js(`window.__stasiunUji.info().lab.jamLab`)) - jamAwal).toFixed(2) };
@@ -302,6 +312,16 @@ if (lab) {
   hasil.lab.lewat = await js(`document.querySelector(".stasiun").hasAttribute("data-lewat")`);
   hasil.lab.pertama = await js(`window.__stasiunUji.info().pertama`);
   hasil.lab.panas = await js(`window.__stasiunUji.info().panas.lab`);
+  // tautan langsung ?proyek=<slug> (slug proyek sesudah Berikutnya) membuka panel lokernya
+  const slug = tautan.split("/").pop();
+  await kirim("Page.navigate", { url: url + (url.includes("?") ? "&" : "?") + "uji-stasiun&proyek=" + slug });
+  for (let n = 0; n < 80; n++) {
+    if (await js(`!!document.querySelector(".stasiun[data-siap]")`)) break;
+    await tidur(250);
+  }
+  await tidur(2500);
+  hasil.lab.tautan = { slug, ...(await aktif()) };
+  console.log(JSON.stringify(hasil.lab.tautan));
   const sel = kontakLab.map((x) => `<figure><img src="${x.berkas}"><figcaption>${x.judul} ${x.t}, ${x.b.calls} dc${x.b.silang ? `, silang ${x.b.silang}` : ""}</figcaption></figure>`).join("");
   writeFileSync(join(keluar, "kontak-lab.html"), `<!doctype html><meta charset="utf-8"><style>body{margin:0;background:#222;font:13px system-ui;color:#eee}main{display:grid;grid-template-columns:repeat(${hp ? 6 : 4},1fr);gap:4px;padding:4px}figure{margin:0}img{width:100%;display:block}figcaption{padding:2px 4px}</style><main>${sel}</main>`);
 }

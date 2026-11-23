@@ -12,7 +12,7 @@ import { useIsi } from "@/components/isi/IsiProvider";
 import { useMode } from "@/components/mode/ModeProvider";
 import Rak from "@/components/rak/Rak";
 import { kendaliLab, AWAL } from "./kendaliLab";
-import { susunLab, buatRel, titikLoker, gulirDariK, BUKA } from "./lab";
+import { susunLab, buatRel, titikLoker, gulirDariK, alamatPanel, panelDariAlamat, BUKA } from "./lab";
 import { TEKS_LAB } from "./teksLab";
 import "./lab.css";
 
@@ -63,33 +63,57 @@ function Lorong({ locale }) {
     [susunan, n],
   );
 
-  const bukaPanel = (i) => {
-    // Loker yang belum terlihat: kamera langsung ke raknya dulu (gulir seketika), baru mendekat.
-    const el = seksi.current;
-    if (el) {
+  // Loker yang belum terlihat: kamera langsung ke raknya dulu (gulir seketika), baru mendekat.
+  const gulirKeLoker = useCallback(
+    (i) => {
+      const el = seksi.current;
+      if (!el) return;
       const r = el.getBoundingClientRect();
       const k = titikLoker(buatRel(susunan.rak.length, tegak()), n)[i];
       const y = gulirDariK(k, innerHeight, r.top + scrollY, r.height);
       if (Math.abs(y - scrollY) > innerHeight * 0.35) scrollTo({ top: y, behavior: "auto" });
-    }
+    },
+    [susunan, n],
+  );
+  const umumkan = (i) => setUmum(`${kode(i)} ${T("dibuka")}: ${proyek[i].judul[locale]}`);
+  // Panel punya alamat sendiri (?proyek=<slug>). Membuka dari daftar menambah satu entri riwayat;
+  // Berikutnya menggantinya, jadi Back tetap langsung menutup panel.
+  const bukaPanel = (i, ganti = false) => {
+    if (!ganti) gulirKeLoker(i);
     kendaliLab.set({ buka: i });
-    history.pushState({ ...history.state, panelLab: proyek[i].slug }, "");
-    setUmum(`${kode(i)} ${T("dibuka")}: ${proyek[i].judul[locale]}`);
+    const st = { ...history.state, panelLab: proyek[i].slug };
+    if (ganti) history.replaceState(st, "", alamatPanel(location.href, proyek[i].slug));
+    else history.pushState(st, "", alamatPanel(location.href, proyek[i].slug));
+    umumkan(i);
   };
   const tutupPanel = useCallback(() => {
     if (kendaliLab.get().buka < 0) return;
     if (history.state?.panelLab) history.back();
-    else kendaliLab.set({ buka: -1 });
+    else {
+      // dibuka dari tautan langsung: tidak ada entri riwayat milik panel untuk dimundurkan
+      history.replaceState({ ...history.state, panelLab: undefined }, "", alamatPanel(location.href, null));
+      kendaliLab.set({ buka: -1 });
+    }
   }, []);
 
-  // Back browser menutup panel.
+  // Back dan Forward browser mengikuti alamat: panel ditutup atau dibuka lagi.
   useEffect(() => {
     const saatPop = () => {
-      if (!history.state?.panelLab && kendaliLab.get().buka >= 0) kendaliLab.set({ buka: -1 });
+      const i = panelDariAlamat(location.href, proyek);
+      if (i !== kendaliLab.get().buka) kendaliLab.set({ buka: i });
+      if (i >= 0) umumkan(i);
     };
     addEventListener("popstate", saatPop);
+    // dibuka lewat tautan ?proyek=<slug>
+    const i = panelDariAlamat(location.href, proyek);
+    if (i >= 0) {
+      gulirKeLoker(i);
+      kendaliLab.set({ buka: i });
+      umumkan(i);
+    }
     return () => removeEventListener("popstate", saatPop);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [proyek]);
 
   // Dialog bawaan: fokus masuk dan terkunci, Escape lewat onCancel. Saat ditutup fokus kembali ke
   // item daftar yang membukanya.
@@ -195,15 +219,21 @@ function Lorong({ locale }) {
             </p>
             {p.ilustrasi && <img className="modul-lab__gambar" src={p.ilustrasi} alt="" width="640" height="360" loading="lazy" decoding="async" />}
             <p className="modul-lab__ringkas">{p.ringkas[locale]}</p>
-            <Link className="modul-lab__lengkap" href={`/proyek/${p.slug}`}>
-              {T("lengkap")}
-            </Link>
+            <div className="modul-lab__aksi">
+              <Link className="modul-lab__lengkap" href={`/proyek/${p.slug}`}>
+                {T("lengkap")}
+              </Link>
+              <button type="button" className="modul-lab__berikutnya" onClick={() => bukaPanel((state.buka + 1) % proyek.length, true)}>
+                {T("berikutnya")}
+              </button>
+            </div>
           </div>
         )}
+        {/* di dalam dialog: di luar dialog modal, isi halaman inert dan pengumumannya bisa tidak dibacakan */}
+        <p className="sr-only" aria-live="polite">
+          {umum}
+        </p>
       </dialog>
-      <p className="sr-only" aria-live="polite">
-        {umum}
-      </p>
     </section>
   );
 }

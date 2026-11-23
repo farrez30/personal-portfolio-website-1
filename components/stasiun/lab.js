@@ -227,9 +227,29 @@ export function tahapBuka(detik) {
 }
 
 // Pose awal di dalam modul untuk zoom-satelit: tepat di balik kaca jendela, menatap rak pertama.
+// Layar tegak: mulai di depan rak L-01, labelnya utuh di bingkai, dengan lensa lebih sempit, lalu
+// mundur menyerong dan melebar ke awal rel.
+// Dari balik kaca, gerak ke awal rel di HP hanya 0,55 m menyamping dan terbaca diam (lembar kontak
+// F6); potongan ke dalam disembunyikan silang dari kaca gelap.
 export function poseMasuk(tegak = false) {
   const [x, y, z] = JENDELA_LAB.pusat;
-  return { posisi: [x, y, z - 0.14], lihat: [x, y - 0.06, MUKA_RAK], fov: BENTUK[tegak ? "tegak" : "lebar"].fov, tahap: "lab" };
+  if (tegak) return { posisi: [x + 0.3, 0.38, MUKA_RAK + 1.15], lihat: [x + 0.05, 0.42, MUKA_RAK], fov: 72, tahap: "lab" };
+  return { posisi: [x, y, z - 0.14], lihat: [x, y - 0.06, MUKA_RAK], fov: BENTUK.lebar.fov, tahap: "lab" };
+}
+
+// ---- Alamat panel proyek ------------------------------------------------------------------------
+// Panel yang terbuka punya alamatnya sendiri (?proyek=<slug>), jadi bisa dibagikan dan Back
+// menutupnya. Slug dari alamat hanya dicocokkan ke daftar, tidak pernah dipakai mentah.
+export const PARAM_PROYEK = "proyek";
+export function alamatPanel(href, slug) {
+  const u = new URL(href);
+  if (slug) u.searchParams.set(PARAM_PROYEK, slug);
+  else u.searchParams.delete(PARAM_PROYEK);
+  return u.pathname + u.search + u.hash;
+}
+export function panelDariAlamat(href, daftar) {
+  const s = new URL(href).searchParams.get(PARAM_PROYEK);
+  return s ? daftar.findIndex((p) => p.slug === s) : -1;
 }
 
 // ---- Sorotan dari daftar HTML ---------------------------------------------------------------------
