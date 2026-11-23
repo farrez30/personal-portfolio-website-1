@@ -29,7 +29,7 @@ test("setiap eksperimen lengkap dua bahasa dan menunjuk proyek yang ada", () => 
 test("eksperimen 2 sampai 4 tinggal di zona flash-sale dan ikut diteruskan", () => {
   const { rewrites, redirects } = aturanZona();
   const asal = ZONA["flash-sale"];
-  for (const k of ["bayar", "backup", "berkas", "kursi"]) {
+  for (const k of ["bayar", "backup", "berkas", "kursi", "like"]) {
     assert.ok(rewrites.some((r) => r.source === `/lab/flash-sale/${k}` && r.destination === `${asal}/lab/flash-sale/${k}`), k);
   }
   // satu zona, satu aturan _next dan satu pengalihan akar, berapa pun eksperimennya
