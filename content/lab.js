@@ -171,6 +171,32 @@ export const eksperimen = [
       },
     ],
   },
+  // Eksperimen 7 di zona yang sama: bot yang memakai identitas baru tiap kali lolos dari aturan
+  // per identitas di SDL-05 dan SDL-06, jadi pertahanannya melihat perangkat, jaringan, dan kecepatan.
+  // Angka dari hasil/bot/tanpa dan hasil/bot/dengan, rekaman 24 Nov 2026 (ADR 0012 flash-sale-lab).
+  {
+    slug: "bot-pertahanan",
+    zona: "flash-sale",
+    nomor: "SDL-07",
+    proyek: "flash-sale-lab",
+    jalur: { id: "Keamanan", en: "Security" },
+    judul: { id: "Bot lawan pertahanan", en: "Bots against the defense" },
+    masalah: {
+      id: "Bot memborong stok dengan nama baru setiap kali. Berapa banyak yang bisa ditahan, berapa orang jujur yang ikut terganggu, dan berapa harganya?",
+      en: "Bots buy up the stock with a new name every time. How many can be held back, how many honest buyers get bothered, and what does it cost?",
+    },
+    halaman: [
+      {
+        kunci: "bot",
+        judul: { id: "Bot dan pertahanan", en: "Bots and the defense" },
+        ket: {
+          id: "Tanpa pertahanan, bot membawa 433 dari 600 rice cooker. Dengan pertahanan 68, dan 237 orang jujur ikut terganggu: dapat soal atau masuk antrean bayangan.",
+          en: "Without a defense, bots take 433 of 600 rice cookers. With it, 68, and 237 honest buyers get bothered: a puzzle or the shadow queue.",
+        },
+        meta: { id: "Rekaman 24 Nov 2026, plus geser ambang dan demo soal", en: "Recorded 24 Nov 2026, plus a threshold slider and a puzzle demo" },
+      },
+    ],
+  },
 ];
 
 // Alamat halaman eksperimen di farrez.vercel.app. Halaman zona berbahasa Inggris bila tanpa

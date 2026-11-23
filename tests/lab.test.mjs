@@ -29,7 +29,7 @@ test("setiap eksperimen lengkap dua bahasa dan menunjuk proyek yang ada", () => 
 test("eksperimen 2 sampai 4 tinggal di zona flash-sale dan ikut diteruskan", () => {
   const { rewrites, redirects } = aturanZona();
   const asal = ZONA["flash-sale"];
-  for (const k of ["bayar", "backup", "berkas", "kursi", "like"]) {
+  for (const k of ["bayar", "backup", "berkas", "kursi", "like", "bot"]) {
     assert.ok(rewrites.some((r) => r.source === `/lab/flash-sale/${k}` && r.destination === `${asal}/lab/flash-sale/${k}`), k);
   }
   // satu zona, satu aturan _next dan satu pengalihan akar, berapa pun eksperimennya
@@ -47,6 +47,9 @@ test("alamat halaman membawa bahasa situs ke pilihan bahasa zona", () => {
   assert.equal(alamatHalaman(e, replay, "id"), "/lab/flash-sale/replay?bahasa=id");
   assert.equal(alamatHalaman(e, skala, "id"), "/lab/flash-sale/skala?bahasa=id");
   assert.equal(eksperimenUntukProyek("jeda"), null);
+  const bot = eksperimen.find((x) => x.nomor === "SDL-07");
+  assert.equal(alamatHalaman(bot, bot.halaman[0], "en"), "/lab/flash-sale/bot");
+  assert.equal(alamatHalaman(bot, bot.halaman[0], "id"), "/lab/flash-sale/bot?bahasa=id");
 });
 
 test("rewrite hanya meneruskan halaman yang dipajang dan aset _next-nya", () => {
