@@ -7,6 +7,15 @@
 import { randomBytes, timingSafeEqual } from "node:crypto";
 
 export const COOKIE_STATE = "porto-google-state";
+// Halaman tujuan sesudah login Google (mis. /bank dari "Sign in as Farrez"), disimpan selama
+// perjalanan ke Google dan kembali.
+export const COOKIE_TUJUAN = "porto-google-ke";
+
+/** Tujuan yang boleh: jalur /admin atau /bank di situs ini saja, supaya bukan pengalih terbuka. */
+export function tujuanAman(nilai) {
+  if (typeof nilai !== "string" || nilai.length > 200) return null;
+  return /^\/(admin|bank)(?:[/?#][^\s\\]*)?$/.test(nilai) && !nilai.startsWith("//") ? nilai : null;
+}
 const PENERBIT = new Set(["https://accounts.google.com", "accounts.google.com"]);
 
 export const googleSiap = (env = process.env) => Boolean(env.GOOGLE_CLIENT_ID && env.GOOGLE_CLIENT_SECRET);
@@ -70,6 +79,7 @@ export async function tukarKode({ code, clientId, clientSecret, redirectUri, fet
  */
 export function pasangSesi(res, cookie) {
   res.cookies.delete({ name: COOKIE_STATE, path: "/api/google" });
+  res.cookies.delete({ name: COOKIE_TUJUAN, path: "/api/google" });
   res.cookies.set({
     name: cookie.name,
     value: cookie.value,

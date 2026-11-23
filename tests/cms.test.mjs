@@ -9,7 +9,7 @@ import { situs } from "../content/situs.js";
 import { susunKlien, susunProyek, susunSitus, ratakanKlien } from "../lib/isi/gabung.js";
 import { dataTeks, gabungPesan, kolomTeks, namaKolom } from "../cms/teks.js";
 import { jalurAset, placeholderSama, slugValid, tautanHttps, tautanKlien, teksProyekAman, warnaHex } from "../cms/aturan.js";
-import { bacaIdToken, COOKIE_STATE, emailSah, pasangSesi, stateCocok, tukarKode, urlMasuk } from "../cms/google.js";
+import { bacaIdToken, COOKIE_STATE, COOKIE_TUJUAN, emailSah, pasangSesi, stateCocok, tujuanAman, tukarKode, urlMasuk } from "../cms/google.js";
 import { NextResponse } from "next/server.js";
 import { generatePayloadCookie } from "payload/shared";
 import { pasangTombolIntip, TANDA } from "../components/admin/intip-sandi.js";
@@ -281,6 +281,31 @@ test("Google: respons balikan membawa cookie sesi Payload dan menghapus cookie s
   assert.match(sesi, /SameSite=lax/i);
   assert.match(sesi, /Path=\//);
   assert.ok(header.some((h) => h.startsWith(`${COOKIE_STATE}=;`) && /Path=\/api\/google/.test(h)), "cookie state tidak dihapus");
+});
+
+test("tujuan sesudah login Google hanya /admin atau /bank di situs ini", () => {
+  for (const ok of ["/bank", "/bank/pola/01?x=1", "/admin", "/admin/collections/kode-bank"]) assert.equal(tujuanAman(ok), ok, ok);
+  for (const buruk of [undefined, "", "bank", "//jahat.example/bank", "/\\jahat.example", "https://jahat.example/bank", "/bankir", "/admin2", "/api/bank/sesi", "javascript:alert(1)", "/bank\n", `/bank/${"a".repeat(300)}`]) {
+    assert.equal(tujuanAman(buruk), null, String(buruk));
+  }
+});
+
+test("login Google membawa tujuan lewat cookie dan menghapusnya sesudah masuk", async () => {
+  const cookie = await generatePayloadCookie({
+    collectionAuthConfig: { cookies: { sameSite: "Lax", secure: true }, tokenExpiration: Users.auth.tokenExpiration },
+    cookiePrefix: "payload",
+    token: "token-uji",
+    returnCookieAsObject: true,
+  });
+  const header = pasangSesi(NextResponse.redirect("https://contoh.test/bank"), cookie).headers.getSetCookie();
+  assert.ok(header.some((h) => h.startsWith(`${COOKIE_TUJUAN}=;`) && /Path=\/api\/google/.test(h)), "cookie tujuan tidak dihapus");
+  const teks = (p) => readFileSync(new URL(`../${p}`, import.meta.url), "utf8");
+  const mulai = teks("app/(payload)/api/google/mulai/route.js");
+  assert.match(mulai, /tujuanAman\(/);
+  assert.match(mulai, /COOKIE_TUJUAN/);
+  const balik = teks("app/(payload)/api/google/balik/route.js");
+  assert.match(balik, /tujuanAman\(req\.cookies\.get\(COOKIE_TUJUAN\)/);
+  assert.match(teks("components/admin/MasukGoogle.jsx"), /\/api\/google\/mulai\?ke=/);
 });
 
 // ---- tombol intip sandi -------------------------------------------------------------------
