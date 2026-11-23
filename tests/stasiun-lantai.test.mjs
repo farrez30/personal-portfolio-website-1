@@ -5,7 +5,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "three";
 import { susunLantai, susun, batas, TEMPAT, POSE, TABLET, PILAR_LEWAT, LABEL, LANTAI } from "../components/stasiun/lantai.js";
-import { ANCHOR_V5, poseAnchor, durasiAntara, poseDalam, poseBlend, DORONG, BATAS_DALAM } from "../components/stasiun/naskah.js";
+import { ANCHOR_V5, JENIS, poseAnchor, durasiAntara, poseDalam, poseBlend, lintasTahap, DORONG, BATAS_DALAM } from "../components/stasiun/naskah.js";
+import { POSE_KOTA } from "../components/stasiun/kota.js";
 
 const BENDA = susunLantai();
 const PADAT = BENDA.filter((o) => o.bahan === "toon" || o.bahan === "layar");
@@ -84,8 +85,9 @@ test("setiap babak di lantai kantor punya pose lebar dan tegak di ANCHOR_V5", ()
       assert.ok(p && p.posisi.length === 3 && p.lihat.length === 3 && p.fov > 20, `${id} tegak=${tegak}`);
     }
   }
-  // babak sesudah gedung belum punya dunia (F4 sampai F6)
-  for (const id of ["ramai", "langkah-kecil", "penutup", "modul-lab"]) assert.equal(poseAnchor(ANCHOR_V5.findIndex((a) => a.id === id)), null, id);
+  // babak ramai di atas kota (F4); peta, globe, dan modul lab belum punya dunia (F5, F6)
+  assert.deepEqual(poseAnchor(ANCHOR_V5.findIndex((a) => a.id === "ramai")).posisi, POSE_KOTA.posisi);
+  for (const id of ["langkah-kecil", "penutup", "modul-lab"]) assert.equal(poseAnchor(ANCHOR_V5.findIndex((a) => a.id === id)), null, id);
 });
 
 test("kamera selalu di dalam gedung dan tidak di dalam benda apa pun", () => {
@@ -139,9 +141,19 @@ test("durasi perpindahan: satu langkah memakai durasi keluar, lompatan dibatasi,
   assert.equal(durasiAntara(i, i + 1, true), 0);
   assert.equal(durasiAntara(-1, 0), 0);
   // keluar ke anchor tanpa dunia: potongan, kanvas memudar
-  const kb = ANCHOR_V5.findIndex((a) => a.id === "kebiasaan");
-  assert.equal(durasiAntara(kb, kb + 1), 0);
-  for (let a = 0; a < ANCHOR_V5.length; a++) for (let b = 0; b < ANCHOR_V5.length; b++) assert.ok(durasiAntara(a, b) <= BATAS_DALAM);
+  const rm = ANCHOR_V5.findIndex((a) => a.id === "ramai");
+  assert.equal(durasiAntara(rm, rm + 1), 0);
+  // serah terima makro (keluar jendela) memakai durasinya sendiri, melewati batas di dalam gedung
+  assert.equal(durasiAntara(rm - 1, rm), 2.8);
+  assert.equal(durasiAntara(rm, rm - 1), 2.8);
+  // lompatan yang melewati serah terima antarskala: potongan, bukan blend lurus menembus dinding
+  assert.equal(durasiAntara(rm - 3, rm), 0);
+  assert.equal(durasiAntara(rm, 2), 0);
+  assert.equal(durasiAntara(rm - 3, rm - 1), 1.2);
+  for (let a = 0; a < ANCHOR_V5.length; a++) for (let b = 0; b < ANCHOR_V5.length; b++) {
+    const makro = Math.abs(a - b) === 1 && JENIS[ANCHOR_V5[Math.min(a, b)].keluar].makro;
+    if (!makro) assert.ok(durasiAntara(a, b) <= BATAS_DALAM, `${a} ke ${b}`);
+  }
 });
 
 test("dorongan dalam babak: mulai 5% lebih jauh, berakhir tepat di pose, titik lihat tetap", () => {
@@ -156,9 +168,11 @@ test("dorongan dalam babak: mulai 5% lebih jauh, berakhir tepat di pose, titik l
   assert.deepEqual(poseDalam(p, -3).posisi, awal.posisi);
 });
 
-// Semua perpindahan satu langkah antara babak berdunia, layar lebar dan tegak, 41 titik.
+// Semua perpindahan satu langkah antara babak berdunia di dalam gedung, layar lebar dan tegak,
+// 41 titik. Serah terima ke kota (jendela) tidak pernah memakai blend: lompatan ke sana potongan.
 const PASANGAN = [];
 for (let i = 0; i + 1 < ANCHOR_V5.length; i++) for (const tegak of [false, true]) {
+  if (lintasTahap(i, i + 1)) continue;
   const a = poseAnchor(i, tegak);
   const b = poseAnchor(i + 1, tegak);
   if (a && b) PASANGAN.push([`${ANCHOR_V5[i].id} ke ${ANCHOR_V5[i + 1].id}${tegak ? " tegak" : ""}`, a, b]);
