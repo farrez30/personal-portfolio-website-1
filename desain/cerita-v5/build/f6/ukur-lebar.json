@@ -1,0 +1,4869 @@
+{
+  "layar": "1440x900@1",
+  "cpu": 1,
+  "babak": [
+    {
+      "anchor": "gerbang",
+      "calls": 14,
+      "segitiga": 89348,
+      "programs": 37,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "dorongan",
+      "calls": 13,
+      "segitiga": 89330,
+      "programs": 37,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "harga-diam",
+      "calls": 14,
+      "segitiga": 89348,
+      "programs": 37,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "tarikan",
+      "calls": 12,
+      "segitiga": 89324,
+      "programs": 37,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "biaya",
+      "calls": 15,
+      "segitiga": 89332,
+      "programs": 37,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "kelangsungan",
+      "calls": 14,
+      "segitiga": 89332,
+      "programs": 37,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "data",
+      "calls": 16,
+      "segitiga": 94372,
+      "programs": 37,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "kebiasaan",
+      "calls": 15,
+      "segitiga": 355958,
+      "programs": 38,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "ramai",
+      "calls": 25,
+      "segitiga": 361192,
+      "programs": 39,
+      "pertama": {
+        "gedung": 378.1
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "langkah-kecil",
+      "calls": 9,
+      "segitiga": 3254,
+      "programs": 40,
+      "pertama": {
+        "gedung": 378.1,
+        "peta": 48.9
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "penutup",
+      "calls": 18,
+      "segitiga": 71002,
+      "programs": 44,
+      "pertama": {
+        "gedung": 378.1,
+        "peta": 48.9,
+        "globe": 51.2
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    },
+    {
+      "anchor": "modul-lab",
+      "calls": 12,
+      "segitiga": 69714,
+      "programs": 44,
+      "pertama": {
+        "gedung": 378.1,
+        "peta": 48.9,
+        "globe": 51.2
+      },
+      "panas": {
+        "peta": {
+          "bangun": 4.2,
+          "unggah": 62.5,
+          "kompilasi": 29.7
+        },
+        "globe": {
+          "bangun": 25.7,
+          "unggah": 21.6,
+          "kompilasi": 31.2
+        },
+        "lab": {
+          "bangun": 85.9,
+          "potong": [
+            35.6,
+            38.9,
+            11.4
+          ],
+          "unggah": 0.6,
+          "kompilasi": 91.4
+        }
+      }
+    }
+  ],
+  "pindah": [
+    {
+      "dari": "gerbang",
+      "ke": "dorongan",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 7.09,
+            "benda": "toon",
+            "titik": [
+              -16.88,
+              0.95,
+              -3.03
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 7.86,
+            "benda": "toon",
+            "titik": [
+              -16.62,
+              0.79,
+              -3.78
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 7.58,
+            "benda": "toon",
+            "titik": [
+              -16.81,
+              0.85,
+              -3.78
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 6.5,
+            "benda": "toon",
+            "titik": [
+              -17.34,
+              1.08,
+              -3.45
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.6,
+            "benda": "toon",
+            "titik": [
+              -17.81,
+              1.28,
+              -3.78
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 13,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 4.05,
+            "benda": "toon",
+            "titik": [
+              -18.03,
+              1.31,
+              -3.78
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 13,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 3.1,
+            "benda": "toon",
+            "titik": [
+              -17.81,
+              1.02,
+              -3.78
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 13,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.08,
+            "benda": "toon",
+            "titik": [
+              -17.42,
+              0.97,
+              -3.29
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 13,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.88,
+            "benda": "toon",
+            "titik": [
+              -17.3,
+              0.92,
+              -3.27
+            ]
+          },
+          "berkas": "t08.jpg"
+        },
+        {
+          "t": 0.9,
+          "calls": 13,
+          "blend": false,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.85,
+            "benda": "toon",
+            "titik": [
+              -17.28,
+              0.91,
+              -3.28
+            ]
+          },
+          "berkas": "t09.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "dorongan",
+      "ke": "harga-diam",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 13,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.85,
+            "benda": "toon",
+            "titik": [
+              -17.28,
+              0.91,
+              -3.28
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 13,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.44,
+            "benda": "toon",
+            "titik": [
+              -17.26,
+              0.89,
+              -3.31
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.69,
+            "benda": "toon",
+            "titik": [
+              -16.88,
+              0.84,
+              -3.03
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 4.56,
+            "benda": "lantai",
+            "titik": [
+              -14.34,
+              0,
+              0.04
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.18,
+            "benda": "lantai",
+            "titik": [
+              -13.8,
+              0,
+              0.86
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.27,
+            "benda": "toon",
+            "titik": [
+              -13.47,
+              0.02,
+              1.36
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.33,
+            "benda": "lantai",
+            "titik": [
+              -13.12,
+              0,
+              1.89
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.28,
+            "benda": "lantai",
+            "titik": [
+              -12.84,
+              0,
+              2.35
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.15,
+            "benda": "lantai",
+            "titik": [
+              -12.6,
+              0,
+              2.75
+            ]
+          },
+          "berkas": "t08.jpg"
+        },
+        {
+          "t": 0.9,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.57,
+            "benda": "toon",
+            "titik": [
+              -13.88,
+              0.75,
+              1.34
+            ]
+          },
+          "berkas": "t09.jpg"
+        },
+        {
+          "t": 1,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.33,
+            "benda": "toon",
+            "titik": [
+              -13.75,
+              0.75,
+              1.61
+            ]
+          },
+          "berkas": "t10.jpg"
+        },
+        {
+          "t": 1.1,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.75,
+            "benda": "toon",
+            "titik": [
+              -13.79,
+              0.83,
+              1.69
+            ]
+          },
+          "berkas": "t11.jpg"
+        },
+        {
+          "t": 1.2,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.23,
+            "benda": "toon",
+            "titik": [
+              -13.91,
+              0.91,
+              1.68
+            ]
+          },
+          "berkas": "t12.jpg"
+        },
+        {
+          "t": 1.3,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.14,
+            "benda": "toon",
+            "titik": [
+              -13.91,
+              0.9,
+              1.77
+            ]
+          },
+          "berkas": "t13.jpg"
+        },
+        {
+          "t": 1.4,
+          "calls": 14,
+          "blend": false,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.15,
+            "benda": "toon",
+            "titik": [
+              -13.91,
+              0.9,
+              1.81
+            ]
+          },
+          "berkas": "t14.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "harga-diam",
+      "ke": "tarikan",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.15,
+            "benda": "toon",
+            "titik": [
+              -13.91,
+              0.9,
+              1.81
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 16,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 7.96,
+            "benda": "toon",
+            "titik": [
+              -8.25,
+              0.6,
+              -3.78
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.53,
+            "benda": "toon",
+            "titik": [
+              -11.77,
+              0.89,
+              -3.78
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.41,
+            "benda": "toon",
+            "titik": [
+              -11.23,
+              0.86,
+              -3.78
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 3.71,
+            "benda": "toon",
+            "titik": [
+              -10.81,
+              0.84,
+              -3.78
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.17,
+            "benda": "toon",
+            "titik": [
+              -10.64,
+              0.87,
+              -3.14
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 12,
+          "blend": false,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.91,
+            "benda": "toon",
+            "titik": [
+              -10.63,
+              0.82,
+              -3.2
+            ]
+          },
+          "berkas": "t06.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "tarikan",
+      "ke": "biaya",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.91,
+            "benda": "toon",
+            "titik": [
+              -10.63,
+              0.82,
+              -3.2
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.65,
+            "benda": "layar",
+            "titik": [
+              -10.33,
+              0.86,
+              -3.17
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.1,
+            "benda": "toon",
+            "titik": [
+              -10.25,
+              0.77,
+              -3.78
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.56,
+            "benda": "layar",
+            "titik": [
+              -10,
+              0.86,
+              -3.38
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.45,
+            "benda": "layar",
+            "titik": [
+              -9.98,
+              0.86,
+              -3.38
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.31,
+            "benda": "layar",
+            "titik": [
+              -9.96,
+              0.86,
+              -3.38
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.15,
+            "benda": "layar",
+            "titik": [
+              -7.19,
+              0.75,
+              2
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.42,
+            "benda": "layar",
+            "titik": [
+              -7.16,
+              0.75,
+              2.04
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 12,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.67,
+            "benda": "layar",
+            "titik": [
+              -7.12,
+              0.75,
+              2.07
+            ]
+          },
+          "berkas": "t08.jpg"
+        },
+        {
+          "t": 0.9,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.88,
+            "benda": "toon",
+            "titik": [
+              -7.09,
+              0.75,
+              2.09
+            ]
+          },
+          "berkas": "t09.jpg"
+        },
+        {
+          "t": 1,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.97,
+            "benda": "toon",
+            "titik": [
+              -6.96,
+              0.74,
+              2.01
+            ]
+          },
+          "berkas": "t10.jpg"
+        },
+        {
+          "t": 1.1,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.96,
+            "benda": "toon",
+            "titik": [
+              -6.74,
+              0.74,
+              1.81
+            ]
+          },
+          "berkas": "t11.jpg"
+        },
+        {
+          "t": 1.2,
+          "calls": 15,
+          "blend": false,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.96,
+            "benda": "kertas",
+            "titik": [
+              -6.62,
+              0.74,
+              1.68
+            ]
+          },
+          "berkas": "t12.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "biaya",
+      "ke": "kelangsungan",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.96,
+            "benda": "kertas",
+            "titik": [
+              -6.62,
+              0.74,
+              1.68
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.06,
+            "benda": "kertas",
+            "titik": [
+              -6.61,
+              0.74,
+              1.7
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.15,
+            "benda": "kertas",
+            "titik": [
+              -6.6,
+              0.74,
+              1.75
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.2,
+            "benda": "kertas",
+            "titik": [
+              -6.63,
+              0.74,
+              1.82
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.17,
+            "benda": "toon",
+            "titik": [
+              -6.78,
+              0.74,
+              1.4
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 3.58,
+            "benda": "lantai",
+            "titik": [
+              -5.67,
+              0,
+              -1.34
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 6,
+            "benda": "toon",
+            "titik": [
+              -4.51,
+              0.3,
+              -3.78
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.54,
+            "benda": "toon",
+            "titik": [
+              -4.29,
+              0.72,
+              -3.78
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 4.46,
+            "benda": "toon",
+            "titik": [
+              -4.04,
+              0.75,
+              -3.78
+            ]
+          },
+          "berkas": "t08.jpg"
+        },
+        {
+          "t": 0.9,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.98,
+            "benda": "toon",
+            "titik": [
+              -3.91,
+              0.75,
+              -3.48
+            ]
+          },
+          "berkas": "t09.jpg"
+        },
+        {
+          "t": 1,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.02,
+            "benda": "toon",
+            "titik": [
+              -3.77,
+              0.78,
+              -3.12
+            ]
+          },
+          "berkas": "t10.jpg"
+        },
+        {
+          "t": 1.1,
+          "calls": 14,
+          "blend": false,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.9,
+            "benda": "toon",
+            "titik": [
+              -3.71,
+              0.78,
+              -3.02
+            ]
+          },
+          "berkas": "t11.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "kelangsungan",
+      "ke": "data",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.9,
+            "benda": "toon",
+            "titik": [
+              -3.71,
+              0.78,
+              -3.02
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.34,
+            "benda": "toon",
+            "titik": [
+              -3.79,
+              0.77,
+              -2.99
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 3.28,
+            "benda": "toon",
+            "titik": [
+              -3.7,
+              0.75,
+              -2.95
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 4.2,
+            "benda": "toon",
+            "titik": [
+              -2.85,
+              0.75,
+              -3.05
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 16,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.74,
+            "benda": "toon",
+            "titik": [
+              -1.76,
+              0.66,
+              -3.78
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 16,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 6.41,
+            "benda": "toon",
+            "titik": [
+              0.08,
+              0.75,
+              -3.78
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 14,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.25,
+            "benda": "toon",
+            "titik": [
+              2.1,
+              1.14,
+              -1.96
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 16,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 6.35,
+            "benda": "toon",
+            "titik": [
+              2.15,
+              1.09,
+              -2.08
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 16,
+          "blend": false,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 6.67,
+            "benda": "toon",
+            "titik": [
+              2.08,
+              1.09,
+              -1.95
+            ]
+          },
+          "berkas": "t08.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "data",
+      "ke": "kebiasaan",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 22,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 6.67,
+            "benda": "toon",
+            "titik": [
+              2.08,
+              1.09,
+              -1.95
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 20,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 6.66,
+            "benda": "toon",
+            "titik": [
+              2.08,
+              0.79,
+              -1.96
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 20,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 7.32,
+            "benda": "lantai",
+            "titik": [
+              2.01,
+              0,
+              -1.81
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 20,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 8.41,
+            "benda": "lantai",
+            "titik": [
+              2.06,
+              0,
+              -1.09
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 20,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 10.66,
+            "benda": "lantai",
+            "titik": [
+              1.75,
+              0,
+              -0.75
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 20,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 13,
+            "benda": "lantai",
+            "titik": [
+              1.36,
+              0,
+              -0.56
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 20,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 14.72,
+            "benda": "lantai",
+            "titik": [
+              1.06,
+              0,
+              -0.45
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 20,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 15.26,
+            "benda": "lantai",
+            "titik": [
+              1.11,
+              0,
+              -0.67
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 20,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 15.26,
+            "benda": "lantai",
+            "titik": [
+              2.35,
+              0,
+              -1.78
+            ]
+          },
+          "berkas": "t08.jpg"
+        },
+        {
+          "t": 0.9,
+          "calls": 18,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 15.26,
+            "benda": "lantai",
+            "titik": [
+              5.64,
+              0,
+              -2.48
+            ]
+          },
+          "berkas": "t09.jpg"
+        },
+        {
+          "t": 1,
+          "calls": 18,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 15.26,
+            "benda": "lantai",
+            "titik": [
+              9.48,
+              0,
+              -1.23
+            ]
+          },
+          "berkas": "t10.jpg"
+        },
+        {
+          "t": 1.1,
+          "calls": 18,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 15.26,
+            "benda": "lantai",
+            "titik": [
+              11.59,
+              0,
+              0.76
+            ]
+          },
+          "berkas": "t11.jpg"
+        },
+        {
+          "t": 1.2,
+          "calls": 18,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 14.71,
+            "benda": "lantai",
+            "titik": [
+              11.86,
+              0,
+              1.34
+            ]
+          },
+          "berkas": "t12.jpg"
+        },
+        {
+          "t": 1.3,
+          "calls": 18,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 12.91,
+            "benda": "lantai",
+            "titik": [
+              11.53,
+              0,
+              1.4
+            ]
+          },
+          "berkas": "t13.jpg"
+        },
+        {
+          "t": 1.4,
+          "calls": 16,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 10.38,
+            "benda": "lantai",
+            "titik": [
+              11.08,
+              0,
+              1.51
+            ]
+          },
+          "berkas": "t14.jpg"
+        },
+        {
+          "t": 1.5,
+          "calls": 16,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 7.69,
+            "benda": "lantai",
+            "titik": [
+              10.61,
+              0,
+              1.7
+            ]
+          },
+          "berkas": "t15.jpg"
+        },
+        {
+          "t": 1.6,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 4.69,
+            "benda": "toon",
+            "titik": [
+              10.05,
+              0.75,
+              1.67
+            ]
+          },
+          "berkas": "t16.jpg"
+        },
+        {
+          "t": 1.7,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 3.79,
+            "benda": "toon",
+            "titik": [
+              9.94,
+              0.75,
+              1.98
+            ]
+          },
+          "berkas": "t17.jpg"
+        },
+        {
+          "t": 1.8,
+          "calls": 15,
+          "blend": false,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.66,
+            "benda": "toon",
+            "titik": [
+              10.65,
+              0.27,
+              3.85
+            ]
+          },
+          "berkas": "t18.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "kebiasaan",
+      "ke": "ramai",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.66,
+            "benda": "toon",
+            "titik": [
+              10.65,
+              0.27,
+              3.85
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 3.31,
+            "benda": "toon",
+            "titik": [
+              9.8,
+              1,
+              1.84
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 3.1,
+            "benda": "layar",
+            "titik": [
+              9.73,
+              1.12,
+              1.85
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 5.01,
+            "benda": "toon",
+            "titik": [
+              10.4,
+              0.63,
+              3.85
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 4.63,
+            "benda": "toon",
+            "titik": [
+              10.24,
+              0.9,
+              3.95
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 20.29,
+            "benda": "kota",
+            "titik": [
+              15.26,
+              -3.2,
+              18.68
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 17.98,
+            "benda": "mobil",
+            "titik": [
+              13.94,
+              -2.05,
+              17.5
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 22.71,
+            "benda": "kota",
+            "titik": [
+              14.36,
+              -2.5,
+              23
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 25.16,
+            "benda": "kota",
+            "titik": [
+              13.87,
+              -2.2,
+              26.59
+            ]
+          },
+          "berkas": "t08.jpg"
+        },
+        {
+          "t": 0.9,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 30.01,
+            "benda": "kota",
+            "titik": [
+              13.99,
+              -2.2,
+              32.8
+            ]
+          },
+          "berkas": "t09.jpg"
+        },
+        {
+          "t": 1,
+          "calls": 17,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 33.41,
+            "benda": "kota",
+            "titik": [
+              14.16,
+              -2.2,
+              37.73
+            ]
+          },
+          "berkas": "t10.jpg"
+        },
+        {
+          "t": 1.1,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 32.38,
+            "benda": "kota",
+            "titik": [
+              13.96,
+              -2.2,
+              39.28
+            ]
+          },
+          "berkas": "t11.jpg"
+        },
+        {
+          "t": 1.2,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 29.86,
+            "benda": "kota",
+            "titik": [
+              13.5,
+              -2.2,
+              39.67
+            ]
+          },
+          "berkas": "t12.jpg"
+        },
+        {
+          "t": 1.3,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 30.74,
+            "benda": "kota",
+            "titik": [
+              13.65,
+              -2.2,
+              42.63
+            ]
+          },
+          "berkas": "t13.jpg"
+        },
+        {
+          "t": 1.4,
+          "calls": 15,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 34.75,
+            "benda": "kota",
+            "titik": [
+              14.4,
+              -2.2,
+              47.6
+            ]
+          },
+          "berkas": "t14.jpg"
+        },
+        {
+          "t": 1.5,
+          "calls": 6,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 38.65,
+            "benda": "kota",
+            "titik": [
+              15.26,
+              6.07,
+              51.13
+            ]
+          },
+          "berkas": "t15.jpg"
+        },
+        {
+          "t": 1.6,
+          "calls": 6,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 98.18,
+            "benda": "kota",
+            "titik": [
+              26.52,
+              -2.2,
+              103.7
+            ]
+          },
+          "berkas": "t16.jpg"
+        },
+        {
+          "t": 1.7,
+          "calls": 11,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 168.06,
+            "benda": "kota",
+            "titik": [
+              25.15,
+              -3.2,
+              166.66
+            ]
+          },
+          "berkas": "t17.jpg"
+        },
+        {
+          "t": 1.8,
+          "calls": 6,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 119.57,
+            "benda": "kota",
+            "titik": [
+              -13.97,
+              49.67,
+              126
+            ]
+          },
+          "berkas": "t18.jpg"
+        },
+        {
+          "t": 1.9,
+          "calls": 6,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 380.48,
+            "benda": "kota",
+            "titik": [
+              -202.08,
+              -3.2,
+              311.56
+            ]
+          },
+          "berkas": "t19.jpg"
+        },
+        {
+          "t": 2,
+          "calls": 6,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 488.45,
+            "benda": "kota",
+            "titik": [
+              -364.92,
+              -3.15,
+              248.89
+            ]
+          },
+          "berkas": "t20.jpg"
+        },
+        {
+          "t": 2.1,
+          "calls": 6,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 569.46,
+            "benda": "kota",
+            "titik": [
+              -407.41,
+              -3.2,
+              131.14
+            ]
+          },
+          "berkas": "t21.jpg"
+        },
+        {
+          "t": 2.2,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 619.44,
+            "benda": "kota",
+            "titik": [
+              -343.05,
+              -3.2,
+              37.84
+            ]
+          },
+          "berkas": "t22.jpg"
+        },
+        {
+          "t": 2.3,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 561.34,
+            "benda": "kota",
+            "titik": [
+              -193,
+              45.67,
+              44.68
+            ]
+          },
+          "berkas": "t23.jpg"
+        },
+        {
+          "t": 2.4,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 691.45,
+            "benda": "kota",
+            "titik": [
+              -211.12,
+              1.3,
+              1
+            ]
+          },
+          "berkas": "t24.jpg"
+        },
+        {
+          "t": 2.5,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 728.57,
+            "benda": "kota",
+            "titik": [
+              -195.57,
+              -2.2,
+              25.22
+            ]
+          },
+          "berkas": "t25.jpg"
+        },
+        {
+          "t": 2.6,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 754.09,
+            "benda": "kota",
+            "titik": [
+              -183.37,
+              -3.2,
+              44.77
+            ]
+          },
+          "berkas": "t26.jpg"
+        },
+        {
+          "t": 2.7,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 769.66,
+            "benda": "kota",
+            "titik": [
+              -175.85,
+              -3.2,
+              57.08
+            ]
+          },
+          "berkas": "t27.jpg"
+        },
+        {
+          "t": 2.8,
+          "calls": 25,
+          "blend": false,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 775.24,
+            "benda": "kota",
+            "titik": [
+              -173.48,
+              -3.2,
+              61.19
+            ]
+          },
+          "berkas": "t28.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "ramai",
+      "ke": "langkah-kecil",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 775.24,
+            "benda": "kota",
+            "titik": [
+              -173.48,
+              -3.2,
+              61.19
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 792.83,
+            "benda": "kota",
+            "titik": [
+              -170.54,
+              -2.2,
+              63.97
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 851.21,
+            "benda": "kota",
+            "titik": [
+              -171.17,
+              -2.2,
+              65.64
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 948.28,
+            "benda": "kota",
+            "titik": [
+              -180.34,
+              -3.2,
+              61.99
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 25,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1072.84,
+            "benda": "kota",
+            "titik": [
+              -197.25,
+              -2.2,
+              52.27
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 34,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0.075,
+          "periksa": {
+            "jarak": 1159.38,
+            "benda": "kota",
+            "titik": [
+              -208.96,
+              48.73,
+              48
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 34,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0.508,
+          "periksa": {
+            "jarak": 1343.6,
+            "benda": "kota",
+            "titik": [
+              -246.91,
+              -3.2,
+              15.26
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 34,
+          "blend": true,
+          "tahap": "gedung",
+          "silang": 0.933,
+          "periksa": {
+            "jarak": 1413.71,
+            "benda": "kota",
+            "titik": [
+              -260.27,
+              7.76,
+              1.97
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 9,
+          "blend": true,
+          "tahap": "peta",
+          "silang": 0,
+          "periksa": {
+            "jarak": 435.43,
+            "benda": "peta",
+            "titik": [
+              -123.22,
+              0,
+              20.65
+            ]
+          },
+          "berkas": "t08.jpg"
+        },
+        {
+          "t": 0.9,
+          "calls": 9,
+          "blend": false,
+          "tahap": "peta",
+          "silang": 0,
+          "periksa": {
+            "jarak": 446.75,
+            "benda": "peta",
+            "titik": [
+              -62.22,
+              0,
+              7.11
+            ]
+          },
+          "berkas": "t09.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "langkah-kecil",
+      "ke": "penutup",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 13,
+          "blend": true,
+          "tahap": "peta",
+          "silang": 0,
+          "periksa": {
+            "jarak": 446.75,
+            "benda": "peta",
+            "titik": [
+              -62.22,
+              0,
+              7.11
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 29,
+          "blend": true,
+          "tahap": "peta",
+          "silang": 0.259,
+          "periksa": {
+            "jarak": 477.38,
+            "benda": "peta",
+            "titik": [
+              -131.31,
+              0,
+              21.18
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 31,
+          "blend": true,
+          "tahap": "peta",
+          "silang": 0.741,
+          "periksa": {
+            "jarak": 531.78,
+            "benda": "peta",
+            "titik": [
+              -165.1,
+              0,
+              26.66
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 18,
+          "blend": false,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 402.78,
+            "benda": "bumi",
+            "titik": [
+              14.32,
+              14.88,
+              -97.83
+            ]
+          },
+          "berkas": "t03.jpg"
+        }
+      ]
+    },
+    {
+      "dari": "penutup",
+      "ke": "modul-lab",
+      "bingkai": [
+        {
+          "t": 0,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 402.78,
+            "benda": "bumi",
+            "titik": [
+              14.32,
+              14.88,
+              -97.83
+            ]
+          },
+          "berkas": "t00.jpg"
+        },
+        {
+          "t": 0.1,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 400.67,
+            "benda": "bumi",
+            "titik": [
+              13.18,
+              14.63,
+              -98
+            ]
+          },
+          "berkas": "t01.jpg"
+        },
+        {
+          "t": 0.2,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 394.61,
+            "benda": "bumi",
+            "titik": [
+              9.91,
+              13.92,
+              -98.51
+            ]
+          },
+          "berkas": "t02.jpg"
+        },
+        {
+          "t": 0.3,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 385.26,
+            "benda": "bumi",
+            "titik": [
+              4.8,
+              12.78,
+              -99.06
+            ]
+          },
+          "berkas": "t03.jpg"
+        },
+        {
+          "t": 0.4,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 373.34,
+            "benda": "bumi",
+            "titik": [
+              -1.87,
+              11.22,
+              -99.31
+            ]
+          },
+          "berkas": "t04.jpg"
+        },
+        {
+          "t": 0.5,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 359.39,
+            "benda": "bumi",
+            "titik": [
+              -9.91,
+              9.26,
+              -99.07
+            ]
+          },
+          "berkas": "t05.jpg"
+        },
+        {
+          "t": 0.6,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 344.09,
+            "benda": "bumi",
+            "titik": [
+              -19.05,
+              6.9,
+              -97.91
+            ]
+          },
+          "berkas": "t06.jpg"
+        },
+        {
+          "t": 0.7,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 327.89,
+            "benda": "bumi",
+            "titik": [
+              -29.05,
+              4.17,
+              -95.58
+            ]
+          },
+          "berkas": "t07.jpg"
+        },
+        {
+          "t": 0.8,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 311.21,
+            "benda": "bumi",
+            "titik": [
+              -39.57,
+              1.1,
+              -91.79
+            ]
+          },
+          "berkas": "t08.jpg"
+        },
+        {
+          "t": 0.9,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 294.26,
+            "benda": "bumi",
+            "titik": [
+              -50.19,
+              -2.24,
+              -86.42
+            ]
+          },
+          "berkas": "t09.jpg"
+        },
+        {
+          "t": 1,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 277.22,
+            "benda": "bumi",
+            "titik": [
+              -60.4,
+              -5.71,
+              -79.45
+            ]
+          },
+          "berkas": "t10.jpg"
+        },
+        {
+          "t": 1.1,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 260.09,
+            "benda": "bumi",
+            "titik": [
+              -69.65,
+              -9.16,
+              -71.13
+            ]
+          },
+          "berkas": "t11.jpg"
+        },
+        {
+          "t": 1.2,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 242.76,
+            "benda": "bumi",
+            "titik": [
+              -77.44,
+              -12.38,
+              -62
+            ]
+          },
+          "berkas": "t12.jpg"
+        },
+        {
+          "t": 1.3,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 224.96,
+            "benda": "bumi",
+            "titik": [
+              -83.43,
+              -15.14,
+              -52.93
+            ]
+          },
+          "berkas": "t13.jpg"
+        },
+        {
+          "t": 1.4,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 206.42,
+            "benda": "bumi",
+            "titik": [
+              -87.61,
+              -17.22,
+              -44.95
+            ]
+          },
+          "berkas": "t14.jpg"
+        },
+        {
+          "t": 1.5,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 187.08,
+            "benda": "bumi",
+            "titik": [
+              -90.18,
+              -18.46,
+              -38.97
+            ]
+          },
+          "berkas": "t15.jpg"
+        },
+        {
+          "t": 1.6,
+          "calls": 16,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 167.25,
+            "benda": "bumi",
+            "titik": [
+              -91.53,
+              -18.76,
+              -35.53
+            ]
+          },
+          "berkas": "t16.jpg"
+        },
+        {
+          "t": 1.7,
+          "calls": 14,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 147.8,
+            "benda": "bumi",
+            "titik": [
+              -92.06,
+              -18.21,
+              -34.45
+            ]
+          },
+          "berkas": "t17.jpg"
+        },
+        {
+          "t": 1.8,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 129.96,
+            "benda": "bumi",
+            "titik": [
+              -92.23,
+              -17.39,
+              -34.41
+            ]
+          },
+          "berkas": "t18.jpg"
+        },
+        {
+          "t": 1.9,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 114.16,
+            "benda": "bumi",
+            "titik": [
+              -92.16,
+              -16.47,
+              -35.07
+            ]
+          },
+          "berkas": "t19.jpg"
+        },
+        {
+          "t": 2,
+          "calls": 14,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 100.55,
+            "benda": "bumi",
+            "titik": [
+              -91.88,
+              -15.53,
+              -36.19
+            ]
+          },
+          "berkas": "t20.jpg"
+        },
+        {
+          "t": 2.1,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 88.94,
+            "benda": "bumi",
+            "titik": [
+              -91.53,
+              -14.66,
+              -37.45
+            ]
+          },
+          "berkas": "t21.jpg"
+        },
+        {
+          "t": 2.2,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 78.86,
+            "benda": "bumi",
+            "titik": [
+              -91.3,
+              -13.99,
+              -38.27
+            ]
+          },
+          "berkas": "t22.jpg"
+        },
+        {
+          "t": 2.3,
+          "calls": 18,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 69.55,
+            "benda": "bumi",
+            "titik": [
+              -91.56,
+              -13.72,
+              -37.77
+            ]
+          },
+          "berkas": "t23.jpg"
+        },
+        {
+          "t": 2.4,
+          "calls": 14,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 61.16,
+            "benda": "bumi",
+            "titik": [
+              -92.11,
+              -13.73,
+              -36.34
+            ]
+          },
+          "berkas": "t24.jpg"
+        },
+        {
+          "t": 2.5,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 54.21,
+            "benda": "bumi",
+            "titik": [
+              -92.56,
+              -13.74,
+              -35.16
+            ]
+          },
+          "berkas": "t25.jpg"
+        },
+        {
+          "t": 2.6,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 12.35,
+            "benda": "stasiun",
+            "titik": [
+              -128.78,
+              -18.76,
+              -36.76
+            ]
+          },
+          "berkas": "t26.jpg"
+        },
+        {
+          "t": 2.7,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 8.02,
+            "benda": "stasiun",
+            "titik": [
+              -129.1,
+              -18.77,
+              -36.02
+            ]
+          },
+          "berkas": "t27.jpg"
+        },
+        {
+          "t": 2.8,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 4.95,
+            "benda": "stasiun",
+            "titik": [
+              -129.25,
+              -18.77,
+              -35.48
+            ]
+          },
+          "berkas": "t28.jpg"
+        },
+        {
+          "t": 2.9,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.79,
+            "benda": "stasiun",
+            "titik": [
+              -129.43,
+              -18.79,
+              -35.11
+            ]
+          },
+          "berkas": "t29.jpg"
+        },
+        {
+          "t": 3,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.55,
+            "benda": "stasiun",
+            "titik": [
+              -129.47,
+              -18.78,
+              -34.89
+            ]
+          },
+          "berkas": "t30.jpg"
+        },
+        {
+          "t": 3.1,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.92,
+            "benda": "stasiun",
+            "titik": [
+              -129.5,
+              -18.78,
+              -34.77
+            ]
+          },
+          "berkas": "t31.jpg"
+        },
+        {
+          "t": 3.2,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.7,
+            "benda": "stasiun",
+            "titik": [
+              -129.51,
+              -18.78,
+              -34.73
+            ]
+          },
+          "berkas": "t32.jpg"
+        },
+        {
+          "t": 3.3,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.67,
+            "benda": "stasiun",
+            "titik": [
+              -129.51,
+              -18.78,
+              -34.73
+            ]
+          },
+          "berkas": "t33.jpg"
+        },
+        {
+          "t": 3.4,
+          "calls": 12,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0,
+          "periksa": {
+            "jarak": 0.67,
+            "benda": "stasiun",
+            "titik": [
+              -129.51,
+              -18.78,
+              -34.73
+            ]
+          },
+          "berkas": "t34.jpg"
+        },
+        {
+          "t": 3.5,
+          "calls": 21,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0.108,
+          "periksa": {
+            "jarak": 0.67,
+            "benda": "stasiun",
+            "titik": [
+              -129.51,
+              -18.78,
+              -34.73
+            ]
+          },
+          "berkas": "t35.jpg"
+        },
+        {
+          "t": 3.6,
+          "calls": 21,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0.398,
+          "periksa": {
+            "jarak": 0.67,
+            "benda": "stasiun",
+            "titik": [
+              -129.51,
+              -18.78,
+              -34.73
+            ]
+          },
+          "berkas": "t36.jpg"
+        },
+        {
+          "t": 3.7,
+          "calls": 21,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0.731,
+          "periksa": {
+            "jarak": 0.67,
+            "benda": "stasiun",
+            "titik": [
+              -129.51,
+              -18.78,
+              -34.73
+            ]
+          },
+          "berkas": "t37.jpg"
+        },
+        {
+          "t": 3.8,
+          "calls": 21,
+          "blend": true,
+          "tahap": "globe",
+          "silang": 0.964,
+          "periksa": {
+            "jarak": 0.67,
+            "benda": "stasiun",
+            "titik": [
+              -129.51,
+              -18.78,
+              -34.73
+            ]
+          },
+          "berkas": "t38.jpg"
+        },
+        {
+          "t": 3.9,
+          "calls": 9,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.43,
+            "benda": "modul",
+            "titik": [
+              -2.7,
+              0.12,
+              -1.23
+            ]
+          },
+          "berkas": "t39.jpg"
+        },
+        {
+          "t": 4,
+          "calls": 9,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.4,
+            "benda": "modul",
+            "titik": [
+              -2.67,
+              0.12,
+              -1.23
+            ]
+          },
+          "berkas": "t40.jpg"
+        },
+        {
+          "t": 4.1,
+          "calls": 9,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.36,
+            "benda": "modul",
+            "titik": [
+              -2.64,
+              0.12,
+              -1.23
+            ]
+          },
+          "berkas": "t41.jpg"
+        },
+        {
+          "t": 4.2,
+          "calls": 9,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.31,
+            "benda": "modul",
+            "titik": [
+              -2.61,
+              0.11,
+              -1.23
+            ]
+          },
+          "berkas": "t42.jpg"
+        },
+        {
+          "t": 4.3,
+          "calls": 9,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.26,
+            "benda": "modul",
+            "titik": [
+              -2.57,
+              0.11,
+              -1.23
+            ]
+          },
+          "berkas": "t43.jpg"
+        },
+        {
+          "t": 4.4,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.21,
+            "benda": "modul",
+            "titik": [
+              -2.53,
+              0.11,
+              -1.23
+            ]
+          },
+          "berkas": "t44.jpg"
+        },
+        {
+          "t": 4.5,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.17,
+            "benda": "modul",
+            "titik": [
+              -2.5,
+              0.11,
+              -1.23
+            ]
+          },
+          "berkas": "t45.jpg"
+        },
+        {
+          "t": 4.6,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.12,
+            "benda": "modul",
+            "titik": [
+              -2.46,
+              0.11,
+              -1.23
+            ]
+          },
+          "berkas": "t46.jpg"
+        },
+        {
+          "t": 4.7,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.07,
+            "benda": "modul",
+            "titik": [
+              -2.43,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t47.jpg"
+        },
+        {
+          "t": 4.8,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2.03,
+            "benda": "modul",
+            "titik": [
+              -2.4,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t48.jpg"
+        },
+        {
+          "t": 4.9,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 2,
+            "benda": "modul",
+            "titik": [
+              -2.38,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t49.jpg"
+        },
+        {
+          "t": 5,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.96,
+            "benda": "modul",
+            "titik": [
+              -2.36,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t50.jpg"
+        },
+        {
+          "t": 5.1,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.93,
+            "benda": "modul",
+            "titik": [
+              -2.34,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t51.jpg"
+        },
+        {
+          "t": 5.2,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.91,
+            "benda": "modul",
+            "titik": [
+              -2.32,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t52.jpg"
+        },
+        {
+          "t": 5.3,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.89,
+            "benda": "modul",
+            "titik": [
+              -2.31,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t53.jpg"
+        },
+        {
+          "t": 5.4,
+          "calls": 8,
+          "blend": true,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.88,
+            "benda": "modul",
+            "titik": [
+              -2.3,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t54.jpg"
+        },
+        {
+          "t": 5.5,
+          "calls": 8,
+          "blend": false,
+          "tahap": "lab",
+          "silang": 0,
+          "periksa": {
+            "jarak": 1.87,
+            "benda": "modul",
+            "titik": [
+              -2.3,
+              0.1,
+              -1.23
+            ]
+          },
+          "berkas": "t55.jpg"
+        }
+      ]
+    }
+  ],
+  "galat": [],
+  "sela": [
+    {
+      "dari": "gerbang",
+      "ke": "dorongan",
+      "balik": "gerbang",
+      "bingkai": 16,
+      "loncatMaks": 1.739,
+      "loncatDiSela": 0.645,
+      "loncat": [
+        0.032,
+        0.222,
+        0.601,
+        1.169,
+        1.739,
+        1.232,
+        0.645,
+        0.645,
+        1.232,
+        1.739,
+        1.169,
+        0.601,
+        0.222,
+        0.032,
+        0
+      ],
+      "rinci": [
+        {
+          "lalu": 0,
+          "ke": 1,
+          "e0": 0,
+          "t0": 30000000,
+          "dur": 900
+        },
+        {
+          "lalu": 1,
+          "ke": 0,
+          "e0": 0.2222,
+          "t0": 30000700,
+          "dur": 700.0000000000001
+        },
+        {
+          "lalu": 1,
+          "ke": 0,
+          "e0": 0.2222,
+          "t0": 30000700,
+          "dur": 700.0000000000001
+        }
+      ],
+      "akhir": [
+        -19.36458875703732,
+        2.414006738847848,
+        3.446883135555985
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "dorongan",
+      "ke": "harga-diam",
+      "balik": "dorongan",
+      "bingkai": 15,
+      "loncatMaks": 0.808,
+      "loncatDiSela": 0.589,
+      "loncat": [
+        0.458,
+        0.808,
+        0.4,
+        0.357,
+        0.518,
+        0.565,
+        0.589,
+        0.589,
+        0.565,
+        0.518,
+        0.357,
+        0.4,
+        0.808,
+        0.458
+      ],
+      "rinci": [
+        {
+          "lalu": 1,
+          "ke": 2,
+          "e0": 0,
+          "t0": 30100000,
+          "dur": 1400
+        },
+        {
+          "lalu": 2,
+          "ke": 1,
+          "e0": 0.5,
+          "t0": 30100700,
+          "dur": 700
+        },
+        {
+          "lalu": 2,
+          "ke": 1,
+          "e0": 0.5,
+          "t0": 30100700,
+          "dur": 700
+        }
+      ],
+      "akhir": [
+        -16.636546258365783,
+        1.4434194761780779,
+        -1.6252569909210275
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "harga-diam",
+      "ke": "tarikan",
+      "balik": "harga-diam",
+      "bingkai": 14,
+      "loncatMaks": 2.354,
+      "loncatDiSela": 1.126,
+      "loncat": [
+        0,
+        0,
+        0.442,
+        2.047,
+        2.354,
+        1.126,
+        0,
+        1.126,
+        2.354,
+        2.047,
+        0.442,
+        0,
+        0
+      ],
+      "rinci": [
+        null,
+        {
+          "lalu": 3,
+          "ke": 2,
+          "e0": 0,
+          "t0": 30200600,
+          "dur": 600
+        },
+        {
+          "lalu": 3,
+          "ke": 2,
+          "e0": 0,
+          "t0": 30200600,
+          "dur": 600
+        }
+      ],
+      "akhir": [
+        -14.638934895633339,
+        1.0864777274535111,
+        0.946614789278059
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "tarikan",
+      "ke": "biaya",
+      "balik": "tarikan",
+      "bingkai": 16,
+      "loncatMaks": 5.74,
+      "loncatDiSela": 0.295,
+      "loncat": [
+        0.023,
+        0.057,
+        0.085,
+        0.112,
+        0.137,
+        5.74,
+        0.295,
+        0.295,
+        5.74,
+        0.137,
+        0.112,
+        0.085,
+        0.057,
+        0.023,
+        0
+      ],
+      "rinci": [
+        {
+          "lalu": 3,
+          "ke": 4,
+          "e0": 0,
+          "t0": 30300000,
+          "dur": 1200
+        },
+        {
+          "lalu": 4,
+          "ke": 3,
+          "e0": 0.4167,
+          "t0": 30300700,
+          "dur": 700.0000000000001
+        },
+        {
+          "lalu": 4,
+          "ke": 3,
+          "e0": 0.4167,
+          "t0": 30300700,
+          "dur": 700.0000000000001
+        }
+      ],
+      "akhir": [
+        -9.89608223709473,
+        0.9864777274535109,
+        -2.675085663640343
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "biaya",
+      "ke": "kelangsungan",
+      "balik": "biaya",
+      "bingkai": 16,
+      "loncatMaks": 0.524,
+      "loncatDiSela": 0.524,
+      "loncat": [
+        0.11,
+        0.115,
+        0.115,
+        0.114,
+        0.115,
+        0.115,
+        0.524,
+        0.524,
+        0.115,
+        0.115,
+        0.114,
+        0.115,
+        0.115,
+        0.11,
+        0
+      ],
+      "rinci": [
+        {
+          "lalu": 4,
+          "ke": 5,
+          "e0": 0,
+          "t0": 30400000,
+          "dur": 1100
+        },
+        {
+          "lalu": 5,
+          "ke": 4,
+          "e0": 0.3636,
+          "t0": 30400700,
+          "dur": 700.0000000000001
+        },
+        {
+          "lalu": 5,
+          "ke": 4,
+          "e0": 0.3636,
+          "t0": 30400700,
+          "dur": 700.0000000000001
+        }
+      ],
+      "akhir": [
+        -6.8,
+        1.6323543718114177,
+        1.3650513981842054
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "kelangsungan",
+      "ke": "data",
+      "balik": "kelangsungan",
+      "bingkai": 16,
+      "loncatMaks": 1.775,
+      "loncatDiSela": 1.123,
+      "loncat": [
+        0.399,
+        1.056,
+        1.508,
+        1.75,
+        1.775,
+        1.57,
+        1.123,
+        1.123,
+        1.57,
+        1.775,
+        1.75,
+        1.508,
+        1.056,
+        0.399,
+        0
+      ],
+      "rinci": [
+        {
+          "lalu": 5,
+          "ke": 6,
+          "e0": 0,
+          "t0": 30500000,
+          "dur": 800
+        },
+        {
+          "lalu": 6,
+          "ke": 5,
+          "e0": 0.125,
+          "t0": 30500700,
+          "dur": 700.0000000000001
+        },
+        {
+          "lalu": 6,
+          "ke": 5,
+          "e0": 0.125,
+          "t0": 30500700,
+          "dur": 700.0000000000001
+        }
+      ],
+      "akhir": [
+        -2.2976798936447196,
+        1.3774057699956233,
+        -1.8877141591008564
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "data",
+      "ke": "kebiasaan",
+      "balik": "data",
+      "bingkai": 16,
+      "loncatMaks": 2.987,
+      "loncatDiSela": 0.556,
+      "loncat": [
+        0.794,
+        2.04,
+        2.771,
+        2.987,
+        2.689,
+        1.876,
+        0.556,
+        0.556,
+        1.876,
+        2.689,
+        2.987,
+        2.771,
+        2.04,
+        0.794,
+        0
+      ],
+      "rinci": [
+        {
+          "lalu": 6,
+          "ke": 7,
+          "e0": 0,
+          "t0": 30600000,
+          "dur": 1800
+        },
+        {
+          "lalu": 7,
+          "ke": 6,
+          "e0": 0.6111,
+          "t0": 30600700,
+          "dur": 700.0000000000001
+        },
+        {
+          "lalu": 7,
+          "ke": 6,
+          "e0": 0.6111,
+          "t0": 30600700,
+          "dur": 700.0000000000001
+        }
+      ],
+      "akhir": [
+        5.489767645176041,
+        2.349870913986689,
+        3.6393803871361077
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "kebiasaan",
+      "ke": "ramai",
+      "balik": "kebiasaan",
+      "bingkai": 15,
+      "loncatMaks": 0.786,
+      "loncatDiSela": 0.786,
+      "loncat": [
+        0.067,
+        0.194,
+        0.311,
+        0.419,
+        0.517,
+        0.642,
+        0.786,
+        0.786,
+        0.642,
+        0.517,
+        0.419,
+        0.311,
+        0.194,
+        0.067
+      ],
+      "rinci": [
+        {
+          "lalu": 7,
+          "ke": 8,
+          "e0": 0,
+          "t0": 30700000,
+          "dur": 2800
+        },
+        {
+          "lalu": 8,
+          "ke": 7,
+          "e0": 0.75,
+          "t0": 30700700,
+          "dur": 700
+        },
+        {
+          "lalu": 8,
+          "ke": 7,
+          "e0": 0.75,
+          "t0": 30700700,
+          "dur": 700
+        }
+      ],
+      "akhir": [
+        8.62257099730732,
+        1.9973773682873546,
+        -1.142132104862064
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "ramai",
+      "ke": "langkah-kecil",
+      "balik": "ramai",
+      "bingkai": 16,
+      "loncatMaks": 262.051,
+      "loncatDiSela": 148.274,
+      "loncat": [
+        46.89,
+        128.29,
+        194.121,
+        241.989,
+        262.051,
+        237.101,
+        148.274,
+        148.274,
+        237.101,
+        262.051,
+        241.989,
+        194.121,
+        128.29,
+        46.89,
+        0
+      ],
+      "rinci": [
+        {
+          "lalu": 8,
+          "ke": 9,
+          "e0": 0,
+          "t0": 30800000,
+          "dur": 900
+        },
+        {
+          "lalu": 9,
+          "ke": 8,
+          "e0": 0.2222,
+          "t0": 30800700,
+          "dur": 700.0000000000001
+        },
+        {
+          "lalu": 9,
+          "ke": 8,
+          "e0": 0.2222,
+          "t0": 30800700,
+          "dur": 700.0000000000001
+        }
+      ],
+      "akhir": [
+        348.4366089061462,
+        373.3417487245669,
+        493.41947617807784
+      ],
+      "tahap": "gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung gedung",
+      "blendSelesai": true
+    },
+    {
+      "dari": "langkah-kecil",
+      "ke": "penutup",
+      "balik": "langkah-kecil",
+      "bingkai": 8,
+      "loncatMaks": 73.966,
+      "loncatDiSela": null,
+      "loncat": [
+        73.966,
+        60.679,
+        0,
+        0,
+        0,
+        60.679,
+        73.966
+      ],
+      "rinci": [
+        null,
+        {
+          "lalu": 10,
+          "ke": 9,
+          "e0": 0,
+          "t0": 30900300,
+          "dur": 300
+        },
+        {
+          "lalu": 10,
+          "ke": 9,
+          "e0": 0,
+          "t0": 30900300,
+          "dur": 300
+        }
+      ],
+      "akhir": [
+        25.249143363596573,
+        388.4366089061465,
+        209.71659118026642
+      ],
+      "tahap": "peta peta peta globe globe peta peta peta",
+      "blendSelesai": true
+    },
+    {
+      "dari": "penutup",
+      "ke": "modul-lab",
+      "balik": "penutup",
+      "bingkai": 15,
+      "loncatMaks": 17.399,
+      "loncatDiSela": 17.399,
+      "loncat": [
+        1.532,
+        4.46,
+        7.192,
+        9.777,
+        12.3,
+        14.835,
+        17.399,
+        17.399,
+        14.835,
+        12.3,
+        9.777,
+        7.192,
+        4.46,
+        1.532
+      ],
+      "rinci": [
+        {
+          "lalu": 10,
+          "ke": 11,
+          "e0": 0,
+          "t0": 31000000,
+          "dur": 5500
+        },
+        {
+          "lalu": 11,
+          "ke": 10,
+          "e0": 0.8727,
+          "t0": 31000700,
+          "dur": 700
+        },
+        {
+          "lalu": 11,
+          "ke": 10,
+          "e0": 0.8727,
+          "t0": 31000700,
+          "dur": 700
+        }
+      ],
+      "akhir": [
+        -139.64343866899657,
+        40.69730829750944,
+        -469.1230043576042
+      ],
+      "tahap": "globe globe globe globe globe globe globe globe globe globe globe globe globe globe globe",
+      "blendSelesai": true
+    }
+  ],
+  "lab": {
+    "rel": [
+      {
+        "k": 0,
+        "calls": 8,
+        "posisi": [
+          -2.9,
+          0.3,
+          0.55
+        ],
+        "periksa": {
+          "jarak": 1.87,
+          "benda": "modul",
+          "titik": [
+            -2.35,
+            0.1,
+            -1.23
+          ]
+        },
+        "nyala": 0,
+        "daftar": 0,
+        "berkas": "rel-00.jpg"
+      },
+      {
+        "k": 0.1,
+        "calls": 8,
+        "posisi": [
+          -1.68,
+          0.3,
+          0.55
+        ],
+        "periksa": {
+          "jarak": 1.87,
+          "benda": "modul",
+          "titik": [
+            -1.13,
+            0.1,
+            -1.23
+          ]
+        },
+        "nyala": 3,
+        "daftar": 3,
+        "berkas": "rel-01.jpg"
+      },
+      {
+        "k": 0.2,
+        "calls": 11,
+        "posisi": [
+          -0.37,
+          0.3,
+          0.55
+        ],
+        "periksa": {
+          "jarak": 1.51,
+          "benda": "modul",
+          "titik": [
+            0.08,
+            0.14,
+            -0.88
+          ]
+        },
+        "nyala": 5,
+        "daftar": 5,
+        "berkas": "rel-02.jpg"
+      },
+      {
+        "k": 0.3,
+        "calls": 11,
+        "posisi": [
+          0.71,
+          0.3,
+          0.55
+        ],
+        "periksa": {
+          "jarak": 1.88,
+          "benda": "modul",
+          "titik": [
+            1.27,
+            0.1,
+            -1.23
+          ]
+        },
+        "nyala": 7,
+        "daftar": 7,
+        "berkas": "rel-03.jpg"
+      },
+      {
+        "k": 0.4,
+        "calls": 14,
+        "posisi": [
+          1.33,
+          0.26,
+          0.48
+        ],
+        "periksa": {
+          "jarak": 1.4,
+          "benda": "pintu",
+          "titik": [
+            2.07,
+            0.14,
+            -0.7
+          ]
+        },
+        "nyala": 7,
+        "daftar": 7,
+        "berkas": "rel-04.jpg"
+      },
+      {
+        "k": 0.5,
+        "calls": 14,
+        "posisi": [
+          3.31,
+          0.11,
+          0.16
+        ],
+        "periksa": {
+          "jarak": 3.27,
+          "benda": "modul",
+          "titik": [
+            6.26,
+            0.04,
+            -1.23
+          ]
+        },
+        "nyala": 7,
+        "daftar": 7,
+        "berkas": "rel-05.jpg"
+      },
+      {
+        "k": 0.6,
+        "calls": 11,
+        "posisi": [
+          5.96,
+          0.04,
+          0
+        ],
+        "periksa": {
+          "jarak": 2.93,
+          "benda": "modul",
+          "titik": [
+            8.68,
+            0.04,
+            -1.11
+          ]
+        },
+        "nyala": 8,
+        "daftar": 8,
+        "berkas": "rel-06.jpg"
+      },
+      {
+        "k": 0.7,
+        "calls": 11,
+        "posisi": [
+          7.81,
+          0.12,
+          0.18
+        ],
+        "periksa": {
+          "jarak": 2.31,
+          "benda": "modul",
+          "titik": [
+            9.88,
+            0.06,
+            -0.82
+          ]
+        },
+        "nyala": 8,
+        "daftar": 8,
+        "berkas": "rel-07.jpg"
+      },
+      {
+        "k": 0.8,
+        "calls": 11,
+        "posisi": [
+          8.1,
+          0.3,
+          0.55
+        ],
+        "periksa": {
+          "jarak": 1.87,
+          "benda": "modul",
+          "titik": [
+            8.66,
+            0.1,
+            -1.23
+          ]
+        },
+        "nyala": 8,
+        "daftar": 8,
+        "berkas": "rel-08.jpg"
+      },
+      {
+        "k": 0.9,
+        "calls": 11,
+        "posisi": [
+          9.27,
+          0.3,
+          0.55
+        ],
+        "periksa": {
+          "jarak": 1.41,
+          "benda": "modul",
+          "titik": [
+            9.69,
+            0.15,
+            -0.79
+          ]
+        },
+        "nyala": 10,
+        "daftar": 10,
+        "berkas": "rel-09.jpg"
+      },
+      {
+        "k": 1,
+        "calls": 11,
+        "posisi": [
+          10.5,
+          0.3,
+          0.55
+        ],
+        "periksa": {
+          "jarak": 1.87,
+          "benda": "modul",
+          "titik": [
+            11.05,
+            0.1,
+            -1.23
+          ]
+        },
+        "nyala": 13,
+        "daftar": 13,
+        "berkas": "rel-10.jpg"
+      }
+    ],
+    "buka": [
+      {
+        "t": 0,
+        "calls": 11,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-00.jpg"
+      },
+      {
+        "t": 0.1,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.091
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-01.jpg"
+      },
+      {
+        "t": 0.2,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.182
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-02.jpg"
+      },
+      {
+        "t": 0.3,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.273
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-03.jpg"
+      },
+      {
+        "t": 0.4,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.364
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-04.jpg"
+      },
+      {
+        "t": 0.5,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.455
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-05.jpg"
+      },
+      {
+        "t": 0.6,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.545
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-06.jpg"
+      },
+      {
+        "t": 0.7,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.636
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-07.jpg"
+      },
+      {
+        "t": 0.8,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.727
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-08.jpg"
+      },
+      {
+        "t": 0.9,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.818
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-09.jpg"
+      },
+      {
+        "t": 1,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 0.909
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-10.jpg"
+      },
+      {
+        "t": 1.1,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-11.jpg"
+      },
+      {
+        "t": 1.2,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-12.jpg"
+      },
+      {
+        "t": 1.3,
+        "calls": 8,
+        "lab": {
+          "nyala": 2,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "buka-13.jpg"
+      }
+    ],
+    "tutup": [
+      {
+        "t": 0,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 1
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-00.jpg"
+      },
+      {
+        "t": 0.1,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.909
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-01.jpg"
+      },
+      {
+        "t": 0.2,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.818
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-02.jpg"
+      },
+      {
+        "t": 0.3,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.727
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-03.jpg"
+      },
+      {
+        "t": 0.4,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.636
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-04.jpg"
+      },
+      {
+        "t": 0.5,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.545
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-05.jpg"
+      },
+      {
+        "t": 0.6,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.455
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-06.jpg"
+      },
+      {
+        "t": 0.7,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.364
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-07.jpg"
+      },
+      {
+        "t": 0.8,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.273
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-08.jpg"
+      },
+      {
+        "t": 0.9,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.182
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-09.jpg"
+      },
+      {
+        "t": 1,
+        "calls": 8,
+        "lab": {
+          "nyala": 4,
+          "buka": {
+            "i": 2,
+            "u": 0.091
+          },
+          "jamLab": 23.76,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-10.jpg"
+      },
+      {
+        "t": 1.1,
+        "calls": 11,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 23.86,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-11.jpg"
+      },
+      {
+        "t": 1.2,
+        "calls": 11,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 23.96,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-12.jpg"
+      },
+      {
+        "t": 1.3,
+        "calls": 11,
+        "lab": {
+          "nyala": 4,
+          "buka": null,
+          "jamLab": 24.06,
+          "jamBeku": 40915.95879999999
+        },
+        "berkas": "tutup-13.jpg"
+      }
+    ],
+    "keyboard": [
+      {
+        "langkah": "Tab ke item pertama",
+        "i": 3,
+        "kelas": "modul-lab__item",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 3,
+        "buka": null,
+        "y": 14100,
+        "live": ""
+      },
+      {
+        "langkah": "Tab empat kali (item ke-5)",
+        "i": 7,
+        "kelas": "modul-lab__item",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 7,
+        "buka": null,
+        "y": 14542,
+        "live": ""
+      },
+      {
+        "langkah": "Enter",
+        "i": -1,
+        "kelas": "tema modul-lab__tutup",
+        "dialog": true,
+        "dalamDialog": true,
+        "nyala": 7,
+        "buka": {
+          "i": 7,
+          "u": 1
+        },
+        "y": 14542,
+        "live": "L-08 dibuka: Jeda"
+      },
+      {
+        "langkah": "Escape",
+        "i": 7,
+        "kelas": "modul-lab__item",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 7,
+        "buka": null,
+        "y": 14542,
+        "live": ""
+      },
+      {
+        "langkah": "Enter lalu Back browser",
+        "i": 7,
+        "kelas": "modul-lab__item",
+        "dialog": false,
+        "dalamDialog": false,
+        "nyala": 7,
+        "buka": null,
+        "y": 14542,
+        "live": ""
+      },
+      {
+        "langkah": "tombol jeda gerak",
+        "jalanSebelum": 0.61,
+        "tekan": "true",
+        "jam": 31.03,
+        "jamSesudah": 31.03
+      }
+    ],
+    "lewat": true,
+    "pertama": {
+      "gedung": 378.1,
+      "peta": 48.9,
+      "globe": 51.2,
+      "lab": 18.4
+    },
+    "panas": {
+      "bangun": 85.9,
+      "potong": [
+        35.6,
+        38.9,
+        11.4
+      ],
+      "unggah": 0.6,
+      "kompilasi": 91.4
+    }
+  },
+  "maksCalls": 34
+}

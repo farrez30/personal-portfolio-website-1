@@ -8,13 +8,18 @@
 // bingkai. F5: peta Nusantara dan globe malam jadi adegan sendiri (peta3d.js) dengan satuan lokal,
 // near/far, dan latarnya sendiri; serah terima antartahap menyilangkan dua adegan lewat satu
 // render target. Gambar hanya saat ada yang berubah; di babak ramai lalu lintas bergerak terus,
-// di babak penutup satelit mengorbit.
+// di babak penutup satelit mengorbit. F6: modul lab satelit jadi tahap keempat (lab3d.js); zoom
+// dari globe ke jendela modul dengan jam globe dibekukan, gulir menggerakkan kamera di rel lorong,
+// daftar proyek HTML menyalakan loker dan membukanya (setNyala, buka, tutup).
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { susunLantai, susun, notaTerbang, LANTAI } from "./lantai.js";
 import { gambarAtlas, uvWilayah } from "./layar.js";
-import { ANCHOR_V5, poseAnchor, durasiAntara, poseDalam, poseAntara, lintasTahap, GESER } from "./naskah.js";
+import { ANCHOR_V5, poseAnchor, durasiAntara, poseDalam, poseAntara, lintasTahap, poseBlend, GESER } from "./naskah.js";
+import { buatLab, bangunLabBertahap } from "./lab3d.js";
+import { buatRel, poseRel, poseLoker, tahapBuka, BUKA, TARIK } from "./lab.js";
+import { rangkaStasiun } from "./peta.js";
 import { buatKota } from "./kota3d.js";
 import { buatPeta, buatGlobe } from "./peta3d.js";
 
@@ -64,7 +69,8 @@ function siapkan(o) {
   return g;
 }
 
-export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = false } = {}) {
+// `daftar` dan `kontak`: isi loker modul lab, urut seperti daftar HTML (ModulLab.jsx).
+export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = false, daftar = [], kontak = "" } = {}) {
   const hp = matchMedia("(pointer: coarse)").matches || innerWidth < 768;
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -243,12 +249,13 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   // diunggah dan programnya dikompilasi), atau langsung bila halaman dibuka di babaknya.
   const iLangkah = ANCHOR_V5.findIndex((a) => a.id === "langkah-kecil");
   const iPenutup = ANCHOR_V5.findIndex((a) => a.id === "penutup");
-  const tahap = { gedung: { scene }, peta: null, globe: null };
+  const iLab = ANCHOR_V5.findIndex((a) => a.id === "modul-lab");
+  const tahap = { gedung: { scene }, peta: null, globe: null, lab: null };
   const panas = {};
   const bangunTahap = (nama) => {
     if (tahap[nama]) return tahap[nama];
     const t0 = performance.now();
-    const t = (nama === "peta" ? buatPeta : buatGlobe)({ ramp, hp, siap: () => (kotor = true) });
+    const t = nama === "lab" ? buatLab({ ramp, daftar, kontak }) : (nama === "peta" ? buatPeta : buatGlobe)({ ramp, hp, siap: () => (kotor = true) });
     panas[nama] = { bangun: +(performance.now() - t0).toFixed(1) };
     tahap[nama] = t;
     kotor = true;
@@ -257,11 +264,32 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   // Unggah tekstur dan kompilasi program sebelum adegannya tampil: bingkai pertamanya tidak
   // menunggu unggahan 4096 px (look-dev: previs 302 dan 403 ms).
   const panaskan = async (nama) => {
+    // modul lab disicil per bagian di callback senggang terpisah (HP: satu hentakan 356 ms bila
+    // dibangun sekaligus), kecuali sudah dibangun karena dibutuhkan seketika
+    if (nama === "lab" && !tahap.lab) {
+      const t0 = performance.now();
+      const potong = [];
+      let mulai = t0;
+      const senggang = window.requestIdleCallback ?? ((f) => setTimeout(f, 50));
+      const lab = await bangunLabBertahap({ ramp, daftar, kontak }, () => {
+        potong.push(performance.now() - mulai);
+        return new Promise((r) => senggang(() => ((mulai = performance.now()), r())));
+      });
+      potong.push(performance.now() - mulai);
+      if (dibuang) return;
+      if (!tahap.lab) {
+        tahap.lab = lab;
+        panas.lab = { bangun: +potong.reduce((a, b) => a + b, 0).toFixed(1), potong: potong.map((x) => +x.toFixed(1)) };
+      }
+      kotor = true;
+    }
     const t = bangunTahap(nama);
     const tex = await t.janji;
     if (dibuang) return;
     const t0 = performance.now();
-    renderer.initTexture(tex);
+    if (tex) renderer.initTexture(tex);
+    // tahap tanpa tekstur unduhan (lab): atlas dan tekstur kanvasnya diunggah di sini
+    else t.scene.traverse((o) => o.material?.map && renderer.initTexture(o.material.map));
     panas[nama].unggah = +(performance.now() - t0).toFixed(1);
     const t1 = performance.now();
     await kompilasiAdegan(t.scene);
@@ -385,6 +413,28 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   let terlihat = true;
   let waktuUji = null;
   const sekarang = () => waktuUji ?? performance.now();
+  // Jam globe (detik): dibekukan selama zoom ke modul lab dan selama di modul, supaya jalur zoom
+  // dan gulir baliknya memakai rangka stasiun yang sama. Saat kembali ke babak penutup jam lanjut
+  // dari titik beku (selisihnya disimpan), satelit tidak meloncat.
+  let jamBeku = null;
+  let selisihJam = 0;
+  let rangkaBeku = rangkaStasiun(0);
+  const jamGlobe = (t) => (kurangiGerak ? 0 : jamBeku ?? t / 1000 - selisihJam);
+  // Modul lab: jam gerak latar, loker yang menyala, loker yang dibuka, jeda gerak.
+  let jamLab = 0;
+  let jedaLab = false;
+  let nyalaLab = 0;
+  let buka = null; // { i, arah, u0, t0 }
+  const uBuka = (t) => (buka ? Math.min(1, Math.max(0, buka.u0 + (buka.arah * (t - buka.t0)) / (BUKA.total * 1000))) : 0);
+  const relLab = () => buatRel(tahap.lab?.susunan.rak.length ?? 7, tegak);
+  // Pose sasaran babak kini: dorongan pelan, atau di modul lab posisi rel ditambah dekat loker.
+  const sasaranDari = (tj, t) => {
+    if (!tj.rel) return poseDalam(tj, geser);
+    const p = poseRel(relLab(), geser, { henti: !hp, potong: kurangiGerak });
+    if (!buka || !tahap.lab) return p;
+    const u = tahapBuka(uBuka(t) * BUKA.total).kamera;
+    return u > 0 ? { ...poseBlend(p, poseLoker(tahap.lab.susunan.loker[buka.i], tegak), u), tahap: "lab" } : p;
+  };
   const lihat = new THREE.Vector3();
 
   const pasang = (p) => {
@@ -400,6 +450,10 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       camera.far = j * 6;
       const f = tahap.peta?.scene.fog;
       if (f) [f.near, f.far] = [j * 1.45, j * 2.6];
+    } else if (p.tahap === "lab") {
+      // di dalam modul: rak paling jauh sekitar 20 m, kamera bisa 0,3 m dari pintu loker
+      camera.near = Math.min(0.05, Math.max(0.01, j * 0.015));
+      camera.far = 60;
     } else if (p.tahap === "globe") {
       // bintang di jari-jari 2600 tetap di dalam far
       camera.near = j * 0.02;
@@ -438,7 +492,8 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     }
     blend = dur > 0 ? { ...awal, ke: i, t0: sekarang(), dur: dur * 1000, makro: awal.lalu >= 0 && lintasTahap(awal.lalu, i) } : null;
     tujuan = ke;
-    if (!blend) pose = poseDalam(ke, geser);
+    if (ke.rel) bangunTahap("lab");
+    if (!blend) pose = sasaranDari(ke, sekarang());
     kotor = true;
   };
 
@@ -463,7 +518,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       const ke = poseAnchor(indeks, tegak);
       if (ke) {
         tujuan = ke;
-        pose = poseDalam(ke, geser);
+        pose = sasaranDari(ke, sekarang());
         blend = null;
       }
     }
@@ -488,10 +543,26 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       geser = Math.abs(g - geserTujuan) < 1e-4 ? geserTujuan : g;
       kotor = true;
     }
-    const sasaran = poseDalam(tujuan, geser);
+    // Jam globe beku sejak zoom ke modul lab mulai sampai kamera kembali diam di babak penutup.
+    const perluBeku = indeks >= iLab || (blend && Math.max(blend.lalu, blend.ke) >= iLab);
+    if (perluBeku && jamBeku == null) {
+      jamBeku = t / 1000 - selisihJam;
+      rangkaBeku = rangkaStasiun(jamGlobe(t));
+    } else if (!perluBeku && jamBeku != null) {
+      selisihJam = t / 1000 - jamBeku;
+      jamBeku = null;
+    }
+    // Loker selesai ditutup: kembali ke rel biasa.
+    if (buka && buka.arah < 0 && uBuka(t) <= 0) {
+      tahap.lab?.tarik(-1, 0);
+      buka = null;
+      kotor = true;
+    }
+    const sasaran = sasaranDari(tujuan, t);
+    if (buka) kotor = true;
     if (blend) {
       const u = Math.min(1, (t - blend.t0) / blend.dur);
-      pose = poseAntara(blend.lalu, blend.ke, blend.dari, sasaran, blend.e0 + (1 - blend.e0) * u, { aspek: camera.aspect, tegak });
+      pose = poseAntara(blend.lalu, blend.ke, blend.dari, sasaran, blend.e0 + (1 - blend.e0) * u, { aspek: camera.aspect, tegak, stasiun: rangkaBeku });
       if (u >= 1) blend = null;
       kotor = true;
     } else if (kotor) pose = sasaran;
@@ -499,15 +570,25 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     // sejalan gulir di babak itu.
     const ramai = indeks === iRamai || (blend && blend.lalu === iRamai);
     const tampak = [pose.tahap, pose.silang?.tahap];
-    if ((ramai || tampak.includes("globe")) && !kurangiGerak) kotor = true;
+    // Gerak latar modul lab berjalan sejak tampil, berhenti saat dijeda atau panel proyek terbuka
+    // (WCAG 2.2.2, storyboard §4); lampu loker memudar ke loker yang dipilih dari daftar.
+    const lab = tampak.includes("lab") ? tahap.lab : null;
+    const labJalan = lab && !kurangiGerak && !jedaLab && !buka;
+    if (labJalan) jamLab += dt;
+    if (lab && lab.nyala(nyalaLab, dt, kurangiGerak)) kotor = true;
+    if (((ramai || tampak.includes("globe")) && !kurangiGerak && jamBeku == null) || labJalan) kotor = true;
     if (!kotor) return false;
     letakNota(blend ? pose.nota : null);
     pasang(pose);
     if (tampak.includes("gedung")) aturKota(t, ramai);
-    for (const n of ["peta", "globe"]) if (tampak.includes(n)) bangunTahap(n);
+    for (const n of ["peta", "globe", "lab"]) if (tampak.includes(n)) bangunTahap(n);
     // Rute satu cabang tumbuh sejalan gulir babak langkah-kecil; sesudahnya utuh.
     tahap.peta?.atur(kurangiGerak || indeks > iLangkah ? 1 : indeks === iLangkah && !blend ? (geser - 0.1) / 0.5 : 0);
-    tahap.globe?.atur(kurangiGerak ? 0 : t / 1000);
+    tahap.globe?.atur(jamGlobe(t));
+    if (tahap.lab && tampak.includes("lab")) {
+      tahap.lab.atur(jamLab);
+      tahap.lab.tarik(buka ? buka.i : -1, buka ? tahapBuka(uBuka(t) * BUKA.total).tarik : 0);
+    }
     gambar(pose);
     kotor = false;
     return true;
@@ -578,6 +659,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       // Dibuka langsung di babak peta atau globe: tahapnya dipanaskan sebelum bingkai pertama.
       if (indeks === iLangkah) await panaskan("peta");
       if (indeks === iPenutup) await panaskan("globe");
+      if (indeks === iLab) await panaskan("lab");
       await kompilasi();
       renderer.shadowMap.needsUpdate = true;
       kotor = true;
@@ -599,6 +681,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
         },
         () => panaskan("peta"),
         () => panaskan("globe"),
+        () => panaskan("lab"),
       ]);
     },
     keAnchor,
@@ -615,11 +698,49 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       if (v && !terlihat) kotor = true;
       terlihat = v;
     },
+    // ---- Modul lab (ModulLab.jsx lewat DuniaV5) ----
+    setNyala(i) {
+      if (i !== nyalaLab) kotor = true;
+      nyalaLab = i;
+    },
+    setJeda(v) {
+      jedaLab = v;
+      kotor = true;
+    },
+    // Buka loker ke-i: kamera mendekat, loker meluncur (gerak dikurangi: langsung terbuka).
+    buka(i) {
+      const t = sekarang();
+      if (buka && buka.i === i && buka.arah > 0) return;
+      buka = { i, arah: 1, u0: kurangiGerak ? 1 : buka?.i === i ? uBuka(t) : 0, t0: t };
+      nyalaLab = i;
+      kotor = true;
+    },
+    tutup() {
+      if (!buka) return;
+      const t = sekarang();
+      buka = { ...buka, arah: -1, u0: kurangiGerak ? 0 : uBuka(t), t0: t };
+      kotor = true;
+    },
+    // Titik tengah pintu loker ke-i yang sudah meluncur, di piksel layar, dari pose dekat loker:
+    // asal kartu HTML yang tumbuh jadi panel. null bila modul belum ada.
+    layarLoker(i) {
+      const l = tahap.lab?.susunan.loker[i];
+      if (!l) return null;
+      const p = poseLoker(l, tegak);
+      const c = camera.clone();
+      c.position.set(...p.posisi);
+      c.lookAt(...p.lihat);
+      c.fov = p.fov;
+      c.updateProjectionMatrix();
+      c.updateMatrixWorld();
+      const v = new THREE.Vector3(l.pusat[0], l.pusat[1], l.pusat[2] + TARIK).project(c);
+      return { x: ((v.x + 1) / 2) * wadah.clientWidth, y: ((1 - v.y) / 2) * wadah.clientHeight };
+    },
     dispose() {
       dibuang = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
-      for (const n of ["peta", "globe"])
+      for (const n of ["peta", "globe", "lab"])
         tahap[n]?.scene.traverse((o) => {
           o.geometry?.dispose();
           [].concat(o.material ?? []).forEach((m) => {
@@ -655,7 +776,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       scene,
       camera,
       renderer,
-      info: () => ({ ...info, programs: renderer.info.programs?.length ?? 0, tegak, indeks }),
+      info: () => ({ ...info, programs: renderer.info.programs?.length ?? 0, tegak, indeks, lab: { nyala: nyalaLab, buka: buka && { i: buka.i, u: +uBuka(sekarang()).toFixed(3) }, jamLab: +jamLab.toFixed(2), jamBeku } }),
       // Bekukan jam di t milidetik, jalankan satu langkah, gambar. null melepas jam.
       waktu(t) {
         waktuUji = t;

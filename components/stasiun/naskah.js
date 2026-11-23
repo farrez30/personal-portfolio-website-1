@@ -8,7 +8,9 @@ import { pemicuAnchor as pemicuDasar, easeInOut } from "../dunia/naskah.js";
 import { BABAK_V5 } from "../../content/cerita-v5.js";
 import { POSE, TABLET, PILAR_LEWAT, notaTerbang } from "./lantai.js";
 import { POSE_KOTA, ATAP_KLIEN } from "./kota.js";
-import { POSE_PETA, POSE_GLOBE, JAKARTA_PETA, TITIK_PETA, JAKARTA_BOLA, R_BUMI } from "./peta.js";
+import { POSE_PETA, POSE_GLOBE, JAKARTA_PETA, TITIK_PETA, JAKARTA_BOLA, R_BUMI, rangkaStasiun, titikJendela, JENDELA_STASIUN, SKALA_STASIUN } from "./peta.js";
+import { susunLab, buatRel, poseRel, poseMasuk } from "./lab.js";
+import { proyek as PROYEK } from "../../content/proyek.js";
 
 // Jenis perpindahan. `makro` = serah terima antarskala (gedung ke kota ke peta ke globe ke modul),
 // boleh lebih lama dari batas perpindahan di dalam gedung.
@@ -44,11 +46,15 @@ const KELUAR = {
 };
 
 // `pose` diisi untuk anchor di lantai kantor (F2, components/stasiun/lantai.js), babak ramai di
-// atas kota (F4, kota.js), peta Nusantara dan globe malam (F5, peta.js); modul lab menyusul di F6.
+// atas kota (F4, kota.js), peta Nusantara dan globe malam (F5, peta.js), dan modul lab (F6, lab.js).
 // Anchor tanpa pose: dunia memudar dan seksinya tampil sebagai halaman biasa. Pose bertanda
-// `tahap` ("peta", "globe") ada di satuan lokal tahapnya; tanpa tanda = gedung dan kota (meter,
+// `tahap` ("peta", "globe", "lab") ada di satuan lokal tahapnya; tanpa tanda = gedung dan kota (meter,
 // koordinat lantai kantor).
 const POSE_BABAK = { ...POSE, ramai: POSE_KOTA, "langkah-kecil": POSE_PETA, penutup: POSE_GLOBE };
+// Pose anchor modul lab = awal rel lorong (rak pertama). Titik awal rel sama untuk jumlah rak
+// berapa pun, jadi daftar proyek dari CMS yang berbeda jumlahnya tidak mengubah pose ini.
+const RAK_BAWAAN = susunLab(PROYEK).rak.length;
+const POSE_LAB = { ...poseRel(buatRel(RAK_BAWAAN, false), 0), tegak: poseRel(buatRel(RAK_BAWAAN, true), 0) };
 export const ANCHOR_V5 = [
   { id: "gerbang", seksi: [{ sel: ".gerbang", di: 0 }], tempat: "lantai kantor, meja 1 dari jauh", keluar: "blend", durasi: 0.9, pose: POSE.gerbang },
   ...BABAK_V5.map((b) => {
@@ -56,7 +62,7 @@ export const ANCHOR_V5 = [
     return { id: b.id, seksi: [{ sel: `.bab--${b.id}`, di: 0 }], keluar, durasi, pemicu, pose: POSE_BABAK[b.id] ?? null };
   }),
   // modul lab: gulir menggerakkan kamera di rel lorong, bukan perpindahan berwaktu
-  { id: "modul-lab", seksi: [{ sel: "#modul-lab", di: 0 }], tempat: "modul lab, lorong rak", keluar: "rel", durasi: 0, pose: null },
+  { id: "modul-lab", seksi: [{ sel: "#modul-lab", di: 0 }], tempat: "modul lab, lorong rak", keluar: "rel", durasi: 0, pose: POSE_LAB, rel: true },
 ];
 
 // Pose kamera anchor ke-i untuk layar lebar atau tegak (lebar/tinggi di bawah 0,8), atau null.
@@ -64,7 +70,7 @@ export function poseAnchor(i, tegak = false) {
   const p = ANCHOR_V5[i]?.pose;
   if (!p) return null;
   const t = tegak && p.tegak ? p.tegak : p;
-  return { posisi: [...t.posisi], lihat: [...t.lihat], fov: t.fov, tahap: p.tahap ?? "gedung" };
+  return { posisi: [...t.posisi], lihat: [...t.lihat], fov: t.fov, tahap: p.tahap ?? "gedung", ...(ANCHOR_V5[i].rel ? { rel: true } : {}) };
 }
 
 // Perpindahan antara anchor `dari` dan `ke` melewati serah terima antarskala (gedung ke kota dan
@@ -320,7 +326,55 @@ const JALUR = {
     const globe = poseAntaraArah(globeAtasJakarta(b), b, halus(klamp((e - 0.45) / 0.55)));
     return silang(peta, { ...globe, tahap: "globe", fov: b.fov }, s, a.fov, "peta");
   },
+  "zoom-satelit"(a, b, e, bingkai) {
+    return poseZoom(a, b, e, bingkai);
+  },
 };
+
+// Zoom ke modul lab (5,5 s, makro). Stasiun mengorbit, jadi jam globe dibekukan saat zoom mulai
+// (adegan.js) dan rangka stasiun beku itu masuk lewat `bingkai.stasiun`; gulir mundur memakai
+// rangka yang sama, jadi bingkainya persis sama dalam urutan terbalik. Kamera berputar mengitari
+// pusat bumi (jari-jari tidak pernah di bawah orbit stasiun, jadi tidak menembus bumi walau
+// stasiun di balik bumi), menoleh ke jendela modul A, lalu turun tegak lurus ke kaca sampai kaca
+// gelap memenuhi layar (0,6). Selama 0,62 sampai 0,7 (0,44 s) bingkai globe disilang ke dalam modul
+// yang kameranya mulai tepat di balik kaca, lalu kamera dalam menoleh ke awal rel lorong.
+export const AKHIR_GLOBE = 0.6;
+export const SILANG_LAB = [0.62, 0.7];
+export const MULAI_DALAM = 0.66;
+// Jarak kamera dari kaca supaya kaca (8% lebih kecil dari jari-jarinya) menutup seluruh bingkai
+// yang tampak, termasuk bagian yang digeser dari kolom teks.
+export function jarakKaca(fov, { aspek = 16 / 9, tegak = false } = {}) {
+  const tanH = Math.tan((fov * Math.PI) / 360);
+  const [gx, gy] = tegak ? [0, GESER.tegak] : [GESER.lebar, 0];
+  return (JENDELA_STASIUN.r * SKALA_STASIUN * 0.92) / (tanH * Math.hypot(aspek * (1 + 2 * gx), 1 + 2 * gy));
+}
+function slerp(a, b, u) {
+  const c = Math.min(1, Math.max(-1, a.reduce((s, v, i) => s + v * b[i], 0)));
+  const om = Math.acos(c);
+  if (om < 1e-6) return lerp(a, b, u);
+  // hampir berlawanan: lewat sumbu yang tegak lurus a (arah utara bila bisa)
+  if (Math.PI - om < 1e-3) {
+    const t = satuan([0, 1, 0].map((v, i) => v - a[1] * a[i]));
+    return u < 0.5 ? slerp(a, t, u * 2) : slerp(t, b, (u - 0.5) * 2);
+  }
+  const [p, q] = [Math.sin((1 - u) * om) / Math.sin(om), Math.sin(u * om) / Math.sin(om)];
+  return a.map((v, i) => v * p + b[i] * q);
+}
+export function poseZoom(a, b, e, bingkai = {}) {
+  const R = bingkai.stasiun ?? rangkaStasiun(0);
+  const W = titikJendela(R);
+  const K = W.map((v, i) => v + R.z[i] * jarakKaca(a.fov, bingkai));
+  const s = halus(klamp(e / AKHIR_GLOBE));
+  const [r0, r1] = [Math.hypot(...a.posisi), Math.hypot(...K)];
+  const arah = slerp(a.posisi.map((v) => v / r0), K.map((v) => v / r1), halus(klamp(s / 0.78)));
+  const r = r1 + (r0 - r1) * Math.pow(1 - s, 1.6);
+  const globe = { posisi: arah.map((v) => v * r), lihat: lerp(a.lihat, W, seg(e, 0, 0.3)), fov: a.fov };
+  if (e >= 1) return { ...b, tahap: "lab" };
+  const v = halus(klamp((e - MULAI_DALAM) / (1 - MULAI_DALAM)));
+  const L0 = poseMasuk(!!bingkai.tegak);
+  const dalam = { ...poseAntaraArah(L0, b, v), fov: L0.fov + (b.fov - L0.fov) * v, tahap: "lab" };
+  return silang(globe, dalam, seg(e, ...SILANG_LAB), a.fov, "globe");
+}
 
 // Kamera globe di atas Jakarta (sejauh 1,6 jari-jari bumi dari permukaan), sedikit ke utara supaya
 // menunduk seperti kamera peta; utara di atas gambar.
@@ -383,6 +437,13 @@ export function poseJalur(i, a, b, e, bingkai) {
 }
 
 export const pemicuAnchorV5 = (ukur) => pemicuDasar(ukur, ANCHOR_V5);
+
+// Pose sasaran selama satu babak dibaca: dorongan pelan, atau di modul lab posisi di rel lorong
+// (`rel` dari lab.js buatRel, opsi henti dan potong seperti bagianRel).
+export function poseBabak(tujuan, k, rel = null, opsi = {}) {
+  if (tujuan.rel && rel) return poseRel(rel, k, opsi);
+  return poseDalam(tujuan, k);
+}
 
 // Lama perpindahan keluar dari anchor ke-i. Gerak dikurangi: semua jadi potongan (0 detik).
 export function durasiPindah(i, kurangiGerak = false) {

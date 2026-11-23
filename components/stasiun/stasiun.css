@@ -49,3 +49,8 @@
     transition: none;
   }
 }
+
+/* Sesudah seksi modul lab lewat (Klien, Kontak): dunia memudar dan berhenti digambar. */
+.stasiun[data-lewat] {
+  opacity: 0 !important;
+}

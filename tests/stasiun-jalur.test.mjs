@@ -11,7 +11,10 @@ import { susunLantai, susun, batas, LANTAI, TABLET, notaTerbang, CELAH_JENDELA, 
 import { ANCHOR_V5, JENIS, poseAnchor, poseJalur, poseAntara, poseDalam, GESER, TINGGI_CRANE } from "../components/stasiun/naskah.js";
 import { kulitGedung, batasKota, JALAN_DEPAN, ATAP_KLIEN } from "../components/stasiun/kota.js";
 import { SILANG_PETA } from "../components/stasiun/naskah.js";
-import { BIDANG_PETA, JAKARTA_PETA, TITIK_PETA, JAKARTA_BOLA, R_BUMI } from "../components/stasiun/peta.js";
+import { BIDANG_PETA, JAKARTA_PETA, TITIK_PETA, JAKARTA_BOLA, R_BUMI, rangkaStasiun, titikJendela, lajuOrbit, ORBIT_STASIUN, JENDELA_STASIUN } from "../components/stasiun/peta.js";
+import { AKHIR_GLOBE, SILANG_LAB } from "../components/stasiun/naskah.js";
+import { susunLab, bendaLab } from "../components/stasiun/lab.js";
+import { proyek } from "../content/proyek.js";
 
 const BENDA = susunLantai();
 const PADAT = BENDA.filter((o) => o.bahan === "toon" || o.bahan === "layar");
@@ -45,9 +48,9 @@ const arah = (p) => p.lihat.map((v, k) => v - p.posisi[k]);
 // Pose utama dan lapisan silangnya (serah terima antartahap).
 const lapisan = (q) => (q.silang ? [q, q.silang] : [q]);
 
-test("sepuluh perpindahan: blend dari hero, enam jenis di lantai kantor, keluar jendela, serah terima ke peta dan globe", () => {
-  assert.deepEqual([...new Set(JALUR.map((j) => j.jenis))], ["blend", "ikut", "whip", "layar", "orbit", "pilar", "crane", "jendela", "serah-peta", "serah-globe"]);
-  assert.equal(JALUR.length, 20);
+test("sebelas perpindahan: blend dari hero, enam jenis di lantai kantor, keluar jendela, serah terima ke peta, globe, dan modul lab", () => {
+  assert.deepEqual([...new Set(JALUR.map((j) => j.jenis))], ["blend", "ikut", "whip", "layar", "orbit", "pilar", "crane", "jendela", "serah-peta", "serah-globe", "zoom-satelit"]);
+  assert.equal(JALUR.length, 22);
   for (const j of JALUR) assert.ok(JENIS[j.jenis], j.nama);
 });
 
@@ -82,7 +85,9 @@ test("tiap jalur di dalam gedung tetap di atas lantai dan di dalam denah, hanya 
 });
 
 test("kamera tidak pernah menengadah ke atas dinding (tanpa plafon, di atasnya latar kosong)", () => {
-  for (const j of JALUR) for (const e of SAMPEL) for (const q of lapisan(pada(j, e))) assert.ok(pitch(q) < 0.1, `${j.nama} di ${e}`);
+  // zoom-satelit mengejar stasiun di orbit miring, jadi kadang menengadah ke arah stasiun; di luar
+  // angkasa dan di dalam modul (berplafon) tidak ada latar kosong. Aturannya dites di bagian F6.
+  for (const j of JALUR.filter((x) => x.jenis !== "zoom-satelit")) for (const e of SAMPEL) for (const q of lapisan(pada(j, e))) assert.ok(pitch(q) < 0.1, `${j.nama} di ${e}`);
 });
 
 test("gulir mundur memutar jalur yang sama dengan waktu dibalik", () => {
@@ -464,5 +469,144 @@ test("globe: kamera di luar bumi, Jakarta menghadap kamera, bumi utuh di bingkai
     assert.ok(diBingkai(layar(cam, [0, 0, 0]), 0.2), `${nama}: pusat bumi di tepi bingkai`);
     // di babak penutup bumi utuh di bingkai; selama serah terima kamera boleh mulai dekat Jakarta
     if (!nama.startsWith("serah")) assert.ok(Math.asin(R_BUMI / c.length()) * 2 < (cam.fov * Math.PI) / 180, `${nama}: bumi lebih besar dari bingkai`);
+  }
+});
+
+// ---- F6: zoom dari globe ke modul lab ----------------------------------------------------------
+// Stasiun mengorbit; jam globe dibekukan saat zoom mulai, jadi jalurnya diuji di 24 fase orbit.
+const ZOOM = satu("zoom-satelit");
+const PUTARAN = (2 * Math.PI) / lajuOrbit(ORBIT_STASIUN.r);
+const FASE = Array.from({ length: 24 }, (_, f) => rangkaStasiun((f / 24) * PUTARAN));
+const LAYAR_ZOOM = { lebar: [1440, 900], tegak: [390, 844] };
+const zoom = (j, R, e) => poseJalur(j.i, j.a, j.b, e, { ...j.bingkai, stasiun: R });
+const zNama = (j) => (j.bingkai.tegak ? "tegak" : "lebar");
+const kameraZoom = (p, tegak) => {
+  const [w, h] = LAYAR_ZOOM[tegak ? "tegak" : "lebar"];
+  const c = new THREE.PerspectiveCamera(p.fov, w / h, 0.01, 5000);
+  if (tegak) c.setViewOffset(w, h, 0, h * GESER.tegak, w, h);
+  else c.setViewOffset(w, h, -w * GESER.lebar, 0, w, h);
+  c.position.set(...p.posisi);
+  c.lookAt(new THREE.Vector3(...p.lihat));
+  c.updateMatrixWorld();
+  c.updateProjectionMatrix();
+  return c;
+};
+const ES = Array.from({ length: 111 }, (_, s) => s / 110);
+
+test("zoom-satelit: stasiun bersikap LVLH, jendela selalu menghadap menjauhi bumi", () => {
+  for (const R of FASE) {
+    const n = Math.hypot(...R.pusat);
+    assert.ok(Math.abs(n - ORBIT_STASIUN.r) < 1e-6);
+    const radial = R.pusat.map((v) => v / n);
+    assert.ok(R.z.reduce((s, v, k) => s + v * radial[k], 0) > 0.999);
+    for (const [u, v] of [[R.x, R.y], [R.y, R.z], [R.x, R.z]]) assert.ok(Math.abs(u.reduce((s, x, k) => s + x * v[k], 0)) < 1e-9);
+  }
+});
+
+test("zoom-satelit: kamera tidak pernah masuk bumi atau atmosfernya, di fase orbit mana pun", () => {
+  for (const j of ZOOM) for (const R of FASE) for (const e of ES) {
+    const q = zoom(j, R, e);
+    if (q.tahap !== "globe") continue;
+    assert.ok(Math.hypot(...q.posisi) > R_BUMI * 1.035 + 1, `${zNama(j)} e=${e}`);
+  }
+});
+
+test("zoom-satelit: sejak 0,4 jendela stasiun di bingkai dan tidak tertutup bumi", () => {
+  for (const j of ZOOM) for (const R of FASE) {
+    const W = titikJendela(R);
+    for (const e of ES.filter((x) => x >= 0.4 && x <= AKHIR_GLOBE)) {
+      const q = zoom(j, R, e);
+      const p = q.posisi;
+      const d = W.map((v, k) => v - p[k]);
+      const L = Math.hypot(...d);
+      const t = Math.max(0, Math.min(L, -p.reduce((s, v, k) => s + v * d[k], 0) / L));
+      assert.ok(Math.hypot(...p.map((v, k) => v + (d[k] / L) * t)) > R_BUMI, `${zNama(j)} e=${e} tertutup bumi`);
+      const v = new THREE.Vector3(...W).project(kameraZoom(q, j.bingkai.tegak));
+      assert.ok(Math.abs(v.x) < 1 && Math.abs(v.y) < 1, `${zNama(j)} e=${e} jendela di luar bingkai`);
+    }
+  }
+});
+
+test("zoom-satelit: dari ujung jalur globe sampai silang selesai, kaca gelap menutup seluruh bingkai", () => {
+  for (const j of ZOOM) for (const R of FASE) {
+    const W = titikJendela(R);
+    const n = R.z;
+    for (const e of [AKHIR_GLOBE, (AKHIR_GLOBE + SILANG_LAB[0]) / 2, SILANG_LAB[0], (SILANG_LAB[0] + SILANG_LAB[1]) / 2, SILANG_LAB[1] - 1e-6]) {
+      const q = zoom(j, R, e);
+      const g = q.tahap === "globe" ? q : null;
+      assert.ok(g, `${zNama(j)} e=${e} lapis globe hilang`);
+      const c = kameraZoom(g, j.bingkai.tegak);
+      for (const [x, y] of [[-1, -1], [1, -1], [-1, 1], [1, 1], [0, 0]]) {
+        const ray = new THREE.Vector3(x, y, 0.5).unproject(c).sub(c.position).normalize();
+        const denom = ray.dot(new THREE.Vector3(...n));
+        const t = new THREE.Vector3(...W).sub(c.position).dot(new THREE.Vector3(...n)) / denom;
+        const hit = c.position.clone().addScaledVector(ray, t);
+        assert.ok(t > 0 && hit.distanceTo(new THREE.Vector3(...W)) < JENDELA_STASIUN.r * 1.4, `${zNama(j)} e=${e} sudut ${x},${y} di luar kaca`);
+      }
+    }
+  }
+});
+
+test("zoom-satelit: silang ke dalam modul sekitar 0,4 detik, bobotnya hanya naik, ujungnya di modul lab", () => {
+  const lama = (SILANG_LAB[1] - SILANG_LAB[0]) * ANCHOR_V5.find((a) => a.keluar === "zoom-satelit").durasi;
+  assert.ok(lama >= 0.35 && lama <= 0.5, `${lama} s`);
+  for (const j of ZOOM) {
+    let w = 0;
+    for (const e of ES) {
+      const q = pada(j, e);
+      const x = q.tahap === "lab" ? 1 : q.silang?.w ?? 0;
+      assert.ok(x >= w, `${zNama(j)} e=${e}`);
+      w = x;
+      if (q.silang) assert.equal(q.silang.tahap, "lab");
+    }
+    assert.equal(pada(j, 1).tahap, "lab");
+  }
+});
+
+test("zoom-satelit: bagian di dalam modul tidak menembus rak, peralatan, atau dinding", () => {
+  const LAB = bendaLab(susunLab(proyek));
+  for (const j of ZOOM) for (const e of ES) {
+    const q = pada(j, e);
+    const d = q.tahap === "lab" ? q : q.silang;
+    if (!d) continue;
+    const p = d.posisi;
+    assert.ok(Math.abs(p[1]) < 0.9 && Math.abs(p[2]) < 1.15, `${zNama(j)} e=${e}: ${p}`);
+    assert.equal(LAB.find((b) => dalam(p, b, 0.08)), undefined, `${zNama(j)} e=${e}`);
+  }
+});
+
+test("zoom-satelit: tidak ada jeda mati lebih dari 0,25 detik", () => {
+  const dur = ANCHOR_V5.find((a) => a.keluar === "zoom-satelit").durasi;
+  const langkah = 0.05 / dur;
+  for (const j of ZOOM) for (const R of FASE.slice(0, 6)) {
+    let diam = 0;
+    let lalu = null;
+    for (let e = 0; e <= 1 + 1e-9; e += langkah) {
+      const q = zoom(j, R, Math.min(1, e));
+      // bingkai yang paling tampak: lapis lab saat bobot silangnya di atas setengah
+      const v = q.silang && q.silang.w > 0.5 ? q.silang : q;
+      const now = [...v.posisi, ...satuanArah(v), v.tahap];
+      if (lalu && now[6] === lalu[6]) {
+        const gerak = Math.hypot(...[0, 1, 2].map((k) => now[k] - lalu[k])) / Math.max(1e-3, Math.hypot(...v.posisi.map((x, k) => x - v.lihat[k])));
+        const putar = Math.hypot(...[3, 4, 5].map((k) => now[k] - lalu[k]));
+        diam = gerak < 1e-3 && putar < 1e-3 && !(q.silang && q.silang.w > 0 && q.silang.w < 1) ? diam + 0.05 : 0;
+        assert.ok(diam <= 0.25 + 1e-9, `${zNama(j)} diam ${diam.toFixed(2)} s di e=${e.toFixed(3)}`);
+      }
+      lalu = now;
+    }
+  }
+});
+const satuanArah = (p) => {
+  const d = p.lihat.map((v, k) => v - p.posisi[k]);
+  const L = Math.hypot(...d);
+  return d.map((v) => v / L);
+};
+
+test("zoom-satelit: gulir mundur memakai rangka beku yang sama, bingkainya persis sama", () => {
+  for (const j of ZOOM) for (const R of FASE.slice(0, 4)) for (const e of [0.1, 0.37, 0.61, 0.66, 0.9]) {
+    const maju = zoom(j, R, e);
+    const mundur = poseAntara(j.i + 1, j.i, j.b, j.a, 1 - e, { ...j.bingkai, stasiun: R });
+    maju.posisi.forEach((v, k) => assert.ok(Math.abs(v - mundur.posisi[k]) < 1e-9));
+    assert.equal(maju.silang?.w ?? 0, mundur.silang?.w ?? 0);
   }
 });

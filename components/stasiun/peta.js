@@ -114,3 +114,32 @@ export function posisiSatelit(o, i, t) {
 }
 export const posisiStasiun = (t) => diOrbit(ORBIT_STASIUN.r, ORBIT_STASIUN.miring, ORBIT_STASIUN.sudut + lajuOrbit(ORBIT_STASIUN.r) * t);
 export const SATELIT = { badan: 4, panel: [12, 0.3, 3.2] };
+
+// Sikap stasiun seperti ISS (LVLH): sumbu modul searah gerak orbit, sisi jendela (+z lokal)
+// menghadap menjauhi bumi, jadi zoom-satelit selalu mendekat dari luar dan bumi malam ada di
+// belakang stasiun. Satu putaran sikap per satu putaran orbit. Kembalian: pusat dan tiga sumbu
+// lokal di koordinat globe.
+const ternormal = (v) => {
+  const j = Math.hypot(...v) || 1;
+  return v.map((x) => x / j);
+};
+const silangV = (a, b) => [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]];
+// Normal bidang orbit stasiun: sumbu y diputar Rz lalu Rx, sama dengan diOrbit.
+const NORMAL_ORBIT = (() => {
+  const [cz, sz] = [Math.cos(MIRING_Z), Math.sin(MIRING_Z)];
+  const [cx, sx] = [Math.cos(ORBIT_STASIUN.miring), Math.sin(ORBIT_STASIUN.miring)];
+  const [x, y] = [-sz, cz];
+  return [x, y * cx, y * sx];
+})();
+export function rangkaStasiun(t) {
+  const pusat = posisiStasiun(t);
+  const z = ternormal(pusat);
+  const x = ternormal(silangV(NORMAL_ORBIT, z));
+  const y = silangV(z, x);
+  return { pusat, x, y, z };
+}
+export const SKALA_STASIUN = 1.4;
+// Jendela modul lab A (lambung merah di x -5,2) di sisi +z, segaris dengan JENDELA_LAB di dalam.
+export const JENDELA_STASIUN = { lokal: [-6.74, 0, 2.17], r: 0.43 };
+export const keRangka = (R, lokal) => R.pusat.map((p, i) => p + SKALA_STASIUN * (lokal[0] * R.x[i] + lokal[1] * R.y[i] + lokal[2] * R.z[i]));
+export const titikJendela = (R) => keRangka(R, JENDELA_STASIUN.lokal);

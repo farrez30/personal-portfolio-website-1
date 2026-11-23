@@ -1,0 +1,209 @@
+/* Seksi proyek /v5 di mode Imersif (ModulLab.jsx): daftar proyek menempel di depan modul lab 3D,
+   setinggi --bobot layar supaya gulir menyusuri rel lorong. Panel kabut gelap seperti teks babak
+   cerita (cerita.css, .cerita-kerja--dunia), jadi terbaca di kedua tema. */
+.modul-lab {
+  position: relative;
+  z-index: 1;
+  min-height: calc(var(--bobot) * 100svh);
+}
+
+.modul-lab__kendali {
+  --fokus: #f0b35a;
+  position: sticky;
+  top: 14svh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: min(22rem, 34vw);
+  max-height: 72svh;
+  margin-left: var(--tepi);
+  padding: 1rem 0.75rem 0.9rem;
+  border-radius: var(--r-kotak);
+  background: rgb(18 16 14 / 0.8);
+  color: #ece8e1;
+}
+
+.modul-lab__judul {
+  margin: 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.modul-lab__daftar {
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  list-style: none;
+}
+
+.modul-lab__item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.55rem 0.5rem;
+  border: 0;
+  border-left: 3px solid transparent;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s linear, border-color 0.2s linear;
+}
+
+.modul-lab__daftar > li[data-nyala] > .modul-lab__item {
+  border-left-color: #e0574b;
+  background: rgb(236 232 225 / 0.1);
+}
+
+.modul-lab__item:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: -2px;
+}
+
+.modul-lab__kode {
+  flex: none;
+  color: #f2897f;
+  font-size: 0.8rem;
+}
+
+.modul-lab__item--kontak .modul-lab__nama {
+  text-decoration: underline;
+  text-decoration-color: rgb(236 232 225 / 0.35);
+  text-underline-offset: 0.2em;
+}
+
+.modul-lab__jeda {
+  align-self: flex-start;
+  min-height: 44px;
+  margin: 0 0.5rem;
+  padding: 0 0.9rem;
+  border: 1px solid rgb(236 232 225 / 0.3);
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.modul-lab__jeda[aria-pressed="true"] {
+  border-color: #f0b35a;
+  background: rgb(240 179 90 / 0.15);
+}
+
+/* Layar tegak: daftar menempel di bagian bawah, modul lab di atasnya (setViewOffset 14%). */
+@media (max-aspect-ratio: 4/5) {
+  .modul-lab__kendali {
+    top: 56svh;
+    width: auto;
+    max-height: 40svh;
+    margin: 0 0.75rem;
+  }
+}
+
+/* Panel proyek: dialog bawaan. Kartunya tumbuh dari loker yang meluncur sesudah kamera mendekat
+   (--tunda dan --dx/--dy dari ModulLab.jsx); gerak dikurangi: langsung tampil. */
+.modul-lab__panel {
+  width: min(36rem, 100% - 2rem);
+  max-height: min(88svh, 100% - 2rem);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  overflow: visible;
+}
+
+.modul-lab__panel::backdrop {
+  background: rgb(11 10 9 / 0.45);
+  animation: modul-lab-redup 0.25s linear var(--tunda, 0s) both;
+}
+
+.modul-lab__kartu {
+  position: relative;
+  max-height: min(88svh, 100vh - 2rem);
+  overflow-y: auto;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--line);
+  border-radius: var(--r-kotak);
+  background: var(--bg);
+  animation: modul-lab-tumbuh 0.3s var(--ease) var(--tunda, 0s) both;
+}
+
+@keyframes modul-lab-tumbuh {
+  from {
+    opacity: 0;
+    transform: translate(var(--dx, 0), var(--dy, 0)) scale(0.12);
+  }
+}
+
+@keyframes modul-lab-redup {
+  from {
+    opacity: 0;
+  }
+}
+
+.modul-lab__tutup {
+  position: sticky;
+  top: 0;
+  float: right;
+  z-index: 2;
+  background: var(--bg);
+}
+
+.modul-lab__kartu .modul-lab__kode {
+  margin: 0;
+  color: var(--aksen);
+}
+
+.modul-lab__panel-judul {
+  margin: 0.25rem 0 0.5rem;
+  font-size: clamp(1.4rem, 4vw, 1.9rem);
+  line-height: 1.15;
+}
+
+.modul-lab__meta {
+  margin: 0 0 1rem;
+  color: var(--ink-2);
+  font-size: 0.8rem;
+}
+
+.modul-lab__gambar {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--r-kecil);
+  background: var(--bg-2);
+}
+
+.modul-lab__ringkas {
+  margin: 1rem 0;
+  max-width: 60ch;
+}
+
+.modul-lab__lengkap {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border-radius: 999px;
+  background: var(--aksen);
+  color: var(--aksen-ink);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modul-lab__item {
+    transition: none;
+  }
+
+  .modul-lab__kartu,
+  .modul-lab__panel::backdrop {
+    animation: none;
+  }
+}
