@@ -5,6 +5,7 @@ import { postgresAdapter } from "@payloadcms/db-postgres";
 import { Users } from "./cms/koleksi/Users.js";
 import { Klien } from "./cms/koleksi/Klien.js";
 import { Proyek } from "./cms/koleksi/Proyek.js";
+import { KodeBank } from "./cms/koleksi/KodeBank.js";
 import { Situs } from "./cms/global/Situs.js";
 import { Teks } from "./cms/global/Teks.js";
 
@@ -25,7 +26,7 @@ export default buildConfig({
       afterLogin: ["/components/admin/MasukGoogle.jsx"],
     },
   },
-  collections: [Proyek, Klien, Users],
+  collections: [Proyek, Klien, Users, KodeBank],
   globals: [Situs, ...Teks],
   localization: {
     locales: [

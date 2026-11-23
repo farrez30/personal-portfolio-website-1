@@ -1,0 +1,4354 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.proyek": {
+      "name": "proyek",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_order": {
+          "name": "_order",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tampil": {
+          "name": "tampil",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "katalog": {
+          "name": "katalog",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis": {
+          "name": "jenis",
+          "type": "enum_proyek_jenis",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "enum_proyek_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "periode": {
+          "name": "periode",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "warna": {
+          "name": "warna",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tautan_situs": {
+          "name": "tautan_situs",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tautan_repo": {
+          "name": "tautan_repo",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tautan_kasus": {
+          "name": "tautan_kasus",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "proyek__order_idx": {
+          "name": "proyek__order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "proyek_slug_idx": {
+          "name": "proyek_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "proyek_updated_at_idx": {
+          "name": "proyek_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "proyek_created_at_idx": {
+          "name": "proyek_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.proyek_locales": {
+      "name": "proyek_locales",
+      "schema": "",
+      "columns": {
+        "judul": {
+          "name": "judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ringkas": {
+          "name": "ringkas",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "proyek_locales_locale_parent_id_unique": {
+          "name": "proyek_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "proyek_locales_parent_id_idx": {
+          "name": "proyek_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "proyek_locales_parent_id_fk": {
+          "name": "proyek_locales_parent_id_fk",
+          "tableFrom": "proyek_locales",
+          "tableTo": "proyek",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.klien_jenis": {
+      "name": "klien_jenis",
+      "schema": "",
+      "columns": {
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "value": {
+          "name": "value",
+          "type": "enum_klien_jenis",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "klien_jenis_order_idx": {
+          "name": "klien_jenis_order_idx",
+          "columns": [
+            {
+              "expression": "order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "klien_jenis_parent_idx": {
+          "name": "klien_jenis_parent_idx",
+          "columns": [
+            {
+              "expression": "parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "klien_jenis_parent_fk": {
+          "name": "klien_jenis_parent_fk",
+          "tableFrom": "klien_jenis",
+          "tableTo": "klien",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.klien": {
+      "name": "klien",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_order": {
+          "name": "_order",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tampil": {
+          "name": "tampil",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "nama": {
+          "name": "nama",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "slug": {
+          "name": "slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kelompok": {
+          "name": "kelompok",
+          "type": "enum_klien_kelompok",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "induk": {
+          "name": "induk",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tahun": {
+          "name": "tahun",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tautan": {
+          "name": "tautan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cakram": {
+          "name": "cakram",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "album": {
+          "name": "album",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "klien__order_idx": {
+          "name": "klien__order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "klien_slug_idx": {
+          "name": "klien_slug_idx",
+          "columns": [
+            {
+              "expression": "slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "klien_updated_at_idx": {
+          "name": "klien_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "klien_created_at_idx": {
+          "name": "klien_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.klien_locales": {
+      "name": "klien_locales",
+      "schema": "",
+      "columns": {
+        "industri": {
+          "name": "industri",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "kerja": {
+          "name": "kerja",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "klien_locales_locale_parent_id_unique": {
+          "name": "klien_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "klien_locales_parent_id_idx": {
+          "name": "klien_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "klien_locales_parent_id_fk": {
+          "name": "klien_locales_parent_id_fk",
+          "tableFrom": "klien_locales",
+          "tableTo": "klien",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users_sessions": {
+      "name": "users_sessions",
+      "schema": "",
+      "columns": {
+        "_order": {
+          "name": "_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "varchar",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "users_sessions_order_idx": {
+          "name": "users_sessions_order_idx",
+          "columns": [
+            {
+              "expression": "_order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_sessions_parent_id_idx": {
+          "name": "users_sessions_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "users_sessions_parent_id_fk": {
+          "name": "users_sessions_parent_id_fk",
+          "tableFrom": "users_sessions",
+          "tableTo": "users",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.users": {
+      "name": "users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "username": {
+          "name": "username",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reset_password_token": {
+          "name": "reset_password_token",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reset_password_expiration": {
+          "name": "reset_password_expiration",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "salt": {
+          "name": "salt",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hash": {
+          "name": "hash",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "reset_password_requested_at": {
+          "name": "reset_password_requested_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "login_attempts": {
+          "name": "login_attempts",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false,
+          "default": 0
+        },
+        "lock_until": {
+          "name": "lock_until",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "users_updated_at_idx": {
+          "name": "users_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_created_at_idx": {
+          "name": "users_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_email_idx": {
+          "name": "users_email_idx",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "users_username_idx": {
+          "name": "users_username_idx",
+          "columns": [
+            {
+              "expression": "username",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.kode_bank": {
+      "name": "kode_bank",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "nama": {
+          "name": "nama",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "sidik": {
+          "name": "sidik",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "aktif": {
+          "name": "aktif",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": true
+        },
+        "kedaluwarsa": {
+          "name": "kedaluwarsa",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "terakhir_masuk": {
+          "name": "terakhir_masuk",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "catatan": {
+          "name": "catatan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "kode_bank_sidik_idx": {
+          "name": "kode_bank_sidik_idx",
+          "columns": [
+            {
+              "expression": "sidik",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "kode_bank_updated_at_idx": {
+          "name": "kode_bank_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "kode_bank_created_at_idx": {
+          "name": "kode_bank_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_kv": {
+      "name": "payload_kv",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "data": {
+          "name": "data",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "payload_kv_key_idx": {
+          "name": "payload_kv_key_idx",
+          "columns": [
+            {
+              "expression": "key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_locked_documents": {
+      "name": "payload_locked_documents",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "global_slug": {
+          "name": "global_slug",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "payload_locked_documents_global_slug_idx": {
+          "name": "payload_locked_documents_global_slug_idx",
+          "columns": [
+            {
+              "expression": "global_slug",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_updated_at_idx": {
+          "name": "payload_locked_documents_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_created_at_idx": {
+          "name": "payload_locked_documents_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_locked_documents_rels": {
+      "name": "payload_locked_documents_rels",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "path": {
+          "name": "path",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "proyek_id": {
+          "name": "proyek_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "klien_id": {
+          "name": "klien_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "users_id": {
+          "name": "users_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kode_bank_id": {
+          "name": "kode_bank_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "payload_locked_documents_rels_order_idx": {
+          "name": "payload_locked_documents_rels_order_idx",
+          "columns": [
+            {
+              "expression": "order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_parent_idx": {
+          "name": "payload_locked_documents_rels_parent_idx",
+          "columns": [
+            {
+              "expression": "parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_path_idx": {
+          "name": "payload_locked_documents_rels_path_idx",
+          "columns": [
+            {
+              "expression": "path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_proyek_id_idx": {
+          "name": "payload_locked_documents_rels_proyek_id_idx",
+          "columns": [
+            {
+              "expression": "proyek_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_klien_id_idx": {
+          "name": "payload_locked_documents_rels_klien_id_idx",
+          "columns": [
+            {
+              "expression": "klien_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_users_id_idx": {
+          "name": "payload_locked_documents_rels_users_id_idx",
+          "columns": [
+            {
+              "expression": "users_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_locked_documents_rels_kode_bank_id_idx": {
+          "name": "payload_locked_documents_rels_kode_bank_id_idx",
+          "columns": [
+            {
+              "expression": "kode_bank_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "payload_locked_documents_rels_parent_fk": {
+          "name": "payload_locked_documents_rels_parent_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "payload_locked_documents",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_proyek_fk": {
+          "name": "payload_locked_documents_rels_proyek_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "proyek",
+          "columnsFrom": [
+            "proyek_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_klien_fk": {
+          "name": "payload_locked_documents_rels_klien_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "klien",
+          "columnsFrom": [
+            "klien_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_users_fk": {
+          "name": "payload_locked_documents_rels_users_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "users",
+          "columnsFrom": [
+            "users_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_kode_bank_fk": {
+          "name": "payload_locked_documents_rels_kode_bank_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "kode_bank",
+          "columnsFrom": [
+            "kode_bank_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_preferences": {
+      "name": "payload_preferences",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "key": {
+          "name": "key",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "value": {
+          "name": "value",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "payload_preferences_key_idx": {
+          "name": "payload_preferences_key_idx",
+          "columns": [
+            {
+              "expression": "key",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_updated_at_idx": {
+          "name": "payload_preferences_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_created_at_idx": {
+          "name": "payload_preferences_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_preferences_rels": {
+      "name": "payload_preferences_rels",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "order": {
+          "name": "order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "parent_id": {
+          "name": "parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "path": {
+          "name": "path",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "users_id": {
+          "name": "users_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {
+        "payload_preferences_rels_order_idx": {
+          "name": "payload_preferences_rels_order_idx",
+          "columns": [
+            {
+              "expression": "order",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_rels_parent_idx": {
+          "name": "payload_preferences_rels_parent_idx",
+          "columns": [
+            {
+              "expression": "parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_rels_path_idx": {
+          "name": "payload_preferences_rels_path_idx",
+          "columns": [
+            {
+              "expression": "path",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_preferences_rels_users_id_idx": {
+          "name": "payload_preferences_rels_users_id_idx",
+          "columns": [
+            {
+              "expression": "users_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "payload_preferences_rels_parent_fk": {
+          "name": "payload_preferences_rels_parent_fk",
+          "tableFrom": "payload_preferences_rels",
+          "tableTo": "payload_preferences",
+          "columnsFrom": [
+            "parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_preferences_rels_users_fk": {
+          "name": "payload_preferences_rels_users_fk",
+          "tableFrom": "payload_preferences_rels",
+          "tableTo": "users",
+          "columnsFrom": [
+            "users_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.payload_migrations": {
+      "name": "payload_migrations",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "batch": {
+          "name": "batch",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "payload_migrations_updated_at_idx": {
+          "name": "payload_migrations_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "payload_migrations_created_at_idx": {
+          "name": "payload_migrations_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.situs": {
+      "name": "situs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "whatsapp": {
+          "name": "whatsapp",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "linkedin": {
+          "name": "linkedin",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "github": {
+          "name": "github",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "cv": {
+          "name": "cv",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_meta": {
+      "name": "teks_meta",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_meta_locales": {
+      "name": "teks_meta_locales",
+      "schema": "",
+      "columns": {
+        "site_name": {
+          "name": "site_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "keywords": {
+          "name": "keywords",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_meta_locales_locale_parent_id_unique": {
+          "name": "teks_meta_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_meta_locales_parent_id_idx": {
+          "name": "teks_meta_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_meta_locales_parent_id_fk": {
+          "name": "teks_meta_locales_parent_id_fk",
+          "tableFrom": "teks_meta_locales",
+          "tableTo": "teks_meta",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_gerbang": {
+      "name": "teks_gerbang",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_gerbang_locales": {
+      "name": "teks_gerbang_locales",
+      "schema": "",
+      "columns": {
+        "nama": {
+          "name": "nama",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "peran": {
+          "name": "peran",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "headline": {
+          "name": "headline",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lihat_proyek": {
+          "name": "lihat_proyek",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "hubungi": {
+          "name": "hubungi",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "unduh_c_v": {
+          "name": "unduh_c_v",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "headline_a": {
+          "name": "headline_a",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "headline_b": {
+          "name": "headline_b",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sorot": {
+          "name": "sorot",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_gerbang_locales_locale_parent_id_unique": {
+          "name": "teks_gerbang_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_gerbang_locales_parent_id_idx": {
+          "name": "teks_gerbang_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_gerbang_locales_parent_id_fk": {
+          "name": "teks_gerbang_locales_parent_id_fk",
+          "tableFrom": "teks_gerbang_locales",
+          "tableTo": "teks_gerbang",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_mode": {
+      "name": "teks_mode",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_mode_locales": {
+      "name": "teks_mode_locales",
+      "schema": "",
+      "columns": {
+        "label": {
+          "name": "label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imersif": {
+          "name": "imersif",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ringan": {
+          "name": "ringan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "imersif_info": {
+          "name": "imersif_info",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ringan_info": {
+          "name": "ringan_info",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_mode_locales_locale_parent_id_unique": {
+          "name": "teks_mode_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_mode_locales_parent_id_idx": {
+          "name": "teks_mode_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_mode_locales_parent_id_fk": {
+          "name": "teks_mode_locales_parent_id_fk",
+          "tableFrom": "teks_mode_locales",
+          "tableTo": "teks_mode",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_rak": {
+      "name": "teks_rak",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_rak_locales": {
+      "name": "teks_rak_locales",
+      "schema": "",
+      "columns": {
+        "judul": {
+          "name": "judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sebelumnya": {
+          "name": "sebelumnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "berikutnya": {
+          "name": "berikutnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buka": {
+          "name": "buka",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_kerja": {
+          "name": "jenis_kerja",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_studio": {
+          "name": "jenis_studio",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_pribadi": {
+          "name": "jenis_pribadi",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status_dipakai": {
+          "name": "status_dipakai",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status_berjalan": {
+          "name": "status_berjalan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status_pilot": {
+          "name": "status_pilot",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "petunjuk_gulir": {
+          "name": "petunjuk_gulir",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_rak_locales_locale_parent_id_unique": {
+          "name": "teks_rak_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_rak_locales_parent_id_idx": {
+          "name": "teks_rak_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_rak_locales_parent_id_fk": {
+          "name": "teks_rak_locales_parent_id_fk",
+          "tableFrom": "teks_rak_locales",
+          "tableTo": "teks_rak",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_album": {
+      "name": "teks_album",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_album_locales": {
+      "name": "teks_album_locales",
+      "schema": "",
+      "columns": {
+        "tutup": {
+          "name": "tutup",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buklet": {
+          "name": "buklet",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "putar": {
+          "name": "putar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kembali": {
+          "name": "kembali",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buka_situs": {
+          "name": "buka_situs",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lihat_repo": {
+          "name": "lihat_repo",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "case_study": {
+          "name": "case_study",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_overview": {
+          "name": "halaman_overview",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_challenge": {
+          "name": "halaman_challenge",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_decisions": {
+          "name": "halaman_decisions",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_solution": {
+          "name": "halaman_solution",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_delivery": {
+          "name": "halaman_delivery",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_outcome": {
+          "name": "halaman_outcome",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_architecture": {
+          "name": "halaman_architecture",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "periode": {
+          "name": "periode",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis": {
+          "name": "jenis",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "status": {
+          "name": "status",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tutup_buklet": {
+          "name": "tutup_buklet",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_album_locales_locale_parent_id_unique": {
+          "name": "teks_album_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_album_locales_parent_id_idx": {
+          "name": "teks_album_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_album_locales_parent_id_fk": {
+          "name": "teks_album_locales_parent_id_fk",
+          "tableFrom": "teks_album_locales",
+          "tableTo": "teks_album",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_kontak": {
+      "name": "teks_kontak",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_kontak_locales": {
+      "name": "teks_kontak_locales",
+      "schema": "",
+      "columns": {
+        "judul": {
+          "name": "judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "teks": {
+          "name": "teks",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "whatsapp": {
+          "name": "whatsapp",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "linkedin": {
+          "name": "linkedin",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "github": {
+          "name": "github",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "form_judul": {
+          "name": "form_judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "nama": {
+          "name": "nama",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "email_anda": {
+          "name": "email_anda",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subjek": {
+          "name": "subjek",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "subjek_isi": {
+          "name": "subjek_isi",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pesan": {
+          "name": "pesan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pesan_isi": {
+          "name": "pesan_isi",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kirim_email": {
+          "name": "kirim_email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kirim_wa": {
+          "name": "kirim_wa",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "galat_judul": {
+          "name": "galat_judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "galat_kirim": {
+          "name": "galat_kirim",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "terkirim": {
+          "name": "terkirim",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sapa_pagi": {
+          "name": "sapa_pagi",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sapa_siang": {
+          "name": "sapa_siang",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sapa_sore": {
+          "name": "sapa_sore",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sapa_malam": {
+          "name": "sapa_malam",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bantu": {
+          "name": "bantu",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "brief_judul": {
+          "name": "brief_judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kebutuhan_judul": {
+          "name": "kebutuhan_judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kebutuhan_android": {
+          "name": "kebutuhan_android",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kebutuhan_kantor": {
+          "name": "kebutuhan_kantor",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kebutuhan_iklan": {
+          "name": "kebutuhan_iklan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kebutuhan_konten": {
+          "name": "kebutuhan_konten",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kebutuhan_belum": {
+          "name": "kebutuhan_belum",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pemakai_judul": {
+          "name": "pemakai_judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pemakai_sendiri": {
+          "name": "pemakai_sendiri",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pemakai_tim": {
+          "name": "pemakai_tim",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pemakai_perusahaan": {
+          "name": "pemakai_perusahaan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "waktu_judul": {
+          "name": "waktu_judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "waktu_bulan_ini": {
+          "name": "waktu_bulan_ini",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "waktu_tiga_bulan": {
+          "name": "waktu_tiga_bulan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "waktu_menjajaki": {
+          "name": "waktu_menjajaki",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "anggaran_judul": {
+          "name": "anggaran_judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "anggaran_belum": {
+          "name": "anggaran_belum",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "anggaran_bawah": {
+          "name": "anggaran_bawah",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "anggaran_antara": {
+          "name": "anggaran_antara",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "anggaran_atas": {
+          "name": "anggaran_atas",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "brief_pesan": {
+          "name": "brief_pesan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_kontak_locales_locale_parent_id_unique": {
+          "name": "teks_kontak_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_kontak_locales_parent_id_idx": {
+          "name": "teks_kontak_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_kontak_locales_parent_id_fk": {
+          "name": "teks_kontak_locales_parent_id_fk",
+          "tableFrom": "teks_kontak_locales",
+          "tableTo": "teks_kontak",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_pemutar": {
+      "name": "teks_pemutar",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_pemutar_locales": {
+      "name": "teks_pemutar_locales",
+      "schema": "",
+      "columns": {
+        "putar": {
+          "name": "putar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jeda": {
+          "name": "jeda",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sembunyi": {
+          "name": "sembunyi",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tampil": {
+          "name": "tampil",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sedang_diputar": {
+          "name": "sedang_diputar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "siap": {
+          "name": "siap",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "berikutnya": {
+          "name": "berikutnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "domain_publik": {
+          "name": "domain_publik",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_pemutar_locales_locale_parent_id_unique": {
+          "name": "teks_pemutar_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_pemutar_locales_parent_id_idx": {
+          "name": "teks_pemutar_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_pemutar_locales_parent_id_fk": {
+          "name": "teks_pemutar_locales_parent_id_fk",
+          "tableFrom": "teks_pemutar_locales",
+          "tableTo": "teks_pemutar",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_umum": {
+      "name": "teks_umum",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_umum_locales": {
+      "name": "teks_umum_locales",
+      "schema": "",
+      "columns": {
+        "bahasa": {
+          "name": "bahasa",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tema_terang": {
+          "name": "tema_terang",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tema_gelap": {
+          "name": "tema_gelap",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lewati": {
+          "name": "lewati",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "suara": {
+          "name": "suara",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_umum_locales_locale_parent_id_unique": {
+          "name": "teks_umum_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_umum_locales_parent_id_idx": {
+          "name": "teks_umum_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_umum_locales_parent_id_fk": {
+          "name": "teks_umum_locales_parent_id_fk",
+          "tableFrom": "teks_umum_locales",
+          "tableTo": "teks_umum",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_panggung": {
+      "name": "teks_panggung",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_panggung_locales": {
+      "name": "teks_panggung_locales",
+      "schema": "",
+      "columns": {
+        "tentang": {
+          "name": "tentang",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kontak": {
+          "name": "kontak",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tutup": {
+          "name": "tutup",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "keluarkan": {
+          "name": "keluarkan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buklet": {
+          "name": "buklet",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "putar_cakram": {
+          "name": "putar_cakram",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buka_tab": {
+          "name": "buka_tab",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "case_study": {
+          "name": "case_study",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "memuat": {
+          "name": "memuat",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pemutar": {
+          "name": "pemutar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "putar": {
+          "name": "putar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jeda": {
+          "name": "jeda",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sebelumnya": {
+          "name": "sebelumnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "berikutnya": {
+          "name": "berikutnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_sebelumnya": {
+          "name": "halaman_sebelumnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "halaman_berikutnya": {
+          "name": "halaman_berikutnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "keadaan_rak": {
+          "name": "keadaan_rak",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "keadaan_buka": {
+          "name": "keadaan_buka",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "keadaan_buklet": {
+          "name": "keadaan_buklet",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "keadaan_putar": {
+          "name": "keadaan_putar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_desktop": {
+          "name": "layar_desktop",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_hp": {
+          "name": "layar_hp",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_sinarx": {
+          "name": "layar_sinarx",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_tampilan": {
+          "name": "layar_tampilan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_sedang_disiapkan": {
+          "name": "layar_sedang_disiapkan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_buka_tab": {
+          "name": "layar_buka_tab",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_case_study": {
+          "name": "layar_case_study",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_perbesar": {
+          "name": "layar_perbesar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_perkecil": {
+          "name": "layar_perkecil",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_memuat": {
+          "name": "layar_memuat",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_dijeda": {
+          "name": "layar_dijeda",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_lanjutkan": {
+          "name": "layar_lanjutkan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_bisukan": {
+          "name": "layar_bisukan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_bunyikan": {
+          "name": "layar_bunyikan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "layar_situs_langsung": {
+          "name": "layar_situs_langsung",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "senter": {
+          "name": "senter",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_panggung_locales_locale_parent_id_unique": {
+          "name": "teks_panggung_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_panggung_locales_parent_id_idx": {
+          "name": "teks_panggung_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_panggung_locales_parent_id_fk": {
+          "name": "teks_panggung_locales_parent_id_fk",
+          "tableFrom": "teks_panggung_locales",
+          "tableTo": "teks_panggung",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_arsitektur": {
+      "name": "teks_arsitektur",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_arsitektur_locales": {
+      "name": "teks_arsitektur_locales",
+      "schema": "",
+      "columns": {
+        "dipakai": {
+          "name": "dipakai",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kelompok_fitur": {
+          "name": "kelompok_fitur",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kelompok_stack": {
+          "name": "kelompok_stack",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kelompok_infrastruktur": {
+          "name": "kelompok_infrastruktur",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lihat_diagram": {
+          "name": "lihat_diagram",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "judul_halaman": {
+          "name": "judul_halaman",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kembali": {
+          "name": "kembali",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "diagram": {
+          "name": "diagram",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "teknologi": {
+          "name": "teknologi",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_arsitektur_locales_locale_parent_id_unique": {
+          "name": "teks_arsitektur_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_arsitektur_locales_parent_id_idx": {
+          "name": "teks_arsitektur_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_arsitektur_locales_parent_id_fk": {
+          "name": "teks_arsitektur_locales_parent_id_fk",
+          "tableFrom": "teks_arsitektur_locales",
+          "tableTo": "teks_arsitektur",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_cerita": {
+      "name": "teks_cerita",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_cerita_locales": {
+      "name": "teks_cerita_locales",
+      "schema": "",
+      "columns": {
+        "judul": {
+          "name": "judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lewati": {
+          "name": "lewati",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bukti": {
+          "name": "bukti",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ke_rak": {
+          "name": "ke_rak",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bab": {
+          "name": "bab",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "rel": {
+          "name": "rel",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ke_bab": {
+          "name": "ke_bab",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_cerita_locales_locale_parent_id_unique": {
+          "name": "teks_cerita_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_cerita_locales_parent_id_idx": {
+          "name": "teks_cerita_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_cerita_locales_parent_id_fk": {
+          "name": "teks_cerita_locales_parent_id_fk",
+          "tableFrom": "teks_cerita_locales",
+          "tableTo": "teks_cerita",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_dunia": {
+      "name": "teks_dunia",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_dunia_locales": {
+      "name": "teks_dunia_locales",
+      "schema": "",
+      "columns": {
+        "memuat": {
+          "name": "memuat",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lonceng": {
+          "name": "lonceng",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_dunia_locales_locale_parent_id_unique": {
+          "name": "teks_dunia_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_dunia_locales_parent_id_idx": {
+          "name": "teks_dunia_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_dunia_locales_parent_id_fk": {
+          "name": "teks_dunia_locales_parent_id_fk",
+          "tableFrom": "teks_dunia_locales",
+          "tableTo": "teks_dunia",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_klien": {
+      "name": "teks_klien",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.teks_klien_locales": {
+      "name": "teks_klien_locales",
+      "schema": "",
+      "columns": {
+        "label": {
+          "name": "label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "judul": {
+          "name": "judul",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "pengantar": {
+          "name": "pengantar",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tab_coderoach": {
+          "name": "tab_coderoach",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tab_mitraplus": {
+          "name": "tab_mitraplus",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tab_pribadi": {
+          "name": "tab_pribadi",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "set": {
+          "name": "set",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buka": {
+          "name": "buka",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "tutup": {
+          "name": "tutup",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "kasus": {
+          "name": "kasus",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sebelumnya": {
+          "name": "sebelumnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "berikutnya": {
+          "name": "berikutnya",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_company_profile": {
+          "name": "jenis_company_profile",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_erp": {
+          "name": "jenis_erp",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_website": {
+          "name": "jenis_website",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_landing": {
+          "name": "jenis_landing",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_operasional": {
+          "name": "jenis_operasional",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_keuangan": {
+          "name": "jenis_keuangan",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_aplikasi_web": {
+          "name": "jenis_aplikasi_web",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_pwa": {
+          "name": "jenis_pwa",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_saas": {
+          "name": "jenis_saas",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_enterprise": {
+          "name": "jenis_enterprise",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_link_in_bio": {
+          "name": "jenis_link_in_bio",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_dashboard": {
+          "name": "jenis_dashboard",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_android": {
+          "name": "jenis_android",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "jenis_tools": {
+          "name": "jenis_tools",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "detail": {
+          "name": "detail",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "buka_album": {
+          "name": "buka_album",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "petunjuk_geser": {
+          "name": "petunjuk_geser",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "teks_klien_locales_locale_parent_id_unique": {
+          "name": "teks_klien_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "teks_klien_locales_parent_id_idx": {
+          "name": "teks_klien_locales_parent_id_idx",
+          "columns": [
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "teks_klien_locales_parent_id_fk": {
+          "name": "teks_klien_locales_parent_id_fk",
+          "tableFrom": "teks_klien_locales",
+          "tableTo": "teks_klien",
+          "columnsFrom": [
+            "_parent_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public._locales": {
+      "name": "_locales",
+      "schema": "public",
+      "values": [
+        "id",
+        "en"
+      ]
+    },
+    "public.enum_proyek_jenis": {
+      "name": "enum_proyek_jenis",
+      "schema": "public",
+      "values": [
+        "kerja",
+        "studio",
+        "pribadi"
+      ]
+    },
+    "public.enum_proyek_status": {
+      "name": "enum_proyek_status",
+      "schema": "public",
+      "values": [
+        "dipakai",
+        "berjalan",
+        "pilot"
+      ]
+    },
+    "public.enum_klien_jenis": {
+      "name": "enum_klien_jenis",
+      "schema": "public",
+      "values": [
+        "company-profile",
+        "erp",
+        "website",
+        "landing",
+        "operasional",
+        "keuangan",
+        "aplikasi-web",
+        "pwa",
+        "saas",
+        "enterprise",
+        "link-in-bio",
+        "dashboard",
+        "android",
+        "tools"
+      ]
+    },
+    "public.enum_klien_kelompok": {
+      "name": "enum_klien_kelompok",
+      "schema": "public",
+      "values": [
+        "coderoach",
+        "mitraplus",
+        "pribadi"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "id": "58641ca4-98c4-436d-9315-6d9f7f5216ae",
+  "prevId": "00000000-0000-0000-0000-000000000000"
+}
