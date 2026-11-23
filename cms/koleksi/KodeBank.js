@@ -13,7 +13,7 @@ export const KodeBank = {
     useAsTitle: "nama",
     defaultColumns: ["nama", "aktif", "kedaluwarsa", "terakhirMasuk"],
     group: "Sistem",
-    description: "Kode tamu untuk farrez.vercel.app/bank. Matikan Aktif untuk mencabut satu orang. Kode baru dari skrip: npm run bank:kode -- -Nama Zidni",
+    description: "Kode tamu untuk farrez.vercel.app/bank. Matikan Aktif untuk mencabut satu orang. Kode baru dibuat Bitwarden lewat npm run bank:kode -- -Nama <nama>, lalu ditempel di kolom Kode baru",
   },
   hooks: {
     beforeChange: [
