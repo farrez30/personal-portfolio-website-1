@@ -3,14 +3,16 @@
 // draw call tidak ikut naik dengan jumlah benda. Garis tinta image-space seperti previs: pass
 // normal + depth, pass warna ke target MSAA, lalu quad tepi (docs/look-dev/cerita-v5.md).
 // Kamera berpindah antaranchor lewat jalur bertipe berwaktu (F3: ikut nota, whip, layar, orbit,
-// pilar, crane; poseAntara di naskah.js) dan mendorong pelan selama babak dibaca. Gambar hanya
-// saat ada yang berubah.
+// pilar, crane; F4: keluar jendela ke atas kota; poseAntara di naskah.js) dan mendorong pelan
+// selama babak dibaca. Kota (kota3d.js) tampak sejak babak kebiasaan, saat jendelanya masuk
+// bingkai. Gambar hanya saat ada yang berubah; di babak ramai lalu lintas bergerak terus.
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { susunLantai, susun, notaTerbang, LANTAI } from "./lantai.js";
 import { gambarAtlas, uvWilayah } from "./layar.js";
-import { ANCHOR_V5, poseAnchor, durasiAntara, poseDalam, poseAntara, GESER } from "./naskah.js";
+import { ANCHOR_V5, poseAnchor, durasiAntara, poseDalam, poseAntara, lintasTahap, GESER } from "./naskah.js";
+import { buatKota } from "./kota3d.js";
 
 const LATAR = 0xf3ece0;
 const TINTA = 0x2a2836;
@@ -75,6 +77,8 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   const scene = new THREE.Scene();
   const latar = new THREE.Color(LATAR);
   scene.background = latar;
+  // Kabut ke warna latar: tepi kota dan cakrawala melebur ke kertas (previs kota).
+  scene.fog = new THREE.Fog(LATAR, 900, 2800);
   const camera = new THREE.PerspectiveCamera(38, 1, 0.05, 200);
 
   // ---- Bahan ---------------------------------------------------------------------------------
@@ -171,6 +175,26 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     nota.matrixWorldNeedsUpdate = true;
   };
 
+  // ---- Kota (F4) -------------------------------------------------------------------------------
+  // Dibangun saat dibutuhkan (babak kebiasaan ke atas) atau saat peramban senggang sesudah bingkai
+  // pertama, supaya bingkai pertama hero tidak menunggu 100 ribu segitiga kota.
+  const iKebiasaan = ANCHOR_V5.findIndex((a) => a.id === "kebiasaan");
+  const iRamai = ANCHOR_V5.findIndex((a) => a.id === "ramai");
+  const bahanPesan = new THREE.MeshBasicMaterial({ color: 0xf0b35a });
+  let kota = null;
+  let bayangKota = false;
+  const bangunKota = () => {
+    if (kota) return kota;
+    kota = buatKota({ bahanToon: bahan.toon, bahanPesan, hp });
+    for (const m of kota.mesh) {
+      m.receiveShadow = m !== kota.pesan;
+      scene.add(m);
+    }
+    tanpaTepi.push(kota.pesan);
+    kotor = true;
+    return kota;
+  };
+
   // ---- Cahaya (previs dunia penuh, gaya terang) ------------------------------------------------
   scene.add(new THREE.HemisphereLight(0xffffff, 0xe6dccb, 1.4));
   scene.add(new THREE.HemisphereLight(0xffffff, 0x201812, 0.6));
@@ -183,8 +207,11 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   kunci.shadow.mapSize.set(hp ? 2048 : 4096, hp ? 1024 : 2048);
   kunci.shadow.bias = -0.0004;
   kunci.shadow.normalBias = 0.012;
-  // Kamera bayangan dihadapkan sepanjang lantai (arah atas -z), lalu batasnya dipas ke sudut lantai.
-  {
+  // Kamera bayangan dihadapkan sepanjang lantai (arah atas -z), lalu batasnya dipas ke kotak
+  // [a, b]: sudut lantai kantor, atau kota sekitar gedung klien saat kamera di atas kota (desktop).
+  const arahKunci = kunci.position.clone().normalize();
+  const pasBayang = (a, b, jauh) => {
+    kunci.position.copy(arahKunci).multiplyScalar(jauh);
     const kb = kunci.shadow.camera;
     kb.up.set(0, 0, -1);
     kb.position.copy(kunci.position);
@@ -193,14 +220,18 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     const inv = kb.matrixWorldInverse;
     const min = new THREE.Vector3(Infinity, Infinity, Infinity);
     const max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
-    for (const x of [-1, 1]) for (const y of [0, 1]) for (const z of [-1, 1]) {
-      const p = new THREE.Vector3((x * LANTAI.lebar) / 2, y * LANTAI.tinggi, (z * LANTAI.dalam) / 2).applyMatrix4(inv);
+    for (const x of [a[0], b[0]]) for (const y of [a[1], b[1]]) for (const z of [a[2], b[2]]) {
+      const p = new THREE.Vector3(x, y, z).applyMatrix4(inv);
       min.min(p);
       max.max(p);
     }
     Object.assign(kb, { left: min.x - 0.3, right: max.x + 0.3, bottom: min.y - 0.3, top: max.y + 0.3, near: Math.max(0.1, -max.z - 1), far: -min.z + 1 });
     kb.updateProjectionMatrix();
-  }
+    renderer.shadowMap.needsUpdate = true;
+  };
+  const BAYANG_LANTAI = [[-LANTAI.lebar / 2, 0, -LANTAI.dalam / 2], [LANTAI.lebar / 2, LANTAI.tinggi, LANTAI.dalam / 2]];
+  const BAYANG_KOTA = [[-760, -4, -720], [700, 170, 760]];
+  pasBayang(...BAYANG_LANTAI, 40);
   scene.add(kunci);
 
   // ---- Garis tinta di layar ------------------------------------------------------------------
@@ -310,9 +341,19 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       blend = null;
       return;
     }
-    const dur = pose && tujuan ? durasiAntara(lalu, i, kurangiGerak) : 0;
-    // Disela di tengah perpindahan: kamera tidak di pose anchor mana pun, jadi blend biasa (lalu -1).
-    blend = dur > 0 ? { dari: { ...pose }, lalu: blend ? -1 : lalu, ke: i, t0: sekarang(), dur: dur * 1000 } : null;
+    const awal = { dari: pose ? { ...pose } : null, lalu, e0: 0 };
+    let dur = pose && tujuan ? durasiAntara(lalu, i, kurangiGerak) : 0;
+    if (blend && dur > 0) {
+      const e = blend.e0 + (1 - blend.e0) * Math.min(1, (sekarang() - blend.t0) / blend.dur);
+      if (blend.lalu === i && Math.abs(blend.ke - i) === 1) {
+        // Disela lalu digulir balik: putar jalur yang sama mundur dari titik sekarang.
+        Object.assign(awal, { dari: poseDalam(tujuan, geser), lalu: blend.ke, e0: 1 - e });
+        dur = durasiAntara(blend.ke, i, kurangiGerak) * e;
+      } else if (blend.makro || lintasTahap(lalu, i)) dur = 0;
+      // Disela ke arah lain: kamera tidak di pose anchor mana pun, jadi blend biasa (lalu -1).
+      else awal.lalu = -1;
+    }
+    blend = dur > 0 ? { ...awal, ke: i, t0: sekarang(), dur: dur * 1000, makro: awal.lalu >= 0 && lintasTahap(awal.lalu, i) } : null;
     tujuan = ke;
     if (!blend) pose = poseDalam(ke, geser);
     kotor = true;
@@ -365,21 +406,66 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     }
     const sasaran = poseDalam(tujuan, geser);
     if (blend) {
-      const u = (t - blend.t0) / blend.dur;
-      pose = poseAntara(blend.lalu, blend.ke, blend.dari, sasaran, Math.min(1, u), { aspek: camera.aspect, tegak });
+      const u = Math.min(1, (t - blend.t0) / blend.dur);
+      pose = poseAntara(blend.lalu, blend.ke, blend.dari, sasaran, blend.e0 + (1 - blend.e0) * u, { aspek: camera.aspect, tegak });
       if (u >= 1) blend = null;
       kotor = true;
     } else if (kotor) pose = sasaran;
+    // Kota bergerak terus selama babak ramai (kecuali gerak dikurangi): lalu lintas memadat
+    // sejalan gulir di babak itu.
+    const ramai = indeks === iRamai || (blend && blend.lalu === iRamai);
+    if (ramai && !kurangiGerak) kotor = true;
     if (!kotor) return false;
     letakNota(blend ? pose.nota : null);
     pasang(pose);
+    aturKota(t, ramai);
     gambar();
     kotor = false;
     return true;
   };
+  // Kota tampak sejak babak kebiasaan (jendelanya di belakang meja), termasuk selama perpindahan
+  // dari atau ke sana. Pelat atas, lantai 3, dan atap hanya saat kamera keluar ke kota, karena
+  // crane F3 membuka lantai kantor dari atas.
+  const aturKota = (t, ramai) => {
+    const asal = blend && blend.lalu >= 0 ? blend.lalu : indeks;
+    const tampak = Math.max(indeks, asal) >= iKebiasaan;
+    if (tampak) bangunKota();
+    if (!kota) return;
+    for (const m of kota.mesh) m.visible = tampak;
+    kota.kulitAtas.visible = tampak && Math.max(indeks, asal) >= iRamai;
+    if (!tampak) return;
+    kota.atur(kurangiGerak ? 0 : t / 1000, ramai && indeks === iRamai && !blend ? geser : 0);
+    // Bayangan kota hanya di desktop (lembar look-dev: dimatikan di HP), dan hanya setelah kamera
+    // jauh di atas gedung: peta bayangan dipas ulang sekali ke kota, lalu sekali lagi ke lantai.
+    const diKota = !hp && kota.kulitAtas.visible && camera.position.y > 40;
+    if (diKota !== bayangKota) {
+      bayangKota = diKota;
+      kota.diam.castShadow = kota.kulitAtas.castShadow = kota.mobil.castShadow = diKota;
+      if (diKota) pasBayang(...BAYANG_KOTA, 2000);
+      else pasBayang(...BAYANG_LANTAI, 40);
+    }
+  };
+
   const bingkai = () => {
     raf = requestAnimationFrame(bingkai);
     if (waktuUji == null) langkah();
+  };
+
+  // Program dikompilasi untuk target warna, tempat adegan sungguh digambar (kunci programnya ikut
+  // ruang warna target). compile hanya menelusuri benda yang tampak, jadi kota ditampakkan sebentar.
+  let dibuang = false;
+  const kompilasi = async () => {
+    const tampak = kota?.mesh.map((m) => m.visible);
+    kota?.mesh.forEach((m) => (m.visible = true));
+    // pass normal + depth (bahan pengganti) juga punya program sendiri untuk mesh instanced
+    scene.overrideMaterial = matNormal;
+    renderer.setRenderTarget(rtNormal);
+    await renderer.compileAsync(scene, camera);
+    scene.overrideMaterial = null;
+    renderer.setRenderTarget(rtWarna);
+    await renderer.compileAsync(scene, camera);
+    renderer.setRenderTarget(null);
+    kota?.mesh.forEach((m, i) => (m.visible = tampak[i]));
   };
 
   const api = {
@@ -390,14 +476,20 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       ukur();
       const p = poseAnchor(Math.max(0, indeks), tegak) ?? poseAnchor(0, tegak);
       pasang(p);
-      // Program dikompilasi untuk target warna, tempat adegan sungguh digambar (kunci programnya
-      // ikut ruang warna target).
-      renderer.setRenderTarget(rtWarna);
-      await renderer.compileAsync(scene, camera);
-      renderer.setRenderTarget(null);
+      if (indeks >= iKebiasaan) bangunKota();
+      await kompilasi();
       renderer.shadowMap.needsUpdate = true;
       kotor = true;
       raf = requestAnimationFrame(bingkai);
+      if (!kota) {
+        const senggang = window.requestIdleCallback ?? ((f) => setTimeout(f, 1500));
+        senggang(async () => {
+          if (dibuang || kota) return;
+          bangunKota();
+          aturKota(sekarang(), false);
+          await kompilasi();
+        });
+      }
     },
     keAnchor,
     get indeks() {
@@ -414,6 +506,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       terlihat = v;
     },
     dispose() {
+      dibuang = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
       scene.traverse((o) => {
@@ -450,12 +543,12 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
           kotor = true;
           langkah();
         } else waktuLalu = performance.now();
-        return { ...info, posisi: camera.position.toArray(), blend: !!blend };
+        return { ...info, posisi: camera.position.toArray(), blend: !!blend, rinci: blend && { lalu: blend.lalu, ke: blend.ke, e0: +blend.e0.toFixed(4), t0: blend.t0, dur: blend.dur } };
       },
       periksa() {
         const r = new THREE.Raycaster();
         r.setFromCamera(new THREE.Vector2(0, 0), camera);
-        const h = r.intersectObjects(scene.children.filter((o) => o.isMesh && !tanpaTepi.includes(o)), false)[0];
+        const h = r.intersectObjects(scene.children.filter((o) => o.isMesh && o.visible && !tanpaTepi.includes(o)), false)[0];
         return h ? { jarak: +h.distance.toFixed(2), benda: h.object.name, titik: h.point.toArray().map((x) => +x.toFixed(2)) } : null;
       },
     };

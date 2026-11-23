@@ -2,7 +2,9 @@
 // - tiap babak di lantai kantor: draw call, segitiga, foto kanvas;
 // - tiap perpindahan antarbabak dengan jam dibekukan: bingkai per 0,1 detik, raycast tengah layar,
 //   draw call terbanyak, lalu lembar kontak berlabel waktu.
-//   node scripts/ukur-stasiun.mjs <url /v5> <lebarxtinggi> --keluar <folder> [--dpr 2] [--cpu 4] [--gpu] [--kontak]
+// - dengan --sela: tiap perpindahan disela di tengah lalu digulir balik; lompatan posisi kamera
+//   antarbingkai 0,1 s dicatat (jalur yang sama diputar mundur dari titik sela, tanpa loncat).
+//   node scripts/ukur-stasiun.mjs <url /v5> <lebarxtinggi> --keluar <folder> [--dpr 2] [--cpu 4] [--gpu] [--kontak] [--sela]
 // Hasil angka di <folder>/ukur.json. Profil Chrome sementara dihapus di akhir.
 import { spawn } from "node:child_process";
 import { mkdtempSync, mkdirSync, writeFileSync, rmSync } from "node:fs";
@@ -19,6 +21,7 @@ const dpr = Number(nilai("--dpr", W < 768 ? 2 : 1));
 const cpu = Number(nilai("--cpu", 1));
 const gpu = arg.includes("--gpu");
 const kontak = arg.includes("--kontak");
+const sela = arg.includes("--sela");
 const hp = W < 768;
 mkdirSync(keluar, { recursive: true });
 
@@ -119,6 +122,12 @@ for (let i = 0; i < titik.length; i++) {
   hasil.babak.push({ anchor: aktif, calls: info.calls, segitiga: info.segitiga, programs: info.programs });
   await foto(join(keluar, `babak-${String(i).padStart(2, "0")}-${aktif}.jpg`));
   await foto(join(keluar, `halaman-${String(i).padStart(2, "0")}-${aktif}.jpg`), false);
+  // Ujung babak (dorongan selesai, lalu lintas babak ramai paling padat), sebelum pemicu berikutnya.
+  if (titik[i + 1]) {
+    await js(`(() => { scrollTo(0, Math.max(0, ${titik[i + 1].y} - innerHeight / 2 - 80)); dispatchEvent(new Event("scroll")); return true; })()`);
+    await tidur(1500);
+    if ((await js(`document.querySelector(".stasiun").dataset.anchor`)) === aktif) await foto(join(keluar, `akhir-${String(i).padStart(2, "0")}-${aktif}.jpg`));
+  }
 }
 
 // 2. Perpindahan, jam dibekukan: bingkai per 0,1 detik
@@ -158,6 +167,45 @@ if (kontak) {
     );
   }
 }
+// 3. Disela di tengah lalu digulir balik
+if (sela) {
+  hasil.sela = [];
+  for (let i = 0; i + 1 < titik.length; i++) {
+    await keAnchor(i);
+    await tidur(1500);
+    if (await js(`document.querySelector(".stasiun").hasAttribute("data-kosong")`)) continue;
+    const T0 = 3e7 + i * 1e5;
+    await js(`window.__stasiunUji.waktu(${T0}); true`);
+    const ke = await keAnchor(i + 1);
+    if (await js(`document.querySelector(".stasiun").hasAttribute("data-kosong")`)) {
+      await js(`window.__stasiunUji.waktu(null); true`);
+      continue;
+    }
+    const pos = [];
+    const langkah = async (k) => (await js(`window.__stasiunUji.waktu(${T0 + k * 100})`));
+    let k = 0;
+    let s;
+    // maju 0,7 s (separuh perpindahan terpanjang di dalam gedung), lalu digulir balik
+    for (; k <= 7; k++) {
+      s = await langkah(k);
+      pos.push(s.posisi);
+      if (!s.blend) break;
+    }
+    const sebelum = s.rinci;
+    const balik = await keAnchor(i);
+    const rinci = [sebelum];
+    // k sudah 8 sesudah loop maju: bingkai pertama sesudah balik di 0,8 s
+    for (let n = 0; n < 40; n++, k++) {
+      s = await langkah(k);
+      if (n < 2) rinci.push(s.rinci);
+      pos.push(s.posisi);
+      if (!s.blend) break;
+    }
+    await js(`window.__stasiunUji.waktu(null); true`);
+    const loncat = pos.slice(1).map((p, j) => Math.hypot(...p.map((v, d) => v - pos[j][d])));
+    hasil.sela.push({ dari: titik[i].nama, ke, balik, bingkai: pos.length, loncatMaks: +Math.max(...loncat).toFixed(3), loncatDiSela: +loncat[7]?.toFixed(3), loncat: loncat.map((x) => +x.toFixed(3)), rinci, akhir: s.posisi, blendSelesai: !s.blend });
+  }
+}
 hasil.maksCalls = maks;
 writeFileSync(join(keluar, "ukur.json"), JSON.stringify(hasil, null, 2));
 
@@ -176,5 +224,5 @@ if (kontak) {
     await kirim("Emulation.setDeviceMetricsOverride", { width: 1600, height: 900, deviceScaleFactor: 1, mobile: false });
   }
 }
-console.log(JSON.stringify({ maksCalls: maks, babak: hasil.babak, galat }, null, 1));
+console.log(JSON.stringify({ maksCalls: maks, babak: hasil.babak, sela: hasil.sela?.map((x) => `${x.dari} ke ${x.ke} balik ${x.balik}: loncat maks ${x.loncatMaks} m, di sela ${x.loncatDiSela} m, selesai ${x.blendSelesai}`), galat }, null, 1));
 process.exit(0);

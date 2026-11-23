@@ -219,6 +219,11 @@ POSE.gerbang = {
   tegak: { posisi: [-19.3, 2.6, 3.4], lihat: [-16.4, 0.9, -2.6], fov: 58 },
 };
 
+// Celah jendela tanpa tiang [x kiri, x kanan] di fasad (z = 4): di antara kusen x = 4 dan x = 12,
+// ambang atas 0,9 m, ambang bawah lintel 3,05 m. Jalan keluar kamera F4.
+export const CELAH_JENDELA = [4.125, 11.875];
+export const FASAD = { z: 4, kaca: 4.16, ambang: 0.9, lintel: 3.05 };
+
 // Dua pilar struktur di tengah lorong [x, z].
 export const PILAR_LORONG = [[-11.9, -0.6], [-2.0, -0.6]];
 
@@ -273,7 +278,10 @@ export function susunLantai() {
   b.kotak(LANTAI.lebar, 0.9, 0.3, W.putih, 0, 0.45, 4, b.akar, undefined, { bevel: 0, bayang: false });
   b.kotak(LANTAI.lebar, 0.4, 0.3, W.putih, 0, 3.25, 4, b.akar, undefined, { bevel: 0, bayang: false });
   for (let x = -20; x <= 20; x += 4) if (Math.abs(x - 8) > 2.5) b.kotak(0.25, 2.3, 0.3, W.gelap, x, 1.55, 4, b.akar, undefined, { bevel: 0, bayang: false });
-  b.tempel({ bentuk: "bidang", ukuran: [LANTAI.lebar, 2.3], bahan: "kaca", bayang: false, warna: W.putih }, susun([0, 1.55, 4.16]));
+  // Kaca di kiri dan kanan celah: celahnya terbuka, kamera F4 keluar lewat sana tanpa menembus kaca.
+  for (const [kiri, kanan] of [[-LANTAI.lebar / 2, CELAH_JENDELA[0]], [CELAH_JENDELA[1], LANTAI.lebar / 2]]) {
+    b.tempel({ bentuk: "bidang", ukuran: [kanan - kiri, 2.3], bahan: "kaca", bayang: false, warna: W.putih }, susun([(kiri + kanan) / 2, 1.55, 4.16]));
+  }
 
   // Lorong: dua pilar struktur, pilar yang dilewati kamera, tanaman di kedua ujung, dua rekan kerja.
   // Kedua pilar digeser dari previs (x -12,3 dan -0,4): di sana blend harga-diam ke tarikan dan

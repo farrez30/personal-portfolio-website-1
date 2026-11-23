@@ -124,7 +124,7 @@ Perbandingan: outline image-space memakai draw call 1,6 sampai 2 kali clay, seta
 |---|---|---|---|---|---|---|---|
 | Timbangan + nota | lolos | lolos setelah nota `#b8322a` | lolos setelah map dan monitor digeser (balok berlatar dinding) | lolos | tidak relevan | lolos | objek persisten |
 | Tumpukan map | lolos | lolos | menyatu dengan meja (wajar) | lolos | | gagal draw call | gabung geometri |
-| Kota | lolos (setelah dibangun ulang) | lolos | lolos (siluet kota terbaca) | lolos | | lolos | ruko klien merah perlu ditonjolkan di build (sekarang tertutup gedung di bidikan desktop) |
+| Kota | lolos (setelah dibangun ulang) | lolos | lolos (siluet kota terbaca) | lolos | | lolos | ruko klien merah perlu ditonjolkan di build (sekarang tertutup gedung di bidikan desktop); F4: gedung klien di tepi blok menghadap taman, atap merah, garis pandang dikunci tes |
 | Globe malam | lolos | lolos (laut Y sekitar 45, lampu Y di atas 200) | lolos | lolos | | gagal bingkai pertama | panggang tekstur |
 | Orang (kapsul) | lolos | lolos | lolos | lolos | | lolos | bentuk masih blockout |
 | Layar produk | | | | | dari gambar asli | | belum diisi layar proyek nyata |

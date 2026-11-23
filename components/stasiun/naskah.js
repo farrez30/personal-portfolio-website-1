@@ -7,6 +7,7 @@
 import { pemicuAnchor as pemicuDasar, easeInOut } from "../dunia/naskah.js";
 import { BABAK_V5 } from "../../content/cerita-v5.js";
 import { POSE, TABLET, PILAR_LEWAT, notaTerbang } from "./lantai.js";
+import { POSE_KOTA } from "./kota.js";
 
 // Jenis perpindahan. `makro` = serah terima antarskala (gedung ke kota ke peta ke globe ke modul),
 // boleh lebih lama dari batas perpindahan di dalam gedung.
@@ -41,14 +42,15 @@ const KELUAR = {
   penutup: ["zoom-satelit", 5.5, "satelit melayang masuk dari atas"],
 };
 
-// `pose` diisi untuk anchor di lantai kantor (F2, components/stasiun/lantai.js); anchor kota, peta,
-// globe, dan modul lab menyusul di F4 sampai F6. Anchor tanpa pose: dunia memudar dan seksinya
-// tampil sebagai halaman biasa.
+// `pose` diisi untuk anchor di lantai kantor (F2, components/stasiun/lantai.js) dan babak ramai di
+// atas kota (F4, kota.js); peta, globe, dan modul lab menyusul di F5 dan F6. Anchor tanpa pose:
+// dunia memudar dan seksinya tampil sebagai halaman biasa.
+const POSE_BABAK = { ...POSE, ramai: POSE_KOTA };
 export const ANCHOR_V5 = [
   { id: "gerbang", seksi: [{ sel: ".gerbang", di: 0 }], tempat: "lantai kantor, meja 1 dari jauh", keluar: "blend", durasi: 0.9, pose: POSE.gerbang },
   ...BABAK_V5.map((b) => {
     const [keluar, durasi, pemicu] = KELUAR[b.id];
-    return { id: b.id, seksi: [{ sel: `.bab--${b.id}`, di: 0 }], keluar, durasi, pemicu, pose: POSE[b.id] ?? null };
+    return { id: b.id, seksi: [{ sel: `.bab--${b.id}`, di: 0 }], keluar, durasi, pemicu, pose: POSE_BABAK[b.id] ?? null };
   }),
   // modul lab: gulir menggerakkan kamera di rel lorong, bukan perpindahan berwaktu
   { id: "modul-lab", seksi: [{ sel: "#modul-lab", di: 0 }], tempat: "modul lab, lorong rak", keluar: "rel", durasi: 0, pose: null },
@@ -62,14 +64,26 @@ export function poseAnchor(i, tegak = false) {
   return { posisi: [...t.posisi], lihat: [...t.lihat], fov: t.fov };
 }
 
+// Perpindahan antara anchor `dari` dan `ke` melewati serah terima antarskala (gedung ke kota dan
+// seterusnya): ada anchor di antaranya yang keluar dengan jenis makro.
+export function lintasTahap(dari, ke) {
+  for (let k = Math.min(dari, ke); k < Math.max(dari, ke); k++) if (JENIS[ANCHOR_V5[k]?.keluar]?.makro) return true;
+  return false;
+}
+
 // Lama perpindahan dari anchor `dari` ke `ke` dalam detik. Maju satu langkah memakai durasi
 // keluar anchor asalnya; mundur satu langkah memakai durasi yang sama (jalur yang sama dibalik);
-// lompatan jauh (tautan, muat ulang di tengah) dibatasi supaya kamera tidak terbang lama.
-// Gerak dikurangi: potongan. Perpindahan ke anchor tanpa pose juga potongan (dunianya memudar).
+// di dalam gedung paling lama BATAS_DALAM, serah terima makro boleh lebih lama. Lompatan jauh
+// (tautan, muat ulang di tengah) dibatasi supaya kamera tidak terbang lama; lompatan yang
+// melewati serah terima antarskala jadi potongan, karena blend lurus dari dalam gedung ke atas
+// kota menembus dinding. Gerak dikurangi: potongan. Ke anchor tanpa pose juga potongan.
 export function durasiAntara(dari, ke, kurangiGerak = false) {
   if (kurangiGerak || dari === ke || dari < 0 || !ANCHOR_V5[ke]?.pose || !ANCHOR_V5[dari]?.pose) return 0;
-  if (Math.abs(ke - dari) === 1) return Math.min(ANCHOR_V5[Math.min(dari, ke)].durasi, BATAS_DALAM);
-  return 1.2;
+  if (Math.abs(ke - dari) === 1) {
+    const a = ANCHOR_V5[Math.min(dari, ke)];
+    return JENIS[a.keluar].makro ? a.durasi : Math.min(a.durasi, BATAS_DALAM);
+  }
+  return lintasTahap(dari, ke) ? 0 : 1.2;
 }
 
 // Dorongan pelan selama satu babak dibaca: kamera mulai 5% lebih jauh dan mendekat ke posenya
@@ -156,6 +170,35 @@ function depanLayar(T, fov, { aspek = 16 / 9, tegak = false } = {}) {
   return T.c.map((v, i) => v + n[i] * d - atas[i] * 0.02 * d);
 }
 
+// Catmull-Rom centripetal, rumus yang sama dengan THREE.CatmullRomCurve3 (getPoint, tidak tertutup),
+// supaya naskah tetap tanpa three.js. u 0..1 dibagi rata per ruas, bukan per panjang busur: ruas
+// pendek di dalam gedung berjalan pelan, ruas panjang di atas kota cepat.
+function catmullRom(titik, u) {
+  const n = titik.length;
+  const p = (n - 1) * u;
+  let i = Math.floor(p);
+  let w = p - i;
+  if (i >= n - 1) [i, w] = [n - 2, 1];
+  const ambil = (k) => (k < 0 ? titik[0].map((v, j) => 2 * v - titik[1][j]) : k > n - 1 ? titik[n - 1].map((v, j) => 2 * v - titik[n - 2][j]) : titik[k]);
+  const [p0, p1, p2, p3] = [ambil(i - 1), ambil(i), ambil(i + 1), ambil(i + 2)];
+  const jarak = (a, b) => Math.pow(a.reduce((s, v, j) => s + (v - b[j]) ** 2, 0), 0.25);
+  let [d0, d1, d2] = [jarak(p0, p1), jarak(p1, p2), jarak(p2, p3)];
+  if (d1 < 1e-4) d1 = 1;
+  if (d0 < 1e-4) d0 = d1;
+  if (d2 < 1e-4) d2 = d1;
+  return p1.map((x1, j) => {
+    const [x0, x2, x3] = [p0[j], p2[j], p3[j]];
+    const t1 = ((x1 - x0) / d0 - (x2 - x0) / (d0 + d1) + (x2 - x1) / d1) * d1;
+    const t2 = ((x2 - x1) / d1 - (x3 - x1) / (d1 + d2) + (x3 - x2) / d2) * d1;
+    return x1 + t1 * w + (-3 * x1 + 3 * x2 - 2 * t1 - t2) * w * w + (2 * x1 - 2 * x2 + t1 + t2) * w * w * w;
+  });
+}
+
+// Titik antara jalur keluar jendela (previs jalanKeluar dengan TX=campur), di koordinat lantai:
+// ke celah jendela tanpa tiang di x = 8, datar setinggi 2,4 m sampai di luar fasad (z = 4,16),
+// naik tegak di atas jalan depan (garis tengah z = 15), lalu menjauh ke bidikan kota.
+export const TITIK_JENDELA = [[8.6, 2.4, 0.6], [8, 2.4, 2.6], [8, 2.4, 5.5], [8, 2.6, 11], [8, 8, 15], [8.4, 34, 15.5], [10, 90, 17], [45, 210, 95], [185, 300, 300]];
+
 const JALUR = {
   // Nota merah lepas dari timbangan meja 1, terbang melengkung ke timbangan meja 2; kamera mundur
   // ke belakangnya dan mengikuti, lalu turun ke pose meja 2.
@@ -229,6 +272,27 @@ const JALUR = {
       posisi: lerp(lerp(lerp(a.posisi, atas(a.lihat), seg(e, 0, 0.38)), atas(b.lihat), seg(e, 0.35, 0.65)), b.posisi, seg(e, 0.62, 1)),
       lihat: lerp(lerp(lerp(a.lihat, lantai(a.lihat), seg(e, 0, 0.3)), lantai(b.lihat), seg(e, 0.35, 0.65)), b.lihat, seg(e, 0.68, 1)),
     };
+  },
+  // Keluar lewat celah jendela, naik di atas jalan, menjauh ke atas kota (serah terima gedung ke
+  // kota). Posisi di spline TITIK_JENDELA; arah pandang diinterpolasi sebagai yaw, pitch, dan jarak
+  // (seperti poseBlend), bukan titik lihat yang digeser: titik lihat previs bergeser dari depan
+  // kamera ke pusat kota di belakangnya dan sempat lewat di bawah kamera. Selama keluar kamera
+  // memandang lurus ke luar jendela, saat naik menunduk ke menara seberang, lalu berputar ke
+  // gedung klien di tengah kota. Jarak pandang membesar bertahap supaya bidang dekat (near) kecil
+  // selama kamera masih dekat kusen dan dinding.
+  jendela(a, b, e) {
+    const s = halus(e);
+    const posisi = catmullRom([a.posisi, ...TITIK_JENDELA, b.posisi], s);
+    const A = arahPandang(a);
+    const B = arahPandang(b);
+    const keluar = 0;
+    const dyB = Math.atan2(Math.sin(B.yaw - keluar), Math.cos(B.yaw - keluar));
+    const yaw = A.yaw + (keluar - A.yaw) * seg(s, 0, 0.3) + dyB * seg(s, 0.62, 0.95);
+    const pitch = A.pitch + (-0.14 - A.pitch) * seg(s, 0, 0.3) + (-0.42 + 0.14) * seg(s, 0.35, 0.62) + (B.pitch + 0.42) * seg(s, 0.62, 1);
+    const log = (x, y, u) => Math.exp(Math.log(x) + (Math.log(y) - Math.log(x)) * u);
+    const jarak = log(log(log(A.jarak, 8, seg(s, 0, 0.3)), 60, seg(s, 0.35, 0.65)), B.jarak, seg(s, 0.65, 1));
+    const arah = arahDari(yaw, pitch);
+    return { posisi, lihat: posisi.map((v, i) => v + arah[i] * jarak) };
   },
 };
 

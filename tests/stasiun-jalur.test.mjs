@@ -2,15 +2,22 @@
 // babaknya, tidak menembus benda, tidak menatap ke atas dinding, gulir mundur memutar jalur yang
 // sama, dan tiap jenis benar-benar melakukan geraknya (nota terbang dan diikuti, whip diam dulu lalu
 // lewat sedikit, layar memenuhi bingkai di potongan, orbit memutari meja, pilar menyapu bingkai
-// sebentar, crane naik di atas denah tanpa gambar terbalik).
+// sebentar, crane naik di atas denah tanpa gambar terbalik). Jalur keluar jendela F4 punya tesnya
+// sendiri di bagian akhir.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "three";
-import { susunLantai, susun, batas, LANTAI, TABLET, notaTerbang } from "../components/stasiun/lantai.js";
+import { susunLantai, susun, batas, LANTAI, TABLET, notaTerbang, CELAH_JENDELA, FASAD } from "../components/stasiun/lantai.js";
 import { ANCHOR_V5, JENIS, poseAnchor, poseJalur, poseAntara, GESER, TINGGI_CRANE } from "../components/stasiun/naskah.js";
+import { kulitGedung, batasKota, JALAN_DEPAN } from "../components/stasiun/kota.js";
 
 const BENDA = susunLantai();
 const PADAT = BENDA.filter((o) => o.bahan === "toon" || o.bahan === "layar");
+// Kulit gedung klien dan kota di sekitarnya. Pelat atas, lantai 3, dan atap hanya tampak sesudah
+// kamera keluar jendela (crane membuka lantai kantor dari atas), jadi hanya padat bagi jalur itu.
+const KULIT = kulitGedung();
+const LUAR = [...KULIT.bawah.map(batas), ...batasKota()];
+const LUAR_JENDELA = [...LUAR, ...KULIT.atas.map(batas)];
 const dalam = (p, b, sela = 0) => p.every((v, k) => v > b.min[k] - sela && v < b.max[k] + sela);
 const potong = (a, b) => [0, 1, 2].every((k) => a.min[k] < b.max[k] && b.min[k] < a.max[k]);
 // Layar HP 390x844 dan desktop 1440x900, seperti lembar kontak.
@@ -34,9 +41,9 @@ const pitch = (p) => Math.asin((p.lihat[1] - p.posisi[1]) / Math.hypot(...p.liha
 const sudut = (u, v) => Math.acos(Math.min(1, Math.max(-1, u.reduce((s, x, k) => s + x * v[k], 0) / (Math.hypot(...u) * Math.hypot(...v)))));
 const arah = (p) => p.lihat.map((v, k) => v - p.posisi[k]);
 
-test("tujuh perpindahan lantai kantor, enam jenis bertipe ditambah blend dari hero", () => {
-  assert.deepEqual([...new Set(JALUR.map((j) => j.jenis))], ["blend", "ikut", "whip", "layar", "orbit", "pilar", "crane"]);
-  assert.equal(JALUR.length, 14);
+test("delapan perpindahan: blend dari hero, enam jenis di lantai kantor, keluar jendela ke kota", () => {
+  assert.deepEqual([...new Set(JALUR.map((j) => j.jenis))], ["blend", "ikut", "whip", "layar", "orbit", "pilar", "crane", "jendela"]);
+  assert.equal(JALUR.length, 16);
   for (const j of JALUR) assert.ok(JENIS[j.jenis], j.nama);
 });
 
@@ -49,16 +56,18 @@ test("tiap jalur mulai dan berakhir tepat di pose kedua babak", () => {
   }
 });
 
-test("tiap jalur tidak menembus benda", () => {
+test("tiap jalur tidak menembus benda, juga kulit gedung dan kota di luarnya", () => {
   for (const j of JALUR) for (const e of SAMPEL) {
     const p = pada(j, e).posisi;
     const kena = PADAT.find((o) => dalam(p, batas(o), 0.05));
     assert.equal(kena, undefined, `${j.nama} di ${e} menembus ${kena?.bentuk} ${kena?.ukuran}`);
+    const luar = (JENIS[j.jenis].makro ? LUAR_JENDELA : LUAR).find((b) => dalam(p, b, 0.05));
+    assert.equal(luar, undefined, `${j.nama} di ${e} menembus benda luar di ${luar?.min}`);
   }
 });
 
-test("tiap jalur tetap di atas lantai dan di dalam denah gedung, hanya crane yang naik di atas dinding", () => {
-  for (const j of JALUR) for (const e of SAMPEL) {
+test("tiap jalur di dalam gedung tetap di atas lantai dan di dalam denah, hanya crane yang naik di atas dinding", () => {
+  for (const j of JALUR.filter((x) => !JENIS[x.jenis].makro)) for (const e of SAMPEL) {
     const p = pada(j, e).posisi;
     assert.ok(Math.abs(p[0]) < LANTAI.lebar / 2 - 0.2 && p[2] > -3.75 && p[2] < 3.85 && p[1] > 0.3, `${j.nama} di ${e}: ${p}`);
     if (j.jenis !== "crane") assert.ok(p[1] < LANTAI.tinggi, `${j.nama} di ${e} di atas dinding`);
@@ -221,6 +230,87 @@ test("crane: naik ke atas denah, menunduk hampir tegak lurus, gambar tidak terba
       const atas = new THREE.Vector3(0, 1, 0).applyQuaternion(cam.quaternion);
       if (lalu) assert.ok(atas.angleTo(lalu) < (25 * Math.PI) / 180, `${j.nama} e=${e} gambar berputar ${atas.angleTo(lalu)}`);
       lalu = atas;
+    }
+  }
+});
+
+// ---- F4: keluar jendela ke atas kota ------------------------------------------------------------
+// Sampel rapat untuk jalur panjang: 2,8 detik, 1201 titik (sekitar 2 ms per titik).
+const RAPAT = Array.from({ length: 1201 }, (_, s) => s / 1200);
+const SEMUA_PADAT = [...PADAT.map(batas), ...LUAR_JENDELA];
+// Kotak yang berdekatan dengan ruas p..q saja (ribuan kotak kota, ribuan ruas).
+const dekat = (p, q, r) => SEMUA_PADAT.filter((b) => [0, 1, 2].every((k) => Math.min(p[k], q[k]) - r < b.max[k] && Math.max(p[k], q[k]) + r > b.min[k]));
+const besar = (b, r) => ({ min: b.min.map((v) => v - r), max: b.max.map((v) => v + r) });
+// Bidang dekat (near) kamera pada pose ini, sama dengan adegan.js pasang().
+const near = (q) => Math.min(4, Math.max(0.03, Math.hypot(...arah(q)) * 0.015));
+
+test("jendela: raycast sepanjang jalur tidak memotong benda apa pun, dengan jarak aman setebal bidang dekat", () => {
+  for (const j of satu("jendela")) for (let s = 0; s + 1 < RAPAT.length; s++) {
+    const p = pada(j, RAPAT[s]);
+    const q = pada(j, RAPAT[s + 1]);
+    // ruas antarsampel diperbesar setebal bidang dekat: tidak ada benda yang terpotong bidang dekat
+    const r = Math.max(near(p), 0.05);
+    const kena = dekat(p.posisi, q.posisi, r).find((b) => kenaRuas(p.posisi, q.posisi, besar(b, r)));
+    assert.equal(kena, undefined, `${j.nama} ruas ${RAPAT[s]}: kena kotak di ${kena?.min}`);
+  }
+});
+
+test("jendela: lewat celah tanpa tiang, datar setinggi ambang sampai di luar fasad", () => {
+  for (const j of satu("jendela")) {
+    const titik = RAPAT.map((e) => pada(j, e).posisi);
+    // tiap titik yang berada di tebal fasad (ambang, kusen, kaca) ada di dalam celah dengan sela
+    const diFasad = titik.filter((p) => p[2] > FASAD.z - 0.3 && p[2] < FASAD.kaca + 0.3);
+    assert.ok(diFasad.length >= 3, `${j.nama}: jalur tidak melewati fasad`);
+    for (const p of diFasad) {
+      assert.ok(p[0] > CELAH_JENDELA[0] + 1 && p[0] < CELAH_JENDELA[1] - 1, `${j.nama}: x ${p[0]} terlalu dekat kusen`);
+      assert.ok(p[1] > FASAD.ambang + 1 && p[1] < FASAD.lintel - 0.4, `${j.nama}: y ${p[1]} terlalu dekat ambang atau lintel`);
+    }
+    // datar: dari setinggi celah (2,3 m) sampai 2 m di luar fasad, naik turunnya paling banyak 25 cm
+    const mulai = titik.findIndex((p) => p[1] >= 2.3);
+    const akhir = titik.findIndex((p) => p[2] > FASAD.kaca + 2);
+    const ys = titik.slice(mulai, akhir).map((p) => p[1]);
+    assert.ok(mulai >= 0 && akhir > mulai);
+    assert.ok(Math.max(...ys) - Math.min(...ys) < 0.25, `${j.nama}: tidak datar (${Math.min(...ys)} sampai ${Math.max(...ys)})`);
+  }
+});
+
+test("jendela: selama di dalam gedung kamera memandang keluar lewat celah, bukan ke kusen atau dinding", () => {
+  const fasad = PADAT.filter((o) => o.bentuk === "kotak" && Math.abs(o.m[14] - FASAD.z) < 0.01).map(batas);
+  assert.ok(fasad.length >= 10, "ambang, lintel, dan kusen ikut diperiksa");
+  for (const j of satu("jendela")) for (const e of RAPAT) {
+    const q = pada(j, e);
+    if (q.posisi[2] < 2 || q.posisi[2] > FASAD.z) continue;
+    // sinar tengah layar sejauh 30 m ke depan
+    const d = arah(q).map((v) => v / Math.hypot(...arah(q)));
+    const ujung = q.posisi.map((v, k) => v + d[k] * 30);
+    const kena = fasad.find((b) => kenaRuas(q.posisi, ujung, b));
+    assert.equal(kena, undefined, `${j.nama} di ${e}: sinar tengah kena fasad di ${kena?.min}`);
+  }
+});
+
+test("jendela: naik hampir tegak di atas jalan depan, lalu menjauh ke bidikan kota", () => {
+  for (const j of satu("jendela")) {
+    const titik = RAPAT.map((e) => pada(j, e).posisi);
+    const naik = titik.filter((p) => p[1] > 6 && p[1] < 60);
+    assert.ok(naik.length > 20);
+    for (const p of naik) assert.ok(Math.abs(p[2] - JALAN_DEPAN.z) < JALAN_DEPAN.lebar / 2, `${j.nama}: naik di z ${p[2]}, di luar jalan`);
+    const geser = Math.hypot(naik.at(-1)[0] - naik[0][0], naik.at(-1)[2] - naik[0][2]);
+    assert.ok(geser < 0.15 * (naik.at(-1)[1] - naik[0][1]), `${j.nama}: bergeser ${geser} m selama naik`);
+    // tinggi tidak pernah turun sesudah keluar fasad
+    const luar = titik.findIndex((p) => p[2] > FASAD.kaca + 1);
+    for (let s = luar + 1; s < titik.length; s++) assert.ok(titik[s][1] >= titik[s - 1][1] - 0.25, `${j.nama}: turun di sampel ${s}`);
+  }
+});
+
+test("jendela: tidak ada jeda mati, kamera terus bergerak atau berputar sampai bidikan kota", () => {
+  for (const j of satu("jendela")) {
+    const dur = ANCHOR_V5[j.i].durasi;
+    // jendela 0,2 s: posisi bergeser atau arah pandang berputar
+    for (let e = 0.05; e + 0.0714 <= 0.95; e += 0.05) {
+      const [p, q] = [pada(j, e), pada(j, e + 0.2 / dur)];
+      const pindah = Math.hypot(...p.posisi.map((v, k) => v - q.posisi[k]));
+      const putar = sudut(arah(p), arah(q));
+      assert.ok(pindah > 0.05 || putar > 0.02, `${j.nama} di ${e.toFixed(2)}: diam`);
     }
   }
 });
