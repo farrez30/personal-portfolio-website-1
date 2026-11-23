@@ -185,6 +185,30 @@
   max-width: 60ch;
 }
 
+.modul-lab__aksi {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.modul-lab__berikutnya {
+  min-height: 44px;
+  padding: 0 1.1rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.modul-lab__berikutnya:focus-visible,
+.modul-lab__lengkap:focus-visible {
+  outline: 2px solid var(--fokus);
+  outline-offset: 2px;
+}
+
 .modul-lab__lengkap {
   display: inline-flex;
   align-items: center;

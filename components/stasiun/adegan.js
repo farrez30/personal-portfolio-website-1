@@ -432,7 +432,8 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     if (!tj.rel) return poseDalam(tj, geser);
     const p = poseRel(relLab(), geser, { henti: !hp, potong: kurangiGerak });
     if (!buka || !tahap.lab) return p;
-    const u = tahapBuka(uBuka(t) * BUKA.total).kamera;
+    // pindah loker dari panel (Berikutnya): kamera langsung di depan loker baru
+    const u = buka.ganti ? 1 : tahapBuka(uBuka(t) * BUKA.total).kamera;
     return u > 0 ? { ...poseBlend(p, poseLoker(tahap.lab.susunan.loker[buka.i], tegak), u), tahap: "lab" } : p;
   };
   const lihat = new THREE.Vector3();
@@ -711,7 +712,14 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     buka(i) {
       const t = sekarang();
       if (buka && buka.i === i && buka.arah > 0) return;
-      buka = { i, arah: 1, u0: kurangiGerak ? 1 : buka?.i === i ? uBuka(t) : 0, t0: t };
+      // Loker lain sementara panel terbuka: potong ke loker baru, pintunya meluncur dari awal.
+      if (buka && buka.arah > 0) {
+        buka = { i, arah: 1, u0: kurangiGerak ? 1 : BUKA.tarik[0] / BUKA.total, t0: t, ganti: true };
+        nyalaLab = i;
+        kotor = true;
+        return;
+      }
+      buka = { i, arah: 1, u0: kurangiGerak ? 1 : buka?.i === i ? uBuka(t) : 0, t0: t, ganti: buka?.ganti && buka.i === i };
       nyalaLab = i;
       kotor = true;
     },

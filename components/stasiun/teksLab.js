@@ -6,4 +6,5 @@ export const TEKS_LAB = {
   jeda: { id: "Jeda gerak", en: "Pause motion" },
   lengkap: { id: "Lihat proyek", en: "View project" },
   dibuka: { id: "dibuka", en: "opened" },
+  berikutnya: { id: "Berikutnya", en: "Next" },
 };

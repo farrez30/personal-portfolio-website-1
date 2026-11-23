@@ -106,3 +106,25 @@ kamera dalam diam lama, rel tanpa palka, rak pengisi, titik loker tertukar, hove
 kabar ganda, kamera terlalu dekat loker, loker meluncur sebelum kamera tiba, tanpa henti lembut,
 kamera masuk di luar kaca, rel HP menempel di rak. Dua mutasi pertama yang lolos ternyata masih
 perilaku sah (lerp arah dinormalkan, rel 1 m dari pintu) dan diganti.
+
+## Lanjutan 24 Nov: Berikutnya, alamat per proyek, gerak masuk di HP
+
+- **Alamat per proyek:** panel yang terbuka menulis `?proyek=<slug>` (`alamatPanel`, `panelDariAlamat`
+  di lab.js; slug hanya dicocokkan ke daftar). Membuka dari daftar menambah satu entri riwayat,
+  tombol **Berikutnya** menggantinya (`replaceState`), jadi Back tetap langsung menutup panel.
+  Tautan langsung `?proyek=<slug>` membuka panel lokernya. Di 3D, pindah loker dari panel
+  memotong kamera ke loker baru dan pintunya meluncur dari awal.
+- **Live region pindah ke dalam dialog** (temuan audit): di luar dialog modal isi halaman inert,
+  jadi pengumuman "L-09 dibuka: YiheeCam" bisa tidak dibacakan.
+- **Gerak masuk di HP:** sebelumnya kamera dari balik kaca hanya bergeser 0,55 m ke awal rel dan
+  terbaca diam. Sekarang mulai 1,15 m di depan rak L-01 (label utuh, lensa 72°), lalu mundur
+  menyerong dan melebar ke 88° di awal rel; potongan ke dalam tertutup silang kaca gelap. Lembar
+  `kontak-zoom-hp.jpg` diganti dengan putaran ini: label L-01 terbaca sejak 3,6 s, rak penuh di 4,7 s.
+  Putaran antara (0,75 m, lensa 64°) memotong label selama 0,4 s dan dibuang.
+- Uji CDP HP dan desktop (`ukur-hp-lanjut.json`, `ukur-lebar-lanjut.json`): Enter, Berikutnya
+  (alamat `?proyek=yiheecam`, loker 3D L-09, live region), Back sesudah Berikutnya menutup dan fokus
+  kembali ke L-08, tautan langsung membuka L-09. Maks 34 draw call HP, 25 desktop, 0 galat,
+  bingkai pertama modul 24 ms HP, 10 ms desktop.
+- Tes: tiga tes baru di `tests/stasiun-lab.test.mjs` (gerak masuk HP, label L-01 utuh, alamat panel).
+  `npm test` 378 lulus. Lima mutasi baru merah: HP masuk dari kaca lagi, HP terlalu dekat, tanpa
+  lensa melebar, slug asing diterima, parameter tidak dihapus saat tutup.
