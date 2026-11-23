@@ -122,6 +122,32 @@ export const eksperimen = [
       },
     ],
   },
+  // Eksperimen 5 di zona yang sama, dengan loker sendiri: masalahnya bukan satu angka stok, tapi
+  // kursi bernomor yang masing-masing punya pemegang, dan bot yang menahan tanpa membayar.
+  // Angka dari hasil/kursi/dengan dan hasil/kursi/tanpa, uji 23 Nov 2026 (ADR 0010 flash-sale-lab).
+  {
+    slug: "kursi-konser",
+    zona: "flash-sale",
+    nomor: "SDL-05",
+    proyek: "flash-sale-lab",
+    jalur: { id: "Integritas data", en: "Data integrity" },
+    judul: { id: "Kursi konser", en: "Concert seats" },
+    masalah: {
+      id: "Ribuan orang memilih kursi bernomor yang sama di detik yang sama, dan bot menahan kursi tanpa pernah membayar. Bagaimana satu kursi tetap jatuh ke satu orang?",
+      en: "Thousands of people pick the same numbered seat in the same second, and bots hold seats they never pay for. How does each seat still go to one person?",
+    },
+    halaman: [
+      {
+        kunci: "kursi",
+        judul: { id: "Kursi dan bot", en: "Seats and bots" },
+        ket: {
+          id: "Tanpa pertahanan, bot mengunci 423 dari 1.200 kursi sampai penjualan selesai. Dengan pertahanan, semua terjual. Tidak ada kursi yang terjual dua kali.",
+          en: "Without defences, bots lock 423 of 1,200 seats until the sale ends. With them, every seat sells. No seat is sold twice.",
+        },
+        meta: { id: "Rekaman 23 Nov 2026, plus simulator", en: "Recorded 23 Nov 2026, plus a simulator" },
+      },
+    ],
+  },
 ];
 
 // Alamat halaman eksperimen di farrez.vercel.app. Halaman zona punya pilihan bahasa sendiri
