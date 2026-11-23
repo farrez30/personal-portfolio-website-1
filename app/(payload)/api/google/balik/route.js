@@ -3,7 +3,7 @@ import { getPayload } from "payload";
 import { addSessionToUser, generatePayloadCookie } from "payload/shared";
 import { getFieldsToSign, jwtSign } from "payload";
 import config from "@payload-config";
-import { bacaIdToken, COOKIE_STATE, emailSah, googleSiap, stateCocok, tukarKode } from "@/cms/google";
+import { bacaIdToken, COOKIE_STATE, emailSah, googleSiap, pasangSesi, stateCocok, tukarKode } from "@/cms/google";
 
 export const dynamic = "force-dynamic";
 
@@ -49,11 +49,8 @@ export async function GET(req) {
     secret: payload.secret,
     tokenExpiration: koleksi.auth.tokenExpiration,
   });
-  const res = NextResponse.redirect(`${url.origin}/admin`);
-  res.headers.append(
-    "Set-Cookie",
-    generatePayloadCookie({ collectionAuthConfig: koleksi.auth, cookiePrefix: payload.config.cookiePrefix, token }),
+  return pasangSesi(
+    NextResponse.redirect(`${url.origin}/admin`),
+    generatePayloadCookie({ collectionAuthConfig: koleksi.auth, cookiePrefix: payload.config.cookiePrefix, token, returnCookieAsObject: true }),
   );
-  res.cookies.delete({ name: COOKIE_STATE, path: "/api/google" });
-  return res;
 }
