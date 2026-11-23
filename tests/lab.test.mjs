@@ -12,13 +12,31 @@ test("setiap eksperimen lengkap dua bahasa dan menunjuk proyek yang ada", () => 
   for (const e of eksperimen) {
     assert.match(e.nomor, /^SDL-\d{2}$/);
     assert.ok(cariProyek(e.proyek), `${e.slug}: proyek ${e.proyek} tidak ada di content/proyek.js`);
-    assert.ok(ZONA[e.slug]?.startsWith("https://"), `${e.slug}: asal zona harus https`);
+    assert.ok(ZONA[e.zona]?.startsWith("https://"), `${e.slug}: asal zona harus https`);
     for (const teks of [e.jalur, e.judul, e.masalah, ...e.halaman.flatMap((h) => [h.judul, h.ket, h.meta])]) {
       assert.ok(teks.id?.trim() && teks.en?.trim(), `${e.slug}: ada teks yang kosong di satu bahasa`);
     }
-    const kunci = e.halaman.map((h) => h.kunci);
-    assert.equal(new Set(kunci).size, kunci.length, `${e.slug}: kunci halaman ganda`);
   }
+  const nomor = eksperimen.map((e) => e.nomor);
+  assert.equal(new Set(nomor).size, nomor.length, "nomor SDL ganda");
+  // beberapa eksperimen bisa berbagi zona; alamatnya /lab/<zona>/<kunci>, jadi kunci unik per zona
+  for (const z of new Set(eksperimen.map((e) => e.zona))) {
+    const kunci = eksperimen.filter((e) => e.zona === z).flatMap((e) => e.halaman.map((h) => h.kunci));
+    assert.equal(new Set(kunci).size, kunci.length, `zona ${z}: kunci halaman ganda`);
+  }
+});
+
+test("eksperimen 2 sampai 4 tinggal di zona flash-sale dan ikut diteruskan", () => {
+  const { rewrites, redirects } = aturanZona();
+  const asal = ZONA["flash-sale"];
+  for (const k of ["bayar", "backup", "berkas"]) {
+    assert.ok(rewrites.some((r) => r.source === `/lab/flash-sale/${k}` && r.destination === `${asal}/lab/flash-sale/${k}`), k);
+  }
+  // satu zona, satu aturan _next dan satu pengalihan akar, berapa pun eksperimennya
+  assert.equal(rewrites.filter((r) => r.source.endsWith("/_next/:path+")).length, 1);
+  assert.equal(redirects.length, 1);
+  const e = eksperimen.find((x) => x.slug === "backup");
+  assert.equal(alamatHalaman(e, e.halaman[0], "en"), "/lab/flash-sale/backup?bahasa=en");
 });
 
 test("alamat halaman membawa bahasa situs ke pilihan bahasa zona", () => {

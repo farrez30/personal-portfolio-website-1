@@ -7,6 +7,14 @@
   margin-bottom: 2rem;
 }
 
+/* Di atas lebar ponsel pemutar musik duduk di 7,5rem dari atas, sejajar ujung judul pada layar
+   sedang (diukur di 724 px): judul diturunkan sampai lewat bawah pemutar. */
+@media (min-width: 601px) {
+  .lab__kembali {
+    margin-bottom: 4rem;
+  }
+}
+
 .lab__judul {
   font-size: clamp(2.25rem, 6vw, 3.5rem);
 }

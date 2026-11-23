@@ -32,6 +32,9 @@ that table: no build output in this public repo, and each experiment deploys on 
 ## Consequences
 - `content/lab.js` is the single list of experiments. It feeds the hub, the album links (Replay,
   Scaling simulator, System Design Lab on FRZ-13), and the rewrites in `next.config.mjs`.
+- Several experiments can share one zone (`zona` in `content/lab.js`): on 23 Nov 2026 payments and
+  ledger, backup and restore, and large file upload joined as SDL-02 to SDL-04, all served by the
+  flash-sale-lab zone at `/lab/flash-sale/{bayar,backup,berkas}`. Page keys must be unique per zone.
 - Only listed pages and their `_next` assets are rewritten. `/lab/<slug>` redirects to `/lab`
   because the zone's root is the shop, which needs an API that is not deployed.
 - `proxy.js` skips `lab/` so the zone pages get no locale prefix; the hub `/lab` still gets one.
