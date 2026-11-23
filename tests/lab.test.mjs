@@ -36,15 +36,16 @@ test("eksperimen 2 sampai 4 tinggal di zona flash-sale dan ikut diteruskan", () 
   assert.equal(rewrites.filter((r) => r.source.endsWith("/_next/:path+")).length, 1);
   assert.equal(redirects.length, 1);
   const e = eksperimen.find((x) => x.slug === "backup");
-  assert.equal(alamatHalaman(e, e.halaman[0], "en"), "/lab/flash-sale/backup?bahasa=en");
+  assert.equal(alamatHalaman(e, e.halaman[0], "en"), "/lab/flash-sale/backup");
 });
 
 test("alamat halaman membawa bahasa situs ke pilihan bahasa zona", () => {
   const e = eksperimenUntukProyek("flash-sale-lab");
   const [replay, skala] = e.halaman;
-  assert.equal(alamatHalaman(e, replay, "id"), "/lab/flash-sale/replay");
-  assert.equal(alamatHalaman(e, replay, "en"), "/lab/flash-sale/replay?bahasa=en");
-  assert.equal(alamatHalaman(e, skala, "id"), "/lab/flash-sale/skala");
+  // halaman zona berbahasa Inggris bila tanpa parameter (keputusan Farrez 23 Nov 2026)
+  assert.equal(alamatHalaman(e, replay, "en"), "/lab/flash-sale/replay");
+  assert.equal(alamatHalaman(e, replay, "id"), "/lab/flash-sale/replay?bahasa=id");
+  assert.equal(alamatHalaman(e, skala, "id"), "/lab/flash-sale/skala?bahasa=id");
   assert.equal(eksperimenUntukProyek("jeda"), null);
 });
 
