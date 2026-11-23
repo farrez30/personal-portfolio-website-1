@@ -125,7 +125,8 @@ Perbandingan: outline image-space memakai draw call 1,6 sampai 2 kali clay, seta
 | Timbangan + nota | lolos | lolos setelah nota `#b8322a` | lolos setelah map dan monitor digeser (balok berlatar dinding) | lolos | tidak relevan | lolos | objek persisten |
 | Tumpukan map | lolos | lolos | menyatu dengan meja (wajar) | lolos | | gagal draw call | gabung geometri |
 | Kota | lolos (setelah dibangun ulang) | lolos | lolos (siluet kota terbaca) | lolos | | lolos | ruko klien merah perlu ditonjolkan di build (sekarang tertutup gedung di bidikan desktop); F4: gedung klien di tepi blok menghadap taman, atap merah, garis pandang dikunci tes |
-| Globe malam | lolos | lolos (laut Y sekitar 45, lampu Y di atas 200) | lolos | lolos | | gagal bingkai pertama | panggang tekstur |
+| Globe malam | lolos | lolos (laut Y sekitar 45, lampu Y di atas 200) | lolos | lolos | | lolos setelah dipanggang (F5: 63 ms HP) | tekstur WebP dari `scripts/panggang-peta.mjs`; 22 satelit klien dan stasiun di orbit |
+| Peta Nusantara | | | | lolos | | lolos (F5: 41 ms HP) | bidang sampai 90 LS supaya tepi bawah HP tidak kosong |
 | Orang (kapsul) | lolos | lolos | lolos | lolos | | lolos | bentuk masih blockout |
 | Layar produk | | | | | dari gambar asli | | belum diisi layar proyek nyata |
 
@@ -139,3 +140,7 @@ Perbandingan: outline image-space memakai draw call 1,6 sampai 2 kali clay, seta
   terbit, sisi malam hampir hitam, awan beralfa bergradasi, lampu kota Black Marble tanpa ambang
   keras. Darat (Blue Marble dipadatkan ke tangga pastel), laut, garis pantai vektor, dan benda tetap
   toon. Alasannya permintaan Farrez: garis senja dan lampu malam harus serealistis versi Cesium.
+- 2026-11-23: F5. Peta Nusantara dan bumi malam dipanggang ke WebP pangkat dua (peta 4096 x 2048
+  desktop, 2048 x 1024 HP; bumi sama), didekode di luar utas utama dan diunggah saat senggang. Peta
+  memakai bahan dasar `MeshBasicMaterial` bertekstur, titik kota toon; globe tanpa busur ke kota dunia
+  (belum ada klien di sana), satelit klien toon di tiga orbit.

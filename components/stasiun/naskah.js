@@ -7,7 +7,8 @@
 import { pemicuAnchor as pemicuDasar, easeInOut } from "../dunia/naskah.js";
 import { BABAK_V5 } from "../../content/cerita-v5.js";
 import { POSE, TABLET, PILAR_LEWAT, notaTerbang } from "./lantai.js";
-import { POSE_KOTA } from "./kota.js";
+import { POSE_KOTA, ATAP_KLIEN } from "./kota.js";
+import { POSE_PETA, POSE_GLOBE, JAKARTA_PETA, TITIK_PETA, JAKARTA_BOLA, R_BUMI } from "./peta.js";
 
 // Jenis perpindahan. `makro` = serah terima antarskala (gedung ke kota ke peta ke globe ke modul),
 // boleh lebih lama dari batas perpindahan di dalam gedung.
@@ -42,10 +43,12 @@ const KELUAR = {
   penutup: ["zoom-satelit", 5.5, "satelit melayang masuk dari atas"],
 };
 
-// `pose` diisi untuk anchor di lantai kantor (F2, components/stasiun/lantai.js) dan babak ramai di
-// atas kota (F4, kota.js); peta, globe, dan modul lab menyusul di F5 dan F6. Anchor tanpa pose:
-// dunia memudar dan seksinya tampil sebagai halaman biasa.
-const POSE_BABAK = { ...POSE, ramai: POSE_KOTA };
+// `pose` diisi untuk anchor di lantai kantor (F2, components/stasiun/lantai.js), babak ramai di
+// atas kota (F4, kota.js), peta Nusantara dan globe malam (F5, peta.js); modul lab menyusul di F6.
+// Anchor tanpa pose: dunia memudar dan seksinya tampil sebagai halaman biasa. Pose bertanda
+// `tahap` ("peta", "globe") ada di satuan lokal tahapnya; tanpa tanda = gedung dan kota (meter,
+// koordinat lantai kantor).
+const POSE_BABAK = { ...POSE, ramai: POSE_KOTA, "langkah-kecil": POSE_PETA, penutup: POSE_GLOBE };
 export const ANCHOR_V5 = [
   { id: "gerbang", seksi: [{ sel: ".gerbang", di: 0 }], tempat: "lantai kantor, meja 1 dari jauh", keluar: "blend", durasi: 0.9, pose: POSE.gerbang },
   ...BABAK_V5.map((b) => {
@@ -61,7 +64,7 @@ export function poseAnchor(i, tegak = false) {
   const p = ANCHOR_V5[i]?.pose;
   if (!p) return null;
   const t = tegak && p.tegak ? p.tegak : p;
-  return { posisi: [...t.posisi], lihat: [...t.lihat], fov: t.fov };
+  return { posisi: [...t.posisi], lihat: [...t.lihat], fov: t.fov, tahap: p.tahap ?? "gedung" };
 }
 
 // Perpindahan antara anchor `dari` dan `ke` melewati serah terima antarskala (gedung ke kota dan
@@ -294,7 +297,77 @@ const JALUR = {
     const arah = arahDari(yaw, pitch);
     return { posisi, lihat: posisi.map((v, i) => v + arah[i] * jarak) };
   },
+  // Serah terima kota ke peta (0,9 s). Kamera naik dari bidikan kota sampai tegak di atas gedung
+  // klien, atap merahnya mengecil jadi satu titik di tengah bingkai; di 0,5 sampai 0,83 (0,3 s)
+  // bingkai kota disilang ke peta yang kameranya juga tegak di atas Jakarta, titik merahnya
+  // seukuran atap tadi; lalu kamera peta mundur dan miring ke pose babak langkah-kecil.
+  "serah-peta"(a, b, e) {
+    const u = halus(klamp(e / SILANG_PETA[1]));
+    // kamera peta mulai mundur dan miring di tengah silang, titik lihatnya baru lepas dari
+    // Jakarta sesudah silang selesai: titik merahnya diam di tempat atap tadi
+    const v = halus(klamp((e - 0.62) / 0.38));
+    const kota = poseTegak(a, ATAP_KLIEN.pusat, TINGGI_SERAH, u, halus(klamp(e / 0.6)));
+    const peta = poseTegak(b, JAKARTA_PETA, JARAK_SERAH_PETA, 1 - v, 1 - seg(e, SILANG_PETA[1], 1));
+    return silang(kota, { ...peta, tahap: "peta", fov: b.fov }, seg(e, ...SILANG_PETA), a.fov, "gedung");
+  },
+  // Serah terima peta ke globe (0,3 s, silang penuh). Kamera peta mundur sambil membidik Jakarta;
+  // kamera globe mulai tegak di atas Jakarta, utara di atas seperti peta, lalu mundur ke pose babak
+  // penutup. Di tengah silang titik Jakarta kedua tahap ada di titik bidik yang sama.
+  "serah-globe"(a, b, e) {
+    const s = halus(e);
+    const lihatP = lerp(a.lihat, JAKARTA_PETA, Math.sin((Math.PI / 2) * Math.min(1, s * 2)));
+    const peta = { posisi: lihatP.map((x, i) => x + (a.posisi[i] - a.lihat[i]) * (1 + 0.25 * s)), lihat: lihatP };
+    const globe = poseAntaraArah(globeAtasJakarta(b), b, halus(klamp((e - 0.45) / 0.55)));
+    return silang(peta, { ...globe, tahap: "globe", fov: b.fov }, s, a.fov, "peta");
+  },
 };
+
+// Kamera globe di atas Jakarta (sejauh 1,6 jari-jari bumi dari permukaan), sedikit ke utara supaya
+// menunduk seperti kamera peta; utara di atas gambar.
+const ARAH_JKT = JAKARTA_BOLA.map((v) => v / R_BUMI);
+function globeAtasJakarta(b) {
+  const j = 1.6 * R_BUMI;
+  const utara = [0, 1, 0].map((v, i) => v - ARAH_JKT[1] * ARAH_JKT[i]);
+  const posisi = JAKARTA_BOLA.map((v, i) => v + ARAH_JKT[i] * j + utara[i] * 0.3 * j);
+  return { posisi, lihat: [...JAKARTA_BOLA], fov: b.fov };
+}
+// Pose di u antara p dan q: titik lihat lurus, arah pandang sebagai yaw dan pitch, jarak secara log.
+function poseAntaraArah(p, q, u) {
+  const [A, B] = [arahPandang(p), arahPandang(q)];
+  const yaw = A.yaw + Math.atan2(Math.sin(B.yaw - A.yaw), Math.cos(B.yaw - A.yaw)) * u;
+  const pitch = A.pitch + (B.pitch - A.pitch) * u;
+  const j = Math.exp(Math.log(A.jarak) + (Math.log(B.jarak) - Math.log(A.jarak)) * u);
+  const lihat = lerp(p.lihat, q.lihat, u);
+  const arah = arahDari(yaw, pitch);
+  return { posisi: lihat.map((x, i) => x - arah[i] * j), lihat };
+}
+
+// Silang dua tahap: pose utama (tahap asal) plus lapisan tahap tujuan dengan bobot w. Di w = 0
+// hanya tahap asal, di w = 1 hanya tahap tujuan, jadi ujung jalur tepat di pose kedua babak.
+function silang(utama, lapis, w, fov, tahap) {
+  if (w <= 0) return { ...utama, fov, tahap };
+  if (w >= 1) return lapis;
+  return { ...utama, fov, tahap, silang: { ...lapis, w } };
+}
+// Waktu silang kota ke peta (bagian dari e), jarak kamera tegak di atas atap gedung klien (m), dan
+// jarak kamera peta di atas Jakarta yang membuat cincin Jakarta (12 satuan) tampak seukuran atap
+// (41 m) di tengah silang.
+export const SILANG_PETA = [0.5, 0.83];
+export const TINGGI_SERAH = 1400;
+export const JARAK_SERAH_PETA = 381;
+// Pose di antara `p` (u = 0) dan kamera tegak di atas titik `c` sejauh `jarak` (u = 1), utara (-z)
+// di atas gambar. Diinterpolasi sebagai titik lihat, yaw, pitch, dan jarak (log), seperti jendela.
+const TEGAK = -1.55;
+function poseTegak(p, c, jarak, u, uLihat = u) {
+  const A = arahPandang(p);
+  const yaw = A.yaw + Math.atan2(Math.sin(Math.PI - A.yaw), Math.cos(Math.PI - A.yaw)) * u;
+  const pitch = A.pitch + (TEGAK - A.pitch) * u;
+  const j = Math.exp(Math.log(A.jarak) + (Math.log(jarak) - Math.log(A.jarak)) * u);
+  const lihat = lerp(p.lihat, c, uLihat);
+  const arah = arahDari(yaw, pitch);
+  return { posisi: lihat.map((x, i) => x - arah[i] * j), lihat };
+}
+export const UKURAN_TITIK = { atap: ATAP_KLIEN.lebar, cincin: 2 * TITIK_PETA.cincin[1] };
 
 // Pose kamera di e (0..1, waktu linear) pada perpindahan dari anchor ke-i ke ke-(i+1), dengan pose
 // ujung a dan b. Jenis tanpa rumus khusus (blend dari hero) memakai poseBlend dengan ease. `nota`
@@ -302,9 +375,11 @@ const JALUR = {
 export function poseJalur(i, a, b, e, bingkai) {
   const f = JALUR[ANCHOR_V5[i]?.keluar];
   const x = klamp(e);
-  if (!f) return { ...poseBlend(a, b, easeInOut(x)), nota: null };
+  if (!f) return { ...poseBlend(a, b, easeInOut(x)), nota: null, tahap: a.tahap };
   const q = f(a, b, x, bingkai, ANCHOR_V5[i].id, ANCHOR_V5[i + 1].id);
-  return { posisi: q.posisi, lihat: q.lihat, fov: a.fov + (b.fov - a.fov) * x, nota: q.nota ?? null };
+  const hasil = { posisi: q.posisi, lihat: q.lihat, fov: q.fov ?? a.fov + (b.fov - a.fov) * x, nota: q.nota ?? null, tahap: q.tahap ?? a.tahap };
+  if (q.silang) hasil.silang = q.silang;
+  return hasil;
 }
 
 export const pemicuAnchorV5 = (ukur) => pemicuDasar(ukur, ANCHOR_V5);
@@ -337,5 +412,5 @@ export function periksaNaskah(daftar = ANCHOR_V5) {
 export function poseAntara(dari, ke, a, b, e, bingkai) {
   if (dari >= 0 && ke === dari + 1) return poseJalur(dari, a, b, e, bingkai);
   if (ke >= 0 && ke === dari - 1) return poseJalur(ke, b, a, 1 - e, bingkai);
-  return { ...poseBlend(a, b, easeInOut(Math.min(1, Math.max(0, e)))), nota: null };
+  return { ...poseBlend(a, b, easeInOut(Math.min(1, Math.max(0, e)))), nota: null, tahap: b.tahap };
 }

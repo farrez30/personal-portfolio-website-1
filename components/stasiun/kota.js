@@ -92,6 +92,9 @@ export function kulitGedung() {
   return { bawah, atas };
 }
 
+// Pusat atas atap merah gedung klien: dari atas kota inilah titik merah yang jadi Jakarta di peta.
+export const ATAP_KLIEN = { pusat: [0, TINGGI_LANTAI * 2 + 0.6, 0], lebar: 41, dalam: 9 };
+
 // ---- Pose kamera babak ramai ----------------------------------------------------------------
 // Bidikan kota previs (ADEGAN.kota, kamera: true) relatif ke gedung klien.
 export const POSE_KOTA = {

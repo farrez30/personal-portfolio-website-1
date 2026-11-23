@@ -5,7 +5,10 @@
 // Kamera berpindah antaranchor lewat jalur bertipe berwaktu (F3: ikut nota, whip, layar, orbit,
 // pilar, crane; F4: keluar jendela ke atas kota; poseAntara di naskah.js) dan mendorong pelan
 // selama babak dibaca. Kota (kota3d.js) tampak sejak babak kebiasaan, saat jendelanya masuk
-// bingkai. Gambar hanya saat ada yang berubah; di babak ramai lalu lintas bergerak terus.
+// bingkai. F5: peta Nusantara dan globe malam jadi adegan sendiri (peta3d.js) dengan satuan lokal,
+// near/far, dan latarnya sendiri; serah terima antartahap menyilangkan dua adegan lewat satu
+// render target. Gambar hanya saat ada yang berubah; di babak ramai lalu lintas bergerak terus,
+// di babak penutup satelit mengorbit.
 import * as THREE from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
@@ -13,6 +16,7 @@ import { susunLantai, susun, notaTerbang, LANTAI } from "./lantai.js";
 import { gambarAtlas, uvWilayah } from "./layar.js";
 import { ANCHOR_V5, poseAnchor, durasiAntara, poseDalam, poseAntara, lintasTahap, GESER } from "./naskah.js";
 import { buatKota } from "./kota3d.js";
+import { buatPeta, buatGlobe } from "./peta3d.js";
 
 const LATAR = 0xf3ece0;
 const TINTA = 0x2a2836;
@@ -75,8 +79,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   wadah.appendChild(kanvas);
 
   const scene = new THREE.Scene();
-  const latar = new THREE.Color(LATAR);
-  scene.background = latar;
+  scene.background = new THREE.Color(LATAR);
   // Kabut ke warna latar: tepi kota dan cakrawala melebur ke kertas (previs kota).
   scene.fog = new THREE.Fog(LATAR, 900, 2800);
   const camera = new THREE.PerspectiveCamera(38, 1, 0.05, 200);
@@ -233,6 +236,37 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   const BAYANG_KOTA = [[-760, -4, -720], [700, 170, 760]];
   pasBayang(...BAYANG_LANTAI, 40);
   scene.add(kunci);
+  scene.userData.tanpaTepi = tanpaTepi;
+
+  // ---- Peta dan globe (F5) -----------------------------------------------------------------------
+  // Dibangun dan dipanaskan saat senggang sesudah kota (tekstur didekode di luar utas utama, lalu
+  // diunggah dan programnya dikompilasi), atau langsung bila halaman dibuka di babaknya.
+  const iLangkah = ANCHOR_V5.findIndex((a) => a.id === "langkah-kecil");
+  const iPenutup = ANCHOR_V5.findIndex((a) => a.id === "penutup");
+  const tahap = { gedung: { scene }, peta: null, globe: null };
+  const panas = {};
+  const bangunTahap = (nama) => {
+    if (tahap[nama]) return tahap[nama];
+    const t0 = performance.now();
+    const t = (nama === "peta" ? buatPeta : buatGlobe)({ ramp, hp, siap: () => (kotor = true) });
+    panas[nama] = { bangun: +(performance.now() - t0).toFixed(1) };
+    tahap[nama] = t;
+    kotor = true;
+    return t;
+  };
+  // Unggah tekstur dan kompilasi program sebelum adegannya tampil: bingkai pertamanya tidak
+  // menunggu unggahan 4096 px (look-dev: previs 302 dan 403 ms).
+  const panaskan = async (nama) => {
+    const t = bangunTahap(nama);
+    const tex = await t.janji;
+    if (dibuang) return;
+    const t0 = performance.now();
+    renderer.initTexture(tex);
+    panas[nama].unggah = +(performance.now() - t0).toFixed(1);
+    const t1 = performance.now();
+    await kompilasiAdegan(t.scene);
+    panas[nama].kompilasi = +(performance.now() - t1).toFixed(1);
+  };
 
   // ---- Garis tinta di layar ------------------------------------------------------------------
   const ext = renderer.extensions;
@@ -255,10 +289,12 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
         far: { value: 200 },
         tebal: { value: hp ? 1.6 : 1.5 },
         tinta: { value: new THREE.Color(TINTA) },
+        tLapis: { value: null },
+        lapis: { value: 0 },
       },
       vertexShader: "varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0., 1.); }",
       fragmentShader: `
-        uniform sampler2D tWarna, tNormal, tDepth; uniform vec2 res; uniform float near, far, tebal; uniform vec3 tinta; varying vec2 vUv;
+        uniform sampler2D tWarna, tNormal, tDepth, tLapis; uniform vec2 res; uniform float near, far, tebal, lapis; uniform vec3 tinta; varying vec2 vUv;
         float jarak(vec2 uv){ float z = texture2D(tDepth, uv).x; float n = z * 2. - 1.; return 2. * near * far / (far + near - n * (far - near)); }
         vec3 nor(vec2 uv){ return texture2D(tNormal, uv).xyz * 2. - 1.; }
         void main(){
@@ -269,7 +305,9 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
             tepi = max(tepi, smoothstep(0.006, 0.02, abs(d - d0) / min(d, d0)));
             tepi = max(tepi, smoothstep(0.25, 0.45, 1. - dot(n, n0))); }
           vec4 w = texture2D(tWarna, vUv);
-          gl_FragColor = vec4(mix(w.rgb, tinta, tepi * 0.92), 1.);
+          vec3 c = mix(w.rgb, tinta, tepi * 0.92);
+          if (lapis > 0.) c = mix(c, texture2D(tLapis, vUv).rgb, lapis);
+          gl_FragColor = vec4(c, 1.);
           #include <colorspace_fragment>
         }`,
       depthTest: false,
@@ -280,25 +318,55 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   adeganLayar.add(quad);
   const kameraLayar = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
-  const info = { calls: 0, segitiga: 0, maksCalls: 0, bingkai: 0 };
-  const gambar = () => {
-    renderer.info.autoReset = false;
-    renderer.info.reset();
+  // Lapisan silang: bingkai tahap tujuan selama serah terima (dibuat saat pertama dipakai).
+  let rtLapis = null;
+  const info = { calls: 0, segitiga: 0, maksCalls: 0, bingkai: 0, pertama: {}, panas };
+  // Satu tahap: pass normal + depth, pass warna ke target MSAA, lalu quad tepi ke `keluar`.
+  const gambarTahap = (nama, keluar, lapis) => {
+    const sc = tahap[nama].scene;
+    const tanpa = sc.userData.tanpaTepi;
+    const latarSc = sc.background;
     const u = quad.material.uniforms;
     u.near.value = camera.near;
     u.far.value = camera.far;
-    scene.overrideMaterial = matNormal;
-    scene.background = latarNormal;
-    tanpaTepi.forEach((o) => (o.visible = false));
+    sc.overrideMaterial = matNormal;
+    sc.background = latarNormal;
+    tanpa.forEach((o) => (o.visible = false));
     renderer.setRenderTarget(rtNormal);
-    renderer.render(scene, camera);
-    scene.overrideMaterial = null;
-    scene.background = latar;
-    tanpaTepi.forEach((o) => (o.visible = true));
+    renderer.render(sc, camera);
+    sc.overrideMaterial = null;
+    sc.background = latarSc;
+    tanpa.forEach((o) => (o.visible = true));
     renderer.setRenderTarget(rtWarna);
-    renderer.render(scene, camera);
-    renderer.setRenderTarget(null);
+    renderer.render(sc, camera);
+    u.lapis.value = lapis;
+    u.tLapis.value = lapis > 0 ? rtLapis.texture : null;
+    renderer.setRenderTarget(keluar);
     renderer.render(adeganLayar, kameraLayar);
+    u.lapis.value = 0;
+  };
+  // Bingkai pertama tiap tahap diukur sampai GPU selesai (hanya di mode uji: readPixels memaksa
+  // antrean perintah dikerjakan), termasuk unggah tekstur yang belum dipanaskan.
+  const piksel = new Uint8Array(4);
+  const gambar = (p) => {
+    renderer.info.autoReset = false;
+    renderer.info.reset();
+    const baru = [p.tahap, p.silang?.tahap].filter((n) => n && !(n in info.pertama));
+    const t0 = performance.now();
+    if (p.silang && tahap[p.silang.tahap]) {
+      if (!rtLapis) rtLapis = new THREE.WebGLRenderTarget(rtWarna.width, rtWarna.height, { type: tipeWarna, depthBuffer: false });
+      pasang(p.silang);
+      gambarTahap(p.silang.tahap, rtLapis, 0);
+      pasang(p);
+      gambarTahap(p.tahap, null, p.silang.w);
+    } else gambarTahap(p.tahap, null, 0);
+    if (baru.length) {
+      if (uji) {
+        const gl = renderer.getContext();
+        gl.readPixels(0, 0, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, piksel);
+      }
+      for (const n of baru) info.pertama[n] = +(performance.now() - t0).toFixed(1);
+    }
     info.calls = renderer.info.render.calls;
     info.segitiga = renderer.info.render.triangles;
     info.maksCalls = Math.max(info.maksCalls, info.calls);
@@ -324,9 +392,24 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     lihat.set(...p.lihat);
     camera.lookAt(lihat);
     const j = camera.position.distanceTo(lihat);
-    // Rentang depth sempit di sekitar sasaran supaya tepi depth tidak bergerigi (previs dunia penuh).
-    camera.near = Math.min(4, Math.max(0.03, j * 0.015));
-    camera.far = Math.max(200, j * 12);
+    // Rentang depth sempit di sekitar sasaran supaya tepi depth tidak bergerigi (previs dunia penuh),
+    // per tahap di satuan lokalnya. Kabut ikut jarak kamera: saat serah terima kota ke peta kamera
+    // naik 1,4 km dan kotanya tetap terbaca.
+    if (p.tahap === "peta") {
+      camera.near = j * 0.02;
+      camera.far = j * 6;
+      const f = tahap.peta?.scene.fog;
+      if (f) [f.near, f.far] = [j * 1.45, j * 2.6];
+    } else if (p.tahap === "globe") {
+      // bintang di jari-jari 2600 tetap di dalam far
+      camera.near = j * 0.02;
+      camera.far = Math.max(j * 12, 3400);
+    } else {
+      camera.near = Math.min(4, Math.max(0.03, j * 0.015));
+      camera.far = Math.max(200, j * 12);
+      scene.fog.near = Math.max(900, j * 1.2);
+      scene.fog.far = Math.max(2800, j * 3);
+    }
     camera.fov = p.fov;
     camera.updateProjectionMatrix();
   };
@@ -368,6 +451,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     const ph = Math.max(1, Math.floor(h * rasio));
     rtWarna.setSize(pw, ph);
     rtNormal.setSize(pw, ph);
+    rtLapis?.setSize(pw, ph);
     quad.material.uniforms.res.value.set(pw, ph);
     camera.aspect = w / h;
     const tegakBaru = w / h < 0.8;
@@ -414,12 +498,17 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
     // Kota bergerak terus selama babak ramai (kecuali gerak dikurangi): lalu lintas memadat
     // sejalan gulir di babak itu.
     const ramai = indeks === iRamai || (blend && blend.lalu === iRamai);
-    if (ramai && !kurangiGerak) kotor = true;
+    const tampak = [pose.tahap, pose.silang?.tahap];
+    if ((ramai || tampak.includes("globe")) && !kurangiGerak) kotor = true;
     if (!kotor) return false;
     letakNota(blend ? pose.nota : null);
     pasang(pose);
-    aturKota(t, ramai);
-    gambar();
+    if (tampak.includes("gedung")) aturKota(t, ramai);
+    for (const n of ["peta", "globe"]) if (tampak.includes(n)) bangunTahap(n);
+    // Rute satu cabang tumbuh sejalan gulir babak langkah-kecil; sesudahnya utuh.
+    tahap.peta?.atur(kurangiGerak || indeks > iLangkah ? 1 : indeks === iLangkah && !blend ? (geser - 0.1) / 0.5 : 0);
+    tahap.globe?.atur(kurangiGerak ? 0 : t / 1000);
+    gambar(pose);
     kotor = false;
     return true;
   };
@@ -454,6 +543,15 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   // Program dikompilasi untuk target warna, tempat adegan sungguh digambar (kunci programnya ikut
   // ruang warna target). compile hanya menelusuri benda yang tampak, jadi kota ditampakkan sebentar.
   let dibuang = false;
+  const kompilasiAdegan = async (sc) => {
+    sc.overrideMaterial = matNormal;
+    renderer.setRenderTarget(rtNormal);
+    await renderer.compileAsync(sc, camera);
+    sc.overrideMaterial = null;
+    renderer.setRenderTarget(rtWarna);
+    await renderer.compileAsync(sc, camera);
+    renderer.setRenderTarget(null);
+  };
   const kompilasi = async () => {
     const tampak = kota?.mesh.map((m) => m.visible);
     kota?.mesh.forEach((m) => (m.visible = true));
@@ -476,20 +574,32 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       ukur();
       const p = poseAnchor(Math.max(0, indeks), tegak) ?? poseAnchor(0, tegak);
       pasang(p);
-      if (indeks >= iKebiasaan) bangunKota();
+      if (indeks >= iKebiasaan && indeks < iLangkah) bangunKota();
+      // Dibuka langsung di babak peta atau globe: tahapnya dipanaskan sebelum bingkai pertama.
+      if (indeks === iLangkah) await panaskan("peta");
+      if (indeks === iPenutup) await panaskan("globe");
       await kompilasi();
       renderer.shadowMap.needsUpdate = true;
       kotor = true;
       raf = requestAnimationFrame(bingkai);
-      if (!kota) {
-        const senggang = window.requestIdleCallback ?? ((f) => setTimeout(f, 1500));
+      // Sisanya satu per satu saat senggang: kota, peta, globe.
+      const senggang = window.requestIdleCallback ?? ((f) => setTimeout(f, 1500));
+      const lanjut = (sisa) =>
         senggang(async () => {
-          if (dibuang || kota) return;
+          if (dibuang || !sisa.length) return;
+          await sisa[0]();
+          lanjut(sisa.slice(1));
+        });
+      lanjut([
+        async () => {
+          if (kota) return;
           bangunKota();
           aturKota(sekarang(), false);
           await kompilasi();
-        });
-      }
+        },
+        () => panaskan("peta"),
+        () => panaskan("globe"),
+      ]);
     },
     keAnchor,
     get indeks() {
@@ -509,6 +619,16 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       dibuang = true;
       cancelAnimationFrame(raf);
       ro.disconnect();
+      for (const n of ["peta", "globe"])
+        tahap[n]?.scene.traverse((o) => {
+          o.geometry?.dispose();
+          [].concat(o.material ?? []).forEach((m) => {
+            m.map?.image?.close?.();
+            m.map?.dispose();
+            m.dispose();
+          });
+        });
+      rtLapis?.dispose();
       scene.traverse((o) => {
         o.geometry?.dispose();
         [].concat(o.material ?? []).forEach((m) => {
@@ -543,12 +663,13 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
           kotor = true;
           langkah();
         } else waktuLalu = performance.now();
-        return { ...info, posisi: camera.position.toArray(), blend: !!blend, rinci: blend && { lalu: blend.lalu, ke: blend.ke, e0: +blend.e0.toFixed(4), t0: blend.t0, dur: blend.dur } };
+        return { ...info, posisi: camera.position.toArray(), tahap: pose?.tahap, silang: pose?.silang ? +pose.silang.w.toFixed(3) : 0, blend: !!blend, rinci: blend && { lalu: blend.lalu, ke: blend.ke, e0: +blend.e0.toFixed(4), t0: blend.t0, dur: blend.dur } };
       },
       periksa() {
         const r = new THREE.Raycaster();
         r.setFromCamera(new THREE.Vector2(0, 0), camera);
-        const h = r.intersectObjects(scene.children.filter((o) => o.isMesh && o.visible && !tanpaTepi.includes(o)), false)[0];
+        const sc = tahap[pose?.tahap ?? "gedung"]?.scene ?? scene;
+        const h = r.intersectObjects(sc.children.filter((o) => o.isMesh && o.visible && !sc.userData.tanpaTepi.includes(o)), false)[0];
         return h ? { jarak: +h.distance.toFixed(2), benda: h.object.name, titik: h.point.toArray().map((x) => +x.toFixed(2)) } : null;
       },
     };

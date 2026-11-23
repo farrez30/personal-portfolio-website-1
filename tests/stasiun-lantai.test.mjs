@@ -85,9 +85,13 @@ test("setiap babak di lantai kantor punya pose lebar dan tegak di ANCHOR_V5", ()
       assert.ok(p && p.posisi.length === 3 && p.lihat.length === 3 && p.fov > 20, `${id} tegak=${tegak}`);
     }
   }
-  // babak ramai di atas kota (F4); peta, globe, dan modul lab belum punya dunia (F5, F6)
-  assert.deepEqual(poseAnchor(ANCHOR_V5.findIndex((a) => a.id === "ramai")).posisi, POSE_KOTA.posisi);
-  for (const id of ["langkah-kecil", "penutup", "modul-lab"]) assert.equal(poseAnchor(ANCHOR_V5.findIndex((a) => a.id === id)), null, id);
+  // babak ramai di atas kota (F4), peta dan globe di satuan tahapnya (F5); modul lab belum punya dunia (F6)
+  const id = (x) => ANCHOR_V5.findIndex((a) => a.id === x);
+  assert.deepEqual(poseAnchor(id("ramai")).posisi, POSE_KOTA.posisi);
+  assert.equal(poseAnchor(id("ramai")).tahap, "gedung");
+  assert.equal(poseAnchor(id("langkah-kecil")).tahap, "peta");
+  assert.equal(poseAnchor(id("penutup"), true).tahap, "globe");
+  assert.equal(poseAnchor(id("modul-lab")), null);
 });
 
 test("kamera selalu di dalam gedung dan tidak di dalam benda apa pun", () => {
@@ -140,9 +144,13 @@ test("durasi perpindahan: satu langkah memakai durasi keluar, lompatan dibatasi,
   assert.equal(durasiAntara(0, 5), 1.2);
   assert.equal(durasiAntara(i, i + 1, true), 0);
   assert.equal(durasiAntara(-1, 0), 0);
-  // keluar ke anchor tanpa dunia: potongan, kanvas memudar
+  // serah terima ke peta dan ke globe memakai durasinya; keluar ke anchor tanpa dunia: potongan
   const rm = ANCHOR_V5.findIndex((a) => a.id === "ramai");
-  assert.equal(durasiAntara(rm, rm + 1), 0);
+  assert.equal(durasiAntara(rm, rm + 1), 0.9);
+  assert.equal(durasiAntara(rm + 2, rm + 1), 0.3);
+  assert.equal(durasiAntara(rm + 2, rm + 3), 0);
+  // lompatan melewati serah terima peta atau globe: potongan
+  assert.equal(durasiAntara(rm, rm + 2), 0);
   // serah terima makro (keluar jendela) memakai durasinya sendiri, melewati batas di dalam gedung
   assert.equal(durasiAntara(rm - 1, rm), 2.8);
   assert.equal(durasiAntara(rm, rm - 1), 2.8);
