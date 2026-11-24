@@ -63,3 +63,16 @@ pertama modul 34 ms, uji keyboard lulus (fokus L-01, empat Tab ke L-05, Enter, E
 Berikutnya, tautan langsung), tombol jeda membekukan gerak latar, dunia memudar sesudah seksi lab.
 Putaran pertama gagal karena port debug Chrome bertabrakan dengan sesi lain; skrip sekarang
 memeriksa port kosong lebih dulu.
+
+## Tautan dua arah beranda dan arsip (25 Nov 2026)
+
+Riset (subagen peneliti, Fable 5.2): portofolio nyata memajang versi lama sebagai kartu proyek atau
+menu arsip, jarang di footer; situs dokumentasi memberi pita di atas versi lama; NN/g menyebut logo
+saja tidak cukup sebagai jalan pulang. Keputusan Farrez: tautan teks "Versi terbaru" di bilah atas
+halaman arsip, dan rak CD jadi loker L-14 di modul lab selain tautan footer.
+
+- `Bilah.jsx`: "Versi terbaru" hanya di `/arsip/...`; di HP bilah arsip dua baris (terukur: 418 px
+  lebar halaman di layar 360 sebelum diperbaiki, sesudahnya pas di 320, 360, 390, 1440 px).
+- `lab.js`: loker tambahan `["arsip", "kontak"]`, kontak tetap terakhir; 15 loker, rak terakhir satu
+  pintu (tanpa pengisi). Astronot pindah ke dekat palka node karena semua ceruk terisi.
+- Ukur HP CPU 4x: 0 galat, maks 25 draw call, bingkai pertama modul 29 ms, uji keyboard lulus.

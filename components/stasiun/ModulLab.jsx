@@ -183,6 +183,12 @@ function Lorong({ locale }) {
               </button>
             </li>
           ))}
+          <li data-nyala={nyala === n - 2 ? "" : undefined}>
+            <Link href="/arsip/cd" className="modul-lab__item modul-lab__item--kontak" {...ikat(n - 2)}>
+              <span className="mono modul-lab__kode">{kode(n - 2)}</span>
+              <span className="modul-lab__nama">{T("arsip")}</span>
+            </Link>
+          </li>
           <li data-nyala={nyala === n - 1 ? "" : undefined}>
             <a href="#kontak" className="modul-lab__item modul-lab__item--kontak" {...ikat(n - 1)}>
               <span className="mono modul-lab__kode">{kode(n - 1)}</span>

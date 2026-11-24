@@ -22,6 +22,21 @@
   font-weight: 500;
 }
 
+/* Tautan "Versi terbaru" di halaman arsip: teks biasa bergaris bawah aksen, target sentuh 44 px. */
+.bilah__terbaru {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-right: auto;
+  margin-left: 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-decoration-color: var(--aksen);
+  text-underline-offset: 4px;
+}
+
 .bilah__alat {
   display: flex;
   align-items: center;
@@ -110,6 +125,20 @@
   }
 
   .bilah__alat {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Halaman arsip di HP: "Versi terbaru" tidak muat satu baris bersama kendali, jadi nama dan tautan
+   di baris atas, kendali di baris bawah (terukur 418 px di layar 360 sebelum diperbaiki). */
+@media (max-width: 480px) {
+  .bilah__isi:has(.bilah__terbaru) {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+
+  .bilah__isi:has(.bilah__terbaru) .bilah__alat {
     width: 100%;
     justify-content: space-between;
   }

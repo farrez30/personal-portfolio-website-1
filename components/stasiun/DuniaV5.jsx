@@ -48,7 +48,8 @@ function DuniaImersif({ aktif }) {
     let lewat = false;
     // Modul lab: loker dari daftar proyek yang sama dengan daftar HTML (ModulLab.jsx).
     const daftar = proyek.map((p) => ({ slug: p.slug, judul: p.judul[bahasa], warna: p.warna }));
-    const jumlahRak = susunLab(daftar).rak.length;
+    const susunan = susunLab(daftar);
+    const jumlahRak = susunan.rak.length;
 
     const ukurSeksi = (sel) => {
       const el = document.querySelector(sel);
@@ -79,7 +80,7 @@ function DuniaImersif({ aktif }) {
         if (r) {
           const k = kDariGulir(y, innerHeight, r.top + y, r.height);
           d.setGeser(k);
-          kendaliLab.set({ gulir: lokerGulir(titikLoker(buatRel(jumlahRak, innerWidth / innerHeight < 0.8), daftar.length + 1), k) });
+          kendaliLab.set({ gulir: lokerGulir(titikLoker(buatRel(jumlahRak, innerWidth / innerHeight < 0.8), susunan.loker.length), k) });
           setLewat(r.bottom < innerHeight / 2);
           setRuang(!lewat);
           return;
@@ -143,7 +144,7 @@ function DuniaImersif({ aktif }) {
         const { buatDuniaV5 } = await import("./adegan");
         if (batal) return;
         performance.mark("stasiun:modul");
-        d = buatDuniaV5(wadah.current, { kurangiGerak, bahasa, uji, daftar, kontak: TEKS_LAB.kontak[bahasa] });
+        d = buatDuniaV5(wadah.current, { kurangiGerak, bahasa, uji, daftar, kontak: TEKS_LAB.kontak[bahasa], arsip: TEKS_LAB.arsip[bahasa] });
         saatKendali(kendaliLab.get());
         kendaliLab.set({ dunia: true });
         hitungTitik();

@@ -45,3 +45,10 @@ test("tombol jeda gerak: hanya saat dunia v5 terpasang, keadaan lewat aria-press
   assert.match(src, /aria-pressed=\{s\.jeda\}/);
   assert.match(baca("components/bilah/Bilah.jsx"), /<TombolJeda \/>/);
 });
+
+test("arah dua: daftar modul lab menaut ke /arsip/cd, bilah arsip menaut ke versi terbaru", () => {
+  const daftar = baca("components/stasiun/ModulLab.jsx");
+  assert.match(daftar, /<Link href="\/arsip\/cd"[^>]*\{\.\.\.ikat\(n - 2\)\}>/);
+  const bilah = baca("components/bilah/Bilah.jsx");
+  assert.match(bilah, /pathname\.startsWith\("\/arsip\/"\) && \(\s*<Link href="\/" className="bilah__terbaru">/);
+});

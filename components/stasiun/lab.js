@@ -30,10 +30,14 @@ export const pusatModul = (m) => m * MODUL.jarak;
 const klamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 const halus = (x) => x * x * (3 - 2 * x);
 
+// Loker sesudah proyek, urut: versi lama portofolio (rak CD di /arsip/cd, dipajang seperti karya,
+// keputusan Farrez 25 Nov 2026) lalu kontak, yang selalu terakhir.
+export const LOKER_TAMBAHAN = ["arsip", "kontak"];
+
 // Susunan loker dari daftar proyek (urutan daftar HTML = urutan loker). Tiap loker:
-// { i, slug, kontak, rak, baris, modul, pusat (tengah muka pintu), label }.
+// { i, slug, jenis ("proyek", "arsip", "kontak"), kontak, rak, baris, modul, pusat, label }.
 export function susunLab(daftar) {
-  const n = daftar.length + 1;
+  const n = daftar.length + LOKER_TAMBAHAN.length;
   const jumlahRak = Math.ceil(n / LOKER_PER_RAK);
   const modul = Math.ceil(jumlahRak / RAK_PER_MODUL);
   const rak = Array.from({ length: jumlahRak }, (_, r) => {
@@ -44,10 +48,12 @@ export function susunLab(daftar) {
     const r = Math.floor(i / LOKER_PER_RAK);
     const baris = i % LOKER_PER_RAK;
     const p = daftar[i];
+    const jenis = p ? "proyek" : LOKER_TAMBAHAN[i - daftar.length];
     return {
       i,
       slug: p?.slug ?? null,
-      kontak: !p,
+      jenis,
+      kontak: jenis === "kontak",
       rak: r,
       baris,
       modul: rak[r].modul,
