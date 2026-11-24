@@ -52,3 +52,14 @@ Sebelum perbaikan, bilah beranda di 390 px memotong tombol tema (`bilah-hp-sebel
 - Bingkai pertama tahap gedung (hero) 264 ms HP, 284 ms desktop, temuan lama sejak F2.
 - Suara modul memakai bawaan mesin suara situs: bunyi kecuali pengunjung memilih gerak dikurangi
   atau membisukannya. Storyboard §4 menulis "mati bawaan"; belum diputuskan ulang.
+
+## Tayang di prod (24 Nov 2026, 16:10 UTC)
+
+Deploy prod lewat Vercel CLI dari master 9531965 (deploy otomatis sesudah merge ditolak batas
+harian akun Free). `https://farrez.vercel.app`: `/id`, `/en`, `/id/arsip/cd`, `/en/arsip/cd`,
+`/id/proyek/jeda`, `/id/lab` 200; `/id/v5?proyek=jeda` 308 ke `/id?proyek=jeda`; arsip memuat
+`noindex`. Ukur HP CPU 4x di prod (`ukur-prod-hp.json`): 0 galat, maks 25 draw call, bingkai
+pertama modul 34 ms, uji keyboard lulus (fokus L-01, empat Tab ke L-05, Enter, Escape, Back,
+Berikutnya, tautan langsung), tombol jeda membekukan gerak latar, dunia memudar sesudah seksi lab.
+Putaran pertama gagal karena port debug Chrome bertabrakan dengan sesi lain; skrip sekarang
+memeriksa port kosong lebih dulu.

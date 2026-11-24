@@ -31,7 +31,14 @@ const kurangi = arg.includes("--kurangi");
 const hp = W < 768;
 mkdirSync(keluar, { recursive: true });
 
-const port = 9300 + Math.floor(Math.random() * 500);
+// Port debug acak yang belum dipakai Chrome lain: sesi lain di PC yang sama juga menjalankan Chrome
+// headless, dan port yang bertabrakan membuat skrip mengemudikan tab milik sesi itu (24 Nov 2026).
+let port;
+for (let i = 0; i < 20 && !port; i++) {
+  const p = 9300 + Math.floor(Math.random() * 1500);
+  const dipakai = await fetch(`http://127.0.0.1:${p}/json/version`).then(() => true, () => false);
+  if (!dipakai) port = p;
+}
 const profil = mkdtempSync(join(tmpdir(), "ukur-stasiun-"));
 let proc;
 process.on("exit", () => {
