@@ -127,7 +127,7 @@ export async function bangunLabBertahap(opsi, jeda) {
   }
   return r.value;
 }
-function* langkahLab({ ramp, daftar, kontak: judulKontak = "" }) {
+function* langkahLab({ ramp, daftar, kontak: judulKontak = "", arsip: judulArsip = "" }) {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0xcfc7b8);
   const tanpaTepi = (scene.userData.tanpaTepi = []);
@@ -220,7 +220,7 @@ function* langkahLab({ ramp, daftar, kontak: judulKontak = "" }) {
       g.font = "700 38px ui-monospace, monospace";
       g.fillText(l.label, x + 20, y + 48);
       // satu kali ukur di 38 px lalu diskalakan supaya muat 340 px (mengganti font berulang mahal di HP)
-      const judul = l.kontak ? judulKontak : daftar[i].judul;
+      const judul = l.jenis === "kontak" ? judulKontak : l.jenis === "arsip" ? judulArsip : daftar[i].judul;
       g.font = "600 38px system-ui, sans-serif";
       const lebar = g.measureText(judul).width;
       if (lebar > 340) g.font = `600 ${Math.max(20, Math.floor((38 * 340) / lebar))}px system-ui, sans-serif`;
@@ -243,7 +243,8 @@ function* langkahLab({ ramp, daftar, kontak: judulKontak = "" }) {
     // HP: satu jeda tiap empat loker (lembar ukur F6: dua potongan 468 dan 612 ms di CPU 4x)
     if (l.i && l.i % 4 === 0) yield;
     const [x, y, z] = l.pusat;
-    const warna = l.kontak ? MERAH : new THREE.Color(daftar[l.i]?.warna ?? "#a9c4ec").getHex();
+    // loker arsip: strip hitam seperti label piringan hitam rak CD lama
+    const warna = l.kontak ? MERAH : l.jenis === "arsip" ? 0x2a2836 : new THREE.Color(daftar[l.i]?.warna ?? "#a9c4ec").getHex();
     const bagian = [];
     const t = (g, w) => bagian.push(warnai(g.translate(x, y, z), w));
     t(kotak(PINTU.lebar, PINTU.tinggi, PINTU.tebal, 0.07, 2), 0xf6efe3);
@@ -356,7 +357,8 @@ function* langkahLab({ ramp, daftar, kontak: judulKontak = "" }) {
   astro.scale.setScalar(1.05);
   // ceruk rak kosong di modul terakhir (tanpa loker pengisi), atau di node bila semua ceruk terisi
   const sisa = S.modul * 4 - S.rak.length;
-  const xAstro = sisa > 0 ? pusatModul(S.modul - 1) + 1.8 : (NODE[0] + NODE[1]) / 2;
+  // di node bila semua ceruk terisi: dekat palka masuk, jauh dari tas kargo di tengah node
+  const xAstro = sisa > 0 ? pusatModul(S.modul - 1) + 1.8 : NODE[0] + 0.65;
   const bagTas = [warnai(kotak(0.44, 0.26, 0.34, 0.06), 0xece4d2), warnai(kotak(0.46, 0.05, 0.36, 0.02).translate(0, 0.02, 0), 0x9fb3e0)];
   const tas = new THREE.Mesh(mergeGeometries(bagTas), bahanToon);
   bagTas.forEach((g) => g.dispose());

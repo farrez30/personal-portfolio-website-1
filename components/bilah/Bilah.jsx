@@ -8,6 +8,10 @@ import TombolSuara from "./TombolSuara";
 import TombolJeda from "./TombolJeda";
 import "./bilah.css";
 
+// Di halaman arsip versi lama, tautan teks ke versi terbaru di samping nama: logo saja tidak dikenali
+// semua orang sebagai jalan pulang (riset 25 Nov 2026, NN/g "Homepage Links Remain a Necessity").
+const TERBARU = { id: "Versi terbaru", en: "Latest version" };
+
 export default function Bilah() {
   const t = useTranslations("umum");
   const locale = useLocale();
@@ -19,6 +23,11 @@ export default function Bilah() {
         <Link href="/" className="bilah__nama mono" aria-label="Farrez Al Hakim">
           FARREZ<span className="bilah__nama-ekor"> AL HAKIM</span>
         </Link>
+        {pathname.startsWith("/arsip/") && (
+          <Link href="/" className="bilah__terbaru">
+            {TERBARU[locale] ?? TERBARU.en}
+          </Link>
+        )}
         <div className="bilah__alat">
           <ModeSwitch />
           <nav aria-label={t("bahasa")} className="bilah__bahasa mono">

@@ -70,7 +70,7 @@ function siapkan(o) {
 }
 
 // `daftar` dan `kontak`: isi loker modul lab, urut seperti daftar HTML (ModulLab.jsx).
-export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = false, daftar = [], kontak = "" } = {}) {
+export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = false, daftar = [], kontak = "", arsip = "" } = {}) {
   const hp = matchMedia("(pointer: coarse)").matches || innerWidth < 768;
   const renderer = new THREE.WebGLRenderer({ antialias: false, alpha: false, powerPreference: "high-performance" });
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -257,7 +257,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
   const bangunTahap = (nama) => {
     if (tahap[nama]) return tahap[nama];
     const t0 = performance.now();
-    const t = nama === "lab" ? buatLab({ ramp, daftar, kontak }) : (nama === "peta" ? buatPeta : buatGlobe)({ ramp, hp, siap: () => (kotor = true) });
+    const t = nama === "lab" ? buatLab({ ramp, daftar, kontak, arsip }) : (nama === "peta" ? buatPeta : buatGlobe)({ ramp, hp, siap: () => (kotor = true) });
     panas[nama] = { bangun: +(performance.now() - t0).toFixed(1) };
     tahap[nama] = t;
     kotor = true;
@@ -273,7 +273,7 @@ export function buatDuniaV5(wadah, { kurangiGerak = false, bahasa = "id", uji = 
       const potong = [];
       let mulai = t0;
       const senggang = window.requestIdleCallback ?? ((f) => setTimeout(f, 50));
-      const lab = await bangunLabBertahap({ ramp, daftar, kontak }, () => {
+      const lab = await bangunLabBertahap({ ramp, daftar, kontak, arsip }, () => {
         potong.push(performance.now() - mulai);
         return new Promise((r) => senggang(() => ((mulai = performance.now()), r())));
       });

@@ -33,14 +33,16 @@ function kamera(p, tegak, w, h) {
 }
 const SAMPEL = Array.from({ length: 401 }, (_, s) => s / 400);
 
-test("loker: satu per proyek plus satu loker kontak, urut seperti daftar, tanpa pengisi", () => {
-  assert.equal(S.loker.length, proyek.length + 1);
-  assert.deepEqual(S.loker.slice(0, -1).map((l) => l.slug), proyek.map((p) => p.slug));
+test("loker: satu per proyek, lalu versi lama (rak CD), lalu kontak; urut seperti daftar, tanpa pengisi", () => {
+  assert.equal(S.loker.length, proyek.length + 2);
+  assert.deepEqual(S.loker.slice(0, -2).map((l) => l.slug), proyek.map((p) => p.slug));
   assert.equal(new Set(S.loker.map((l) => l.slug).filter(Boolean)).size, proyek.length);
-  assert.ok(S.loker.at(-1).kontak && !S.loker.at(-1).slug);
+  assert.deepEqual(S.loker.slice(-2).map((l) => l.jenis), ["arsip", "kontak"]);
+  assert.ok(S.loker.at(-1).kontak && !S.loker.at(-1).slug && !S.loker.at(-2).kontak);
+  assert.ok(S.loker.slice(0, -2).every((l) => l.jenis === "proyek" && !l.kontak));
   assert.equal(S.rak.length, Math.ceil(S.loker.length / 2));
   assert.equal(S.modul, Math.ceil(S.rak.length / 4));
-  // 13 proyek (storyboard §4): modul A penuh delapan loker, modul B lima proyek dan loker kontak
+  // 13 proyek: modul A penuh delapan loker, modul B lima proyek, loker arsip, dan loker kontak
   assert.equal(S.loker.filter((l) => l.modul === 0).length, 8);
   assert.deepEqual(S.loker.map((l) => l.label), S.loker.map((_, i) => `L-${String(i + 1).padStart(2, "0")}`));
 });
@@ -48,8 +50,9 @@ test("loker: satu per proyek plus satu loker kontak, urut seperti daftar, tanpa 
 test("loker: jumlah rak dan modul ikut daftar dari CMS, berapa pun panjangnya", () => {
   for (const n of [0, 1, 3, 7, 8, 15, 22]) {
     const s = susunLab(proyek.slice(0, 1).flatMap(() => Array.from({ length: n }, (_, i) => ({ slug: `p${i}` }))));
-    assert.equal(s.loker.length, n + 1);
-    assert.equal(s.rak.length, Math.ceil((n + 1) / 2), `n=${n}`);
+    assert.equal(s.loker.length, n + 2);
+    assert.equal(s.rak.length, Math.ceil((n + 2) / 2), `n=${n}`);
+    assert.deepEqual(s.loker.slice(-2).map((l) => l.jenis), ["arsip", "kontak"]);
     assert.equal(s.modul, Math.ceil(s.rak.length / 4), `n=${n}`);
     // tidak ada rak kosong: rak terakhir memuat satu atau dua loker
     assert.ok(s.rak.length * 2 - s.loker.length < 2);
